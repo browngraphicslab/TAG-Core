@@ -8828,6 +8828,7 @@ function updateOnce( viewer ) {
     if (THIS[viewer.hash] !== null && THIS[viewer.hash] !== undefined) {
         THIS[viewer.hash].animating = animated;
     } else {
+        viewer.source = null;
         console.log("failed animation null-check in OSD");
     }
 
@@ -14171,6 +14172,8 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
                     document.body.appendChild( element );
                 }
             }
+
+            this.source = null;
 
             // clear the onDraw callback
             this.onDraw = null;

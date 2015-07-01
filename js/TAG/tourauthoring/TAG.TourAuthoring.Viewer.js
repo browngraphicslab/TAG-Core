@@ -56,29 +56,32 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     that.tour = tour;
 
     // create ITE player
-    (function _createITE() {
+    var createITE = function (reload) {
 
         // panels
-        viewerPanel.attr('id', 'viewer');
-        viewerPanel.css({
-            "background-color": "rgb(0,0,0)", "height": "100%", "width": "80%",
-            "position": "relative", "left": "20%"
-        });
+        if (!reload) {
+            viewerPanel.attr('id', 'viewer');
+            viewerPanel.css({
+                "background-color": "rgb(0,0,0)", "height": "100%", "width": "80%",
+                "position": "relative", "left": "20%"
+            });
 
-        // let's assume 16:9 ratio for now
-        ITEContainer.attr('id', 'ITEContainer');
-        ITEContainer.css({
-            'border-style': 'solid',
-            'border-width': TAG.TourAuthoring.Constants.rinBorder + 'px',
-            'border-color': 'white',
-            'height': '95%',
-            'width': '30%',
-            'top': '0%',
-            'left': '30%',
-            'position': 'absolute',
-            'overflow': 'hidden'
-        });
-        viewerPanel.append(ITEContainer);
+            // let's assume 16:9 ratio for now
+            ITEContainer.attr('id', 'ITEContainer');
+            ITEContainer.css({
+                'border-style': 'solid',
+                'border-width': TAG.TourAuthoring.Constants.rinBorder + 'px',
+                'border-color': 'white',
+                'height': '95%',
+                'width': '30%',
+                'top': '0%',
+                'left': '30%',
+                'position': 'absolute',
+                'overflow': 'hidden'
+            });
+
+            viewerPanel.append(ITEContainer);
+        }
 
         // create ITE player
         player = new ITE.Player(ITEConfig, self, ITEContainer);
@@ -88,7 +91,9 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         //    loadTour(url, function () { console.log('Viewer: initial loading complete'); });
         //}
 
-    })();
+    };
+
+    createITE(false);
 
     function loadITE() {
         //player.load(tour);
@@ -101,6 +106,12 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         return player;
     }
     that.getITE = getITE;
+
+    function forceITEPlayerReload() {
+        $('#ITEHolder').remove();
+        createITE(true);
+    }
+    that.forceITEPlayerReload = forceITEPlayerReload;
 
     /**
      * When RIN is interacted with, captures new keyframe data and sends it to timeline

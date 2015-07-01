@@ -309,7 +309,11 @@ TAG.Util.Splitscreen = (function () {
                     } else {
                         selector.css({ 'width': 'auto' });
                     }
-                    selector.parent().css({ 'height': root.find("#searchInput").height() + 'px' });
+                    var selectorH = root.find("#searchInput").height();
+                    if (!IS_WINDOWS){
+                        selectorH = selectorH * 1.4;
+                    }
+                    selector.parent().css({ 'height': selectorH + 'px' });
                     selector.parent().find('.selector-dropdown').css({
                         'width': ($("#tagRoot").width() * 0.01015) + 'px',
                         'float': 'right',
@@ -323,6 +327,11 @@ TAG.Util.Splitscreen = (function () {
                             .css('width', selector.parent().outerWidth() + 'px'); // Change the width of the actual dropdownchecklist to be the same.
                     
                 });
+                
+                //adjust styling for windows
+                if (!IS_WINDOWS){
+                    $(".selector-dropdown").css('top','-1px');
+                }
 
                 root.find("#searchInput").css({
                     'width': $("#searchInput").width() * 2

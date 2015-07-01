@@ -47,8 +47,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         pointerStartLocation;
 
     // keyframing
-	var captureHandlers = [];
-	var captureFinishedHandlers = [];
+	var captureHandlers;
+	var captureFinishedHandlers;
 
 
 	// Start things up...
@@ -352,9 +352,10 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
     // keyframe capture pub/sub methods
 	self.registerCaptureHandler = function (handler) {
-	    captureHandlers = handler;
+	    captureHandlers = handler.end;
 
-        // add image equivalents
+	    // image equivalents are called from mediamanip
+
 	    //_viewer.addHandler('canvas-scroll',
         //    function (evt) {
         //        handler(evt);
@@ -366,7 +367,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	}
 
 	self.registerCaptureFinishedHandler = function (handler) {
-	    captureFinishedHandlers = handler;
+	    captureFinishedHandlers = handler.end;
 	    // add image equivalents
 	    //_viewer.addHandler('canvas-drag-end',
 	    //    function (evt) {
@@ -505,7 +506,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	            left: finalPosition.x
     	        })
     	    }*/
-    	    if (!res.translation){ return }
+    	    if (!res.translation) {
+    	        return;
+    	    }
     	    var newTop = top + res.translation.y;
     	    var newLeft = left + res.translation.x;
 
@@ -513,6 +516,13 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	         top: newTop,
     	         left: newLeft
     	     })
+
+    	     if (captureHandlers) {
+    	         var evt = {
+    	             imageTrack: self
+    	         }
+    	         captureHandlers(evt);
+    	     }
 
     	} else {
 
@@ -535,6 +545,13 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	        top: finalPosition.y,
     	        left: finalPosition.x
     	    });
+
+    	    if (captureHandlers) {
+    	        var evt = {
+    	            imageTrack: self
+    	        }
+    	        captureHandlers(evt);
+    	    }
     	}
     };
 	
@@ -586,6 +603,13 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         	width: newW,
         	height: newH
         });
+
+        if (captureHandlers) {
+            var evt = {
+                imageTrack: self
+            }
+            captureHandlers(evt);
+        }
     };
     
     /*
