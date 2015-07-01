@@ -4072,7 +4072,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         dateText = yearText;
         monthDict = {
                     "January": 1,
-                    "February:": 2,
+                    "February": 2,
                     "March": 3,
                     "April": 4,
                     "May": 5,
