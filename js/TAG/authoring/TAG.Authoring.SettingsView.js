@@ -8992,7 +8992,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @return {String} timelineInputText   text to display in timelineYearInput 
          */
         function getTimelineInputText(yearInput){
-            var timelineInputText = TAG.Util.parseDateToYear({ year : yearInput.attr('value')});
+            var timelineInputText = TAG.Util.parseDateToYear({ year: yearInput.attr('value') });
+            if (timelineInputText === 999999) {
+                timelineInputText = "";
+            }
             if (timelineInputText){
                 if (timelineInputText<0){
                     return -timelineInputText + ' BCE';
