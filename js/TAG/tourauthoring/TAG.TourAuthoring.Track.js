@@ -76,7 +76,6 @@ TAG.TourAuthoring.Track = function (spec, my) {
     my.toConvert = spec.toConvert;                                                                  // boolean to check if the user want to convert a video track right after uploading
 
     lastScale = my.timeManager.getDuration().scale;
-
     // private variables
     my.displays = [];
     // A variable to store all the keyframes for the audio track : Hak

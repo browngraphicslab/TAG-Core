@@ -304,6 +304,10 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     this.getITE = function () {
         return ITE;
     };
+    
+    this.getTimeline = function () {
+        return timeline;
+    }
 
     this.getViewer = function () {
         return viewer;

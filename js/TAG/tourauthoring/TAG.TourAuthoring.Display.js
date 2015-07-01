@@ -755,7 +755,6 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         //Telemetry
         TAG.Telemetry.register(deleteKFButton, "mousedown", "DeleteDisplay");
-
     })();
 
     function getLimits() {

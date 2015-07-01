@@ -3777,8 +3777,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     });
                     SPENT_TIMER.restart();
                     toureditor.getViewer().loadITE();
+                    toureditor.getTimeline().onUpdate();
 
-                    //toureditor.getViewer().loadITE();
                 });
             });
             if (progressBarLength > 0) { //other upload happening - disable import
