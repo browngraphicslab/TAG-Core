@@ -10577,9 +10577,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'display': 'block',
             }).css('border-radius', '3.5px');
         if (!IS_WINDOWS){
-            menuLabel.css('font-size','100%');
+            menuLabel.css('font-size', '100%');
         } else{
-            menuLabel.css('font-size','50%');
+            menuLabel.css('font-size', '50%');
+            menuLabel.css('padding-left', '3%');
+            menuLabel.css('padding-right', '2%');
         }
         var addMenuArrowIcon = $(document.createElement('img'))
             .attr('id', 'addMenuArrowIcon')
