@@ -388,11 +388,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         mediaElement.attr("fileName", doq.Metadata.Source.substring(0, source.lastIndexOf('.')));
         var sourceMP4 = sourceWithoutExtension + ".mp4";
         var sourceWEBM = sourceWithoutExtension + ".webm";
-        var sourceOGV = sourceWithoutExtension + ".ogv";
+        var sourceOGG = sourceWithoutExtension + ".ogg";
 
         addSourceToVideo(mediaElement, sourceMP4, 'video/mp4');
         addSourceToVideo(mediaElement, sourceWEBM, 'video/webm');
-        addSourceToVideo(mediaElement, sourceOGV, 'video/ogv');
+        addSourceToVideo(mediaElement, sourceOGG, 'video/ogg');
         mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer);
         viewer.append(mediaElement);
 
@@ -4224,11 +4224,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         holder.removeAttr('src');
                         var sourceMP4 = sourceWithoutExtension + ".mp4";
                         var sourceWEBM = sourceWithoutExtension + ".webm";
-                        var sourceOGV = sourceWithoutExtension + ".ogv";
+                        //var sourceOGG = sourceWithoutExtension + ".ogg";
 
                         addSourceToVideo(holder, sourceMP4, 'video/mp4');
                         addSourceToVideo(holder, sourceWEBM, 'video/webm');
-                        addSourceToVideo(holder, sourceOGV, 'video/ogv');
+                        //addSourceToVideo(holder, sourceOGV, 'video/ogg');
                         holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer);
                         //$(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
                         viewer.append(holder);
