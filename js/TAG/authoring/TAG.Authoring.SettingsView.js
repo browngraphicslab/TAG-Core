@@ -4774,9 +4774,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineDay = inputs.timelineDayInput.val(),
             desc = inputs.descInput.val(),
             source = embeddedURL || "";
-         
+        
+        //don't allow saving of invalid year
         if (!checkValidYear(timelineYear)) {
-            timelineYear = media.Metadata.TimelineYear;
+            //allow clearing of timeline year
+            if (timelineYear === '') {
+                timelineYear = undefined;
+            } else {
+                timelineYear = media.Metadata.TimelineYear;
+            }
         }
         //pCL = displayLoadingSettings();
         clearRight();
@@ -7767,7 +7773,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //don't save an invalid timeline year 
         if (!checkValidYear(timelineYear)) {
-            timelineYear = artwork.Metadata.TimelineYear
+            //allow clearing of timeline date
+            if (timelineYear === "") {
+                timelineYear = undefined;
+            } else {
+                timelineYear = artwork.Metadata.TimelineYear;
+            }
         }
 
         var infoFields = {};
