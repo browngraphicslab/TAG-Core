@@ -3014,7 +3014,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             var positionX = timeManager.getCurrentPx();
                             var displayLength = 5;
                             var dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
+                            console.log("display len: " + dispLen);
                             var newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
+                            console.log("new Display: ");
+                            console.log(newDisplay);
                             if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
                                 newDisplay.setIn(0);
                                 newDisplay.setOut(0);
