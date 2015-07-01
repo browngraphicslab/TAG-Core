@@ -39,7 +39,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         video = root.find('#video'),
         sourceMP4,
         sourceWEBM,
-        sourceOGG,
+        sourceOGV,
         videoElt = video[0],
         DURATION = parseFloat(videoSrc.Metadata.Duration),
         bottomBar = root.find('#bottomBar'),
@@ -126,6 +126,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      * @method playVideo
      */
     function playVideo() {
+        console.log('PLAY VID');
         videoElt.play();
         topBar.css('display', 'none');
         play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/pause.png');
@@ -141,6 +142,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      * @method pauseVideo
      */
     function pauseVideo() {
+        console.log('PAUSE VID');
         videoElt.pause();
         topBar.css('display','inline');
         play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/play.png');
@@ -156,7 +158,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      * @method toggleVideo
      */
     function toggleVideo() {
-        videoElt.paused ? playVideo() : pauseVideo();
+        videoElt.paused === true ? playVideo() : pauseVideo();
     }
 
     /**
@@ -312,20 +314,25 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         idleTimer = null;
         // set attributes of video element
         video.attr({
-            poster: poster,
+            // poster: poster,
+            fileName: sourceWithoutExtension,
+            identifier: videoSrc.Identifier,
             controls: false,
-            preload: 'metadata'
+            preload: 'none'
         });
 
         //Adding sources for the video file
         sourceMP4  = sourceWithoutExtension + ".mp4";
         sourceWEBM = sourceWithoutExtension + ".webm";
-        sourceOGG  = sourceWithoutExtension + ".ogg";
+        sourceOGV  = sourceWithoutExtension + ".ogv";
         
         //video[0] converts the jQuery object 'video' into an HTML object, allowing us to use innerHTML on it
-        videoElt.innerHTML  = '<source src="' + sourceMP4  + '" type='+"'"+'video/mp4; codecs="avc1.42E01E, mp4a.40.2"'+"'"+'>';
-        videoElt.innerHTML += '<source src="' + sourceWEBM + '" type='+"'"+'video/webm; codecs="vorbis, vp8"'+"'"+'>';
-        videoElt.innerHTML += '<source src="' + sourceOGG  + '" type='+"'"+'video/ogg; codecs="theora, vorbis"'+"'"+'>';
+        //videoElt.innerHTML  = '<source src="' + sourceMP4  + '" type='+"'"+'video/mp4; codecs="avc1.42E01E, mp4a.40.2"'+"'"+'>';
+        //videoElt.innerHTML += '<source src="' + sourceWEBM + '" type='+"'"+'video/webm; codecs="vorbis, vp8"'+"'"+'>';
+        //videoElt.innerHTML += '<source src="' + sourceOGG  + '" type='+"'"+'video/ogg; codecs="theora, vorbis"'+"'"+'>';
+        videoElt.innerHTML = '<source src="' + sourceMP4 + '" type="video/mp4">';
+        videoElt.innerHTML += '<source src="' + sourceWEBM + '" type="video/webm">';
+        videoElt.innerHTML += '<source src="' + sourceOGV + '" type="video/ogv">';
 
         // set text of time display
         currentTimeDisplay.text("00:00");

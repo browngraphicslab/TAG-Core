@@ -37,6 +37,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         isUploading = false,
         allArtworks,
         uploadHappening = false,
+        usedAssocMediaGuids = [],
         pickerloaded = false;
     functionsPanelDocfrag.appendChild(functionsPanel[0]);
     timeline.setCompControl(that);
@@ -1335,7 +1336,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     uploadHappening = false; //enables button
                     fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
                 },
-            ['.mp4', '.webm', '.ogv','.avi','.mov','.wma'],//'.avi','.mov','.wma'
+            ['.mp4'/*, '.webm', '.ogv','.avi','.mov','.wma'*/],//'.avi','.mov','.wma'
                 false,
                 function () {
                     root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
@@ -2206,6 +2207,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
             
             function getArt(i) {
+                usedAssocMediaGuids = []
                 // get associated media and cache them in array associated with the guid of each artwork
                 TAG.Worktop.Database.getAssocMediaTo(myFilteredArtwork[i], function (doqs) {
                     doqs.sort(function (a, b) {
@@ -2282,6 +2284,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 $(".artworkHolder").css('background', 'black');
                 $(allAssociatedMediaHolder).css('background', '#999');
                 $(".mediaHolder").detach();
+                usedAssocMediaGuids = [];
                 for (var i = 0; i < myArtwork.length; i++) {
                     var allAMDocfrag = document.createDocumentFragment();
                     drawAssociatedMedia(mediaCache[myFilteredArtwork[i]], assMediasingleDoubleclick, allAMDocfrag);
@@ -2440,9 +2443,19 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             //mediaQueue.clear();
             if (mediaArray) {
                 for (var i = 0; i < mediaArray.length; i++) {
-                    mediaQueue.add(createMediaHolder(mediaArray[i], applyClick));
+                    console.log(usedAssocMediaGuids)
+                    if (usedAssocMediaGuids.indexOf(mediaArray[i].Identifier) < 0) {
+                        mediaQueue.add(createMediaHolder(mediaArray[i], applyClick));
+                        usedAssocMediaGuids.push(mediaArray[i].Identifier)
+                    }
                 }
             }
+            /*
+            if (mediaArray) {
+                for (var i = 0; i < mediaArray.length; i++) {
+                    mediaQueue.add(createMediaHolder(mediaArray[i], applyClick));
+                }
+            }*/
             //$(associatedMediaPickerMedia).append(docfrag);
         }
 
