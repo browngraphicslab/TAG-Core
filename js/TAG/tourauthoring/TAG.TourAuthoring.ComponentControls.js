@@ -1331,7 +1331,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     uploadHappening = false; //enables button
                     fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
                 },
-            ['.mp4', '.webm', '.ogv','.avi','.mov','.wma'],//'.avi','.mov','.wma'
+            ['.mp4'/*, '.webm', '.ogv','.avi','.mov','.wma'*/],//'.avi','.mov','.wma'
                 false,
                 function () {
                     root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));

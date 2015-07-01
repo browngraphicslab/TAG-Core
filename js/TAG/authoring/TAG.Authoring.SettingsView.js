@@ -5236,7 +5236,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     alphaName = names[j];
                 }
             }
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.mp4', '.webm', '.ogv','.mov','.avi','.wmv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'/*, '.mp4', '.webm', '.ogv','.mov','.avi','.wmv'*/]);
     }
 
     /**Create an associated media (import), possibly more than one
@@ -6958,7 +6958,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4'/*, '.webm', '.ogv','.avi','.mov','.wmv'*/]);
     }
 
    // var optionButtons = document.getElementById('optionButtons');
