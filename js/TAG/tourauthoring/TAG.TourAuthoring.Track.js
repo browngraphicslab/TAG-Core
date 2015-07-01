@@ -76,7 +76,6 @@ TAG.TourAuthoring.Track = function (spec, my) {
     my.toConvert = spec.toConvert;                                                                  // boolean to check if the user want to convert a video track right after uploading
 
     lastScale = my.timeManager.getDuration().scale;
-
     // private variables
     my.displays = [];
     // A variable to store all the keyframes for the audio track : Hak
@@ -2541,7 +2540,7 @@ function trackTitleReleased(evt) {
     that.captureHandler = captureHandler;
 
     function captureTween(evt) {
-        var origin = evt.eventSource.ITE_track;
+        var origin = evt.imageTrack ? evt.imageTrack : evt.eventSource.ITE_track;
         var time = origin.timeManager.elapsedOffset;
 
         // enabled and disabled via custom event framework - see Viewer's event listener for playerReady event
@@ -2634,12 +2633,12 @@ function trackTitleReleased(evt) {
     function captureFinishedHandler(evt) {
         captureHandler(evt);
 
-        var doCapture = function () {
+        var doCapture = $.debounce(500, function () {
             captureHandler(evt);
-        }
+            my.update();
+        });
 
-        setTimeout(doCapture, 500);
-
+        doCapture();
         my.update();
     }
     that.captureFinishedHandler = captureFinishedHandler;

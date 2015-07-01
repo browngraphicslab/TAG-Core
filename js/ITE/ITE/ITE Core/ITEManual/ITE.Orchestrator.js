@@ -14,6 +14,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.player = player;
 	self.isAuthoring = isAuthoring;
 	self.currentManipulatedObject = null;
+	self.animationFinishHandlerBound = false;
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY self IS GOING TO BE************
 	//self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
@@ -106,6 +107,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			self.trackManager[i].unload();
 			trackManager.remove(trackManager[i]);
 		}
+		self.animationFinishHandlerBound = false;
 	}
 
 	/**

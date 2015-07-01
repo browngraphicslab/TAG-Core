@@ -707,16 +707,17 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             };
             // parse into new format
         } else {
+            var ITEContainer = $('#ITEContainer');
             var rinData = {
                 viewport: {
                     region: {
                         center: {
-                            x: data.bounds.x,
-                            y: data.bounds.y
+                            x: (data.bounds ? data.bounds.x : data.left / ITEContainer.width()),
+                            y: (data.bounds ? data.bounds.y : data.top / ITEContainer.height())
                         },
                         span: {
-                            x: data.bounds.width,
-                            y: data.bounds.height
+                            x: (data.bounds ? data.bounds.width : data.width / ITEContainer.width()),
+                            y: (data.bounds ? data.bounds.height : data.height / ITEContainer.height())
                         }
                     }
                 }
