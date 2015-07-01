@@ -23,12 +23,12 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     var self = this;
     var rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
     var ispagetoload = pageToLoad && (pageToLoad.pagename === 'tour');
-
+    this.iteTour = tour;
     var tagContainer = $('#tagRoot');
 
     var player,
         root = TAG.Util.getHtmlAjax('TourPlayer.html'),
-        rinPlayer = root.find('#rinPlayer'),
+        rinPlayer = root.find('#ITEContainer'),
         backButtonContainer = root.find('#backButtonContainer'),
         backButton = root.find('#backButton'),
         linkButtonContainer = root.find('#linkContainer'),
@@ -51,6 +51,11 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             'top': (h - w * 9 / 16) / 2 + 'px'
         });
     }
+
+    rinPlayer.css({
+        width: parseInt($(window).width()),
+        height: parseInt($(window).height())
+    })
     
     // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
     // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
@@ -128,6 +133,16 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         }
     }
 
+    function reloadTourData(data) {
+        this.iteTour = data;
+    }
+    this.reloadTourData = reloadTourData;
+
+    function getTourData() {
+        return this.iteTour;
+    }
+    this.getTourData = getTourData;
+
     function goBack () {
 
         var artmode, collectionsPage;
@@ -199,8 +214,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                     setStartingOffset:          0,
                     setEndTime:                 NaN
             };
-            player = new ITE.Player(testOptions, self);
-            player.load(tour)
+            player = new ITE.Player(testOptions, self, rinPlayer);
+            player.load(self.getTourData());
         }
     };
 

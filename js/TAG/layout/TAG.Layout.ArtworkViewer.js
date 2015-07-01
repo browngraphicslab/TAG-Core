@@ -1079,8 +1079,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     var iteData = TAG.Util.RIN_TO_ITE(tour); 
                     
                     //Create tag tourplayer (which will in turn create an ITE player)
-                    var ITEPlayer = new TAG.Layout.TourPlayer(iteData, prevCollection, prevInfo, options,tour);
-                    TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), ITEPlayer.startPlayback);
+                    var ITEPlayer = new TAG.Layout.TourPlayer(iteData, prevCollection, prevInfo, options, tour);
+                    TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
+                        setTimeout(function () {
+                            var rindata = tour;
+                            ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
+                            ITEPlayer.startPlayback();
+                        }, 1000);
+                    });
                     currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
                 }
             };

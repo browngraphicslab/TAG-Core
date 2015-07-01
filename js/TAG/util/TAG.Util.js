@@ -8397,26 +8397,48 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 					currKeyframe.offset = currExperienceStream.duration
 				}
 				
-				if (providerID == "image"){
-					keyframeObject = {
-						"dispNum": k,
-						"zIndex": track.data.zIndex,
-						"time": time_offset + currKeyframe.offset,
-						"opacity": 1, 
-						"size": {
-							"x": currKeyframe.state.viewport.region.span.x * $('#ITEHolder').width(),
-							"y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
-						},
-						"pos": {
-						    "x": currKeyframe.state.viewport.region.center.x * $('#ITEHolder').width(),
-						    "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height()
-						},
-						"data": {},
-						"left": currKeyframe.state.viewport.region.center.x * $('#ITEHolder').width(),
-						"top": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height(),
-						"width": currKeyframe.state.viewport.region.span.x * $('#ITEHolder').width(),
-						"height": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
-					}
+				if (providerID == "image") {
+				    if (!($('#ITEContainer')).length) {
+				        keyframeObject = {
+				            "dispNum": k,
+				            "zIndex": track.data.zIndex,
+				            "time": time_offset + currKeyframe.offset,
+				            "opacity": 1,
+				            "size": {
+				                "x": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
+				                "y": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
+				            },
+				            "pos": {
+				                "x": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
+				                "y": currKeyframe.state.viewport.region.center.y * parseInt($(window).height())
+				            },
+				            "data": {},
+				            "left": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
+				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).height()),
+				            "width": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
+				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
+				        }
+				    } else {
+				        keyframeObject = {
+				            "dispNum": k,
+				            "zIndex": track.data.zIndex,
+				            "time": time_offset + currKeyframe.offset,
+				            "opacity": 1,
+				            "size": {
+				                "x": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').width()),
+				                "y": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').height())
+				            },
+				            "pos": {
+				                "x": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').width()),
+				                "y": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').height())
+				            },
+				            "data": {},
+				            "left": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').width()),
+				            "top": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').height()),
+				            "width": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').width()),
+				            "height": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').height())
+				        }
+				    }
 				}
 				else if (providerID == "deepZoom"){
 					keyframeObject = {
