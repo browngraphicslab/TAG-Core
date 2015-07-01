@@ -388,11 +388,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         mediaElement.attr("fileName", doq.Metadata.Source.substring(0, source.lastIndexOf('.')));
         var sourceMP4 = sourceWithoutExtension + ".mp4";
         var sourceWEBM = sourceWithoutExtension + ".webm";
-        var sourceOGV = sourceWithoutExtension + ".ogv";
+        var sourceOGG = sourceWithoutExtension + ".ogg";
 
         addSourceToVideo(mediaElement, sourceMP4, 'video/mp4');
         addSourceToVideo(mediaElement, sourceWEBM, 'video/webm');
-        addSourceToVideo(mediaElement, sourceOGV, 'video/ogv');
+        addSourceToVideo(mediaElement, sourceOGG, 'video/ogg');
         mediaElement[0].onerror = TAG.Util.videoErrorHandler(mediaElement, viewer);
         viewer.append(mediaElement);
 
@@ -4264,11 +4264,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         holder.removeAttr('src');
                         var sourceMP4 = sourceWithoutExtension + ".mp4";
                         var sourceWEBM = sourceWithoutExtension + ".webm";
-                        var sourceOGV = sourceWithoutExtension + ".ogv";
+                        //var sourceOGG = sourceWithoutExtension + ".ogg";
 
                         addSourceToVideo(holder, sourceMP4, 'video/mp4');
                         addSourceToVideo(holder, sourceWEBM, 'video/webm');
-                        addSourceToVideo(holder, sourceOGV, 'video/ogv');
+                        //addSourceToVideo(holder, sourceOGV, 'video/ogg');
                         holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer);
                         //$(document.getElementsByClassName("convertVideoBtn")[0]).hide().data('disabled', true);
                         viewer.append(holder);
@@ -5284,7 +5284,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     alphaName = names[j];
                 }
             }
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3', '.mp4', '.webm', '.ogv','.mov','.avi','.wmv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'/*, '.mp4', '.webm', '.ogv','.mov','.avi','.wmv'*/]);
     }
 
     /**Create an associated media (import), possibly more than one
@@ -7055,7 +7055,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             }
 
-        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.webm', '.ogv','.avi','.mov','.wmv']);
+        }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4'/*, '.webm', '.ogv','.avi','.mov','.wmv'*/]);
     }
 
    // var optionButtons = document.getElementById('optionButtons');
@@ -9032,7 +9032,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @return {String} timelineInputText   text to display in timelineYearInput 
          */
         function getTimelineInputText(yearInput){
-            var timelineInputText = TAG.Util.parseDateToYear({ year : yearInput.attr('value')});
+            var timelineInputText = TAG.Util.parseDateToYear({ year: yearInput.attr('value') });
+            if (timelineInputText === 999999) {
+                timelineInputText = "";
+            }
             if (timelineInputText){
                 if (timelineInputText<0){
                     return -timelineInputText + ' BCE';
