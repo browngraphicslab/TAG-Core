@@ -125,7 +125,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         function goBack() {
             var messageBox;
             // first, make sure that a tour reload isn't in progress
-            if (viewer.getIsReloading()) {
+            if (viewer.getIsReloading() && false) {//this is obvously never going to happen, but keeping in case of needing quick revert
                 messageBox = TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
                 $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
                 $('body').append(messageBox);
