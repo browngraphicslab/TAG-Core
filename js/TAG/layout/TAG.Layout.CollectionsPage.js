@@ -2568,7 +2568,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .append(yearTextBox);
 
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
-                if (currentWork.Metadata.ContentType == "tour") {
+                console.log("      ")
+                console.log("currentWork: ")
+                console.log(currentWork)
+                console.log("type: " + currentWork.Type)
+                console.log("Metadata.ContentType: " + currentWork.Metadata.ContentType)
+                console.log("Metadata.Type: " + currentWork.Metadata.Type)
+                console.log("              ")
+                if (currentWork.Metadata.ContentType == "tour" || currentWork.Metadata.ContentType == undefined) {
                     tourLabel = $(document.createElement('img'))
                         .addClass('tourLabel')
                         .attr('src', tagPath + 'images/tour_icon.svg');
