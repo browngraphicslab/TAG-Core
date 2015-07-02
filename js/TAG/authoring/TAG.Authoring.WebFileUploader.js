@@ -283,6 +283,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
                 });
             } else {    //Size > maxSize
                 resumableUploader.removeFile(resumableFile);    //Remove the file from the upload operation
+                removeOverlay();
                 console.log("Too big!");
                 largeFiles.push(resumableFile.file);
                 filesCompleted++;
