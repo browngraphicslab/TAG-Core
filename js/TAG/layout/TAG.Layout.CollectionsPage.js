@@ -1200,7 +1200,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
                 centeredCollectionHeader.css({ 'height': 'auto' });
             }
-            if (previewing) {
+            if (IS_WINDOWS && previewing) {
                 titleBox.css({
                     "padding-right": .133 * centeredCollectionHeader.height() + "px"
                 })
@@ -1213,13 +1213,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 'width': .13344* centeredCollectionHeader.height() + 'px',
                 'top' : "17%"
             });
-            if (!IS_WINDOWS && !previewing) {
+            if (!IS_WINDOWS ) {
                 dropDownArrow.css({
                     'height': .71625 * centeredCollectionHeader.height() + "px",
                     'width': .2066 * centeredCollectionHeader.height() + 'px',
                     'top': "18.5%",
                     'position':'absolute'
                 });
+            }
+            if (!IS_WINDOWS && previewing){
+                dropDownArrow.css({'top':'8%'});
             }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
