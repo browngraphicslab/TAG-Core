@@ -8734,6 +8734,8 @@ function onCanvasScroll(event, isTopLayer) {
             originalEvent: event.originalEvent
         });
         //cancels event
+        this.orchestrator.currentManipulatedObject = null;
+
         return false;
     }
 }
