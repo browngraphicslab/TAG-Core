@@ -492,6 +492,19 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		return state;
 	};
 
+    /*
+     * I/P:     none
+     * Returns true if the track is currently visible.
+     * O/P:     isVisible:          True if track is visible.
+     */
+	self.isVisible = function () {
+	    if (!self.firstKeyframe || !self.lastKeyframe) {
+	        return false;
+	    }
+	    var now = self.timeManager.getElapsedOffset();
+	    return self.firstKeyframe.time <= now && now <= self.lastKeyframe.time;
+	};
+
     // keyframe capture pub/sub methods
 	self.registerCaptureHandler = function (handlers) {
 	    scrollCaptureHandler = handlers.scroll;

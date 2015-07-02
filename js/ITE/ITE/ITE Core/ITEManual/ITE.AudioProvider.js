@@ -318,6 +318,15 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		return state;
 	};
 
+    /*
+     * I/P:     none
+     * Returns true if the track is currently visible.
+     * O/P:     isVisible:          True if track is visible.
+     */
+	self.isVisible = function () {
+	    return false;
+	};
+
 	///////////////////////////////////////////////////////////////////////////
 	// AudioProvider functions.
 	///////////////////////////////////////////////////////////////////////////

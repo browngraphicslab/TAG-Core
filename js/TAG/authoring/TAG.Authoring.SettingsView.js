@@ -10639,7 +10639,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-bottom':'1%',
                 'padding-left':'1.5%',
                 'padding-right':'1%',
-                'width': '40%',
+                'width': '35%',
                 'border': '1px solid black',
                 //'padding': '1.5% 0px 0px 0px',
                 'padding-top':'-10%',
@@ -10691,7 +10691,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .append($(document.createElement('div')).text('Import').css({
                 'display': 'inline-block',
                 //'margin-right': '1%',
-                'margin-left' : '10%',
+                'margin-left' : '0%',
                 'float':'left'
             }))
             .append(addMenuArrowIcon)
@@ -10731,7 +10731,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     '-ms-transform': 'rotate(90deg)',
                     'transform': 'rotate(90deg)',
                     'padding-left': '7%',
-                    'padding-right': '0%'
+                    'padding-right': '0%',
+                    'margin-left': '3%',
+                    'margin-right': '5%'
                 });
                 dropDown.hide();
             } else {
@@ -10745,7 +10747,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'transform': 'rotate(270deg)',
                     'padding-left': '0%',
                     'padding-right':'7%',
-                    'float':'right'
+                    //'float':'right'
                 });
                 console.log(findContainer.css('display'));
                 if (findContainer.css('display') != 'none') {
