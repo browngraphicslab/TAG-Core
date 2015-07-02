@@ -33,6 +33,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
 
     }
 
+    var lastStop = 0;
     var that = {};
 
     var root = TAG.Util.getHtmlAjax('VideoPlayer.html'),
@@ -144,6 +145,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
     function pauseVideo() {
         console.log('PAUSE VID');
         videoElt.pause();
+        lastStop = videoElt.currentTime;
         topBar.css('display','inline');
         play.attr('src', tagPath+'js/rin/web/systemResources/themeresources/images/play.png');
         TAG.Telemetry.recordEvent("VideoPlayer", function(tobj) {
@@ -318,7 +320,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
             fileName: sourceWithoutExtension,
             identifier: videoSrc.Identifier,
             controls: false,
-            preload: 'none'
+            preload: 'none',
         });
 
         //Adding sources for the video file
@@ -334,6 +336,19 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         videoElt.innerHTML += '<source src="' + sourceWEBM + '" type="video/webm">';
         videoElt.innerHTML += '<source src="' + sourceOGV + '" type="video/ogv">';
 
+        videoElt.onerror = function (err){
+            console.log(err);
+            switch (err.target.error.code){
+                case err.target.error.MEDIA_ERR_NETWORK:
+                    console.log(lastStop);
+                    videoElt.load();
+                    videoElt.currentTime = lastStop;
+                    //pauseVideo();
+                    playVideo();
+                    //initPage();
+                    break;
+            }
+        }
         // set text of time display
         currentTimeDisplay.text("00:00");
     
