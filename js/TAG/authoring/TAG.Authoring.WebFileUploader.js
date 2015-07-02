@@ -442,6 +442,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         var longFilesExist = false;
         var i;
         if (largeFiles.length > 0) {
+            str = "";
             msg = "The following file(s) exceeded the 50MB file limit: <br />";
             for(var i =0; i<largeFiles.length; i++){
                 str = str + largeFiles[i].name + "<br />";
