@@ -10624,7 +10624,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-bottom':'1%',
                 'padding-left':'1.5%',
                 'padding-right':'1%',
-                'width': '35%',
+                'width': '40%',
                 'border': '1px solid black',
                 //'padding': '1.5% 0px 0px 0px',
                 'padding-top':'-10%',
