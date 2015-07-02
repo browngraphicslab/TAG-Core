@@ -5659,8 +5659,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         var cancel = false;
         collectionSort.css('display','inline-block');
+        collectionSort.css({    
+            'padding-left': '2px',
+            'padding-right': '2px',
+            'float': 'left'
+        });
 
-        findContainer.css('width','140%');
+        titleSort.css({
+            'padding-left': '2px',
+            'padding-right': '2px',
+            'float': 'left'
+        })
+
+        addedRecentlySort.css({
+            'padding-left': '2px',
+            'padding-right': '2px',
+            'float': 'left'
+
+        })
+
+        findContainer.css('width','100%');
 
         //if (generalIsLoading || collectionsIsLoading ||
         //  artworksIsLoading || associatedMediaIsLoading || toursIsLoading) {
