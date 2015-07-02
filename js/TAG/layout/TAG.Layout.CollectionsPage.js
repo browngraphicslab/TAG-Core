@@ -884,7 +884,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             //adjust styling for windows
             if (!IS_WINDOWS){              
                 if (previewing) {
-                    (".selector-dropdown").css('top', '-4px');
+                    $(".selector-dropdown").css('top', '-4px');
                 } else {
                     $(".selector-dropdown").css('top', '-1px');
                 }
