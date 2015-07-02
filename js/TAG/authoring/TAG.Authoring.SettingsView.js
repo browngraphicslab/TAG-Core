@@ -4774,15 +4774,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineDay = inputs.timelineDayInput.val(),
             desc = inputs.descInput.val(),
             source = embeddedURL || "";
-        
-        //don't allow saving of invalid year
+         
         if (!checkValidYear(timelineYear)) {
-            //allow clearing of timeline year
-            if (timelineYear === '') {
-                timelineYear = undefined;
-            } else {
-                timelineYear = media.Metadata.TimelineYear;
-            }
+            timelineYear = media.Metadata.TimelineYear;
         }
         //pCL = displayLoadingSettings();
         clearRight();
@@ -5659,8 +5653,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         var cancel = false;
         collectionSort.css('display','inline-block');
+        collectionSort.css({    
+            'padding-left': '2px',
+            'padding-right': '2px',
+            'float': 'left'
+        });
 
-        findContainer.css('width','140%');
+        titleSort.css({
+            'padding-left': '2px',
+            'padding-right': '2px',
+            'float': 'left'
+        })
+
+        addedRecentlySort.css({
+            'padding-left': '2px',
+            'padding-right': '2px',
+            'float': 'left'
+
+        })
+
+        findContainer.css('width','100%');
 
         //if (generalIsLoading || collectionsIsLoading ||
         //  artworksIsLoading || associatedMediaIsLoading || toursIsLoading) {
@@ -7773,12 +7785,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //don't save an invalid timeline year 
         if (!checkValidYear(timelineYear)) {
-            //allow clearing of timeline date
-            if (timelineYear === "") {
-                timelineYear = undefined;
-            } else {
-                timelineYear = artwork.Metadata.TimelineYear;
-            }
+            timelineYear = artwork.Metadata.TimelineYear
         }
 
         var infoFields = {};
@@ -8332,7 +8339,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.text(newText);
         newButton.unbind('click').click(newBehavior);
         if (!newText) { newButton.hide(); }
-        else { newButton.show(); }
+            else { newButton.show(); }
 
         if (inArtworkView){
             menuLabel.hide();
@@ -8348,6 +8355,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if(IS_WINDOWS){
                 deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
                 deleteBlankButton.text('Delete');
+                deleteBlankButton.css('margin-left', '2.25%');
+                addButton.css('margin-left', '0%');
             } else{
                 deleteBlankButton.css('display','none'); //web app - delete button disabled
             }
@@ -8363,9 +8372,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             findBar.css("display", "inline-block");
             searchbar.css({ width: '75%' });
             if (IS_WINDOWS) {
-                
                 deleteBlankButton.unbind('click').click(function () { deleteAssociatedMedia(multiSelected) });
                 deleteBlankButton.text('Delete');
+                deleteBlankButton.css('margin-left','2%');
+                addButton.css('margin-left', '2%');
             } else {
                 deleteBlankButton.css('display', 'none'); //web app - delete button disabled
             }
@@ -8375,6 +8385,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (IS_WINDOWS) {
                     deleteBlankButton.unbind('click').click(function () { deleteExhibition(multiSelected) });
                     deleteBlankButton.text('Delete');
+                    deleteBlankButton.css('margin-left', '0%');
                 } else {
                     deleteBlankButton.css('display', 'none'); //web app - delete button disabled
                 }
@@ -10675,7 +10686,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .append($(document.createElement('div')).text('Import').css({
                 'display': 'inline-block',
-                'margin-right': '1%',
+                //'margin-right': '1%',
                 'margin-left' : '10%',
                 'float':'left'
             }))
