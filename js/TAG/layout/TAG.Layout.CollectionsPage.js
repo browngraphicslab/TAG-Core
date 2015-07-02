@@ -1211,9 +1211,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
             if (!IS_WINDOWS && !previewing) {
                 dropDownArrow.css({
-                    'height': .64 * centeredCollectionHeader.height() + "px",
-                    'width': .149 * centeredCollectionHeader.height() + 'px',
-                    'top': "12%",
+                    'height': .71625 * centeredCollectionHeader.height() + "px",
+                    'width': .2066 * centeredCollectionHeader.height() + 'px',
+                    'top': "18.5%",
                     'position':'absolute'
                 });
             }
