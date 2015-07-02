@@ -3391,10 +3391,12 @@ TAG.Util.UI = (function () {
 
         if(displayNames){
             $(messageLabel).css('height', 'auto')
+            $(namesLabel).css('font-size', fontsize);
             for (var i = 0; i < displayNames.length; i++) {
 
                 var para = document.createElement('div');
                 $(para).text(displayNames[i]);
+                $(para).css('font-size', fontsize);
                 $(para).css({color: 'white', 'z-index': '99999999999'});
                 $(namesLabel).append(para);
                 TAG.Util.multiLineEllipsis($(para));
