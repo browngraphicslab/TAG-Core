@@ -49,7 +49,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             width: root.css('width'),
             height: h + 'px'
         });
-    } else if (w / h < 16 / 9) {
+    } else if (w / h <= 16 / 9) {
         root.css({
             'height': w * 9 / 16 + 'px',
             'top': (h - w * 9 / 16) / 2 + 'px'
