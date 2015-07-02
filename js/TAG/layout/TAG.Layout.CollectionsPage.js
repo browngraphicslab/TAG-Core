@@ -882,8 +882,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
             
                             //adjust styling for windows
-            if (!IS_WINDOWS){
-                $(".selector-dropdown").css('top','-1px');
+            if (!IS_WINDOWS){              
+                if (previewing) {
+                    (".selector-dropdown").css('top', '-4px');
+                } else {
+                    $(".selector-dropdown").css('top', '-1px');
+                }
             }
 
             // The last thing we do is add a search button. 
@@ -1170,7 +1174,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             titleBox.css({
                 "display": "inline-block",
                 "position": "relative",
-                "padding-right": "18px",
+                "padding-right": $("#tagRoot").width()*0.012+ "px",
                 "height": "100%",
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
@@ -1178,8 +1182,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             centeredCollectionHeader.css({
                 "text-align": "center",
                 "display": "inline-block",
-                //"height": "90%",
-                //"overflow": "hidden",
+                "height": "90%",
                 "top": "10%",
                 "cursor": "pointer",
                 "white-space" : "nowrap"
@@ -1194,9 +1197,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!IS_WINDOWS) {
                 titleBox.css({
                     "padding-right": .165 * centeredCollectionHeader.height() + "px"
-                })
+                });
+                centeredCollectionHeader.css({ 'height': 'auto' });
             }
-            if (previewing) {
+            if (IS_WINDOWS && previewing) {
                 titleBox.css({
                     "padding-right": .133 * centeredCollectionHeader.height() + "px"
                 })
@@ -1204,17 +1208,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             dropDownArrow.css({
                 'display': 'inline-block',
                 'left': "auto",
-                //'position': "relative",
+                'position': "relative",
                 'height': .55*centeredCollectionHeader.height()+"px",
                 'width': .13344* centeredCollectionHeader.height() + 'px',
-                'top' : "27%"
+                'top' : "17%"
             });
-            if (!IS_WINDOWS && !previewing) {
+            if (!IS_WINDOWS ) {
                 dropDownArrow.css({
-                    'height': .64 * centeredCollectionHeader.height() + "px",
-                    'width': .149 * centeredCollectionHeader.height() + 'px',
-                    'top' : "18.25%"
+                    'height': .71625 * centeredCollectionHeader.height() + "px",
+                    'width': .2066 * centeredCollectionHeader.height() + 'px',
+                    'top': "18.5%",
+                    'position':'absolute'
                 });
+            }
+            if (!IS_WINDOWS && previewing){
+                dropDownArrow.css({'top':'8%'});
             }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    

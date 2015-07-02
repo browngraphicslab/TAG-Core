@@ -237,7 +237,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         time_spent_timer: null
     };
 
-    
+
         
 
     //WEB ui
@@ -4253,7 +4253,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr('identifier', media.Identifier);
                 holder.attr("preload", "none");
                 holder.attr("controls", "");
-                holder.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
+                holder.css({ "width": "100%", "max-width": "100%", "max-height": "100%"});
+                if (!IS_WINDOWS) {holder.css("padding-top","2%")}; // adjust the position for video previewing in web app
                 holder.attr("src", source);
                 var source = TAG.Worktop.Database.fixPath(media.Metadata.Source);
                 var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
@@ -6178,7 +6179,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.attr('identifier', artwork.Identifier);
             mediaElement.attr("preload", "none");
             mediaElement.attr("controls", "");
-            mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
+            mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%"});
+            if (!IS_WINDOWS) {mediaElement.css("padding-top","2%")}; // adjust the position for video previewing in web app
             var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
             var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
             var sourceExt = source.substring(source.lastIndexOf('.'));
