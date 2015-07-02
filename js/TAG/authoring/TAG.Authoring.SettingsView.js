@@ -5653,8 +5653,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         var cancel = false;
         collectionSort.css('display','inline-block');
+        collectionSort.css({    
+            'padding-left': '2px',
+            'padding-right': '2px',
+            'float': 'left'
+        });
 
-        findContainer.css('width','140%');
+        titleSort.css({
+            'padding-left': '2px',
+            'padding-right': '2px',
+            'float': 'left'
+        })
+
+        addedRecentlySort.css({
+            'padding-left': '2px',
+            'padding-right': '2px',
+            'float': 'left'
+
+        })
+
+        findContainer.css('width','100%');
 
         //if (generalIsLoading || collectionsIsLoading ||
         //  artworksIsLoading || associatedMediaIsLoading || toursIsLoading) {
@@ -10617,7 +10635,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-bottom':'1%',
                 'padding-left':'1.5%',
                 'padding-right':'1%',
-                'width': '35%',
+                'width': '40%',
                 'border': '1px solid black',
                 //'padding': '1.5% 0px 0px 0px',
                 'padding-top':'-10%',

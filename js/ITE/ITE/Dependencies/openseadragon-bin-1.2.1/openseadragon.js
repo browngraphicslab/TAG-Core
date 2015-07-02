@@ -7951,6 +7951,9 @@ function openTileSource( viewer, source ) {
         _this.close( );
     }
 
+    if (!THIS[_this.hash]) {
+        return;
+    }
     THIS[ _this.hash ].prevContainerSize = _getSafeElemSize( _this.container );
 
 
@@ -8374,7 +8377,6 @@ function onCanvasDblClick(event, first) {
 function onCanvasDrag(event, isTopTrack) {
     //get zindex of current dz track
     var zIndex = this.ITE_track.trackData.zIndex;
-    this.orchestrator.animationFinishHandlerBound = true;
 
     // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
     //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
@@ -8450,7 +8452,6 @@ function onCanvasDrag(event, isTopTrack) {
 
 function onCanvasDragEnd(event, isTopTrack) {
     var zIndex = this.ITE_track.trackData.zIndex;
-    this.orchestrator.animationFinishHandlerBound = true;
 
     // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
     //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
@@ -8459,6 +8460,7 @@ function onCanvasDragEnd(event, isTopTrack) {
             this.orchestrator.currentManipulatedObject.viewer.onCanvasDragEnd(event, false);
         } else {
             this.orchestrator.currentManipulatedObject.endManipFromDZRecursion(event);
+            this.orchestrator.currentManipulatedObject = null;
         }
         return;
     }
@@ -8560,9 +8562,34 @@ function onCanvasPinch(event, isTopLayer) {
     //takes the first dz track in the stack that has the click/touch event in bounds
     var track = this.orchestrator.getTrackBehind(zIndex, event, false);
 
-    //if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
-    if ((isTopLayer === undefined || isTopLayer) && track != null) {
-        track.viewer.onCanvasPinch(event, false);
+    ////if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
+    //if ((isTopLayer === undefined || isTopLayer) && track != null) {
+    //    track.viewer.onCanvasPinch(event, false);
+    //}
+
+    //if (this.orchestrator.currentManipulatedObject && (isTopLayer !== false)) {
+    //    if (this.orchestrator.currentManipulatedObject.viewer) {
+    //        this.orchestrator.currentManipulatedObject.viewer.onCanvasPinch(event, false);
+    //    } else {
+    //        this.orchestrator.currentManipulatedObject.scrollFromDZRecursion(event);
+    //    }
+    //    return;
+    //}
+
+    // otherwise, check if this is the top dz track
+    if ((isTopLayer === undefined) || (isTopLayer === true)) {
+        //find the first dz track in the stack to have the click/touch event in bounds
+        var track = this.orchestrator.getTrackBehind(zIndex, event);
+        this.orchestrator.currentManipulatedObject = track;
+
+        //if the track exists, pass the event to that track 
+        if (track) {
+            if (track.viewer) {
+                track.viewer.onCanvasPinch(event, false);
+            } else {
+                track.scrollFromDZRecursion(event);
+            }
+        }
     } else {
         var gestureSettings,
             centerPt,
@@ -8628,17 +8655,47 @@ function onCanvasPinch(event, isTopLayer) {
 
 /*Augmented function for layers fix*/
 function onCanvasScroll(event, isTopLayer) {
+    //////////////////////////////////////////////////////////
     var zIndex = this.ITE_track.trackData.zIndex;
 
     //takes the first dz track in the stack that has the click/touch event in bounds
     var track = this.orchestrator.getTrackBehind(zIndex, event, false);
 
-    //if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
-    if ((isTopLayer === undefined || isTopLayer) && track != null) {
-        if (track.viewer) {
-            track.viewer.onCanvasScroll(event, false);
+    ////if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
+    //if ((isTopLayer === undefined || isTopLayer) && track != null) {
+    //    if (track.viewer) {
+    //        track.viewer.onCanvasScroll(event, false);
+    //    } else {
+    //        track.scrollFromDZRecursion(event);
+    //    }
+    //}
+    //////////////////////////////////////////////////////////
+    var zIndex = this.ITE_track.trackData.zIndex;
+
+    // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
+    //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
+    if (this.orchestrator.currentManipulatedObject && (isTopLayer !== false)) {
+        if (this.orchestrator.currentManipulatedObject.viewer) {
+            this.orchestrator.currentManipulatedObject.viewer.onCanvasScroll(event, false);
         } else {
-            track.scrollFromDZRecursion(event);
+            this.orchestrator.currentManipulatedObject.scrollFromDZRecursion(event);
+        }
+        return;
+    }
+
+    // otherwise, check if this is the top dz track
+    if ((isTopLayer === undefined) || (isTopLayer === true)) {
+        //find the first dz track in the stack to have the click/touch event in bounds
+        var track = this.orchestrator.getTrackBehind(zIndex, event);
+        this.orchestrator.currentManipulatedObject = track;
+
+        //if the track exists, pass the event to that track 
+        if (track) {
+            if (track.viewer) {
+                track.viewer.onCanvasScroll(event, false);
+            } else {
+                track.scrollFromDZRecursion(event);
+            }
         }
     } else {
         var gestureSettings,
