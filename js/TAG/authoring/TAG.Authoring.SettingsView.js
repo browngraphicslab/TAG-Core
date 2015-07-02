@@ -5659,6 +5659,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'float': 'left'
         });
 
+
         titleSort.css({
             'padding-left': '2px',
             'padding-right': '2px',
@@ -5673,6 +5674,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         })
 
         findContainer.css('width','100%');
+        searchbar.css('width', '75%');
 
         //if (generalIsLoading || collectionsIsLoading ||
         //  artworksIsLoading || associatedMediaIsLoading || toursIsLoading) {
