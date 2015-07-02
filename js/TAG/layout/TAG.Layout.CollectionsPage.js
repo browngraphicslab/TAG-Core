@@ -882,8 +882,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             });
             
                             //adjust styling for windows
-            if (!IS_WINDOWS){
-                $(".selector-dropdown").css('top','-1px');
+            if (!IS_WINDOWS){              
+                if (previewing) {
+                    $(".selector-dropdown").css('top', '-4px');
+                } else {
+                    $(".selector-dropdown").css('top', '-1px');
+                }
             }
 
             // The last thing we do is add a search button. 
@@ -2572,7 +2576,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .append(yearTextBox);
 
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
-                if (currentWork.Metadata.ContentType == "tour") {
+                if (currentWork.Metadata.ContentType == "tour" || currentWork.Metadata.ContentType == undefined) {
                     tourLabel = $(document.createElement('img'))
                         .addClass('tourLabel')
                         .attr('src', tagPath + 'images/tour_icon.svg');
