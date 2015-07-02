@@ -265,6 +265,14 @@ ITE.ProviderInterfacePrototype = function(trackData, player, timeManager, orches
 	 * Creates a linearly interpolated state between start and end keyframes.
 	 * O/P: 	state : 			Object holding lerped keyframe's state, as used in animation.
 	 */
-	self.lerpState = function(startKeyframe, endKeyframe, interp) {};
+	self.lerpState = function (startKeyframe, endKeyframe, interp) { };
+
+
+    /*
+     * I/P:     none
+     * Returns true if the track is currently visible.
+     * O/P:     isVisible:          True if track is visible.
+     */
+	self.isVisible = function () { };
 
 }
