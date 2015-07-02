@@ -40,22 +40,25 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         w = $('#tagRoot').width(),
         h = $('#tagRoot').height();
     
-    if (h * 16 / 9 < w) { // make sure player is 16:9
+    if (w / h > 16 / 9) { // make sure player is 16:9
         root.css({
             'width': h * 16 / 9 + 'px',
-            'left': (w - h*16/9)/2 + 'px'
+            'left': (w - h * 16 / 9) / 2 + 'px'
         });
-    } else if (w * 9/16 < h) {
+        rinPlayer.css({
+            width: root.css('width'),
+            height: h + 'px'
+        });
+    } else if (w / h < 16 / 9) {
         root.css({
             'height': w * 9 / 16 + 'px',
             'top': (h - w * 9 / 16) / 2 + 'px'
         });
+        rinPlayer.css({
+            width: w + 'px',
+            height: root.css('height')
+        })
     }
-
-    rinPlayer.css({
-        width: parseInt($(window).width()),
-        height: parseInt($(window).height())
-    })
     
     // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
     // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
