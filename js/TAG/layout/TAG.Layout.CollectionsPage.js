@@ -1170,7 +1170,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             titleBox.css({
                 "display": "inline-block",
                 "position": "relative",
-                "padding-right": "18px",
+                "padding-right": $("#tagRoot").width()*0.012+ "px",
                 "height": "100%",
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
@@ -1178,8 +1178,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             centeredCollectionHeader.css({
                 "text-align": "center",
                 "display": "inline-block",
-                //"height": "90%",
-                //"overflow": "hidden",
+                "height": "90%",
                 "top": "10%",
                 "cursor": "pointer",
                 "white-space" : "nowrap"
@@ -1194,7 +1193,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!IS_WINDOWS) {
                 titleBox.css({
                     "padding-right": .165 * centeredCollectionHeader.height() + "px"
-                })
+                });
+                centeredCollectionHeader.css({ 'height': 'auto' });
             }
             if (previewing) {
                 titleBox.css({
@@ -1204,16 +1204,17 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             dropDownArrow.css({
                 'display': 'inline-block',
                 'left': "auto",
-                //'position': "relative",
+                'position': "relative",
                 'height': .55*centeredCollectionHeader.height()+"px",
                 'width': .13344* centeredCollectionHeader.height() + 'px',
-                'top' : "27%"
+                'top' : "17%"
             });
             if (!IS_WINDOWS && !previewing) {
                 dropDownArrow.css({
                     'height': .64 * centeredCollectionHeader.height() + "px",
                     'width': .149 * centeredCollectionHeader.height() + 'px',
-                    'top' : "18.25%"
+                    'top': "12%",
+                    'position':'absolute'
                 });
             }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
