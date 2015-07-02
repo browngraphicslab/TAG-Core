@@ -426,7 +426,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
     function finishedUpload() {
         console.log("Called finishedUpload");
-        //removeOverlay();
+        removeOverlay();
      
         addLocalCallback(globalFiles, localURLs, globalUriStrings)();
         finishedCallback(dataReaderLoads);
