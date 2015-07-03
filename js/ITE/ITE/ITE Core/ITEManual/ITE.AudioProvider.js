@@ -130,12 +130,13 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.play = function(endKeyframe) {
-		_audioControls.pause();
+	    _audioControls.pause();
 		
 		if (self.status === 3) {
 			return;
 		}
 		self.status = 1;
+		self.orchestrator.updateZIndices();
 
 		// Revert to any saved state, get time to start animation.
 		var startTime;

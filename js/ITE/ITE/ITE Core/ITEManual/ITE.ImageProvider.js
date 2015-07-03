@@ -164,6 +164,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 1;
+		self.orchestrator.updateZIndices();
 
 		// Revert to any saved state, get time to start animation.
 		var startTime;
