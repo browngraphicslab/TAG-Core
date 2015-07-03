@@ -73,7 +73,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Format of keyword sets: [{keywordSet1}, {keywordSet2}, {keywordSet3}]
         // Where {keywordSetX} = {"name": "XXXX", "set": ["XXXX", "XXXX", "XXXX", "XXXX" ...]}
-        keywordSets, 
+        keywordSets,
 
         primaryColorPicker,
         secondaryColorPicker,
@@ -128,7 +128,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         that = {
             getRoot: getRoot,
-           
+
         },
 
         //AUTOSAVING HAS BEEN REMOVED - SAVE BUTTONS ARE BACK!
@@ -209,19 +209,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         inFeedbackView = false,
 
         showDropdown = false;
-        createAddToArtworkMenu();
-        
-        createDropdownAssocMediaMenu();
-        setUpFindContainer();
+    createAddToArtworkMenu();
 
-        //window.addEventListener('keydown', keyHandler),
-        TAG.Util.UI.initKeyHandler();
-        TAG.Util.UI.getStack()[0] = settingsViewKeyHandler;
-        var timelineShown;
+    createDropdownAssocMediaMenu();
+    setUpFindContainer();
 
-        newButton.on("mousedown", function () {
-            newButton.css({"background-color":"white"});
-        });
+    //window.addEventListener('keydown', keyHandler),
+    TAG.Util.UI.initKeyHandler();
+    TAG.Util.UI.getStack()[0] = settingsViewKeyHandler;
+    var timelineShown;
+
+    newButton.on("mousedown", function () {
+        newButton.css({ "background-color": "white" });
+    });
 
     var prevLeftBarSelection = {
         timeSpentTimer: null,
@@ -238,11 +238,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     };
 
 
-        
+
 
     //WEB ui
     if (!IS_WINDOWS) {
-        
+
         newButton.css({
             'width': 'auto',
             'font-size': '100%'
@@ -259,15 +259,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     deleteBlankButton.css({
         'min-width': '0px',
         'width': '20%',
-        'font-size':'50%'
+        'font-size': '50%'
     })
     .text("Delete");
-    if(!IS_WINDOWS){
+    if (!IS_WINDOWS) {
         deleteBlankButton.css({
-        'display': 'none'
+            'display': 'none'
         });
     }
-    
+
     //.text("Delete");
     findBarTextBox.css({
         'height': '100%',
@@ -287,24 +287,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     }
     if (IS_WINDOWS) {
         findBarTextBox.css('font-size', '150%');
-        findButton.css('font-size','100%');
+        findButton.css('font-size', '100%');
         findBarDropIcon.css({
             'float': 'left',
             'width': '5%',
             'margin-top': '5%',
-            'margin-left':'20%'
+            'margin-left': '20%'
         });
     }
 
     /*Surbhi */
 
-        TAG.Telemetry.register(newButton, "mousedown", "ImportButton", function (tobj) {
-            tobj.element_type = "artwork";
-        });
+    TAG.Telemetry.register(newButton, "mousedown", "ImportButton", function (tobj) {
+        tobj.element_type = "artwork";
+    });
 
     //////////////////////////
-        var checkConTimerId;
-        var cancelArtworkLoad = null;
+    var checkConTimerId;
+    var cancelArtworkLoad = null;
     loadHelper();
     if (callback) {
         callback(that);
@@ -362,8 +362,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             viewer.append(TAG.Util.createConversionLoading(msg, true));
                         }
                     }
-                
-                }else {
+
+                } else {
                     console.log("not converted: ");
                 }
             }, null, doq.Identifier);
@@ -400,8 +400,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         $("#leftLoading").remove();
         $("#videoErrorMsg").remove();
     }
-    
-    
+
+
     //an array to store video guids that need to be converted
     var conversionVideos = [];
     /**
@@ -504,16 +504,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if ($(document.getElementById('thumbnailButton')).length) {
                     saveThumbnail(currentList[currentIndex], false);
                 }
-             }
+            }
             if (inAssociatedView) {
                 if (!$('.pickerOverlay').length) {
                     assocToArtworks(currentList[currentIndex]);
-                }                
+                }
             }
             if (inToursView) { editTour(currentList[currentIndex]); }
             if (inFeedbackView) { deleteFeedback(currentList[currentIndex]); }
         }
-        
+
     }
 
     /**Handles delete key press on the SettingsView page
@@ -534,31 +534,31 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (currentSelected.prev()) {
                     if (currentIndex > 0) {
                         //resetLabels('.middleLabel');
-                        selectLabel(currentSelected.prev(),false,'.middleLabel');
+                        selectLabel(currentSelected.prev(), false, '.middleLabel');
                         currentSelected = currentSelected.prev();
                         prevSelectedMiddleLabel = currentSelected;
                         currentIndex--;
-                        
 
-                        if (inCollectionsView) { 
-                            loadExhibition(currentList[currentIndex]); 
+
+                        if (inCollectionsView) {
+                            loadExhibition(currentList[currentIndex]);
                         }
-                        if (inArtworkView) { 
-                            loadArtwork(currentList[currentIndex]); 
+                        if (inArtworkView) {
+                            loadArtwork(currentList[currentIndex]);
                         }
-                        if (inAssociatedView) { 
-                            loadAssocMedia(currentList[currentIndex]); 
+                        if (inAssociatedView) {
+                            loadAssocMedia(currentList[currentIndex]);
                         }
-                        if (inToursView) { 
-                            loadTour(currentList[currentIndex]); 
+                        if (inToursView) {
+                            loadTour(currentList[currentIndex]);
                         }
                         if (inFeedbackView) {
-                            loadFeedback(currentList[currentIndex]); 
+                            loadFeedback(currentList[currentIndex]);
                         }
                     }
                 }
             }
-			
+
         }
         if (inGeneralView) {
             if (currentSelected === labelTwo) {
@@ -579,7 +579,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method downKeyHandlerSettingsView
      */
     function downKeyHandlerSettingsView() {
-        
+
         if (!$("input, textarea").is(":focus") && !inGeneralView) {
             if (prevSelectedMiddleLabel && prevSelectedMiddleLabel === currentSelected) {
                 if (currentSelected.next()) {
@@ -617,17 +617,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 loadPasswordScreen();
             } else if (currentSelected === labelTwo) {
                 //resetLabels('.leftLabel');
-                selectLabel(labelOne,false, '.leftLabel');
+                selectLabel(labelOne, false, '.leftLabel');
                 currentSelected = labelOne;
                 loadSplashScreen();
             }
         }
     }
 
- /**
-  * Function to reset current view and reload original labels
-  * @method resetView
-  */
+    /**
+     * Function to reset current view and reload original labels
+     * @method resetView
+     */
     function resetView() {
         if (inArtworkView) {
             loadArtView();
@@ -647,20 +647,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method loadHelper
      * @param {Object} main  
      */
-    function loadHelper(main){
+    function loadHelper(main) {
 
         //Setting up UI:
         backButton = root.find('#setViewBackButton');
         backButton.attr('src', tagPath + 'images/icons/Back.svg');
         backButton.css({
             'float': 'left',
-            'display':'inline-block'
+            'display': 'inline-block'
         });
 
         backButton.mousedown(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, false);
         });
-            
+
         backButton.mouseleave(function () {
             TAG.Util.UI.cgBackColor("backButton", backButton, true);
         });
@@ -690,19 +690,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             //if (!changesHaveBeenMade) {
             TAG.Util.removeYoutubeVideo();
-                TAG.Auth.clearToken();
-                rightQueue.clear();
-                middleQueue.clear();
-                backButton.off('click');
-                if (backPage) {
-                    var bpage = backPage();
-                    TAG.Util.UI.slidePageRight(bpage);
-                } else {
-                    TAG.Layout.StartPage({ primaryFontColor: TAG.Worktop.Database.getPrimaryFontColor(), secondaryFontColor: TAG.Worktop.Database.getSecondaryFontColor(), isPreview: false}, function (page) {
-                        TAG.Util.UI.slidePageRight(page);
-                    });
-                }
-                TAG.Util.UI.getStack()[0] = null;
+            TAG.Auth.clearToken();
+            rightQueue.clear();
+            middleQueue.clear();
+            backButton.off('click');
+            if (backPage) {
+                var bpage = backPage();
+                TAG.Util.UI.slidePageRight(bpage);
+            } else {
+                TAG.Layout.StartPage({ primaryFontColor: TAG.Worktop.Database.getPrimaryFontColor(), secondaryFontColor: TAG.Worktop.Database.getSecondaryFontColor(), isPreview: false }, function (page) {
+                    TAG.Util.UI.slidePageRight(page);
+                });
+            }
+            TAG.Util.UI.getStack()[0] = null;
             //} else {
 
             //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
@@ -736,7 +736,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    var progressCL = TAG.Util.showProgressCircle(settings, progressCircCSS, '0px', '0px', true);
             //    settings.append(changeLabel);
             //}
-            
+
         });
         /*
         TAG.Telemtry.register(backButton, "click", "BackButton", function (tobj) {
@@ -765,9 +765,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         navBar.append(nav[NAV_TEXT.exhib.text] = createNavLabel(NAV_TEXT.exhib, loadExhibitionsView));
         navBar.append(nav[NAV_TEXT.art.text] = createNavLabel(NAV_TEXT.art, loadArtView));
         navBar.append(nav[NAV_TEXT.media.text] = createNavLabel(NAV_TEXT.media, loadAssocMediaView)); // COMMENT!!!!!!!!
-        if (IS_WINDOWS){
+        if (IS_WINDOWS) {
             navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.tour, loadTourView, false));
-        } else{
+        } else {
             navBar.append(nav[NAV_TEXT.tour.text] = createNavLabel(NAV_TEXT.dummytour, null, true));
         }
         //navBar.append(nav[NAV_TEXT.feedback.text] = createNavLabel(NAV_TEXT.feedback, loadFeedbackView));
@@ -787,7 +787,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 searchbar.css({ 'background-image': 'url("' + tagPath + '/images/icons/Lens.svg")' });
             }
         });
-        
+
         searchbar.keyup(function (e) {
 
             if (!searchbar.val()) {
@@ -796,7 +796,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
         });
 
-       // rootContainer.keydown(keyHandler);
+        // rootContainer.keydown(keyHandler);
         //searchbar.attr('placeholder', 'Search...');
         newButton.text('New').css('border-radius', '3.5px');
         secondaryButton.text('Video');
@@ -815,7 +815,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         switchView(startView, startLabelID);
     }
-    
+
     /**Switches the view based on selected navigation label
      * @method switchView
      * @param {String} view         the view to switch to
@@ -841,7 +841,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 loadArtView(id);
                 isArtView = true;
                 break;
-            case "Associated Media": 
+            case "Associated Media":
                 selectLabel(nav[NAV_TEXT.media.text]);
                 prevSelectedSetting = nav[NAV_TEXT.media.text];
                 loadAssocMediaView(id);
@@ -856,7 +856,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             case "Feedback":
                 selectLabel(nav[NAV_TEXT.feedback.text]);
                 prevSelectedSetting = nav[NAV_TEXT.feedback.text];
-                loadFeedbackView(id)                                      
+                loadFeedbackView(id)
                 break;
 
             case "General Settings":
@@ -883,81 +883,81 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     // Navigation Bar Functions:
 
-     /**Create a navigation label
-     * @method createNavLabel
-     * @param {String} text         text for label
-     * @param {Function} onclick    onclick function for label
-     * @param {Boolean} disabled    true if its disabled
-     * @return {Object} container   container containing new label
-     */
+    /**Create a navigation label
+    * @method createNavLabel
+    * @param {String} text         text for label
+    * @param {Function} onclick    onclick function for label
+    * @param {Boolean} disabled    true if its disabled
+    * @return {Object} container   container containing new label
+    */
     function createNavLabel(text, onclick, disabled) {
         var container = $(document.createElement('div'));
-        if (!disabled){
+        if (!disabled) {
             container.attr('class', 'navContainer');
         } else {
-            container.attr('class','dummyNav')
+            container.attr('class', 'dummyNav')
         }
         container.attr('id', 'nav-' + text.text);
-        if (!disabled){
-        container.mousedown(function () {
-            container.css({
-                'background': HIGHLIGHT
+        if (!disabled) {
+            container.mousedown(function () {
+                container.css({
+                    'background': HIGHLIGHT
+                });
             });
-        });
-        container.mouseup(function () {
-            container.css({
-                'background': 'transparent'
+            container.mouseup(function () {
+                container.css({
+                    'background': 'transparent'
+                });
             });
-        });
-        container.mouseleave(function () {
-            container.css({
-                'background': 'transparent'
+            container.mouseleave(function () {
+                container.css({
+                    'background': 'transparent'
+                });
             });
-        });
-        container.click(function () {
-            
-            TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
-                tobj.category_name = prevLeftBarSelection.categoryName;
-                tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
-                tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
-            });
+            container.click(function () {
 
-            prevLeftBarSelection.timeSpentTimer.restart();
-            prevLeftBarSelection.loadTime = 0
-            prevLeftBarSelection.categoryName = text.text;
+                TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
+                    tobj.category_name = prevLeftBarSelection.categoryName;
+                    tobj.middle_bar_load_count = prevLeftBarSelection.loadTime;
+                    tobj.time_spent = prevLeftBarSelection.timeSpentTimer.get_elapsed();
+                });
 
-            // If a label is clicked return if its already selected.
-            //if (prevSelectedSetting === container) {
-            //    return;
-            //} else {
-            //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-            //    changesHaveBeenMade = false;
-            //}
-            // Reset all labels and then select this one
-            TAG.Util.removeYoutubeVideo();
-            searchbar[0].value = "";
+                prevLeftBarSelection.timeSpentTimer.restart();
+                prevLeftBarSelection.loadTime = 0
+                prevLeftBarSelection.categoryName = text.text;
 
-            //resetLabels('.navContainer');
-            selectLabel(container, false, '.navContainer');
-            // Do the onclick function
-            if (onclick) {
-                onclick();
-            }
-            prevSelectedSetting = container;
-        });
+                // If a label is clicked return if its already selected.
+                //if (prevSelectedSetting === container) {
+                //    return;
+                //} else {
+                //    changesHaveBeenMade && currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                //    changesHaveBeenMade = false;
+                //}
+                // Reset all labels and then select this one
+                TAG.Util.removeYoutubeVideo();
+                searchbar[0].value = "";
+
+                //resetLabels('.navContainer');
+                selectLabel(container, false, '.navContainer');
+                // Do the onclick function
+                if (onclick) {
+                    onclick();
+                }
+                prevSelectedSetting = container;
+            });
         }
         // vertical centering groundwork for 2.2
         //var navTextHolder;
 
         var navtext = $(document.createElement('label'));
-        navtext.attr('class','navtext');
+        navtext.attr('class', 'navtext');
         navtext.text(text.text);
 
         var navsubtext = $(document.createElement('label'));
-        navsubtext.attr('class','navsubtext');
+        navsubtext.attr('class', 'navsubtext');
         navsubtext.text(text.subtext);
 
-        if (disabled){
+        if (disabled) {
             container.removeClass('leftLabel');
         }
 
@@ -972,7 +972,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method loadGeneralView
      */
     function loadGeneralView() {
-  
+
         inGeneralView = true;
         inCollectionsView = false;
         inArtworkView = false;
@@ -994,7 +994,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var loadTimer = new TelemetryTimer();
         // Add this to our queue so the UI doesn't lock up
-        middleQueue.add(function () { 
+        middleQueue.add(function () {
             var label;
             // Add the Splash Screen label and set it as previously selected because its our default
             middleLoading.before(label = selectLabel(createMiddleLabel('Splash Screen', null, loadSplashScreen), true));
@@ -1007,7 +1007,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             labelTwo = createMiddleLabel('Password Settings', null, loadPasswordScreen).attr('id', 'password');
             labelTwo.addClass('leftLabel');
             middleLoading.before(labelTwo);
-            middleLoading.hide(); 
+            middleLoading.hide();
         });
         middleQueue.add(function () {
             prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
@@ -1087,7 +1087,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         // Load the start page, the callback will add it to the viewer when its done
-		//if (generalIsLoading) {
+        //if (generalIsLoading) {
         //    generalProgressCircle = displayLoadingSettings();
         //} else {
         //    generalProgressCircle && hideLoadingSettings(generalProgressCircle);
@@ -1131,7 +1131,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
             uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
-                
+
                 var url = urls[0];
                 bgImgInput.val(url);
                 $('#innerContainer').css({
@@ -1223,12 +1223,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             }, null, null, true);
         }));
-       
-            if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
-                console.log("select background image button disabled");
-                bgImgInput.prop('disabled', true);
-                bgImgInput.css({ 'opacity': '.4' });
-            }
+
+        if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
+            console.log("select background image button disabled");
+            bgImgInput.prop('disabled', true);
+            bgImgInput.css({ 'opacity': '.4' });
+        }
         TAG.Telemetry.register(bgImgInput, "click", "BackgroundImage", function (tobj) {
             //nothing to record
         });
@@ -1267,7 +1267,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
             }
-            
+
         });
 
         primaryFontColorInput.on('change', function () {
@@ -1354,7 +1354,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var font = fontFamilyInput.find(":selected").text();
         //$('.primaryFont').css('font-family', fontFamily);
         //$('.secondaryFont').css('font-family', fontFamily);
-        
+
         // Handle changes
         primaryFontColorInput.focus(function () {
             $('#tagContainer').off().unbind();
@@ -1474,8 +1474,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         keywordSetsSettings.forEach(function (setting) {
             settingsContainer.append(setting);
         });
-        
-		//automatically save General Settings - Customization
+
+        //automatically save General Settings - Customization
         onChangeUpdateText(idleTimerDurationInput, null, 3);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = idleTimerDurationInput.val();
         settings.scroll(function () {
@@ -1508,33 +1508,33 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //    });
         //};
 
-        
+
 
         //to-do create save function for kiosk locking
 
-        lockedKioskInput.on('click',function () {
+        lockedKioskInput.on('click', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
         });
 
-        unlockedKioskInput.on('click',function () {
+        unlockedKioskInput.on('click', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
         });
 
-        
+
 
         // Save buttton
 
         var saveButton = createButton('Save', function () {
-           /* if (locInput === undefined) {
-                locInput = "";
-            }
-            if (infoInput === undefined) {
-                infoInput = "";
-            }*/
+            /* if (locInput === undefined) {
+                 locInput = "";
+             }
+             if (infoInput === undefined) {
+                 infoInput = "";
+             }*/
             //save Splash screen and pass in inputs with following keys:
             //idleTimerDurationInput.text(idleTimerDurationInput.val());
             saveIdleTimerDuration(idleTimerDurationInput);
@@ -1564,7 +1564,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-left': '.5%',
             'float': 'right'
         }, true);
-        
+
         TAG.Telemetry.register(saveButton, "click", "SaveButton", function (tobj) {
             tobj.element_type = "Splash Screen";
         });
@@ -1581,16 +1581,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         previewStartPageButton.focus();
         var previewCollectionsPageButton = createButton('Collections Page', function () {
-                previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
-                primaryColorPicker.hidePicker();
-                secondaryColorPicker.hidePicker();
-            },
+            previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
+            primaryColorPicker.hidePicker();
+            secondaryColorPicker.hidePicker();
+        },
             {
-            'margin-left': '2%',
-            'margin-top': '1%',
-            'margin-right': '0%',
-            'margin-bottom': '3%',
-        });
+                'margin-left': '2%',
+                'margin-top': '1%',
+                'margin-right': '0%',
+                'margin-bottom': '3%',
+            });
 
         var previewArtworkViewerButton = createButton('Artwork Viewer', function () {
             previewArtworkViewer(primaryFontColorInput, secondaryFontColorInput);
@@ -1644,7 +1644,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         newButton.on("mouseleave", function () {
             newButton.css({ "background-color": "transparent" });
         });
-        
+
     }
 
     /**Changes idle timer stageOne duration from the customization settings
@@ -1654,7 +1654,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {HTML Element} input      
      */
     function saveIdleTimerDuration(input) {
-        idleDuration = parseInt(input.val())*60000;
+        idleDuration = parseInt(input.val()) * 60000;
     }
 
     /**Saves the splash screen settings
@@ -1665,7 +1665,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function saveSplashScreen(inputs, callback) {
         //pCL = displayLoadingSettings();
         //backButtonClicked && prepareNextView(false, null, null, "Saving...");
-		//generalIsLoading = true;
+        //generalIsLoading = true;
         clearRight();
         prepareViewer(true);
         prepareNextView(false, null, null, "Saving...");
@@ -1687,7 +1687,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
 
-        
+
         //inputs.idleTimerDurationInput.val(idleTimerDuration);
         //TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(idleTimerDuration);
         var options = {
@@ -1790,7 +1790,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 settingsContainer.append(old);
                 settingsContainer.append(new1);
                 settingsContainer.append(new2);
-               
+
 
                 //Hide or else unused div covers 'Old Password' line
                 buttonContainer.css('display', 'none');
@@ -1862,8 +1862,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function previewStartPage(primaryFontInput, secondaryFontInput) {
         // Load the start page, the callback adds it to the viewer when it's done loading
-        var startPage = TAG.Layout.StartPage({ primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val(), isPreview:true}, function (startPage) {
-            if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
+        var startPage = TAG.Layout.StartPage({ primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val(), isPreview: true }, function (startPage) {
+            if (prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
                 return;
             }
             viewer.empty();
@@ -1877,20 +1877,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method previewCollectionsPage
      */
     function previewCollectionsPage(primaryFontInput, secondaryFontInput) {
-    	var collectionsPage,
+        var collectionsPage,
     		options,
     		croot;
-    	options = {
-    	    primaryFontColor: primaryFontInput.val(),
-    	    secondaryFontColor: secondaryFontInput.val(),
-    		previewing:true
-    	}
-    	collectionsPage = TAG.Layout.CollectionsPage(options);
-    	$(collectionsPage).find("*").off();;
+        options = {
+            primaryFontColor: primaryFontInput.val(),
+            secondaryFontColor: secondaryFontInput.val(),
+            previewing: true
+        }
+        collectionsPage = TAG.Layout.CollectionsPage(options);
+        $(collectionsPage).find("*").off();;
         croot = collectionsPage.getRoot();
         $(croot).css({ 'z-index': '1' });
 
-        if(prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
+        if (prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
             return;
         }
         viewer.empty();
@@ -1907,36 +1907,36 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         	artworkViewer,
         	aroot;
 
-        TAG.Worktop.Database.getArtworks(function(result){
-        	doq=result[0];
-        	var i;
-     		for (i=0;i<result.length;i++){
-     			//set the preview doq to the first artwork (not video or tour)
-     			if (!(result[i].Metadata.Medium === "Video")&& !(result[i].Type === "Empty")){
-     			    doq = result[i];
-     				break;
-     			}
-     		}
-        	options = { 
-        		catalogState: {}, 
-        		doq: doq, 
-        		split: 'L', 
-        		primaryFontColor: primaryFontInput.val(),
-        		secondaryFontColor: secondaryFontInput.val(),
-        		previewing: true,
-        	}
-        	artworkViewer = TAG.Layout.ArtworkViewer(options, viewer);
-        	aroot = artworkViewer.getRoot();
-        	$(aroot).css('z-index', '-1');
-        	if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.general.text]) {
-            	return;
-        	}
-        	viewer.empty();
-        	
-        	viewer.append(aroot);
-        	// Don't allow the viewer to be clicked
-        	preventClickthrough(viewer);
-        });      
+        TAG.Worktop.Database.getArtworks(function (result) {
+            doq = result[0];
+            var i;
+            for (i = 0; i < result.length; i++) {
+                //set the preview doq to the first artwork (not video or tour)
+                if (!(result[i].Metadata.Medium === "Video") && !(result[i].Type === "Empty")) {
+                    doq = result[i];
+                    break;
+                }
+            }
+            options = {
+                catalogState: {},
+                doq: doq,
+                split: 'L',
+                primaryFontColor: primaryFontInput.val(),
+                secondaryFontColor: secondaryFontInput.val(),
+                previewing: true,
+            }
+            artworkViewer = TAG.Layout.ArtworkViewer(options, viewer);
+            aroot = artworkViewer.getRoot();
+            $(aroot).css('z-index', '-1');
+            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.general.text]) {
+                return;
+            }
+            viewer.empty();
+
+            viewer.append(aroot);
+            // Don't allow the viewer to be clicked
+            preventClickthrough(viewer);
+        });
     }
 
     // Collection Functions:
@@ -1961,15 +1961,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var list;
         var cancel = false;
         currentIndex = 0;
-        
+
 
         // Set the new button text to "New"
         prepareNextView(true, "New", createExhibition);
-        
+
         //Enables newButton - might be disabled initially because upload is happening
         newButton.prop('disabled', false);
-        newButton.css({'opacity': '1', 'background-color': 'transparent'});
-        
+        newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+
         if (!(justMiddle === true)) {
             clearRight();
             prepareViewer(true);
@@ -2007,7 +2007,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 displayLabels();
             });
         }
-        
+
 
         function displayLabels() {
             var selectNext = false;
@@ -2031,8 +2031,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (guidsToBeDeleted.indexOf(collectguid) >= 0) {
                         markedForDelete = true;
                     }
-                    if (!markedForDelete && !selectedLabel && 
-                        ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
+                    if (!markedForDelete && !selectedLabel &&
+                        ((id && val.Identifier === id) || (!id && i === 0) || (!id && selectNext))) {
 
                         // Select the first one or the specified id
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
@@ -2040,7 +2040,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (cancelLastView) cancelLastView();
                             loadExhibition(val);
                             currentIndex = i;
-                        }, val.Identifier, 0, 0, 0, 0, markedForDelete,true), true, '.middleLabel'));
+                        }, val.Identifier, 0, 0, 0, 0, markedForDelete, true), true, '.middleLabel'));
                         selectNext = false;
                         selectedLabel = true;
 
@@ -2054,7 +2054,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         currentSelected = prevSelectedMiddleLabel;
                         currentIndex = i;
                         if (cancelLastView) cancelLastView();
-                        if (!(justMiddle === true)){
+                        if (!(justMiddle === true)) {
                             loadExhibition(val);
                         }
                     } else {
@@ -2071,7 +2071,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             loadExhibition(val);
                             previousIdentifier = val.Identifier;
                             currentIndex = i;
-                        }, val.Identifier,0,0,0,0,markedForDelete));
+                        }, val.Identifier, 0, 0, 0, 0, markedForDelete));
                         //prevSelectedMiddleLabel = label;
                         //currentSelected = prevSelectedMiddleLabel;
                     }
@@ -2107,10 +2107,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortButton;
 
             if (sortDiv.attr("setSort") === "true" || sortDiv.attr("setSort") === true) {
-                if (sortOptionsCount>0){
+                if (sortOptionsCount > 0) {
                     sortOptionsCount--;
                 }
-                
+
                 sortDiv.attr("setSort", false);
                 sortDiv.css({
                     "background-color": "black",
@@ -2120,14 +2120,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortOptionsObj[sortDiv.text()] = false;
                 //TODO:set the sort tag to white in previewer
 
-                $("[id='"+buttonId+"']").hide();
+                $("[id='" + buttonId + "']").hide();
 
                 if (sortDiv.text() === "Date") {
                     timelineShown = false;
                     $("#dateButton").hide();
                     $("#showTimelineBttn").css('background-color', '');
                     $("#hideTimelineBttn").css('background-color', 'white');
-                    $("#showTimelineBttn").attr("disabled","true");
+                    $("#showTimelineBttn").attr("disabled", "true");
                 }
             } else {
                 if (sortOptionsCount < 4) {
@@ -2141,12 +2141,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if ($("[id='" + buttonId + "']")[0]) {
                         $("[id='" + buttonId + "']").show()
                         if (buttonId === "dateButton") {
-                            $(".sortButton").css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7)});
+                            $(".sortButton").css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) });
                             $("[id='" + buttonId + "']").css('color', 'white');
                         } else {
                             $("[id='" + buttonId + "']").css({ "color": TAG.Util.UI.dimColor("#" + TAG.Worktop.Database.getSecondaryFontColor(), 1.7) })
                         }
-                   } else { //or if you're making it (sort option was origionally deselected)
+                    } else { //or if you're making it (sort option was origionally deselected)
                         var listItem = $(document.createElement('li')).addClass('rowItem');
                         sortButton = $(document.createElement('div'));
                         //Because stored on server as "Tour" but should be displayed as "Tours"
@@ -2162,7 +2162,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
                         listItem.append(sortButton);
                         $(".sortRowLeft").append(listItem);
-                        
+
                     }
 
                     if (sortDiv.text() === "Date") {
@@ -2171,7 +2171,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                     sortOptionsObj[sortDiv.text()] = true;
                 }
-                
+
             }
         };
     };
@@ -2216,9 +2216,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 sortOptionsDiv.append(sortDiv);
             }
         }
-        
+
         return sortOptionsDiv;
-    }    
+    }
 
     /**Editing collections by adding/removing artworks
      * @method manageCollection
@@ -2249,7 +2249,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     prepareViewer(true);
                     loadExhibitionsView(exhibition.Identifier);
                 });
-     }
+    }
 
 
 
@@ -2295,7 +2295,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'min-height': '0px',
             'margin-right': '4%',
             'width': '48%',
-            'height':'35px'
+            'height': '35px'
         });
         privateInput.attr('class', 'settingButton');
         var publicInput = createButton('Publish', function () {
@@ -2306,7 +2306,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, {
             'min-height': '0px',
             'width': '48%',
-            'height':'35px'
+            'height': '35px'
         });
         publicInput.attr('class', 'settingButton');
         if (privateState) {
@@ -2314,7 +2314,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             publicInput.css('background-color', 'white');
         }
-        
+
         TAG.Telemetry.register(privateInput, "click", "Publish", function (tobj) {
             tobj.toggle_state = privateInput.privateState;
             tobj.element_type = "collections";
@@ -2371,7 +2371,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //TO-DO: add in on server side from TAG.Worktop.Database.js changeExhibition() 
         var assocMediaShown;
         if (exhibition.Metadata.AssocMediaView === "true" || exhibition.Metadata.AssocMediaView === "false") {
-            exhibition.Metadata.AssocMediaView === "true" ? assocMediaShown = true: assocMediaShown = false;
+            exhibition.Metadata.AssocMediaView === "true" ? assocMediaShown = true : assocMediaShown = false;
         } else {
             //backwards compatibility
             assocMediaShown = false;
@@ -2379,41 +2379,41 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var showAssocMedia = createButton('Show', function () {
             //(!assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = true;
-            showAssocMedia.css({'background-color':'white'});
+            showAssocMedia.css({ 'background-color': 'white' });
             hideAssocMedia.css({ 'background-color': '' });
             $('#divide').css('display', 'inline');
-            $('#filters').css('display','inline');
+            $('#filters').css('display', 'inline');
         }, {
             'min-height': '0px',
             'margin-right': '4%',
             'width': '48%',
-            'height':'35px'
+            'height': '35px'
         });
-        showAssocMedia.attr('class','settingButton');
+        showAssocMedia.attr('class', 'settingButton');
         var hideAssocMedia = createButton('Hide', function () {
             //(assocMediaShown) && function () { changesHaveBeenMade = true; }();
             assocMediaShown = false;
-            hideAssocMedia.css('background-color','white');
-            showAssocMedia.css('background-color','');
+            hideAssocMedia.css('background-color', 'white');
+            showAssocMedia.css('background-color', '');
             $('#divide').css('display', 'none');
             $('#filters').css('display', 'none');
-            }, {
+        }, {
             'min-height': '0px',
             'width': '48%',
-             'height': '35px'
+            'height': '35px'
         });
-        hideAssocMedia.attr('class','settingButton');
-        if (assocMediaShown){
-            showAssocMedia.css('background-color','white');
-        }else{
-            hideAssocMedia.css('background-color','white');
+        hideAssocMedia.attr('class', 'settingButton');
+        if (assocMediaShown) {
+            showAssocMedia.css('background-color', 'white');
+        } else {
+            hideAssocMedia.css('background-color', 'white');
         }
         /*var timelineOptionsDiv = $(document.createElement('div'));
         timelineOptionsDiv.append(showTimeline).append(hideTimeline);*/
 
-        
+
         if (exhibition.Metadata.Timeline === "true" || exhibition.Metadata.Timeline === "false") {
-            exhibition.Metadata.Timeline === "true" ? timelineShown = true: timelineShown = false;
+            exhibition.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
         } else {
             //backwards compatibility
             timelineShown = true;
@@ -2431,7 +2431,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //(!timelineShown) && function () { changesHaveBeenMade = true; }();
             timelineShown = true;
             showTimeline.css('background-color', 'white');
-            hideTimeline.css('background-color','');
+            hideTimeline.css('background-color', '');
             if ($('#timelineArea').children().length > 0) {
                 $('#timelineArea').css('display', 'block');
                 $('#bottomContainer').css({
@@ -2444,37 +2444,37 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, {
             'min-height': '0px',
             'margin-right': '4%',
-            'width':'48%',
+            'width': '48%',
             'padding-left': '10px',
             'padding-right': '10px',
             'height': '35px'
         });
-        showTimeline.attr("id","showTimelineBttn");
-        showTimeline.attr('class','settingButton');
+        showTimeline.attr("id", "showTimelineBttn");
+        showTimeline.attr('class', 'settingButton');
         var hideTimeline = createButton('Hide', function () {
             //(timelineShown) && function () { changesHaveBeenMade = true; }();
             timelineShown = false;
-            hideTimeline.css('background-color','white');
-            showTimeline.css('background-color','');
-            $('#timelineArea').css('display','none');
+            hideTimeline.css('background-color', 'white');
+            showTimeline.css('background-color', '');
+            $('#timelineArea').css('display', 'none');
             $('#bottomContainer').css({
                 'height': '85%',
-                'top':'15%'
-               });
+                'top': '15%'
+            });
             //$('#dateButton') &&
             //$('#yearButton') &&
-            }, {
-                'min-height': '0px',
-                'width': '48%',
-                'height': '35px'
-            });
+        }, {
+            'min-height': '0px',
+            'width': '48%',
+            'height': '35px'
+        });
 
-        hideTimeline.attr("id","hideTimelineBttn");
-        hideTimeline.attr('class','settingButton');
-        if (timelineShown){
-            showTimeline.css('background-color','white');
-        }else{
-            hideTimeline.css('background-color','white');
+        hideTimeline.attr("id", "hideTimelineBttn");
+        hideTimeline.attr('class', 'settingButton');
+        if (timelineShown) {
+            showTimeline.css('background-color', 'white');
+        } else {
+            hideTimeline.css('background-color', 'white');
         }
 
 
@@ -2491,7 +2491,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var descInput;
         var assocMedia;
         var sortOptions = null;
-        var curSortOptions = JSON.parse(exhibition.Metadata.SortOptions || "{}" );
+        var curSortOptions = JSON.parse(exhibition.Metadata.SortOptions || "{}");
         var key;
         sortOptionsObj = {};
         if (curSortOptions.Title === false) {
@@ -2520,7 +2520,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     var infoFields = artworks[i].Metadata.InfoFields;
                     for (key in infoFields) {
                         var val = curSortOptions[key];
-                        if (val===null) {
+                        if (val === null) {
                             sortOptionsObj[key] = false;
                         } else {
                             sortOptionsObj[key] = val;
@@ -2671,8 +2671,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
-                            if (inAssociatedView){
-                                $(menuLabel).prop('disabled',false);
+                            if (inAssociatedView) {
+                                $(menuLabel).prop('disabled', false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
 
@@ -2729,7 +2729,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 bgInput.prop('disabled', true);
                 bgInput.css({ 'opacity': '.4' });
             }
-            
+
 
             nameInput.focus(function () {
                 if (nameInput.val() === 'Collection')
@@ -2738,7 +2738,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             nameInput.keyup(function (event) {
                 event.preventDefault();
                 event.stopPropagation();
-                if (event.which === 13) {                   
+                if (event.which === 13) {
                     saveButton.click();
                 } else {
                     changesMade = true;
@@ -2746,7 +2746,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     saveButton.css("opacity", 1);
                 }
                 $('#collection-title').text(nameInput.val());
-                
+
             });
             descInput.focus(function () {
                 if (descInput.val() === 'Description')
@@ -2900,24 +2900,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-            
-            function importAndRefresh(){
+
+            function importAndRefresh() {
                 uploadingOverlay.attr("id", "uploadingOverlay");
                 uploadingOverlay.css({ 'position': 'absolute', 'left': '0%', 'top': '0%', 'background-color': 'rgba(0, 0, 0, .5)', 'width': '100%', 'height': '100%', 'z-index': 100000100000000000000000000000 });
 
                 uploadOverlayText.css({ 'color': 'white', 'height': '5%', 'top': '35%', 'left': '35%', 'position': 'absolute', 'font-size': '150%' });
                 uploadOverlayText.text('Uploading file(s). Please wait.');
-                if(textAppended==false){
-                   uploadingOverlay.append(uploadOverlayText); 
-                   textAppended = true;
+                if (textAppended == false) {
+                    uploadingOverlay.append(uploadOverlayText);
+                    textAppended = true;
                 }
                 createArtwork(true, exhibition);
 
                 //makeManagePopUp();
-                
+
             }
 
-            function makeManagePopUp(){
+            function makeManagePopUp() {
                 console.log("Made Manage Pop Up");
                 //currCollection= exhibition.Identifier;
                 //root.append(uploadingOverlay);
@@ -2939,7 +2939,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         name: 'Import',
                         getObjs: null,
                         args: null,
-                 
+
                     }], {
                         getObjs: TAG.Worktop.Database.getArtworksIn, //Artworks in this collection
                         args: [exhibition.Identifier]
@@ -2952,11 +2952,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             }
 
-            function mergeCollectionsPopUp(){
+            function mergeCollectionsPopUp() {
                 TAG.Util.UI.createAssociationPicker(
                     root,
-                    "Select Collections from which to Add Artworks", 
-                    {comp: exhibition, type: "exhib"},
+                    "Select Collections from which to Add Artworks",
+                    { comp: exhibition, type: "exhib" },
                     "exhib",
                     [{
                         name: "All Collections",
@@ -2967,7 +2967,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         getObjs: function () { return [] },
                         args: [exhibition.Identifier]
                     },
-                    function(){loadExhibitionsView(exhibition.Identifier)},
+                    function () { loadExhibitionsView(exhibition.Identifier) },
                     null,
                     null,
                     true)
@@ -2975,11 +2975,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             var mergeButton = createButton('Add from Collection',
                 mergeCollectionsPopUp, {
-                'margin-left': '2%',
-                'margin-top': '1%',
-                'margin-right': '0%',
-                'margin-bottom': '3%',
-            });
+                    'margin-left': '2%',
+                    'margin-top': '1%',
+                    'margin-right': '0%',
+                    'margin-bottom': '3%',
+                });
 
 
             var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
@@ -3008,7 +3008,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '0%',
                 'margin-bottom': '3%',
             });
-            
+
             TAG.Telemetry.register(artPickerButton, "click", "EditorButton", function (tobj) {
                 tobj.edit_type = "Manage Collection";
                 tobj.element_id = exhibition.Identifier;
@@ -3019,7 +3019,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
 
             artPickerButton.on("mousedown", function () {
-                artPickerButton.css({ "background-color": "white"});
+                artPickerButton.css({ "background-color": "white" });
             });
 
             leftButton = artPickerButton;
@@ -3057,9 +3057,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             newButton.on("mouseleave", function () {
                 newButton.css({ "background-color": "transparent" });
             });
-            
 
-          
+
+
 
             // Sets the viewer to catalog view
             function catalogView() {
@@ -3097,10 +3097,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             }
 
-            
+
 
             buttonContainer.append(artPickerButton).append(saveButton).append(mergeButton); //REAPPEND DELETE BUTTON HERE
-            if(!IS_WINDOWS){
+            if (!IS_WINDOWS) {
                 buttonContainer.append(deleteButton);
             }
         }
@@ -3194,7 +3194,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //hideLoading();
             //hideLoadingSettings(pCL);
             //saveArray.splice(saveArray.indexOf(exhibition.Identifier), 1); //removes identifier from save array
-            
+
             if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                 LADS.Worktop.Database.getExhibitions();
                 if (callback) {
@@ -3247,7 +3247,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     loadExhibitionsView(toLoad, undefined, onlyMiddle);
                 }, authError, authError);
             }
-        },confirmText, confirmButtonText, true, function () {
+        }, confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
             var remIndex;
             for (var x = 0; x < numEx; x++) {
@@ -3293,7 +3293,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param justMiddle only reload middle bar
      */
     function loadTourView(id, matches, justMiddle) {
-        
+
 
         inGeneralView = false;
         inCollectionsView = false;
@@ -3309,11 +3309,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //Enables new button
         newButton.prop('disabled', false);
-        newButton.css({'opacity': '1', 'background-color': 'transparent'});
+        newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
 
         prepareNextView(true, "New", createTour);
 
-        if (!(justMiddle===true)) {
+        if (!(justMiddle === true)) {
             clearRight();
             prepareViewer(true);
 
@@ -3372,7 +3372,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         markedForDelete = true;
                     }
                     if (!markedForDelete && !selectedLabel &&
-                        ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
+                        ((id && val.Identifier === id) || (!id && i === 0) || (!id && selectNext))) {
                         // Select the first one
                         middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, null, function () {
                             previousIdentifier = val.Identifier;
@@ -3380,7 +3380,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             currentIndex = i;
                         }, val.Identifier, false, function () {
                             editTour(val);
-                        }, 0, 0, markedForDelete,true), true,'.middleLabel'));
+                        }, 0, 0, markedForDelete, true), true, '.middleLabel'));
                         selectNext = false;
                         selectedLabel = true;
 
@@ -3394,7 +3394,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         prevSelectedMiddleLabel = label;
                         currentSelected = prevSelectedMiddleLabel;
                         currentIndex = i;
-                        if (!(justMiddle===true)) {
+                        if (!(justMiddle === true)) {
                             loadTour(val);
                         }
                     } else {
@@ -3413,7 +3413,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }, val.Identifier, false, function () {
                             editTour(val);
 
-                        },0,0,markedForDelete));
+                        }, 0, 0, markedForDelete));
                         //prevSelectedMiddleLabel = label;
                         //currentSelected = prevSelectedMiddleLabel;
                     }
@@ -3507,10 +3507,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //'min-height': '0px',
             'margin-right': '4%',
             'width': '48%',
-            'height':'35px'
+            'height': '35px'
         });
         privateInput.attr('class', 'settingButton');
-        
+
         privateInput.click(function () {
             changesMade = true;
             saveButton.prop("disabled", false);
@@ -3525,7 +3525,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, {
             //'min-height': '0px',
             'width': '48%',
-            'height':'35px'
+            'height': '35px'
         });
 
         publicInput.click(function () {
@@ -3545,7 +3545,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
 
-        publicInput.attr('class','settingButton');
+        publicInput.attr('class', 'settingButton');
         if (privateState) {
             privateInput.css('background-color', 'white');
         } else {
@@ -3555,7 +3555,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         pubPrivDiv.append(privateInput).append(publicInput);
 
         var nameInput = createTextInput(TAG.Util.htmlEntityDecode(tour.Name), "Tour Title", 120);
-        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(tour.Metadata.Description).replace(/\n/g,'<br />') || "", false, 2000);
+        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(tour.Metadata.Description).replace(/\n/g, '<br />') || "", false, 2000);
         var tourIdInput = createTextInput(tour.Identifier, 'Tour ID (read-only)', 80, false, true);
         nameInput.focus(function () {
             if (nameInput.val() === 'Untitled Tour')
@@ -3646,7 +3646,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-bottom': '3%',
                 'float': 'right'
             });
-    
+
 
         TAG.Telemetry.register(duplicateButton, "click", "DuplicateTour", function (tobj) {
             //nothing to record
@@ -3671,7 +3671,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             tobj.element_type = "Tour";
         });
         buttonContainer.append(editButton).append(saveButton).append(duplicateButton);
-        if(!IS_WINDOWS){
+        if (!IS_WINDOWS) {
             buttonContainer.append(deleteButton);
         }
 
@@ -3697,8 +3697,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         duplicateButton.on("mouseleave", function () {
             duplicateButton.css({ "background-color": "transparent" });
         });
-        TAG.Telemetry.register(deleteButton,"click","DeleteButton",function(tobj){
-            tobj.element_type= "Tour";
+        TAG.Telemetry.register(deleteButton, "click", "DeleteButton", function (tobj) {
+            tobj.element_type = "Tour";
         });
         deleteButton.on("mouseleave", function () {
             deleteButton.css({ "background-color": "transparent" });
@@ -3741,12 +3741,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} tour     tour to edit
      */
     function editTour(tour) {
-        
+
         if (!tour) {
             return;
         }
 
-        var progressBarLength =  $(document.getElementById("progressBarUploads")).length;
+        var progressBarLength = $(document.getElementById("progressBarUploads")).length;
 
 
         TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
@@ -3789,7 +3789,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, 1);
 
         //var progressBar = $(document.getElementById("progressBarUploads"));
-        
+
     }
 
     /**Delete a tour
@@ -3826,15 +3826,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     loadTourView(toLoad, undefined, onlyMiddle);
                 }, authError, authError);
             }
-            }, confirmText, confirmButtonText, true, function () { 
-                $(confirmationBox).hide();
-                var remIndex;
-                for (var x=0;x<numTours;x++){
-                    remIndex = guidsToBeDeleted.indexOf(tours[x]);
-                    if (remIndex >= 0) {
-                        guidsToBeDeleted.splice(remIndex, 1);
-                    }
+        }, confirmText, confirmButtonText, true, function () {
+            $(confirmationBox).hide();
+            var remIndex;
+            for (var x = 0; x < numTours; x++) {
+                remIndex = guidsToBeDeleted.indexOf(tours[x]);
+                if (remIndex >= 0) {
+                    guidsToBeDeleted.splice(remIndex, 1);
                 }
+            }
         }, null, null, null, null, null, null, true);
         root.append(confirmationBox);
         $(confirmationBox).show();
@@ -3946,27 +3946,27 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //var sortBy = "Title";
         currentIndex = 0;
         menuLabel.on("mouseleave", function () {
-            menuLabel.css({"background-color": "transparent"});
+            menuLabel.css({ "background-color": "transparent" });
         });
         if (showDropdown) {
             menuLabel.click();
         }
 
-        collectionSort.css('display','none');
+        collectionSort.css('display', 'none');
 
-        findContainer.css('width','100%');
+        findContainer.css('width', '100%');
 
         //Enables new button - might be initially disabled if upload is happening
-        if($('.progressBarUploads').length>0){ //upload happening - disable import button
-          $(menuLabel).prop('disabled', true);
-            menuLabel.css({'opacity': '.4'});  
-        } else{
-           $(menuLabel).prop('disabled', false);
-            menuLabel.css({'opacity': '1'});   
+        if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
+            $(menuLabel).prop('disabled', true);
+            menuLabel.css({ 'opacity': '.4' });
+        } else {
+            $(menuLabel).prop('disabled', false);
+            menuLabel.css({ 'opacity': '1' });
         }
 
         prepareNextView(true, "Import", createAsset);
-        if (!(justMiddle===true)) {
+        if (!(justMiddle === true)) {
             prepareViewer(true);
             clearRight();
         }
@@ -3990,7 +3990,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
-            if (list.length>0){
+            if (list.length > 0) {
                 list.unshift("Search Results:")
             } else {
                 list.push("No search results");
@@ -4009,24 +4009,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }
 
-        if (sortByAssoc == "Title"){
-            titleSort.css('background-color','white');
-            collectionSort.css('background','transparent');
-            addedRecentlySort.css('background','transparent');
-        } else if (sortByAssoc == "Recently Added"){
-            titleSort.css('background','transparent');
-            collectionSort.css('background','transparent');
-            addedRecentlySort.css('background-color','white');
+        if (sortByAssoc == "Title") {
+            titleSort.css('background-color', 'white');
+            collectionSort.css('background', 'transparent');
+            addedRecentlySort.css('background', 'transparent');
+        } else if (sortByAssoc == "Recently Added") {
+            titleSort.css('background', 'transparent');
+            collectionSort.css('background', 'transparent');
+            addedRecentlySort.css('background-color', 'white');
         }
-        
 
-        function sortLabels(){
-            if (sortByAssoc == "Title"){
+
+        function sortLabels() {
+            if (sortByAssoc == "Title") {
                 console.log("sort by title");
                 sortAZ(list);
                 displayLabels();
-            } 
-            else if (sortByAssoc == "Recently Added"){
+            }
+            else if (sortByAssoc == "Recently Added") {
                 //create sort list for added before and other
                 console.log("sort by recently added")
                 //sortAZ(list);
@@ -4100,83 +4100,83 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (list[0]) {
                 $.each(list, function (i, val) {
                     if (cancel) return;
-                    if (val && val.Metadata){
-                    // Add each label in a separate function in the queue so the UI doesn't lock up
-                    middleQueue.add(function () {
-                        if (cancel) return;
-                        if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.media.text]) {
-                            return;
-                        }
-                        var label;
-                        var imagesrc;
-                        var assocguid = val.Identifier;
-                        var markedForDelete = false;
-                        if (guidsToBeDeleted.indexOf(assocguid) >= 0) {
-                            markedForDelete = true;
-                        }
-                        switch (val.Metadata.ContentType.toLowerCase()) {
-                            case 'video':
-                                imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg';
-                                break;
-                            case 'audio':
-                                imagesrc = tagPath + '/images/audio_icon.svg';
-                                break;
-                            case 'iframe':
-                                imagesrc = tagPath + '/images/video_icon.svg'; // TODO iframe replace icon
-                                break;
-                            case 'image':
-                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg';
-                                break;
-                            case 'text':
-                                imagesrc = tagPath + '/images/text_icon.svg';
-                                break;
-                            default:
-                                imagesrc = null;
-                                break;
-                        }
-
-                        if (!markedForDelete && !selectedLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
-                            // Select the first one
-                            middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
-                                //keep track of identifiers for autosaving
-                                previousIdentifier = val.identifier;
-                                loadAssocMedia(val);
-                                currentIndex = i;
-                            }, val.Identifier, false, 0, 0, 0, markedForDelete,true), true,'.middleLabel'));
-                            selectNext = false;
-                            selectedLabel = true;
-
-                            // Scroll to the selected label if the user hasn't already scrolled somewhere
-                            if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
-                                middleLabelContainer.animate({
-                                    scrollTop: (label.offset().top - middleLabelContainer.height() / 2)
-                                }, 1000);
+                    if (val && val.Metadata) {
+                        // Add each label in a separate function in the queue so the UI doesn't lock up
+                        middleQueue.add(function () {
+                            if (cancel) return;
+                            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.media.text]) {
+                                return;
+                            }
+                            var label;
+                            var imagesrc;
+                            var assocguid = val.Identifier;
+                            var markedForDelete = false;
+                            if (guidsToBeDeleted.indexOf(assocguid) >= 0) {
+                                markedForDelete = true;
+                            }
+                            switch (val.Metadata.ContentType.toLowerCase()) {
+                                case 'video':
+                                    imagesrc = (val.Metadata.Thumbnail && !val.Metadata.Thumbnail.match(/.mp4/)) ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/video_icon.svg';
+                                    break;
+                                case 'audio':
+                                    imagesrc = tagPath + '/images/audio_icon.svg';
+                                    break;
+                                case 'iframe':
+                                    imagesrc = tagPath + '/images/video_icon.svg'; // TODO iframe replace icon
+                                    break;
+                                case 'image':
+                                    imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + 'images/image_icon.svg';
+                                    break;
+                                case 'text':
+                                    imagesrc = tagPath + '/images/text_icon.svg';
+                                    break;
+                                default:
+                                    imagesrc = null;
+                                    break;
                             }
 
-                            prevSelectedMiddleLabel = label;
-                            currentSelected = prevSelectedMiddleLabel;
-                            if (!(justMiddle === true)) {
-                                loadAssocMedia(val);
+                            if (!markedForDelete && !selectedLabel &&
+                                ((id && val.Identifier === id) || (!id && i === 0) || (!id && selectNext))) {
+                                // Select the first one
+                                middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
+                                    //keep track of identifiers for autosaving
+                                    previousIdentifier = val.identifier;
+                                    loadAssocMedia(val);
+                                    currentIndex = i;
+                                }, val.Identifier, false, 0, 0, 0, markedForDelete, true), true, '.middleLabel'));
+                                selectNext = false;
+                                selectedLabel = true;
+
+                                // Scroll to the selected label if the user hasn't already scrolled somewhere
+                                if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
+                                    middleLabelContainer.animate({
+                                        scrollTop: (label.offset().top - middleLabelContainer.height() / 2)
+                                    }, 1000);
+                                }
+
+                                prevSelectedMiddleLabel = label;
+                                currentSelected = prevSelectedMiddleLabel;
+                                if (!(justMiddle === true)) {
+                                    loadAssocMedia(val);
+                                }
+                            } else {
+                                if (markedForDelete) {
+                                    selectNext = true;
+                                }
+                                middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
+                                    //if (changesHaveBeenMade) {
+                                    //    //saveArray.push(previousIdentifier);
+                                    //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                                    //    //changesHaveBeenMade = false;
+                                    //}
+                                    loadAssocMedia(val);
+                                    previousIdentifier = val.Identifier;
+                                    currentIndex = i;
+                                }, val.Identifier, false, 0, 0, 0, markedForDelete));
                             }
-                        } else {
-                            if (markedForDelete) {
-                                selectNext = true;
-                            }
-                            middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
-                                //if (changesHaveBeenMade) {
-                                //    //saveArray.push(previousIdentifier);
-                                //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                                //    //changesHaveBeenMade = false;
-                                //}
-                                loadAssocMedia(val);
-                                previousIdentifier = val.Identifier;
-                                currentIndex = i;
-                            }, val.Identifier, false,0,0,0,markedForDelete));
-                        }
-                    });
-                    } else if (val) {                        
-                        middleQueue.add(function(){
+                        });
+                    } else if (val) {
+                        middleQueue.add(function () {
                             console.log(val);
                             middleLoading.before(label = createSortLabel(val));
                         });
@@ -4253,15 +4253,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr('identifier', media.Identifier);
                 holder.attr("preload", "none");
                 holder.attr("controls", "");
-                holder.css({ "width": "100%", "max-width": "100%", "max-height": "100%"});
-                if (!IS_WINDOWS) {holder.css("padding-top","2%")}; // adjust the position for video previewing in web app
+                holder.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
+                if (!IS_WINDOWS) { holder.css("padding-top", "2%") }; // adjust the position for video previewing in web app
                 holder.attr("src", source);
                 var source = TAG.Worktop.Database.fixPath(media.Metadata.Source);
                 var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
                 sourceExt = source.substring(source.lastIndexOf('.'));
                 TAG.Worktop.Database.getConvertedVideoCheck(
                 function (output) {
-                    if (output ==="True" || sourceExt === ".mp4") {
+                    if (output === "True" || sourceExt === ".mp4") {
                         holder.removeAttr('src');
                         var sourceMP4 = sourceWithoutExtension + ".mp4";
                         var sourceWEBM = sourceWithoutExtension + ".webm";
@@ -4301,7 +4301,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             } else {
                                 viewer.append(TAG.Util.createConversionLoading(msg, true));
                             }
-                        } else if(output ===null) {
+                        } else if (output === null) {
                             TAG.Worktop.Database.convertVideo(function () {
                             }, null, source, sourceExt, sourceWithoutExtension, artwork.Identifier);
                         }
@@ -4347,7 +4347,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.crossOrigin = "";
                 break;
         }
-        (source && type !== 'Text' && type!== "iframe") && holder.attr('src', source);
+        (source && type !== 'Text' && type !== "iframe") && holder.attr('src', source);
 
         // Create a progress circle
         var progressCircCSS = {
@@ -4387,8 +4387,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //center the the audio element in the viewer
                 viewer.append(holder);
                 var left = viewer.width() / 2 - holder.width() / 2 + "px";
-                var top = viewer.height() /2 - holder.height() /2 + "px";
-                holder.css({ "position": "absolute", "left": left, "top" : top });
+                var top = viewer.height() / 2 - holder.height() / 2 + "px";
+                holder.css({ "position": "absolute", "left": left, "top": top });
                 break;
             case "iframe":
                 TAG.Util.removeProgressCircle(circle);
@@ -4397,7 +4397,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 break;
             case "text":
                 TAG.Util.removeProgressCircle(circle);
-                viewer.css({ 'background': 'black'});
+                viewer.css({ 'background': 'black' });
                 viewer.append(holder);
                 var left = viewer.width() / 2 - holder.width() / 2 + "px";
                 var top = viewer.height() / 2 - holder.height() / 2 + "px";
@@ -4411,7 +4411,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         // Create labels
         var titleInput = createTextInput(TAG.Util.htmlEntityDecode(media.Name) || "", "Title", 100);
-        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(media.Metadata.Description).replace(/\n/g,'<br />') || "", true, 2000);
+        var descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(media.Metadata.Description).replace(/\n/g, '<br />') || "", true, 2000);
 
         titleInput.focus(function () {
             if (titleInput.val() === 'Title')
@@ -4426,7 +4426,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
             }
-            
+
         });
 
         descInput.focus(function () {
@@ -4445,7 +4445,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var title = createSetting('Title', titleInput);
         var desc = createSetting('Description', descInput);
-        var yearMetadataDivSpecs = createYearMetadataDiv(media, function (event) {            
+        var yearMetadataDivSpecs = createYearMetadataDiv(media, function (event) {
             if (event && event.which === 13) {
                 saveButton.click();
             } else {
@@ -4464,13 +4464,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (rawSource.indexOf('embed') > -1) {
                     visibleSource = rawSource.substring(rawSource.indexOf('embed') + 6);
                     visibleSource = "https://www.youtube.com/watch?v=" + visibleSource;
-                }                
+                }
             }
             else if (rawSource.indexOf('vimeo')) {
                 if (rawSource.indexOf('video') > -1) {
                     visibleSource = rawSource.substring(rawSource.indexOf('video') + 6, rawSource.indexOf("?"));
                     visibleSource = "https://www.vimeo.com/" + visibleSource;
-                }    
+                }
             }
             var sourceInput = createTextInput(visibleSource);
             sourceInput.focus(function () {
@@ -4510,7 +4510,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //};
 
         // Create buttons
-        
+
         addToArtworkLabel.unbind("click");
         addToArtworkLabel.click(
             function () {
@@ -4613,41 +4613,41 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         thumbnailButton.attr('id', 'thumbnailButton');
 
         if (media.Metadata.ContentType.toLowerCase() === 'video') {
-        //    var convertBtn = createButton('Convert Video',
-        //            function () {
-        //                var source = media.Metadata.Source;
-        //                var newFileName = source.slice(8, source.length);
-        //                var index = newFileName.lastIndexOf(".");
-        //                var fileExtension = newFileName.slice(index);
-        //                var baseFileName = newFileName.slice(0, index);
-        //                if (media.Metadata.Converted !== "True") {
-        //                    TAG.Worktop.Database.convertVideo(function () {
-        //                    }, null, newFileName, fileExtension, baseFileName, media.Identifier);
-        //                    conversionVideos.push(media.Identifier);
-        //                    $("#videoErrorMsg").remove();
-        //                    $("#leftLoading").remove();
-        //                    var msg = "This video is being converted to compatible formats for different browsers";
-        //                    viewer.append(TAG.Util.createConversionLoading(msg));
-        //                    holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, "False");
-        //                    convertBtn.hide().data('disabled', true);
-        //                }
-        //            }, {
-        //                'margin-right': '0%',
-        //                'margin-top': '1%',
-        //                'margin-bottom': '3%',
-        //                'margin-left': '2%',
-        //                'float': 'left'
-        //            })
-        //    convertBtn.attr('class', 'button convertVideoButton');
-        //    convertBtn.attr("disabled", "");
-        buttonContainer.append(thumbnailButton);//.append(convertBtn);
+            //    var convertBtn = createButton('Convert Video',
+            //            function () {
+            //                var source = media.Metadata.Source;
+            //                var newFileName = source.slice(8, source.length);
+            //                var index = newFileName.lastIndexOf(".");
+            //                var fileExtension = newFileName.slice(index);
+            //                var baseFileName = newFileName.slice(0, index);
+            //                if (media.Metadata.Converted !== "True") {
+            //                    TAG.Worktop.Database.convertVideo(function () {
+            //                    }, null, newFileName, fileExtension, baseFileName, media.Identifier);
+            //                    conversionVideos.push(media.Identifier);
+            //                    $("#videoErrorMsg").remove();
+            //                    $("#leftLoading").remove();
+            //                    var msg = "This video is being converted to compatible formats for different browsers";
+            //                    viewer.append(TAG.Util.createConversionLoading(msg));
+            //                    holder[0].onerror = TAG.Util.videoErrorHandler(holder, viewer, "False");
+            //                    convertBtn.hide().data('disabled', true);
+            //                }
+            //            }, {
+            //                'margin-right': '0%',
+            //                'margin-top': '1%',
+            //                'margin-bottom': '3%',
+            //                'margin-left': '2%',
+            //                'float': 'left'
+            //            })
+            //    convertBtn.attr('class', 'button convertVideoButton');
+            //    convertBtn.attr("disabled", "");
+            buttonContainer.append(thumbnailButton);//.append(convertBtn);
         } else if (media.Metadata.ContentType.toLowerCase() === 'image' && !media.Metadata.Thumbnail && media.Metadata.Source && media.Metadata.Source[0] === '/' && !source.match(/.mp3/)) {
             // hacky way to see if asset was imported recently enough to support thumbnailing (these are /Images/_____.__
             // rather than http:// _______/Images/_______.__
             buttonContainer.append(generateAssocMediaThumbnailButton);
         }
         buttonContainer.append(saveButton); //SAVE BUTTON// //REAPPEND DELETE BUTTON HERE
-        if(!IS_WINDOWS){
+        if (!IS_WINDOWS) {
             buttonContainer.append(deleteButton);
         }
 
@@ -4775,7 +4775,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineDay = inputs.timelineDayInput.val(),
             desc = inputs.descInput.val(),
             source = embeddedURL || "";
-         
+
         if (!checkValidYear(timelineYear)) {
             timelineYear = media.Metadata.TimelineYear;
         }
@@ -4951,7 +4951,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }], {
             getObjs: TAG.Worktop.Database.getArtworksAssocTo,
             args: [media.Identifier]
-        }, function () { 
+        }, function () {
 
         });
     }
@@ -5021,7 +5021,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method createAsset
      */
     function createAsset() {
-        if ($('.progressBarUploads').length != 0){
+        if ($('.progressBarUploads').length != 0) {
             console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
             return
         }
@@ -5037,27 +5037,27 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //prepareViewer(true);
 
 
-            if(files.length > 0) {
+            if (files.length > 0) {
                 durationHelper(0);
             }
 
             function durationHelper(j) {
                 if (contentTypes[j] === 'Video') {
-                    
+
                     //webappfileupload
-                    if (!IS_WINDOWS){
+                    if (!IS_WINDOWS) {
                         var videoElement = $(document.createElement('video'));
                         videoElement.attr('preload', 'metadata');   //Instead of waiting for whole video to load, just load metadata
                         var videoURL = URL.createObjectURL(files[j]);
                         videoElement.attr('src', videoURL);
-                        videoElement.on('loadedmetadata', function() {
+                        videoElement.on('loadedmetadata', function () {
                             var dur = this.duration;
                             durations.push(dur);
                         });
                     } else {
                         files[j].properties.getVideoPropertiesAsync().done(function (VideoProperties) {
-                        durations.push(VideoProperties.duration / 1000); // duration in seconds
-                        updateDoq(j);
+                            durations.push(VideoProperties.duration / 1000); // duration in seconds
+                            updateDoq(j);
                         }, function (err) {
                             console.log(err);
                         });
@@ -5066,20 +5066,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 } else if (contentTypes[j] === 'Audio') {
 
                     //webappfileupload
-                    if (!IS_WINDOWS){
+                    if (!IS_WINDOWS) {
                         var audioElement = $(document.createElement('audio'));
                         audioElement.attr('preload', 'metadata');   //Instead of waiting for whole audio to load, just load metadata
                         var audioURL = URL.createObjectURL(files[j]);
                         audioElement.attr('src', audioURL);
-                        audioElement.on('loadedmetadata', function() {
+                        audioElement.on('loadedmetadata', function () {
                             var dur = this.duration;
                             durations.push(dur);
                             updateDoq(j);
                         });
                     } else {
                         files[j].properties.getMusicPropertiesAsync().done(function (MusicProperties) {
-                        durations.push(MusicProperties.duration / 1000); // duration in seconds
-                        updateDoq(j);
+                            durations.push(MusicProperties.duration / 1000); // duration in seconds
+                            updateDoq(j);
                         }, function (error) {
                             console.log(error);
                         });
@@ -5094,34 +5094,34 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 done++;
                 if (done >= total) {
                     var duplicates = new HashTable();
-                        var editedNames = names;
+                    var editedNames = names;
 
-                        //Remove duplicate names
-                        for (var i = 0; i < editedNames.length; i ++){
+                    //Remove duplicate names
+                    for (var i = 0; i < editedNames.length; i++) {
 
-                            if(duplicates._hasItem(editedNames[i])){
-                                editedNames[i] = null;
-                            }else{
-                                duplicates.insert(editedNames[i], editedNames[i]);
-                            }
+                        if (duplicates._hasItem(editedNames[i])) {
+                            editedNames[i] = null;
+                        } else {
+                            duplicates.insert(editedNames[i], editedNames[i]);
                         }
-                        for (var i = 0; i<editedNames.length; i++){
-                            if(editedNames[i] != null){
-                                var stringName = editedNames[i].toString();
-                                if (stringName.length >= 30) { //name too long - needs ellipsis
-                                    console.log("NAME IS TOO LONG");
-                                    var shortName = stringName;
+                    }
+                    for (var i = 0; i < editedNames.length; i++) {
+                        if (editedNames[i] != null) {
+                            var stringName = editedNames[i].toString();
+                            if (stringName.length >= 30) { //name too long - needs ellipsis
+                                console.log("NAME IS TOO LONG");
+                                var shortName = stringName;
 
-                                    while (shortName.length>29) {
-                                        console.log("shortening long name!");
-                                        shortName = shortName.substr(0, shortName.length - 1);
-                                    }
-                                    stringName = shortName + "...";
+                                while (shortName.length > 29) {
+                                    console.log("shortening long name!");
+                                    shortName = shortName.substr(0, shortName.length - 1);
                                 }
+                                stringName = shortName + "...";
+                            }
 
-                                editedNames[i] = stringName;
-                            } 
+                            editedNames[i] = stringName;
                         }
+                    }
 
                     //Get rid of progress bar here    
                     /*var importInTours = $(document.getElementById("importToTours"));
@@ -5129,59 +5129,59 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $(importInTours).css({ 'color': 'rgb(256, 256, 256)' });
                         $(importInTours).prop('disabled', 'false');
                     }*/
-                        var importToTour = $(document.getElementById("importToTour"));
-                        if (importToTour && toureditor) {
-                            importToTour.css({ 'background-color': 'transparent', 'color': 'white' }); //enables
-                            toureditor.uploadStillHappening(false);
-                        }
+                    var importToTour = $(document.getElementById("importToTour"));
+                    if (importToTour && toureditor) {
+                        importToTour.css({ 'background-color': 'transparent', 'color': 'white' }); //enables
+                        toureditor.uploadStillHappening(false);
+                    }
 
-                        if (artworkeditor) {
-                            artworkeditor.uploadStillHappening(false);
-                            var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
-                            importMapButton.prop('disabled', false);
-                            importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
-                        }
-                        console.log("confirmation that assoc media uploaded");
+                    if (artworkeditor) {
+                        artworkeditor.uploadStillHappening(false);
+                        var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                        importMapButton.prop('disabled', false);
+                        importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+                    }
+                    console.log("confirmation that assoc media uploaded");
 
 
                     var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
 
-                            //remove progress stuff
-                            $('.progressBarUploads').remove();
-                            $('.progressBarUploadsButton').remove();
-                            $('.progressText').remove();
-                            $(document.getElementById("uploadProgressPopup")).remove();
+                        //remove progress stuff
+                        $('.progressBarUploads').remove();
+                        $('.progressBarUploadsButton').remove();
+                        $('.progressText').remove();
+                        $(document.getElementById("uploadProgressPopup")).remove();
 
-                            root = $(document.getElementById("setViewRoot"));
-                            newButton = root.find('#setViewNewButton');
+                        root = $(document.getElementById("setViewRoot"));
+                        newButton = root.find('#setViewNewButton');
 
-                            //enable import buttons
-                            newButton.prop('disabled', false);
-                            newButton.css({'opacity': '1', 'background-color': 'transparent'});
-                            if (inCollectionsView == true) {
-                                bgInput.prop('disabled', false);
-                                bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
-                            }
-                            if (inGeneralView == true) {
-                                bgImgInput.prop('disabled', false);
-                                bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                        //enable import buttons
+                        newButton.prop('disabled', false);
+                        newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+                        if (inCollectionsView == true) {
+                            bgInput.prop('disabled', false);
+                            bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                        }
+                        if (inGeneralView == true) {
+                            bgImgInput.prop('disabled', false);
+                            bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
-                            }
-                            if (inAssociatedView){
-                                $(menuLabel).prop('disabled',false);
-                                menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
-                                //hide confirmation box
-                            }
-                            $(importConfirmedBox).hide();
+                        }
+                        if (inAssociatedView) {
+                            $(menuLabel).prop('disabled', false);
+                            menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
+                            //hide confirmation box
+                        }
+                        $(importConfirmedBox).hide();
 
-                            if(inAssociatedView==true){ //reload artworks tab if in artworks
-                                loadAssocMediaView(currDoq, undefined, true);
-                            }
-                        },
+                        if (inAssociatedView == true) { //reload artworks tab if in artworks
+                            loadAssocMediaView(currDoq, undefined, true);
+                        }
+                    },
                         "The following media files were successfully imported:",
                         "OK",
                         false, null, null, null, null, true, false, editedNames); //not actually fortelemetry, but formatting works nicely
-                    
+
                     //maybe multiline ellipsis will work now?!
                     var textHolder = $($($(importConfirmedBox).children()[0]).children()[0]);
                     var text = textHolder.html();
@@ -5215,7 +5215,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     root.append(importConfirmedBox);
                     $(importConfirmedBox).show();
                     //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
-                    
+
                 } else {
                     durationHelper(done);
                 }
@@ -5229,8 +5229,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (durations[j]) {
                         options.Duration = durations[j];
                     }
-                    TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function(){
-                        if(done>=total){ //unknown error alert should come up ONCE
+                    TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function () {
+                        if (done >= total) { //unknown error alert should come up ONCE
                             error(incrDone)
                         }
                     });
@@ -5304,7 +5304,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         artworkAssociations = [];
         numFiles = 0;
         isUploading = true;
-        if (IS_WINDOWS){
+        if (IS_WINDOWS) {
             assetUploader = TAG.Authoring.FileUploader( // multi-file upload now
                 root,
                 TAG.Authoring.FileUploadTypes.AssociatedMedia,
@@ -5342,7 +5342,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         mediaMetadata[i].contentUrl = dataReaderLoad;
                     }
 
-                // chooseAssociatedArtworks(); // need to send in media objects here TODO
+                    // chooseAssociatedArtworks(); // need to send in media objects here TODO
                 },
                 ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'], // filters
                 false, // useThumbnail
@@ -5350,7 +5350,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 true // multiple file upload enabled?
             );
         } else {
-        //webappfileupload
+            //webappfileupload
             assetUploader = TAG.Authoring.WebFileUploader(
                 root,
                 TAG.Authoring.FileUploadTypes.AssociatedMedia,
@@ -5372,7 +5372,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         } else if (file.type.match(/audio/)) {
                             contentType = 'Audio';
                         }
-                    
+
                         uniqueUrls.push(localURL);
                         mediaMetadata.push({
                             'title': file.name,
@@ -5391,7 +5391,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         mediaMetadata[i].contentUrl = dataReaderLoad;
                     }
 
-                // chooseAssociatedArtworks(); // need to send in media objects here TODO
+                    // chooseAssociatedArtworks(); // need to send in media objects here TODO
                 },
                 ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4', '.mp3'], // filters
                 false, // useThumbnail
@@ -5529,7 +5529,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         searchbar[0].value = "";
         //$(searchbar).blur(); //////////
         infoSource = [];
-        
+
         $.each(currentList, function (i, cts) {
             if (!cts) {
                 return false;
@@ -5540,14 +5540,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     info += " " + field;
                     info += " " + fieldText;
                 });
-            }            
-            
+            }
+
             infoSource.push({
                 "id": i,
                 "keys": info.toLowerCase(),
                 "identifier": info.Identifier
             });
-           
+
         });
     }
 
@@ -5574,12 +5574,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         if (inArtworkView) {
             loadArtView(null, matches);
-            if(matches.length==0){
+            if (matches.length == 0) {
                 console.log("No matches in artwork view");
             }
         } else if (inAssociatedView) {
             loadAssocMediaView(null, matches);
-            if(matches.length ==0){
+            if (matches.length == 0) {
                 console.log("no matches in associated media view");
             }
         } else if (inCollectionsView) {
@@ -5595,7 +5595,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     }
 
-    function displayNoResults(){
+    function displayNoResults() {
         var noResults = $(document.createElement('label')).css('border-radius', '3.5px');
         noResults.css({
             'margin': '1%',
@@ -5609,7 +5609,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'float': "right",
             'margin-right': '3%'
         });
-        
+
 
     }
 
@@ -5623,9 +5623,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Array} matches list of search result matches
      * @param {Boolean} justMiddle true if you should only reload middle
      */
-    function loadArtView(id, matches,justMiddle) {
+    function loadArtView(id, matches, justMiddle) {
         console.log(sortByArt);
-        
+
         inGeneralView = false;
         inCollectionsView = false;
         inArtworkView = true;
@@ -5642,19 +5642,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         currentIndex = 0;
 
         prepareNextView(true, "Import", createArtwork, null, true);
-        
-        if($('.progressBarUploads').length>0){ //upload happening - disable import button
+
+        if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
             newButton.prop('disabled', true);
-            newButton.css({'opacity': '.4'});
+            newButton.css({ 'opacity': '.4' });
         }
-        
+
         if (!(justMiddle === true)) {
             prepareViewer(true);
             clearRight();
         }
         var cancel = false;
-        collectionSort.css('display','inline-block');
-        collectionSort.css({    
+        collectionSort.css('display', 'inline-block');
+        collectionSort.css({
             'padding-left': '2px',
             'padding-right': '2px',
             'float': 'left'
@@ -5674,7 +5674,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         })
 
-        findContainer.css('width','100%');
+        findContainer.css('width', '100%');
         searchbar.css('width', '75%');
 
         //if (generalIsLoading || collectionsIsLoading ||
@@ -5695,12 +5695,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var loadTimer = new TelemetryTimer();
         if (typeof matches !== "undefined") {       //If there are no search results to display
             list = matches;
-            if (list.length>0){
+            if (list.length > 0) {
                 list.unshift("Search Results:")
             } else {
                 list.push("No search results");
             }
-            displayLabels(); 
+            displayLabels();
         } else {
             // Make an async call to get artworks and then display
             TAG.Worktop.Database.getArtworks(function (result) {
@@ -5714,68 +5714,68 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
         }
 
-        if (sortByArt == "Title"){
-            titleSort.css('background-color','white');
-            collectionSort.css('background','transparent');
-            addedRecentlySort.css('background','transparent');
-        } else if (sortByArt == "Collection"){
-            titleSort.css('background','transparent');
-            collectionSort.css('background-color','white');
-            addedRecentlySort.css('background','transparent');
-        } else if (sortByArt == "Recently Added"){
-            titleSort.css('background','transparent');
-            collectionSort.css('background','transparent');
-            addedRecentlySort.css('background-color','white');
+        if (sortByArt == "Title") {
+            titleSort.css('background-color', 'white');
+            collectionSort.css('background', 'transparent');
+            addedRecentlySort.css('background', 'transparent');
+        } else if (sortByArt == "Collection") {
+            titleSort.css('background', 'transparent');
+            collectionSort.css('background-color', 'white');
+            addedRecentlySort.css('background', 'transparent');
+        } else if (sortByArt == "Recently Added") {
+            titleSort.css('background', 'transparent');
+            collectionSort.css('background', 'transparent');
+            addedRecentlySort.css('background-color', 'white');
         }
-        
-        function sortLabels(){
+
+        function sortLabels() {
             collectionList = [];
             guidsInCollection = [];
-            if (sortByArt == "Title"){
+            if (sortByArt == "Title") {
                 console.log("sort by title");
                 sortAZ(list);
                 displayLabels();
-            } 
-            else if (sortByArt == "Collection"){
+            }
+            else if (sortByArt == "Collection") {
                 console.log("sort by collection");
                 TAG.Worktop.Database.getExhibitions(function (result) {
                     if (cancel) return;
                     sortAZ(result);
                     //create sort list for each collection
-                    for (var r = 0, len = result.length; r < len; r++){
+                    for (var r = 0, len = result.length; r < len; r++) {
                         //make entry in hash map 
-                            //key- guid of collection
-                            //values- name of collection
-                            //      - list of artwork guids in collection
-                        collectionList[result[r].Identifier] = {collect_name: result[r].Name, artworks:[]};
+                        //key- guid of collection
+                        //values- name of collection
+                        //      - list of artwork guids in collection
+                        collectionList[result[r].Identifier] = { collect_name: result[r].Name, artworks: [] };
                     }
                     //create list for artworks that are not in a collection
-                    collectionList["Other"] = {collect_name: "Other", artworks:[]};
+                    collectionList["Other"] = { collect_name: "Other", artworks: [] };
                     //add artworks to collectionList based on values in _Folders attribute
-                    for (var a=0, alen= list.length; a<alen; a++){
+                    for (var a = 0, alen = list.length; a < alen; a++) {
                         var notInCollection = true;
                         var folders = list[a]._Folders.FolderData;
-                        for (var v=0, vlen=folders.length; v<vlen;v++){
-                            if (folders[v].FolderId in collectionList){
+                        for (var v = 0, vlen = folders.length; v < vlen; v++) {
+                            if (folders[v].FolderId in collectionList) {
                                 collectionList[folders[v].FolderId].artworks.push(list[a]);
                                 notInCollection = false;
                             }
                         }
-                        if (notInCollection){
+                        if (notInCollection) {
                             //add to other
                             collectionList["Other"].artworks.push(list[a]);
                         }
                     }
                     //concatenate list
                     list = [];
-                    for (var collect in collectionList){
+                    for (var collect in collectionList) {
                         list.push(collectionList[collect].collect_name);
                         list = list.concat(collectionList[collect].artworks);
                     }
                     displayLabels();
                 });
             }
-            else if (sortByArt == "Recently Added"){
+            else if (sortByArt == "Recently Added") {
                 //create sort list for added before and other
                 console.log("sort by recently added")
                 //sortAZ(list);
@@ -5803,7 +5803,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     var bucket = []
                     if (labelList.length > 0) {
                         var currLabel = labelList.shift()
-                        while(heap.size()>0 && func(heap.peek())<currLabel[0]){
+                        while (heap.size() > 0 && func(heap.peek()) < currLabel[0]) {
                             bucket.push(heap.pop())
                         }
                         if (bucket.length > 0) {
@@ -5811,7 +5811,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             list = list.concat(bucket)
                         }
                     }
-                    else{
+                    else {
                         list.push(heap.pop())
                     }
 
@@ -5851,100 +5851,100 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (cancel) return;
                     // Add each label in a separate function in the queue
                     // so the UI doesn't lock up
-                    if (val && val.Metadata){
-                    val.Name = TAG.Util.htmlEntityDecode(val.Name);
-                    middleQueue.add(function () {
-                        if (cancel) return;
-                        if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
-                            return;
-                        }
-                        var label;
-                        var imagesrc;
-                        //check if artwork has been marked for delete by batch operation
-                        var artguid = val.Identifier;
-                        var markedForDelete = false;
-                        if (guidsToBeDeleted.indexOf(artguid) >= 0) {
-                            markedForDelete = true;
-                        }
-                        switch (val.Metadata.Type) {
-                            case 'Artwork':
-                                imagesrc = TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail);
-                                break;
-                            case 'VideoArtwork':
-                                imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + "images/video_icon.svg";
-                                break
-                            default:
-                                imagesrc = null;
-                        }
-                        //lucy- removing a piece of logic here cause not sure what its doing but will monitor
-                        if (!markedForDelete && !selectedLabel &&
-                            ((id && val.Identifier === id) || (!id && i === 0)||(!id && selectNext))) {
+                    if (val && val.Metadata) {
+                        val.Name = TAG.Util.htmlEntityDecode(val.Name);
+                        middleQueue.add(function () {
+                            if (cancel) return;
+                            if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
+                                return;
+                            }
+                            var label;
+                            var imagesrc;
+                            //check if artwork has been marked for delete by batch operation
+                            var artguid = val.Identifier;
+                            var markedForDelete = false;
+                            if (guidsToBeDeleted.indexOf(artguid) >= 0) {
+                                markedForDelete = true;
+                            }
+                            switch (val.Metadata.Type) {
+                                case 'Artwork':
+                                    imagesrc = TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail);
+                                    break;
+                                case 'VideoArtwork':
+                                    imagesrc = val.Metadata.Thumbnail ? TAG.Worktop.Database.fixPath(val.Metadata.Thumbnail) : tagPath + "images/video_icon.svg";
+                                    break
+                                default:
+                                    imagesrc = null;
+                            }
+                            //lucy- removing a piece of logic here cause not sure what its doing but will monitor
+                            if (!markedForDelete && !selectedLabel &&
+                                ((id && val.Identifier === id) || (!id && i === 0) || (!id && selectNext))) {
 
-                            // Select the first one
-                            middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
-                                //keep track of identifiers for autosaving
-                                previousIdentifier = val.identifier;
-                                loadArtwork(val);
-                                currentIndex = i;
-                            }, val.Identifier, false, function () {
-                                if (val.Metadata.Type === "Artwork") {
-                                    editArtwork(val);
+                                // Select the first one
+                                middleLoading.before(selectLabel(label = createMiddleLabel(val.Name, imagesrc, function () {
+                                    //keep track of identifiers for autosaving
+                                    previousIdentifier = val.identifier;
+                                    loadArtwork(val);
+                                    currentIndex = i;
+                                }, val.Identifier, false, function () {
+                                    if (val.Metadata.Type === "Artwork") {
+                                        editArtwork(val);
+                                    }
+                                }, true, val.Extension, markedForDelete, true), true, '.middleLabel'));
+                                selectNext = false;
+                                selectedLabel = true;
+
+                                // Scroll to the selected label if the user hasn't already scrolled somewhere
+                                if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
+                                    middleLabelContainer.animate({
+                                        scrollTop: (label.offset().top - middleLabelContainer.height() / 2)
+                                    }, 1000);
                                 }
-                            }, true, val.Extension, markedForDelete,true), true,'.middleLabel'));
-                            selectNext = false;
-                            selectedLabel = true;
 
-                            // Scroll to the selected label if the user hasn't already scrolled somewhere
-                            if (middleLabelContainer.scrollTop() === 0 && label.offset().top - middleLabelContainer.height() > 0) {
-                                middleLabelContainer.animate({
-                                    scrollTop: (label.offset().top - middleLabelContainer.height() / 2)
-                                }, 1000);
-                            }
-
-                            prevSelectedMiddleLabel = label;
-                            currentSelected = prevSelectedMiddleLabel;
-                            currentIndex = i;
-                            if (!(justMiddle===true)) {
-                                loadArtwork(val);
-                            }
-                        } else {
-                            if (markedForDelete) {
-                                selectNext = true;
-                            }
-                            middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
-                                //keep track of identifiers for autosaving
-                                //if (changesHaveBeenMade) {
-                                //    //saveArray.push(previousIdentifier);
-                                //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                                //    //changesHaveBeenMade = false;
-                                //}
-                                loadArtwork(val);
-                                previousIdentifier = val.Identifier;
+                                prevSelectedMiddleLabel = label;
+                                currentSelected = prevSelectedMiddleLabel;
                                 currentIndex = i;
-                            }, val.Identifier, false, function () {
-                                if (val.Metadata.Type === "Artwork") {
-                                    editArtwork(val);
+                                if (!(justMiddle === true)) {
+                                    loadArtwork(val);
                                 }
-                            }, true, val.Extension, markedForDelete));
-                        }
-                        if (i == list.length - 1 && i>1) {
-                            middleQueue.add(function () {
-                                console.log("adding extra space");
-                                var extraSpace = $(document.createElement("div"));
-                                extraSpace.width(middleLabelContainer.width());
-                                extraSpace.height($($(".middleLabel")[0]).height()/2);
-                                console.log($(".middleLabel"));
-                                middleLoading.before(extraSpace)
-                            });
-                        }
+                            } else {
+                                if (markedForDelete) {
+                                    selectNext = true;
+                                }
+                                middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
+                                    //keep track of identifiers for autosaving
+                                    //if (changesHaveBeenMade) {
+                                    //    //saveArray.push(previousIdentifier);
+                                    //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
+                                    //    //changesHaveBeenMade = false;
+                                    //}
+                                    loadArtwork(val);
+                                    previousIdentifier = val.Identifier;
+                                    currentIndex = i;
+                                }, val.Identifier, false, function () {
+                                    if (val.Metadata.Type === "Artwork") {
+                                        editArtwork(val);
+                                    }
+                                }, true, val.Extension, markedForDelete));
+                            }
+                            if (i == list.length - 1 && i > 1) {
+                                middleQueue.add(function () {
+                                    console.log("adding extra space");
+                                    var extraSpace = $(document.createElement("div"));
+                                    extraSpace.width(middleLabelContainer.width());
+                                    extraSpace.height($($(".middleLabel")[0]).height() / 2);
+                                    console.log($(".middleLabel"));
+                                    middleLoading.before(extraSpace)
+                                });
+                            }
 
-                    });
+                        });
                     }
-                    //sort name
+                        //sort name
                     else if (val) {
-                        middleQueue.add(function(){
+                        middleQueue.add(function () {
                             console.log(val);
-                            middleLoading.before(label= createSortLabel(val));
+                            middleLoading.before(label = createSortLabel(val));
                         });
                     }
                     selectNext = true;
@@ -5960,7 +5960,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             middleQueue.add(function () {
                 prevLeftBarSelection.loadTime = loadTimer.get_elapsed();
             });
-            
+
         }
         if (idleTimer) {
             idleTimer.kill();
@@ -5968,7 +5968,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         cancelLastSetting = function () { cancel = true; };
     }
 
-    function createSortLabel(text){
+    function createSortLabel(text) {
 
         var container = $(document.createElement('div'));
         var text = TAG.Util.htmlEntityDecode(text);
@@ -5977,7 +5977,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var helper = $(document.createElement('span'));
         helper.css({
-            'display' : 'inline-block',
+            'display': 'inline-block',
             'height': '100%',
             'vertical-align': 'middle'
         });
@@ -5991,15 +5991,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         label.text(text);
-        container.append(label); 
-        return container; 
+        container.append(label);
+        return container;
     }
 
 
     /**Add artworks to collections in the Artwork Tab
      * @method addArtworksToCollections 
      */
-    function addArtworksToCollections(artworks) { 
+    function addArtworksToCollections(artworks) {
         console.log("called addArtworksToCollections");
         if (!artworks.length) {
             return;
@@ -6007,20 +6007,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //Opens a popup to choose collection(s) to add the artworks list to
         TAG.Util.UI.createAssociationPicker(root, "Add Artworks to Collections",
-                { comp: artworks, type: 'artworkMulti' , modifiedButtons: true},
+                { comp: artworks, type: 'artworkMulti', modifiedButtons: true },
                 'exhib', [{
                     name: 'All Collections',
                     getObjs: TAG.Worktop.Database.getExhibitions,
                     excluded: guidsToBeDeleted
                 }], {
-                    getObjs: function () { return [];}, //TODO how to get the collections that an artwork is already in
+                    getObjs: function () { return []; }, //TODO how to get the collections that an artwork is already in
                 }, function () {
                     TAG.Util.removeProgressCircle($('.progressCircle')); // remove progress circle
                     $('.progressText').remove(); // remove progress text
                     // refresh the page only if the user stays in artworks tab
-                    if (inArtworkView) { 
-                        loadArtView(currDoq,undefined,true);
-                    } 
+                    if (inArtworkView) {
+                        loadArtView(currDoq, undefined, true);
+                    }
                 }
         );
     }
@@ -6068,14 +6068,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     getObjs: TAG.Worktop.Database.getArtworks,
                     excluded: guidsToBeDeleted
                 }], {
-                    getObjs: function () { return []; }, 
+                    getObjs: function () { return []; },
                 }, function () {
                     TAG.Util.removeProgressCircle($('.progressCircle')); // remove progress circle
                     $('.progressText').remove(); // remove progress text
                     // refresh the page only if the user stays in associated media tab
-                    if (inAssociatedView) { 
+                    if (inAssociatedView) {
                         loadAssocMediaView(currDoq, undefined, true);
-                    } 
+                    }
                     //loadExhibitionsView();
                 });
     }
@@ -6179,8 +6179,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.attr('identifier', artwork.Identifier);
             mediaElement.attr("preload", "none");
             mediaElement.attr("controls", "");
-            mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%"});
-            if (!IS_WINDOWS) {mediaElement.css("padding-top","2%")}; // adjust the position for video previewing in web app
+            mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
+            if (!IS_WINDOWS) { mediaElement.css("padding-top", "2%") }; // adjust the position for video previewing in web app
             var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
             var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
             var sourceExt = source.substring(source.lastIndexOf('.'));
@@ -6267,7 +6267,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         }
 
-        
+
 
         // Lock artwork setting: Only one artwork per server
         var isLocked;
@@ -6398,8 +6398,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 changesMade = true;
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
-                TAG.Telemetry.recordEvent('LockToArtwork', function(tobj) {
-                    tobj.toggle_state = true;                                
+                TAG.Telemetry.recordEvent('LockToArtwork', function (tobj) {
+                    tobj.toggle_state = true;
                 });
 
             });
@@ -6408,8 +6408,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 changesMade = true;
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
-                TAG.Telemetry.recordEvent('LockToArtwork', function(tobj) {
-                    tobj.toggle_state = false;                                
+                TAG.Telemetry.recordEvent('LockToArtwork', function (tobj) {
+                    tobj.toggle_state = false;
                 });
             });
             var lockedSetting = createSetting('Lock to this artwork', lockedDiv);
@@ -6531,7 +6531,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             thumbnailButton.attr('id', 'thumbnailButton');
             if (artwork.Metadata.Type !== 'VideoArtwork') { //REAPPEND DELETE BUTTON HERE
                 buttonContainer.append(editArt).append(saveButton); //.append(xmluploaderbtn); // for win8 aug 15 release only
-                if(!IS_WINDOWS){
+                if (!IS_WINDOWS) {
                     buttonContainer.append(deleteArt);
                 }
                 //searchContainer.append(deleteArt);
@@ -6539,7 +6539,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             } else {
                 buttonContainer.append(saveButton);//.append(xmluploaderbtn); // for win8 aug 15 release only
 
-              
+
             }
 
             saveButton.on("mousedown", function () {
@@ -6645,7 +6645,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     console.log("success?")
                     loadArtView(component.Identifier);
                 }, unauth, conflict, error);
-            
+
             } else { // here, it must be a video assoc media
                 TAG.Worktop.Database.changeHotspot(id, { Thumbnail: imageURL }, function () {
                     console.log("success?");
@@ -6686,8 +6686,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method createArtwork
      */
     function createArtwork(fromImportPopUp, currCollection) {
-        
-        if ($('.progressBarUploads').length != 0){
+
+        if ($('.progressBarUploads').length != 0) {
             console.log("THERE IS ALREADY AN UPLOAD HAPPENING");
             return
         }
@@ -6713,7 +6713,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'width': '20%',
                 'z-index': '9999999999999999999999999999'
             };
-            
+
             //implementing background uploads - david
             console.log("createArtwork called")
             hideUploadingProgress();
@@ -6722,11 +6722,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //prepareViewer(true);
 
             //different circles for different pages
-            
+
             //webappfileupload
-            if (!IS_WINDOWS){
-                if(!total) {
-                    if(inArtworkView==true){
+            if (!IS_WINDOWS) {
+                if (!total) {
+                    if (inArtworkView == true) {
                         loadArtView();
                     }
                 }
@@ -6735,27 +6735,27 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             function incrDone() {
                 done++;
                 //webappfileupload
-                if (!IS_WINDOWS){
- 
+                if (!IS_WINDOWS) {
+
                     if (done >= total || !total) {
                         middleLoading.hide();
                         //if(inArtworkView==true){ //scroll down to newly-added artwork
                         //    loadArtView(toScroll.Identifier);   
-                        
+
                         var duplicates = new HashTable();
                         var editedNames = names;
 
                         //Remove duplicate names
-                        for (var i = 0; i < editedNames.length; i ++){
+                        for (var i = 0; i < editedNames.length; i++) {
 
-                            if(duplicates._hasItem(editedNames[i])){
+                            if (duplicates._hasItem(editedNames[i])) {
                                 editedNames[i] = null;
-                            }else{
+                            } else {
                                 duplicates.insert(editedNames[i], editedNames[i]);
                             }
                         }
-                        for (var i = 0; i<editedNames.length; i++){
-                            if(editedNames[i] != null){
+                        for (var i = 0; i < editedNames.length; i++) {
+                            if (editedNames[i] != null) {
                                 var stringName = editedNames[i].toString();
                                 if (stringName.length >= 21) { //name too long - needs ellipsis
                                     console.log("NAME IS TOO LONG");
@@ -6767,23 +6767,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     }
                                     stringName = shortName + "...";
                                 }
-                                editedNames[i] = stringName;   
+                                editedNames[i] = stringName;
                             }
-                            
+
                         }
 
                         var message;
-                    
-                        if(fromImportPopUp==true){
+
+                        if (fromImportPopUp == true) {
                             message = "The following files were successfully imported into " + currCollection.Name + ":";
-                        } else{
+                        } else {
                             message = "The following files were successfully imported: "
                         }
 
                         //Confirmation pop up that artworks have been imported
                         console.log("confirm that artworks were imported");
 
-                        var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () { 
+                        var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
                             //remove progress stuff
                             $('.progressBarUploads').remove();
                             $('.progressBarUploadsButton').remove();
@@ -6804,51 +6804,51 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
-                            if (inAssociatedView){
-                                $(menuLabel).prop('disabled',false);
+                            if (inAssociatedView) {
+                                $(menuLabel).prop('disabled', false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
-                            
+
                             //hide confirmation box
                             $(importConfirmedBox).hide();
 
-                            if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
+                            if (fromImportPopUp == true && inCollectionsView == true) { //reload collections tab if in collections and artworks were added to collection
                                 loadExhibitionsView(currDoq, undefined, true);
                             }
-                            if(inArtworkView==true){ //reload artworks tab if in artworks
+                            if (inArtworkView == true) { //reload artworks tab if in artworks
                                 loadArtView(currDoq, undefined, true);
-                            }                            
-                            },
+                            }
+                        },
                             message,
                             "OK",
                             false, null, null, null, null, null, false, editedNames);
 
                         root = $(document.getElementById("setViewRoot"));
-                        
+
                         root.append(importConfirmedBox);
                         $(importConfirmedBox).show();
                         console.log("importConfirmedBox should be visible here!!");
                         TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
-                 
-                   } else {
+
+                    } else {
                         durationHelper(done);
                     }
                 } else { //win8 app
                     if (done >= total) {
                         console.log("upload is ACTUALLY done");
-                     
+
                         var duplicates = new HashTable();
                         var editedNames = names;
-                        for (var i = 0; i < editedNames.length; i ++){
+                        for (var i = 0; i < editedNames.length; i++) {
 
-                            if(duplicates._hasItem(editedNames[i])){
+                            if (duplicates._hasItem(editedNames[i])) {
                                 editedNames[i] = null;
-                            }else{
+                            } else {
                                 duplicates.insert(editedNames[i], editedNames[i]);
                             }
                         }
-                        for (var i = 0; i<editedNames.length; i++){
-                            if(editedNames[i] != null){
+                        for (var i = 0; i < editedNames.length; i++) {
+                            if (editedNames[i] != null) {
                                 var stringName = editedNames[i].toString();
                                 if (stringName.length >= 30) { //name too long - needs ellipsis
                                     console.log("NAME IS TOO LONG");
@@ -6860,19 +6860,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     }
                                     stringName = shortName + "...";
                                 }
-                                editedNames[i] = stringName;   
+                                editedNames[i] = stringName;
                             }
-                            
+
                         }
 
                         var message;
-                        if(fromImportPopUp==true){
+                        if (fromImportPopUp == true) {
                             message = "The following files were successfully imported into " + currCollection.Name + ":";
-                        } else{
+                        } else {
                             message = "The following files were successfully imported: "
                         }
-                        
-                        
+
+
 
                         var importToTour = $(document.getElementById("importToTour"));
                         if (importToTour && toureditor) {
@@ -6908,23 +6908,23 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
-                            if (inAssociatedView){
-                                $(menuLabel).prop('disabled',false);
+                            if (inAssociatedView) {
+                                $(menuLabel).prop('disabled', false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
-                            
+
                             //hide confirmation box
                             $(importConfirmedBox).hide();
 
-                            if(fromImportPopUp==true && inCollectionsView==true){ //reload collections tab if in collections and artworks were added to collection
+                            if (fromImportPopUp == true && inCollectionsView == true) { //reload collections tab if in collections and artworks were added to collection
                                 console.log("reload queue");
                                 loadExhibitionsView(currDoq, undefined, false);
 
                             }
-                            if(inArtworkView==true){ //reload artworks tab if in artworks
-                                loadArtView(currDoq,undefined,true);
+                            if (inArtworkView == true) { //reload artworks tab if in artworks
+                                loadArtView(currDoq, undefined, true);
                             }
-                            },
+                        },
                             message,
                             "OK",
                             false, null, null, null, null, true, false, editedNames);
@@ -6943,15 +6943,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             var bool = t.height() > textHolder.height();
                             return bool;
                         }; */
-        
-                        if(textHolder.css("overflow") == "hidden")
-                        {
-                             $(textHolder).css({ 'overflow-y': 'auto' });
+
+                        if (textHolder.css("overflow") == "hidden") {
+                            $(textHolder).css({ 'overflow-y': 'auto' });
                             textHolder.parent().append(t);
                             var func = t.height() > textHolder.height();
                             console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
-                            while (text.length > 0 && (t.height()>textHolder.height()))
-                            {
+                            while (text.length > 0 && (t.height() > textHolder.height())) {
                                 console.log("in while loop")
                                 text = text.substr(0, text.length - 1);
                                 t.html(text + "...");
@@ -6963,7 +6961,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         //TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
                         root = $(document.getElementById("setViewRoot"));
                         root.append(importConfirmedBox);
-                       
+
                         $(importConfirmedBox).show();
                         console.log("importConfirmed box should be visible");
 
@@ -6982,12 +6980,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (contentTypes[j] === 'Video') {
 
                     //webappfileupload
-                    if (!IS_WINDOWS){
+                    if (!IS_WINDOWS) {
                         var videoElement = $(document.createElement('video'));
                         videoElement.attr('preload', 'metadata');   //Instead of waiting for whole video to load, just load metadata
                         var videoURL = URL.createObjectURL(files[j]);
                         videoElement.attr('src', videoURL);
-                        videoElement.on('loadedmetadata', function() {
+                        videoElement.on('loadedmetadata', function () {
                             var dur = this.duration;
                             durations.push(dur);
                             updateDoq(j);
@@ -7023,11 +7021,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     toScroll = newDoq;                          //Alphabetical order
                     alphaName = names[j];
                 }
-                TAG.Worktop.Database.changeArtwork(newDoq.Identifier, ops, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function(){
-                        if(done>=total){ //unknown error alert should come up ONCE
-                            error(incrDone);
-                        }
-                    });
+                TAG.Worktop.Database.changeArtwork(newDoq.Identifier, ops, incrDone, TAG.Util.multiFnHandler(authError, incrDone), TAG.Util.multiFnHandler(conflict(newDoq, "Update", incrDone)), function () {
+                    if (done >= total) { //unknown error alert should come up ONCE
+                        error(incrDone);
+                    }
+                });
                 var source = newDoq.Metadata.Source;
                 var newFileName = source.slice(8, source.length);
                 var index = newFileName.lastIndexOf(".");
@@ -7045,7 +7043,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 /*var elementClassName = function (s) { return s.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0); } (newDoq.name)
                 $(".uploadProgressLabel" + elementClassName).text((100).toString().substring(0, 4) + "%")
                 $(".uploadProgressInner" + elementClassName).css({'width': 100+'%'}); */
-                
+
                 /*var source = newDoq.Metadata.Source;
                 if (contentTypes[j] === "Video") {
                     var newFileName = source.slice(8, source.length);
@@ -7080,7 +7078,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }, true, ['.jpg', '.png', '.gif', '.tif', '.tiff', '.mp4'/*, '.webm', '.ogv','.avi','.mov','.wmv'*/]);
     }
 
-   // var optionButtons = document.getElementById('optionButtons');
+    // var optionButtons = document.getElementById('optionButtons');
     //console.log(optionButtons == null);
 
 
@@ -7142,10 +7140,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             $(field).css({
                 'margin': '0px 0px 2px 0px',
                 padding: '1% 7% 1% 1%',
-                width:'92%',
+                width: '92%',
             });
             $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'top' });
-            $(field).children().eq(1).css({ margin: '0 auto', 'font-size':'60%'});
+            $(field).children().eq(1).css({ margin: '0 auto', 'font-size': '60%' });
             mtinputs[key] = input;// { field: field, input: input };
             field.show().data('visible', true);
             parsingInfo.append(field);
@@ -7358,13 +7356,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     */
     function _metadatapicker(artwork, inputs, settingsContainer, metadatalist, spec) {
         var allTitles = {};
-        var metadataPickerOverlay   = $(TAG.Util.UI.blockInteractionOverlay())  .addClass('metadataPickerOverlay');
-        var metadataPicker          = $(document.createElement('div'))          .addClass("metadataPicker");
-        var metadataPickerHeader    = $(document.createElement('div'))          .addClass('metadataPickerHeader')       .text("No match found. Please select the metadata you would like to import for '" + artwork.Name + "'.");
-        var searchbar               = $(document.createElement('input'))        .addClass('metadataPickerSearchbar')    .attr('type', 'text');
-        var metadataLists           = $(document.createElement('div'))          .addClass('metadataLists');
-        var metadataInfos           = $(document.createElement('div'))          .addClass('metadataInfos');
-        var metadataholder          = $(document.createElement('div'))          .addClass('metadataHolder');
+        var metadataPickerOverlay = $(TAG.Util.UI.blockInteractionOverlay()).addClass('metadataPickerOverlay');
+        var metadataPicker = $(document.createElement('div')).addClass("metadataPicker");
+        var metadataPickerHeader = $(document.createElement('div')).addClass('metadataPickerHeader').text("No match found. Please select the metadata you would like to import for '" + artwork.Name + "'.");
+        var searchbar = $(document.createElement('input')).addClass('metadataPickerSearchbar').attr('type', 'text');
+        var metadataLists = $(document.createElement('div')).addClass('metadataLists');
+        var metadataInfos = $(document.createElement('div')).addClass('metadataInfos');
+        var metadataholder = $(document.createElement('div')).addClass('metadataHolder');
         var fields = {};//fields to store all the metadata elements
 
         //get all metadata titles from metadatalist.
@@ -7381,7 +7379,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         metadataPickerHeader.css({
             'text-overflow': 'ellipsis',
             'white-space': 'nowrap',
-            'overflow':'hidden'
+            'overflow': 'hidden'
         });
         TAG.Util.multiLineEllipsis(metadataPickerHeader);
         metadataPicker.append(metadataPickerHeader);
@@ -7437,7 +7435,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // creates a panel for all metadata's detailed info
         metadataPicker.append(metadataInfos);
         metadataInfos.append(metadataholder);
-        
+
 
         //Method to display reset the metadata list and search information
         function init() {
@@ -7446,7 +7444,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             curlist = metadatalist;
             for (i = 0; i < metadatalist.length; i++) {
                 info = "";
-                $.each(metadatalist[i], function(index, element) {
+                $.each(metadatalist[i], function (index, element) {
                     info += element + " ";          //Put all the metadata in one string for searching purposes
                 });
                 var mt = metadatalist[i];
@@ -7454,11 +7452,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 infoSource.push({
                     "id": i,
                     "keys": info.toLowerCase(),
-                    "title": title||"Untitled",
+                    "title": title || "Untitled",
                 });
                 if (!title)
                     title = "Untitled";
-                allTitles[i] = title;                                          
+                allTitles[i] = title;
                 if (i < 30) {
                     var mtHolder = makemtholder(title, i);
                     //set the first one selected once we firstly open the picker
@@ -7469,12 +7467,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }
             };
         }
-        
+
         //Actual search method
         function doSearch() {
             var content = searchbar.val();
             var searchResults = [];
-            if(content){
+            if (content) {
                 metadataLists.empty();
                 counter = 0;
                 content = content.toLowerCase();
@@ -7508,11 +7506,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     counter++;
                 }
             }
-            
+
         }
         function makemtholder(ttl, index) {
             var mtHolder = $(document.createElement('div')).addClass('mtHolder').attr('id', index).text(ttl)
-                            .css({'white-space':'nowrap','overflow':'hidden','text-overflow':'ellipsis','font-size':'0.9em'});
+                            .css({ 'white-space': 'nowrap', 'overflow': 'hidden', 'text-overflow': 'ellipsis', 'font-size': '0.9em' });
             metadataLists.append(mtHolder);
             makemtClickable(mtHolder);
             return mtHolder;
@@ -7542,9 +7540,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             var input = createTextInput(selectedmetadata[rest], "Metadata Field", null, false, true);
                             var field = createSetting(rest, input, null, '7px').addClass("metadataField").attr('title', rest);
                             field.css({
-                                margin:  '0%',
+                                margin: '0%',
                                 padding: '1%',
-                                width:   '98%'
+                                width: '98%'
                             });
                             $(field).children(":first").css({ color: 'white', 'font-style': 'normal', 'vertical-align': 'middle' });
                             fields[rest] = { field: field, input: input };
@@ -7559,10 +7557,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
         var metadataPickerButtons = $(document.createElement('div')).attr("id", "metadataPickerButtons")
-                                    .css({'height':'5%','bottom':'7%','width':'100%','position':'absolute'});
+                                    .css({ 'height': '5%', 'bottom': '7%', 'width': '100%', 'position': 'absolute' });
         var metadataPickerCancel = $(document.createElement('button')).attr("id", "metadataPickerCancel").css({ 'float': 'right', 'position': 'absolute', 'margin-right': '12%' }).css('border-radius', '3.5px');;
         metadataPickerCancel.text("Cancel");
-        
+
         // cancel button click handler
         metadataPickerCancel.click(function () {
             metadataPickerOverlay.fadeOut();
@@ -7656,14 +7654,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             // actually delete the exhibition
             TAG.Worktop.Database.deleteDoq(artwork.Identifier, function () {
-               
+
                 loadArtView();
             }, function () {
-                    console.log("noauth error");
-                }, function () {
-                    console.log("conflict error");
-                }, function () {
-                    console.log("general error");
+                console.log("noauth error");
+            }, function () {
+                console.log("conflict error");
+            }, function () {
+                console.log("general error");
             });
         }, "Are you sure you want to delete " + artwork.Name + " ?", "Delete", true, function () { $(confirmationBox).hide(); });
         root.append(confirmationBox);
@@ -7705,7 +7703,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     loadArtView(toLoad, undefined, onlyMiddle);
                 }, authError, authError);
             }
-        },confirmText, confirmButtonText, true, function () {
+        }, confirmText, confirmButtonText, true, function () {
             $(confirmationBox).hide();
             //remove guids from list to be greyed out if someone hits cancel
             var remIndex;
@@ -7802,7 +7800,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         clearRight();
         prepareViewer(true);
         prepareNextView(false, null, null, "Saving...");
-        
+
         //helper
         function checkValidYear(dateString) {
             //remove characters that are okay and white space
@@ -7854,7 +7852,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 loadArtView(previousIdentifier);
                 return;
             }
-        }, authError, conflict(artwork, "Update", loadArtView), error(loadArtView)); 
+        }, authError, conflict(artwork, "Update", loadArtView), error(loadArtView));
     }
 
     // Feedback Functions:
@@ -8074,7 +8072,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param checkMe                   if the checkbox should start out checked
      * @return {Object} container       the container of the new label
      */
-    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension, markedForDelete,checkMe) {
+    function createMiddleLabel(text, imagesrc, onclick, id, noexpand, onDoubleClick, inArtMode, extension, markedForDelete, checkMe) {
         var container = $(document.createElement('div'));
         text = TAG.Util.htmlEntityDecode(text);
         container.attr('class', 'middleLabel');
@@ -8082,7 +8080,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             container.attr('id', id);
         }
 
-    
+
         if (markedForDelete) {
             container.css({
                 'opacity': '0.4',
@@ -8134,7 +8132,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 TAG.Util.removeYoutubeVideo();
                 //resetLabels('.middleLabel');
-                selectLabel(container, !noexpand,'.middleLabel');
+                selectLabel(container, !noexpand, '.middleLabel');
 
                 TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
                     tobj.type_representation = prevMiddleBarSelection.type_representation;
@@ -8159,7 +8157,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         // BUILD VERTICAL CENTERING HELPER FUCK YEAH
         var helper = $(document.createElement('span'));
         helper.css({
-            'display' : 'inline-block',
+            'display': 'inline-block',
             'height': '100%',
             'vertical-align': 'middle'
         });
@@ -8251,7 +8249,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     .attr('type', 'checkbox')
                                     .attr('value', id)
                                     .addClass('middleCheck')
-                                    .css('background-color','gray')
+                                    .css('background-color', 'gray')
                                     .attr('id', "checkbox" + id)
                                     .attr('checked', false)
                                     .on("click", function (evt) {
@@ -8278,7 +8276,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (checkMe) {
                         checkbox.attr('checked', true);
                         if (!inAssociatedView) {
-                            if (multiSelectedUnique(id)){
+                            if (multiSelectedUnique(id)) {
                                 multiSelected.push(id);
                             }
                         } else {
@@ -8326,8 +8324,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             '-ms-transform': 'rotate(90deg)',
             'transform': 'rotate(90deg)',
         });
-        findBar.css("display","none");
-        findContainer.css("display","none");
+        findBar.css("display", "none");
+        findContainer.css("display", "none");
         findShown = false;
 
         //clears the multiselected artworks/tours
@@ -8339,36 +8337,36 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //menuLabel.hide();
         addToArtworkLabel.hide(); // this button isn't used anymore
-        addButton.css('margin-left','0%');
+        addButton.css('margin-left', '0%');
         newButton.text(newText);
         newButton.unbind('click').click(newBehavior);
         if (!newText) { newButton.hide(); }
-            else { newButton.show(); }
+        else { newButton.show(); }
 
-        if (inArtworkView){
+        if (inArtworkView) {
             menuLabel.hide();
             newButton.show();
-            findBar.css("display","inline-block");
+            findBar.css("display", "inline-block");
             searchbar.css({ width: '53%' });
             //shows the second button
             addButton.text("Add to Collection")
             addButton.show();
-            addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected)});
+            addButton.unbind('click').click(function () { addArtworksToCollections(multiSelected) });
 
-       
-            if(IS_WINDOWS){
-                deleteBlankButton.unbind('click').click(function(){ deleteArtwork(multiSelected)});
+
+            if (IS_WINDOWS) {
+                deleteBlankButton.unbind('click').click(function () { deleteArtwork(multiSelected) });
                 deleteBlankButton.text('Delete');
                 deleteBlankButton.css('margin-left', '2.25%');
                 addButton.css('margin-left', '0%');
-            } else{
-                deleteBlankButton.css('display','none'); //web app - delete button disabled
+            } else {
+                deleteBlankButton.css('display', 'none'); //web app - delete button disabled
             }
 
         } else if (inAssociatedView) {
             findBar.css("display", "none");
             addButton.text("Add Associations");
-            addButton.css('margin-left','1%');
+            addButton.css('margin-left', '1%');
             addButton.show();
             newButton.hide();
             menuLabel.show();
@@ -8378,7 +8376,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (IS_WINDOWS) {
                 deleteBlankButton.unbind('click').click(function () { deleteAssociatedMedia(multiSelected) });
                 deleteBlankButton.text('Delete');
-                deleteBlankButton.css('margin-left','2%');
+                deleteBlankButton.css('margin-left', '2%');
                 addButton.css('margin-left', '2%');
             } else {
                 deleteBlankButton.css('display', 'none'); //web app - delete button disabled
@@ -8393,7 +8391,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 } else {
                     deleteBlankButton.css('display', 'none'); //web app - delete button disabled
                 }
-                
+
             } else if (inToursView) {
                 if (IS_WINDOWS) {
                     deleteBlankButton.unbind('click').click(function () { deleteTour(multiSelected) });
@@ -8407,7 +8405,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             addButton.hide();
             newButton.show();
             addButton.unbind('click')
-            findBar.css("display","none");
+            findBar.css("display", "none");
         }
 
         prevSelectedMiddleLabel = null;
@@ -8483,7 +8481,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 (BUTTON_HEIGHT * 1) + 'px',
             });
         }
-        if (showButtons===false){
+        if (showButtons === false) {
             buttonContainer.hide();
         }
     }
@@ -8526,28 +8524,28 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} selector     class of labels to reset
      */
     function resetLabels(selector) {
-        
+
         $(selector).css('background', 'transparent');
         $.each($(selector), function (i, current) {
-            
+
             if ($(current).attr('disabled') === 'disabled') {
                 return;
             }
-            
+
             $(current).mousedown(function () {
-                
+
                 $(current).css({
                     'background': HIGHLIGHT
                 });
             });
             $(current).mouseup(function () {
-                
+
                 $(current).css({
                     'background': 'transparent'
                 });
             });
             $(current).mouseleave(function () {
-                
+
                 $(current).css({
                     'background': 'transparent'
                 });
@@ -8572,17 +8570,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var labelId = label.attr('id');
         var text = label.text();
         var checkBox = $("#checkbox" + labelId);
-        if (!(toBeUnselected===null) && !(toBeUnselected.attr("id") === "checkbox"+labelId)) {
+        if (!(toBeUnselected === null) && !(toBeUnselected.attr("id") === "checkbox" + labelId)) {
             toBeUnselected.prop('checked', false);
             var justGuid = toBeUnselected.attr('id').replace("checkbox", "");
             removeIdFromMulti(justGuid);
             toBeUnselected = null;
         }
         //check that it is a check-able label (not a nav label)
-        if (checkBox.prop("checked") !== undefined){
+        if (checkBox.prop("checked") !== undefined) {
             checkBox.prop('checked', true);
             if (!inAssociatedView) {
-                if (multiSelectedUnique(labelId)){
+                if (multiSelectedUnique(labelId)) {
                     multiSelected.push(labelId);
                 }
             } else {
@@ -8617,7 +8615,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         return label;
     }
 
-   
+
     //Settings functions:
 
     /**Gets the height of the settings section since the viewer has to be positioned absolutely,
@@ -8653,7 +8651,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function createSetting(text, input, width, labelLeft, timeline) {
         var container = $(document.createElement('div'));
         var mb = "4%";
-        if (timeline){
+        if (timeline) {
             mb = "0%";
         }
         container.css({
@@ -8717,7 +8715,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
         inputs.setLabel.css(kw_css).css({ 'width': '17%', 'float': 'left' });
         inputs.nameInput.css(kw_css).css({ 'width': '57%' });
-        inputs.editInput.css({'min-width': '0px', 'width': '20%'});
+        inputs.editInput.css({ 'min-width': '0px', 'width': '20%' });
 
         var editDiv = $(document.createElement('div')).css(kw_css).css({ 'width': '43%', 'float': 'left' });
         editDiv.append(inputs.setLabel).append(inputs.nameInput).append(inputs.editInput);
@@ -8750,8 +8748,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     * @param {Function} callback                save button to be enabled when settings are changed
     * @return {Object} yearMetadataDivSpecs     div with year and timeline year options, list of input fields
     */
-    function createYearMetadataDiv(work, callback){
-        
+    function createYearMetadataDiv(work, callback) {
+
         var yearInput,
             monthInput,
             dayInput,
@@ -8770,7 +8768,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             timelineDay,
             timelineYearAutofilled = false,
             timelineYearAllowed = true,
-            yearMetadataDiv= $(document.createElement('div')).addClass('yearMetadataDiv'),
+            yearMetadataDiv = $(document.createElement('div')).addClass('yearMetadataDiv'),
             yearMetadataDivSpecs;
 
         //Create input boxes: 
@@ -8778,48 +8776,48 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var yearDescriptionDiv = $(document.createElement('div'));
         monthInput = createSelectInput(getMonthOptions(yearInput.attr('value')), work.Metadata.Month);
         monthInput.css('margin-right', '0%');
-        dayInput = createSelectInput(getDayOptions(monthInput.attr('value'),yearInput,monthInput), work.Metadata.Day);
+        dayInput = createSelectInput(getDayOptions(monthInput.attr('value'), yearInput, monthInput), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
         timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
-        if (timelineInputText === "undefined"){
+        if (timelineInputText === "undefined") {
             timelineInputText = getTimelineInputText(yearInput);
         }
         timelineYearInput = createTextInput(timelineInputText, "Enter valid year", 100);
-        timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')),work.Metadata.TimelineMonth);
+        timelineMonthInput = createSelectInput(getMonthOptions(timelineYearInput.attr('value')), work.Metadata.TimelineMonth);
         timelineMonthInput.css({ 'margin-right': '0%' });
-        timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value'),timelineYearInput,timelineMonthInput), work.Metadata.TimelineDay);
-        timelineDayInput.css({'margin-right': '0%'});
+        timelineDayInput = createSelectInput(getDayOptions(timelineMonthInput.attr('value'), timelineYearInput, timelineMonthInput), work.Metadata.TimelineDay);
+        timelineDayInput.css({ 'margin-right': '0%' });
         var showAsRangeDiv = $(document.createElement('div'));
-        
+
         yearInput.attr('id', 'yearInput');
         //Add focus to inputs:
         yearInput.focus(function () {
-            if (yearInput.val() === 'Year'){
+            if (yearInput.val() === 'Year') {
                 yearInput.select();
             }
         });
-        monthInput.focus(function(){
-            if (monthInput.val() === 'Month'){
+        monthInput.focus(function () {
+            if (monthInput.val() === 'Month') {
                 monthInput.select();
             }
         });
-        dayInput.focus(function(){
-            if (dayInput.val() === 'Day'){
+        dayInput.focus(function () {
+            if (dayInput.val() === 'Day') {
                 dayInput.select();
             }
         });
-        timelineYearInput.focus(function(){
-            if (timelineYearInput.val() === 'Date on Timeline'){
+        timelineYearInput.focus(function () {
+            if (timelineYearInput.val() === 'Date on Timeline') {
                 timelineYearInput.select();
             }
         });
-        timelineMonthInput.focus(function(){
-            if (timelineMonthInput.val() === "Month"){
+        timelineMonthInput.focus(function () {
+            if (timelineMonthInput.val() === "Month") {
                 timelineMonthInput.select();
             }
         });
-        timelineDayInput.focus(function(){
-            if (timelineDayInput.val() === "Day"){
+        timelineDayInput.focus(function () {
+            if (timelineDayInput.val() === "Day") {
                 timelineDayInput.select();
             }
         });
@@ -8827,7 +8825,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Set up year div:
         //TO-DO: add (?) icon w/ pop-up
         yearDiv.css({
-            width : '100%',
+            width: '100%',
         });
         year = createSetting('Year', yearInput, 60, null, true);
         year.css({
@@ -8839,7 +8837,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         month.css({
             width: '32%',
             'padding-left': '1%',
-            'position':'relative',
+            'position': 'relative',
             display: 'inline-block',
         });
         toggleAllow(monthInput);
@@ -8859,7 +8857,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //TO-DO add (?) icon w/ pop-up
         timelineYearDiv.css({
             width: '100%',
-            'padding-top':'2%'
+            'padding-top': '2%'
         });
         timelineYear = createSetting('Date on Timeline', timelineYearInput, 40);
         timelineYear.css({
@@ -8894,11 +8892,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'font-size': '70%',
             'font-style': 'italic',
             'white-space': 'nowrap',
-            'display':'inline-block'
+            'display': 'inline-block'
         });
-        if (IS_WINDOWS){
+        if (IS_WINDOWS) {
             yearDescriptionDiv.css({
-            'top': '-10px'
+                'top': '-10px'
             });
         }
         yearDescriptionDiv.text("Year Format Examples:  2013, 800 BC, 17th century, 1415-1450");
@@ -8939,16 +8937,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //Link input values of date fields to dynamically change/disable               
         yearInput.on('input', function (event) {
             callback(event);
-            setOptions(monthInput, getMonthOptions(yearInput.attr('value')),'');
+            setOptions(monthInput, getMonthOptions(yearInput.attr('value')), '');
             toggleAllow(monthInput);
-            setOptions(dayInput, getDayOptions(monthInput.attr('value'),yearInput,monthInput));
+            setOptions(dayInput, getDayOptions(monthInput.attr('value'), yearInput, monthInput));
             toggleAllow(dayInput);
-            if (!timelineYearJustChanged|| timelineYearInput.val()===''){
+            if (!timelineYearJustChanged || timelineYearInput.val() === '') {
                 timelineYearInput.val(getTimelineInputText(yearInput));
                 timelineYearJustChanged = false;
                 setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr("value")));
                 toggleAllow(timelineMonthInput);
-                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value"),timelineYearInput,timelineMonthInput));
+                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value"), timelineYearInput, timelineMonthInput));
                 toggleAllow(timelineDayInput);
             }
             /**
@@ -8965,58 +8963,58 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         monthInput.change(function () {
             callback();
-            setOptions(dayInput,getDayOptions(monthInput.attr("value"),yearInput,monthInput),dayInput.attr('value'));
+            setOptions(dayInput, getDayOptions(monthInput.attr("value"), yearInput, monthInput), dayInput.attr('value'));
             toggleAllow(dayInput);
             if (timelineMonthInput.attr("value") === "") {
-                timelineMonthInput.attr("value",monthInput.attr("value"));
-                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value"),timelineYearInput,timelineMonthInput));
+                timelineMonthInput.attr("value", monthInput.attr("value"));
+                setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value"), timelineYearInput, timelineMonthInput));
                 toggleAllow(timelineDayInput);
             }
         });
         dayInput.change(function () {
-            callback();           
-            if (timelineDayInput.attr("value")=== "" && timelineDayInput.dropDownOptions.length>1){
+            callback();
+            if (timelineDayInput.attr("value") === "" && timelineDayInput.dropDownOptions.length > 1) {
                 timelineDayInput.attr("value", dayInput.attr("value"));
             };
         });
         timelineYearInput.on('input', function (event) {
-            callback(event);            
-            if (timelineYearInput.attr('value').length===0 && !timelineYearAutofilled){
+            callback(event);
+            if (timelineYearInput.attr('value').length === 0 && !timelineYearAutofilled) {
                 timelineYearInput.val(getTimelineInputText(yearInput));
                 timelineMonthInput.val(monthInput.attr("value"));
                 timelineDayInput.val(dayInput.attr("value"));
                 timelineYearAutofilled = true;
-            } 
+            }
             timelineYearJustChanged = true;
-            if ( timelineYearInput.attr('value').length>0 &&!isSingleYear(timelineYearInput.attr('value'))){
+            if (timelineYearInput.attr('value').length > 0 && !isSingleYear(timelineYearInput.attr('value'))) {
                 timelineYearAllowed = false;
                 timelineYearInput.css({
                     'border-color': 'red',
-                    'border-width' : 'medium',
-                    'opacity' : '0.7'
+                    'border-width': 'medium',
+                    'opacity': '0.7'
                 });
             } else {
                 timelineYearAllowed = true;
                 timelineYearInput.css({
-                    'border-color' : '#a7b4ae',
+                    'border-color': '#a7b4ae',
                     'border-width': 'thin',
                     'opacity': '1'
                 });
             }
-            setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr('value')),'');
+            setOptions(timelineMonthInput, getMonthOptions(timelineYearInput.attr('value')), '');
             toggleAllow(timelineMonthInput, timelineYearAllowed);
-            setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr('value'),timelineYearInput,timelineMonthInput),'');
+            setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr('value'), timelineYearInput, timelineMonthInput), '');
             toggleAllow(timelineDayInput, timelineYearAllowed);
         });
         timelineMonthInput.change(function () {
             callback();
-            setOptions(timelineDayInput,getDayOptions(timelineMonthInput.attr("value"),timelineYearInput,timelineMonthInput),timelineDayInput.attr('value'));
+            setOptions(timelineDayInput, getDayOptions(timelineMonthInput.attr("value"), timelineYearInput, timelineMonthInput), timelineDayInput.attr('value'));
             toggleAllow(timelineDayInput, true);
         });
 
         //Set up year metadatadiv
         yearMetadataDiv.css({
-            'width' : '100%'
+            'width': '100%'
         });
 
         yearMetadataDiv.append(yearDiv)
@@ -9025,8 +9023,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         .append(showAsRangeDiv);
 
         yearMetadataDivSpecs = {
-            yearMetadataDiv : yearMetadataDiv,
-            yearInput : yearInput, 
+            yearMetadataDiv: yearMetadataDiv,
+            yearInput: yearInput,
             monthInput: monthInput,
             dayInput: dayInput,
             timelineYearInput: timelineYearInput,
@@ -9044,11 +9042,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @param {String} year         year used to determine month options
          * @return {Array}              list of options to use in month drop down
          */
-        function getMonthOptions(year){
-            if (!isSingleYear(year)){
+        function getMonthOptions(year) {
+            if (!isSingleYear(year)) {
                 return [''];
             } else {
-                return ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+                return ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             }
         }
 
@@ -9057,19 +9055,19 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @param {Object} yearInput        year input field
          * @return {String} timelineInputText   text to display in timelineYearInput 
          */
-        function getTimelineInputText(yearInput){
+        function getTimelineInputText(yearInput) {
             var timelineInputText = TAG.Util.parseDateToYear({ year: yearInput.attr('value') });
             if (timelineInputText === 999999) {
                 timelineInputText = "";
             }
-            if (timelineInputText){
-                if (timelineInputText<0){
+            if (timelineInputText) {
+                if (timelineInputText < 0) {
                     return -timelineInputText + ' BCE';
                 }
                 else {
                     return timelineInputText;
                 }
-            } else{
+            } else {
                 return '';
             }
         }
@@ -9079,15 +9077,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
          * @param {String} dateString      string to parse
          * @return {Boolean}               whether input string represents single year
          */
-        function isSingleYear(dateString){
+        function isSingleYear(dateString) {
             //remove characters that are okay and white space
-            dateString = dateString.replace(/bce?/gi,'')
+            dateString = dateString.replace(/bce?/gi, '')
                                    .replace(/ce/gi, '')
                                    .replace(/ad/gi, '')
-                                   .replace(/,/g,'')
-                                   .replace(/\s/gi,'');
+                                   .replace(/,/g, '')
+                                   .replace(/\s/gi, '');
             //dateString now cannot have non-numeric characters, except '-' at index 0 (for negative numbers) 
-            if (dateString.search(/[^0-9]/)>0 || dateString.length===0 || dateString[0].search(/[0-9||-]/)<0){
+            if (dateString.search(/[^0-9]/) > 0 || dateString.length === 0 || dateString[0].search(/[0-9||-]/) < 0) {
                 return false;
             } else {
                 return true;
@@ -9102,7 +9100,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         *                       end - end date
         */
         function isRange(dateString) {
-            var rangeSpecs = {'isRange':false};
+            var rangeSpecs = { 'isRange': false };
             //remove characters that are okay and white space
             dateString = dateString.replace(/bce?/gi, '')
                                    .replace(/ce/gi, '')
@@ -9116,7 +9114,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 var firstDateNeg = false;
                 //search for a dash 
                 var dashIndex = dateString.search(/[-]/);
-                if (dashIndex < 0 ||dashIndex=== dateString.length) {
+                if (dashIndex < 0 || dashIndex === dateString.length) {
                     return rangeSpecs;
                 }
                 if (dashIndex === 0) {
@@ -9140,42 +9138,42 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 rangeSpecs = { 'isRange': true, 'start': startDate, 'end': endDate };
                 return rangeSpecs;
             }
-           
+
         }
-        
+
         /*Get day options based on month using test date
          * @method getDayOptions
          * @param {String} month
          * @return {Array} dayArray     array of day drop down options
          */
-        function getDayOptions(month, yearIn, monthIn){
+        function getDayOptions(month, yearIn, monthIn) {
             var dayArray = [''],
                 testDate,
                 daysInMonth,
                 i;
-            if (month === '') { 
+            if (month === '') {
                 return dayArray;
             }
-            testDate = new Date(TAG.Util.parseDateToYear({year: yearIn.attr('value')}), monthIn.dropDownOptions.indexOf(month), 0);
+            testDate = new Date(TAG.Util.parseDateToYear({ year: yearIn.attr('value') }), monthIn.dropDownOptions.indexOf(month), 0);
             daysInMonth = testDate.getDate();
-            for (i=1;i<daysInMonth+1;i++){
+            for (i = 1; i < daysInMonth + 1; i++) {
                 dayArray.push(i);
             }
             return dayArray;
         }
-        
+
         /*Set drop down options of a select input
          * @method setOptions()
          * @param {Object} select       select input
          * @param {Object} options      options to add to drop down
          * @param {String} value        selected value
          */
-        function setOptions(select, options, value){
+        function setOptions(select, options, value) {
             var option,
                 i;
             select.empty();
             select.dropDownOptions = options;
-            for (i=0; i<options.length; i++) {
+            for (i = 0; i < options.length; i++) {
                 option = $(document.createElement('option'));
                 option.text(options[i]);
                 option.attr('value', options[i]);
@@ -9189,21 +9187,21 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         * @param {Boolean} allowed      whether its allowed (optional)
         * @return {Boolean}             whether its allowed
         */
-        function toggleAllow(select, allowed){
-            if (select.dropDownOptions.length === 1 || allowed === "false"){
+        function toggleAllow(select, allowed) {
+            if (select.dropDownOptions.length === 1 || allowed === "false") {
                 select.css({
                     'background-color': 'gray',
-                    'opacity' : '0.3',
+                    'opacity': '0.3',
                 });
                 return false;
             }
             else {
                 select.css({
                     'background-color': 'white',
-                    'opacity' : '1'
+                    'opacity': '1'
                 });
                 return true;
-            } 
+            }
         }
     }
 
@@ -9215,9 +9213,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @return {Object} button      new button created
      */
     function createButton(text, onclick, css, isSaveButton) {
-        var button = $(document.createElement('button')).text(text).css('border-radius','3.5px');
+        var button = $(document.createElement('button')).text(text).css('border-radius', '3.5px');
         button.attr('type', 'button');
-        button.attr('class','button');
+        button.attr('class', 'button');
         if (css) {
             button.css(css);
         }
@@ -9289,20 +9287,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             text = text.replace(/<br \/>/g, '\n').replace(/<br>/g, '\n').replace(/<br\/>/g, '\n');
         }
         text = text.substring(0, 2001);
-        var input = $(document.createElement('textarea')).val(text).attr({ 'id': 'settingsViewTextarea', 'maxlength': maxLength});
-         input.css({
-             'overflow': 'hidden',
-         });
-         /*input.bind('copy paste', function (e) {
-             e.preventDefault();
-         });*/
+        var input = $(document.createElement('textarea')).val(text).attr({ 'id': 'settingsViewTextarea', 'maxlength': maxLength });
+        input.css({
+            'overflow': 'hidden',
+        });
+        /*input.bind('copy paste', function (e) {
+            e.preventDefault();
+        });*/
         //input.autoSize();
         doWhenReady(input, function (elem) {
-            if (input[0].scrollHeight<=(root.find('#setViewSettingsContainer').height() * 0.5)){
+            if (input[0].scrollHeight <= (root.find('#setViewSettingsContainer').height() * 0.5)) {
                 var realHeight = input[0].scrollHeight;
             }
-            else{
-                var realHeight= root.find('#setViewSettingsContainer').height() * 0.5;
+            else {
+                var realHeight = root.find('#setViewSettingsContainer').height() * 0.5;
             }
             $(input).css('height', realHeight + 'px');
         });
@@ -9335,7 +9333,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             i;
         selectElt.css({ 'overflow': 'scroll' });
         selectElt.dropDownOptions = options;
-        for (i=0; i<options.length; i++) {
+        for (i = 0; i < options.length; i++) {
             option = $(document.createElement('option'));
             option.text(options[i]);
             option.attr('value', options[i]);
@@ -9369,16 +9367,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var hex = TAG.Util.UI.colorToHex(color);
         container.val(color);
         picker.fromString(color);
-        if (selectorText === ".secondaryFont"){
+        if (selectorText === ".secondaryFont") {
             secondaryColorPicker = picker;
         } else {
             primaryColorPicker = picker;
         }
         picker.onImmediateChange = function () {
-            if(selectorText) {
+            if (selectorText) {
                 updateTextColor(selectorText, container.val());
-            } 
-            if(selectorBackground) {
+            }
+            if (selectorBackground) {
                 updateBGColor(selectorBackground, container.val(), getTransValue());
             }
             if (selectorText != ".secondaryFont") {
@@ -9386,7 +9384,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 $('#passwordInput').css('border-color', '#' + container.val());
                 $('#serverSubmit').css('border-color', '#' + container.val());
                 $('#passwordSubmit').css('border-color', '#' + container.val());
-            } 
+            }
         };
         //container.on('change', function () { changesHaveBeenMade = true; }); //for autosaving
         return container;
@@ -9430,11 +9428,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var keywordEditDiv = $(document.createElement('div'))
                 .addClass('keywordDeleteDiv')
                 .hover(
-                    function () { $(this).css( {'background-color': '#555'} ); },
-                    function () { $(this).css( {'background-color': '#000'} ); }
+                    function () { $(this).css({ 'background-color': '#555' }); },
+                    function () { $(this).css({ 'background-color': '#000' }); }
                 )
                 .appendTo(keywordListContainer);
-            
+
             // Label.
             var keywordsEditLabel = $(document.createElement('div'))
                 .addClass('keywordDeleteLabel')
@@ -9489,7 +9487,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .attr('cols', '10')
             .attr('rows', '2')
             .attr('maxlength', '2000')
-            .bind("enterKey",function(e) {
+            .bind("enterKey", function (e) {
                 keywordAddButton.click();
             })
             .keyup(function (e) {
@@ -9500,7 +9498,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 return false;
             })
             .appendTo(addKeywordContainer);
-        
+
 
         //// to focus the 'add' button on the enter key
         //addKeywordContainer.keypress(function (e) {
@@ -9524,7 +9522,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-right': '5%',
                 'min-width': '20px',
                 'width': '20%',
-                'margin-top':'3%'
+                'margin-top': '3%'
             })
             .click(function () {
                 $('#setEditorMessageContainer').text('');
@@ -9744,26 +9742,26 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var options = set.keywords.slice();
         var inputs = {
             setLabel: $(document.createElement('div'))
-                .attr('for', 'keyword-set-name-input-' + (setIndex+1))
-                .text('Set ' + (setIndex+1)),
+                .attr('for', 'keyword-set-name-input-' + (setIndex + 1))
+                .text('Set ' + (setIndex + 1)),
             nameInput: createTextInput(set.name, 'untitled set')
                 .addClass('keyword-set-name-input')
                 .attr('id', 'keyword-set-name-input-' + (setIndex + 1))
                 .attr('disabled', keywordSets[setIndex].shown !== 'true')
                 .attr('maxlength', '25')
-                .css({'width': '20%'})
+                .css({ 'width': '20%' })
                 .blur(function (e) {
                     if (keywordSets) {
                         keywordSets[setIndex].name = $(this).val();
                     }
                 }),
             editInput: createButton('Edit', function () {
-                    if (keywordSets) {
-                        var popup = TAG.Util.UI.popUpCustom(createKeywordSetPopup(setIndex), false, false);
-                        root.append(popup);
-                        $(popup).show();
-                    }
-                }, false)
+                if (keywordSets) {
+                    var popup = TAG.Util.UI.popUpCustom(createKeywordSetPopup(setIndex), false, false);
+                    root.append(popup);
+                    $(popup).show();
+                }
+            }, false)
                 .addClass('keyword-set-edit-button')
                 .attr('disabled', keywordSets[setIndex].shown !== 'true')
                 .css({
@@ -9771,37 +9769,37 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'opacity': (keywordSets[setIndex].shown === 'true' ? '1' : '0.4')
                 }),
             showKeywords: createButton('Show', function () {
-                    $($('.keyword-set-show-button')[setIndex]).css('background-color', 'white');
-                    $($('.keyword-set-hide-button')[setIndex]).css('background-color', '');
+                $($('.keyword-set-show-button')[setIndex]).css('background-color', 'white');
+                $($('.keyword-set-hide-button')[setIndex]).css('background-color', '');
 
-                    $($('.keyword-set-name-input')[setIndex]).removeAttr('disabled');
-                    $($('.keyword-set-edit-button')[setIndex]).removeAttr('disabled');
-                    $($('.keyword-set-edit-button')[setIndex]).css('opacity', '1');
+                $($('.keyword-set-name-input')[setIndex]).removeAttr('disabled');
+                $($('.keyword-set-edit-button')[setIndex]).removeAttr('disabled');
+                $($('.keyword-set-edit-button')[setIndex]).css('opacity', '1');
 
-                    keywordSets[setIndex].shown = 'true';
-                }, {
-                    'min-height': '0px',
-                    'margin-right': '4%',
-                    'width': '48%',
-                })
+                keywordSets[setIndex].shown = 'true';
+            }, {
+                'min-height': '0px',
+                'margin-right': '4%',
+                'width': '48%',
+            })
                 .addClass('keyword-set-show-button')
                 .css({
                     'margin-top': '0.5%',
                     'background-color': (keywordSets[setIndex].shown === 'true' ? 'white' : '')
                 }),
             hideKeywords: createButton('Hide', function () {
-                    $($('.keyword-set-hide-button')[setIndex]).css('background-color', 'white');
-                    $($('.keyword-set-show-button')[setIndex]).css('background-color', '');
+                $($('.keyword-set-hide-button')[setIndex]).css('background-color', 'white');
+                $($('.keyword-set-show-button')[setIndex]).css('background-color', '');
 
-                    $($('.keyword-set-name-input')[setIndex]).attr('disabled', 'disabled');
-                    $($('.keyword-set-edit-button')[setIndex]).attr('disabled', 'disabled');
-                    $($('.keyword-set-edit-button')[setIndex]).css('opacity', '.4');
+                $($('.keyword-set-name-input')[setIndex]).attr('disabled', 'disabled');
+                $($('.keyword-set-edit-button')[setIndex]).attr('disabled', 'disabled');
+                $($('.keyword-set-edit-button')[setIndex]).css('opacity', '.4');
 
-                    keywordSets[setIndex].shown = 'false';
-                }, {
-                    'min-height': '0px',
-                    'width': '48%',
-                })
+                keywordSets[setIndex].shown = 'false';
+            }, {
+                'min-height': '0px',
+                'width': '48%',
+            })
                 .addClass('keyword-set-hide-button')
                 .css({
                     'margin-top': '0.5%',
@@ -10023,244 +10021,244 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function uploadFile(type, callback, multiple, filter, useOverlay) {
         console.log("file upload!");
-        console.log(IS_WINDOWS); 
-        if (!IS_WINDOWS){
-        //webappfileupload:   
-        var names = [], locals = [], contentTypes = [], fileArray = [], i, urlArray = [];
-        return TAG.Authoring.WebFileUploader( // remember, this is a multi-file upload
-            root,
-            type,
-            // local callback - get filename
-            function (files, localURLs) {
-                for (i = 0; i < files.length; i++) {
-                    fileArray.push(files[i]);
-                    names.push(files[i].name);
-                    if (files[i].type.match(/image/)) {
-                        contentTypes.push('Image');
-                    } else if (files[i].type.match(/video/)) {
-                        contentTypes.push('Video');
-                    } else if (files[i].type.match(/audio/)) {
-                        contentTypes.push('Audio');
+        console.log(IS_WINDOWS);
+        if (!IS_WINDOWS) {
+            //webappfileupload:   
+            var names = [], locals = [], contentTypes = [], fileArray = [], i, urlArray = [];
+            return TAG.Authoring.WebFileUploader( // remember, this is a multi-file upload
+                root,
+                type,
+                // local callback - get filename
+                function (files, localURLs) {
+                    for (i = 0; i < files.length; i++) {
+                        fileArray.push(files[i]);
+                        names.push(files[i].name);
+                        if (files[i].type.match(/image/)) {
+                            contentTypes.push('Image');
+                        } else if (files[i].type.match(/video/)) {
+                            contentTypes.push('Video');
+                        } else if (files[i].type.match(/audio/)) {
+                            contentTypes.push('Audio');
+                        }
                     }
-                }
-            },
-            // remote callback - save correct name
-            function (urls) {
-                if (!is_array(urls)) { // check to see whether a single file was returned
-                    urls = [urls];
-                    names = [names];
-                }
-                for (i = 0; i < urls.length; i++) {
-                    console.log("trying that new URL thing");
-                    urlArray.push(urls[i]);
-                    //console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
-                }
-
-                for (var i = 0; i < names.length; i++) {
-                    console.log("The files being passed through names: " + names[i]);
-                }
-                callback(urls, names, contentTypes, fileArray);
-            },
-            filter || ['.jpg', '.png', '.gif', '.tif', '.tiff'],
-            false,
-            function () {
-                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
-            },
-            !!multiple, // batch upload disabled
-            null,
-            useOverlay,
-            //$('.progressBarUploads').length, //determines if an upload is happening 
-            function () {
-                root = $(document.getElementById("setViewRoot"));
-                newButton = root.find('#setViewNewButton');
-
-                if(inArtworkView==true || inAssociatedView ==true){ //disables all import buttons if upload is happening
-                    newButton.prop('disabled', true);
-                    newButton.css({'opacity': '.4'});
-                }
-                if (inCollectionsView == true) {
-                    bgInput.prop('disabled', true);
-                    bgInput.css({ 'opacity': '.4' });
-                }
-                if (inGeneralView == true) {
-                    bgImgInput.prop('disabled', true);
-                    bgImgInput.css({ 'opacity': '.4' });
-
-                }
-                if (inAssociatedView===true){
-                    menuLabel.prop('disabled',true);;
-                    menuLabel.css({'opacity':'.4'})
-                }
-
-                uploadInProgress = true;
-            
-            },
-            function () {
-                root = $(document.getElementById("setViewRoot"));
-                newButton = root.find('#setViewNewButton');
-
-                newButton.prop('disabled', false);
-                newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
-
-                if (inCollectionsView == true) {
-                    bgInput.prop('disabled', false);
-                    bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
-                }
-                if (inGeneralView == true) {
-                    bgImgInput.prop('disabled', false);
-                    bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
-
-                }
-                if (inAssociatedView===true){
-                    menuLabel.prop('disabled',false);
-                    menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
-                }
-               
-                uploadInProgress = false;
-            }
-            );
-        } else {
-
-        var names = [], locals = [], contentTypes = [], fileArray, i;
-        return TAG.Authoring.FileUploader( // remember, this is a multi-file upload
-            root,
-            type,
-            // local callback - get filename
-            function (files, localURLs) {
-                fileArray = files;
-                for (i = 0; i < files.length; i++) {
-                    names.push(files[i].displayName);
-                    var ext=files[i].fileType.toLowerCase();
-                    if (files[i].contentType.match(/image/)) {
-                        contentTypes.push('Image');
-                    } else if (files[i].contentType.match(/video/) || ext === ".avi" || ext === ".wmv" || ext === ".mov" || ext === ".mp4" || ext === ".webm" || ext === ".ogv") {
-                        contentTypes.push('Video');
-                    } else if (files[i].contentType.match(/audio/)) {
-                        contentTypes.push('Audio');
-                    } else if (files[i].name.match('\.woff')) {
-                        contentTypes.push('Font');
+                },
+                // remote callback - save correct name
+                function (urls) {
+                    if (!is_array(urls)) { // check to see whether a single file was returned
+                        urls = [urls];
+                        names = [names];
                     }
-                }
-
-                if (files.length > 0) {
-                    var elementType;
-                    switch (type) {
-                        case 0:
-                            elementType = "Standard";bgInput
-                            break;
-                        case 1:
-                            elementType = "DeepZoom";
-                            break;
-                        case 2:
-                            elementType = "Associated Media";
-                            break;
-                        case 3:
-                            elementType = "Video Artwork";
-                        case 4:
-                            elementType = "Map";
-                            break;
-                        case 5:
-                            elementType = "CSV"
-                            break;
-                        default:
-                            elementType = "Unkown";
+                    for (i = 0; i < urls.length; i++) {
+                        console.log("trying that new URL thing");
+                        urlArray.push(urls[i]);
+                        //console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
                     }
-                    TAG.Telemetry.recordEvent("EndOfImport", function (tobj) {
-                        tobj.number_imported = files.length;
-                        tobj.element_type = elementType;
-                    });
-                }
-            },
-            // remote callback - save correct name
-            function (urls) {
-                if (!is_array(urls)) { // check to see whether a single file was returned
-                    urls = [urls];
-                    names = [names];
-                }
-                for (i = 0; i < urls.length; i++) {
-                    console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
-                }
-                callback(urls, names, contentTypes, fileArray);
-            },
-            filter || ['.jpg', '.png', '.gif', '.tif', '.tiff', '.woff'],
-            false,
-            function () {
-                root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
-            },
-            //commenting out to test
-            !!multiple, // batch upload disabled
-            null,
-            useOverlay,
-            function(){//disables all import buttons if upload is happening - this automatically disables the button the user imported from
-                root = $(document.getElementById("setViewRoot"));
-                newButton = root.find('#setViewNewButton');
 
-                if (inArtworkView == true || inAssociatedView == true) {
-                    newButton.prop('disabled', true);
-                    newButton.css({'opacity': '.4'});
-                }
-                if (inCollectionsView == true) {
-                    bgInput.prop('disabled', true);
-                    bgInput.css({ 'opacity': '.4' });
-                }
-                if (inGeneralView == true) {
-                    bgImgInput.prop('disabled', true);
-                    bgImgInput.css({ 'opacity': '.4' });
+                    for (var i = 0; i < names.length; i++) {
+                        console.log("The files being passed through names: " + names[i]);
+                    }
+                    callback(urls, names, contentTypes, fileArray);
+                },
+                filter || ['.jpg', '.png', '.gif', '.tif', '.tiff'],
+                false,
+                function () {
+                    root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+                },
+                !!multiple, // batch upload disabled
+                null,
+                useOverlay,
+                //$('.progressBarUploads').length, //determines if an upload is happening 
+                function () {
+                    root = $(document.getElementById("setViewRoot"));
+                    newButton = root.find('#setViewNewButton');
 
-                }
-                if (inAssociatedView==true){
-                    menuLabel.prop('disabled', true);
-                    menuLabel.css({'opacity':'.4'});
-                }
+                    if (inArtworkView == true || inAssociatedView == true) { //disables all import buttons if upload is happening
+                        newButton.prop('disabled', true);
+                        newButton.css({ 'opacity': '.4' });
+                    }
+                    if (inCollectionsView == true) {
+                        bgInput.prop('disabled', true);
+                        bgInput.css({ 'opacity': '.4' });
+                    }
+                    if (inGeneralView == true) {
+                        bgImgInput.prop('disabled', true);
+                        bgImgInput.css({ 'opacity': '.4' });
 
-                uploadInProgress = true;
-                //var importToTour = $(document.getElementById("importToTour"));
-                
-                
-            },
-            function(){
-                if (inArtworkView || inAssociatedView) {
+                    }
+                    if (inAssociatedView === true) {
+                        menuLabel.prop('disabled', true);;
+                        menuLabel.css({ 'opacity': '.4' })
+                    }
+
+                    uploadInProgress = true;
+
+                },
+                function () {
+                    root = $(document.getElementById("setViewRoot"));
+                    newButton = root.find('#setViewNewButton');
+
                     newButton.prop('disabled', false);
                     newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                    if (inCollectionsView == true) {
+                        bgInput.prop('disabled', false);
+                        bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                    }
+                    if (inGeneralView == true) {
+                        bgImgInput.prop('disabled', false);
+                        bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                    }
+                    if (inAssociatedView === true) {
+                        menuLabel.prop('disabled', false);
+                        menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
+                    }
+
+                    uploadInProgress = false;
                 }
-                
+                );
+        } else {
 
-                if (inCollectionsView == true) {
-                    bgInput.prop('disabled', false);
-                    bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+            var names = [], locals = [], contentTypes = [], fileArray, i;
+            return TAG.Authoring.FileUploader( // remember, this is a multi-file upload
+                root,
+                type,
+                // local callback - get filename
+                function (files, localURLs) {
+                    fileArray = files;
+                    for (i = 0; i < files.length; i++) {
+                        names.push(files[i].displayName);
+                        var ext = files[i].fileType.toLowerCase();
+                        if (files[i].contentType.match(/image/)) {
+                            contentTypes.push('Image');
+                        } else if (files[i].contentType.match(/video/) || ext === ".avi" || ext === ".wmv" || ext === ".mov" || ext === ".mp4" || ext === ".webm" || ext === ".ogv") {
+                            contentTypes.push('Video');
+                        } else if (files[i].contentType.match(/audio/)) {
+                            contentTypes.push('Audio');
+                        } else if (files[i].name.match('\.woff')) {
+                            contentTypes.push('Font');
+                        }
+                    }
+
+                    if (files.length > 0) {
+                        var elementType;
+                        switch (type) {
+                            case 0:
+                                elementType = "Standard"; bgInput
+                                break;
+                            case 1:
+                                elementType = "DeepZoom";
+                                break;
+                            case 2:
+                                elementType = "Associated Media";
+                                break;
+                            case 3:
+                                elementType = "Video Artwork";
+                            case 4:
+                                elementType = "Map";
+                                break;
+                            case 5:
+                                elementType = "CSV"
+                                break;
+                            default:
+                                elementType = "Unkown";
+                        }
+                        TAG.Telemetry.recordEvent("EndOfImport", function (tobj) {
+                            tobj.number_imported = files.length;
+                            tobj.element_type = elementType;
+                        });
+                    }
+                },
+                // remote callback - save correct name
+                function (urls) {
+                    if (!is_array(urls)) { // check to see whether a single file was returned
+                        urls = [urls];
+                        names = [names];
+                    }
+                    for (i = 0; i < urls.length; i++) {
+                        console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
+                    }
+                    callback(urls, names, contentTypes, fileArray);
+                },
+                filter || ['.jpg', '.png', '.gif', '.tif', '.tiff', '.woff'],
+                false,
+                function () {
+                    root.append(TAG.Util.UI.popUpMessage(null, "There was an error uploading the file.  Please try again later."));
+                },
+                //commenting out to test
+                !!multiple, // batch upload disabled
+                null,
+                useOverlay,
+                function () {//disables all import buttons if upload is happening - this automatically disables the button the user imported from
+                    root = $(document.getElementById("setViewRoot"));
+                    newButton = root.find('#setViewNewButton');
+
+                    if (inArtworkView == true || inAssociatedView == true) {
+                        newButton.prop('disabled', true);
+                        newButton.css({ 'opacity': '.4' });
+                    }
+                    if (inCollectionsView == true) {
+                        bgInput.prop('disabled', true);
+                        bgInput.css({ 'opacity': '.4' });
+                    }
+                    if (inGeneralView == true) {
+                        bgImgInput.prop('disabled', true);
+                        bgImgInput.css({ 'opacity': '.4' });
+
+                    }
+                    if (inAssociatedView == true) {
+                        menuLabel.prop('disabled', true);
+                        menuLabel.css({ 'opacity': '.4' });
+                    }
+
+                    uploadInProgress = true;
+                    //var importToTour = $(document.getElementById("importToTour"));
+
+
+                },
+                function () {
+                    if (inArtworkView || inAssociatedView) {
+                        newButton.prop('disabled', false);
+                        newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
+                    }
+
+
+                    if (inCollectionsView == true) {
+                        bgInput.prop('disabled', false);
+                        bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                    }
+                    if (inGeneralView == true) {
+                        bgImgInput.prop('disabled', false);
+                        bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+
+                    }
+                    if (inAssociatedView) {
+                        menuLabel.prop('disabled', false);
+                        menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
+                    }
+
+
+                    var importToTour = $(document.getElementById("importToTour"));
+
+                    if (importToTour && toureditor) {
+                        importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
+                        toureditor.uploadStillHappening(false);
+                    }
+
+
+                    if (artworkeditor) {
+                        artworkeditor.uploadStillHappening(false);
+                        var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
+                        importMapButton.prop('disabled', false);
+                        importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+                    }
+
+                    uploadInProgress = false;
+
                 }
-                if (inGeneralView == true) {
-                    bgImgInput.prop('disabled', false);
-                    bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
-
-                }
-                if (inAssociatedView){
-                    menuLabel.prop('disabled',false);
-                    menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
-                }
-            
-
-                var importToTour = $(document.getElementById("importToTour"));
-
-                if (importToTour && toureditor) {
-                    importToTour.css({ 'background-color': 'transparent', 'color': 'white' });
-                    toureditor.uploadStillHappening(false);
-                }
 
 
-                if (artworkeditor) {
-                    artworkeditor.uploadStillHappening(false);
-                    var importMapButton = $(document.getElementById("locationHistoryImportMapButton"));
-                    importMapButton.prop('disabled', false);
-                    importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
-                }
-                    
-                uploadInProgress = false;
-
-                }
-
-            
-        );
+            );
         }
     }
 
@@ -10319,7 +10317,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         label.text(text);
         overlay.append(label);
     }
-    
+
     /** Authentication error function
      * @method authError
      */
@@ -10495,84 +10493,84 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //}
 
 
-    function setUpFindContainer(){
+    function setUpFindContainer() {
         sortLabelContainer.text("Sort By:");
         searchLabelContainer.text("Search:");
         titleSort.addClass('sortByButton')
-                  .click(function(){
-                    if (inArtworkView){
-                        sortByArt = "Title";
-                        titleSort.css('background-color','white');
-                        collectionSort.css('background','transparent');
-                        addedRecentlySort.css('background','transparent');
-                        loadArtView();
-                    }
-                    else if (inAssociatedView){
-                        sortByAssoc = "Title";
-                        titleSort.css('background-color','white');
-                        collectionSort.css('background','transparent');
-                        addedRecentlySort.css('background','transparent');
-                        loadAssocMediaView();
-                    }
+                  .click(function () {
+                      if (inArtworkView) {
+                          sortByArt = "Title";
+                          titleSort.css('background-color', 'white');
+                          collectionSort.css('background', 'transparent');
+                          addedRecentlySort.css('background', 'transparent');
+                          loadArtView();
+                      }
+                      else if (inAssociatedView) {
+                          sortByAssoc = "Title";
+                          titleSort.css('background-color', 'white');
+                          collectionSort.css('background', 'transparent');
+                          addedRecentlySort.css('background', 'transparent');
+                          loadAssocMediaView();
+                      }
                   })
                   .text("Title");
         collectionSort.addClass('sortByButton')
-                    .click(function(){
-                        if (inArtworkView){
+                    .click(function () {
+                        if (inArtworkView) {
                             sortByArt = "Collection";
-                            titleSort.css('background','transparent');
-                            collectionSort.css('background-color','white');
-                            addedRecentlySort.css('background','transparent');
+                            titleSort.css('background', 'transparent');
+                            collectionSort.css('background-color', 'white');
+                            addedRecentlySort.css('background', 'transparent');
                             loadArtView();
                         }
-                        else if (inAssociatedView){
+                        else if (inAssociatedView) {
                             sortByAssoc = "Collection";
-                            titleSort.css('background','transparent');
-                            collectionSort.css('background-color','white');
-                            addedRecentlySort.css('background','transparent');
+                            titleSort.css('background', 'transparent');
+                            collectionSort.css('background-color', 'white');
+                            addedRecentlySort.css('background', 'transparent');
                             loadAssocMediaView();
                         }
                     })
                     .text("Collection");
         addedRecentlySort.addClass('sortByButton')
-                    .click(function(){
-                        if (inArtworkView){
+                    .click(function () {
+                        if (inArtworkView) {
                             sortByArt = "Recently Added";
-                            titleSort.css('background','transparent');
-                            collectionSort.css('background','transparent');
-                            addedRecentlySort.css('background-color','white');
+                            titleSort.css('background', 'transparent');
+                            collectionSort.css('background', 'transparent');
+                            addedRecentlySort.css('background-color', 'white');
                             loadArtView();
                         }
-                        else if (inAssociatedView){
+                        else if (inAssociatedView) {
                             sortByAssoc = "Recently Added";
-                            titleSort.css('background','transparent');
-                            collectionSort.css('background','transparent');
-                            addedRecentlySort.css('background-color','white');
+                            titleSort.css('background', 'transparent');
+                            collectionSort.css('background', 'transparent');
+                            addedRecentlySort.css('background-color', 'white');
                             loadAssocMediaView();
                         }
                     })
                     .text("Date Added");
-        findButton.click(function(){
-            if (findShown){
-                findContainer.css('display','none');
+        findButton.click(function () {
+            if (findShown) {
+                findContainer.css('display', 'none');
                 findBarDropIcon.css({
-                   '-webkit-transform': 'rotate(90deg)',
-                '-moz-transform': 'rotate(90deg)',
-                '-o-transform': 'rotate(90deg)',
-                '-ms-transform': 'rotate(90deg)',
-                'transform': 'rotate(90deg)',     
+                    '-webkit-transform': 'rotate(90deg)',
+                    '-moz-transform': 'rotate(90deg)',
+                    '-o-transform': 'rotate(90deg)',
+                    '-ms-transform': 'rotate(90deg)',
+                    'transform': 'rotate(90deg)',
                 });
-            } else{
-                findContainer.css('display','inline-block');
-                if (dropDown.css('display') != 'none'){
+            } else {
+                findContainer.css('display', 'inline-block');
+                if (dropDown.css('display') != 'none') {
                     menuLabel.click();
                 }
                 findBarDropIcon.css({
                     '-webkit-transform': 'rotate(270deg)',
-                '-moz-transform': 'rotate(270deg)',
-                '-o-transform': 'rotate(270deg)',
-                '-ms-transform': 'rotate(270deg)',
-                'transform': 'rotate(270deg)',
+                    '-moz-transform': 'rotate(270deg)',
+                    '-o-transform': 'rotate(270deg)',
+                    '-ms-transform': 'rotate(270deg)',
+                    'transform': 'rotate(270deg)',
 
                 });
             }
@@ -10582,8 +10580,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     function createAddToArtworkMenu() {
         //var addToArtworkLabel = $(document.createElement('button'))
-            //.attr('id', 'addToArtworkLabel')
-            //.appendTo(searchContainer)
+        //.attr('id', 'addToArtworkLabel')
+        //.appendTo(searchContainer)
         addToArtworkLabel.css({
             "color": "black",
             'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
@@ -10622,30 +10620,30 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else {
             addToArtworkLabel.css('font-size', '50%');
         }
-            //.appendTo(addToArtworkLabel);
+        //.appendTo(addToArtworkLabel);
         //return addToArtworkLabel;
     }
 
     function createDropdownAssocMediaMenu() {
         //var addMenuLabel = $(document.createElement('button'))
-            //.attr('id', 'addMenuLabel')
-            //.appendTo(searchContainer)
+        //.attr('id', 'addMenuLabel')
+        //.appendTo(searchContainer)
         menuLabel.css({
-                "color": "black",
-                'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
-                'float':'left',
-                'height':'40%',
-                'margin-top':'2.8%',
-                'padding-bottom':'1%',
-                'padding-left':'1.5%',
-                'padding-right':'1%',
-                'width': '35%',
-                'border': '1px solid black',
-                //'padding': '1.5% 0px 0px 0px',
-                'padding-top':'-10%',
-                'display': 'block',
-            }).css('border-radius', '3.5px');
-        if (!IS_WINDOWS){
+            "color": "black",
+            'z-index': TAG.TourAuthoring.Constants.aboveRinZIndex,
+            'float': 'left',
+            'height': '40%',
+            'margin-top': '2.8%',
+            'padding-bottom': '1%',
+            'padding-left': '1.5%',
+            'padding-right': '1%',
+            'width': '35%',
+            'border': '1px solid black',
+            //'padding': '1.5% 0px 0px 0px',
+            'padding-top': '-10%',
+            'display': 'block',
+        }).css('border-radius', '3.5px');
+        if (!IS_WINDOWS) {
             menuLabel.css('font-size', '100%');
         } else {
             menuLabel.css('width', '27%');
@@ -10659,7 +10657,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .css({
                 width: '10%',
                 height: '10%',
-                display:'inline-block',
+                display: 'inline-block',
                 'margin-right': '5%',
                 'margin-left': '3%',
                 'margin-top': '5%',
@@ -10669,20 +10667,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 '-ms-transform': 'rotate(90deg)',
                 'transform': 'rotate(90deg)',
                 'padding-left': '7%',
-                'padding-right':'0%'
+                'padding-right': '0%'
             })
         if (IS_WINDOWS) {
             addMenuArrowIcon.css({
                 width: '8%',
                 height: '8%',
                 'margin-top': '2%',
-                'margin-right': '10%',
+                'margin-right': '5%',
                 'float': 'right'
             });
-        } 
+        }
         var addMenuLabelDiv = $(document.createElement('div'))
             .css({
-                width:'auto',
+                width: 'auto',
                 height: '100%',
                 'text-align': 'center',
                 'vertical-align': 'middle'
@@ -10691,8 +10689,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .append($(document.createElement('div')).text('Import').css({
                 'display': 'inline-block',
                 //'margin-right': '1%',
-                'margin-left' : '0%',
-                'float':'left'
+                'margin-left': '0%',
+                'float': 'left'
             }))
             .append(addMenuArrowIcon)
             .appendTo(menuLabel);
@@ -10700,11 +10698,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             .appendTo(searchContainer)
             .css({
                 "left": '0%',
-                "display":"block",
+                "display": "block",
                 "position": "absolute",
                 "color": "rgb(256, 256, 256)",
                 'width': '48%',
-                'background-color': 'rgba(0,0,0,0.95)',
+                'background-color': 'rgb(63,55,53)',
                 'float': 'left',
                 'top': '50%',
                 'clear': 'left',
@@ -10716,7 +10714,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'font-size': '70%',
                 'left': '0%',
                 'width': '37%',
-                'top' : '40%'
+                'top': '40%'
             })
         }
         dropDown.hide();
@@ -10732,8 +10730,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'transform': 'rotate(90deg)',
                     'padding-left': '7%',
                     'padding-right': '0%',
-                    'margin-left': '3%',
-                    'margin-right': '5%'
+                    'margin-right': '5%',
+                    'margin-left': '3%'
                 });
                 dropDown.hide();
             } else {
@@ -10746,7 +10744,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     '-ms-transform': 'rotate(270deg)',
                     'transform': 'rotate(270deg)',
                     'padding-left': '0%',
-                    'padding-right':'7%',
+                    'padding-right': '7%',
                     //'float':'right'
                 });
                 console.log(findContainer.css('display'));
@@ -10754,7 +10752,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     if (!IS_WINDOWS) {
                         dropDown.css('top', (searchContainer.height() - findContainer.height()) * 0.5 + 'px');
                     } else {
-                        dropDown.css('top', ((searchContainer.height() - findContainer.height()) * 0.4) - 5+ 'px' );
+                        dropDown.css('top', ((searchContainer.height() - findContainer.height()) * 0.4) - 5 + 'px');
                     }
                 } else {
                     if (!IS_WINDOWS) {
@@ -10775,7 +10773,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "display": "block",
                 'border-color': 'white',
                 'color': 'white',
-                'background-color': 'black',
+                'background-color': 'rgb(63,55,53)',
                 //'border-style': 'solid',
                 'border-width': 'thin',
                 'border-bottom-style': 'none',
@@ -10783,8 +10781,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'padding-right': '15px',
                 'font-size': '85%',
                 'font-weight': '600',
-                'padding-bottom':'5%',
-                'padding-top':'5%',
+                'padding-bottom': '5%',
+                'padding-top': '5%',
             })
             .on('mouseenter', function () {
                 fromFile.css({
@@ -10795,7 +10793,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .on('mouseleave', function (e) {
                 fromFile.css({
-                    'background-color': 'black',
+                    'background-color': 'rgb(63,55,53)',
                     'color': 'white',
                     'border-color': 'white',
                 });
@@ -10811,7 +10809,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "display": "block",
                 'border-color': 'white',
                 'color': 'white',
-                'background-color': 'black',
+                'background-color': 'rgb(63,55,53)',
                 //'border-style': 'solid',
                 'border-width': 'thin',
                 'padding-left': '15px',
@@ -10830,7 +10828,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .on('mouseleave', function (e) {
                 iFrameAsset.css({
-                    'background-color': 'black',
+                    'background-color': 'rgb(63,55,53)',
                     'color': 'white',
                     'border-color': 'white',
                 });
@@ -10844,15 +10842,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         menuLabel.on("mousedown", function () {
             if (!showDropdown) {
                 menuLabel.css({ "background-color": "white" });
-            }            
+            }
         });
         menuLabel.on("mouseleave", function () {
             if (!showDropdown) {
                 menuLabel.css({ "background-color": "transparent" });
             }
         });
-       
-        
+
+
         //return addMenuLabel;
     }
 
@@ -10865,7 +10863,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (!inAssociatedView) {
             if (multiSelected.indexOf(id) < 0) {
                 return true;
-            } else { return false;}
+            } else { return false; }
         } else {
             for (var w = 0; w < multiSelected.length; w++) {
                 if (multiSelected[w].Identifier === id) {
