@@ -10702,7 +10702,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "position": "absolute",
                 "color": "rgb(256, 256, 256)",
                 'width': '48%',
-                'background-color': 'rgba(0,0,0,0.95)',
+                'background-color': 'rgb(63,55,53)',
                 'float': 'left',
                 'top': '50%',
                 'clear': 'left',
@@ -10773,7 +10773,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "display": "block",
                 'border-color': 'white',
                 'color': 'white',
-                'background-color': 'black',
+                'background-color': 'rgb(63,55,53)',
                 //'border-style': 'solid',
                 'border-width': 'thin',
                 'border-bottom-style': 'none',
@@ -10793,7 +10793,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .on('mouseleave', function (e) {
                 fromFile.css({
-                    'background-color': 'black',
+                    'background-color': 'rgb(63,55,53)',
                     'color': 'white',
                     'border-color': 'white',
                 });
@@ -10809,7 +10809,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 "display": "block",
                 'border-color': 'white',
                 'color': 'white',
-                'background-color': 'black',
+                'background-color': 'rgb(63,55,53)',
                 //'border-style': 'solid',
                 'border-width': 'thin',
                 'padding-left': '15px',
@@ -10828,7 +10828,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             })
             .on('mouseleave', function (e) {
                 iFrameAsset.css({
-                    'background-color': 'black',
+                    'background-color': 'rgb(63,55,53)',
                     'color': 'white',
                     'border-color': 'white',
                 });
