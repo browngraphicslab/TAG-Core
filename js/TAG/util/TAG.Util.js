@@ -478,7 +478,6 @@ TAG.Util = (function () {
             dayInYear,
             totalDaysInYear,
             dayDecimal;
-        console.log("year: " + date.year + "month: " + date.month + "day: " + date.day);
 
         if ((date && date.year)||location){
             yearString = date.year;
