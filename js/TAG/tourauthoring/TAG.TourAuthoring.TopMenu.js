@@ -68,7 +68,13 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         //save method saves all changes made
         var saveClicked = false;
         var nameChanged = false;
-        function save(stayOnPage) {
+
+        /*
+        parameter:      stay on page:                            idk i just wanted to add a second param and the first wasn't documented
+        parameter:      callback           function             a fucntion to call after saving is done
+
+        */
+        function save(stayOnPage, callback) {
             console.log("isUploading === " + componentControls.getIsUploading());
             saveClicked = true;
             nameChanged = false;
@@ -103,6 +109,9 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
                 // success
                 dialogOverlay.fadeOut(500);
                 !stayOnPage && goBack();
+                if (callback) {
+                    callback();
+                }
             }, function () {
                 // unauth
                 dialogOverlay.hide();
@@ -272,7 +281,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
 
             $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
 
-            if (viewer.getIsReloading() && false) {
+            if (viewer.getIsReloading() && false) {//never will happen, only keeping in case we need this code again in the future
                 messageBox = TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
                 $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
                 $('body').append(messageBox);
@@ -287,8 +296,11 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
                     textArea.val('Untitled Tour');
                 }
                 var backDialog = TAG.Util.UI.PopUpConfirmation(function () {
+                    backButton.prop('disabled', true).css("opacity", "0.4");
                     $("#popupConfirmButton").text('Saving...').attr('disabled', true);
-                    save();
+                    save(null, function () {
+                        backButton.prop('disabled', false).css("opacity", "1");
+                    });
                 }, 'Save changes to ' +textArea.val() + ' before leaving?', "Save", false, function () {
                     goBack();
                     $("#popupConfirmButton").attr('disabled', true);//.css({ 'color': 'rgba(255, 255, 255, 0.5)' });

@@ -881,7 +881,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             });
             
-                            //adjust styling for windows
+            //adjust styling for windows
             if (!IS_WINDOWS){              
                 if (previewing) {
                     $(".selector-dropdown").css('top', '-4px');
@@ -2576,7 +2576,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .append(yearTextBox);
 
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
-                if (currentWork.Metadata.ContentType == "tour") {
+                if (currentWork.Metadata.ContentType == "tour" || currentWork.Metadata.ContentType == undefined) {
                     tourLabel = $(document.createElement('img'))
                         .addClass('tourLabel')
                         .attr('src', tagPath + 'images/tour_icon.svg');
@@ -3485,7 +3485,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 if (artwork.Type !== "Empty") {
                     artwork.Metadata.Artist ? artText = "" + artwork.Metadata.Artist : artText = ' ';
                     artistInfo.text(artText);
-                    yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
+                    yearInfo.text(getDateText(getArtworkDate(artwork,false),true) || " ");
                 } else {
                     if (artwork.Extension && artwork.Extension === 'tour') {
                         artistInfo.text("(Interactive Tour)");
@@ -4062,9 +4062,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     /*Get the text to display based on a date object
     * @method getDateText
     * @param {Object} date     object containing year, month, day attributes
+    * @param {Boolean} isYearMetadata whether it is a year metadata field (can be arbitrary string)
     * @return {String} dateText    text to display in mm/dd/yyyy or mm/yyyy format (Note- would need to change for internationalization)
     */   
-    function getDateText(date){
+    function getDateText(date, isYearMetadata){
         var yearText,
             neg = false,
             monthDict,
@@ -4072,7 +4073,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             monthText,
             dayText,
             dateText;
-        yearText = TAG.Util.parseDateToYear({year: date.year});
+
+        yearText = TAG.Util.parseDateToYear({ year: date.year });
+        //display text for arbitrary year metadata (ex- "middle pharoah period" should show up as written)
+        if (!yearText && isYearMetadata) {
+            return date.year
+        }
         if (yearText<0){
             yearText = -yearText;
             neg = true;

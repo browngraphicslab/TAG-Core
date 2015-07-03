@@ -354,6 +354,19 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		return state;
 	};
 
+    /*
+     * I/P:     none
+     * Returns true if the track is currently visible.
+     * O/P:     isVisible:          True if track is visible.
+     */
+	self.isVisible = function () {
+	    if (!self.firstKeyframe || !self.lastKeyframe) {
+	        return false;
+	    }
+	    var now = self.timeManager.getElapsedOffset();
+	    return self.firstKeyframe.time <= now && now <= self.lastKeyframe.time;
+	};
+
     /* I/P: 	evt (a click/touch event)
     * O/P:   	bool, whether or not this event was within the image's bounds
     *This function determines if a touch/click event is within the bounds of this dz on screen

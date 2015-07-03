@@ -128,6 +128,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 	function play() {
+	    updateZIndices();
 		var i;
 		for (i=0; i<self.trackManager.length; i++) {
 			if (self.trackManager[i].state === "loading"){
@@ -143,6 +144,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 	function pause() {
+	    self.updateZIndices();
 		self.timeManager.stopTimer();
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].pause();
@@ -174,7 +176,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 
 	function seek(seekPercent) {
-		self.updateZIndices()
+	    self.updateZIndices();
 		// Pause.
 		if (self.prevStatus === 0) {
 			self.prevStatus = self.status;
@@ -252,8 +254,12 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 	function updateZIndices(){
 		var i;
-		for (i = 0; i < trackManager.length; i++){
-			trackManager[i].setZIndex(i*10)
+		for (i = 0; i < trackManager.length; i++) {
+		    if (trackManager[i].isVisible()) {
+		        trackManager[i].setZIndex(i * 10);
+		    } else {
+		        trackManager[i].setZIndex(-1);
+		    }
 		}
 	}
 

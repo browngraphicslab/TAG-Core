@@ -536,7 +536,8 @@ TAG.Util = (function () {
             if (neg){
                 year = -year;  
             }
-            if (!year) {
+            //for sorting by date for location dates
+            if (!year && location) {
                 year = 999999;
             }
             return year;
