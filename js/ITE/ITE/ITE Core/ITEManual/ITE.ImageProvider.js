@@ -568,6 +568,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	    mediaScroll(scale, evt.position);
 	}
 	self.scrollFromDZRecursion = scrollFromDZRecursion;
+
+	function pinchFromDZRecursion(evt) {
+	    mediaPinch(evt.distance/evt.lastDistance, evt.center);
+	}
+	self.pinchFromDZRecursion = pinchFromDZRecursion;
  
     /*
      * I/P: 	res : 		Object containing hammer event info.
@@ -724,6 +729,58 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         }
     };
     self.mediaScroll = mediaScroll;
+
+    /*
+     * I/P: 	scale : 	Scale factor.	
+     *			pivot : 	Location of event (x,y).
+     * Pinch-zoom handler for makeManipulatable on an image.
+     * O/P: 	none
+     */
+    function mediaPinch(scale, pivot) {
+        var t = _UIControl.position().top,
+            l = _UIControl.position().left,
+            w = _UIControl.width(),
+            h = _UIControl.height(),
+            newW = w * scale,
+            newH,
+            maxW = 1000000,        // These values are somewhat arbitrary; TODO determine good values
+            minW = 200,
+            newX,
+            newY;
+
+        // If the player is playing, pause it.
+        if (self.orchestrator.status === 1) {
+            self.player.pause();
+        }
+
+        // Constrain new width.
+        if ((newW < minW) || (newW > maxW)) {
+            newW = Math.min(maxW, Math.max(minW, newW));
+        };
+
+        // Update scale, new X and new Y according to newly constrained values.
+        scale = newW / w;
+        newH = h * scale;
+        newX = l * scale + pivot.x * (1 - scale);
+        newY = t * scale + pivot.y * (1 - scale);
+
+        // _UIControl to self new position. No animation for pinch.
+        self.interactionAnimation && self.interactionAnimation.kill();
+        self._UIControl.css({
+            top: newY,
+            left: newX,
+            width: newW,
+            height: newH
+        });
+
+        if (captureHandlers) {
+            var evt = {
+                imageTrack: self
+            }
+            captureHandlers(evt);
+        }
+    };
+    self.mediaPinch = mediaPinch;
     
     /*
 	 * I/P: 	none
