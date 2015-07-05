@@ -109,7 +109,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		//lucy vk- error handler to catch network error in chrome and re-start video
 		_videoControls.onerror = function (err){
-			console.log(err);
             switch (err.target.error.code){
                 case err.target.error.MEDIA_ERR_NETWORK:
                 	console.log("caught media error");
