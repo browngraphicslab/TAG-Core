@@ -360,6 +360,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         videoElt.onerror = function (err){
             switch (err.target.error.code){
                 case err.target.error.MEDIA_ERR_NETWORK:
+                    console.log("caught network error");
                     initPage();
                     videoElt.load();
                     var timeOffset = Date.now()/1000 - lastPauseTime;
@@ -372,7 +373,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
                             errorAppended = true;
                         }
                         setTimeout(function(){
-                            console.log("waited then tried again");
+                            console.log("couldn't restart, waited then tried again");
                             initPage();
                             videoElt.load();
                             playVideo();

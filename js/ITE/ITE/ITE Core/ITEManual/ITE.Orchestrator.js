@@ -154,6 +154,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 	function scrub(seekPercent) {
 	    if (!self.tourData) return;
+	    self.updateZIndices();
 		// Pause.
 		if (self.prevStatus === 0) {
 			self.prevStatus = self.status;

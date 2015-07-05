@@ -112,6 +112,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			console.log(err);
             switch (err.target.error.code){
                 case err.target.error.MEDIA_ERR_NETWORK:
+                	console.log("caught media error");
                 	//Sets the image’s URL source
                 	self.load();
                     var timeOffset = Date.now()/1000 - self.lastActualTime;
@@ -264,6 +265,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.status = 1;
 		errorDiv.remove();
 		self.errorAppended = false;
+		self.orchestrator.updateZIndices();
+
 		// Revert to any saved state, get time to start animation.
 		var startTime;
 		if (self.savedState) {
