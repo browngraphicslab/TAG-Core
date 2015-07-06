@@ -281,6 +281,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         width: '7%',
         height: '70%',
         display: 'inline-block',
+        'margin-top': '5%'
     });
     if (idleTimer) {
         idleTimer.kill();
