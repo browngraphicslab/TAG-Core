@@ -1931,7 +1931,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // heading
         var associatedMediaPickerHeader = document.createElement('div');
         $(associatedMediaPickerHeader).addClass('associatedMediaPickerInfo');
-        $(associatedMediaPickerHeader).text("Select media to import");
+        $(associatedMediaPickerHeader).text("Select media to add");
         $(associatedMediaPickerHeader).css({
             'font-size': '100%',
         });
@@ -2333,7 +2333,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             // create import button
             var associatedMediaPickerImport = document.createElement('button');
             associatedMediaPickerImport.disabled = true;
-            $(associatedMediaPickerImport).text("Import");
+            $(associatedMediaPickerImport).text("Add");
             $(associatedMediaPickerImport).css({
                 position: 'absolute',
                 bottom: '1%',
