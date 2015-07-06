@@ -385,6 +385,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var videoErrorDiv = $(document.createElement('div'));
         videoErrorDiv.addClass("videoErrorDiv");
 
+        if (!IS_WINDOWS) { 
+            mediaElement.css("padding-top", "6%");
+            mediaElement.live('playing', function() { 
+            mediaElement.css("padding-top","0%"); 
+                console.log("video clicked");
+            });
+        }; // adjust the position for video previewing in web app
+
         mediaElement.attr("fileName", doq.Metadata.Source.substring(0, source.lastIndexOf('.')));
         var sourceMP4 = sourceWithoutExtension + ".mp4";
         var sourceWEBM = sourceWithoutExtension + ".webm";
@@ -4254,7 +4262,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr("preload", "none");
                 holder.attr("controls", "");
                 holder.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
-                if (!IS_WINDOWS) { holder.css("padding-top", "4%") }; // adjust the position for video previewing in web app
+                if (!IS_WINDOWS) { 
+                    holder.css("padding-top", "6%");
+                    holder.live('playing', function() { 
+                        holder.css("padding-top","0%"); 
+                        console.log("video clicked");
+                    });
+                }; // adjust the position for video previewing in web app
+
                 holder.attr("src", source);
                 var source = TAG.Worktop.Database.fixPath(media.Metadata.Source);
                 var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
@@ -6180,7 +6195,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.attr("preload", "none");
             mediaElement.attr("controls", "");
             mediaElement.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
-            if (!IS_WINDOWS) { mediaElement.css("padding-top", "2%") }; // adjust the position for video previewing in web app
+            if (!IS_WINDOWS) { 
+                mediaElement.css("padding-top", "6%");
+                mediaElement.live('playing', function() { 
+                    mediaElement.css("padding-top","0%"); 
+                    console.log("video clicked");
+                });
+            }; // adjust the position for video previewing in web app
             var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
             var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
             var sourceExt = source.substring(source.lastIndexOf('.'));
