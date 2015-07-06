@@ -153,12 +153,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     });
 
     if (lockKioskMode == "true") {
+        console.log("kiosk mode locked, back button disabled")
         backButton.css('display', 'none');
     } else {
+        console.log("kiosk mode unlocked, back button enabled")
         //collectionMenu.css('left', '5%');
         if (IS_WINDOWS) {
             backButton.css('padding-top', '');
         }
+        backButton.css('display', 'auto');
     }
 
     // get things rolling
@@ -881,9 +884,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
             });
             
-                            //adjust styling for windows
-            if (!IS_WINDOWS){
-                $(".selector-dropdown").css('top','-1px');
+            //adjust styling for windows
+            if (!IS_WINDOWS){              
+                if (previewing) {
+                    $(".selector-dropdown").css('top', '-4px');
+                } else {
+                    $(".selector-dropdown").css('top', '-1px');
+                }
             }
 
             // The last thing we do is add a search button. 
@@ -1170,7 +1177,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             titleBox.css({
                 "display": "inline-block",
                 "position": "relative",
-                "padding-right": "18px",
+                "padding-right": $("#tagRoot").width()*0.012+ "px",
                 "height": "100%",
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap"
@@ -1178,8 +1185,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             centeredCollectionHeader.css({
                 "text-align": "center",
                 "display": "inline-block",
-                //"height": "90%",
-                //"overflow": "hidden",
+                "height": "90%",
                 "top": "10%",
                 "cursor": "pointer",
                 "white-space" : "nowrap"
@@ -1194,9 +1200,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             if (!IS_WINDOWS) {
                 titleBox.css({
                     "padding-right": .165 * centeredCollectionHeader.height() + "px"
-                })
+                });
+                centeredCollectionHeader.css({ 'height': 'auto' });
             }
-            if (previewing) {
+            if (IS_WINDOWS && previewing) {
                 titleBox.css({
                     "padding-right": .133 * centeredCollectionHeader.height() + "px"
                 })
@@ -1204,17 +1211,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             dropDownArrow.css({
                 'display': 'inline-block',
                 'left': "auto",
-                //'position': "relative",
+                'position': "relative",
                 'height': .55*centeredCollectionHeader.height()+"px",
                 'width': .13344* centeredCollectionHeader.height() + 'px',
-                'top' : "27%"
+                'top' : "17%"
             });
-            if (!IS_WINDOWS && !previewing) {
+            if (!IS_WINDOWS ) {
                 dropDownArrow.css({
-                    'height': .64 * centeredCollectionHeader.height() + "px",
-                    'width': .149 * centeredCollectionHeader.height() + 'px',
-                    'top' : "18.25%"
+                    'height': .71625 * centeredCollectionHeader.height() + "px",
+                    'width': .2066 * centeredCollectionHeader.height() + 'px',
+                    'top': "18.5%",
+                    'position':'absolute'
                 });
+            }
+            if (!IS_WINDOWS && previewing){
+                dropDownArrow.css({'top':'3.5%'});
             }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
@@ -2568,7 +2579,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 .append(yearTextBox);
 
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
-                if (currentWork.Metadata.ContentType == "tour") {
+                if (currentWork.Metadata.ContentType == "tour" || currentWork.Metadata.ContentType == undefined) {
                     tourLabel = $(document.createElement('img'))
                         .addClass('tourLabel')
                         .attr('src', tagPath + 'images/tour_icon.svg');
@@ -3477,7 +3488,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 if (artwork.Type !== "Empty") {
                     artwork.Metadata.Artist ? artText = "" + artwork.Metadata.Artist : artText = ' ';
                     artistInfo.text(artText);
-                    yearInfo.text(getDateText(getArtworkDate(artwork,false)) || " ");
+                    yearInfo.text(getDateText(getArtworkDate(artwork,false),true) || " ");
                 } else {
                     if (artwork.Extension && artwork.Extension === 'tour') {
                         artistInfo.text("(Interactive Tour)");
@@ -4054,9 +4065,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     /*Get the text to display based on a date object
     * @method getDateText
     * @param {Object} date     object containing year, month, day attributes
+    * @param {Boolean} isYearMetadata whether it is a year metadata field (can be arbitrary string)
     * @return {String} dateText    text to display in mm/dd/yyyy or mm/yyyy format (Note- would need to change for internationalization)
     */   
-    function getDateText(date){
+    function getDateText(date, isYearMetadata){
         var yearText,
             neg = false,
             monthDict,
@@ -4064,7 +4076,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             monthText,
             dayText,
             dateText;
-        yearText = TAG.Util.parseDateToYear({year: date.year});
+
+        yearText = TAG.Util.parseDateToYear({ year: date.year });
+        //display text for arbitrary year metadata (ex- "middle pharoah period" should show up as written)
+        if (!yearText && isYearMetadata) {
+            return date.year
+        }
         if (yearText<0){
             yearText = -yearText;
             neg = true;

@@ -47,6 +47,20 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 	self.polling = false;
 
+	//lvk- for network error handling
+	self.lastPauseTime = 0;
+	self.lastActualTime = Date.now();
+	self.lastError = undefined;
+	self.errorAppended = false;
+	errorDiv = $(document.createElement('div')).attr('id','errorDiv');
+	errorDiv.text("There was an error during video playback, please wait while we restart the video...")
+            .css({
+                'left': '20%',
+                'top': '50%',
+                'position': 'relative',
+                'font-size': '120%',
+            });
+
 	// Start things up...
 	initialize();
 
@@ -91,7 +105,40 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		_coveringDiv = $(document.createElement("div"));
 		_coveringDiv.css({
             "background_color" : "blue"
-		})
+		});
+
+		//lucy vk- error handler to catch network error in chrome and re-start video
+		_videoControls.onerror = function (err){
+            switch (err.target.error.code){
+                case err.target.error.MEDIA_ERR_NETWORK:
+                	console.log("caught media error");
+                	//Sets the image’s URL source
+                	self.load();
+                    var timeOffset = Date.now()/1000 - self.lastActualTime;
+                    //if playback fails after reloading the video, we display an error message and then wait
+                    //3 seconds before replaying the video from the beginning. The timeout and message 
+                    //are for the benefit of the person watching the video. The message also displays when seeking to an unloaded time
+                    if (self.lastError === self.lastPauseTime){
+                        if (!self.errorAppended){
+                            $("#ITEContainer").append(errorDiv);
+                            self.errorAppended = true;
+                        }
+                        setTimeout(function(){
+                            console.log("waited then tried again");
+                            self.load();
+                            self.play();
+                        }, 5000);
+                        return;
+                    }
+                    self.lastError = self.lastPauseTime;
+                    console.log("self.lastPauseTime: " + self.lastPauseTime);
+                    console.log("timeOffset: " + timeOffset);
+                    _videoControls.currentTime = self.lastPauseTime + timeOffset;
+                    self.play();
+                    break;
+            }
+        }
+        
 	};
 
     /*
@@ -139,13 +186,25 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function () {
-		_super.load();
+	    _super.load();
 
-		//Sets the image’s URL source
+	    var sourceWithoutExtension = self.trackData.assetUrl.substring(0, self.trackData.assetUrl.lastIndexOf('.'));
+	    var sourceExt = self.trackData.assetUrl.substring(self.trackData.assetUrl.lastIndexOf('.'));
+
+		// Set the video source.
 		_video.attr({
-			"src"	: self.trackData.assetUrl,
-			"type" 	: self.trackData.type
+			'src'	    : self.trackData.assetUrl,
+			'type' 	    : self.trackData.type,
+			'preload'   : 'none',
+			'controls'  : false,
+			'filename'  : sourceWithoutExtension
 		});
+		var sourceMP4 = sourceWithoutExtension + ".mp4";
+		var sourceWEBM = sourceWithoutExtension + ".webm";
+		var sourceOGG = sourceWithoutExtension + ".ogg";
+		addSourceToVideo(_video, sourceMP4, 'video/mp4');
+		addSourceToVideo(_video, sourceWEBM, 'video/webm');
+		addSourceToVideo(_video, sourceOGG, 'video/ogg');
 
 		_videoControls.load();
 
@@ -215,6 +274,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 1;
+		errorDiv.remove();
+		self.errorAppended = false;
+		self.orchestrator.updateZIndices();
 
 		// Revert to any saved state, get time to start animation.
 		var startTime;
@@ -252,6 +314,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		if (self.status === 3) {
 			return;
 		}
+		self.lastPauseTime = _videoControls.currentTime;
+		self.lastActualTime = Date.now()/1000;
 		self.status = 2;
 		console.log("Video paused");
 		self.stopDelayStart();
@@ -453,9 +517,33 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		return state;
 	};
 
+    /*
+     * I/P:     none
+     * Returns true if the track is currently visible.
+     * O/P:     isVisible:          True if track is visible.
+     */
+	self.isVisible = function () {
+	    if (!self.firstKeyframe || !self.lastKeyframe) {
+	        return false;
+	    }
+	    var now = self.timeManager.getElapsedOffset();
+	    return self.firstKeyframe.time <= now && now <= self.lastKeyframe.time;
+	};
+
 	///////////////////////////////////////////////////////////////////////////
-	// InkProvider functions.
+	// VideoProvider functions.
 	///////////////////////////////////////////////////////////////////////////
+
+    /*nest source tag inside video element*/
+	function addSourceToVideo(element, src, type) {
+	    var source = document.createElement('source');
+
+	    source.src = src;
+	    source.type = type;
+
+	    element[0].appendChild(source);
+	}
+
 
     /*
 	 * I/P: 	none

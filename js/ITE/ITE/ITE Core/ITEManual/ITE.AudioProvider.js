@@ -130,12 +130,13 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.play = function(endKeyframe) {
-		_audioControls.pause();
+	    _audioControls.pause();
 		
 		if (self.status === 3) {
 			return;
 		}
 		self.status = 1;
+		self.orchestrator.updateZIndices();
 
 		// Revert to any saved state, get time to start animation.
 		var startTime;
@@ -316,6 +317,15 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			state.audioOffset = startKeyframe.time + (interp * (endKeyframe.time - startKeyframe.time));
 		}
 		return state;
+	};
+
+    /*
+     * I/P:     none
+     * Returns true if the track is currently visible.
+     * O/P:     isVisible:          True if track is visible.
+     */
+	self.isVisible = function () {
+	    return false;
 	};
 
 	///////////////////////////////////////////////////////////////////////////

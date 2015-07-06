@@ -122,6 +122,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 1;
+		self.orchestrator.updateZIndices();
 
 		// Revert to any saved state, get time to start animation.
 		var startTime;
@@ -287,6 +288,22 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 						"inkData"	: trackData.string
 					};
 		return state;
+	};
+
+    /*
+     * I/P:     none
+     * Returns true if the track is currently visible.
+     * O/P:     isVisible:          True if track is visible.
+     */
+	self.isVisible = function () {
+	    if (_attachedAsset) {
+	        return _attachedAsset.isVisible();
+	    }
+	    if (!self.firstKeyframe || !self.lastKeyframe) {
+	        return false;
+	    }
+	    var now = self.timeManager.getElapsedOffset();
+	    return self.firstKeyframe.time <= now && now <= self.lastKeyframe.time;
 	};
 
 	///////////////////////////////////////////////////////////////////////////

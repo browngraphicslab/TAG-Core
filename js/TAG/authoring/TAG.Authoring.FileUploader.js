@@ -97,6 +97,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             'float': 'left',
             'margin-left' : '1.2%',
         });
+        var buttonH = 32;
         progressBarButton = $(document.createElement('button'))
             .addClass('progressBarUploadsButton')
             .addClass('button')
@@ -105,11 +106,12 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                 'font-size': '50%',
                 'border-radius': '3.5px',
                 'position': 'relative',
-                'top': '20%',
+                'top': '25%',
                 'margin-left':'1.2%',
                 'border-style': 'solid',
                 'border-color': 'white',
-                'height': '9%',
+                'min-height': '0px',
+                'height': '50%',
                 "display": "inline-block",
                 "color": "white",
                 'float': 'left'

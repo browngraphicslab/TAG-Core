@@ -283,6 +283,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
                 });
             } else {    //Size > maxSize
                 resumableUploader.removeFile(resumableFile);    //Remove the file from the upload operation
+                removeOverlay();
                 console.log("Too big!");
                 largeFiles.push(resumableFile.file);
                 filesCompleted++;
@@ -426,7 +427,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
 
     function finishedUpload() {
         console.log("Called finishedUpload");
-        //removeOverlay();
+        removeOverlay();
      
         addLocalCallback(globalFiles, localURLs, globalUriStrings)();
         finishedCallback(dataReaderLoads);
@@ -442,6 +443,7 @@ TAG.Authoring.WebFileUploader = function (root, type,  localCallback, finishedCa
         var longFilesExist = false;
         var i;
         if (largeFiles.length > 0) {
+            str = "";
             msg = "The following file(s) exceeded the 50MB file limit: <br />";
             for(var i =0; i<largeFiles.length; i++){
                 str = str + largeFiles[i].name + "<br />";

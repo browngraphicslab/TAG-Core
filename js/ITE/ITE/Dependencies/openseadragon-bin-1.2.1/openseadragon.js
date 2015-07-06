@@ -8557,10 +8557,10 @@ function onCanvasRelease(event, first) {
 
 /*Augmented function for layers fix*/
 function onCanvasPinch(event, isTopLayer) {
-    //var zIndex = this.ITE_track.trackData.zIndex;
+    var zIndex = this.ITE_track.trackData.zIndex;
 
-    ////takes the first dz track in the stack that has the click/touch event in bounds
-    //var track = this.orchestrator.getTrackBehind(zIndex, event, false);
+    //takes the first dz track in the stack that has the click/touch event in bounds
+    var track = this.orchestrator.getTrackBehind(zIndex, event, false);
 
     ////if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
     //if ((isTopLayer === undefined || isTopLayer) && track != null) {
@@ -8587,8 +8587,10 @@ function onCanvasPinch(event, isTopLayer) {
             if (track.viewer) {
                 track.viewer.onCanvasPinch(event, false);
             } else {
-                track.scrollFromDZRecursion(event);
+                //track.scrollFromDZRecursion(event);
+                track.pinchFromDZRecursion(event);
             }
+            this.orchestrator.currentManipulatedObject = null;
         }
     } else {
         var gestureSettings,
@@ -8649,6 +8651,7 @@ function onCanvasPinch(event, isTopLayer) {
             originalEvent: event.originalEvent
         });
         //cancels event
+        this.orchestrator.currentManipulatedObject = null;
         return false;
     }
 }
@@ -8656,10 +8659,10 @@ function onCanvasPinch(event, isTopLayer) {
 /*Augmented function for layers fix*/
 function onCanvasScroll(event, isTopLayer) {
     //////////////////////////////////////////////////////////
-    //var zIndex = this.ITE_track.trackData.zIndex;
+    var zIndex = this.ITE_track.trackData.zIndex;
 
-    ////takes the first dz track in the stack that has the click/touch event in bounds
-    //var track = this.orchestrator.getTrackBehind(zIndex, event, false);
+    //takes the first dz track in the stack that has the click/touch event in bounds
+    var track = this.orchestrator.getTrackBehind(zIndex, event, false);
 
     ////if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
     //if ((isTopLayer === undefined || isTopLayer) && track != null) {
@@ -8679,7 +8682,9 @@ function onCanvasScroll(event, isTopLayer) {
             this.orchestrator.currentManipulatedObject.viewer.onCanvasScroll(event, false);
         } else {
             this.orchestrator.currentManipulatedObject.scrollFromDZRecursion(event);
+            //this.orchestrator.currentManipulatedObject.pinchFromDZRecursion(event);
         }
+        this.orchestrator.currentManipulatedObject = null;
         return;
     }
 
@@ -8695,7 +8700,9 @@ function onCanvasScroll(event, isTopLayer) {
                 track.viewer.onCanvasScroll(event, false);
             } else {
                 track.scrollFromDZRecursion(event);
+                //track.pinchFromDZRecursion(event);
             }
+            this.orchestrator.currentManipulatedObject = null;
         }
     } else {
         var gestureSettings,
@@ -8734,6 +8741,8 @@ function onCanvasScroll(event, isTopLayer) {
             originalEvent: event.originalEvent
         });
         //cancels event
+        this.orchestrator.currentManipulatedObject = null;
+
         return false;
     }
 }

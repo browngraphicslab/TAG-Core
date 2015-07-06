@@ -249,6 +249,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 1;
+		self.orchestrator.updateZIndices();
 
 		//If the current time is after the last keyframe of the deepzoom, don't do anything
 		if (this.lastKeyframe.time < self.timeManager.getElapsedOffset()){
@@ -490,6 +491,19 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 															 lerpScale/_viewer.viewport.getAspectRatio())
 					};
 		return state;
+	};
+
+    /*
+     * I/P:     none
+     * Returns true if the track is currently visible.
+     * O/P:     isVisible:          True if track is visible.
+     */
+	self.isVisible = function () {
+	    if (!self.firstKeyframe || !self.lastKeyframe) {
+	        return false;
+	    }
+	    var now = self.timeManager.getElapsedOffset();
+	    return self.firstKeyframe.time <= now && now <= self.lastKeyframe.time;
 	};
 
     // keyframe capture pub/sub methods

@@ -2227,7 +2227,6 @@ TAG.Util_ITE.UI = (function () {
                 max_width: 560,
                 max_height: 200,
             });
-
         $(confirmBox).css({
             position: 'absolute',
             left: confirmBoxSpecs.x + 'px',
@@ -2237,7 +2236,6 @@ TAG.Util_ITE.UI = (function () {
             border: '3px double white',
             'background-color': 'black'
         });
-
         var messageLabel = document.createElement('div');
         $(messageLabel).css({
             color: 'white',

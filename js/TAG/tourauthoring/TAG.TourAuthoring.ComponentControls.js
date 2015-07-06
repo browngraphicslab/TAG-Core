@@ -1066,7 +1066,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         dropFile.hide();
 
         var audioButton = _createAddComponentButton("Audio (MP3)", dropFile);
-        var videoButton = _createAddComponentButton("Video (MP4, WEBM, OGV)", dropFile);
+        var videoButton = _createAddComponentButton("Video (MP4)", dropFile);
         var imageButton = _createAddComponentButton("Image", dropFile);
 
         function exitInk() {
