@@ -478,6 +478,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     function pause() {
         orchestrator.pause();
         playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
+        makeControlsVisible();
     };
 
     /*
