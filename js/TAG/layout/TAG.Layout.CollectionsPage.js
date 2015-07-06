@@ -4184,8 +4184,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour);
         TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
             setTimeout(function () {
-                var rindata = tour;
-                ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
+                //var rindata = tour;
+                //ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
                 ITEPlayer.startPlayback();
             }, 1000);
         });
