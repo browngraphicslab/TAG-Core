@@ -4254,7 +4254,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 holder.attr("preload", "none");
                 holder.attr("controls", "");
                 holder.css({ "width": "100%", "max-width": "100%", "max-height": "100%" });
-                if (!IS_WINDOWS) { holder.css("padding-top", "2%") }; // adjust the position for video previewing in web app
+                if (!IS_WINDOWS) { holder.css("padding-top", "4%") }; // adjust the position for video previewing in web app
                 holder.attr("src", source);
                 var source = TAG.Worktop.Database.fixPath(media.Metadata.Source);
                 var sourceWithoutExtension = source.substring(0, source.lastIndexOf('.'));
