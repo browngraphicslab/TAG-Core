@@ -1637,10 +1637,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             dropFile.hide();
                             $(assetButton).data('selected', false);
                             inkClick = true;
-                            addComponentLabel.prop("disabled", true).css({
-                                "opacity": "0",
-                                "display": "none"
-                            });
                         }
                         break;
 
