@@ -478,7 +478,6 @@ TAG.Util = (function () {
             dayInYear,
             totalDaysInYear,
             dayDecimal;
-        console.log("year: " + date.year + "month: " + date.month + "day: " + date.day);
 
         if ((date && date.year)||location){
             yearString = date.year;
@@ -536,7 +535,8 @@ TAG.Util = (function () {
             if (neg){
                 year = -year;  
             }
-            if (!year) {
+            //for sorting by date for location dates
+            if (!year && location) {
                 year = 999999;
             }
             return year;
@@ -1714,13 +1714,13 @@ TAG.Util = (function () {
             var msg = "";
             switch (err.target.error.code) {
                 case err.target.error.MEDIA_ERR_ABORTED:
-                    msg = "Video playback aborted. Please see FAQs on the TAG website.";
+                    msg = "Video playback aborted";
                     break;
                 case err.target.error.MEDIA_ERR_NETWORK:
-                    msg = "Network error during video upload. Please see FAQs on the TAG website.";
+                    msg = "Sorry, there was a network error during video playback"
                     break;
                 case err.target.error.MEDIA_ERR_DECODE:
-                    msg = "Error decoding video. Please see FAQs on the TAG website.";
+                    msg = "There was an error decoding this video";
                     break;
                 case err.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
                     if (conversionFlag && conversionFlag === "False") {
@@ -1731,11 +1731,11 @@ TAG.Util = (function () {
                         //msg = "The video format is not supported.";
                         //container.append(createConversionLoading(msg));
                     } else {
-                        msg = "Either the video format is not supported or a network or server error occurred. Please see FAQs on the TAG website.";
+                        msg = "Either the video format is not supported or an error occured during playback";
                     }
                     break;
                 default:
-                    msg = "Error: please see FAQs on the TAG website.";
+                    msg = "Sorry, there was an error playing this video";
                     break;
             }
             $("#videoErrorMsg").remove();
