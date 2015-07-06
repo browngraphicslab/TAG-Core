@@ -249,6 +249,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			return;
 		}
 		self.status = 1;
+		self.orchestrator.updateZIndices();
 
 		//If the current time is after the last keyframe of the deepzoom, don't do anything
 		if (this.lastKeyframe.time < self.timeManager.getElapsedOffset()){
