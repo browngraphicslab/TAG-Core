@@ -80,7 +80,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			.append(_image)
 			.css({
 			    "z-index": -1,
-                'overflow': 'hidden'
+                //'overflow': 'hidden'
 			})
 		$("#ITEHolder").append(_UIControl);
 		self._UIControl = _UIControl;
@@ -290,7 +290,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			top 			: _UIControl.position().top,
 			width 			: _UIControl.width(),
 			height 			: _UIControl.height()
-		};	
+		};
+		console.log(self.savedState);
 		return self.savedState;
 	};
 

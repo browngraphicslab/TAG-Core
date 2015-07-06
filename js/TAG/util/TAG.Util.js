@@ -8399,7 +8399,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				}
 				
 				if (providerID == "image") {
-				    if (!($('#ITEContainer')).length) {
+				    if (!($('#ITEContainer').length)) {
 				        keyframeObject = {
 				            "dispNum": k,
 				            "zIndex": track.data.zIndex,
