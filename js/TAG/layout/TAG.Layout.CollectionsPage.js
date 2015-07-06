@@ -153,12 +153,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     });
 
     if (lockKioskMode == "true") {
+        console.log("kiosk mode locked, back button disabled")
         backButton.css('display', 'none');
     } else {
+        console.log("kiosk mode unlocked, back button enabled")
         //collectionMenu.css('left', '5%');
         if (IS_WINDOWS) {
             backButton.css('padding-top', '');
         }
+        backButton.css('display', 'auto');
     }
 
     // get things rolling
@@ -1222,7 +1225,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
             }
             if (!IS_WINDOWS && previewing){
-                dropDownArrow.css({'top':'8%'});
+                dropDownArrow.css({'top':'3.5%'});
             }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
@@ -4179,7 +4182,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         //Create tag tourplayer (which will in turn create an ITE player)
         var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour);
-        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), ITEPlayer.startPlayback);
+        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
+            setTimeout(function () {
+                //var rindata = tour;
+                //ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
+                ITEPlayer.startPlayback();
+            }, 1000);
+        });
         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
     }
     
