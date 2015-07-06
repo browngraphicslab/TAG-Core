@@ -153,12 +153,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     });
 
     if (lockKioskMode == "true") {
+        console.log("kiosk mode locked, back button disabled")
         backButton.css('display', 'none');
     } else {
+        console.log("kiosk mode unlocked, back button enabled")
         //collectionMenu.css('left', '5%');
         if (IS_WINDOWS) {
             backButton.css('padding-top', '');
         }
+        backButton.css('display', 'auto');
     }
 
     // get things rolling
