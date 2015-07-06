@@ -5199,7 +5199,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     check = currentInkController.link();
                 if (!check)
                     return;
-
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display": "block"
+                });
                 TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                     tobj.track_type = "Ink";
                     tobj.quantity = 1;
@@ -5273,6 +5276,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 timeline.setModifyingInk(false);
                 timeline.setEditInkOn(false);
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display": "block"
+                });
             });
             newDiv.append(freeInkButton);
             return newDiv;
