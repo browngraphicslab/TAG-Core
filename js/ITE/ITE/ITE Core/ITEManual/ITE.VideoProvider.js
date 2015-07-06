@@ -186,13 +186,25 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function () {
-		_super.load();
+	    _super.load();
 
-		//Sets the image’s URL source
+	    var sourceWithoutExtension = self.trackData.assetUrl.substring(0, self.trackData.assetUrl.lastIndexOf('.'));
+	    var sourceExt = self.trackData.assetUrl.substring(self.trackData.assetUrl.lastIndexOf('.'));
+
+		// Set the video source.
 		_video.attr({
-			"src"	: self.trackData.assetUrl,
-			"type" 	: self.trackData.type
+			'src'	    : self.trackData.assetUrl,
+			'type' 	    : self.trackData.type,
+			'preload'   : 'none',
+			'controls'  : false,
+			'filename'  : sourceWithoutExtension
 		});
+		var sourceMP4 = sourceWithoutExtension + ".mp4";
+		var sourceWEBM = sourceWithoutExtension + ".webm";
+		var sourceOGG = sourceWithoutExtension + ".ogg";
+		addSourceToVideo(_video, sourceMP4, 'video/mp4');
+		addSourceToVideo(_video, sourceWEBM, 'video/webm');
+		addSourceToVideo(_video, sourceOGG, 'video/ogg');
 
 		_videoControls.load();
 
@@ -519,8 +531,19 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	};
 
 	///////////////////////////////////////////////////////////////////////////
-	// InkProvider functions.
+	// VideoProvider functions.
 	///////////////////////////////////////////////////////////////////////////
+
+    /*nest source tag inside video element*/
+	function addSourceToVideo(element, src, type) {
+	    var source = document.createElement('source');
+
+	    source.src = src;
+	    source.type = type;
+
+	    element[0].appendChild(source);
+	}
+
 
     /*
 	 * I/P: 	none

@@ -54,6 +54,8 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         });
         resizableArea.attr("id", "resizableArea");
 
+        dataHolder.setLastPreviewerHeight(originalHeightSize);
+
         $blocker = $(document.createElement('div'));
         $blocker.css({
             'background-color': "rgb(219, 218, 199)",
@@ -113,11 +115,12 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 });
                 prevLocationY = ui.position.top;
                 timeManager.stop();
+                dataHolder.setLastPreviewerHeight(resizableArea.height());
             }, //commented out because broke with svg
             stop: function (evt, ui) {
                 // the css of bufferingDiv and its parentbeing reset in timeline.onUpdate
                 // if we ever eliminate timeline.onUpdate, reset css here
-                timeline.onUpdate();
+                timeline.onUpdate(true);
             },
             drag: function (event, ui) {
                 if (timeline.getEditInkOn() === true) {
