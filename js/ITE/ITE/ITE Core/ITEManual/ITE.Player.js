@@ -164,7 +164,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
                 .addClass("playPauseButtonContainer");
 
                 playPauseButton.addClass("playPauseButton")
-                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
+                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_play.svg")
                 .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
@@ -423,7 +423,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     */
     function play() {
         orchestrator.play();
-       playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/pause.svg")
+        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg").css({ 'margin-left': '15%' });
        setControlsFade();
     };
     /*
@@ -477,7 +477,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     */
     function pause() {
         orchestrator.pause();
-        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
+        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_play.svg").css('margin-left', '15%');
         makeControlsVisible();
     };
 

@@ -213,7 +213,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 timeline.onUpdate(true);
                 timeline.setModifyingInk(false);
                 timeline.hideEditorOverlay();
-
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display" : "block"
+                });
                 brushEditSliderPoint.attr('value', 7.0);
                 currentInkController.updatePenWidth("brushEditSlider");
                 currentInkController.remove_all();
@@ -479,7 +482,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 timeline.setModifyingInk(false);
                 timeline.setEditInkOn(false);
                 timeline.hideEditorOverlay();
-
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display" : "block"
+                });
                 currentInkController.remove_all();
                 removeInkCanv();
                 inkEditTransparency.hide();
@@ -757,7 +763,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 currentInkController.remove_all();
                 removeInkCanv();
                 inkEditText.hide();
-
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display" : "block"
+                });
                 playbackControls.undoButton.off("click");
                 playbackControls.redoButton.off("click");
 
@@ -1223,7 +1232,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
             }
 
-            if (title === "Video (MP4, WEBM, OGV)") {
+            if (title === "Video (MP4)") {
                 upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
                 function (files, localURLs, confirmCallback, cancelCallback) {
                     var file,
@@ -1482,7 +1491,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         
                         break;
                     case "Audio (MP3)":
-                    case "Video (MP4, WEBM, OGV)":
+                    case "Video (MP4)":
                     case "Image":
                         isInFileSubMenu = true;
                         break;
@@ -1607,7 +1616,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "Audio (MP3)":
-                    case "Video (MP4, WEBM, OGV)":
+                    case "Video (MP4)":
                     case "Image":
                         closeComponentMenu();
                         exitInk();
@@ -1628,6 +1637,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             dropFile.hide();
                             $(assetButton).data('selected', false);
                             inkClick = true;
+                            addComponentLabel.prop("disabled", true).css({
+                                "opacity": "0",
+                                "display": "none"
+                            });
                         }
                         break;
 
@@ -1668,6 +1681,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         $('.changeColor')[0].innerHTML = "#" + $("#textColorToggle").attr('value');
                         updateToggle(textArray, textArea);
                         timeline.setEditInkOn(true);
+                        addComponentLabel.prop("disabled", true).css({
+                            "opacity": "0",
+                            "display" : "none"
+                        });
                         break;
 
                     case "Draw":
@@ -1701,7 +1718,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         p1.updatePenOpacity("opacitySlider");
                         currentInkController = p1;
                         timeline.setEditInkOn(true);
-
+                        addComponentLabel.prop("disabled", true).css({
+                            "opacity": "0",
+                            "display": "none"
+                        });
                         break;
 
                     case "Highlight":
@@ -1716,7 +1736,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         var newHeight = $("#resizableArea").offset().top + $("#resizableArea").height() - inkTransparencyControls.offset().top - 10;
                         inkTransparencyControls.css({ 'height': newHeight });
                         initTrans();
-
+                        addComponentLabel.prop("disabled", true).css({
+                            "opacity": "0",
+                            "display": "none"
+                        });
                         //create an ink canvas and inkController
                         var inkdiv = createInkCanv();
                         var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
@@ -3258,7 +3281,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'height': '425%',
             'width': '100%',
             top: '130%',
-            position: 'absolute',
+            position: 'static',
             'z-index': 0,
             'overflow-x': 'none',
             'overflow-y': 'auto',
@@ -3285,6 +3308,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         cancelTextButton.get(0).innerHTML = "Cancel";
         cancelTextButton.click(function () {
             removeInkCanv();
+            addComponentLabel.prop("disabled", false).css({
+                "opacity": "1",
+                "display" : "block"
+            });
             inkTextControls.hide();
             timeline.setModifyingInk(false);
             timeline.setEditInkOn(false);
@@ -3995,7 +4022,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var inkDrawDocfrag = document.createDocumentFragment();
         inkDrawControls = $(document.createElement('div'));
         inkDrawControls.attr("id", "inkDrawControls");
-        inkDrawControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
+        inkDrawControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         inkDrawDocfrag.appendChild(inkDrawControls[0]);
         inkDrawControls.css({ "display": "none" });
 
@@ -4020,7 +4047,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             inkDrawControls.hide();
             timeline.setModifyingInk(false);
             timeline.setEditInkOn(false);
-
+            addComponentLabel.prop("disabled", false).css({
+                "opacity": "1",
+                "display" : "block"
+            });
             inkAuthoring.getInkUndoManager().clear();
             undoManager.greyOutBtn();
             // reset undo/redo buttons to global undo/redo functionality
@@ -4683,7 +4713,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var inkTransparencyDocfrag = document.createDocumentFragment();
         inkTransparencyControls = $(document.createElement('div'));
         inkTransparencyControls.attr("id","inkTransControls");
-        inkTransparencyControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
+        inkTransparencyControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         inkTransparencyDocfrag.appendChild(inkTransparencyControls[0]);
         inkTransparencyControls.css({ "display": "none" });
 
@@ -4696,6 +4726,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             inkTransparencyControls.hide();
             timeline.setModifyingInk(false);
             timeline.setEditInkOn(false);
+            addComponentLabel.prop("disabled", false).css({
+                "opacity": "1",
+                "display" : "block"
+            });
 
             inkAuthoring.getInkUndoManager().clear();
             undoManager.greyOutBtn();
