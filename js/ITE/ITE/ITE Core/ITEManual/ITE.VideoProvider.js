@@ -125,16 +125,16 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
                         }
                         setTimeout(function(){
                             console.log("waited then tried again");
-                            //self.load();
-                            //self.play();
+                            self.load();
+                            self.play();
                         }, 5000);
                         return;
                     }
                     self.lastError = self.lastPauseTime;
                     console.log("self.lastPauseTime: " + self.lastPauseTime);
                     console.log("timeOffset: " + timeOffset);
-                    //_videoControls.currentTime = self.lastPauseTime + timeOffset;
-                    //self.play();
+                    _videoControls.currentTime = self.lastPauseTime + timeOffset;
+                    self.play();
                     break;
             }
         }
