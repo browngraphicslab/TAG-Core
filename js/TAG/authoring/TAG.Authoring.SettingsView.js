@@ -4656,7 +4656,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //            })
             //    convertBtn.attr('class', 'button convertVideoButton');
             //    convertBtn.attr("disabled", "");
-            buttonContainer.append(thumbnailButton);//.append(convertBtn);
+            
+            if(IS_WINDOWS){
+
+                buttonContainer.append(thumbnailButton);//.append(convertBtn);    
+            }
         } else if (media.Metadata.ContentType.toLowerCase() === 'image' && !media.Metadata.Thumbnail && media.Metadata.Source && media.Metadata.Source[0] === '/' && !source.match(/.mp3/)) {
             // hacky way to see if asset was imported recently enough to support thumbnailing (these are /Images/_____.__
             // rather than http:// _______/Images/_______.__
