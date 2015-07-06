@@ -4182,7 +4182,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         //Create tag tourplayer (which will in turn create an ITE player)
         var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour);
-        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), ITEPlayer.startPlayback);
+        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
+            setTimeout(function () {
+                var rindata = tour;
+                ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
+                ITEPlayer.startPlayback();
+            }, 1000);
+        });
         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
     }
     
