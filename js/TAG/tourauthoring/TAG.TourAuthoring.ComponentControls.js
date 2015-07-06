@@ -1223,7 +1223,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
             }
 
-            if (title === "Video (MP4, WEBM, OGV)") {
+            if (title === "Video (MP4)") {
                 upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
                 function (files, localURLs, confirmCallback, cancelCallback) {
                     var file,
@@ -1482,7 +1482,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         
                         break;
                     case "Audio (MP3)":
-                    case "Video (MP4, WEBM, OGV)":
+                    case "Video (MP4)":
                     case "Image":
                         isInFileSubMenu = true;
                         break;
@@ -1607,7 +1607,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "Audio (MP3)":
-                    case "Video (MP4, WEBM, OGV)":
+                    case "Video (MP4)":
                     case "Image":
                         closeComponentMenu();
                         exitInk();
