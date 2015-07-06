@@ -8590,6 +8590,7 @@ function onCanvasPinch(event, isTopLayer) {
                 //track.scrollFromDZRecursion(event);
                 track.pinchFromDZRecursion(event);
             }
+            this.orchestrator.currentManipulatedObject = null;
         }
     } else {
         var gestureSettings,
@@ -8650,6 +8651,7 @@ function onCanvasPinch(event, isTopLayer) {
             originalEvent: event.originalEvent
         });
         //cancels event
+        this.orchestrator.currentManipulatedObject = null;
         return false;
     }
 }
@@ -8682,6 +8684,7 @@ function onCanvasScroll(event, isTopLayer) {
             this.orchestrator.currentManipulatedObject.scrollFromDZRecursion(event);
             //this.orchestrator.currentManipulatedObject.pinchFromDZRecursion(event);
         }
+        this.orchestrator.currentManipulatedObject = null;
         return;
     }
 
@@ -8699,6 +8702,7 @@ function onCanvasScroll(event, isTopLayer) {
                 track.scrollFromDZRecursion(event);
                 //track.pinchFromDZRecursion(event);
             }
+            this.orchestrator.currentManipulatedObject = null;
         }
     } else {
         var gestureSettings,
