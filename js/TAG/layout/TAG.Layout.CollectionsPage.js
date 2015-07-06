@@ -2909,10 +2909,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } 
         }
 
+        for (var i = 0; i < timelineEventCircles.length; ++i) {
+                    if (selectedCircle && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(selectedCircle.yearKey)) && (timelineEventCircles[i] != selectedCircle)) {
+                        console.log("timeline event circles has same date as selected, should hide");
+                        timelineEventCircles[i].css('visibility', 'hidden');
+
+                        timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
+                    }        
+        }
+        
         // Always show current circle, and if there are other circles with the same date, hide them
         if (selectedCircle && circ.yearKey === selectedCircle.yearKey){ 
-            if (circ === selectedCircle){
+            if (circ === selectedCircle) {
                 timelineDateLabel.css('visibility', 'visible');
+                
             } else {
                 timelineDateLabel.css('visibility', 'hidden'); 
             }
@@ -2921,6 +2931,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
     
     function zoomTimeline(circle) {
+        console.log("zoom timeline called");
         var i,
             j,
             k,
@@ -2933,6 +2944,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             otherCircle;
 
         for (i = 0; i < timelineEventCircles.length ; i++) {
+            
+            
+
             otherCircle = timelineEventCircles[i]
             circleTarget = location(otherCircle)
             otherCircle.stop();
@@ -2943,6 +2957,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //When last animation done, loop through and hide/show date labels
             if (i === timelineEventCircles.length-1){
                 otherCircle.on('webkitTransitionEnd transitionend msTransitionEnd oTransitionEnd', function () {
+                    console.log("Webkit transition end now")
                     for (k=0; k < timelineEventCircles.length; k++){
                         displayLabels(timelineEventCircles[k], circle);
                         if (k===timelineEventCircles.length -1){
