@@ -2856,7 +2856,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var deleteButton = createButton('Delete', function () {
                 deleteExhibitionSingle(exhibition);
             }, {
-                'margin-left': '2%',
+                'margin-left': '1%',
                 'margin-top': '1%',
                 'margin-right': '0',
                 'margin-bottom': '3%',
@@ -2984,14 +2984,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             var mergeButton = createButton('Add from Collection',
                 mergeCollectionsPopUp, {
-                    'margin-left': '2%',
+                    'margin-left': '1%',
                     'margin-top': '1%',
                     'margin-right': '0%',
                     'margin-bottom': '3%',
                 });
 
 
-            var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
+            var artPickerButton = createButton('Add/Remove Artworks and Tours', makeManagePopUp/*function () {
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{
@@ -6481,7 +6481,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var deleteArt = createButton('Delete', //Delete artwork for web app
                 function () { deleteArtworkSingle(artwork); },
                 {
-                    'margin-left': '2%',
+                    'margin-left': '1%',
                     'margin-top': '1%',
                     'margin-right': '0%',
                     'margin-bottom': '3%',
