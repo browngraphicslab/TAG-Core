@@ -111,16 +111,18 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 });
                 $($("#bufferingDiv").parent()).css({
                     "opacity": 0.9,
-                    "display": "block"
+                    "display": "block",
+                    "z-index": "10000000"
                 });
                 prevLocationY = ui.position.top;
                 timeManager.stop();
-                dataHolder.setLastPreviewerHeight(resizableArea.height());
+                dataHolder.setLastPreviewerHeight(resizableArea.height() - 4);
             }, //commented out because broke with svg
             stop: function (evt, ui) {
                 // the css of bufferingDiv and its parentbeing reset in timeline.onUpdate
                 // if we ever eliminate timeline.onUpdate, reset css here
                 timeline.onUpdate(true);
+                dataHolder.setLastPreviewerHeight(resizableArea.height() - 4);
             },
             drag: function (event, ui) {
                 if (timeline.getEditInkOn() === true) {

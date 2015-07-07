@@ -2672,8 +2672,10 @@ TAG.TourAuthoring.Display = function (spec, my) {
                                 center: {
                                     //x: (first.left / parseInt($('#ITEContainer').width())),
                                     //y: (first.top / parseInt($('#ITEContainer').height()))
-                                    x: (first.left / parseInt(dataHolder.getLastPreviewerHeight() * 16 / 9)),
-                                    y: (first.top / parseInt(dataHolder.getLastPreviewerHeight()))
+                                    // -2 is because left should be done from inner left, not border left
+                                    x: (first.left / (parseInt(dataHolder.getLastPreviewerHeight()) * 16 / 9 - 2)),
+                                    // same for top
+                                    y: (first.top / (parseInt(dataHolder.getLastPreviewerHeight()) - 2))
                                 },
                                 span: {
                                     //x: (first.width / parseInt($('#ITEContainer').width())),

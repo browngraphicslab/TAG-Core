@@ -712,12 +712,12 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 viewport: {
                     region: {
                         center: {
-                            x: (data.bounds ? data.bounds.x : data.left / (ITEContainer.height() * 16.0 / 9.0)),
-                            y: (data.bounds ? data.bounds.y : data.top / ITEContainer.height())
+                            x: (data.bounds ? data.bounds.x : data.left / (ITEContainer.height() * 16.0 / 9.0 - 4)), // -4 is for border!
+                            y: (data.bounds ? data.bounds.y : data.top / (ITEContainer.height() - 4))
                         },
                         span: {
-                            x: (data.bounds ? data.bounds.width : data.width / (ITEContainer.height() * 16.0 / 9.0)),
-                            y: (data.bounds ? data.bounds.height : data.height / ITEContainer.height())
+                            x: (data.bounds ? data.bounds.width : data.width / (ITEContainer.height() * 16.0 / 9.0 - 4)),
+                            y: (data.bounds ? data.bounds.height : data.height / (ITEContainer.height() - 4))
                         }
                     }
                 }

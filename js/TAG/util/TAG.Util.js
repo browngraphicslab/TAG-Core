@@ -8428,18 +8428,18 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "time": time_offset + currKeyframe.offset,
 				            "opacity": 1,
 				            "size": {
-				                "x": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').width()),
-				                "y": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').height())
+				                "x": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').innerWidth()),
+				                "y": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').innerHeight())
 				            },
 				            "pos": {
-				                "x": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').width()),
-				                "y": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').height())
+				                "x": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').innerWidth()),
+				                "y": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').innerHeight())
 				            },
 				            "data": {},
-				            "left": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').width()),
-				            "top": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').height()),
-				            "width": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').width()),
-				            "height": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').height())
+				            "left": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').innerWidth()),
+				            "top": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').innerHeight()),
+				            "width": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').innerWidth()),
+				            "height": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').innerHeight())
 				        }
 				    }
 				}
@@ -8484,11 +8484,11 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"opacity": 1,
                         "size": {
                             "x": $('#ITEHolder').width(),//currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
+                            "y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').innerHeight()
                         },
                         "pos": {
                             "x": 0,//currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height()
+                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').innerHeight()
                         },
 						"data": {},
 						"volume": currKeyframe.state.sound.volume,
