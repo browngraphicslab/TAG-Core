@@ -86,7 +86,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
             attachPlay();
             attachLoop();
             attachProgressBar();
-            attachFullScreen();
+            //attachFullScreen();
             attachProgressIndicator();
         };
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls

@@ -5987,14 +5987,46 @@ TAG.Util.RLH = function (input) {
                 currentIndex = mapGuids.length - 1;
                 showMap(mapGuids[currentIndex]);
             }
+            if (currentIndex == 0) {
+                if (!defaultMapShown) {
+                    $("#locationHistoryAddLocationButton").prop('disabled', true).css("opacity", "0.4");
+                    $("#locationHistorySortLocationsByTitleButton").prop('disabled', true).css("opacity", "0.4");
+                    $("#locationHistorySortLocationsByDateButton").prop('disabled', true).css("opacity", "0.4");
+                }
+                else {
+                    $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+                    $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+                    $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+                }
+            }
+            else {
+                $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+                $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+                $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+            }
         });
 
         rightArrowButton.on('click', function () {
+            
             if (currentIndex + 1 < mapGuids.length) {
                 showMap(mapGuids[++currentIndex]);
+                $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+                $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+                $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+                
             } else {
                 currentIndex = 0;
                 showMap(mapGuids[0]);
+                if (!defaultMapShown) {
+                    $("#locationHistoryAddLocationButton").prop('disabled', true).css("opacity", "0.4");
+                    $("#locationHistorySortLocationsByTitleButton").prop('disabled', true).css("opacity", "0.4");
+                    $("#locationHistorySortLocationsByDateButton").prop('disabled', true).css("opacity", "0.4");
+                }
+                else {
+                    $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+                    $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+                    $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+                }
             }
         });
 
