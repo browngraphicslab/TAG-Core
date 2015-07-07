@@ -2092,7 +2092,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         var extraSpace = $(document.createElement("div"));
                         extraSpace.width(middleLabelContainer.width());
                         extraSpace.height($($(".middleLabel")[0]).height() / 2);
-                        console.log($(".middleLabel"));
                         middleLoading.before(extraSpace)
                     });
                 }
@@ -4797,7 +4796,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             source = embeddedURL || "";
 
         if (!checkValidYear(timelineYear)) {
-            timelineYear = media.Metadata.TimelineYear;
+            if (timelineYear === ""){
+                timelineYear = "";
+            } else {
+                timelineYear = media.Metadata.TimelineYear;
+            }
         }
         //pCL = displayLoadingSettings();
         clearRight();
@@ -7813,7 +7816,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //don't save an invalid timeline year 
         if (!checkValidYear(timelineYear)) {
-            timelineYear = artwork.Metadata.TimelineYear
+            if (timelineYear === ""){
+                //allow reseting timeline year to not be on timeline
+                timelineYear = "";
+            } else {
+                timelineYear = artwork.Metadata.TimelineYear;
+            }
         }
 
         var infoFields = {};
@@ -8805,7 +8813,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         monthInput.css('margin-right', '0%');
         dayInput = createSelectInput(getDayOptions(monthInput.attr('value'), yearInput, monthInput), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
-        timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
+        timelineInputText = work.Metadata.TimelineYear;// || getTimelineInputText(yearInput);
         if (timelineInputText === "undefined") {
             timelineInputText = getTimelineInputText(yearInput);
         }
