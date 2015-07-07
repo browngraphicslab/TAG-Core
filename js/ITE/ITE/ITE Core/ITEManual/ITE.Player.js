@@ -685,7 +685,6 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
 ////////////////////////////////////////////////////////////////////////////
 
     function bindCaptureHandlers(handlers) {
-        console.log("binding handlers now");
         orchestrator.bindCaptureHandlers(handlers);
     }
 

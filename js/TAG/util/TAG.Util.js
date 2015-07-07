@@ -1390,7 +1390,6 @@ TAG.Util = (function () {
             element.addEventListener("MSPointerEvent", function (evt) {
                 console.log(evt);
                 if (stopNextClick) {
-                    console.log("STOPPING CLICK");
                     evt.stopPropagation();
                     setTimeout(function () {
                         stopNextClick = false;
@@ -1399,9 +1398,7 @@ TAG.Util = (function () {
                 }
             }, true);
             element.addEventListener("mouseup", function (evt) {
-                console.log("CLICK");
                 if (stopNextClick) {
-                    console.log("STOPPING CLICK");
                     evt.stopPropagation();
                     setTimeout(function () {
                         stopNextClick = false;
@@ -5889,8 +5886,6 @@ TAG.Util.RLH = function (input) {
             //console.log("prog bar length = " + $(progressBar).length);
 
             if (uploadHappening === true) {
-                
-                console.log("upload happening - disable import maps TAG.Util")
                 importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
                 importMapButton.prop('disabled', 'true');
                 
@@ -5933,7 +5928,6 @@ TAG.Util.RLH = function (input) {
                         "Yes",
                         null,
                         function () {
-                            console.log("here!")
                             $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
                         });
                     root.append(overlay);
@@ -6117,7 +6111,6 @@ TAG.Util.RLH = function (input) {
 
         mapHolders = {};
         mapContainer.empty(); // TODO this is inefficient, just here for rapid prototyping
-        console.log("loading maps - maybe causing importmapbutton to be enabled?");
         if (uploadHappening === false) {
             importMapButton.prop('disabled', false);
             importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
@@ -6282,7 +6275,6 @@ TAG.Util.RLH = function (input) {
                 tobj.location_clicked = null;
                 tobj.map_viewed = mapDoqs[guid] || "Bing Map";
                 tobj.map_interaction = "show_map";
-                console.log("show map");
             });
 
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
@@ -6635,7 +6627,6 @@ TAG.Util.RLH = function (input) {
                     tobj.location_clicked = null;
                     tobj.map_viewed = "Bing Map";
                     tobj.map_interaction = "pushpin_clicked";
-                    console.log("bing map pushpin clicked");
                 });
             }
 
@@ -8331,8 +8322,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 	    rinData = tour;
 	} else {
 	    rinData = JSON.parse(unescape(tour.Metadata.Content)); //the original RIN tour obj
-	    console.log("rin data: ")
-	    console.log(rinData)
 	}
 
 	//parses the referenceData to be used for the keyframes
@@ -8441,12 +8430,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "width": currKeyframe.state.viewport.region.span.x * (parseInt($('#ITEContainer').width() - 4)),
 				            "height": currKeyframe.state.viewport.region.span.y * (parseInt($('#ITEContainer').height() - 4))
 				        }
-				        console.log("----------------------util:8425");
-				        console.log(currKeyframe.state.viewport.region.center);
-				        console.log(currKeyframe.state.viewport.region.span);
-				        console.log(parseInt($('#ITEContainer').height() - 2));
-				        console.log(parseInt($('#ITEContainer').width() - 2));
-				        console.log("-------------------------------");
 				    }
 				}
 				else if (providerID == "deepZoom"){
@@ -8640,13 +8623,13 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 		//#1
 		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset - fadeInDurationInk,
+			"time" : timeOffset,
 			"opacity" : 0,
 		}));
 
 		//#2
 		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset,
+			"time" : timeOffset + fadeInDurationInk,
 			"opacity" : 1,
 		}));
 
@@ -8975,9 +8958,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			    keyFrames = [];
 			    currExperienceStreamKey = Object.keys(currExperience.experienceStreams).sort()[0]
                 currExperienceStream = currExperience.experienceStreams[currExperienceStreamKey]
-			    console.log("Experience: ");
-			    console.log(currExperience);
-			    console.log(currExperienceStream);
 			    /*
 			    keyframeObject = {
 			        "dispNum": k,
@@ -9110,8 +9090,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 	        "tracks": ITE_tracks()
 	    };
 
-	    console.log("ITE tour object is: ");
-	    console.log(ITE_tour);
+	    //console.log("ITE tour object is: ");
+	    //console.log(ITE_tour);
 	    console.log(">>>>>>>>>>>>> Finished ITE Parsing >>>>>>>>>>>>>");
 
 	    return ITE_tour;
