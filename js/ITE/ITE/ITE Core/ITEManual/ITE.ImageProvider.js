@@ -509,7 +509,10 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Updates ink so that it animates with image
 	 * O/P: 	none 
 	 */
-	updateInk = function() {
+	updateInk = function () {
+	    if (self.orchestrator.status === 2) {
+	        return;
+	    }
 		var i;
 		for (i = 0; i < attachedInks.length; i++){
 			var bounds = {
