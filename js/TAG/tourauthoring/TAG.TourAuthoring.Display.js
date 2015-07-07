@@ -2271,22 +2271,29 @@ TAG.TourAuthoring.Display = function (spec, my) {
                 return;
             }
 
-            var ITEContainer = $('#resizableArea');
+            var ITEContainer = $('#ITEContainer');
 
             var rinData = {
                 viewport: {
                     region: {
                         center: {
-                            x: (data.bounds ? data.bounds.x : (data.left / parseInt($('#ITEContainer').innerWidth()))),
-                            y: (data.bounds ? data.bounds.y : (data.top / parseInt($('#ITEContainer').innerHeight())))
+                            x: (data.bounds ? data.bounds.x : (data.left / (parseInt($('#ITEContainer').width()) - 2)        )),
+                            y: (data.bounds ? data.bounds.y : (data.top / (parseInt($('#ITEContainer').height()) - 2)       ))
                         },
                         span: {
-                            x: (data.bounds ? data.bounds.width : (data.width / parseInt($('#ITEContainer').innerWidth()))),
-                            y: (data.bounds ? data.bounds.height : (data.height / parseInt($('#ITEContainer').innerHeight())))
+                            x: (data.bounds ? data.bounds.width : (data.width / (parseInt($('#ITEContainer').width()) - 4)          )),
+                            y: (data.bounds ? data.bounds.height : (data.height / (parseInt($('#ITEContainer').height()) - 4)     ))
                         }
                     }
                 }
             }
+
+            console.log("-------------------display:2280")
+            console.log(rinData.viewport.region.center)
+            console.log(rinData.viewport.region.span)
+            console.log(parseInt($('#ITEContainer').height() - 2));
+            console.log(parseInt($('#ITEContainer').width() - 2));
+            console.log("-------------------------------")
 
             var keyspec = {
                     loc: {
@@ -2680,13 +2687,19 @@ TAG.TourAuthoring.Display = function (spec, my) {
                                 span: {
                                     //x: (first.width / parseInt($('#ITEContainer').width())),
                                     //y: (first.height / parseInt($('#ITEContainer').height()))
-                                    x: (first.width / parseInt(dataHolder.getLastPreviewerHeight() * 16 / 9)),
-                                    y: (first.height / parseInt(dataHolder.getLastPreviewerHeight()))
+                                    x: (first.width / (parseInt(dataHolder.getLastPreviewerHeight() * 16 / 9) - 4)),
+                                    y: (first.height / (parseInt(dataHolder.getLastPreviewerHeight()- 4)))
                                 }
                             },
                         },
                     },
                 };
+                console.log("-------------------display:2672")
+                console.log(rin_first.viewport.region.center)
+                console.log(rin_first.viewport.region.span)
+                console.log(parseInt(dataHolder.getLastPreviewerHeight()) - 2);
+                console.log(parseInt(dataHolder.getLastPreviewerHeight()) * 16 / 9 - 2);
+                console.log("-------------------------------")
                 first = rin_first;
             }
             //first.holdDuration = 0;

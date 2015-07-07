@@ -8428,19 +8428,25 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "time": time_offset + currKeyframe.offset,
 				            "opacity": 1,
 				            "size": {
-				                "x": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').innerWidth()),
-				                "y": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').innerHeight())
+				                "x": currKeyframe.state.viewport.region.span.x * (parseInt($('#ITEContainer').width() - 4)),
+				                "y": currKeyframe.state.viewport.region.span.y * (parseInt($('#ITEContainer').height() - 4))
 				            },
 				            "pos": {
-				                "x": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').innerWidth()),
-				                "y": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').innerHeight())
+				                "x": currKeyframe.state.viewport.region.center.x * (parseInt($('#ITEContainer').width() - 2)),
+				                "y": currKeyframe.state.viewport.region.center.y * (parseInt($('#ITEContainer').height() - 2)),
 				            },
 				            "data": {},
-				            "left": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').innerWidth()),
-				            "top": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').innerHeight()),
-				            "width": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').innerWidth()),
-				            "height": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').innerHeight())
+				            "left": currKeyframe.state.viewport.region.center.x * (parseInt($('#ITEContainer').width() - 2)),
+				            "top": currKeyframe.state.viewport.region.center.y * (parseInt($('#ITEContainer').height() - 2)),
+				            "width": currKeyframe.state.viewport.region.span.x * (parseInt($('#ITEContainer').width() - 4)),
+				            "height": currKeyframe.state.viewport.region.span.y * (parseInt($('#ITEContainer').height() - 4))
 				        }
+				        console.log("----------------------util:8425");
+				        console.log(currKeyframe.state.viewport.region.center);
+				        console.log(currKeyframe.state.viewport.region.span);
+				        console.log(parseInt($('#ITEContainer').height() - 2));
+				        console.log(parseInt($('#ITEContainer').width() - 2));
+				        console.log("-------------------------------");
 				    }
 				}
 				else if (providerID == "deepZoom"){
