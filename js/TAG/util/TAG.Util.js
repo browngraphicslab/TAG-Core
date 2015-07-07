@@ -8622,62 +8622,55 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 		*/
 
-		var track = args.track,
+	    var track = args.track,
 			keyframes = [],
-			referenceData,
-			timeOffset = 0,
-			duration = 0,
-			fadeInDurationInk = 0,
-			fadeOutDurationInk = 0;
-
-		referenceData = referenceDataMap[Object.keys(track.experienceStreams)[0]];
-		if (!referenceData) {
-			//this shouldn't ever happen - but why is it?
-			console.log("An error occurred retrieving the reference data for: " + track)
-		} else {
-			timeOffset = referenceData.begin,
-			duration = referenceData.duration;
-		}
+			referenceData;
 
 		if (Object.keys(track.experienceStreams).length > 0) {
-			fadeInDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.inDuration,
-			fadeOutDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.outDuration;
+		    var i = 0; 
+		    for (i = 0; i < Object.keys(track.experienceStreams).length; i++) {
+		        referenceData = referenceDataMap[Object.keys(track.experienceStreams)[i]];
+		        if (!referenceData) {
+		            //this shouldn't ever happen - but why is it?
+		            console.log("An error occurred retrieving the reference data for: " + track)
+		        } 
+
+		        //this is where the four keyframes are actually parsed
+
+		        var keyframePrototype = {
+		            "type": track.data.linkToExperience.embedding.experienceId == "" ? "unattached" : "attached", //TODO - is this what differentiates attached vs. unattached ?????
+		            "dispNum": i, 
+		            "initKeyframe": track.data.linkToExperience.embedding.initKeyframe,
+		            "initproxy": track.data.linkToExperience.embedding.initproxy,
+		        }
+
+		        //#1
+		        keyframes.push($.extend({}, keyframePrototype, {
+		            "time": referenceData.begin,
+		            "opacity": 0,
+		        }));
+
+		        //#2
+		        keyframes.push($.extend({}, keyframePrototype, {
+		            "time": referenceData.begin + track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.inDuration,
+		            "opacity": 1,
+		        }));
+
+		        //#3
+		        keyframes.push($.extend({}, keyframePrototype, {
+		            "time": referenceData.begin + referenceData.duration,
+		            "opacity": 1,
+		        }));
+
+		        //#4
+		        keyframes.push($.extend({}, keyframePrototype, {
+		            "time": referenceData.begin + referenceData.duration + track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.outDuration,
+		            "opacity": 0,
+		        }));
+		    }
 		}
 
-		//this is where the four keyframes are actually parsed
-
-		var keyframePrototype = {
-			"type" : track.data.linkToExperience.embedding.experienceId == "" ? "unattached" : "attached", //TODO - is this what differentiates attached vs. unattached ?????
-			"dispNum" : 1, //TODO - can this be hardcoded (are there ever multiple displays of inks)
-			"initKeyframe" : track.data.linkToExperience.embedding.initKeyframe,
-			"initproxy" : track.data.linkToExperience.embedding.initproxy,
-		}
-
-		//#1
-		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset,
-			"opacity" : 0,
-		}));
-
-		//#2
-		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset + fadeInDurationInk,
-			"opacity" : 1,
-		}));
-
-		//#3
-		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset + duration,
-			"opacity" : 1,
-		}));
-
-		//#4
-		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset + duration + fadeOutDurationInk,
-			"opacity" : 0,
-		}));
-
-		return keyframes
+		return keyframes;
 	}
 
 	/** stolen from tagInk.js
