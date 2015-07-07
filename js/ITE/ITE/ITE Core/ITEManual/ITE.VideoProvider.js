@@ -269,7 +269,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Plays video asset.
 	 * O/P: 	none
 	 */
-	self.play = function(endKeyframe) {
+	self.play = function (endKeyframe) {
+	    console.log("video played");
 		if (self.status === 3) {
 			return;
 		}
@@ -310,7 +311,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Pauses video asset.
 	 * O/P: 	none
 	 */
-	self.pause = function(){
+	self.pause = function () {
+        console.log("video paused")
 		if (self.status === 3) {
 			return;
 		}
@@ -336,7 +338,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Pauses track and changes its state based on new time from timeManager.
 	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
-	self.seek = function() {
+	self.seek = function () {
+        console.log("video sought")
 		if (self.status === 3) {
 			return null;
 		}

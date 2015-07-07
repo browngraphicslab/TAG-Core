@@ -461,7 +461,11 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         playPauseButton.css({ 'opacity' : 1 })
         loopButton.css({ 'opacity' : 1 })
         progressBar.css({ 'opacity' : 1 })
-        fullScreenButton.css({ 'opacity' : 1 })
+        fullScreenButton.css({
+            'opacity': 1,
+            'display': 'none',//because we want to hide the full screen button for now
+            'disabled': true
+        })
         progressIndicator.css({ 'opacity' : 1 })
         $("#backButton").css({ 'opacity' : 1 })
         $("#linkButton").css({ 'opacity' : 1 })

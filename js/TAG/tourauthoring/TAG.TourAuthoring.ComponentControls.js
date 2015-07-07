@@ -1637,10 +1637,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             dropFile.hide();
                             $(assetButton).data('selected', false);
                             inkClick = true;
-                            addComponentLabel.prop("disabled", true).css({
-                                "opacity": "0",
-                                "display": "none"
-                            });
                         }
                         break;
 
@@ -1935,7 +1931,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // heading
         var associatedMediaPickerHeader = document.createElement('div');
         $(associatedMediaPickerHeader).addClass('associatedMediaPickerInfo');
-        $(associatedMediaPickerHeader).text("Select media to import");
+        $(associatedMediaPickerHeader).text("Select media to add");
         $(associatedMediaPickerHeader).css({
             'font-size': '100%',
         });
@@ -2337,7 +2333,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             // create import button
             var associatedMediaPickerImport = document.createElement('button');
             associatedMediaPickerImport.disabled = true;
-            $(associatedMediaPickerImport).text("Import");
+            $(associatedMediaPickerImport).text("Add");
             $(associatedMediaPickerImport).css({
                 position: 'absolute',
                 bottom: '1%',
@@ -5199,7 +5195,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     check = currentInkController.link();
                 if (!check)
                     return;
-
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display": "block"
+                });
                 TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                     tobj.track_type = "Ink";
                     tobj.quantity = 1;
@@ -5273,6 +5272,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 timeline.setModifyingInk(false);
                 timeline.setEditInkOn(false);
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display": "block"
+                });
             });
             newDiv.append(freeInkButton);
             return newDiv;
