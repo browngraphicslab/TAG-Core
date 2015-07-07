@@ -3594,6 +3594,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             prevArrow = $(document.createElement('img'))
                                 .addClass("miniTilesArrow")
                                 .attr('src', tagPath + 'images/icons/Close.svg')
+                                .attr('id','prevMiniArrow')
                                 .on('mousedown', function(){
                                         miniTilesHolder.stop();
                                         miniTilesHolder.animate({
@@ -3604,6 +3605,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             nextArrow = $(document.createElement('img'))
                                 .addClass("miniTilesArrow")
                                 .attr('src', tagPath + 'images/icons/Open.svg')
+                                .attr('id','nextMiniArrow')
                                 .css('left', "94%")
                                 .on('mousedown', function(){
                                     miniTilesHolder.stop();
@@ -3722,6 +3724,11 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                     addAssociationRow(numberAssociatedDoqs); 
                     TAG.Util.removeProgressCircle(circle);
+
+                    // hide previous and next arrows if there is only one artwork thumbnail
+                    if (j == 1) {
+                        $('.miniTilesArrow').hide();
+                    }
 
                     //Also add handlers to switch to first artwork if in assoc media view
                     if (onAssocMediaView) {
