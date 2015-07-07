@@ -3729,8 +3729,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     addAssociationRow(numberAssociatedDoqs); 
                     TAG.Util.removeProgressCircle(circle);
 
-                    // hide previous and next arrows if there is only one artwork thumbnail
-                    if (j == 1) {
+                    // hide previous and next arrows if artworks thumbnail <= 4
+                    if (j <= 4) {
                         $('.miniTilesArrow').hide();
                     }
 
