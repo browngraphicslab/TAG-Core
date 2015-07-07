@@ -2891,6 +2891,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (circ === timelineEventCircles[0]){
             timelineDateLabel.css('visibility', 'visible');
         }
+
+        if (selectedCircle) {
+            selectedCircle.css('visibility', 'visible');
+            selectedCircle.timelineDateLabel.css('visibility', 'visibility');
+        }
+
         if (prevCircle){
             //Find the previous visible timeline label:
             while (timelineEventCircles[timelineEventCircles.indexOf(prevCircle) - 1] && prevCircle.timelineDateLabel.css('visibility')!=='visible'){
@@ -2912,13 +2918,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         }
 
         for (var i = 0; i < timelineEventCircles.length; ++i) {
-                    if (selectedCircle && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(selectedCircle.yearKey)) && (timelineEventCircles[i] != selectedCircle)) {
-                        console.log("timeline event circles has same date as selected, should hide");
+            if (selectedCircle && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(selectedCircle.yearKey)) && (timelineEventCircles[i] != selectedCircle)) {
+                console.log("timeline event circles has same date as selected, should hide");
                         timelineEventCircles[i].css('visibility', 'hidden');
 
                         timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
-                    }        
+            }        
         }
+        
+        
         
         // Always show current circle, and if there are other circles with the same date, hide them
         if (selectedCircle && circ.yearKey === selectedCircle.yearKey){ 
@@ -2946,7 +2954,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             otherCircle;
 
         for (i = 0; i < timelineEventCircles.length ; i++) {
+            //if (!circle) {
+                console.log("no particular circle to zoom on - all circles visible");
+                timelineEventCircles[i].css('visibility', 'visible');
+                timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
+            //}
             
+                
             
 
             otherCircle = timelineEventCircles[i]
@@ -2962,6 +2976,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     console.log("Webkit transition end now")
                     for (k=0; k < timelineEventCircles.length; k++){
                         displayLabels(timelineEventCircles[k], circle);
+                        if (circle) {
+                            timelineEventCircles[k].css('visibility', 'visible');
+                            timelineEventCircles[k].timelineDateLabel.css('visibility', 'visible');
+                        }
                         if (k===timelineEventCircles.length -1){
                            displayLabels(timelineEventCircles[k],null,k); 
                         }
@@ -2978,7 +2996,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     }
                     },1100); // timeout would need to be changed if animation time changed (should use transitionend event in other cases for slow connections)
                 }
-            }   
+            }
+
+            if (!circle) {
+                console.log("no particular circle to zoom on - all circles visible AT END OF ZOOM FUNCTION");
+                timelineEventCircles[i].css('visibility', 'visible');
+                timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
+            }
+
         }
 
         for (j = 0; j < timelineTicks.length; j++) {
@@ -2995,6 +3020,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var target =  ((currOffset + dot.Offset)  - center) * zoomLevel  + center;
             return target;
         }
+
+
     }
 
     /*Helper function to determine if the labels of two event cirlces are overlapping
@@ -3035,6 +3062,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
             zoomTimeline();
+
+            for (var i = 0; i < timelineEventCircles.length; ++i) {
+                console.log("no particular circle to zoom on - all circles visible");
+                timelineEventCircles[i].css('visibility', 'visible');
+                timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
+            }
             catalogDiv.stop(true,false);
             artworkShown = false;
 
@@ -3729,8 +3762,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     addAssociationRow(numberAssociatedDoqs); 
                     TAG.Util.removeProgressCircle(circle);
 
-                    // hide previous and next arrows if there is only one artwork thumbnail
-                    if (j == 1) {
+                    // hide previous and next arrows if artworks thumbnail <= 4
+                    if (j <= 4) {
                         $('.miniTilesArrow').hide();
                     }
 
