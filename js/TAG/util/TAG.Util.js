@@ -7957,19 +7957,19 @@ TAG.Util.RLH = function (input) {
         buttonsRegionDisabled.css({ display: 'block' });
 
         $('#locationHistoryAddLocationButton').disabled = true;
-        $('#locationHistoryAddLocationButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+        $('#locationHistoryAddLocationButton').css({'opacity': '0.4'});
 
         $('#locationHistorySortLocationsByTitleButton').disabled = true;
-        $('#locationHistorySortLocationsByTitleButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+        $('#locationHistorySortLocationsByTitleButton').css({'opacity': '0.4'});
 
         $('#locationHistorySortLocationsByDateButton').disabled = true;
-        $('#locationHistorySortLocationsByDateButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+        $('#locationHistorySortLocationsByDateButton').css({ 'opacity': '0.4' });
 
         $('#locationHistoryImportMapButton').disabled = true;
-        $('#locationHistoryImportMapButton').css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+        $('#locationHistoryImportMapButton').css({ 'opacity': '0.4' });
 
         $('#locationHistoryDeleteButton').disabled = true;
-        $('#locationHistoryDeleteButton').css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+        $('#locationHistoryDeleteButton').css({ 'opacity': '0.4' });
     }
 
     /**
@@ -7982,19 +7982,19 @@ TAG.Util.RLH = function (input) {
         buttonsRegionDisabled.css({ display: 'none' });
 
         $('#locationHistoryAddLocationButton').disabled = false;
-        $('#locationHistoryAddLocationButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+        $('#locationHistoryAddLocationButton').css({ 'opacity': '1' });
 
         $('#locationHistorySortLocationsByTitleButton').disabled = false;
-        $('#locationHistorySortLocationsByTitleButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+        $('#locationHistorySortLocationsByTitleButton').css({ 'opacity': '1' });
 
         $('#locationHistorySortLocationsByDateButton').disabled = false;
-        $('#locationHistorySortLocationsByDateButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+        $('#locationHistorySortLocationsByDateButton').css({ 'opacity': '1' });
 
         $('#locationHistoryImportMapButton').disabled = false;
-        $('#locationHistoryImportMapButton').css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+        $('#locationHistoryImportMapButton').css({ 'opacity': '1' });
 
         $('#locationHistoryDeleteButton').disabled = false;
-        $('#locationHistoryDeleteButton').css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+        $('#locationHistoryDeleteButton').css({ 'opacity': '1' });
     }
 
 

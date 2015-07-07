@@ -1097,14 +1097,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //adjust for nice vertical positioning
             if (!timelineShown && !onAssocMediaView) {
                 root.find("#leftContainer").css('top', -($("#tagRoot").height() * 0.01945) + 'px');
-            } else {
+            } else if (timelineShown && onAssocMediaView){
+                root.find("#leftContainer").css('top', $("#tagRoot").height()*0.02 + 'px');
+            }else {
                 root.find("#leftContainer").css('top', '0px');
             }
 
             if (onAssocMediaView) {
-                $('#keywords').hide();
+                $('#keywords').css('visibility','hidden');
             } else {
-                $('#keywords').show();
+                $('#keywords').css('visibility','visible');
             }
 
             //If on associated media view and there are no associated media with valid dates, hide the timeline
@@ -2909,10 +2911,20 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } 
         }
 
+        for (var i = 0; i < timelineEventCircles.length; ++i) {
+                    if (selectedCircle && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(selectedCircle.yearKey)) && (timelineEventCircles[i] != selectedCircle)) {
+                        console.log("timeline event circles has same date as selected, should hide");
+                        timelineEventCircles[i].css('visibility', 'hidden');
+
+                        timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
+                    }        
+        }
+        
         // Always show current circle, and if there are other circles with the same date, hide them
         if (selectedCircle && circ.yearKey === selectedCircle.yearKey){ 
-            if (circ === selectedCircle){
+            if (circ === selectedCircle) {
                 timelineDateLabel.css('visibility', 'visible');
+                
             } else {
                 timelineDateLabel.css('visibility', 'hidden'); 
             }
@@ -2921,6 +2933,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
     
     function zoomTimeline(circle) {
+        console.log("zoom timeline called");
         var i,
             j,
             k,
@@ -2933,6 +2946,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             otherCircle;
 
         for (i = 0; i < timelineEventCircles.length ; i++) {
+            
+            
+
             otherCircle = timelineEventCircles[i]
             circleTarget = location(otherCircle)
             otherCircle.stop();
@@ -2943,6 +2959,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //When last animation done, loop through and hide/show date labels
             if (i === timelineEventCircles.length-1){
                 otherCircle.on('webkitTransitionEnd transitionend msTransitionEnd oTransitionEnd', function () {
+                    console.log("Webkit transition end now")
                     for (k=0; k < timelineEventCircles.length; k++){
                         displayLabels(timelineEventCircles[k], circle);
                         if (k===timelineEventCircles.length -1){
@@ -4184,8 +4201,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour);
         TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
             setTimeout(function () {
-                var rindata = tour;
-                ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
+                //var rindata = tour;
+                //ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
                 ITEPlayer.startPlayback();
             }, 1000);
         });
@@ -4360,7 +4377,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         return {
             exhibition: currCollection,
             currentTag: currentTag,
-            currentImage: currentArtwork
+            currentImage: currentArtwork,
         };
     }
 

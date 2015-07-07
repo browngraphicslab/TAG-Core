@@ -2092,7 +2092,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         var extraSpace = $(document.createElement("div"));
                         extraSpace.width(middleLabelContainer.width());
                         extraSpace.height($($(".middleLabel")[0]).height() / 2);
-                        console.log($(".middleLabel"));
                         middleLoading.before(extraSpace)
                     });
                 }
@@ -2856,7 +2855,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var deleteButton = createButton('Delete', function () {
                 deleteExhibitionSingle(exhibition);
             }, {
-                'margin-left': '2%',
+                'margin-left': '.8%',
                 'margin-top': '1%',
                 'margin-right': '0',
                 'margin-bottom': '3%',
@@ -2984,14 +2983,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
             var mergeButton = createButton('Add from Collection',
                 mergeCollectionsPopUp, {
-                    'margin-left': '2%',
+                    'margin-left': '.8%',
                     'margin-top': '1%',
                     'margin-right': '0%',
                     'margin-bottom': '3%',
                 });
 
 
-            var artPickerButton = createButton('Add/Remove Artworks', makeManagePopUp/*function () {
+            var artPickerButton = createButton('Add/Remove Artworks and Tours', makeManagePopUp/*function () {
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
                     'exhib', [{
@@ -3635,7 +3634,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var deleteButton = createButton('Delete',
             function () { deleteTour(multiSelected); },
             {
-                'margin-left': '2%',
+                'margin-left': '1%',
                 'margin-top': '1%',
                 'margin-right': '0%',
                 'margin-bottom': '3%',
@@ -3651,7 +3650,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             {
                 'margin-left': '2%',
                 'margin-top': '1%',
-                'margin-right': '2%',
+                'margin-right': '.75%',
                 'margin-bottom': '3%',
                 'float': 'right'
             });
@@ -4797,7 +4796,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             source = embeddedURL || "";
 
         if (!checkValidYear(timelineYear)) {
-            timelineYear = media.Metadata.TimelineYear;
+            if (timelineYear === ""){
+                timelineYear = "";
+            } else {
+                timelineYear = media.Metadata.TimelineYear;
+            }
         }
         //pCL = displayLoadingSettings();
         clearRight();
@@ -6481,7 +6484,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var deleteArt = createButton('Delete', //Delete artwork for web app
                 function () { deleteArtworkSingle(artwork); },
                 {
-                    'margin-left': '2%',
+                    'margin-left': '1%',
                     'margin-top': '1%',
                     'margin-right': '0%',
                     'margin-bottom': '3%',
@@ -7813,7 +7816,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         //don't save an invalid timeline year 
         if (!checkValidYear(timelineYear)) {
-            timelineYear = artwork.Metadata.TimelineYear
+            if (timelineYear === ""){
+                //allow reseting timeline year to not be on timeline
+                timelineYear = "";
+            } else {
+                timelineYear = artwork.Metadata.TimelineYear;
+            }
         }
 
         var infoFields = {};
@@ -8383,7 +8391,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             if (IS_WINDOWS) {
                 deleteBlankButton.unbind('click').click(function () { deleteArtwork(multiSelected) });
                 deleteBlankButton.text('Delete');
-                deleteBlankButton.css('margin-left', '2.25%');
+                deleteBlankButton.css('margin-left', '2%');
                 addButton.css('margin-left', '0%');
             } else {
                 deleteBlankButton.css('display', 'none'); //web app - delete button disabled
@@ -8422,6 +8430,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 if (IS_WINDOWS) {
                     deleteBlankButton.unbind('click').click(function () { deleteTour(multiSelected) });
                     deleteBlankButton.text('Delete');
+                    deleteBlankButton.css('margin-left', '0%');
                 } else {
                     deleteBlankButton.css('display', 'none');
                 }
@@ -8804,7 +8813,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         monthInput.css('margin-right', '0%');
         dayInput = createSelectInput(getDayOptions(monthInput.attr('value'), yearInput, monthInput), work.Metadata.Day);
         dayInput.css('margin-right', '0%');
-        timelineInputText = work.Metadata.TimelineYear || getTimelineInputText(yearInput);
+        timelineInputText = work.Metadata.TimelineYear;// || getTimelineInputText(yearInput);
         if (timelineInputText === "undefined") {
             timelineInputText = getTimelineInputText(yearInput);
         }
