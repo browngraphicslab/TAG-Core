@@ -707,21 +707,27 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             };
             // parse into new format
         } else {
-            var ITEContainer = $('#resizableArea');
+            var ITEContainer = $('#ITEContainer');
             var rinData = {
                 viewport: {
                     region: {
                         center: {
-                            x: (data.bounds ? data.bounds.x : data.left / (ITEContainer.height() * 16.0 / 9.0)),
-                            y: (data.bounds ? data.bounds.y : data.top / ITEContainer.height())
+                            x: (data.bounds ? data.bounds.x : data.left / (ITEContainer.width() - 2)), // -2 is for border!
+                            y: (data.bounds ? data.bounds.y : data.top / (ITEContainer.height() - 2))
                         },
                         span: {
-                            x: (data.bounds ? data.bounds.width : data.width / (ITEContainer.height() * 16.0 / 9.0)),
-                            y: (data.bounds ? data.bounds.height : data.height / ITEContainer.height())
+                            x: (data.bounds ? data.bounds.width : data.width / (ITEContainer.width() - 4)),
+                            y: (data.bounds ? data.bounds.height : data.height / (ITEContainer.height() - 4))
                         }
                     }
                 }
             }
+            console.log("-------------------keyframe:725")
+            console.log(rinData.viewport.region.center)
+            console.log(rinData.viewport.region.span)
+            console.log(ITEContainer.height() - 2);
+            console.log(ITEContainer.width() - 2);
+            console.log("-------------------------------")
             _data = rinData;
         }
         if (_updateKeyFrameCommand) {

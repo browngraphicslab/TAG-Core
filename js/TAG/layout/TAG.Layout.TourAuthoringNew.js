@@ -98,7 +98,8 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 });
                 $($("#bufferingDiv").parent()).css({
                     "opacity": 0.9,
-                    "display": "block"
+                    "display": "block",
+                    "z-index": "10000000"
                 });
                 prevLocationY = ui.position.top;
                 timeManager.stop();
@@ -108,6 +109,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 // the css of bufferingDiv and its parentbeing reset in timeline.onUpdate
                 // if we ever eliminate timeline.onUpdate, reset css here
                 timeline.onUpdate(true);
+                dataHolder.setLastPreviewerHeight(resizableArea.height());
             },
             drag: function (event, ui) {
                 if (timeline.getEditInkOn() === true) {

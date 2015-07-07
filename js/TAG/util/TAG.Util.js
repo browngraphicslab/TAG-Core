@@ -8428,19 +8428,25 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "time": time_offset + currKeyframe.offset,
 				            "opacity": 1,
 				            "size": {
-				                "x": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').width()),
-				                "y": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').height())
+				                "x": currKeyframe.state.viewport.region.span.x * (parseInt($('#ITEContainer').width() - 4)),
+				                "y": currKeyframe.state.viewport.region.span.y * (parseInt($('#ITEContainer').height() - 4))
 				            },
 				            "pos": {
-				                "x": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').width()),
-				                "y": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').height())
+				                "x": currKeyframe.state.viewport.region.center.x * (parseInt($('#ITEContainer').width() - 2)),
+				                "y": currKeyframe.state.viewport.region.center.y * (parseInt($('#ITEContainer').height() - 2)),
 				            },
 				            "data": {},
-				            "left": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').width()),
-				            "top": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').height()),
-				            "width": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').width()),
-				            "height": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').height())
+				            "left": currKeyframe.state.viewport.region.center.x * (parseInt($('#ITEContainer').width() - 2)),
+				            "top": currKeyframe.state.viewport.region.center.y * (parseInt($('#ITEContainer').height() - 2)),
+				            "width": currKeyframe.state.viewport.region.span.x * (parseInt($('#ITEContainer').width() - 4)),
+				            "height": currKeyframe.state.viewport.region.span.y * (parseInt($('#ITEContainer').height() - 4))
 				        }
+				        console.log("----------------------util:8425");
+				        console.log(currKeyframe.state.viewport.region.center);
+				        console.log(currKeyframe.state.viewport.region.span);
+				        console.log(parseInt($('#ITEContainer').height() - 2));
+				        console.log(parseInt($('#ITEContainer').width() - 2));
+				        console.log("-------------------------------");
 				    }
 				}
 				else if (providerID == "deepZoom"){
@@ -8484,11 +8490,11 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"opacity": 1,
                         "size": {
                             "x": $('#ITEHolder').width(),//currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
+                            "y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').innerHeight()
                         },
                         "pos": {
                             "x": 0,//currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height()
+                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').innerHeight()
                         },
 						"data": {},
 						"volume": currKeyframe.state.sound.volume,
@@ -8634,13 +8640,13 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 		//#1
 		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset - fadeInDurationInk,
+			"time" : timeOffset,
 			"opacity" : 0,
 		}));
 
 		//#2
 		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset,
+			"time" : timeOffset + fadeInDurationInk,
 			"opacity" : 1,
 		}));
 

@@ -1097,14 +1097,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //adjust for nice vertical positioning
             if (!timelineShown && !onAssocMediaView) {
                 root.find("#leftContainer").css('top', -($("#tagRoot").height() * 0.01945) + 'px');
-            } else {
+            } else if (timelineShown && onAssocMediaView){
+                root.find("#leftContainer").css('top', $("#tagRoot").height()*0.02 + 'px');
+            }else {
                 root.find("#leftContainer").css('top', '0px');
             }
 
             if (onAssocMediaView) {
-                $('#keywords').hide();
+                $('#keywords').css('visibility','hidden');
             } else {
-                $('#keywords').show();
+                $('#keywords').css('visibility','visible');
             }
 
             //If on associated media view and there are no associated media with valid dates, hide the timeline
@@ -4375,7 +4377,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         return {
             exhibition: currCollection,
             currentTag: currentTag,
-            currentImage: currentArtwork
+            currentImage: currentArtwork,
         };
     }
 
