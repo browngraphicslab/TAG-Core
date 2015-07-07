@@ -10848,6 +10848,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         //return addMenuLabel;
     }
 
+    function makeCollectionsList() {
+    }
+
     /** helper function to check if id is already in multiSelected list
     * @method multiSelectedUnique
     * @param {String} id - what you are trying to append to list

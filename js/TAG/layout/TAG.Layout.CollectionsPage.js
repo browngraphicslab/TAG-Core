@@ -3628,9 +3628,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         thumb;
                     numberAssociatedDoqs = doqs.length;
                     var j = 0;
+                    var defaultIndex = 0; //index of artwork you are taken to when you click "Select an Associated Artwork" in assoc media tab
                     //Loop through media doqs and create tiles from them
                     for (i = 0; i < doqs.length; i++) {
-                        if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier)==-1) {
+                        if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier) == -1) {
+                            if (i === defaultIndex) {
+                                defaultIndex++;
+                            }
                             continue;
                         }
 
@@ -3726,7 +3730,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     //Also add handlers to switch to first artwork if in assoc media view
                     if (onAssocMediaView) {
                         exploreTab.on('mousedown', function(){
-                            (switchPage(doqs[0], artwork, getContainerLeft(artwork, false)))();
+                            (switchPage(doqs[defaultIndex], artwork, getContainerLeft(artwork, false)))();
 
                             //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
                             TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
