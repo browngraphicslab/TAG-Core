@@ -339,7 +339,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         LADS.Worktop.Database.getConvertedVideoCheck(
             function (output) {
                 if (output === "True") {
-                    console.log("converted: ");
                     clearInterval(checkConTimerId);
                     var source = doq.Metadata.Source;
                     var ext = source.substr(source.lastIndexOf('.'));
@@ -831,12 +830,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id           the id of the middle label to start on
      */
     function importFiles() {
-        console.log("Import button was clicked");
+    //    console.log("Import button was clicked");
     }
 
     function switchView(view, id) {
         resetLabels('.navContainer');
-        console.log("switch view called");
         switch (view) {
             case "Exhibitions":
                 selectLabel(nav[NAV_TEXT.exhib.text]);
@@ -1156,7 +1154,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     keywordSetsInputs: keywordSetsInputs // TODO-KEYWORDS
                 }, function () {
                     $('#uploadingOverlay').remove();
-                    console.log("should remove overlay now!!");
 
                     var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
 
@@ -1216,9 +1213,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         textHolder.css({ 'overflow-y': 'auto' });
                         textHolder.parent().append(t);
                         var func = t.height() > textHolder.height();
-                        console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
                         while (text.length > 0 && (t.height() > textHolder.height())) {
-                            console.log("in while loop")
                             text = text.substr(0, text.length - 1);
                             t.html(text + "...");
                         }
@@ -1234,7 +1229,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }));
 
         if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
-            console.log("select background image button disabled");
             bgImgInput.prop('disabled', true);
             bgImgInput.css({ 'opacity': '.4' });
         }
@@ -1751,7 +1745,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //hideLoading();
             //hideLoadingSettings(pCL);
             if (callback) {
-                console.log("callback!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 callback()
             }
         }, authError, conflict({ Name: 'Main' }, 'Update', loadGeneralView), error(loadGeneralView));
@@ -2012,7 +2005,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 currentList = result;
                 initSearch();
                 list = result;
-                console.log("loading colelctions");
                 displayLabels();
             });
         }
@@ -2088,7 +2080,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
                 if (i == list.length - 1 && i > 1) {
                     middleQueue.add(function () {
-                        console.log("adding extra space");
                         var extraSpace = $(document.createElement("div"));
                         extraSpace.width(middleLabelContainer.width());
                         extraSpace.height($($(".middleLabel")[0]).height() / 2);
@@ -2233,7 +2224,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {doq} exhibition      the current collection to be edited
      */
     function manageCollection(exhibition) {
-        console.log("called manage collections");
         if (!exhibition) {
             return;
         }
@@ -2611,7 +2601,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false, 2000);
             bgInput = createButton('Import', function () {
                 //changesHaveBeenMade = true;    
-                console.log("collection bg");
+                //console.log("collection bg");
 
                 //experimentation for background issue
                 /**
@@ -2715,9 +2705,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $(textHolder).css({ 'overflow-y': 'auto' });
                             textHolder.parent().append(t);
                             var func = t.height() > textHolder.height();
-                            console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
                             while (text.length > 0 && (t.height() > textHolder.height())) {
-                                console.log("in while loop")
                                 text = text.substr(0, text.length - 1);
                                 t.html(text + "...");
                             }
@@ -2733,7 +2721,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             });
 
             if ($('.progressBarUploads').length > 0) { //upload happening - disable import button
-                console.log("select background image button disabled from collection");
                 bgInput.prop('disabled', true);
                 bgInput.css({ 'opacity': '.4' });
             }
@@ -2926,7 +2913,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
 
             function makeManagePopUp() {
-                console.log("Made Manage Pop Up");
                 //currCollection= exhibition.Identifier;
                 //root.append(uploadingOverlay);
 
@@ -3145,7 +3131,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @callback function           the callback function to call afterwards
      */
     function saveExhibition(exhibition, inputs, callback) {
-        console.log("save exhibiton called with callback function: " + callback);
         //pCL = displayLoadingSettings();
         //prepareNextView(false, null, null, "Saving...");
         clearRight();
@@ -3186,7 +3171,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         if (bg) {
-            console.log("has bg");
             options.Background = bg;
         }
         TAG.Worktop.Database.changeExhibition(exhibition.Identifier, options, function () {
@@ -3243,8 +3227,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 // actually delete the exhibition
                 chunkDelete(exhibitions, function () {
-
-                    console.log("collection deletion done");
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.exhib.text]) {
                         return;
                     }
@@ -3429,11 +3411,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
                 if (i == list.length - 1 && i > 1) {
                     middleQueue.add(function () {
-                        console.log("adding extra space");
                         var extraSpace = $(document.createElement("div"));
                         extraSpace.width(middleLabelContainer.width());
                         extraSpace.height($($(".middleLabel")[0]).height() / 2);
-                        console.log($(".middleLabel"));
                         middleLoading.before(extraSpace)
                     });
                 }
@@ -3823,7 +3803,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 // actually delete the tour
                 chunkDelete(tours, function () {
-                    console.log("done deleting tours");
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
                         return;
                     }
@@ -3938,8 +3917,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function loadAssocMediaView(id, matches, justMiddle) {
 
-        console.log(sortByAssoc);
-
         //$(document).off();
         inGeneralView = false;
         inCollectionsView = false;
@@ -4030,13 +4007,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         function sortLabels() {
             if (sortByAssoc == "Title") {
-                console.log("sort by title");
                 sortAZ(list);
                 displayLabels();
             }
             else if (sortByAssoc == "Recently Added") {
                 //create sort list for added before and other
-                console.log("sort by recently added")
                 //sortAZ(list);
                 var func = function (e) {
                     return (Date.now() - (new Date(String(e.Metadata.__Created)).getTime()));
@@ -4172,11 +4147,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     selectNext = true;
                                 }
                                 middleLoading.before(label = createMiddleLabel(val.Name, imagesrc, function () {
-                                    //if (changesHaveBeenMade) {
-                                    //    //saveArray.push(previousIdentifier);
-                                    //    //currentMetadataHandler && saveQueue.add(currentMetadataHandler());
-                                    //    //changesHaveBeenMade = false;
-                                    //}
                                     loadAssocMedia(val);
                                     previousIdentifier = val.Identifier;
                                     currentIndex = i;
@@ -4185,18 +4155,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         });
                     } else if (val) {
                         middleQueue.add(function () {
-                            console.log(val);
                             middleLoading.before(label = createSortLabel(val));
                         });
                     }
                     selectNext = true;
                     if (i == list.length - 1 && i > 1) {
                         middleQueue.add(function () {
-                            console.log("adding extra space");
                             var extraSpace = $(document.createElement("div"));
                             extraSpace.width(middleLabelContainer.width());
                             extraSpace.height($($(".middleLabel")[0]).height() / 2);
-                            console.log($(".middleLabel"));
                             middleLoading.before(extraSpace)
                         });
                     }
@@ -5164,7 +5131,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         importMapButton.prop('disabled', false);
                         importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
                     }
-                    console.log("confirmation that assoc media uploaded");
 
 
                     var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
@@ -5224,9 +5190,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         $(textHolder).css({ 'overflow-y': 'auto' });
                         textHolder.parent().append(t);
                         var func = t.height() > textHolder.height();
-                        console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
                         while (text.length > 0 && (t.height() > textHolder.height())) {
-                            console.log("in while loop")
                             text = text.substr(0, text.length - 1);
                             t.html(text + "...");
                         }
@@ -8301,7 +8265,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                                     multiSelected.push({ Identifier: id, Name: text });
                                                 }
                                             }
-                                            console.log(multiSelected)
                                         } else {
                                             removeIdFromMulti(id);
                                         }
@@ -8318,7 +8281,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                 multiSelected.push({ Identifier: id, Name: text });
                             }
                         }
-                        console.log(multiSelected)
                         toBeUnselected = checkbox;
                     }
                     checkboxContainer.append(checkbox);
@@ -8623,7 +8585,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     multiSelected.push({ Identifier: labelId, Name: text });
                 }
             }
-            console.log(multiSelected)
             toBeUnselected = checkBox;
         }
         if (expand) {
@@ -10055,8 +10016,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param filter    
      */
     function uploadFile(type, callback, multiple, filter, useOverlay) {
-        console.log("file upload!");
-        console.log(IS_WINDOWS);
         if (!IS_WINDOWS) {
             //webappfileupload:   
             var names = [], locals = [], contentTypes = [], fileArray = [], i, urlArray = [];
@@ -10211,7 +10170,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         names = [names];
                     }
                     for (i = 0; i < urls.length; i++) {
-                        console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
+                        //console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
                     }
                     callback(urls, names, contentTypes, fileArray);
                 },

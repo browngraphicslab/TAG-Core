@@ -2288,13 +2288,6 @@ TAG.TourAuthoring.Display = function (spec, my) {
                 }
             }
 
-            console.log("-------------------display:2280")
-            console.log(rinData.viewport.region.center)
-            console.log(rinData.viewport.region.span)
-            console.log(parseInt($('#ITEContainer').height() - 2));
-            console.log(parseInt($('#ITEContainer').width() - 2));
-            console.log("-------------------------------")
-
             var keyspec = {
                     loc: {
                         x: Math.twoDecPlaces(my.timeManager.pxToTime(x)),
@@ -2694,12 +2687,6 @@ TAG.TourAuthoring.Display = function (spec, my) {
                         },
                     },
                 };
-                console.log("-------------------display:2672")
-                console.log(rin_first.viewport.region.center)
-                console.log(rin_first.viewport.region.span)
-                console.log(parseInt(dataHolder.getLastPreviewerHeight()) - 2);
-                console.log(parseInt(dataHolder.getLastPreviewerHeight()) * 16 / 9 - 2);
-                console.log("-------------------------------")
                 first = rin_first;
             }
             //first.holdDuration = 0;

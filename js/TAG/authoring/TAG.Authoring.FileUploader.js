@@ -586,7 +586,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
      
     function addOverlay(elmt) {
         if (useOverlay == true) { //do not append other progress things
-            console.log("overlay should be visible here")
             root.append(uploadingOverlay);
             uploadingOverlay.show()
             uploadingOverlay.css({"display": "block"});    
@@ -669,7 +668,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
             } catch (err) {
                 removeOverlay();
-                console.log("is this where the error is?");
                 console.log(err.message);
             }
         };
@@ -719,12 +717,10 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     }
 
     function finishedUpload() {
-        console.log("FINISHED UPLOAD CALLED");
         filesFinished += 1;
         if (filesFinished === numFiles) {
             //removeOverlay();
             finishedCallback(dataReaderLoads);
-            console.log("finished callback called!");
             //sets individual progress bars to 100
             console.log("length = " + $(uploadGuids).length);
             for (var i = 0; i < uploadGuids.length-1; i++) {
@@ -791,7 +787,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             errorAlert;
         if (err.message.split(" ")[0] === "Unauthorized") {
             removeOverlay();
-            console.log("unauthorized");
             TAG.Auth.authenticate(
                 function () {
                     if (uploadFilesObject) {
@@ -807,7 +802,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             );
         } else {
             removeOverlay();
-            console.log("internal server error: possibly not enough RAM on the server VM to handle this upload");
             errorAlert = TAG.Util.UI.popUpMessage(null, "A server error occurred. This image may need to be uploaded into TAG directly through the server. Contact server administrator for more information.");
             $('body').append(errorAlert);
             $(errorAlert).show();
@@ -847,7 +841,6 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
                 percentComplete += 1 / numFiles;
             }
         }
-        console.log("should increment main progress bar now");
         
         
         
@@ -871,10 +864,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
     //updates the progress information in the upload queue 
     //right now - only shows 100% or 0% for each individual file
     function updateProgressUI(name, percent) {
-        console.log("called updateProgressUI");
         percent = 1;
         if (".uploadProgressLabel" + name) {
-            console.log("the label exists!!!!!");
             $(".uploadProgressLabel" + name).text((percent * 90).toString().substring(0, 4) + "%")
             $(".uploadProgressInner" + name).css({'width':percent*90+'%'});
         }

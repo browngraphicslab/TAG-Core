@@ -149,21 +149,16 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	function poll() {
 	        if (orchestrator.getStatus() != 2 && orchestrator.currentTime<self.lastKeyframe.time) {
 	            if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
-	                console.log("video controls played");
 	                _videoControls.play();
 	                if (_videoControls.currentTime >= (orchestrator.getElapsedTime() - self.firstKeyframe.time)) {
-	                    console.log("orchestrator played");
 	                    orchestrator.play();
 	                }
 	            }
 	            else if (_videoControls.readyState < 3) {
-
-	                console.log("readystate was below 3, pausing orchestrator and changing status to 4")
 	                orchestrator.pause();
 	                orchestrator.status = 4;
 	            }
 	            else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
-	                console.log('pausing orchestrator and changing status to 4')
 	                orchestrator.pause();
 	                orchestrator.status = 4;
 	                //_videoControls.pause();
@@ -312,14 +307,12 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.pause = function () {
-        console.log("video paused")
 		if (self.status === 3) {
 			return;
 		}
 		self.lastPauseTime = _videoControls.currentTime;
 		self.lastActualTime = Date.now()/1000;
 		self.status = 2;
-		console.log("Video paused");
 		self.stopDelayStart();
 
 		self.getState();
@@ -339,7 +332,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
 	self.seek = function () {
-        console.log("video sought")
 		if (self.status === 3) {
 			return null;
 		}
@@ -460,8 +452,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	        "width":		state.size.width,
 	        "opacity":		state.opacity
 	    });
-	    console.log("WIDTH: " + _UIControl.width())
-	    console.log("width of iteholder " + $('#tagRoot').width())
 	    _videoControls.volume = state.volume * self.player.currentVolumeLevel;
 	    if(orchestrator.getStatus()!=4){
 	        state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0

@@ -292,7 +292,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			width 			: _UIControl.width(),
 			height 			: _UIControl.height()
 		};
-		console.log(self.savedState);
 		return self.savedState;
 	};
 

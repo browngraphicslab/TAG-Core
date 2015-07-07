@@ -3015,10 +3015,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 //searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
                 searchbar.val("");
                 // add the artwork track to the timeline
-                console.log("                          ");
-                console.log("                          ");
-                console.log("                          ");
-                console.log("                          ");
                 for (i = 0; i < selectedArtworks.length; i++) {
                     selectedArt = selectedArtworks[i];
                     var track;

@@ -26,10 +26,6 @@ TAG.TourAuthoring.TrackType = {
  */
 TAG.TourAuthoring.Track = function (spec, my) {
     "use strict";
-    console.log("                            ")
-    console.log("making new tour authoring Track with spec: ")
-    console.log(spec)
-    console.log("                            ")
     var that = {},
         media = spec.media,
         storageContainer,

@@ -722,12 +722,6 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                     }
                 }
             }
-            console.log("-------------------keyframe:725")
-            console.log(rinData.viewport.region.center)
-            console.log(rinData.viewport.region.span)
-            console.log(ITEContainer.height() - 2);
-            console.log(ITEContainer.width() - 2);
-            console.log("-------------------------------")
             _data = rinData;
         }
         if (_updateKeyFrameCommand) {
