@@ -702,11 +702,16 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             newW 	= Math.min(maxW, Math.max(minW, newW));
         };
 
+        //adjust pivot when in previewer 
+        if ($("#resizableArea").width() != 0) {
+            pivot.x = pivot.x - ($("#ITEContainer").offset().left - $("#viewer").offset().left);
+        }
+
         // Update scale, new X and new Y according to newly constrained values.
         scale 	= newW / w;
         newH	= h * scale;
-        newX 	= l*scale + pivot.x*(1-scale);
-       	newY 	= t*scale + pivot.y*(1-scale); 
+        newX 	= l*scale + (pivot.x)*(1-scale);
+       	newY 	= t*scale + (pivot.y)*(1-scale); 
 
        	if (isFromTouch || !IS_WINDOWS){
        	    newX = l * scale + (pivot.x + l)* (1 - scale);

@@ -2660,22 +2660,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             newButton = root.find('#setViewNewButton');
                             newButton.prop('disabled', false);
                             newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
-                            if (inCollectionsView == true) {
+                            if (bgInput && inCollectionsView == true) {
                                 bgInput.prop('disabled', false);
                                 bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
-                            if (inGeneralView == true) {
+                            if (bgImgInput && inGeneralView == true) {
                                 bgImgInput.prop('disabled', false);
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
-                            if (inAssociatedView) {
+                            if (menuLabel && inAssociatedView) {
                                 $(menuLabel).prop('disabled', false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
-
-                            bgImgInput.prop('disabled', false);
-                            bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                            if (bgImgInput) {
+                                bgImgInput.prop('disabled', false);
+                                bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
+                            }
+                            
 
                             //hide confirmation box
                             $(importConfirmedBox).hide();
@@ -5147,16 +5149,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         //enable import buttons
                         newButton.prop('disabled', false);
                         newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
-                        if (inCollectionsView == true) {
+                        if (bgInput && inCollectionsView == true) {
                             bgInput.prop('disabled', false);
                             bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                         }
-                        if (inGeneralView == true) {
+                        if (bgImgInput && inGeneralView == true) {
                             bgImgInput.prop('disabled', false);
                             bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                         }
-                        if (inAssociatedView) {
+                        if (menuLabel && inAssociatedView) {
                             $(menuLabel).prop('disabled', false);
                             menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             //hide confirmation box
@@ -6788,17 +6790,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //enable import buttons
                             newButton.prop('disabled', false);
                             newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
-                            if (inCollectionsView == true) {
+                            if (bgInput && inCollectionsView == true ) {
                                 bgInput.prop('disabled', false);
                                 bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
-                            if (inGeneralView == true) {
+                            if (bgImgInput && inGeneralView == true) {
                                 bgImgInput.prop('disabled', false);
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
-                            if (inAssociatedView) {
-                                $(menuLabel).prop('disabled', false);
+                            if ($(menuLabel) && inAssociatedView) {
+                                menuLabel.prop('disabled', false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
 
@@ -6892,17 +6894,17 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             //enable import buttons
                             newButton.prop('disabled', false);
                             newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
-                            if (inCollectionsView == true) {
+                            if (bgInput && inCollectionsView == true) {
                                 bgInput.prop('disabled', false);
                                 bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
-                            if (inGeneralView == true) {
+                            if (bgImgInput && inGeneralView == true) {
                                 bgImgInput.prop('disabled', false);
                                 bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                             }
-                            if (inAssociatedView) {
-                                $(menuLabel).prop('disabled', false);
+                            if ($(menuLabel) && inAssociatedView) {
+                                menuLabel.prop('disabled', false);
                                 menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                             }
 
@@ -10070,16 +10072,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         newButton.prop('disabled', true);
                         newButton.css({ 'opacity': '.4' });
                     }
-                    if (inCollectionsView == true) {
+                    if (bgInput && inCollectionsView == true) {
                         bgInput.prop('disabled', true);
                         bgInput.css({ 'opacity': '.4' });
                     }
-                    if (inGeneralView == true) {
+                    if (bgImgInput && inGeneralView == true) {
                         bgImgInput.prop('disabled', true);
                         bgImgInput.css({ 'opacity': '.4' });
 
                     }
-                    if (inAssociatedView === true) {
+                    if (menuLabel && inAssociatedView === true) {
                         menuLabel.prop('disabled', true);;
                         menuLabel.css({ 'opacity': '.4' })
                     }
@@ -10094,16 +10096,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     newButton.prop('disabled', false);
                     newButton.css({ 'opacity': '1', 'background-color': 'transparent' });
 
-                    if (inCollectionsView == true) {
+                    if (bgInput && inCollectionsView == true) {
                         bgInput.prop('disabled', false);
                         bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                     }
-                    if (inGeneralView == true) {
+                    if (bgImgInput && inGeneralView == true) {
                         bgImgInput.prop('disabled', false);
                         bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                     }
-                    if (inAssociatedView === true) {
+                    if (menuLabel && inAssociatedView === true) {
                         menuLabel.prop('disabled', false);
                         menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                     }
@@ -10191,16 +10193,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         newButton.prop('disabled', true);
                         newButton.css({ 'opacity': '.4' });
                     }
-                    if (inCollectionsView == true) {
+                    if (bgInput && inCollectionsView == true) {
                         bgInput.prop('disabled', true);
                         bgInput.css({ 'opacity': '.4' });
                     }
-                    if (inGeneralView == true) {
+                    if (bgImgInput && inGeneralView == true) {
                         bgImgInput.prop('disabled', true);
                         bgImgInput.css({ 'opacity': '.4' });
 
                     }
-                    if (inAssociatedView == true) {
+                    if (menuLabel && inAssociatedView == true) {
                         menuLabel.prop('disabled', true);
                         menuLabel.css({ 'opacity': '.4' });
                     }
@@ -10217,16 +10219,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
 
 
-                    if (inCollectionsView == true) {
+                    if (bgInput && inCollectionsView == true) {
                         bgInput.prop('disabled', false);
                         bgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
                     }
-                    if (inGeneralView == true) {
+                    if (bgImgInput && inGeneralView == true) {
                         bgImgInput.prop('disabled', false);
                         bgImgInput.css({ 'opacity': '1', 'background-color': 'transparent' });
 
                     }
-                    if (inAssociatedView) {
+                    if (menuLabel && inAssociatedView) {
                         menuLabel.prop('disabled', false);
                         menuLabel.css({ 'opacity': '1', 'background-color': 'transparent' });
                     }
