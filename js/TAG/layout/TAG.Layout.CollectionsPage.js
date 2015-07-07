@@ -3594,6 +3594,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             prevArrow = $(document.createElement('img'))
                                 .addClass("miniTilesArrow")
                                 .attr('src', tagPath + 'images/icons/Close.svg')
+                                .attr('id','prevMiniArrow')
                                 .on('mousedown', function(){
                                         miniTilesHolder.stop();
                                         miniTilesHolder.animate({
@@ -3604,6 +3605,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             nextArrow = $(document.createElement('img'))
                                 .addClass("miniTilesArrow")
                                 .attr('src', tagPath + 'images/icons/Open.svg')
+                                .attr('id','nextMiniArrow')
                                 .css('left', "94%")
                                 .on('mousedown', function(){
                                     miniTilesHolder.stop();
@@ -3628,9 +3630,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         thumb;
                     numberAssociatedDoqs = doqs.length;
                     var j = 0;
+                    var defaultIndex = 0; //index of artwork you are taken to when you click "Select an Associated Artwork" in assoc media tab
                     //Loop through media doqs and create tiles from them
                     for (i = 0; i < doqs.length; i++) {
-                        if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier)==-1) {
+                        if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier) == -1) {
+                            if (i === defaultIndex) {
+                                defaultIndex++;
+                            }
                             continue;
                         }
 
@@ -3723,10 +3729,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     addAssociationRow(numberAssociatedDoqs); 
                     TAG.Util.removeProgressCircle(circle);
 
+                    // hide previous and next arrows if artworks thumbnail <= 4
+                    if (j <= 4) {
+                        $('.miniTilesArrow').hide();
+                    }
+
                     //Also add handlers to switch to first artwork if in assoc media view
                     if (onAssocMediaView) {
                         exploreTab.on('mousedown', function(){
-                            (switchPage(doqs[0], artwork, getContainerLeft(artwork, false)))();
+                            (switchPage(doqs[defaultIndex], artwork, getContainerLeft(artwork, false)))();
 
                             //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
                             TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {

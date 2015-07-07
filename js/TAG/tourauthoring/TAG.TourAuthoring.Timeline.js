@@ -335,6 +335,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             'height': '75%',
             'float': 'left',
             'z-index': '5',
+            'display': 'none' // edit by Nate 7/6/15, this ain't workin, so we axed it.
         });
 
         var multiSelButton = $(document.createElement('button')).css('border-radius', '3.5px');
