@@ -944,7 +944,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             var currentcolor = p1.get_attr(datastring, "color", 's'); //update the current color
             colorEditTextLabel1.text(currentcolor);
             
-            //myPicker = new jscolor.color(itemEditText, {});
+            myPicker = new jscolor.color(itemEditText, {});
             myEditTextPicker.fromString(currentcolor);
             currentInkController = p1;
             firstUpdate();
@@ -964,8 +964,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'top': '0px',
             'left': '0px',
             'position': 'relative',
-            'float': 'left',
-            'z-index': 100000
+            'float': 'left'
         }); // Had to do tops and heights as CSS to prevent overlap on small screens
 
         /** Drop Down icon
@@ -1641,6 +1640,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "Write":
+                        console.log("write ink clicked")
                         $('.undoButton').css({ 'opacity': '0.4' });
                         $('.redoButton').css({ 'opacity': '0.4' });
                         self.css({
@@ -1681,9 +1681,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             "opacity": "0",
                             "display" : "none"
                         });
+                        $("#inkTextControls").css({
+                            "display": "block",
+                            'position': 'static'
+                        });
                         break;
 
                     case "Draw":
+                        console.log("draw ink clicked")
                         $('.undoButton').css({ 'opacity': '0.4' });
                         $('.redoButton').css({ 'opacity': '0.4' });
                         self.css({ 'background-color': 'white', 'color': 'black' });
@@ -1718,9 +1723,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             "opacity": "0",
                             "display": "none"
                         });
+                        $("#inkDrawControls").css({
+                            "display": "block",
+                            'position' : 'static'
+                        });
                         break;
 
                     case "Highlight":
+                        console.log("highlight ink clicked")
                         $('.undoButton').css({ 'opacity': '0.4' });
                         $('.redoButton').css({ 'opacity': '0.4' });
                         self.css({ 'background-color': 'white', 'color': 'black' });
@@ -1744,6 +1754,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         p1.set_mode(TAG.TourAuthoring.InkMode.shapes);
                         p1.set_editable(); //in this case, we're just making sure that the artwork can't be manipulated
                         currentInkController = p1;
+                        $("#inkTransControls").css({
+                            "display": "block",
+                            'position': 'static'
+                        });
                         timeline.setEditInkOn(true);
                         break;
                 }
@@ -1775,6 +1789,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          are deleted; disables ink functionality by graying out "Ink" button
          */
         function disableInk() {
+            console.log("ink disabled");
             allowInk = false;
             inkButton.css({ 'background-color': 'transparent', 'color': 'gray' });
             dropInk.hide();
@@ -3277,7 +3292,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'height': '425%',
             'width': '100%',
             top: '130%',
-            position: 'static',
+            position: 'aboslute',
             'z-index': 0,
             'overflow-x': 'none',
             'overflow-y': 'auto',
@@ -3684,7 +3699,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var textEditDocfrag = document.createDocumentFragment();
         inkEditText = $(document.createElement('div'));
         inkEditText.attr("id", "inkEditText");
-        inkEditText.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
+        inkEditText.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         //functionsPanel.append(inkEditText);
         textEditDocfrag.appendChild(inkEditText[0]);
         inkEditText.css({ "display": "none" });
@@ -4230,6 +4245,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // div to contain color picker
         var colorDiv = $(document.createElement('div'));
         colorDiv.css('display', 'none');
+        colorDiv.css("position", "static");
         inkDrawControls.append(colorDiv);
         drawArray.push(colorDiv);
 
@@ -4249,7 +4265,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var item = document.createElement('input');
         $(item).attr('id', 'brushColorToggle');
         $(item).attr('readonly', 'readonly');
-        $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%'});
+        $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%', 'position':'static'});
         item.onfocus = function () {
             currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
         };
@@ -4257,6 +4273,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             event.stopPropagation();
         });
         if (item.addEventListener) {
+            console.log("item.addEventListener called in component controls")
             item.addEventListener('DOMNodeInserted', function () {
                 //initialize colorpicker object on current element
                 myPicker = new jscolor.color(item, {});
@@ -4392,7 +4409,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var editDrawDocfrag = document.createDocumentFragment();
         inkEditDraw = $(document.createElement('div'));
         inkEditDraw.attr("id", "inkEditDraw");
-        inkEditDraw.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%', });
+        inkEditDraw.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%', });
         editDrawDocfrag.appendChild(inkEditDraw[0]);
         inkEditDraw.css('display', 'none');
 
@@ -4888,7 +4905,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var editTransparencyDocfrag = document.createDocumentFragment();
         inkEditTransparency = $(document.createElement('div'));
         inkEditTransparency.attr("id", "inkEditTransparency");
-        inkEditTransparency.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
+        inkEditTransparency.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         editTransparencyDocfrag.appendChild(inkEditTransparency[0]);
         inkEditTransparency.css({ "display": "none" });
 
@@ -5285,6 +5302,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          * Sets display:none for each of the ink control panels
          */
         function hideInkControls() {
+            console.log("hide ink controls called")
             inkTransparencyControls.css({ 'display': 'none' });
             inkTextControls.css({ 'display': 'none' });
             inkDrawControls.css({ 'display': 'none' });

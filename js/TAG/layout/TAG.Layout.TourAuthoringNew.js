@@ -26,7 +26,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         $inkTextControls,
         $inkDrawControls,
         $inkTransControls,
-        $blocker,
         $inkEditText,
         $inkEditDraw,
         $inkEditTransparency,
@@ -55,18 +54,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         resizableArea.attr("id", "resizableArea");
 
         dataHolder.setLastPreviewerHeight(originalHeightSize);
-
-        $blocker = $(document.createElement('div'));
-        $blocker.css({
-            'background-color': "rgb(219, 218, 199)",
-            "height": window.innerHeight - originalHeightSize - 0.08 * window.innerHeight + "px",
-            "width": "100%",
-            "bottom": "0px",
-            "left": "0px",
-            "z-index": "99999",
-            "position": "absolute"
-        })
-        $blocker.attr("id", "blocker");
 
         if (!$mainScrollHider) {
             $mainScrollHider = $('.mainScrollHider');
@@ -151,14 +138,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
 
                 $mainScrollHider.css({
                     'height': $mainScrollHider.height() - distance + 'px',
-                    'z-index': '1000000'
-                });
-
-                if (!$blocker) {
-                    $blocker = $('#blocker');
-                }
-                $blocker.css({
-                    'height': $blocker.height() - distance + 'px',
                 });
 
                 if (!$trackBody) {
@@ -223,7 +202,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         resizeButtonArea.append(resizeButton);
 
         root.append(resizeButtonDocfrag);
-        root.append($blocker);
        
     })();
  
