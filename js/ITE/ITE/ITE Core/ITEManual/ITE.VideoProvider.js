@@ -164,7 +164,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
         if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() < self.lastKeyframe.time) {
             //console.log("entered if statement")
 	        if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4 && Math.abs(orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < .150) {
-                c//onsole.log("video played")
+                //console.log("video played")
 	            _videoControls.play();
 	            if (_videoControls.currentTime >= (orchestrator.getElapsedTime() - self.firstKeyframe.time)) {
                     //console.log("orch played")
