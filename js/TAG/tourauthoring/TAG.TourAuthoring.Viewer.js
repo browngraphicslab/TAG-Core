@@ -110,6 +110,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     function forceITEPlayerReload() {
         $('#ITEHolder').remove();
         createITE(true);
+        timeManager.setPlayer(player);
     }
     that.forceITEPlayerReload = forceITEPlayerReload;
 

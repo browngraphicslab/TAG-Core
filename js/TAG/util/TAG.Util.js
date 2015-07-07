@@ -8640,13 +8640,13 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 		//#1
 		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset - fadeInDurationInk,
+			"time" : timeOffset,
 			"opacity" : 0,
 		}));
 
 		//#2
 		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset,
+			"time" : timeOffset + fadeInDurationInk,
 			"opacity" : 1,
 		}));
 
