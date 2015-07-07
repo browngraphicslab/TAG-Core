@@ -112,7 +112,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
             switch (err.target.error.code){
                 case err.target.error.MEDIA_ERR_NETWORK:
                     console.log("caught media error");
-                    orchestrator.pause();
+                    orchestrator.pause()
                 	//Sets the image’s URL source
                 	//orchestrator.load();
                 	var timeOffset = Date.now() / 1000 - self.lastActualTime;
