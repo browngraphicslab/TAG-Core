@@ -44,7 +44,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    tourData = dataURL
 	    self.tourData = tourData;
 	    loadHelper();
-	    idleTimer.tourPlaying(true);
+	    if (idleTimer) {
+	        idleTimer.tourPlaying(true);
+	    }
 	  /**
 	    * I/P: none
 	  	* Helper function to load tour with AJAX (called below)
@@ -106,7 +108,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    * O/P: none
 	 */
 	function unload() {
-	    idleTimer.tourPlaying(false);
+	    if (idleTimer) {
+	        idleTimer.tourPlaying(false);
+	    }
 		for (i = self.trackManager.length-1; i >= 0; i--) {
 			self.trackManager[i].unload();
 			trackManager.remove(trackManager[i]);
@@ -145,7 +149,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		}
 		self.timeManager.startTimer();
 		self.status = 1;
-		idleTimer.tourPlaying(true);
+		if (idleTimer) {
+		    idleTimer.tourPlaying(true);
+		}
 	}
 
 	function pause() {
@@ -155,7 +161,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			self.trackManager[i].pause();
 		}
 		self.status = 2;
-		idleTimer.tourPlaying(false);
+		if (idleTimer) {
+		    idleTimer.tourPlaying(false);
+		}
 	}
 
 	function scrub(seekPercent) {
