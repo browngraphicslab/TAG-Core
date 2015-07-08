@@ -3428,6 +3428,7 @@ TAG.Util.UI = (function () {
             'margin-left': '12%',
             'color': 'white',
             'border-radius': '3.5px',
+            'display': 'inline-block',
             'margin-top': '1%'
 
         }).attr('id', 'popupConfirmButton');
@@ -3459,12 +3460,13 @@ TAG.Util.UI = (function () {
             'padding': '1%',
             'border': '1px solid white',
             'width': 'auto',
-            'position': 'relative',
+            //'position': 'relative',
             'float': "right",
             'margin-right': '3%',
             'color': 'white',
             'margin-top': '1%',
-            'border-radius': '3.5px'
+            'border-radius': '3.5px',
+            'display': 'inline-block'
         }).attr('id', 'popupCancelButton');
         $cancelButton.text('Cancel');
 
@@ -3490,12 +3492,14 @@ TAG.Util.UI = (function () {
                 'width': 'auto',
                 'position': 'relative',
                 'float': "right",
-                //'margin-right': '12%',
+                'margin-right': '12%',
                 'right':'12%',
                 'color': 'white',
                 'margin-top': '1%',
-                'border-radius': '3.5px'
+                'border-radius': '3.5px',
+                'display': 'inline-block'
             }).text("Cancel");
+            realcancelbtn.attr('id', 'realCancelButton');
             var btnwidth = $(cancelButton).width();
             var dontleft = ($(optionButtonDiv).width() - btnwidth) / 2;
             $cancelButton.css({
@@ -3503,7 +3507,7 @@ TAG.Util.UI = (function () {
                 'margin': 'auto',
                 'margin-top':'1%',                
             });
-            $(optionButtonDiv).append(realcancelbtn);
+           $(optionButtonDiv).append(realcancelbtn);
             realcancelbtn.click(function () {
                 if (origin) {
                     removeAll();
