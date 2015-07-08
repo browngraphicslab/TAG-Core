@@ -2899,7 +2899,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             timelineDateLabel.css('visibility', 'visible');
         }
 
-        if (selectedCircle) {
+        if (selectedCircle) { //sometimes need to reset visiblity of selected circle if there were two circles with same date
             selectedCircle.css('visibility', 'visible');
             selectedCircle.timelineDateLabel.css('visibility', 'visibility');
         }
@@ -2926,7 +2926,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         for (var i = 0; i < timelineEventCircles.length; ++i) {
             if (selectedCircle && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(selectedCircle.yearKey)) && (timelineEventCircles[i] != selectedCircle)) {
-                console.log("timeline event circles has same date as selected, should hide");
+               
                 timelineEventCircles[i].css('visibility', 'hidden');
                 timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');  
             }        
@@ -3871,8 +3871,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // Make current circle larger and white           
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], true)
-            };    
+            }; 
+                
+            for (var i = 0; i < timelineEventCircles.length; ++i) {
 
+
+
+                if ((Math.floor(timelineEventCircles[i].yearKey) === Math.floor(artworkCircles[artwork.Identifier].yearKey)) && (timelineEventCircles[i] != artworkCircles[artwork.Identifier])) {
+                    console.log("Artwork circles should hide?!?");
+                    timelineEventCircles[i].css('visibility', 'hidden');
+                    timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
+                }
+
+            }
             progressCircCSS = {
                 'position': 'absolute',
                 'float'   : 'left',
