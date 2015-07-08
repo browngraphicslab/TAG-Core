@@ -716,7 +716,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         };
 
         //adjust pivot when in previewer 
-        if ($("#resizableArea").width() != 0) {
+        if ($("#resizableArea").width() > 0) {
             pivot.x = pivot.x - ($("#ITEContainer").offset().left - $("#viewer").offset().left);
         }
 
@@ -778,6 +778,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         if ((newW < minW) || (newW > maxW)) {
             newW = Math.min(maxW, Math.max(minW, newW));
         };
+
+        //adjust pivot when in previewer 
+        if ($("#resizableArea").width() > 0) {
+            pivot.x = pivot.x - ($("#ITEContainer").offset().left - $("#viewer").offset().left);
+        }
 
         // Update scale, new X and new Y according to newly constrained values.
         scale = newW / w;
