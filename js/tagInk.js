@@ -423,6 +423,10 @@ var tagInk = function (canvId, html_elt) {
                         marqueeFillOpacity = get_attr(shape, "opac", "f");
                         trans_mode = get_attr(shape, "mode", 's');
                         transCoords = pathstringt.match(/[0-9.\-]+/g);
+                        var i = 0;
+                        for (i = 0; i < transCoords.length; i++) {
+                            transCoords[i] = parseFloat(transCoords[i]);
+                        }
                         transLetters = pathstringt.match(/[CMLz]/g);
                         drawTrans();
                         break;
