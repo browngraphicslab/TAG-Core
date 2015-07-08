@@ -26,7 +26,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.getElapsedTime = function(){
 		return self.timeManager.getElapsedOffset();
 	};	
-
+	if (idleTimer) {
+	    idleTimer.tourPlaying(true);
+	}
 
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
@@ -194,7 +196,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			self.prevStatus = self.status;
 		}
 		if (self.status === 1) {
-			self.pause();
+		    self.pause();
 		}
 
 		if (!self.tourData || !self.tourData.totalDuration) {
@@ -219,6 +221,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			}
 			self.timeManager.startTimer();
 			self.status = 1;
+			if (idleTimer) {
+			    idleTimer.tourPlaying(true);
+			}
 		}
 		self.prevStatus = 0;
 	}

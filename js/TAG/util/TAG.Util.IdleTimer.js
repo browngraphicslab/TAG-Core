@@ -28,7 +28,6 @@ TAG.Util.IdleTimer = (function() {
     function TwoStageTimer(stageOne, stageTwo) {
         stageOne = stageOne || {};
         stageTwo = stageTwo || {};
-
         var s1d = stageOne.duration || idleDuration || 120000,   // duration of stage one timer
             s1c = stageOne.callback || defaultStageOne,          // stage one callback
             s2d = stageTwo.duration || 10000,                    // duration of stage two timer
@@ -44,7 +43,7 @@ TAG.Util.IdleTimer = (function() {
          * @method start
          */
         function start() {
-            if (jQuery.data(document.body, "isKiosk") == true && $.find("video").length==0 && !tourIsPlaying) {
+            if (jQuery.data(document.body, "isKiosk") == true && $.find("video").length==0 && tourIsPlaying==false) {
                 console.log("timer start")
                 if(idleDuration !== 0) { // default is no idle timer
                     s1TimeoutID = setTimeout(fireS1, s1d);
