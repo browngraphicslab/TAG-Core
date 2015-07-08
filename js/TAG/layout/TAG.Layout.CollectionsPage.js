@@ -3875,7 +3875,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
 
 
-                if ((Math.floor(timelineEventCircles[i].yearKey) === Math.floor(artworkCircles[artwork.Identifier].yearKey)) && (timelineEventCircles[i] != artworkCircles[artwork.Identifier])) {
+                if (timelineEventCircles[i] && artworkCircles[artwork.Identifier] && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(artworkCircles[artwork.Identifier].yearKey)) && (timelineEventCircles[i] != artworkCircles[artwork.Identifier])) {
                     console.log("Artwork circles should hide?!?");
                     timelineEventCircles[i].css('visibility', 'hidden');
                     timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
