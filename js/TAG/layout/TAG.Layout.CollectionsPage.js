@@ -1084,7 +1084,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-align" : "center"
             })
             // if the idle timer hasn't started already, start it
-            if (!idleTimer && evt && !previewing && !lockKioskMode) { // loadCollection is called without an event to show the first collection
+            if (!idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                 idleTimer.start();
             }

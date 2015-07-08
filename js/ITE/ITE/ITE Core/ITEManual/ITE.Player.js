@@ -373,6 +373,12 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
         bottomContainer.mouseenter(function () {
             makeControlsVisible();
         })
+        $("#backButton").mouseenter(function () {
+            makeControlsVisible();
+        })
+        $("#backButton").mouseleave(function () {
+            setControlsFade();
+        })
         
         orchestrator.refresh();
     };

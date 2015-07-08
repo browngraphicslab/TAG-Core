@@ -66,9 +66,6 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     // idleTimer.start();
     //idleTimer && idleTimer.kill();
     //idleTimer = null;
-    console.log("idletimer in tourplayer: ")
-    console.log(idleTimer)
-    console.log("              ")
     backButton.attr('src', tagPath+'images/Back_wshadow.svg');
 
     //clicked effect for back button

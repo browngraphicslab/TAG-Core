@@ -8434,17 +8434,17 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "opacity": 1,
 				            "size": {
 				                "x": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
-				                "y": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
+				                "y": currKeyframe.state.viewport.region.span.y * parseInt($(window).width()*(9/16))
 				            },
 				            "pos": {
 				                "x": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
-				                "y": currKeyframe.state.viewport.region.center.y * parseInt($(window).height())
+				                "y": currKeyframe.state.viewport.region.center.y * parseInt($(window).width()*(9/16))
 				            },
 				            "data": {},
 				            "left": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
-				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).height()),
+				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).width()*(9/16)),
 				            "width": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
-				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
+				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).width()*(9/16))
 				        }
 				    } else {
 				        keyframeObject = {
