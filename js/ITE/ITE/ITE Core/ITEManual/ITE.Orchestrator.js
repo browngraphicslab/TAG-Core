@@ -171,7 +171,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 		// Inform tracks of seek.
 		for (i = 0; i < self.trackManager.length; i++) {
-			self.trackManager[i].seek();
+		    self.trackManager[i].seek();
 		}
 	}
 
@@ -352,6 +352,17 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    }
 	}
 
+	function updateInkPositions() {
+	    var i;
+	    for (i = 0; i < trackManager.length; i++) {
+	        var track = trackManager[i];
+	        if (track.type === "image") {
+	            track.updateInk(true);
+	        }
+	    }
+	}
+
+	self.updateInkPositions = updateInkPositions;
 	self.manipTrack = null;
 	self.getTrackManager = getTrackManager;
 	self.captureKeyframe = captureKeyframe;

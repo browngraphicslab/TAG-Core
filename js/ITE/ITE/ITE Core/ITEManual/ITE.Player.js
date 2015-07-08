@@ -381,6 +381,10 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         orchestrator.refresh();
     }
 
+    function updateInkPositions() {
+        orchestrator.updateInkPositions();
+    }
+
     function unload() {
         orchestrator.unload();
     };
@@ -813,4 +817,5 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     this.captureKeyframe = captureKeyframe;
     this.bindCaptureHandlers = bindCaptureHandlers;
     this.getOrchestrator = getOrchestrator;
+    this.updateInkPositions = updateInkPositions;
 };
