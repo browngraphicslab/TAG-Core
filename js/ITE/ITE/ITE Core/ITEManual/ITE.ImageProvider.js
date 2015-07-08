@@ -24,7 +24,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     var Utils = new ITE.Utils(),
 		TAGUtils = ITE.TAGUtils,
 		_super = new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
-        _heightOffsetRatio = 0,
 		self = this;
 
     Utils.extendsPrototype(this, _super);
@@ -68,16 +67,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function initialize() {
 		_super.initialize();
-
-
-
-		var tempHeightOffsetString = (window.getComputedStyle($("#tourRoot")[0]).top);
-		var heightOffset = 0;
-		if ($("#tourRoot").length) {
-		    heightOffset = parseInt(tempHeightOffsetString.substring(0, tempHeightOffsetString.length - 2))
-		}
-
-
 		// Create UI and append to ITEHolder.
 		_image		= $(document.createElement("img"))
 			.addClass("assetImage");
