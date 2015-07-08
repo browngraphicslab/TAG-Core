@@ -348,6 +348,10 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		//Then, when you animate (so on every timertick), call _adjustViewBox with ABSOLUTE coordinates of the artwork.
 	    if (_attachedAsset) {
 	        _attachedAsset.addInk(self);
+            // attempted fix for ink updating with images
+	        if (_attachedAsset.updateInk) {
+	            _attachedAsset.updateInk();
+	        }
 	    }
 	};
 	self.attachToAsset = attachToAsset;

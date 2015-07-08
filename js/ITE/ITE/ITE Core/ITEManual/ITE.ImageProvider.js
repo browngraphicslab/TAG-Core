@@ -246,6 +246,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			self.setState(soughtState);
 			nextKeyframe = surKeyframes[1];
 		}
+
+		updateInk(true);
+
 		return nextKeyframe;
 	};
 
@@ -505,11 +508,14 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	self.addInk = addInk;
 
 	/* 
-	 * I/P: 	none
-	 * Updates ink so that it animates with image
+	 * I/P: 	isForcedRefresh: Caller is a state-changing operation (like seek or reload) that requires inks to update no matter what
+	 * Updates ink so that it animates with image. Omit or pass "false" as param for scheduled updates (e.g. periodic polling during playback)
 	 * O/P: 	none 
 	 */
-	updateInk = function() {
+	updateInk = function (isForcedRefresh) {
+	    if (self.orchestrator.status === 2 && !isForcedRefresh) {
+	        return;
+	    }
 		var i;
 		for (i = 0; i < attachedInks.length; i++){
 			var bounds = {
@@ -521,6 +527,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			attachedInks[i]._ink.adjustViewBox(bounds);
 		}
 	}
+	self.updateInk = updateInk;
 
 	function manipFromDZRecursion(evt) {
 	    //var pivot = { x: evt.x - _UIControl.offset().left, y: evt.y - _UIControl.offset().top };
@@ -546,6 +553,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	        }
 	        captureHandlers(evt);
 	    }
+
+	    updateInk(true);
 	}
 	self.manipFromDZRecursion = manipFromDZRecursion;
 
@@ -556,6 +565,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	        }
 	        captureHandlers(evt);
 	    }
+
+	    updateInk(true);
 	}
 	self.endManipFromDZRecursion = endManipFromDZRecursion;
 
@@ -670,6 +681,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	        captureHandlers(evt);
     	    }
     	}
+
+    	updateInk(true);
     };
     self.mediaManip = mediaManip;
 	
@@ -702,11 +715,16 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             newW 	= Math.min(maxW, Math.max(minW, newW));
         };
 
+        //adjust pivot when in previewer 
+        if ($("#resizableArea").width() != 0) {
+            pivot.x = pivot.x - ($("#ITEContainer").offset().left - $("#viewer").offset().left);
+        }
+
         // Update scale, new X and new Y according to newly constrained values.
         scale 	= newW / w;
         newH	= h * scale;
-        newX 	= l*scale + pivot.x*(1-scale);
-       	newY 	= t*scale + pivot.y*(1-scale); 
+        newX 	= l*scale + (pivot.x)*(1-scale);
+       	newY 	= t*scale + (pivot.y)*(1-scale); 
 
        	if (isFromTouch || !IS_WINDOWS){
        	    newX = l * scale + (pivot.x + l)* (1 - scale);
@@ -728,6 +746,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             }
             captureHandlers(evt);
         }
+
+        updateInk(true);
     };
     self.mediaScroll = mediaScroll;
 
@@ -780,6 +800,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             }
             captureHandlers(evt);
         }
+
+        updateInk(true);
     };
     self.mediaPinch = mediaPinch;
     

@@ -1082,8 +1082,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     var ITEPlayer = new TAG.Layout.TourPlayer(iteData, prevCollection, prevInfo, options, tour);
                     TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
                         setTimeout(function () {
-                            var rindata = tour;
-                            ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
+                            //var rindata = tour;
+                            //ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
                             ITEPlayer.startPlayback();
                         }, 1000);
                     });

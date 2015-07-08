@@ -10,7 +10,8 @@ var TAG = TAG || {};
 TAG.Util.IdleTimer = (function() {
     var overlay,
         stageTwoDuration,
-        overlayInterval;
+        overlayInterval,
+        tourIsPlaying;
 
      /**
       * This two-stage timer takes in two duration-callback pairs. The stage one 
@@ -43,7 +44,7 @@ TAG.Util.IdleTimer = (function() {
          * @method start
          */
         function start() {
-            if (jQuery.data(document.body, "isKiosk") == true && $.find("video").length==0) {
+            if (jQuery.data(document.body, "isKiosk") == true && $.find("video").length==0 && !tourIsPlaying) {
                 console.log("timer start")
                 if(idleDuration !== 0) { // default is no idle timer
                     s1TimeoutID = setTimeout(fireS1, s1d);
@@ -75,6 +76,14 @@ TAG.Util.IdleTimer = (function() {
          */
         function isStopped() {
             return started;
+        }
+
+
+        /*
+        * Pass in a boolean to set the idle timer's knowledge of a tour playing.  will not play if the boolean is true
+        */
+        function tourPlaying(isTourPlaying) {
+            tourIsPlaying = isTourPlaying;
         }
 
         /**
@@ -137,7 +146,8 @@ TAG.Util.IdleTimer = (function() {
             isStopped:    isStopped,
             restart:      restart,
             reinitialize: reinitialize,
-            s1d:          s1d
+            s1d: s1d,
+            tourPlaying: tourPlaying
         };
     }
 

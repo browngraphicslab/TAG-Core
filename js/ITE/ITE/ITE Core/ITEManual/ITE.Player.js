@@ -1,8 +1,8 @@
 window.ITE = window.ITE || {};
 
-ITE.Player = function (options, tourPlayer, container) { //acts as ITE object that contains the orchestrator, etc
+ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE object that contains the orchestrator, etc
    var totalTourDuration;
-   var  orchestrator            = new ITE.Orchestrator(this, options.isAuthoring),
+   var  orchestrator            = new ITE.Orchestrator(this, options.isAuthoring, idleTimer),
         self = this,
         playerConfiguration = {
                 attachVolume:               true,
@@ -381,6 +381,10 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         orchestrator.refresh();
     }
 
+    function updateInkPositions() {
+        orchestrator.updateInkPositions();
+    }
+
     function unload() {
         orchestrator.unload();
     };
@@ -431,21 +435,20 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * Sets the buttons to fade in 2 seconds from function call
     * O/P:   none
     */
-    function setControlsFade(){
-        if(playerConfiguration.fadeControls){
-            window.setTimeout(function(){
-                if(!bottomContainer.is(":hover")){
-                    time = 500
-                    volumeButton.fadeTo(time,0,null);
-                    volumeLevel.fadeTo(time,0,null);
-                    playPauseButton.fadeTo(time,0,null);
-                    loopButton.fadeTo(time,0,null);
-                    progressBar.fadeTo(time,0,null);
-                    fullScreenButton.fadeTo(time,0,null);
-                    progressIndicator.fadeTo(time,0,null);
-                    $("#backButton").fadeTo(time,0,null);
-                    $("#linkButton").fadeTo(time,0,null);
-                }
+    function setControlsFade() {
+        console.log("set controls fade called")
+        if (playerConfiguration.fadeControls) {
+            window.setTimeout(function () {
+                time = 500
+                volumeButton.fadeTo(time,0,null);
+                volumeLevel.fadeTo(time,0,null);
+                playPauseButton.fadeTo(time,0,null);
+                loopButton.fadeTo(time,0,null);
+                progressBar.fadeTo(time,0,null);
+                fullScreenButton.fadeTo(time,0,null);
+                progressIndicator.fadeTo(time,0,null);
+                $("#backButton").fadeTo(time,0,null);
+                $("#linkButton").fadeTo(time,0,null);
             },2000)
        }
     }
@@ -455,7 +458,8 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * Makes the controls/buttons visible and cancels timeouts making them dissappear
     * O/P:   none
     */
-    function makeControlsVisible(){
+    function makeControlsVisible() {
+        console.log("make controls visible called")
         volumeButton.css({ 'opacity' : 1 })
         volumeLevel.css({ 'opacity' : 1 })
         playPauseButton.css({ 'opacity' : 1 })
@@ -813,4 +817,5 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     this.captureKeyframe = captureKeyframe;
     this.bindCaptureHandlers = bindCaptureHandlers;
     this.getOrchestrator = getOrchestrator;
+    this.updateInkPositions = updateInkPositions;
 };
