@@ -53,6 +53,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     var xFadeOffset;
 
     // get things rolling
+    //init();
     initOSD();
 
     return {
