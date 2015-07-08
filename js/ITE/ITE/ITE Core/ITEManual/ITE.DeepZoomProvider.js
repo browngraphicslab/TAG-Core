@@ -777,7 +777,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
  						x: topLeft.x,
  						y: topLeft.y,
  						width: _UIControl.width()*_viewer.viewport.getZoom(true),
- 						height: _UIControl.height()*_viewer.viewport.getZoom(true)
+ 						height: _UIControl.width()*_viewer.viewport.getZoom(true)
  					}
  					attachedInks[i]._ink.adjustViewBox(bounds);
  				}
