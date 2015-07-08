@@ -242,7 +242,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
                         splitscreenContainer.css('display', 'none');
                         TAG.Util.Splitscreen.init(root, collectionsPageRoot);
-                        annotatedImage.viewer.scheduleUpdate();
+                        annotatedImage.viewer.clearOverlays();
                         //annotatedImage.viewer.viewport.applyConstraints();
                         TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                     });
@@ -256,7 +256,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
                     splitscreenContainer.css('display', 'none');
                     TAG.Util.Splitscreen.init(root, collectionsPageRoot);
-                    annotatedImage.viewer.scheduleUpdate();
+                    annotatedImage.viewer.clearOverlays();
                     //annotatedImage.viewer.viewport.applyConstraints();
                     TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                 }
@@ -1354,6 +1354,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         * @param {event} evt            manipulation event of the image
         */
         function dzMoveHandler(evt) {
+
+            //catch race condition when minimap not yet reloaded 
+            if (!minimap) {
+                return;
+            }
             var minimaph = minimap.height();
             var minimapw = minimap.width();
 
@@ -1361,7 +1366,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var minimapt = (minimapContainer.height() / 2) - (minimap.height() / 2);
             var minimapl = (minimapContainer.width() / 2) - (minimap.width() / 2);
 
-            var viewport = evt.viewport;
+            var viewport = evt.userData.viewport;
+            //OSD hasn't reloaded completely yet
+            if (!viewport) {
+                return;
+            }
             var rect = viewport.getBounds(true);
             var tl = rect.getTopLeft();
             var br = rect.getBottomRight();
