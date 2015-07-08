@@ -6852,7 +6852,8 @@ TAG.Util.RLH = function (input) {
                     }
                 },
                 noMedia: true,
-                disableZoom : false
+                disableZoom: false,
+                locationHist: true
             });
         }
 
@@ -6922,7 +6923,7 @@ TAG.Util.RLH = function (input) {
             });
 
             //all pins start off in an overlay
-            annotImg.addOverlay(pushpin[0], new Seadragon.Point(location.x, location.y), Seadragon.OverlayPlacement.BOTTOM);
+            annotImg.addOverlay(pushpin[0], new OpenSeadragon.Point(location.x, location.y), OpenSeadragon.OverlayPlacement.BOTTOM);
 
             var isOverlay = true,
                 x,
@@ -6941,6 +6942,7 @@ TAG.Util.RLH = function (input) {
                             t = pushpin.css('top');
                             l = pushpin.css('left');
                             annotImg.removeOverlay(pushpin[0]); //seems like this changes the CSS of the pushpin?
+                            pushpin.css('display', 'block');
                             pushpin.appendTo(mapHolders[mapdoq.Identifier]);
                             pushpin.css({
                                 top: t,
@@ -6977,9 +6979,9 @@ TAG.Util.RLH = function (input) {
                             var coord = annotImg.returnElementToBounds(pushpin);
                             pushpin.css("top", (coord.y - h) + "px");
                             pushpin.css("left", (coord.x - 0.5 * w) + "px");
-                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(coord.x, coord.y)), Seadragon.OverlayPlacement.BOTTOM);
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new OpenSeadragon.Point(coord.x, coord.y)), OpenSeadragon.OverlayPlacement.BOTTOM);
                         } else {
-                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new OpenSeadragon.Point(x, y)), OpenSeadragon.OverlayPlacement.BOTTOM);
                         }
                         annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
                     }

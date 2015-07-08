@@ -8503,8 +8503,8 @@ function onCanvasRelease(event, first) {
 }
 
 function onCanvasPinch(event, first) {
-    var zIndex = this.ITE_track.trackData.zIndex;
-    var track = this.orchestrator.getTrackBehind(zIndex, event, false);
+   var zIndex = this.ITE_track.trackData.zIndex;
+   var track = this.orchestrator.getTrackBehind(zIndex, event, false);
     //if (track === "NOPE") {
     //    return;
     //}
