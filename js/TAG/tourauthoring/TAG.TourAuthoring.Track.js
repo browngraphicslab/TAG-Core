@@ -2536,7 +2536,7 @@ function trackTitleReleased(evt) {
 
     function captureTween(evt) {
         var origin = evt.imageTrack ? evt.imageTrack : evt.eventSource.ITE_track;
-        var time = origin.timeManager.elapsedOffset;
+        var time = my.timeManager.getCurrentTime();
 
         // enabled and disabled via custom event framework - see Viewer's event listener for playerReady event
         if (my.timeline.getViewer().isKeyframingDisabled()) {
