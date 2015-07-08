@@ -171,6 +171,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method init
      */
     function init() {
+        if (!idleTimer && !previewing) {
+            idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+            idleTimer.start();
+        }
+        console.log("idle timer at start of collections page: ")
+        console.log(idleTimer)
         if ((previewing || lockKioskMode) && idleTimer) {
             idleTimer.kill();
         }
@@ -4241,8 +4247,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         //Parse RIN data to ITE Data
         var iteData = TAG.Util.RIN_TO_ITE(tour);
 
+        console.log("idletimer in collections page: ")
+        console.log(idleTimer)
+        console.log("              ")
+
         //Create tag tourplayer (which will in turn create an ITE player)
-        var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour);
+        var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour, idleTimer);
         TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
             setTimeout(function () {
                 //var rindata = tour;

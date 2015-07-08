@@ -1,8 +1,8 @@
 window.ITE = window.ITE || {};
 
-ITE.Player = function (options, tourPlayer, container) { //acts as ITE object that contains the orchestrator, etc
+ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE object that contains the orchestrator, etc
    var totalTourDuration;
-   var  orchestrator            = new ITE.Orchestrator(this, options.isAuthoring),
+   var  orchestrator            = new ITE.Orchestrator(this, options.isAuthoring, idleTimer),
         self = this,
         playerConfiguration = {
                 attachVolume:               true,
