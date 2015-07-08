@@ -2411,7 +2411,6 @@ function trackTitleReleased(evt) {
         trackBody.scrollTop(topp);
     }
 
-
      //adds a key frame or display    
     function addKeyorDisplay(evt) {
         var positionX = evt.position.x,
@@ -2567,6 +2566,7 @@ function trackTitleReleased(evt) {
         if (currentDisplay && time >= currentDisplay.getStart() && time <= currentDisplay.getEnd()) {
             var time_px = my.timeManager.timeToPx(time);
             keyframe = currentDisplay.addKeyframe(time_px, 48, true);
+
 
             var time_2dec = Math.twoDecPlaces(time);
 

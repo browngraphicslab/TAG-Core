@@ -13960,7 +13960,7 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
     drawHTML: function( container ) {
         if ( !this.loaded || !this.image ) {
             $.console.warn(
-                "Attempting to draw tile %s when it's not yet loaded.",
+                "Attempting to draw tile %s when it's not yet loaded in draw html.",
                 this.toString()
             );
             return;
@@ -14011,7 +14011,7 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
 
         if ( !this.loaded || !( this.image || TILE_CACHE[ this.url ] ) ){
             $.console.warn(
-                "Attempting to draw tile %s when it's not yet loaded.",
+                "Attempting to draw tile %s when it's not yet loaded in drawCanvas.",
                 this.toString()
             );
             return;
