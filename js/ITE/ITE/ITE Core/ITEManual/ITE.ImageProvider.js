@@ -21,11 +21,12 @@ window.ITE = window.ITE || {};
 ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 	// Extend class from ProviderInterfacePrototype
-	var Utils 		= new ITE.Utils(),
-		TAGUtils	= ITE.TAGUtils,
-		_super 		= new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
-		self 		= this;
-	Utils.extendsPrototype(this, _super);
+    var Utils = new ITE.Utils(),
+		TAGUtils = ITE.TAGUtils,
+		_super = new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
+		self = this;
+
+    Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
 	self.loadKeyframes(trackData.keyframes);
@@ -66,7 +67,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function initialize() {
 		_super.initialize();
-
 		// Create UI and append to ITEHolder.
 		_image		= $(document.createElement("img"))
 			.addClass("assetImage");
@@ -324,7 +324,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		var state = {
 			"opacity"	: keyframe.opacity,
 			"left"		: (keyframe.pos.x) + "px",
-			"top"		: (keyframe.pos.y) + "px",
+			"top"       : (keyframe.pos.y) + "px",
 			"width"		: (keyframe.size.x) + "px",
 			"height"	: (keyframe.size.y) + "px"
 		};
@@ -342,6 +342,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		if (!endKeyframe) {
 			return self.getKeyframeState(startKeyframe);
 		}
+
 		
 		var lerpOpacity = startKeyframe.opacity + (interp * (endKeyframe.opacity - startKeyframe.opacity));
 		var lerpPosX = startKeyframe.pos.x + (interp * (endKeyframe.pos.x - startKeyframe.pos.x));
