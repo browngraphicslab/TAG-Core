@@ -3460,7 +3460,7 @@ TAG.Util.UI = (function () {
             'padding': '1%',
             'border': '1px solid white',
             'width': 'auto',
-            //'position': 'relative',
+            'position': 'relative',
             'float': "right",
             'margin-right': '3%',
             'color': 'white',
@@ -3492,12 +3492,11 @@ TAG.Util.UI = (function () {
                 'width': 'auto',
                 'position': 'relative',
                 'float': "right",
-                'margin-right': '12%',
+                //'margin-right': '12%',
                 'right':'12%',
                 'color': 'white',
                 'margin-top': '1%',
-                'border-radius': '3.5px',
-                'display': 'inline-block'
+                'border-radius': '3.5px'
             }).text("Cancel");
             realcancelbtn.attr('id', 'realCancelButton');
             var btnwidth = $(cancelButton).width();
@@ -3507,7 +3506,7 @@ TAG.Util.UI = (function () {
                 'margin': 'auto',
                 'margin-top':'1%',                
             });
-           $(optionButtonDiv).append(realcancelbtn);
+            $(optionButtonDiv).append(realcancelbtn);
             realcancelbtn.click(function () {
                 if (origin) {
                     removeAll();
@@ -8434,17 +8433,17 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "opacity": 1,
 				            "size": {
 				                "x": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
-				                "y": currKeyframe.state.viewport.region.span.y * parseInt($(window).width()*(9/16))
+				                "y": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
 				            },
 				            "pos": {
 				                "x": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
-				                "y": currKeyframe.state.viewport.region.center.y * parseInt($(window).width()*(9/16))
+				                "y": currKeyframe.state.viewport.region.center.y * parseInt($(window).height())
 				            },
 				            "data": {},
 				            "left": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
-				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).width()*(9/16)),
+				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).height()),
 				            "width": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
-				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).width()*(9/16))
+				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
 				        }
 				    } else {
 				        keyframeObject = {
