@@ -195,6 +195,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
         var loadingLabel = $(document.createElement('div'));
+        loadingLabel.attr('id','loadingLabel');
         loadingLabel.css({
             'position': 'absolute',
             'left': '37%',
@@ -202,7 +203,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'font-size': '200%',
             'color': 'white',
             'opacity': '1'
-        });
+        });  
+
         loadingLabel.text('Loading Collections');
         loadingArea.append(loadingLabel);
 
@@ -987,6 +989,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             '-webkit-transform': 'rotate(270deg)'
                         });
                     });
+
                 //fix for web app styling  
                 if (!IS_WINDOWS){
                     root.find("#filterByKeywords").css({'width':'30%'});
@@ -1084,7 +1087,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-align" : "center"
             })
             // if the idle timer hasn't started already, start it
-            if (!idleTimer && evt && !previewing && !lockKioskMode) { // loadCollection is called without an event to show the first collection
+            if (!idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                 idleTimer.start();
             }
