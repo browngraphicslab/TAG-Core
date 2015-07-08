@@ -1888,6 +1888,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             viewer.reloadTour(data, getAllCaptureHandlers(), function () {
                 setTimeout(function () {
                     viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
+                    viewer.getPlayer().updateInkPositions();
                     viewer.setIsReloading(false);
                 }, 500);
             });
