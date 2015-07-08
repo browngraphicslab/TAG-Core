@@ -65,7 +65,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         visibleCollections = [],                               // array of collections that are visible and published
         collectionDots = {},                               // dict of collection dots, keyed by collection id
         artworkCircles = {},                               // dict of artwork circles in timeline, keyed by artwork id                  
-        artworkTiles = {},                               // dict of artwork tiles in bottom region, keyed by artwork id
+        artworkTiles = {},                                   // dict of artwork tiles in bottom region, keyed by artwork id
+        hiddenDots = [],
         firstLoad = true,                             // TODO is this necessary? what is it doing?
         currentArtworks = [],                               // array of artworks in current collection
         infoSource = [],                               // array to hold sorting/searching information
@@ -2920,9 +2921,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         for (var i = 0; i < timelineEventCircles.length; ++i) {
             if (selectedCircle && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(selectedCircle.yearKey)) && (timelineEventCircles[i] != selectedCircle)) {
                 console.log("timeline event circles has same date as selected, should hide");
-                        timelineEventCircles[i].css('visibility', 'hidden');
-
-                        timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
+                timelineEventCircles[i].css('visibility', 'hidden');
+                timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');  
             }        
         }
         
@@ -2955,7 +2955,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         for (i = 0; i < timelineEventCircles.length ; i++) {
             //if (!circle) {
-                console.log("no particular circle to zoom on - all circles visible");
+                //console.log("no particular circle to zoom on - all circles visible");
                 timelineEventCircles[i].css('visibility', 'visible');
                 timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
             //}
@@ -2977,8 +2977,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     for (k=0; k < timelineEventCircles.length; k++){
                         displayLabels(timelineEventCircles[k], circle);
                         if (circle) {
-                            timelineEventCircles[k].css('visibility', 'visible');
-                            timelineEventCircles[k].timelineDateLabel.css('visibility', 'visible');
+                            console.log("CIRCLE IS NOT NULL")
+                            //  timelineEventCircles[k].css('visibility', 'visible');
+                            //timelineEventCircles[k].timelineDateLabel.css('visibility', 'visible');
                         }
                         if (k===timelineEventCircles.length -1){
                            displayLabels(timelineEventCircles[k],null,k); 
@@ -2999,7 +3000,6 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             }
 
             if (!circle) {
-                console.log("no particular circle to zoom on - all circles visible AT END OF ZOOM FUNCTION");
                 timelineEventCircles[i].css('visibility', 'visible');
                 timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
             }
