@@ -14024,9 +14024,6 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
                 "Attempting to draw tile %s when it's not yet loaded in drawCanvas.",
                 this.toString()
             );
-            console.log("unloaded:");
-            console.log(this.unloaded);
-            console.log(this.image);
             return;
         }
         context.globalAlpha = this.opacity;
