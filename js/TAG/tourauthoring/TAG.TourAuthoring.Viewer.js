@@ -138,6 +138,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                 //when done moving right
                 console.log($("#setViewButtonContainer"));
                 $("#setViewButtonContainer")[0].firstChild.click();//click on the 'edit tour' button
+                
+               
                 window.setTimeout(function () {
                     TAG.Util.hideLoading(temp2)//after .25 second delay, remove the loading circle
                     temp.remove();//remove the two covering divs
