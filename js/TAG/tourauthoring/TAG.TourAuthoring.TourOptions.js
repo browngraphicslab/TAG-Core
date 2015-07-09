@@ -1,4 +1,4 @@
-﻿fTAG.Util.makeNamespace('TAG.TourAuthoring.TourOptions');
+﻿TAG.Util.makeNamespace('TAG.TourAuthoring.TourOptions');
 
 /**
  * Control for additional tour options
