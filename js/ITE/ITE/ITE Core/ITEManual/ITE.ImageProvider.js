@@ -106,12 +106,12 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		_image.css({
 		    "top": "0px",
 		    "left": "0px",
-		    "width": "100%",
-            "height": "auto"
+		    "min-width": "100%",
+            "min-height": "100%",
+		    "max-width": "100%",
+            "max-height": "100%"
 		})
-		_UIControl.css({
 
-		})
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 		TweenLite.ticker.addEventListener("tick", updateInk)
 
@@ -166,6 +166,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		self.status = 1;
 		self.orchestrator.updateZIndices();
 
+		// Janky chrome fix 7/9/2015. For some reason, the 'height: 100%' did not register, and images were not showing up (only in chrome).
+		// The css had to be reapplied after everything was loaded. Listen. You. If you're from the future, try removing this and see if images 
+		// show up in chrome. If they do, obliterate this pathetic line of shit from its unnatural, forced existence. And its evil twin in seek().
+		_image.css("height", "100%");
+
 		// Revert to any saved state, get time to start animation.
 		var startTime;
 		if (self.savedState) {
@@ -217,6 +222,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		if (self.status === 3) {
 			return null;
 		}
+
+		// Janky chrome fix 7/9/2015. For some reason, the 'height: 100%' did not register, and images were not showing up (only in chrome).
+		// The css had to be reapplied after everything was loaded. Listen. You. If you're from the future, try removing this and see if images 
+		// show up in chrome. If they do, obliterate this pathetic line of shit from its unnatural, forced existence. And its evil twin in play().
+		_image.css("height", "100%");
 
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
 		var prevStatus = self.status; // Store what we were previously doing.
