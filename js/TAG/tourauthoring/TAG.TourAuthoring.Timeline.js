@@ -584,6 +584,11 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
     }
     that.hideEditorOverlay = hideEditorOverlay;
 
+    function setITE(player) {
+        ITE = player;
+    }
+    that.setITE = setITE;
+
     // Creating a vertical scroll visualizer widget
     function createVerticalScroller(container) {
         var elements = [];
@@ -1890,6 +1895,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                     viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
                     viewer.getPlayer().updateInkPositions();
                     viewer.setIsReloading(false);
+                    viewer.capturingBackOn();
                 }, 500);
             });
         }
