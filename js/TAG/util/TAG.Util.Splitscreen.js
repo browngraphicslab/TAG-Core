@@ -165,7 +165,7 @@ TAG.Util.Splitscreen = (function () {
 
             if (viewerL) {
                 $(viewerL.container).css({ 'width': '100%', 'height': '100%' });
-                viewerL.scheduleUpdate();
+                viewerL.clearOverlays();
                 /**
                 var newLContainerSize = {
                     x: $(viewerL.container).width(),
@@ -183,7 +183,7 @@ TAG.Util.Splitscreen = (function () {
 
             if (viewerR) {
                 $(viewerR.container).css({ 'width': '100%', 'height': '100%' });
-                viewerR.scheduleUpdate();
+                viewerR.clearOverlays();
                // viewerR.viewport.applyConstraints();
                // viewerR.viewport.update();
             }

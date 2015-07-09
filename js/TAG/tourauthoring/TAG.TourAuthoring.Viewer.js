@@ -31,12 +31,12 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         keyframingDisabled = false,
 
         ITEConfig = {
-            attachVolume: true,
-            attachLoop: true,
-            attachPlay: true,
-            attachProgressBar: true,
-            attachFullScreen: true,
-            attachProgressIndicator: true,
+            attachVolume: false,
+            attachLoop: false,
+            attachPlay: false,
+            attachProgressBar: false,
+            attachFullScreen: false,
+            attachProgressIndicator: false,
             fadeControlskey: true,
             hideControls: true,
             autoPlay: false,
@@ -65,7 +65,6 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                 "background-color": "rgb(0,0,0)", "height": "100%", "width": "80%",
                 "position": "relative", "left": "20%"
             });
-
             // let's assume 16:9 ratio for now
             ITEContainer.attr('id', 'ITEContainer');
             ITEContainer.css({
@@ -107,10 +106,88 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     }
     that.getITE = getITE;
 
-    function forceITEPlayerReload() {
+
+    function forceITEPlayerReload() {//DEFINITION OF JANKY BUG FIX
+        var temp = $(TAG.Util.UI.blockInteractionOverlay(1));//add two blocking div's to stop all interaction
+        var temp2 = $(TAG.Util.UI.blockInteractionOverlay(1));
+        temp.css("display", 'block')
+        temp2.css("display", 'block')
+        var root = $(document.body);
+        root.append(temp)
+        root.append(temp2)
+
+        TAG.Util.showLoading(temp2, '20%', '40%', '40%')//to show the loading screen
+        temp.css('background-color','rgb(0,0,0,1)')
+        temp.css("z-index", "2147483646");
+        temp2.css("z-index", "2147483647");//update temp blocking divs' css z-index
+
+        var content = JSON.stringify(timeline.toRIN(true));
+        var related = JSON.stringify(timeline.getRelatedArtworks());
+        var options = {
+            Name : $("#textArea").val(),
+            Content: content,
+            RelatedArtworks: related
+        }
+        TAG.Worktop.Database.changeTour(tourobj, options, function () {//update tour object (save tour)
+            // then upon sucess of saving,
+            stop();
+            unload();
+            var tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);//create settings so the settingsview page knows where to go
+
+            TAG.Util.UI.slidePageRight(tempSettings.getRoot(), function () {//LITERALLY MOVE THE PAGE RIGHT
+                //when done moving right
+                console.log($("#setViewButtonContainer"));
+                $("#setViewButtonContainer")[0].firstChild.click();//click on the 'edit tour' button
+                window.setTimeout(function () {
+                    TAG.Util.hideLoading(temp2)//after .25 second delay, remove the loading circle
+                    temp.remove();//remove the two covering divs
+                    temp2.remove();
+                }, 250);
+                /*
+                var toureditor = new TAG.Layout.TourAuthoringNew(tourobj, function () {
+                    TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
+                        toureditor.getViewer().loadITE();
+                        toureditor.getTimeline().onUpdate();
+                    });
+                });
+                /*
+                if (progressBarLength > 0) { //other upload happening - disable import
+                    toureditor.uploadStillHappening(true);
+                }*/
+            })
+        }, function () {
+            // unauth
+            dialogOverlay.hide();
+            var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  You must log in to save changes.");
+            $('body').append(popup);
+            $(popup).show();
+        }, function (jqXHR, ajaxCall) {
+            // conflict
+            // Ignore conflict for now
+            ajaxCall.force();
+        }, function () {
+            // error
+            dialogOverlay.hide();
+            var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  There was an error contacting the server.");
+            $('body').append(popup);
+            $(popup).show();
+        });
+
+        /*
         $('#ITEHolder').remove();
         createITE(true);
-        timeManager.setPlayer(player);
+        timeManager.setPlayer(getPlayer());
+
+        function updateTimelinePlayerReference() {
+            if (timeline) {
+                timeline.setITE(getPlayer());
+            } else {
+                setTimeout(updateTimelinePlayerReference(), 500);
+            }
+        }
+
+        updateTimelinePlayerReference();
+        */
     }
     that.forceITEPlayerReload = forceITEPlayerReload;
 
@@ -165,6 +242,11 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         currentCapture = '';
     }
     that.capturingOff = capturingOff;
+
+    function capturingBackOn() {
+        capturingOn = true;
+    }
+    that.capturingBackOn = capturingBackOn;
 
     /**
      * Get state of keyframe disable switch.
@@ -227,9 +309,9 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @returns     current keyframe state data
      */
     function captureKeyframe(title) {
-        if (player) {
+        if (getPlayer()) {
             //return null;
-            return player.captureKeyframe(title); //grab artwork container? BREAKPOINT HERE
+            return getPlayer().captureKeyframe(title); //grab artwork container? BREAKPOINT HERE
         }
     }
     that.captureKeyframe = captureKeyframe;
@@ -240,7 +322,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      */
     function getCurrentTime() {
         //return 0;
-        return player.orchestrator.getElapsedTime();
+        return getPlayer().getOrchestrator().getElapsedTime();
     }
     that.getCurrentTime = getCurrentTime;
     
@@ -293,7 +375,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      */
     function play() {
         if (!playing) {
-            player.play()
+            getPlayer().play()
             playing = true;
         }
     }
@@ -307,7 +389,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      */
     function stop() {
         if (playing && !buffering) {
-            player.pause();
+            getPlayer().pause();
             playing = false;
         }
     }
@@ -319,7 +401,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param time  location to seek to in units of seconds
      */
     function seek(time) {
-        player.scrubTimeline(time.percent);
+        getPlayer().scrubTimeline(time.percent);
         // HACK TO GET IT TO REFRESH
         //player.play();
         //player.pause();
@@ -334,7 +416,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param v     volume, between 0 and 1
      */
     function volume(v) {
-        player.volume(v);
+        getPlayer().volume(v);
     }
     that.volume = volume;
 
@@ -367,7 +449,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param data      Segment portion of RIN tour
      */
     function reloadTour(data, handlers, callback) {
-        if (player) {
+        if (getPlayer) {
             reloading = true;
             // call reload
             //var conv = {
@@ -376,9 +458,9 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //    }
             //};
             this.unload();
-            player.load(TAG.Util.RIN_TO_ITE(data));
-            player.getOrchestrator().setPendingCallback(callback);
-            player.bindCaptureHandlers(handlers);
+            getPlayer().load(TAG.Util.RIN_TO_ITE(data));
+            getPlayer().getOrchestrator().setPendingCallback(callback);
+            getPlayer().bindCaptureHandlers(handlers);
             //player.scrubTimeline(percent);
             reloading = false;
         }
@@ -409,7 +491,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //}, 50);
         } else if (player) {
             ctime = timeManager.getCurrentTime();
-            player.unload();
+            getPlayer().unload();
             //player.loadData(data, function () {
             //    setTimeout(function () {
             //        seek(ctime);
