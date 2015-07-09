@@ -130,7 +130,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
 			zoomPerClick 		: 1,
 			minZoomImageRatio	: .5,
-			maxZoomImageRatio	: 2,
+			maxZoomPixelRatio	: 2,
 			visibilityRatio		: .2,
 			mouseNavEnabled 	: true, //enables their own touch/click handlers
 			orchestrator        : orchestrator, //passes in a reference to orchestrator for layers fix
