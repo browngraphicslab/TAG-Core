@@ -6005,7 +6005,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     getObjs: function () { return []; }, //TODO how to get the collections that an artwork is already in
                 }, function () {
                     TAG.Util.removeProgressCircle($('.progressCircle')); // remove progress circle
-                    $('.progressText').remove(); // remove progress text
+                    $('#addingText').remove(); // remove progress text
                     // refresh the page only if the user stays in artworks tab
                     if (inArtworkView) {
                         loadArtView(currDoq, undefined, true);
@@ -6060,7 +6060,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     getObjs: function () { return []; },
                 }, function () {
                     TAG.Util.removeProgressCircle($('.progressCircle')); // remove progress circle
-                    $('.progressText').remove(); // remove progress text
+                    $('#addingText').remove(); // remove progress text
                     // refresh the page only if the user stays in associated media tab
                     if (inAssociatedView) {
                         loadAssocMediaView(currDoq, undefined, true);

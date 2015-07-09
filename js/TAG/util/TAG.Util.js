@@ -4993,8 +4993,8 @@ TAG.Util.UI = (function () {
             var options = {};
 
             //to prevent multiple uploading texts and loading circles from appearing simultanesouly
-            if ($(".progressText").length > 0 && $(".progressCircle").length > 0) {
-                $(".progressText").remove()
+            if ($("#addingText") && $("#addingText").length > 0 && $(".progressCircle").length > 0) {
+                $("#addingText").remove()
                 $(".progressCircle").remove()
             }
 
@@ -5004,10 +5004,12 @@ TAG.Util.UI = (function () {
                 'left': '40%',
                 'top': '40%',
                 'z-index': '50',
+                'display': 'inline-block',
+              
                 'height': 0.5*($("#setViewTopBar").height()),
                 'width': 'auto'
             };
-
+            
             // progress text to notify the users that the process is loading
             var progressText = $(document.createElement('div'))
                 .addClass('progressText')
@@ -5019,11 +5021,12 @@ TAG.Util.UI = (function () {
                        'font-size': '60%',
                         'position' : 'relative',
                         'top': '31%',
+                    
                 }),
                 viewer = $("#setViewTopBar"),
                 vert = viewer.height() / 2,
                 horz = viewer.width() / 5;
-
+            progressText.attr('id', 'addingText');
             // only update recentlyAssociated if the target is an artwork and we're managing an artwork-media assoc
             if (type === 'artwork' && target.type === 'artwork') {
                 for (var i = 0; i < addedComps.length; i++) {
@@ -5122,8 +5125,11 @@ TAG.Util.UI = (function () {
                         (target.comp.length > 1) ? progressText.text("Adding Artworks to Collection...") : progressText.text("Adding Artwork to Collection...");
                     }
                     viewer.append(progressText);
+                    
+                    
+                    
                     TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
-
+                    
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeExhibition(addedComps[i], { AddIDs: [target.comp] }, function () {
                             if (i == addedComps.length) {
@@ -5143,7 +5149,7 @@ TAG.Util.UI = (function () {
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
                     horz = viewer.width() / 6; // adjusting the formatting of the progress circle position 
                     progressText.text("Adding Associations...");
-                    viewer.append(progressText);
+                    
                     TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     /**
                     console.log("adding associated medias to artworks")
