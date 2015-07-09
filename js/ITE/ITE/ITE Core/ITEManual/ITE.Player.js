@@ -55,7 +55,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
 
     //Other miscellaneous variables
     Utils = new ITE.Utils();
-    this.Orchestrator = orchestrator;
+    this.orchestrator = orchestrator;
 
     var onLoadPlayerEvent = new ITE.PubSubStruct();
     this.onTourEndEvent = new ITE.PubSubStruct();
@@ -402,7 +402,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
     * O/P:   none
     */ 
     function captureKeyframe(trackID) {
-        return this.orchestrator.captureKeyframe(trackID);
+        return orchestrator.captureKeyframe(trackID);
     };
 
     function getTime() {
@@ -764,7 +764,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
             trackManager[i] = temp
             i++;
         }
-        Orchestrator.updateZIndices();
+        orchestrator.updateZIndices();
     }
 
 
@@ -775,7 +775,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
     * O/P:    trackManager of the orchestrator (list of tracks)
     */ 
     function getTracks(){
-        return this.Orchestrator.getTrackManager()
+        return orchestrator.getTrackManager()
     }
 
     /**
@@ -784,9 +784,9 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
     * O/P:    said added track
     */ 
     function addTrack(trackData){
-        track =  Orchestrator.createTrackByProvider(trackData)
+        track = orchestrator.createTrackByProvider(trackData)
         track.createDefaultKeyframes()
-        Orchestrator.initializeTrack(track)
+        orchestrator.initializeTrack(track)
         track.load()
         return track
     }

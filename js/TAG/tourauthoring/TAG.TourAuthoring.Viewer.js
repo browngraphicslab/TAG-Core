@@ -31,12 +31,12 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         keyframingDisabled = false,
 
         ITEConfig = {
-            attachVolume: true,
-            attachLoop: true,
-            attachPlay: true,
-            attachProgressBar: true,
-            attachFullScreen: true,
-            attachProgressIndicator: true,
+            attachVolume: false,
+            attachLoop: false,
+            attachPlay: false,
+            attachProgressBar: false,
+            attachFullScreen: false,
+            attachProgressIndicator: false,
             fadeControlskey: true,
             hideControls: true,
             autoPlay: false,
@@ -110,7 +110,17 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     function forceITEPlayerReload() {
         $('#ITEHolder').remove();
         createITE(true);
-        timeManager.setPlayer(player);
+        timeManager.setPlayer(getPlayer());
+
+        function updateTimelinePlayerReference() {
+            if (timeline) {
+                timeline.setITE(getPlayer());
+            } else {
+                setTimeout(updateTimelinePlayerReference(), 500);
+            }
+        }
+
+        updateTimelinePlayerReference();
     }
     that.forceITEPlayerReload = forceITEPlayerReload;
 
@@ -165,6 +175,11 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         currentCapture = '';
     }
     that.capturingOff = capturingOff;
+
+    function capturingBackOn() {
+        capturingOn = true;
+    }
+    that.capturingBackOn = capturingBackOn;
 
     /**
      * Get state of keyframe disable switch.
@@ -227,9 +242,9 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @returns     current keyframe state data
      */
     function captureKeyframe(title) {
-        if (player) {
+        if (getPlayer()) {
             //return null;
-            return player.captureKeyframe(title); //grab artwork container? BREAKPOINT HERE
+            return getPlayer().captureKeyframe(title); //grab artwork container? BREAKPOINT HERE
         }
     }
     that.captureKeyframe = captureKeyframe;
@@ -240,7 +255,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      */
     function getCurrentTime() {
         //return 0;
-        return player.orchestrator.getElapsedTime();
+        return getPlayer().getOrchestrator().getElapsedTime();
     }
     that.getCurrentTime = getCurrentTime;
     
@@ -293,7 +308,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      */
     function play() {
         if (!playing) {
-            player.play()
+            getPlayer().play()
             playing = true;
         }
     }
@@ -307,7 +322,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      */
     function stop() {
         if (playing && !buffering) {
-            player.pause();
+            getPlayer().pause();
             playing = false;
         }
     }
@@ -319,7 +334,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param time  location to seek to in units of seconds
      */
     function seek(time) {
-        player.scrubTimeline(time.percent);
+        getPlayer().scrubTimeline(time.percent);
         // HACK TO GET IT TO REFRESH
         //player.play();
         //player.pause();
@@ -334,7 +349,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param v     volume, between 0 and 1
      */
     function volume(v) {
-        player.volume(v);
+        getPlayer().volume(v);
     }
     that.volume = volume;
 
@@ -367,7 +382,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param data      Segment portion of RIN tour
      */
     function reloadTour(data, handlers, callback) {
-        if (player) {
+        if (getPlayer) {
             reloading = true;
             // call reload
             //var conv = {
@@ -376,9 +391,9 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //    }
             //};
             this.unload();
-            player.load(TAG.Util.RIN_TO_ITE(data));
-            player.getOrchestrator().setPendingCallback(callback);
-            player.bindCaptureHandlers(handlers);
+            getPlayer().load(TAG.Util.RIN_TO_ITE(data));
+            getPlayer().getOrchestrator().setPendingCallback(callback);
+            getPlayer().bindCaptureHandlers(handlers);
             //player.scrubTimeline(percent);
             reloading = false;
         }
@@ -409,7 +424,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //}, 50);
         } else if (player) {
             ctime = timeManager.getCurrentTime();
-            player.unload();
+            getPlayer().unload();
             //player.loadData(data, function () {
             //    setTimeout(function () {
             //        seek(ctime);

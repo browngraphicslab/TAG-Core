@@ -1177,6 +1177,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         });
                         viewer.forceITEPlayerReload();
                         timeline.onUpdate(true);
+
+                        setTimeout((function () {
+                            viewer.forceITEPlayerReload();
+                            timeline.onUpdate(true);
+                        }), 1000);
                         TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                             tobj.track_type = "Audio File";
                             tobj.quantity = urls.length;
@@ -1340,6 +1345,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         });
                         viewer.forceITEPlayerReload();
                         timeline.onUpdate(true);
+
+                        setTimeout((function () {
+                            viewer.forceITEPlayerReload();
+                            timeline.onUpdate(true);
+                        }), 1000);
                     }
                     uploadHappening = false; //enables button
                     fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
@@ -1395,6 +1405,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     });
                     viewer.forceITEPlayerReload();
                     timeline.onUpdate(true);
+
+                    setTimeout((function () {
+                        viewer.forceITEPlayerReload();
+                        timeline.onUpdate(true);
+                    }), 1000);
                     TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                         tobj.track_type = "Image File";
                         tobj.quantity = urls.length;
