@@ -2218,11 +2218,11 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             //kfvh = keyframe.state.viewport.region.span.y;
         }
         else if (linkType === TAG.TourAuthoring.TrackType.image) {
-            kfvw = 1.0 / (keyframe.width/$('#ITEContainer').width());
+            // domelement = ITE container here
+            kfvw = 1.0 / (keyframe.width/domelement.width());
             kfvh = keyframe.height;
-            kfvx = -keyframe.left / domelement.width();// * kfvw;
-            var rw = keyframe.width;// * domelement.width();
-            kfvy = (-(domelement.height() / rw) * keyframe.top)/domelement.height();
+            kfvx = -keyframe.left / keyframe.width;// * kfvw;
+            kfvy = -keyframe.top / keyframe.width;
             //kfvw = 1.0 / keyframe.state.viewport.region.span.x;//$("#" + canvid).width() / (keyframe.state.viewport.region.span.x * cw);
             //var rw = keyframe.state.viewport.region.span.x * domelement.width();
             //kfvh = keyframe.state.viewport.region.span.y; /////bogus entry, not used

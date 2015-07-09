@@ -173,9 +173,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     //kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
                     kfvw = 1.0 / (keyframe.width / $('#ITEContainer').width());
                     kfvh = keyframe.height;
-                    kfvx = -keyframe.left / proxy.w;// * kfvw;
-                    var rw = keyframe.width;// * domelement.width();
-                    kfvy = (-(proxy.h / rw) * keyframe.top) / proxy.h;
+                    kfvx = -keyframe.left / keyframe.width;// * kfvw;
+                    kfvy = -keyframe.top / keyframe.width;
 
 
                     //kfvw = 1.0 / keyframe.state.viewport.region.span.x;
@@ -317,7 +316,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         //new_kfvh = new_keyframe.height; // not used
                         //new_kfvx = -new_keyframe.left * new_kfvw;
                         //new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
-
+                        new_kfvw = 1.0 / (new_keyframe.width / $('#ITEContainer').width());
+                        new_kfvh = new_keyframe.height;
+                        new_kfvx = -new_keyframe.left / new_keyframe.width;// * kfvw;
+                        new_kfvy = -new_keyframe.top / new_keyframe.width;
                     }
                     track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
                     track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
@@ -455,11 +457,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     kfvh = keyframe.bounds.height;
                 }
                 else if (track.getInkLink().getType() === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.width;
-                    var rw = keyframe.width * $("#ITEHolder").width();
-                    kfvh = keyframe.height; // not used
-                    kfvx = -keyframe.left * kfvw;
-                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    kfvw = 1.0 / (keyframe.width / $('#ITEContainer').width());
+                    kfvh = keyframe.height;
+                    kfvx = -keyframe.left / keyframe.width;// * kfvw;
+                    kfvy = -keyframe.top / keyframe.width;
                 }
             }
             
@@ -583,11 +584,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         new_kfvh = new_keyframe.bounds.height;
                     }
                     else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.width;
-                        var rw = new_keyframe.width * currcanv.width();
-                        new_kfvh = new_keyframe.height; // not used
-                        new_kfvx = -new_keyframe.left * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
+                        //new_kfvw = 1.0 / new_keyframe.width;
+                        //var rw = new_keyframe.width * currcanv.width();
+                        //new_kfvh = new_keyframe.height; // not used
+                        //new_kfvx = -new_keyframe.left * new_kfvw;
+                        //new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
+                        new_kfvw = 1.0 / (new_keyframe.width / $('#ITEContainer').width());
+                        new_kfvh = new_keyframe.height;
+                        new_kfvx = -new_keyframe.left / new_keyframe.width;// * kfvw;
+                        new_kfvy = -new_keyframe.top / new_keyframe.width;
                     }
                     track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
                     track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
@@ -742,9 +747,8 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     //kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
                     kfvw = 1.0 / (keyframe.width / $('#ITEContainer').width());
                     kfvh = keyframe.height;
-                    kfvx = -keyframe.left / domelement.width();// * kfvw;
-                    var rw = keyframe.width;// * domelement.width();
-                    kfvy = (-(domelement.height() / rw) * keyframe.top) / domelement.height();
+                    kfvx = -keyframe.left / keyframe.width;// * kfvw;
+                    kfvy = -keyframe.top / keyframe.width;
                 }
             }
             
@@ -866,11 +870,15 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         new_kfvh = new_keyframe.bounds.height;
                     }
                     else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.width;
-                        var rw = new_keyframe.width * currcanv.width();
-                        new_kfvh = new_keyframe.height; // not used
-                        new_kfvx = -new_keyframe.left * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
+                        //new_kfvw = 1.0 / new_keyframe.width;
+                        //var rw = new_keyframe.width * currcanv.width();
+                        //new_kfvh = new_keyframe.height; // not used
+                        //new_kfvx = -new_keyframe.left * new_kfvw;
+                        //new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
+                        new_kfvw = 1.0 / (new_keyframe.width / $('#ITEContainer').width());
+                        new_kfvh = new_keyframe.height;
+                        new_kfvx = -new_keyframe.left / new_keyframe.width;// * kfvw;
+                        new_kfvy = -new_keyframe.top / new_keyframe.width;
                     }
                     track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
                     track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
