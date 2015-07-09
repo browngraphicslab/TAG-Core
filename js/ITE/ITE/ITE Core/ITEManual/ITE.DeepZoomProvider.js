@@ -513,12 +513,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	    _viewer.addHandler('canvas-scroll',
             function (evt) {
                 handlers.scroll(evt);
-                orchestrator.pause();
             });
 	    _viewer.addHandler('canvas-drag',
             function (evt) {
                 handlers.drag(evt);
-                orchestrator.pause();
             });
 	}
 
