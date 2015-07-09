@@ -5149,7 +5149,7 @@ TAG.Util.UI = (function () {
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
                     horz = viewer.width() / 6; // adjusting the formatting of the progress circle position 
                     progressText.text("Adding Associations...");
-                    
+                    viewer.append(progressText);
                     TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     /**
                     console.log("adding associated medias to artworks")

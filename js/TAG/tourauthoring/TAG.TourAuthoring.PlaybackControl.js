@@ -28,6 +28,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             "width": "96.95%", "bottom": "0%",
             'margin-left': '1.25%',
             "position": "absolute",
+            "z-index": "999999999",
             "box-shadow": "0px -16px 14px -14px #888",
 
         });
