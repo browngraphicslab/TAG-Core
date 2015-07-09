@@ -2541,6 +2541,7 @@ function trackTitleReleased(evt) {
     }
 
     function captureHandler(evt) {
+        my.timeManager.stop();
         captureTween(evt);
         my.update();
     }

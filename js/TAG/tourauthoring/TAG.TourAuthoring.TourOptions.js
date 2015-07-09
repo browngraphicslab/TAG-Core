@@ -630,7 +630,7 @@ TAG.TourAuthoring.TourOptions = function (spec) {
         }
         /*the helper function to hide menus when an option is clicked*/
         function hideMenu() {
-            $('.tourOptionDropDownIcon').css({ 'transform': 'scaleY(1)', 'margin-bottom': '0%' });
+            $('.tourOptionDropDownIcon').css({ 'transform': 'scaleY(1)', 'margin-bottom': '2%' });
             menuVisible = false;
             dropMain.hide();
         }

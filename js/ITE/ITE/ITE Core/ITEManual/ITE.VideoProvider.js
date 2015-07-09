@@ -105,7 +105,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		_coveringDiv.css({
             "background_color" : "blue"
 		});
-
+		if (orchestrator.isAuthoring) {
+		    self.pause();
+		}
 		//lucy vk- error handler to catch network error in chrome and re-start video
 		_videoControls.onerror = function (err){
             switch (err.target.error.code){
@@ -189,9 +191,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
                 //console.log("video not ready")
 	            orchestrator.pause();
 	            orchestrator.status = 4;
-	            if (Math.abs(orchestrator.getElapsedTime() - _videoControls.currentTime - self.firstKeyframe.time) > .150) {
-	                _videoControls.currentTime = orchestrator.getElapsedTime();
-	            }
 	        }
 	        else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
                 //console.log("orch paused and status set to 4")
@@ -492,10 +491,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Sets properties of the video to reflect the input state.
 	 * O/P: 	none
 	 */
-	self.setState = function(state) {
+	self.setState = function (state) {
 	    _UIControl.css({
-	        "left":			state.pos.left,
-	        "top":			state.pos.top,
+	        "left":			0,
+	        "top":			0,
 	        "width":		state.size.width,
 	        "opacity":		state.opacity
 	    });
@@ -648,7 +647,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			attachedInks[i]._ink.adjustViewBox(bounds);
 		}
 	}
-
+	self.updateInk = updateInk;
 
 	/* 
 	 * I/P: 	newVolume :  	 New volume set by user via UI.

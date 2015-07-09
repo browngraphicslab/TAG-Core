@@ -249,7 +249,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
 
         setTimeout(updateTime, 33);
     }
-   // that.play = play;
+    that.play = play;
 
     /**
      * Stops playback if time manager is playing
@@ -259,7 +259,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
             _sendStop();
         }
     }
-    //that.stop = stop;
+    that.stop = stop;
 
     /**
      * Functions for converting btw pixel space and time space

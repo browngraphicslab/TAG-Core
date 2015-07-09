@@ -6294,6 +6294,19 @@ TAG.Util.RLH = function (input) {
 
         currentIndex = mapGuids.indexOf(guid);
 
+        if (currentIndex == 0) {
+            if (!defaultMapShown) {
+                $("#locationHistoryAddLocationButton").prop('disabled', true).css("opacity", "0.4");
+                $("#locationHistorySortLocationsByTitleButton").prop('disabled', true).css("opacity", "0.4");
+                $("#locationHistorySortLocationsByDateButton").prop('disabled', true).css("opacity", "0.4");
+            }
+        }
+        else {
+            $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+        }
+
         //If bing maps is disabled and in art viewer, don't show it
         if (!guid && !input.authoring && !defaultMapShown) {
             return;
@@ -6863,7 +6876,8 @@ TAG.Util.RLH = function (input) {
                     }
                 },
                 noMedia: true,
-                disableZoom : false
+                disableZoom: false,
+                locationHist: true
             });
         }
 
@@ -6933,7 +6947,7 @@ TAG.Util.RLH = function (input) {
             });
 
             //all pins start off in an overlay
-            annotImg.addOverlay(pushpin[0], new Seadragon.Point(location.x, location.y), Seadragon.OverlayPlacement.BOTTOM);
+            annotImg.addOverlay(pushpin[0], new OpenSeadragon.Point(location.x, location.y), OpenSeadragon.OverlayPlacement.BOTTOM);
 
             var isOverlay = true,
                 x,
@@ -6952,6 +6966,7 @@ TAG.Util.RLH = function (input) {
                             t = pushpin.css('top');
                             l = pushpin.css('left');
                             annotImg.removeOverlay(pushpin[0]); //seems like this changes the CSS of the pushpin?
+                            pushpin.css('display', 'block');
                             pushpin.appendTo(mapHolders[mapdoq.Identifier]);
                             pushpin.css({
                                 top: t,
@@ -6988,9 +7003,9 @@ TAG.Util.RLH = function (input) {
                             var coord = annotImg.returnElementToBounds(pushpin);
                             pushpin.css("top", (coord.y - h) + "px");
                             pushpin.css("left", (coord.x - 0.5 * w) + "px");
-                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(coord.x, coord.y)), Seadragon.OverlayPlacement.BOTTOM);
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new OpenSeadragon.Point(coord.x, coord.y)), OpenSeadragon.OverlayPlacement.BOTTOM);
                         } else {
-                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new OpenSeadragon.Point(x, y)), OpenSeadragon.OverlayPlacement.BOTTOM);
                         }
                         annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
                     }
@@ -8520,7 +8535,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                         },
                         "pos": {
                             "x": 0,//currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').innerHeight()
+                            "y": 0
                         },
 						"data": {},
 						"volume": currKeyframe.state.sound.volume,

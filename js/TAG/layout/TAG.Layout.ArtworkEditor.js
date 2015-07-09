@@ -121,7 +121,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     }
                     initUI();
                 },
-                noMedia: true
+                noMedia: true,
+                inArtworkEditor: true,
             });
         } else {
             initUI();
