@@ -520,11 +520,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
                 handlers.drag(evt);
                 orchestrator.pause();
             });
-	    _viewer.addHandler('canvas-press',
-            function (evt) {
-                handlers.drag(evt);
-                orchestrator.pause();
-            });
 	}
 
 	self.registerCaptureFinishedHandler = function (handlers) {
