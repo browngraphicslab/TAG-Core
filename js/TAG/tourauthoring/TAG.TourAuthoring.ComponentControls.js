@@ -1190,12 +1190,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             container.track.updatePos(i);
                         });
                         viewer.forceITEPlayerReload();
-                        timeline.onUpdate(true);
 
-                        setTimeout((function () {
-                            viewer.forceITEPlayerReload();
-                            timeline.onUpdate(true);
-                        }), 1000);
+                        //setTimeout((function () {
+                            //viewer.forceITEPlayerReload();
+                        //}), 1000);
                         TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                             tobj.track_type = "Audio File";
                             tobj.quantity = urls.length;
@@ -1358,12 +1356,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             tobj.quantity = urls.length;
                         });
                         viewer.forceITEPlayerReload();
-                        timeline.onUpdate(true);
-
-                        setTimeout((function () {
-                            viewer.forceITEPlayerReload();
-                            timeline.onUpdate(true);
-                        }), 1000);
+                        //setTimeout((function () {
+                            //viewer.forceITEPlayerReload();
+                        //}), 1000);
                     }
                     uploadHappening = false; //enables button
                     fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
@@ -1418,12 +1413,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         container.track.updatePos(i);
                     });
                     viewer.forceITEPlayerReload();
-                    timeline.onUpdate(true);
+                    //timeline.onUpdate(true);
 
-                    setTimeout((function () {
-                        viewer.forceITEPlayerReload();
-                        timeline.onUpdate(true);
-                    }), 1000);
+                    //setTimeout((function () {
+                        //viewer.forceITEPlayerReload();
+                        //timeline.onUpdate(true);
+                    //}), 1000);
                     TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                         tobj.track_type = "Image File";
                         tobj.quantity = urls.length;
@@ -2247,7 +2242,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     container.track.updatePos(i);
                 });
                 viewer.forceITEPlayerReload();
-                timeline.onUpdate(true);
+                //timeline.onUpdate(true);
             }
 
             //this handles discriminating between the double and single clicks for importing media
@@ -2464,7 +2459,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     container.track.updatePos(i);
                 });
                 viewer.forceITEPlayerReload();
-                timeline.onUpdate(true);
+                //timeline.onUpdate(true);
             });
             associatedMediaPicker.append(associatedMediaPickerImport);
 
@@ -3110,7 +3105,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 });
                 
                 viewer.forceITEPlayerReload();
-                timeline.onUpdate(true);
+                //timeline.onUpdate(true);
             }
 
             //this handles discriminating between the double and single clicks for importing artworks
@@ -3253,7 +3248,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     container.track.updatePos(i);
                 });
                 viewer.forceITEPlayerReload();
-                timeline.onUpdate(true);
+                //timeline.onUpdate(true);
             });
             catalogPicker.append(catalogPickerImport);
 
