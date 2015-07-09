@@ -112,11 +112,27 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         var temp2 = $(TAG.Util.UI.blockInteractionOverlay(1));
         temp.css("display", 'block')
         temp2.css("display", 'block')
+
+        var infoDiv = $(document.createElement('div'));
+        infoDiv.css({
+            "color": "white",
+            "background-color": "transparent",
+            "text-align": "center",
+            "top": "59%",
+            "display": "block",
+            "position": "absolute",
+            "font-size": "3.55em",
+            "width": '100%',
+            "height" : "100%"
+        })
+        infoDiv.text("Adding artwork...");
+        temp2.append(infoDiv);
+
         var root = $(document.body);
         root.append(temp)
         root.append(temp2)
 
-        TAG.Util.showLoading(temp2, '20%', '40%', '40%')//to show the loading screen
+        TAG.Util.showLoading(temp2, '10%', '42.5%', '45%')//to show the loading screen
         temp.css('background-color','rgb(0,0,0,1)')
         temp.css("z-index", "2147483646");
         temp2.css("z-index", "2147483647");//update temp blocking divs' css z-index
@@ -137,14 +153,24 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             TAG.Util.UI.slidePageRight(tempSettings.getRoot(), function () {//LITERALLY MOVE THE PAGE RIGHT
                 //when done moving right
                 console.log($("#setViewButtonContainer"));
-                $("#setViewButtonContainer")[0].firstChild.click();//click on the 'edit tour' button
-                
-               
-                window.setTimeout(function () {
-                    TAG.Util.hideLoading(temp2)//after .25 second delay, remove the loading circle
-                    temp.remove();//remove the two covering divs
-                    temp2.remove();
-                }, 250);
+
+                var poll = function () {
+                    console.log("polling to look for edit button")
+                    if ($("#setViewButtonContainer")[0].firstChild) {
+                        console.log("found first child");
+                        $("#setViewButtonContainer")[0].firstChild.click();//click on the 'edit tour' button
+                        window.setTimeout(function () {
+                            TAG.Util.hideLoading(temp2)//after .25 second delay, remove the loading circle
+                            temp.remove();//remove the two covering divs
+                            temp2.remove();
+                        }, 200);
+                    }
+                    else {
+                        window.setTimeout(poll, 100);
+                    }
+                    
+                }
+                poll();
                 /*
                 var toureditor = new TAG.Layout.TourAuthoringNew(tourobj, function () {
                     TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {

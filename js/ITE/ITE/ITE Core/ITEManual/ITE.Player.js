@@ -148,6 +148,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
                            .append(volumeLevelContainer);
             volumeButtonContainer.append(volumeButton);
             volumeLevelContainer.append(volumeLevel);
+            //move to be next to loop button, which is hard-coded at 50px
+            volumeContainer.css('right', $("#tagRoot").width() * 0.03 + 50 + 'px');
         }
         playerConfiguration.setMute ? mute(): unMute()
     };
@@ -258,6 +260,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
             progressIndicator.addClass("progressIndicator"); 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
+            //adjust right positioning
+            ProgressIndicatorContainer.css({ 'right': $("#tagRoot").width()*0.04 + 100 + 'px' });
             updateProgressIndicator(orchestrator.getElapsedTime());
         }
     };
