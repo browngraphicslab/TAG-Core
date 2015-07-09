@@ -3484,12 +3484,13 @@ TAG.Util.UI = (function () {
                 'left': '12%',
                 'margin': 'auto',
                 'margin-top': '1%',
+                'width': '15%',
             });
             var realcancelbtn = $(document.createElement('button'));
             realcancelbtn.css({
                 'padding': '1%',
                 'border': '1px solid white',
-                'width': 'auto',
+                'width': '15%',
                 'position': 'relative',
                 'float': "right",
                 //'margin-right': '12%',
@@ -3502,8 +3503,9 @@ TAG.Util.UI = (function () {
             var btnwidth = $(cancelButton).width();
             var dontleft = ($(optionButtonDiv).width() - btnwidth) / 2;
             $cancelButton.css({
-                "float": 'none',
+                "float": 'left',
                 'margin': 'auto',
+                'width': '15%',
                 'margin-top':'1%',                
             });
             $(optionButtonDiv).append(realcancelbtn);
