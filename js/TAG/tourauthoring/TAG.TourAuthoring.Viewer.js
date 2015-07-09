@@ -130,12 +130,6 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         }
         TAG.Worktop.Database.changeTour(tourobj, options, function () {
             // success
-
-
-
-
-            console.log(tourobj)
-            console.log(tour)
             stop();
             unload();
             var tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);
@@ -161,11 +155,6 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                     toureditor.uploadStillHappening(true);
                 }*/
             })
-
-
-
-
-
         }, function () {
             // unauth
             dialogOverlay.hide();
