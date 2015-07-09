@@ -2192,7 +2192,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             $("[id='" + artName + "']") :
             $("[id='" + artName + + "holder" + "']");
 
-        proxy = {
+        var proxy = {
             x: parseInt(proxy_div.position().left),
             y: parseInt(proxy_div.position().top),
             w: proxy_div.width(),
