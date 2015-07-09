@@ -83,6 +83,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			.addClass("UIControl")
 			.append(_video)
             .append(_coveringDiv);
+
+		_UIControl.css({
+		    position: 'relative'
+		})
         
 		$("#ITEHolder").append(_UIControl);
 		self._UIControl = _UIControl;
@@ -251,10 +255,12 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			TweenLite.ticker.addEventListener("tick", updateInk);
 
 			// When finished loading, set status to 2 (paused).
-			self.status = 2; 
+			self.status = 2;
+
+			self.constrainVideoSize();
 
 			//Tell orchestrator to play (if other tracks are ready)
-			self.orchestrator.playWhenAllTracksReady()
+			self.orchestrator.playWhenAllTracksReady();
 		});
 
 		// // Ensure that the video is completely loaded.
@@ -299,6 +305,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	    	console.log(_videoControls);
 	    	_videoControls.currentTime = time;
 	    	updateInk(true);
+	    	self.constrainVideoSize();
 		}
 	}
 	/*
@@ -409,11 +416,39 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			nextKeyframe = surKeyframes[1];
 		}
 
+		self.constrainVideoSize();
+
 		updateInk(true);
 
 		return nextKeyframe;
 	};
 
+	self.constrainVideoSize = function () {
+	    var vwidth = _video[0].videoWidth;
+	    var vheight = _video[0].videoHeight;
+	    var defaultAspectRatio = 16.0 / 9.0;
+	    if ((vwidth / vheight) >= defaultAspectRatio) {
+	        var primaryDim = $('#ITEContainer').width();
+	        _UIControl.css({
+	            width: primaryDim,
+	            height: primaryDim * 9.0 / 16.0
+	        });
+	        _video.css({
+	            width: primaryDim,
+	            height: primaryDim * 9.0 / 16.0
+	        });
+	    } else {
+	        var primaryDim = $('#ITEContainer').height();
+	        _UIControl.css({
+	            width: primaryDim * 16.0 / 9.0,
+	            height: primaryDim
+	        });
+	        _video.css({
+	            width: primaryDim * 16.0 / 9.0,
+	            height: primaryDim
+	        });
+	    }
+	}
 
 	/* 
 	 * I/P: 	duration : 		Length of time animation should take, in milliseconds.
@@ -442,9 +477,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			duration, 
 			// New state for animation.
 			{
-				"left":			state.pos.left,
-				"top":			state.pos.top,
-				"width":		state.size.width,
 				"opacity":		state.opacity,
 				"onComplete":	onComplete
 			}
@@ -493,12 +525,13 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.setState = function (state) {
 	    _UIControl.css({
-	        "left":			0,
-	        "top":			0,
-	        "width":		state.size.width,
 	        "opacity":		state.opacity
 	    });
+
+	    self.constrainVideoSize();
+
 	    _videoControls.volume = state.volume * self.player.currentVolumeLevel;
+
 	    if(orchestrator.getStatus()!=4){
 	        state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
 	    }
