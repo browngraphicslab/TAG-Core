@@ -1858,7 +1858,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
         //    tracks[i].addScreenPlayEntries(screenplayStorage);
         //}
         dataHolder.mapTracks(function (i) {
-            i.track.addScreenPlayEntries(screenplayStorage);
+            i.track.addScreenPlayEntries(screenplayStorage, true);
         });
         screenplayStorage.sort(function (a, b) { return a.begin - b.begin; }); // Screenplay must be sorted
         return screenplayStorage;
