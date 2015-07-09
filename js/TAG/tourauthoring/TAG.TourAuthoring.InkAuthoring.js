@@ -2188,9 +2188,11 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         var ch = domelement.height();
         magX = cw;
         magY = ch;
-        var proxy_div = $("[id='" + artname + "']");
+        var proxy_div = $("[id='" + artName + "']").length > 0 ?
+            $("[id='" + artName + "']") :
+            $("[id='" + artName + + "holder" + "']");
 
-        proxy = {
+        var proxy = {
             x: parseInt(proxy_div.position().left),
             y: parseInt(proxy_div.position().top),
             w: proxy_div.width(),
@@ -2962,7 +2964,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * which keeps track of its dimensions
      */
     function retrieveOrigDims() {
-        var proxy = $("[id='" + artname + "']");
+        var proxy = $("[id='" + artName + "']").length > 0 ?
+            $("[id='" + artName + "']") : 
+            $("[id='" + artName + "holder" + "']");
         var kfx = initKeyframe.x;
         var kfy = initKeyframe.y;
         var kfw = initKeyframe.w;

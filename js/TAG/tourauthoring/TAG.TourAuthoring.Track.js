@@ -577,6 +577,13 @@ TAG.TourAuthoring.Track = function (spec, my) {
             return;
         }
 
+        my.timeline.setEditInkOn(true);
+        $("#addComponentLabel").prop("disabled", true).css({
+            "opacity": "0",
+            'display': 'none'
+        })
+
+
         //that.setInkPath("");
         my.isVisible = false;
 
