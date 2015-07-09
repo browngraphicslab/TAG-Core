@@ -107,8 +107,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     that.getITE = getITE;
 
 
-    function forceITEPlayerReload() {
-        var temp = $(TAG.Util.UI.blockInteractionOverlay(1));
+    function forceITEPlayerReload() {//DEFINITION OF JANKY BUG FIX
+        var temp = $(TAG.Util.UI.blockInteractionOverlay(1));//add two blocking div's to stop all interaction
         var temp2 = $(TAG.Util.UI.blockInteractionOverlay(1));
         temp.css("display", 'block')
         temp2.css("display", 'block')
@@ -116,10 +116,10 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         root.append(temp)
         root.append(temp2)
 
-        TAG.Util.showLoading(temp2, '20%', '40%', '40%')
+        TAG.Util.showLoading(temp2, '20%', '40%', '40%')//to show the loading screen
         temp.css('background-color','rgb(0,0,0,1)')
         temp.css("z-index", "2147483646");
-        temp2.css("z-index", "2147483647");
+        temp2.css("z-index", "2147483647");//update temp blocking divs' css z-index
 
         var content = JSON.stringify(timeline.toRIN(true));
         var related = JSON.stringify(timeline.getRelatedArtworks());
@@ -128,21 +128,21 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             Content: content,
             RelatedArtworks: related
         }
-        TAG.Worktop.Database.changeTour(tourobj, options, function () {
-            // success
+        TAG.Worktop.Database.changeTour(tourobj, options, function () {//update tour object (save tour)
+            // then upon sucess of saving,
             stop();
             unload();
-            var tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);
+            var tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);//create settings so the settingsview page knows where to go
 
-            TAG.Util.UI.slidePageRight(tempSettings.getRoot(), function () {
-
+            TAG.Util.UI.slidePageRight(tempSettings.getRoot(), function () {//LITERALLY MOVE THE PAGE RIGHT
+                //when done moving right
                 console.log($("#setViewButtonContainer"));
-                $("#setViewButtonContainer")[0].firstChild.click();
+                $("#setViewButtonContainer")[0].firstChild.click();//click on the 'edit tour' button
                 window.setTimeout(function () {
-                    TAG.Util.hideLoading(temp2)
-                    temp.remove();
+                    TAG.Util.hideLoading(temp2)//after .25 second delay, remove the loading circle
+                    temp.remove();//remove the two covering divs
                     temp2.remove();
-                }, 750);
+                }, 250);
                 /*
                 var toureditor = new TAG.Layout.TourAuthoringNew(tourobj, function () {
                     TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
