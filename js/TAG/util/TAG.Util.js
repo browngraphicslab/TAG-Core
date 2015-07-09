@@ -6288,6 +6288,19 @@ TAG.Util.RLH = function (input) {
 
         currentIndex = mapGuids.indexOf(guid);
 
+        if (currentIndex == 0) {
+            if (!defaultMapShown) {
+                $("#locationHistoryAddLocationButton").prop('disabled', true).css("opacity", "0.4");
+                $("#locationHistorySortLocationsByTitleButton").prop('disabled', true).css("opacity", "0.4");
+                $("#locationHistorySortLocationsByDateButton").prop('disabled', true).css("opacity", "0.4");
+            }
+        }
+        else {
+            $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+            $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+        }
+
         //If bing maps is disabled and in art viewer, don't show it
         if (!guid && !input.authoring && !defaultMapShown) {
             return;
