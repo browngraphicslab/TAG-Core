@@ -65,7 +65,6 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                 "background-color": "rgb(0,0,0)", "height": "100%", "width": "80%",
                 "position": "relative", "left": "20%"
             });
-
             // let's assume 16:9 ratio for now
             ITEContainer.attr('id', 'ITEContainer');
             ITEContainer.css({
@@ -107,10 +106,90 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     }
     that.getITE = getITE;
 
+
     function forceITEPlayerReload() {
+        var temp = $(TAG.Util.UI.blockInteractionOverlay(1));
+        var temp2 = $(TAG.Util.UI.blockInteractionOverlay(1));
+        temp.css("display", 'block')
+        temp2.css("display", 'block')
+        var root = $(document.body);
+        root.append(temp)
+        root.append(temp2)
+
+        TAG.Util.showLoading(temp2, '20%', '40%', '40%')
+        temp.css('background-color','rgb(0,0,0,1)')
+        temp.css("z-index", "2147483646");
+        temp2.css("z-index", "2147483647");
+
+        var content = JSON.stringify(timeline.toRIN(true));
+        var related = JSON.stringify(timeline.getRelatedArtworks());
+        var options = {
+            Name : $("#textArea").val(),
+            Content: content,
+            RelatedArtworks: related
+        }
+        TAG.Worktop.Database.changeTour(tourobj, options, function () {
+            // success
+
+
+
+
+            console.log(tourobj)
+            console.log(tour)
+            stop();
+            unload();
+            var tempSettings = new TAG.Authoring.SettingsView('Tours', null, null, tourobj.Identifier);
+
+            TAG.Util.UI.slidePageRight(tempSettings.getRoot(), function () {
+
+                console.log($("#setViewButtonContainer"));
+                $("#setViewButtonContainer")[0].firstChild.click();
+                window.setTimeout(function () {
+                    TAG.Util.hideLoading(temp2)
+                    temp.remove();
+                    temp2.remove();
+                }, 750);
+                /*
+                var toureditor = new TAG.Layout.TourAuthoringNew(tourobj, function () {
+                    TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
+                        toureditor.getViewer().loadITE();
+                        toureditor.getTimeline().onUpdate();
+                    });
+                });
+                /*
+                if (progressBarLength > 0) { //other upload happening - disable import
+                    toureditor.uploadStillHappening(true);
+                }*/
+            })
+
+
+
+
+
+        }, function () {
+            // unauth
+            dialogOverlay.hide();
+            var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  You must log in to save changes.");
+            $('body').append(popup);
+            $(popup).show();
+        }, function (jqXHR, ajaxCall) {
+            // conflict
+            // Ignore conflict for now
+            ajaxCall.force();
+        }, function () {
+            // error
+            dialogOverlay.hide();
+            var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  There was an error contacting the server.");
+            $('body').append(popup);
+            $(popup).show();
+        });
+
+        /*
         $('#ITEHolder').remove();
         createITE(true);
+        loadITE();
         timeManager.setPlayer(player);
+        */
     }
     that.forceITEPlayerReload = forceITEPlayerReload;
 
