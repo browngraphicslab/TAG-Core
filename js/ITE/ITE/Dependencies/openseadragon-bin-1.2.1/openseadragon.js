@@ -13694,6 +13694,7 @@ ImageJob.prototype = {
         this.image.onload = this.image.onerror = this.image.onabort = null;
         if (!successful) {
             this.image = null;
+            console.log("failed to load image");
         }
 
         if ( this.jobId ) {
@@ -13969,7 +13970,7 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
     drawHTML: function( container ) {
         if ( !this.loaded || !this.image ) {
             $.console.warn(
-                "Attempting to draw tile %s when it's not yet loaded.",
+                "Attempting to draw tile %s when it's not yet loaded in draw html.",
                 this.toString()
             );
             return;
@@ -14020,9 +14021,12 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
 
         if ( !this.loaded || !( this.image || TILE_CACHE[ this.url ] ) ){
             $.console.warn(
-                "Attempting to draw tile %s when it's not yet loaded.",
+                "Attempting to draw tile %s when it's not yet loaded in drawCanvas.",
                 this.toString()
             );
+            console.log("unloaded:");
+            console.log(this.unloaded);
+            console.log(this.image);
             return;
         }
         context.globalAlpha = this.opacity;
@@ -14055,6 +14059,7 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
             //since we are caching the prerendered image on a canvas
             //allow the image to not be held in memory
             this.image = null;
+            console.log('cached');
         }
 
         rendered = TILE_CACHE[ this.url ];
@@ -14098,7 +14103,9 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
         this.imgElement = null;
         this.image      = null;
         this.loaded     = false;
-        this.loading    = false;
+        this.loading = false;
+        this.unloaded = true;
+        console.log("unloaded");
     }
 };
 

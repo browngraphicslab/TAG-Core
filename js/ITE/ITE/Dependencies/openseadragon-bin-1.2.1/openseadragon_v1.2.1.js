@@ -14541,13 +14541,18 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
             rendered,
             canvas;
 
-        if ( !this.loaded || !( this.image || TILE_CACHE[ this.url ] ) ){
+        if ( !this.loaded || !(this.image || TILE_CACHE[this.url]) ){
             $.console.warn(
                 "Attempting to draw tile %s when it's not yet loaded.",
                 this.toString()
             );
+            console.log("unloaded:");
+            console.log(this.unloaded);
             return;
+        } /*else if (!TILE_CACHE[this.url]) {
+            console.log("cache miss");
         }
+        */
         context.globalAlpha = this.opacity;
 
         //context.save();
@@ -14621,7 +14626,8 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
         this.imgElement = null;
         this.image      = null;
         this.loaded     = false;
-        this.loading    = false;
+        this.loading = false;
+        this.unloaded = true;
     }
 };
 

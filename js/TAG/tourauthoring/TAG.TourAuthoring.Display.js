@@ -2261,6 +2261,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
      * @param capture   whether the keyframe should immediately capture the state of the player
      * @returns     keyframe%A
      */
+
     function addKeyframe(x, y, customSpec) {
         if (canKeyframe) {
             var data = my.timeline.captureKeyframe(my.title),

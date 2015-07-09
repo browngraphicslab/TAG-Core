@@ -236,6 +236,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		for(var v in self) {
 			v = null;
 		}
+		_viewer = null;
+		self.viewer = null;
 
 	};
 
@@ -359,7 +361,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	/* 
 	 * I/P: 	duration : 		Length of time animation should take, in milliseconds.
 	 * 			state : 		State to animate to, from current state.
-	 * Animates from current state to provided state in specified duration.
+	 * Animates from current state to provided state in specified duration..
 	 * O/P: 	none
 	 */
 	self.animate = function(duration, state) {

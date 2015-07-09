@@ -2411,7 +2411,6 @@ function trackTitleReleased(evt) {
         trackBody.scrollTop(topp);
     }
 
-
      //adds a key frame or display    
     function addKeyorDisplay(evt) {
         var positionX = evt.position.x,
@@ -2537,7 +2536,7 @@ function trackTitleReleased(evt) {
 
     function captureTween(evt) {
         var origin = evt.imageTrack ? evt.imageTrack : evt.eventSource.ITE_track;
-        var time = origin.timeManager.elapsedOffset;
+        var time = my.timeManager.getCurrentTime();
 
         // enabled and disabled via custom event framework - see Viewer's event listener for playerReady event
         if (my.timeline.getViewer().isKeyframingDisabled()) {
@@ -2567,6 +2566,7 @@ function trackTitleReleased(evt) {
         if (currentDisplay && time >= currentDisplay.getStart() && time <= currentDisplay.getEnd()) {
             var time_px = my.timeManager.timeToPx(time);
             keyframe = currentDisplay.addKeyframe(time_px, 48, true);
+
 
             var time_2dec = Math.twoDecPlaces(time);
 

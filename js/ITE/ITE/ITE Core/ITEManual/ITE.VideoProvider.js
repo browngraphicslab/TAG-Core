@@ -299,6 +299,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	    	console.log("seeked to time: " + time);
 	    	console.log(_videoControls);
 	    	_videoControls.currentTime = time;
+	    	updateInk(true);
 		}
 	}
 	/*
@@ -408,6 +409,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			self.setState(soughtState);
 			nextKeyframe = surKeyframes[1];
 		}
+
+		updateInk(true);
+
 		return nextKeyframe;
 	};
 
@@ -629,7 +633,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Updates ink so that it animates with image
 	 * O/P: 	none 
 	 */
-	updateInk = function() {
+	updateInk = function (isForcedRefresh) {
+	    if (self.orchestrator.status === 2 && !isForcedRefresh) {
+	        return;
+	    }
 		var i;
 		for (i = 0; i < attachedInks.length; i++){
 			var bounds = {
