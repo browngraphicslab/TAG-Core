@@ -177,7 +177,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	function poll() {
 	    //console.log("polled orch time: " + orchestrator.getElapsedTime() + "    video time: " + _videoControls.currentTime + "    first keyframe time: " + self.firstKeyframe.time + "    computed offset: " + (orchestrator.getElapsedTime() - _videoControls.currentTime));
         //console.log("orchestrator status: "+orchestrator.getStatus() + "   last key frame time: "+self.lastKeyframe.time+"    _videwoControls readystate: "+_videoControls.readyState)
-        if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() < self.lastKeyframe.time) {
+	    if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() <= self.lastKeyframe.time && orchestrator.getElapsedTime() >= self.firstKeyframe.time) {
             //console.log("entered if statement")
 	        if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4 && Math.abs(orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < .150) {
                 //console.log("video played")
@@ -202,8 +202,11 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	            orchestrator.status = 4;
 	            _videoControls.pause();
 	        }
+	        else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < -.150) {
+	            _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
+	        }
 	        else {
-                //console.log("else loop ended with no calls")
+	            //console.log("else loop ended with no calls")
 	        }/*
 		    else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
 		        console.log("just pausing orchestrator");
@@ -249,7 +252,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		_videoControls.load();
 
 		// Ensure that the video is completely loaded.
-		_videoControls.addEventListener("canplay", function() {
+		_videoControls.addEventListener("canplay", function () {
+		    console.log("video can play")
+
+
 			// Update first state.
 			self.setState(self.getKeyframeState(self.firstKeyframe));
 			TweenLite.ticker.addEventListener("tick", updateInk);
@@ -345,7 +351,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		if (nextKeyframe) {
 			self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
 		}
-
+        if(orchestrator.getElapsedTime())
 		_videoControls.play();
 		_videoControls.hasAttribute("controls") ? _videoControls.removeAttribute("controls") : null;
 	};
