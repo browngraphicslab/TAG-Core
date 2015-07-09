@@ -9037,10 +9037,17 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                 */
                 var w = $("#ITEContainer").width() ? $("#ITEContainer").width() : $("#tagRoot").width();
                 var h = $("#ITEContainer").height() ? $("#ITEContainer").height() : $("#tagRoot").height();
+                var screenplay = referenceDataMap[currExperienceStreamKey];
+                var fadeIn = 0, fadeOut = 0;
+                if (currExperienceStream.data.transition) {
+                    fadeIn = currExperienceStream.data.transition.inDuration;
+                    fadeOut = currExperienceStream.data.transition.outDuration;
+                }
+
 			    keyFrame0 = {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
-			        "time": 0,
+			        "time": screenplay.begin,
 			        "opacity": 1,
 			        "size": {
 			            "x": w,
@@ -9057,7 +9064,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			    keyFrame1 = {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
-			        "time": .05,
+			        "time": screenplay.begin + fadeIn + 0.01,
 			        "opacity": 1,
 			        "size": {
 			            "x": w,
@@ -9074,7 +9081,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			    keyFrame2 = {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
-			        "time": currExperienceStream.duration - .05,
+			        "time": screenplay.begin + currExperienceStream.duration + 0.01,
 			        "opacity": 1,
 			        "size": {
 			            "x": w,
@@ -9091,7 +9098,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			    keyFrame3 = {
 			        "dispNum": 1,
 			        "zIndex": currExperienceStream.data.zIndex,
-			        "time": currExperienceStream.duration,
+			        "time": screenplay.begin + currExperienceStream.duration + fadeOut + 0.01,
 			        "opacity": 0,
 			        "size": {
 			            "x": w,

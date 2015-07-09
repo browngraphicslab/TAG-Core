@@ -2565,6 +2565,11 @@ TAG.TourAuthoring.Display = function (spec, my) {
                     'beginAt': 0,
                     'endAt': main
                 };
+                //data.experienceStreams[esTitle].data.markers = {
+                //    'beginAt': getStart(),
+                //    'length': main,
+                //    'endAt': getEnd()
+                //};
                 break;
 
             case TAG.TourAuthoring.TrackType.ink:
