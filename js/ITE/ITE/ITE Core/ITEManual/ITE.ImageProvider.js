@@ -605,8 +605,10 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	}
 
     	if (IS_WINDOWS) {
-    	    if (res.scroll != 1) {
-    	        mediaScroll(res.scale, res.pivot, true);//True is from touch
+    	    if (res.scale !== 1) {
+    	        mediaPinch(res.scale, res.pivot);
+                top = _UIControl.position().top;
+                left = _UIControl.position().left;
     	    }
 
     	    //Target location is just current location plus translation
@@ -781,23 +783,28 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
         };
 
         //adjust pivot when in previewer 
-        if ($("#resizableArea").width() > 0) {
-            pivot.x = pivot.x - ($("#ITEContainer").offset().left - $("#viewer").offset().left);
-        }
+        //if ($("#resizableArea").width() > 0) {
+        //    pivot.x = pivot.x - ($("#ITEContainer").offset().left - $("#viewer").offset().left);
+        //}
 
         // Update scale, new X and new Y according to newly constrained values.
         scale = newW / w;
         newH = h * scale;
-        newX = l * scale + pivot.x * (1 - scale);
-        newY = t * scale + pivot.y * (1 - scale);
+        //newX = l * scale + pivot.x * (1 - scale);
+        //newY = t * scale + pivot.y * (1 - scale);
+        //newX = l * scale + (pivot.x + l)* (1 - scale);
+        //newY = t * scale + (pivot.y + t) * (1 - scale);
+        newX = l + pivot.x * (1 - scale);
+        newY = t + pivot.y * (1 - scale);
+
 
         // _UIControl to self new position. No animation for pinch.
         self.interactionAnimation && self.interactionAnimation.kill();
         self._UIControl.css({
-            top: newY,
-            left: newX,
-            width: newW,
-            height: newH
+            top: newY + 'px',
+            left: newX + 'px',
+            width: newW + 'px',
+            height: newH + 'px'
         });
 
         if (captureHandlers) {
