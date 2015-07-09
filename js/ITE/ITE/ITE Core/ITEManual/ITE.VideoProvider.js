@@ -105,7 +105,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		_coveringDiv.css({
             "background_color" : "blue"
 		});
-
+		if (orchestrator.isAuthoring) {
+		    self.pause();
+		}
 		//lucy vk- error handler to catch network error in chrome and re-start video
 		_videoControls.onerror = function (err){
             switch (err.target.error.code){
