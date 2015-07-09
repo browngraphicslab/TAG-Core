@@ -139,7 +139,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if (linked) {
                 artname = linkedTrack.getTitle();
                 var linkType = linkedTrack.getType();
-                var proxy_div = $("[id='" + artname + "']");
+                var proxy_div = $("[id='" + artname + "']").length > 0 ? 
+                    $("[id='" + artname + "']") : 
+                    $("[id='" + artname + "holder" + "']");
 
                 proxy = {
                     x: parseInt(proxy_div.position().left),
@@ -288,7 +290,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 if (linked) {
                     var currcanv = $('#inkCanv');
 
-                    var new_proxy_div = $("[id='" + artname + "']"); //proxy for the artwork -- keeps track of dimensions
+                    var new_proxy_div = $("[id='" + artname + "']").length > 0 ?
+                        $("[id='" + artname + "']") :
+                        $("[id='" + artname + "holder" + "']"); //proxy for the artwork -- keeps track of dimensions
                     var new_proxy = {
                         x: parseInt(new_proxy_div.position().left),
                         y: parseInt(new_proxy_div.position().top),
@@ -433,7 +437,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if (linked) {
                 initKeyframe = track.getInkInitKeyframe();
                 artname = linkedTrack.getTitle();
-                var proxy_div = $("[id='" + artname + "']");
+                var proxy_div = $("[id='" + artname + "']").length > 0 ?
+                    $("[id='" + artname + "']") :
+                    $("[id='" + artname + "holder" + "']");
 
                 proxy = {
                     x: parseInt(proxy_div.position().left),
@@ -561,7 +567,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 if (linked) {
                     var currcanv = $('#inkCanv');
 
-                    var new_proxy_div = $("[id='" + artname + "']");//proxy for the artwork -- keeps track of dimensions
+                    var new_proxy_div = $("[id='" + artname + "']").length > 0 ?
+                        $("[id='" + artname + "']") :
+                        $("[id='" + artname + "holder" + "']");//proxy for the artwork -- keeps track of dimensions
                     var new_proxy = {
                         x: parseInt(new_proxy_div.position().left),
                         y: parseInt(new_proxy_div.position().top),
@@ -716,7 +724,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 initKeyframe = track.getInkInitKeyframe();
                 artname = linkedTrack.getTitle();
                 var linkType = linkedTrack.getType();
-                var proxy_div = $("[id='" + artname + "']");
+                var proxy_div = $("[id='" + artname + "']").length > 0 ?
+                    $("[id='" + artname + "']") :
+                    $("[id='" + artname + "holder" + "']");
 
                 proxy = {
                     x: parseInt(proxy_div.position().left),
@@ -847,7 +857,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 if (linked) {
                     var currcanv = $('#inkCanv');
 
-                    var new_proxy_div = $("[id='" + artname + "']"); //proxy for the artwork -- keeps track of dimensions
+                    var new_proxy_div = $("[id='" + artname + "']").length > 0 ?
+                        $("[id='" + artname + "']") :
+                        $("[id='" + artname + "holder" + "']"); //proxy for the artwork -- keeps track of dimensions
                     var new_proxy = {
                         x: parseInt(new_proxy_div.position().left),
                         y: parseInt(new_proxy_div.position().top),
