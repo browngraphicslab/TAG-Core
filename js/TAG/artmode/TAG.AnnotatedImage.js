@@ -19,6 +19,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         callback = options.callback,       // called after associated media are retrieved from server
         noMedia = options.noMedia,        // should we not have assoc media? (set to true in artwork editor)
         locationHist = options.locationHist,
+        inArtworkEditor = options.inArtworkEditor,
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,   // prepend server address to given path
@@ -569,41 +570,44 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 		//Creates element that the OSD viewer will be appended to
 		viewerelt = document.createElement("div");
 	    
-        //OSD enforces unique ids, so we need to create unique ids for when there are multiple viewers for custom maps
+        
 		var holderID;
 		if (locationHist) {
 		    holderID = "locationHistViewer";
-		    holderID = holderID + Math.floor(Math.random() * 1000000000);
 		} else {
 		    holderID = "annotatedImageViewer";
 		}
+	    //OSD enforces unique viewer ids, so we need to create unique ids for when there are multiple viewers (such as w/ custom maps)
+		holderID = holderID + Math.floor(Math.random() * 1000000000);
 		OSDHolder = $(viewerelt)
 			.attr("id", holderID)
 			.on('mousedown scroll click mousemove resize', function(evt){
 				evt.preventDefault();
 			});
 		root.append(OSDHolder);
-		if (locationHist) {
-		    OSDHolder.css({
+		OSDHolder.css({
 		        'height': '100%',
 		        'width': '100%',
 		        'position': 'absolute',
 		        'z-index': '0'
-		    });
+		});
+	    //The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or width at which the zoom out will be constrained.
+		//Setting it to 0, for example will allow you to zoom out infinitly.
+		var minZoomImageRatio = 0.9; //OSD default- don't allow as much zoom out on deep zooms as in tour player
+		if (inArtworkEditor) {
+		    minZoomImageRatio = 0.4; //Allow a lot of zoom out in artwork editor for thumbnail capture
 		}
-
 		//creates and sets up the OSD viewer
 		viewer = new OpenSeadragon.Viewer({
 			id : holderID,
 			element: viewerelt,
 			zoomPerClick: 1,  //disables click to zoom
             artworkViewer: true,
-			//constrainDuringPan: true,
-			//panHorizontal: false,
-           // panVertical: false,
-			//minZoomImageRatio: .5,
-			//maxZoomImageRatio: 2,
-			//visibilityRatio: 1,
+            constrainDuringPan: true,
+            minZoomImageRatio: minZoomImageRatio,
+			maxZoomPixelRatio: 2, //The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. 
+			visibilityRatio: .2, //set for consistency with ITE
+			gestureSettingsTouch: { flickEnabled: false }, //don't allow flick gesture to throw art off screen
 		});
 		if (locationHist) {
 		    viewer.setMouseNavEnabled(false);

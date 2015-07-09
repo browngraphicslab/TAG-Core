@@ -21,12 +21,11 @@ window.ITE = window.ITE || {};
 ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 	// Extend class from ProviderInterfacePrototype
-    var Utils = new ITE.Utils(),
-		TAGUtils = ITE.TAGUtils,
-		_super = new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
-		self = this;
-
-    Utils.extendsPrototype(this, _super);
+	var Utils 		= new ITE.Utils(),
+		TAGUtils	= ITE.TAGUtils,
+		_super 		= new ITE.ProviderInterfacePrototype(trackData, player, timeManager, orchestrator),
+		self 		= this;
+	Utils.extendsPrototype(this, _super);
 
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
 	self.loadKeyframes(trackData.keyframes);
@@ -67,6 +66,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function initialize() {
 		_super.initialize();
+
 		// Create UI and append to ITEHolder.
 		_image		= $(document.createElement("img"))
 			.addClass("assetImage");
@@ -80,7 +80,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			.append(_image)
 			.css({
 			    "z-index": -1,
-                //'overflow': 'hidden'
+                'overflow': 'hidden'
 			})
 		$("#ITEHolder").append(_UIControl);
 		self._UIControl = _UIControl;
@@ -107,9 +107,9 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		    "top": "0px",
 		    "left": "0px",
 		    "width": "100%",
-            "height": "auto"
+		    "height": "100%"
 		})
-		_UIControl.attr("id", self.trackData.name);
+
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 		TweenLite.ticker.addEventListener("tick", updateInk)
 
@@ -164,6 +164,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		self.status = 1;
 		self.orchestrator.updateZIndices();
 
+		// Janky chrome fix 7/9/2015. For some reason, the 'height: 100%' did not register, and images were not showing up (only in chrome).
+		// The css had to be reapplied after everything was loaded. Listen. You. If you're from the future, try removing this and see if images 
+		// show up in chrome. If they do, obliterate this pathetic line of shit from its unnatural, forced existence. And its evil twin in seek().
+		_image.css("height", "100%");
+
 		// Revert to any saved state, get time to start animation.
 		var startTime;
 		if (self.savedState) {
@@ -216,6 +221,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			return null;
 		}
 
+		// Janky chrome fix 7/9/2015. For some reason, the 'height: 100%' did not register, and images were not showing up (only in chrome).
+		// The css had to be reapplied after everything was loaded. Listen. You. If you're from the future, try removing this and see if images 
+		// show up in chrome. If they do, obliterate this pathetic line of shit from its unnatural, forced existence. And its evil twin in play().
+		_image.css("height", "100%");
+
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
 		var prevStatus = self.status; // Store what we were previously doing.
 		self.pause(); // Stop any animations and stop the delayStart timer.
@@ -244,9 +254,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			self.setState(soughtState);
 			nextKeyframe = surKeyframes[1];
 		}
-
-		updateInk(true);
-
 		return nextKeyframe;
 	};
 
@@ -292,7 +299,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			top 			: _UIControl.position().top,
 			width 			: _UIControl.width(),
 			height 			: _UIControl.height()
-		};
+		};	
 		return self.savedState;
 	};
 
@@ -322,7 +329,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		var state = {
 			"opacity"	: keyframe.opacity,
 			"left"		: (keyframe.pos.x) + "px",
-			"top"       : (keyframe.pos.y) + "px",
+			"top"		: (keyframe.pos.y) + "px",
 			"width"		: (keyframe.size.x) + "px",
 			"height"	: (keyframe.size.y) + "px"
 		};
@@ -340,7 +347,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		if (!endKeyframe) {
 			return self.getKeyframeState(startKeyframe);
 		}
-
 		
 		var lerpOpacity = startKeyframe.opacity + (interp * (endKeyframe.opacity - startKeyframe.opacity));
 		var lerpPosX = startKeyframe.pos.x + (interp * (endKeyframe.pos.x - startKeyframe.pos.x));
@@ -507,14 +513,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	self.addInk = addInk;
 
 	/* 
-	 * I/P: 	isForcedRefresh: Caller is a state-changing operation (like seek or reload) that requires inks to update no matter what
-	 * Updates ink so that it animates with image. Omit or pass "false" as param for scheduled updates (e.g. periodic polling during playback)
+	 * I/P: 	none
+	 * Updates ink so that it animates with image
 	 * O/P: 	none 
 	 */
-	updateInk = function (isForcedRefresh) {
-	    if (self.orchestrator.status === 2 && !isForcedRefresh) {
-	        return;
-	    }
+	updateInk = function() {
 		var i;
 		for (i = 0; i < attachedInks.length; i++){
 			var bounds = {
@@ -526,7 +529,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			attachedInks[i]._ink.adjustViewBox(bounds);
 		}
 	}
-	self.updateInk = updateInk;
 
 	function manipFromDZRecursion(evt) {
 	    //var pivot = { x: evt.x - _UIControl.offset().left, y: evt.y - _UIControl.offset().top };
@@ -552,8 +554,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	        }
 	        captureHandlers(evt);
 	    }
-
-	    updateInk(true);
 	}
 	self.manipFromDZRecursion = manipFromDZRecursion;
 
@@ -564,8 +564,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	        }
 	        captureHandlers(evt);
 	    }
-
-	    updateInk(true);
 	}
 	self.endManipFromDZRecursion = endManipFromDZRecursion;
 
@@ -603,10 +601,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	}
 
     	if (IS_WINDOWS) {
-    	    if (res.scale !== 1) {
-    	        mediaPinch(res.scale, res.pivot);
-                top = _UIControl.position().top;
-                left = _UIControl.position().left;
+    	    if (res.scroll != 1) {
+    	        mediaScroll(res.scale, res.pivot, true);//True is from touch
     	    }
 
     	    //Target location is just current location plus translation
@@ -682,8 +678,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	        captureHandlers(evt);
     	    }
     	}
-
-    	updateInk(true);
     };
     self.mediaManip = mediaManip;
 	
@@ -716,16 +710,11 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             newW 	= Math.min(maxW, Math.max(minW, newW));
         };
 
-        //adjust pivot when in previewer 
-        if ($("#resizableArea").width() > 0) {
-            pivot.x = pivot.x - ($("#ITEContainer").offset().left - $("#viewer").offset().left);
-        }
-
         // Update scale, new X and new Y according to newly constrained values.
         scale 	= newW / w;
         newH	= h * scale;
-        newX 	= l*scale + (pivot.x)*(1-scale);
-       	newY 	= t*scale + (pivot.y)*(1-scale); 
+        newX 	= l*scale + pivot.x*(1-scale);
+       	newY 	= t*scale + pivot.y*(1-scale); 
 
        	if (isFromTouch || !IS_WINDOWS){
        	    newX = l * scale + (pivot.x + l)* (1 - scale);
@@ -747,8 +736,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             }
             captureHandlers(evt);
         }
-
-        updateInk(true);
     };
     self.mediaScroll = mediaScroll;
 
@@ -780,29 +767,19 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             newW = Math.min(maxW, Math.max(minW, newW));
         };
 
-        //adjust pivot when in previewer 
-        //if ($("#resizableArea").width() > 0) {
-        //    pivot.x = pivot.x - ($("#ITEContainer").offset().left - $("#viewer").offset().left);
-        //}
-
         // Update scale, new X and new Y according to newly constrained values.
         scale = newW / w;
         newH = h * scale;
-        //newX = l * scale + pivot.x * (1 - scale);
-        //newY = t * scale + pivot.y * (1 - scale);
-        //newX = l * scale + (pivot.x + l)* (1 - scale);
-        //newY = t * scale + (pivot.y + t) * (1 - scale);
-        newX = l + pivot.x * (1 - scale);
-        newY = t + pivot.y * (1 - scale);
-
+        newX = l * scale + pivot.x * (1 - scale);
+        newY = t * scale + pivot.y * (1 - scale);
 
         // _UIControl to self new position. No animation for pinch.
         self.interactionAnimation && self.interactionAnimation.kill();
         self._UIControl.css({
-            top: newY + 'px',
-            left: newX + 'px',
-            width: newW + 'px',
-            height: newH + 'px'
+            top: newY,
+            left: newX,
+            width: newW,
+            height: newH
         });
 
         if (captureHandlers) {
@@ -811,8 +788,6 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             }
             captureHandlers(evt);
         }
-
-        updateInk(true);
     };
     self.mediaPinch = mediaPinch;
     
