@@ -2188,12 +2188,13 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         var ch = domelement.height();
         magX = cw;
         magY = ch;
-        var proxy_div = $("[data-proxy='" + escape(artName) + "']");
-        var proxy = {
-            x: proxy_div.data("x"),
-            y: proxy_div.data("y"),
-            w: proxy_div.data("w"),
-            h: proxy_div.data("h")
+        var proxy_div = $("[id='" + artname + "']");
+
+        proxy = {
+            x: parseInt(proxy_div.position().left),
+            y: parseInt(proxy_div.position().top),
+            w: proxy_div.width(),
+            h: proxy_div.height()
         };
 
         var datastr = update_datastring();
@@ -2961,12 +2962,12 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * which keeps track of its dimensions
      */
     function retrieveOrigDims() {
-        var proxy = $("[data-proxy='" + escape(artName) + "']");
+        var proxy = $("[id='" + artname + "']");
         var kfx = initKeyframe.x;
         var kfy = initKeyframe.y;
         var kfw = initKeyframe.w;
         var real_kfw = origPaperW / kfw;
-        var real_kfh = real_kfw * (proxy.data("h") / proxy.data("w"));
+        var real_kfh = real_kfw * (proxy.height() / proxy.width());
         var real_kfx = -kfx * real_kfw;
         var real_kfy = -kfy * real_kfh;
         origpx = real_kfx;
