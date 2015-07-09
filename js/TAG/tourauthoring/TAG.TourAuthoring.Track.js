@@ -438,7 +438,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         });
 
         deleteButton.on('mouseup', function () {
-            deleteButton.css({ "background-color": "transparent", "color": "white" });
+            console.log("track delete button press")
         });
 
         deleteButton.on('mouseout', function () {
@@ -1149,6 +1149,11 @@ TAG.TourAuthoring.Track = function (spec, my) {
                                 //});
                             }
                         }
+                        my.timeline.setEditInkOn(false);
+                        $("#addComponentLabel").prop("disabled", false).css({
+                            "opacity": "1",
+                            'display' : 'block'
+                        })
                     }
                     my.update();
                 },

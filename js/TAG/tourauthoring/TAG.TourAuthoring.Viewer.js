@@ -168,7 +168,6 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                     else {
                         window.setTimeout(poll, 100);
                     }
-                    
                 }
                 poll();
                 /*
