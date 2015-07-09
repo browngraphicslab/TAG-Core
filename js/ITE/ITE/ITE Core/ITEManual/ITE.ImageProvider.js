@@ -109,9 +109,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		    "width": "100%",
             "height": "auto"
 		})
-		_UIControl.css({
-
-		})
+		_UIControl.attr("id", self.trackData.name);
 		self.setState(self.getKeyframeState(self.firstKeyframe));
 		TweenLite.ticker.addEventListener("tick", updateInk)
 
