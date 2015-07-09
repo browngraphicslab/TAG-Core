@@ -261,7 +261,13 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
             //adjust right positioning
-            ProgressIndicatorContainer.css({ 'right': $("#tagRoot").width()*0.03 + 100 + 'px' });
+            var shift;
+            if (!IS_WINDOWS){
+                shift = 0.035;
+            } else {
+                shift = 0.03;
+            }
+            ProgressIndicatorContainer.css({ 'right': $("#tagRoot").width()*shift + 100 + 'px' });
             updateProgressIndicator(orchestrator.getElapsedTime());
         }
     };
