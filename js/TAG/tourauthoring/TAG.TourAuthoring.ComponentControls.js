@@ -139,7 +139,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if (linked) {
                 artname = linkedTrack.getTitle();
                 var linkType = linkedTrack.getType();
-                var proxy_div = $("#" + escape(artname));
+                var proxy_div = $("[id='" + artname + "']");
 
                 proxy = {
                     x: parseInt(proxy_div.position().left),
@@ -288,12 +288,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 if (linked) {
                     var currcanv = $('#inkCanv');
 
-                    var new_proxy_div = $("[data-proxy='" + escape(artname) + "']"); //proxy for the artwork -- keeps track of dimensions
+                    var new_proxy_div = $("[id='" + artname + "']"); //proxy for the artwork -- keeps track of dimensions
                     var new_proxy = {
-                        x: new_proxy_div.data("x"),
-                        y: new_proxy_div.data("y"),
-                        w: new_proxy_div.data("w"),
-                        h: new_proxy_div.data("h")
+                        x: parseInt(new_proxy_div.position().left),
+                        y: parseInt(new_proxy_div.position().top),
+                        w: new_proxy_div.width(),
+                        h: new_proxy_div.height()
                     };
 
                     var new_keyframe = viewer.captureKeyframe(artname);
@@ -433,7 +433,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if (linked) {
                 initKeyframe = track.getInkInitKeyframe();
                 artname = linkedTrack.getTitle();
-                var proxy_div = $("#" + escape(artname));
+                var proxy_div = $("[id='" + artname + "']");
 
                 proxy = {
                     x: parseInt(proxy_div.position().left),
@@ -561,12 +561,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 if (linked) {
                     var currcanv = $('#inkCanv');
 
-                    var new_proxy_div = $("[data-proxy='" + escape(artname) + "']"); //proxy for the artwork -- keeps track of dimensions
+                    var new_proxy_div = $("[id='" + artname + "']");//proxy for the artwork -- keeps track of dimensions
                     var new_proxy = {
-                        x: new_proxy_div.data("x"),
-                        y: new_proxy_div.data("y"),
-                        w: new_proxy_div.data("w"),
-                        h: new_proxy_div.data("h")
+                        x: parseInt(new_proxy_div.position().left),
+                        y: parseInt(new_proxy_div.position().top),
+                        w: new_proxy_div.width(),
+                        h: new_proxy_div.height()
                     };
 
                     var new_keyframe = viewer.captureKeyframe(artname);
@@ -716,7 +716,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 initKeyframe = track.getInkInitKeyframe();
                 artname = linkedTrack.getTitle();
                 var linkType = linkedTrack.getType();
-                var proxy_div = $("#" + escape(artname));
+                var proxy_div = $("[id='" + artname + "']");
 
                 proxy = {
                     x: parseInt(proxy_div.position().left),
@@ -847,12 +847,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 if (linked) {
                     var currcanv = $('#inkCanv');
 
-                    var new_proxy_div = $("[data-proxy='" + escape(artname) + "']"); //proxy for the artwork -- keeps track of dimensions
+                    var new_proxy_div = $("[id='" + artname + "']"); //proxy for the artwork -- keeps track of dimensions
                     var new_proxy = {
-                        x: new_proxy_div.data("x"),
-                        y: new_proxy_div.data("y"),
-                        w: new_proxy_div.data("w"),
-                        h: new_proxy_div.data("h")
+                        x: parseInt(new_proxy_div.position().left),
+                        y: parseInt(new_proxy_div.position().top),
+                        w: new_proxy_div.width(),
+                        h: new_proxy_div.height()
                     };
 
                     var new_keyframe = viewer.captureKeyframe(artname);
