@@ -1318,7 +1318,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                             l = hotspotAnchor.css('left');
                         hotspotAnchor.css("top", (parseInt(t, 10) + res.pivot.y - 20) + "px");
                         hotspotAnchor.css("left", (parseInt(l, 10) + res.pivot.x - 20) + "px");
-                        annotatedImage.updateOverlay(hotspotAnchor[0], Seadragon.OverlayPlacement.TOP_LEFT);
+                        annotatedImage.updateOverlay(hotspotAnchor[0], OpenSeadragon.OverlayPlacement.TOP_LEFT);
                     }
                 });
             } else {
@@ -1328,7 +1328,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                             l = hotspotAnchor.css('left');
                         hotspotAnchor.css("top", (parseInt(t, 10) + res.pivot.y - 20) + "px");
                         hotspotAnchor.css("left", (parseInt(l, 10) + res.pivot.x - 20) + "px");
-                        annotatedImage.updateOverlay(hotspotAnchor[0], Seadragon.OverlayPlacement.TOP_LEFT);
+                        annotatedImage.updateOverlay(hotspotAnchor[0], OpenSeadragon.OverlayPlacement.TOP_LEFT);
                     }
                 });
             }
@@ -1346,7 +1346,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             point = point || annotatedImage.viewer.viewport.getCenter();
 
             var pixel = annotatedImage.viewer.viewport.pixelFromPoint(point),
-                pixel_adj = new Seadragon.Point(pixel.x + 50, pixel.y + 50),
+                pixel_adj = new OpenSeadragon.Point(pixel.x + 50, pixel.y + 50),
                 point_adj = annotatedImage.viewer.viewport.pointFromPixel(pixel_adj);
 
             isLayer && toggleFromLayer();
@@ -1355,8 +1355,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
            // toggleLayerButton.attr('disabled', 'disabled');
            // toggleLayerButton.css('opacity', '0.5');
 
-            annotatedImage.addOverlay(hotspotAnchor[0], point_adj, Seadragon.OverlayPlacement.TOP_LEFT); // TODO see new AnnotatedImage; also, do we really want to be adding a new overlay each time? we only have one hotspot circle, so maybe just want to update the existing overlay
-            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(point.x, point.y), false);
+            annotatedImage.addOverlay(hotspotAnchor[0], point_adj, OpenSeadragon.OverlayPlacement.TOP_LEFT); // TODO see new AnnotatedImage; also, do we really want to be adding a new overlay each time? we only have one hotspot circle, so maybe just want to update the existing overlay
+            annotatedImage.viewer.viewport.panTo(new OpenSeadragon.Point(point.x, point.y), false);
             hotspotAnchor.fadeIn(100);
             isHotspot = true;
         }
@@ -1391,11 +1391,11 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             var offset = layerContainer.offset(),
                 width = layerContainer.width(),
                 height = layerContainer.height(),
-                topLeft = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left, offset.top)),
-                bottomRight = annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(offset.left + width, offset.top + height));
+                topLeft = annotatedImage.viewer.viewport.pointFromPixel(new OpenSeadragon.Point(offset.left, offset.top)),
+                bottomRight = annotatedImage.viewer.viewport.pointFromPixel(new OpenSeadragon.Point(offset.left + width, offset.top + height));
             console.log("width" + width);
             console.log("height" + height);
-            return new Seadragon.Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+            return new OpenSeadragon.Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
         }
 
         /**
@@ -1423,7 +1423,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         top: (t + ty) + 'px'
                     });
 
-                    annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
+                    annotatedImage.viewer.updateOverlay(layerContainer[0], getLayerRect());
                 },
                 onScroll: function (res, pivot) {
                     var l = layerContainer.offset().left, // TODO might need to update this for web app
@@ -1433,7 +1433,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         newW = w * res,
                         newH = h * res;
 
-                    annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]); // remove and re-add to ensure correct positioning if we move artwork
+                    annotatedImage.viewer.removeOverlay(layerContainer[0]); // remove and re-add to ensure correct positioning if we move artwork
                     root.append(layerContainer);
 
                     layerContainer.css({
@@ -1444,7 +1444,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         position: 'absolute'
                     });
 
-                    annotatedImage.viewer.drawer.addOverlay(layerContainer[0], getLayerRect());
+                    annotatedImage.viewer.addOverlay(layerContainer[0], getLayerRect());
                 }
             }, false, true);
 
@@ -1454,7 +1454,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             //        w = layerContainer.width(),
             //        h = layerContainer.height();
 
-            //    annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]); // remove to ensure correct positioning if artwork is in midst of a move
+            //    annotatedImage.viewer.removeOverlay(layerContainer[0]); // remove to ensure correct positioning if artwork is in midst of a move
             //    root.append(layerContainer);
             //    layerContainer.css({
             //        left: l + 'px',
@@ -1484,19 +1484,19 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             layerContainer.on("mouseup", function () {
                 positionChanged = true;
                 annotatedImage.unfreezeArtwork();
-                annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
+                annotatedImage.viewer.updateOverlay(layerContainer[0], getLayerRect());
             });
             layerContainer.on("click", function () {
                 positionChanged = true;
                 annotatedImage.unfreezeArtwork();
-                annotatedImage.viewer.drawer.updateOverlay(layerContainer[0], getLayerRect());
+                annotatedImage.viewer.updateOverlay(layerContainer[0], getLayerRect());
             });
         }
 
         /**
          * Makes layerContainer visible at the specified location
          * @method toggleToLayer
-         * @param {Seadragon.Rect} rect      the rect on the artwork on which we'll add the layer container (see Seadragon.Drawer docs)
+         * @param {Seadragon.Rect} rect      the rect on the artwork on which we'll add the layer container
          */
         function toggleToLayer(rect) {
             var i,
@@ -1514,7 +1514,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
 
             if (oldLayerContainers.length > 0) {   // clicking on a thumbnail button really quickly would add a bunch of layerContainers...but
                 for (i = 0; i < oldLayerContainers.length; i++) { // a cleaner way to avoid that would be to just disable the thumbnail button when its media is already open
-                    annotatedImage.viewer.drawer.removeOverlay(oldLayerContainers[i]);
+                    annotatedImage.viewer.removeOverlay(oldLayerContainers[i]);
                     $(oldLayerContainers[i]).remove();
                 }
             }
@@ -1536,7 +1536,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 rect = getLayerRect();
             }
 
-            annotatedImage.viewer.drawer.addOverlay(layerContainer[0], rect);
+            annotatedImage.viewer.addOverlay(layerContainer[0], rect);
         }
 
         /**
@@ -1556,7 +1556,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          //       toggleLayerButton.css({ "background-color": "transparent", "color": "white" });
          //   });
             if (layerContainer) {
-                annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
+                annotatedImage.viewer.removeOverlay(layerContainer[0]);
                 layerContainer.remove();
                 layerContainer.css('display', 'none');
             }
@@ -1776,7 +1776,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 updateAssocMedia({
                     title: TAG.Util.htmlEntityEncode(titleTextVal),
                     desc: TAG.Util.htmlEntityEncode($('.description').val()),
-                    pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
+                    pos: isHotspot ? OpenSeadragon.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
                     rect: isLayer ? getLayerRect() : null,
                     contentType: activeAssocMedia.doq.Metadata.ContentType,
                     contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.doq.Metadata.Source),
@@ -2276,7 +2276,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     updateAssocMedia({
                         title: TAG.Util.htmlEntityEncode(titleTextVal),
                         desc: TAG.Util.htmlEntityEncode($descArea.val()),
-                        pos: isHotspot ? Seadragon.Utils.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
+                        pos: isHotspot ? OpenSeadragon.getElementPosition(hotspotAnchor.children().first().get(0)) : null, // TODO should store this html elt in a variable (in the function that makes the hotspot anchor) so people don't have to figure out what this means
                         rect: isLayer ? getLayerRect() : null,
                         contentType: activeAssocMedia.doq.Metadata.ContentType,
                         contentUrl: TAG.Worktop.Database.fixPath(activeAssocMedia.doq.Metadata.Source),
@@ -2380,9 +2380,9 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 }
 
                 if (isHotspot) {
-                    point = new Seadragon.Point(x, y);
+                    point = new OpenSeadragon.Point(x, y);
                 } else if (isLayer) {
-                    rect = new Seadragon.Rect(x, y, w, h);
+                    rect = new OpenSeadragon.Rect(x, y, w, h);
                 }
 
                 toggleHotspotButton.text(isHotspot ? 'Remove Hotspot' : 'Create Hotspot');
@@ -2441,7 +2441,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 rightbar = $('.rightbar');
                 hotspotAnchor.fadeOut(100);
                 if (layerContainer) {
-                    annotatedImage.viewer.drawer.removeOverlay(layerContainer[0]);
+                    annotatedImage.viewer.removeOverlay(layerContainer[0]);
                     layerContainer.remove();
                 }
                 annotatedImage.unfreezeArtwork();

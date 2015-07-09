@@ -17,6 +17,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         viewer = spec.viewer,
         timeline = spec.timeline,
         root = spec.root,
+        fader,
         playHeadGroup,//represents the black, long playhead
         lastScale = timeManager.getDuration().scale;//stores the scale of the timeline, which can change because of zoom (?)
 
@@ -180,7 +181,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         sliderBox.append(greenBoxInSlider);
 
         // Fader
-        var fader = createPlayhead();
+        fader = createPlayhead();
         fader.css({
             'height': '155%', 'width': '0%', 'margin-top': '-4%',
             'position': 'absolute', 'left': '0%'

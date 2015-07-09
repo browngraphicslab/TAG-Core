@@ -138,13 +138,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             // gotta do this up here to do creation check
             if (linked) {
                 artname = linkedTrack.getTitle();
+                var linkType = linkedTrack.getType();
+                var proxy_div = $("#" + escape(artname));
 
-                var proxy_div = $("[data-proxy='" + escape(artname) + "']");
                 proxy = {
-                    x: proxy_div.data("x"),
-                    y: proxy_div.data("y"),
-                    w: proxy_div.data("w"),
-                    h: proxy_div.data("h")
+                    x: parseInt(proxy_div.position().left),
+                    y: parseInt(proxy_div.position().top),
+                    w: proxy_div.width(),
+                    h: proxy_div.height()
                 };
 
                 var keyframe = viewer.captureKeyframe(artname);
@@ -153,8 +154,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     creationError("The track this annotation is attached to must be fully on screen in order to edit this annotation. Please seek to a location where the track is visible.");
                     return false;
                 }
-                var kfvx, kfvy, kfvw, kfvh,
-                    linkType = linkedTrack.getType();
+                var kfvx, kfvy, kfvw, kfvh;
                 if (linkType === TAG.TourAuthoring.TrackType.artwork) {
                     kfvx = keyframe.bounds.x;
                     kfvy = keyframe.bounds.y;
@@ -166,11 +166,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     //kfvh = keyframe.state.viewport.region.span.y;
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.width;
-                    var rw = keyframe.width * $("#ITEHolder").width();
-                    kfvh = keyframe.height; // not used
-                    kfvx = -keyframe.left * kfvw;
-                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    //kfvw = 1.0 / keyframe.width;
+                    //var rw = keyframe.width * $("#ITEHolder").width();
+                    //kfvh = keyframe.height; // not used
+                    //kfvx = -keyframe.left * kfvw;
+                    //kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    kfvw = 1.0 / (keyframe.width / $('#ITEContainer').width());
+                    kfvh = keyframe.height;
+                    kfvx = -keyframe.left / proxy.w;// * kfvw;
+                    var rw = keyframe.width;// * domelement.width();
+                    kfvy = (-(proxy.h / rw) * keyframe.top) / proxy.h;
+
+
                     //kfvw = 1.0 / keyframe.state.viewport.region.span.x;
                     //var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
                     //kfvh = keyframe.state.viewport.region.span.y; // not used
@@ -305,11 +312,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         new_kfvh = new_keyframe.bounds.height;
                     }
                     else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.width;
-                        var rw = new_keyframe.width * currcanv.width();
-                        new_kfvh = new_keyframe.height; // not used
-                        new_kfvx = -new_keyframe.left * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
+                        //new_kfvw = 1.0 / new_keyframe.width;
+                        //var rw = new_keyframe.width * currcanv.width();
+                        //new_kfvh = new_keyframe.height; // not used
+                        //new_kfvx = -new_keyframe.left * new_kfvw;
+                        //new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
+
                     }
                     track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
                     track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
@@ -423,12 +431,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if (linked) {
                 initKeyframe = track.getInkInitKeyframe();
                 artname = linkedTrack.getTitle();
-                var proxy_div = $("[data-proxy='" + escape(artname) + "']");
+                var proxy_div = $("#" + escape(artname));
+
                 proxy = {
-                    x: proxy_div.data("x"),
-                    y: proxy_div.data("y"),
-                    w: proxy_div.data("w"),
-                    h: proxy_div.data("h")
+                    x: parseInt(proxy_div.position().left),
+                    y: parseInt(proxy_div.position().top),
+                    w: proxy_div.width(),
+                    h: proxy_div.height()
                 };
 
                 var keyframe = viewer.captureKeyframe(artname);
@@ -701,13 +710,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if (linked) {
                 initKeyframe = track.getInkInitKeyframe();
                 artname = linkedTrack.getTitle();
+                var linkType = linkedTrack.getType();
+                var proxy_div = $("#" + escape(artname));
 
-                var proxy_div = $("[data-proxy='" + escape(artname) + "']");
                 proxy = {
-                    x: proxy_div.data("x"),
-                    y: proxy_div.data("y"),
-                    w: proxy_div.data("w"),
-                    h: proxy_div.data("h")
+                    x: parseInt(proxy_div.position().left),
+                    y: parseInt(proxy_div.position().top),
+                    w: proxy_div.width(),
+                    h: proxy_div.height()
                 };
 
                 var keyframe = viewer.captureKeyframe(artname);
@@ -717,8 +727,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     return false;
                 }
 
-                var kfvx, kfvy, kfvw, kfvh,
-                    linkType = linkedTrack.getType();
+                var kfvx, kfvy, kfvw, kfvh;
                 if (linkType === TAG.TourAuthoring.TrackType.artwork) {
                     kfvx = keyframe.bounds.x;
                     kfvy = keyframe.bounds.y;
@@ -726,11 +735,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     kfvh = keyframe.bounds.height;
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.width;
-                    var rw = keyframe.width * $("#ITEHolder").width();
-                    kfvh = keyframe.height; // not used
-                    kfvx = -keyframe.left * kfvw;
-                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    //kfvw = 1.0 / keyframe.width;
+                    //var rw = keyframe.width * $("#ITEHolder").width();
+                    //kfvh = keyframe.height; // not used
+                    //kfvx = -keyframe.left * kfvw;
+                    //kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    kfvw = 1.0 / (keyframe.width / $('#ITEContainer').width());
+                    kfvh = keyframe.height;
+                    kfvx = -keyframe.left / domelement.width();// * kfvw;
+                    var rw = keyframe.width;// * domelement.width();
+                    kfvy = (-(domelement.height() / rw) * keyframe.top) / domelement.height();
                 }
             }
             
@@ -1177,6 +1191,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         });
                         viewer.forceITEPlayerReload();
                         timeline.onUpdate(true);
+
+                        setTimeout((function () {
+                            viewer.forceITEPlayerReload();
+                            timeline.onUpdate(true);
+                        }), 1000);
                         TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                             tobj.track_type = "Audio File";
                             tobj.quantity = urls.length;
@@ -1340,6 +1359,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         });
                         viewer.forceITEPlayerReload();
                         timeline.onUpdate(true);
+
+                        setTimeout((function () {
+                            viewer.forceITEPlayerReload();
+                            timeline.onUpdate(true);
+                        }), 1000);
                     }
                     uploadHappening = false; //enables button
                     fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
@@ -1395,6 +1419,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     });
                     viewer.forceITEPlayerReload();
                     timeline.onUpdate(true);
+
+                    setTimeout((function () {
+                        viewer.forceITEPlayerReload();
+                        timeline.onUpdate(true);
+                    }), 1000);
                     TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                         tobj.track_type = "Image File";
                         tobj.quantity = urls.length;

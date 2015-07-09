@@ -216,7 +216,8 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         undoManager = TAG.TourAuthoring.UndoManager();
         viewer = TAG.TourAuthoring.Viewer({
             timeManager: timeManager,
-            tourobj: tourobj
+            tourobj: tourobj,
+            timeline:timeline
         });
         var tour = viewer.getTour();
         ITE = viewer.getPlayer();
