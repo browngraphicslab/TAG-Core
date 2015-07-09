@@ -26,7 +26,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         $inkTextControls,
         $inkDrawControls,
         $inkTransControls,
-        $blocker,
         $inkEditText,
         $inkEditDraw,
         $inkEditTransparency,
@@ -54,17 +53,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         });
         resizableArea.attr("id", "resizableArea");
 
-        $blocker = $(document.createElement('div'));
-        $blocker.css({
-            'background-color': "rgb(219, 218, 199)",
-            "height": window.innerHeight - originalHeightSize - 0.08 * window.innerHeight + "px",
-            "width": "100%",
-            "bottom": "0px",
-            "left": "0px",
-            "z-index": "99999",
-            "position": "absolute"
-        })
-        $blocker.attr("id", "blocker");
+        dataHolder.setLastPreviewerHeight(originalHeightSize);
 
         if (!$mainScrollHider) {
             $mainScrollHider = $('.mainScrollHider');
@@ -109,15 +98,18 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 });
                 $($("#bufferingDiv").parent()).css({
                     "opacity": 0.9,
-                    "display": "block"
+                    "display": "block",
+                    "z-index": "10000000"
                 });
                 prevLocationY = ui.position.top;
                 timeManager.stop();
+                dataHolder.setLastPreviewerHeight(resizableArea.height());
             }, //commented out because broke with svg
             stop: function (evt, ui) {
                 // the css of bufferingDiv and its parentbeing reset in timeline.onUpdate
                 // if we ever eliminate timeline.onUpdate, reset css here
-                timeline.onUpdate();
+                timeline.onUpdate(true);
+                dataHolder.setLastPreviewerHeight(resizableArea.height());
             },
             drag: function (event, ui) {
                 if (timeline.getEditInkOn() === true) {
@@ -148,14 +140,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
 
                 $mainScrollHider.css({
                     'height': $mainScrollHider.height() - distance + 'px',
-                    'z-index': '1000000'
-                });
-
-                if (!$blocker) {
-                    $blocker = $('#blocker');
-                }
-                $blocker.css({
-                    'height': $blocker.height() - distance + 'px',
                 });
 
                 if (!$trackBody) {
@@ -220,7 +204,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         resizeButtonArea.append(resizeButton);
 
         root.append(resizeButtonDocfrag);
-        root.append($blocker);
        
     })();
  
@@ -233,7 +216,8 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         undoManager = TAG.TourAuthoring.UndoManager();
         viewer = TAG.TourAuthoring.Viewer({
             timeManager: timeManager,
-            tourobj: tourobj
+            tourobj: tourobj,
+            timeline:timeline
         });
         var tour = viewer.getTour();
         ITE = viewer.getPlayer();

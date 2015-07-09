@@ -32,6 +32,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
         mainStart = (inStart + fadeIn), // start of main region
         outStart = (mainStart + main), // start of fade-out
         id,
+        lastRINData,
         mainRect,
         trackPos,
         dataHolder = spec.dataHolder,
@@ -2260,6 +2261,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
      * @param capture   whether the keyframe should immediately capture the state of the player
      * @returns     keyframe%A
      */
+
     function addKeyframe(x, y, customSpec) {
         if (canKeyframe) {
             var data = my.timeline.captureKeyframe(my.title),
@@ -2270,18 +2272,18 @@ TAG.TourAuthoring.Display = function (spec, my) {
                 return;
             }
 
-            var ITEContainer = $('#resizableArea');
+            var ITEContainer = $('#ITEContainer');
 
             var rinData = {
                 viewport: {
                     region: {
                         center: {
-                            x: (data.bounds ? data.bounds.x : data.left / ITEContainer.height() * 16.0 / 9.0),
-                            y: (data.bounds ? data.bounds.y : data.top / ITEContainer.height())
+                            x: (data.bounds ? data.bounds.x : (data.left / (parseInt($('#ITEContainer').width()) - 2)        )),
+                            y: (data.bounds ? data.bounds.y : (data.top / (parseInt($('#ITEContainer').height()) - 2)       ))
                         },
                         span: {
-                            x: (data.bounds ? data.bounds.width : data.width / ITEContainer.height() * 16.0 / 9.0),
-                            y: (data.bounds ? data.bounds.height : data.height / ITEContainer.height())
+                            x: (data.bounds ? data.bounds.width : (data.width / (parseInt($('#ITEContainer').width()) - 4)          )),
+                            y: (data.bounds ? data.bounds.height : (data.height / (parseInt($('#ITEContainer').height()) - 4)     ))
                         }
                     }
                 }
@@ -2516,7 +2518,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
      * @param passthrough   whether this ES (layer) can be manipulated
      * @param prevState     final keyframe from previous display, defines start state for this display
      */
-    function toES(data, passthrough, prevState, id) {
+    function toES(data, passthrough, prevState, id, noChange) {
         var keySeq = {},
             esTitle = my.title + '-' + id;
 
@@ -2577,7 +2579,12 @@ TAG.TourAuthoring.Display = function (spec, my) {
     /**
      * Helper function for collecting RIN data of associated keyframes
      */
-    function _getKeyframesRIN(prevState) {
+    function _getKeyframesRIN(prevState, noChange) {
+        if (noChange && lastRINData) {
+            return lastRINData;
+        } else if (noChange && !lastRINData) {
+            console.log("WARNING: no previously-stored RIN data for this display. Re-gathering keyframes now.")
+        }
         var i, rin = [],
             first;
         var dispkfs = dataHolder.getKeyframes(that.getStorageContainer());
@@ -2664,12 +2671,18 @@ TAG.TourAuthoring.Display = function (spec, my) {
                         viewport: {
                             region: {
                                 center: {
-                                    x: first.left,
-                                    y: first.top
+                                    //x: (first.left / parseInt($('#ITEContainer').width())),
+                                    //y: (first.top / parseInt($('#ITEContainer').height()))
+                                    // -2 is because left should be done from inner left, not border left
+                                    x: (first.left / (parseInt(dataHolder.getLastPreviewerHeight()) * 16 / 9 - 2)),
+                                    // same for top
+                                    y: (first.top / (parseInt(dataHolder.getLastPreviewerHeight()) - 2))
                                 },
                                 span: {
-                                    x: first.width,
-                                    y: first.height
+                                    //x: (first.width / parseInt($('#ITEContainer').width())),
+                                    //y: (first.height / parseInt($('#ITEContainer').height()))
+                                    x: (first.width / (parseInt(dataHolder.getLastPreviewerHeight() * 16 / 9) - 4)),
+                                    y: (first.height / (parseInt(dataHolder.getLastPreviewerHeight()- 4)))
                                 }
                             },
                         },
@@ -2682,6 +2695,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             first.init = true;
             rin.push(first);
         }
+        lastRINData = rin;
         return rin;
     }
 

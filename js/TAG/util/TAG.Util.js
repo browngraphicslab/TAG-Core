@@ -1390,7 +1390,6 @@ TAG.Util = (function () {
             element.addEventListener("MSPointerEvent", function (evt) {
                 console.log(evt);
                 if (stopNextClick) {
-                    console.log("STOPPING CLICK");
                     evt.stopPropagation();
                     setTimeout(function () {
                         stopNextClick = false;
@@ -1399,9 +1398,7 @@ TAG.Util = (function () {
                 }
             }, true);
             element.addEventListener("mouseup", function (evt) {
-                console.log("CLICK");
                 if (stopNextClick) {
-                    console.log("STOPPING CLICK");
                     evt.stopPropagation();
                     setTimeout(function () {
                         stopNextClick = false;
@@ -3391,10 +3388,12 @@ TAG.Util.UI = (function () {
 
         if(displayNames){
             $(messageLabel).css('height', 'auto')
+            $(namesLabel).css('font-size', fontsize);
             for (var i = 0; i < displayNames.length; i++) {
 
                 var para = document.createElement('div');
                 $(para).text(displayNames[i]);
+                $(para).css('font-size', fontsize);
                 $(para).css({color: 'white', 'z-index': '99999999999'});
                 $(namesLabel).append(para);
                 TAG.Util.multiLineEllipsis($(para));
@@ -5887,8 +5886,6 @@ TAG.Util.RLH = function (input) {
             //console.log("prog bar length = " + $(progressBar).length);
 
             if (uploadHappening === true) {
-                
-                console.log("upload happening - disable import maps TAG.Util")
                 importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
                 importMapButton.prop('disabled', 'true');
                 
@@ -5931,7 +5928,6 @@ TAG.Util.RLH = function (input) {
                         "Yes",
                         null,
                         function () {
-                            console.log("here!")
                             $("#locationHistorySaveMapButton").prop("disabled", false).css("opacity", "1");
                         });
                     root.append(overlay);
@@ -5991,14 +5987,46 @@ TAG.Util.RLH = function (input) {
                 currentIndex = mapGuids.length - 1;
                 showMap(mapGuids[currentIndex]);
             }
+            if (currentIndex == 0) {
+                if (!defaultMapShown) {
+                    $("#locationHistoryAddLocationButton").prop('disabled', true).css("opacity", "0.4");
+                    $("#locationHistorySortLocationsByTitleButton").prop('disabled', true).css("opacity", "0.4");
+                    $("#locationHistorySortLocationsByDateButton").prop('disabled', true).css("opacity", "0.4");
+                }
+                else {
+                    $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+                    $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+                    $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+                }
+            }
+            else {
+                $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+                $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+                $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+            }
         });
 
         rightArrowButton.on('click', function () {
+            
             if (currentIndex + 1 < mapGuids.length) {
                 showMap(mapGuids[++currentIndex]);
+                $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+                $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+                $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+                
             } else {
                 currentIndex = 0;
                 showMap(mapGuids[0]);
+                if (!defaultMapShown) {
+                    $("#locationHistoryAddLocationButton").prop('disabled', true).css("opacity", "0.4");
+                    $("#locationHistorySortLocationsByTitleButton").prop('disabled', true).css("opacity", "0.4");
+                    $("#locationHistorySortLocationsByDateButton").prop('disabled', true).css("opacity", "0.4");
+                }
+                else {
+                    $("#locationHistoryAddLocationButton").prop('disabled', false).css("opacity", "1");
+                    $("#locationHistorySortLocationsByTitleButton").prop('disabled', false).css("opacity", "1");
+                    $("#locationHistorySortLocationsByDateButton").prop('disabled', false).css("opacity", "1");
+                }
             }
         });
 
@@ -6115,7 +6143,6 @@ TAG.Util.RLH = function (input) {
 
         mapHolders = {};
         mapContainer.empty(); // TODO this is inefficient, just here for rapid prototyping
-        console.log("loading maps - maybe causing importmapbutton to be enabled?");
         if (uploadHappening === false) {
             importMapButton.prop('disabled', false);
             importMapButton.css({ 'color': 'rgba(255, 255, 255, 1.0)' });
@@ -6280,7 +6307,6 @@ TAG.Util.RLH = function (input) {
                 tobj.location_clicked = null;
                 tobj.map_viewed = mapDoqs[guid] || "Bing Map";
                 tobj.map_interaction = "show_map";
-                console.log("show map");
             });
 
         showMetadataEditingFields(); //by default; hideMetadataEditingFields() is called later for bing map
@@ -6633,7 +6659,6 @@ TAG.Util.RLH = function (input) {
                     tobj.location_clicked = null;
                     tobj.map_viewed = "Bing Map";
                     tobj.map_interaction = "pushpin_clicked";
-                    console.log("bing map pushpin clicked");
                 });
             }
 
@@ -6827,7 +6852,8 @@ TAG.Util.RLH = function (input) {
                     }
                 },
                 noMedia: true,
-                disableZoom : false
+                disableZoom: false,
+                locationHist: true
             });
         }
 
@@ -6897,7 +6923,7 @@ TAG.Util.RLH = function (input) {
             });
 
             //all pins start off in an overlay
-            annotImg.addOverlay(pushpin[0], new Seadragon.Point(location.x, location.y), Seadragon.OverlayPlacement.BOTTOM);
+            annotImg.addOverlay(pushpin[0], new OpenSeadragon.Point(location.x, location.y), OpenSeadragon.OverlayPlacement.BOTTOM);
 
             var isOverlay = true,
                 x,
@@ -6916,6 +6942,7 @@ TAG.Util.RLH = function (input) {
                             t = pushpin.css('top');
                             l = pushpin.css('left');
                             annotImg.removeOverlay(pushpin[0]); //seems like this changes the CSS of the pushpin?
+                            pushpin.css('display', 'block');
                             pushpin.appendTo(mapHolders[mapdoq.Identifier]);
                             pushpin.css({
                                 top: t,
@@ -6952,9 +6979,9 @@ TAG.Util.RLH = function (input) {
                             var coord = annotImg.returnElementToBounds(pushpin);
                             pushpin.css("top", (coord.y - h) + "px");
                             pushpin.css("left", (coord.x - 0.5 * w) + "px");
-                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(coord.x, coord.y)), Seadragon.OverlayPlacement.BOTTOM);
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new OpenSeadragon.Point(coord.x, coord.y)), OpenSeadragon.OverlayPlacement.BOTTOM);
                         } else {
-                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new OpenSeadragon.Point(x, y)), OpenSeadragon.OverlayPlacement.BOTTOM);
                         }
                         annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
                     }
@@ -7955,19 +7982,19 @@ TAG.Util.RLH = function (input) {
         buttonsRegionDisabled.css({ display: 'block' });
 
         $('#locationHistoryAddLocationButton').disabled = true;
-        $('#locationHistoryAddLocationButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+        $('#locationHistoryAddLocationButton').css({'opacity': '0.4'});
 
         $('#locationHistorySortLocationsByTitleButton').disabled = true;
-        $('#locationHistorySortLocationsByTitleButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+        $('#locationHistorySortLocationsByTitleButton').css({'opacity': '0.4'});
 
         $('#locationHistorySortLocationsByDateButton').disabled = true;
-        $('#locationHistorySortLocationsByDateButton').css({'color': 'rgba(255, 255, 255, 0.5)'});
+        $('#locationHistorySortLocationsByDateButton').css({ 'opacity': '0.4' });
 
         $('#locationHistoryImportMapButton').disabled = true;
-        $('#locationHistoryImportMapButton').css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+        $('#locationHistoryImportMapButton').css({ 'opacity': '0.4' });
 
         $('#locationHistoryDeleteButton').disabled = true;
-        $('#locationHistoryDeleteButton').css({ 'color': 'rgba(255, 255, 255, 0.5)' });
+        $('#locationHistoryDeleteButton').css({ 'opacity': '0.4' });
     }
 
     /**
@@ -7980,19 +8007,19 @@ TAG.Util.RLH = function (input) {
         buttonsRegionDisabled.css({ display: 'none' });
 
         $('#locationHistoryAddLocationButton').disabled = false;
-        $('#locationHistoryAddLocationButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+        $('#locationHistoryAddLocationButton').css({ 'opacity': '1' });
 
         $('#locationHistorySortLocationsByTitleButton').disabled = false;
-        $('#locationHistorySortLocationsByTitleButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+        $('#locationHistorySortLocationsByTitleButton').css({ 'opacity': '1' });
 
         $('#locationHistorySortLocationsByDateButton').disabled = false;
-        $('#locationHistorySortLocationsByDateButton').css({'color': 'rgba(255, 255, 255, 1.0)'});
+        $('#locationHistorySortLocationsByDateButton').css({ 'opacity': '1' });
 
         $('#locationHistoryImportMapButton').disabled = false;
-        $('#locationHistoryImportMapButton').css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+        $('#locationHistoryImportMapButton').css({ 'opacity': '1' });
 
         $('#locationHistoryDeleteButton').disabled = false;
-        $('#locationHistoryDeleteButton').css({ 'color': 'rgba(255, 255, 255, 1.0)' });
+        $('#locationHistoryDeleteButton').css({ 'opacity': '1' });
     }
 
 
@@ -8329,8 +8356,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 	    rinData = tour;
 	} else {
 	    rinData = JSON.parse(unescape(tour.Metadata.Content)); //the original RIN tour obj
-	    console.log("rin data: ")
-	    console.log(rinData)
 	}
 
 	//parses the referenceData to be used for the keyframes
@@ -8399,7 +8424,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				}
 				
 				if (providerID == "image") {
-				    if (!($('#ITEContainer')).length) {
+				    if (!($('#ITEContainer').length)) {
 				        keyframeObject = {
 				            "dispNum": k,
 				            "zIndex": track.data.zIndex,
@@ -8407,17 +8432,17 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "opacity": 1,
 				            "size": {
 				                "x": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
-				                "y": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
+				                "y": currKeyframe.state.viewport.region.span.y * parseInt($(window).width()*(9/16))
 				            },
 				            "pos": {
 				                "x": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
-				                "y": currKeyframe.state.viewport.region.center.y * parseInt($(window).height())
+				                "y": currKeyframe.state.viewport.region.center.y * parseInt($(window).width()*(9/16))
 				            },
 				            "data": {},
 				            "left": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
-				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).height()),
+				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).width()*(9/16)),
 				            "width": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
-				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
+				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).width()*(9/16))
 				        }
 				    } else {
 				        keyframeObject = {
@@ -8426,18 +8451,18 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "time": time_offset + currKeyframe.offset,
 				            "opacity": 1,
 				            "size": {
-				                "x": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').width()),
-				                "y": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').height())
+				                "x": currKeyframe.state.viewport.region.span.x * (parseInt($('#ITEContainer').width() - 4)),
+				                "y": currKeyframe.state.viewport.region.span.y * (parseInt($('#ITEContainer').height() - 4))
 				            },
 				            "pos": {
-				                "x": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').width()),
-				                "y": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').height())
+				                "x": currKeyframe.state.viewport.region.center.x * (parseInt($('#ITEContainer').width() - 2)),
+				                "y": currKeyframe.state.viewport.region.center.y * (parseInt($('#ITEContainer').height() - 2)),
 				            },
 				            "data": {},
-				            "left": currKeyframe.state.viewport.region.center.x * parseInt($('#ITEContainer').width()),
-				            "top": currKeyframe.state.viewport.region.center.y * parseInt($('#ITEContainer').height()),
-				            "width": currKeyframe.state.viewport.region.span.x * parseInt($('#ITEContainer').width()),
-				            "height": currKeyframe.state.viewport.region.span.y * parseInt($('#ITEContainer').height())
+				            "left": currKeyframe.state.viewport.region.center.x * (parseInt($('#ITEContainer').width() - 2)),
+				            "top": currKeyframe.state.viewport.region.center.y * (parseInt($('#ITEContainer').height() - 2)),
+				            "width": currKeyframe.state.viewport.region.span.x * (parseInt($('#ITEContainer').width() - 4)),
+				            "height": currKeyframe.state.viewport.region.span.y * (parseInt($('#ITEContainer').height() - 4))
 				        }
 				    }
 				}
@@ -8482,11 +8507,11 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 						"opacity": 1,
                         "size": {
                             "x": $('#ITEHolder').width(),//currKeyframe.state.viewport.region.span.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').height()
+                            "y": currKeyframe.state.viewport.region.span.y * $('#ITEHolder').innerHeight()
                         },
                         "pos": {
                             "x": 0,//currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').height()
+                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').innerHeight()
                         },
 						"data": {},
 						"volume": currKeyframe.state.sound.volume,
@@ -8599,62 +8624,55 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 		*/
 
-		var track = args.track,
+	    var track = args.track,
 			keyframes = [],
-			referenceData,
-			timeOffset = 0,
-			duration = 0,
-			fadeInDurationInk = 0,
-			fadeOutDurationInk = 0;
-
-		referenceData = referenceDataMap[Object.keys(track.experienceStreams)[0]];
-		if (!referenceData) {
-			//this shouldn't ever happen - but why is it?
-			console.log("An error occurred retrieving the reference data for: " + track)
-		} else {
-			timeOffset = referenceData.begin,
-			duration = referenceData.duration;
-		}
+			referenceData;
 
 		if (Object.keys(track.experienceStreams).length > 0) {
-			fadeInDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.inDuration,
-			fadeOutDurationInk = track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.outDuration;
+		    var i = 0; 
+		    for (i = 0; i < Object.keys(track.experienceStreams).length; i++) {
+		        referenceData = referenceDataMap[Object.keys(track.experienceStreams)[i]];
+		        if (!referenceData) {
+		            //this shouldn't ever happen - but why is it?
+		            console.log("An error occurred retrieving the reference data for: " + track)
+		        } 
+
+		        //this is where the four keyframes are actually parsed
+
+		        var keyframePrototype = {
+		            "type": track.data.linkToExperience.embedding.experienceId == "" ? "unattached" : "attached", //TODO - is this what differentiates attached vs. unattached ?????
+		            "dispNum": i, 
+		            "initKeyframe": track.data.linkToExperience.embedding.initKeyframe,
+		            "initproxy": track.data.linkToExperience.embedding.initproxy,
+		        }
+
+		        //#1
+		        keyframes.push($.extend({}, keyframePrototype, {
+		            "time": referenceData.begin,
+		            "opacity": 0,
+		        }));
+
+		        //#2
+		        keyframes.push($.extend({}, keyframePrototype, {
+		            "time": referenceData.begin + track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.inDuration,
+		            "opacity": 1,
+		        }));
+
+		        //#3
+		        keyframes.push($.extend({}, keyframePrototype, {
+		            "time": referenceData.begin + referenceData.duration,
+		            "opacity": 1,
+		        }));
+
+		        //#4
+		        keyframes.push($.extend({}, keyframePrototype, {
+		            "time": referenceData.begin + referenceData.duration + track.experienceStreams[Object.keys(track.experienceStreams)[0]].data.transition.outDuration,
+		            "opacity": 0,
+		        }));
+		    }
 		}
 
-		//this is where the four keyframes are actually parsed
-
-		var keyframePrototype = {
-			"type" : track.data.linkToExperience.embedding.experienceId == "" ? "unattached" : "attached", //TODO - is this what differentiates attached vs. unattached ?????
-			"dispNum" : 1, //TODO - can this be hardcoded (are there ever multiple displays of inks)
-			"initKeyframe" : track.data.linkToExperience.embedding.initKeyframe,
-			"initproxy" : track.data.linkToExperience.embedding.initproxy,
-		}
-
-		//#1
-		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset - fadeInDurationInk,
-			"opacity" : 0,
-		}));
-
-		//#2
-		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset,
-			"opacity" : 1,
-		}));
-
-		//#3
-		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset + duration,
-			"opacity" : 1,
-		}));
-
-		//#4
-		keyframes.push($.extend({}, keyframePrototype, {
-			"time" : timeOffset + duration + fadeOutDurationInk,
-			"opacity" : 0,
-		}));
-
-		return keyframes
+		return keyframes;
 	}
 
 	/** stolen from tagInk.js
@@ -8967,9 +8985,6 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			    keyFrames = [];
 			    currExperienceStreamKey = Object.keys(currExperience.experienceStreams).sort()[0]
                 currExperienceStream = currExperience.experienceStreams[currExperienceStreamKey]
-			    console.log("Experience: ");
-			    console.log(currExperience);
-			    console.log(currExperienceStream);
 			    /*
 			    keyframeObject = {
 			        "dispNum": k,
@@ -9102,8 +9117,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 	        "tracks": ITE_tracks()
 	    };
 
-	    console.log("ITE tour object is: ");
-	    console.log(ITE_tour);
+	    //console.log("ITE tour object is: ");
+	    //console.log(ITE_tour);
 	    console.log(">>>>>>>>>>>>> Finished ITE Parsing >>>>>>>>>>>>>");
 
 	    return ITE_tour;

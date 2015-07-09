@@ -1,7 +1,7 @@
 window.ITE = window.ITE || {};
 ITE.Orchestrator = function(player, isAuthoring) {
 	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
-									// Defaulted to ‘loading’
+    // Defaulted to ‘loading’
 	var self = this;
 	var pctTime = null;
 	var reloadCallback = null;
@@ -26,7 +26,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.getElapsedTime = function(){
 		return self.timeManager.getElapsedOffset();
 	};	
-
+	if (idleTimer) {
+	    idleTimer.tourPlaying(true);
+	}
 
    /**
     * I/P: {URL}     	dataURL    Location of JSON data about keyframes/tracks
@@ -41,7 +43,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    tourData = dataURL
 	    self.tourData = tourData;
 	    loadHelper();
-
+	    if (idleTimer) {
+	        idleTimer.tourPlaying(true);
+	    }
 	  /**
 	    * I/P: none
 	  	* Helper function to load tour with AJAX (called below)
@@ -102,7 +106,10 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	  	* unloads the tour
 	    * O/P: none
 	 */
-	function unload(){
+	function unload() {
+	    if (idleTimer) {
+	        idleTimer.tourPlaying(false);
+	    }
 		for (i = self.trackManager.length-1; i >= 0; i--) {
 			self.trackManager[i].unload();
 			trackManager.remove(trackManager[i]);
@@ -141,6 +148,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		}
 		self.timeManager.startTimer();
 		self.status = 1;
+		if (idleTimer) {
+		    idleTimer.tourPlaying(true);
+		}
 	}
 
 	function pause() {
@@ -149,7 +159,10 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		for (i = 0; i < self.trackManager.length; i++) {
 			self.trackManager[i].pause();
 		}
-		self.status = 2; 
+		self.status = 2;
+		if (idleTimer) {
+		    idleTimer.tourPlaying(false);
+		}
 	}
 
 	function scrub(seekPercent) {
@@ -171,7 +184,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 		// Inform tracks of seek.
 		for (i = 0; i < self.trackManager.length; i++) {
-			self.trackManager[i].seek();
+		    self.trackManager[i].seek();
 		}
 	}
 
@@ -183,7 +196,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			self.prevStatus = self.status;
 		}
 		if (self.status === 1) {
-			self.pause();
+		    self.pause();
 		}
 
 		if (!self.tourData || !self.tourData.totalDuration) {
@@ -208,6 +221,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			}
 			self.timeManager.startTimer();
 			self.status = 1;
+			if (idleTimer) {
+			    idleTimer.tourPlaying(true);
+			}
 		}
 		self.prevStatus = 0;
 	}
@@ -352,6 +368,17 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    }
 	}
 
+	function updateInkPositions() {
+	    var i;
+	    for (i = 0; i < trackManager.length; i++) {
+	        var track = trackManager[i];
+	        if (track.type === "image") {
+	            track.updateInk(true);
+	        }
+	    }
+	}
+
+	self.updateInkPositions = updateInkPositions;
 	self.manipTrack = null;
 	self.getTrackManager = getTrackManager;
 	self.captureKeyframe = captureKeyframe;

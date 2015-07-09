@@ -47,7 +47,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         prevTag             = options.prevTag,          // sort tag of collection we came from, if any
         prevMult            = options.prevMult, 
         prevPreview         = options.prevPreview,      //previous artwork/media that was previewing (could be different than doq for assoc media view)     
-        prevPreviewPos = options.prevPreviewPos,
+        prevPreviewPos      = options.prevPreviewPos,
         prevSearch          = options.prevSearch,       // previous search
         previewing 	        = options.previewing, 	   // if we are previewing in authoring (for styling)
         assocMediaToShow    = options.assocMediaToShow,
@@ -237,11 +237,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         collectionsPage = TAG.Layout.CollectionsPage();
 
                         collectionsPageRoot = collectionsPage.getRoot();
+                        collectionsPageRoot.find("#loadingLabel").css({'font-size':'100%','left':'37%','top':'50%'}); // adjust formatting in splitscreen mode
                         collectionsPageRoot.data('split', 'R');
 
                         splitscreenContainer.css('display', 'none');
                         TAG.Util.Splitscreen.init(root, collectionsPageRoot);
-                        annotatedImage.viewer.scheduleUpdate();
+                        annotatedImage.viewer.clearOverlays();
                         //annotatedImage.viewer.viewport.applyConstraints();
                         TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                     });
@@ -250,11 +251,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     collectionsPage = TAG.Layout.CollectionsPage();
 
                     collectionsPageRoot = collectionsPage.getRoot();
+                    collectionsPageRoot.find("#loadingLabel").css({'font-size':'100%','left':'37%','top':'50%'}); // adjust formatting in splitscreen mode
                     collectionsPageRoot.data('split', 'R');
 
                     splitscreenContainer.css('display', 'none');
                     TAG.Util.Splitscreen.init(root, collectionsPageRoot);
-                    annotatedImage.viewer.scheduleUpdate();
+                    annotatedImage.viewer.clearOverlays();
                     //annotatedImage.viewer.viewport.applyConstraints();
                     TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                 }
@@ -1082,8 +1084,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     var ITEPlayer = new TAG.Layout.TourPlayer(iteData, prevCollection, prevInfo, options, tour);
                     TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
                         setTimeout(function () {
-                            var rindata = tour;
-                            ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
+                            //var rindata = tour;
+                            //ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
                             ITEPlayer.startPlayback();
                         }, 1000);
                     });
@@ -1352,6 +1354,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         * @param {event} evt            manipulation event of the image
         */
         function dzMoveHandler(evt) {
+
+            //catch race condition when minimap not yet reloaded 
+            if (!minimap) {
+                return;
+            }
             var minimaph = minimap.height();
             var minimapw = minimap.width();
 
@@ -1359,7 +1366,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var minimapt = (minimapContainer.height() / 2) - (minimap.height() / 2);
             var minimapl = (minimapContainer.width() / 2) - (minimap.width() / 2);
 
-            var viewport = evt.viewport;
+            var viewport = evt.userData.viewport;
+            //OSD hasn't reloaded completely yet
+            if (!viewport) {
+                return;
+            }
             var rect = viewport.getBounds(true);
             var tl = rect.getTopLeft();
             var br = rect.getBottomRight();

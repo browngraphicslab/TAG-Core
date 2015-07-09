@@ -634,8 +634,6 @@ TAG.Worktop.Database = (function () {
         error: Called for any other errors
     */
     function changeExhibition(guid, options, success, unauth, conflict, error) {
-        console.log("CHANGE EXHIBITION")
-        console.log(guid)
         _db = _db || new Worktop.Database();
         if (typeof guid !== "string" && guid && guid.Identifier) guid = guid.Identifier;
         _db.postExhibition(guid, options, { success: success, unauth: unauth, conflict: conflict, error: error }, strict);

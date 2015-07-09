@@ -1,8 +1,8 @@
 window.ITE = window.ITE || {};
 
-ITE.Player = function (options, tourPlayer, container) { //acts as ITE object that contains the orchestrator, etc
+ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE object that contains the orchestrator, etc
    var totalTourDuration;
-   var  orchestrator            = new ITE.Orchestrator(this, options.isAuthoring),
+   var  orchestrator            = new ITE.Orchestrator(this, options.isAuthoring, idleTimer),
         self = this,
         playerConfiguration = {
                 attachVolume:               true,
@@ -55,7 +55,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
 
     //Other miscellaneous variables
     Utils = new ITE.Utils();
-    this.Orchestrator = orchestrator;
+    this.orchestrator = orchestrator;
 
     var onLoadPlayerEvent = new ITE.PubSubStruct();
     this.onTourEndEvent = new ITE.PubSubStruct();
@@ -86,7 +86,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
             attachPlay();
             attachLoop();
             attachProgressBar();
-            attachFullScreen();
+            //attachFullScreen();
             attachProgressIndicator();
         };
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls
@@ -148,6 +148,8 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
                            .append(volumeLevelContainer);
             volumeButtonContainer.append(volumeButton);
             volumeLevelContainer.append(volumeLevel);
+            //move to be next to loop button, which is hard-coded at 50px
+            volumeContainer.css('right', $("#tagRoot").width() * 0.025 + 50 + 'px');
         }
         playerConfiguration.setMute ? mute(): unMute()
     };
@@ -164,7 +166,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
                 .addClass("playPauseButtonContainer");
 
                 playPauseButton.addClass("playPauseButton")
-                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
+                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_play.svg")
                 .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
@@ -258,6 +260,8 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
             progressIndicator.addClass("progressIndicator"); 
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
+            //adjust right positioning
+            ProgressIndicatorContainer.css({ 'right': $("#tagRoot").width()*0.03 + 100 + 'px' });
             updateProgressIndicator(orchestrator.getElapsedTime());
         }
     };
@@ -373,12 +377,22 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
         bottomContainer.mouseenter(function () {
             makeControlsVisible();
         })
+        $("#backButton").mouseenter(function () {
+            makeControlsVisible();
+        })
+        $("#backButton").mouseleave(function () {
+            setControlsFade();
+        })
         
         orchestrator.refresh();
     };
 
     function refresh() {
         orchestrator.refresh();
+    }
+
+    function updateInkPositions() {
+        orchestrator.updateInkPositions();
     }
 
     function unload() {
@@ -392,7 +406,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * O/P:   none
     */ 
     function captureKeyframe(trackID) {
-        return this.orchestrator.captureKeyframe(trackID);
+        return orchestrator.captureKeyframe(trackID);
     };
 
     function getTime() {
@@ -423,7 +437,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     */
     function play() {
         orchestrator.play();
-       playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/pause.svg")
+        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
        setControlsFade();
     };
     /*
@@ -431,21 +445,20 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * Sets the buttons to fade in 2 seconds from function call
     * O/P:   none
     */
-    function setControlsFade(){
-        if(playerConfiguration.fadeControls){
-            window.setTimeout(function(){
-                if(!bottomContainer.is(":hover")){
-                    time = 500
-                    volumeButton.fadeTo(time,0,null);
-                    volumeLevel.fadeTo(time,0,null);
-                    playPauseButton.fadeTo(time,0,null);
-                    loopButton.fadeTo(time,0,null);
-                    progressBar.fadeTo(time,0,null);
-                    fullScreenButton.fadeTo(time,0,null);
-                    progressIndicator.fadeTo(time,0,null);
-                    $("#backButton").fadeTo(time,0,null);
-                    $("#linkButton").fadeTo(time,0,null);
-                }
+    function setControlsFade() {
+        console.log("set controls fade called")
+        if (playerConfiguration.fadeControls) {
+            window.setTimeout(function () {
+                time = 500
+                volumeButton.fadeTo(time,0,null);
+                volumeLevel.fadeTo(time,0,null);
+                playPauseButton.fadeTo(time,0,null);
+                loopButton.fadeTo(time,0,null);
+                progressBar.fadeTo(time,0,null);
+                fullScreenButton.fadeTo(time,0,null);
+                progressIndicator.fadeTo(time,0,null);
+                $("#backButton").fadeTo(time,0,null);
+                $("#linkButton").fadeTo(time,0,null);
             },2000)
        }
     }
@@ -455,13 +468,18 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * Makes the controls/buttons visible and cancels timeouts making them dissappear
     * O/P:   none
     */
-    function makeControlsVisible(){
+    function makeControlsVisible() {
+        console.log("make controls visible called")
         volumeButton.css({ 'opacity' : 1 })
         volumeLevel.css({ 'opacity' : 1 })
         playPauseButton.css({ 'opacity' : 1 })
         loopButton.css({ 'opacity' : 1 })
         progressBar.css({ 'opacity' : 1 })
-        fullScreenButton.css({ 'opacity' : 1 })
+        fullScreenButton.css({
+            'opacity': 1,
+            'display': 'none',//because we want to hide the full screen button for now
+            'disabled': true
+        })
         progressIndicator.css({ 'opacity' : 1 })
         $("#backButton").css({ 'opacity' : 1 })
         $("#linkButton").css({ 'opacity' : 1 })
@@ -477,7 +495,8 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     */
     function pause() {
         orchestrator.pause();
-        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/play.svg")
+        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_play.svg");
+        makeControlsVisible();
     };
 
     /*
@@ -680,7 +699,6 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
 ////////////////////////////////////////////////////////////////////////////
 
     function bindCaptureHandlers(handlers) {
-        console.log("binding handlers now");
         orchestrator.bindCaptureHandlers(handlers);
     }
 
@@ -750,7 +768,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
             trackManager[i] = temp
             i++;
         }
-        Orchestrator.updateZIndices();
+        orchestrator.updateZIndices();
     }
 
 
@@ -761,7 +779,7 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * O/P:    trackManager of the orchestrator (list of tracks)
     */ 
     function getTracks(){
-        return this.Orchestrator.getTrackManager()
+        return orchestrator.getTrackManager()
     }
 
     /**
@@ -770,9 +788,9 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     * O/P:    said added track
     */ 
     function addTrack(trackData){
-        track =  Orchestrator.createTrackByProvider(trackData)
+        track = orchestrator.createTrackByProvider(trackData)
         track.createDefaultKeyframes()
-        Orchestrator.initializeTrack(track)
+        orchestrator.initializeTrack(track)
         track.load()
         return track
     }
@@ -809,4 +827,5 @@ ITE.Player = function (options, tourPlayer, container) { //acts as ITE object th
     this.captureKeyframe = captureKeyframe;
     this.bindCaptureHandlers = bindCaptureHandlers;
     this.getOrchestrator = getOrchestrator;
+    this.updateInkPositions = updateInkPositions;
 };

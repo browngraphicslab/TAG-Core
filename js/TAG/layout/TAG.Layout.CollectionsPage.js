@@ -65,7 +65,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         visibleCollections = [],                               // array of collections that are visible and published
         collectionDots = {},                               // dict of collection dots, keyed by collection id
         artworkCircles = {},                               // dict of artwork circles in timeline, keyed by artwork id                  
-        artworkTiles = {},                               // dict of artwork tiles in bottom region, keyed by artwork id
+        artworkTiles = {},                                   // dict of artwork tiles in bottom region, keyed by artwork id
+        hiddenDots = [],
         firstLoad = true,                             // TODO is this necessary? what is it doing?
         currentArtworks = [],                               // array of artworks in current collection
         infoSource = [],                               // array to hold sorting/searching information
@@ -153,12 +154,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     });
 
     if (lockKioskMode == "true") {
+        console.log("kiosk mode locked, back button disabled")
         backButton.css('display', 'none');
     } else {
+        console.log("kiosk mode unlocked, back button enabled")
         //collectionMenu.css('left', '5%');
         if (IS_WINDOWS) {
             backButton.css('padding-top', '');
         }
+        backButton.css('display', 'auto');
     }
 
     // get things rolling
@@ -168,6 +172,10 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      * @method init
      */
     function init() {
+        if (!idleTimer && !previewing) {
+            idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+            idleTimer.start();
+        }
         if ((previewing || lockKioskMode) && idleTimer) {
             idleTimer.kill();
         }
@@ -187,6 +195,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         
         circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
         var loadingLabel = $(document.createElement('div'));
+        loadingLabel.attr('id','loadingLabel');
         loadingLabel.css({
             'position': 'absolute',
             'left': '37%',
@@ -194,7 +203,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             'font-size': '200%',
             'color': 'white',
             'opacity': '1'
-        });
+        });  
+
         loadingLabel.text('Loading Collections');
         loadingArea.append(loadingLabel);
 
@@ -979,6 +989,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             '-webkit-transform': 'rotate(270deg)'
                         });
                     });
+
                 //fix for web app styling  
                 if (!IS_WINDOWS){
                     root.find("#filterByKeywords").css({'width':'30%'});
@@ -1076,7 +1087,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 "text-align" : "center"
             })
             // if the idle timer hasn't started already, start it
-            if (!idleTimer && evt && !previewing && !lockKioskMode) { // loadCollection is called without an event to show the first collection
+            if (!idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true) { // loadCollection is called without an event to show the first collection
                 idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
                 idleTimer.start();
             }
@@ -1094,14 +1105,16 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //adjust for nice vertical positioning
             if (!timelineShown && !onAssocMediaView) {
                 root.find("#leftContainer").css('top', -($("#tagRoot").height() * 0.01945) + 'px');
-            } else {
+            } else if (timelineShown && onAssocMediaView){
+                root.find("#leftContainer").css('top', $("#tagRoot").height()*0.02 + 'px');
+            }else {
                 root.find("#leftContainer").css('top', '0px');
             }
 
             if (onAssocMediaView) {
-                $('#keywords').hide();
+                $('#keywords').css('visibility','hidden');
             } else {
-                $('#keywords').show();
+                $('#keywords').css('visibility','visible');
             }
 
             //If on associated media view and there are no associated media with valid dates, hide the timeline
@@ -1222,7 +1235,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 });
             }
             if (!IS_WINDOWS && previewing){
-                dropDownArrow.css({'top':'8%'});
+                dropDownArrow.css({'top':'3.5%'});
             }
             dropDownArrow.attr('src', tagPath + 'images/icons/Close.svg');
             dropDownArrow.addClass('arrow');    
@@ -2886,6 +2899,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         if (circ === timelineEventCircles[0]){
             timelineDateLabel.css('visibility', 'visible');
         }
+
+        if (selectedCircle) { //sometimes need to reset visiblity of selected circle if there were two circles with same date
+            selectedCircle.css('visibility', 'visible');
+            selectedCircle.timelineDateLabel.css('visibility', 'visibility');
+        }
+
         if (prevCircle){
             //Find the previous visible timeline label:
             while (timelineEventCircles[timelineEventCircles.indexOf(prevCircle) - 1] && prevCircle.timelineDateLabel.css('visibility')!=='visible'){
@@ -2906,10 +2925,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             } 
         }
 
+        for (var i = 0; i < timelineEventCircles.length; ++i) {
+            if (selectedCircle && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(selectedCircle.yearKey)) && (timelineEventCircles[i] != selectedCircle)) {
+               
+                timelineEventCircles[i].css('visibility', 'hidden');
+                timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');  
+            }        
+        }
+        
+        
+        
         // Always show current circle, and if there are other circles with the same date, hide them
         if (selectedCircle && circ.yearKey === selectedCircle.yearKey){ 
-            if (circ === selectedCircle){
+            if (circ === selectedCircle) {
                 timelineDateLabel.css('visibility', 'visible');
+                
             } else {
                 timelineDateLabel.css('visibility', 'hidden'); 
             }
@@ -2918,6 +2948,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
     }
     
     function zoomTimeline(circle) {
+        console.log("zoom timeline called");
         var i,
             j,
             k,
@@ -2930,6 +2961,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             otherCircle;
 
         for (i = 0; i < timelineEventCircles.length ; i++) {
+            //if (!circle) {
+                //console.log("no particular circle to zoom on - all circles visible");
+                timelineEventCircles[i].css('visibility', 'visible');
+                timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
+            //}
+            
+                
+            
+
             otherCircle = timelineEventCircles[i]
             circleTarget = location(otherCircle)
             otherCircle.stop();
@@ -2940,8 +2980,14 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             //When last animation done, loop through and hide/show date labels
             if (i === timelineEventCircles.length-1){
                 otherCircle.on('webkitTransitionEnd transitionend msTransitionEnd oTransitionEnd', function () {
+                    console.log("Webkit transition end now")
                     for (k=0; k < timelineEventCircles.length; k++){
                         displayLabels(timelineEventCircles[k], circle);
+                        if (circle) {
+                            console.log("CIRCLE IS NOT NULL")
+                            //  timelineEventCircles[k].css('visibility', 'visible');
+                            //timelineEventCircles[k].timelineDateLabel.css('visibility', 'visible');
+                        }
                         if (k===timelineEventCircles.length -1){
                            displayLabels(timelineEventCircles[k],null,k); 
                         }
@@ -2958,7 +3004,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     }
                     },1100); // timeout would need to be changed if animation time changed (should use transitionend event in other cases for slow connections)
                 }
-            }   
+            }
+
+            if (!circle) {
+                timelineEventCircles[i].css('visibility', 'visible');
+                timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
+            }
+
         }
 
         for (j = 0; j < timelineTicks.length; j++) {
@@ -2975,6 +3027,8 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             var target =  ((currOffset + dot.Offset)  - center) * zoomLevel  + center;
             return target;
         }
+
+
     }
 
     /*Helper function to determine if the labels of two event cirlces are overlapping
@@ -3015,6 +3069,12 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 styleTimelineCircle(artworkCircles[artwork.Identifier], false);
             }
             zoomTimeline();
+
+            for (var i = 0; i < timelineEventCircles.length; ++i) {
+                console.log("no particular circle to zoom on - all circles visible");
+                timelineEventCircles[i].css('visibility', 'visible');
+                timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
+            }
             catalogDiv.stop(true,false);
             artworkShown = false;
 
@@ -3574,6 +3634,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             prevArrow = $(document.createElement('img'))
                                 .addClass("miniTilesArrow")
                                 .attr('src', tagPath + 'images/icons/Close.svg')
+                                .attr('id','prevMiniArrow')
                                 .on('mousedown', function(){
                                         miniTilesHolder.stop();
                                         miniTilesHolder.animate({
@@ -3584,6 +3645,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                             nextArrow = $(document.createElement('img'))
                                 .addClass("miniTilesArrow")
                                 .attr('src', tagPath + 'images/icons/Open.svg')
+                                .attr('id','nextMiniArrow')
                                 .css('left', "94%")
                                 .on('mousedown', function(){
                                     miniTilesHolder.stop();
@@ -3608,9 +3670,13 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                         thumb;
                     numberAssociatedDoqs = doqs.length;
                     var j = 0;
+                    var defaultIndex = 0; //index of artwork you are taken to when you click "Select an Associated Artwork" in assoc media tab
                     //Loop through media doqs and create tiles from them
                     for (i = 0; i < doqs.length; i++) {
-                        if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier)==-1) {
+                        if (onAssocMediaView && artworkInCollectionList.indexOf(doqs[i].Identifier) == -1) {
+                            if (i === defaultIndex) {
+                                defaultIndex++;
+                            }
                             continue;
                         }
 
@@ -3703,10 +3769,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                     addAssociationRow(numberAssociatedDoqs); 
                     TAG.Util.removeProgressCircle(circle);
 
+                    // hide previous and next arrows if artworks thumbnail <= 4
+                    if (j <= 4) {
+                        $('.miniTilesArrow').hide();
+                    }
+
                     //Also add handlers to switch to first artwork if in assoc media view
                     if (onAssocMediaView) {
                         exploreTab.on('mousedown', function(){
-                            (switchPage(doqs[0], artwork, getContainerLeft(artwork, false)))();
+                            (switchPage(doqs[defaultIndex], artwork, getContainerLeft(artwork, false)))();
 
                             //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
                             TAG.Telemetry.recordEvent('ArtworkPreviewer', function(tobj) {
@@ -3801,8 +3872,19 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             // Make current circle larger and white           
             if (artworkCircles[artwork.Identifier]){
                 styleTimelineCircle(artworkCircles[artwork.Identifier], true)
-            };    
+            }; 
+                
+            for (var i = 0; i < timelineEventCircles.length; ++i) {
 
+
+
+                if (timelineEventCircles[i] && artworkCircles[artwork.Identifier] && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(artworkCircles[artwork.Identifier].yearKey)) && (timelineEventCircles[i] != artworkCircles[artwork.Identifier])) {
+                    console.log("Artwork circles should hide?!?");
+                    timelineEventCircles[i].css('visibility', 'hidden');
+                    timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
+                }
+
+            }
             progressCircCSS = {
                 'position': 'absolute',
                 'float'   : 'left',
@@ -4176,10 +4258,15 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
         //Parse RIN data to ITE Data
         var iteData = TAG.Util.RIN_TO_ITE(tour);
-
         //Create tag tourplayer (which will in turn create an ITE player)
-        var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour);
-        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), ITEPlayer.startPlayback);
+        var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour, idleTimer);
+        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
+            setTimeout(function () {
+                //var rindata = tour;
+                //ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
+                ITEPlayer.startPlayback();
+            }, 1000);
+        });
         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
     }
     
@@ -4351,7 +4438,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         return {
             exhibition: currCollection,
             currentTag: currentTag,
-            currentImage: currentArtwork
+            currentImage: currentArtwork,
         };
     }
 

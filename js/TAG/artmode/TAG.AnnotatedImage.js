@@ -18,6 +18,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         doq = options.doq,            // doq for the artwork
         callback = options.callback,       // called after associated media are retrieved from server
         noMedia = options.noMedia,        // should we not have assoc media? (set to true in artwork editor)
+        locationHist = options.locationHist,
+        inArtworkEditor = options.inArtworkEditor,
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,   // prepend server address to given path
@@ -43,6 +45,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         // misc uninitialized variables
         viewerelt,
+        OSDHolder,
         viewer,
         assetCanvas;
 
@@ -50,7 +53,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     var xFadeOffset;
 
     // get things rolling
-    init();
+    initOSD();
 
     return {
         getAssociatedMedia: getAssociatedMedia,
@@ -131,7 +134,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     }
 
     /**
-     * Wrapper around Seadragon.Drawer.updateOverlay; moves an HTML element "overlay."
+     * Wrapper around Seadragon.updateOverlay; moves an HTML element "overlay."
      * Used mostly in conjunction with hotspot circles (this function is currently
      * only called from ArtworkEditor.js)
      * @method updateOverlay
@@ -143,12 +146,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             top  = parseFloat($elt.css('top')),
             left = parseFloat($elt.css('left'));
         if (top && left) { // TODO is this check necessary?
-            viewer.drawer.updateOverlay(element, viewer.viewport.pointFromPixel(new Seadragon.Point(left, top)), placement);
+            viewer.updateOverlay(element, viewer.viewport.pointFromPixel(new OpenSeadragon.Point(left, top)), placement);
         }
     }
 
     /**
-     * Wrapper around Seadragon.Drawer.addOverlay; adds an HTML overlay to the seadragon
+     * Wrapper around Seadragon.addOverlay; adds an HTML overlay to the seadragon
      * canvas. Currently only used in ArtworkEditor.js.
      * @method addOverlay
      * @param {HTML element} element                   the overlay element to add
@@ -157,29 +160,29 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function addOverlay(element, point, placement) {
         if (!viewer.isOpen()) {
-            viewer.addEventListener('open', function () {
-                viewer.drawer.addOverlay(element, point, placement);
-                viewer.drawer.updateOverlay(element, point, placement);
+            viewer.addHandler('open', function () {
+                viewer.addOverlay(element, point, placement);
+                viewer.updateOverlay(element, point, placement);
             });
         } else {
-            viewer.drawer.addOverlay(element, point, placement);
-            viewer.drawer.updateOverlay(element, point, placement);
+            viewer.addOverlay(element, point, placement);
+            viewer.updateOverlay(element, point, placement);
         }
     }
 
     /**
-     * Wrapper around Seadragon.Drawer.removeOverlay. Removes an HTML overlay from the seadragon
+     * Wrapper around Seadragon.removeOverlay. Removes an HTML overlay from the seadragon
      * canvas.
      * @method removeOverlay
      * @param {HTML element}       the ovlerlay element to remove
      */
     function removeOverlay(element) {
         if (!viewer.isOpen()) {
-            viewer.addEventListener('open', function () {
-                viewer.drawer.removeOverlay(element);
+            viewer.addHandler('open', function () {
+                viewer.removeOverlay(element);
             });
         } else {
-            viewer.drawer.removeOverlay(element);
+            viewer.removeOverlay(element);
         }
     };
 
@@ -188,7 +191,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @method unload
      */
     function unload() {
-        viewer && viewer.unload();
+        viewer && viewer.destroy();
     }
 
     /**
@@ -222,12 +225,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         dzManipPreprocessing();
 
         if (!artworkFrozen) {
-            pivotRel = viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y));
+            pivotRel = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y));
             var piv = {
                 x: pivotRel.x,
                 y: pivotRel.y
             };
-            transRel = viewer.viewport.deltaPointsFromPixels(new Seadragon.Point(trans.x, trans.y));
+            transRel = viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y));
             if (xFadeOffset) {
                 
                 // testing 
@@ -350,12 +353,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         viewer.viewport && function () {
             var ycoord = parseFloat($(element).css('top')) + parseFloat($(element).css('height'));
             var xcoord = parseFloat($(element).css('left')) + 0.5 * parseFloat($(element).css('width'));
-            var point = viewer.viewport.pointFromPixel(new Seadragon.Point(xcoord, ycoord));
+            var point = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(xcoord, ycoord));
             var bounds = viewer.viewport.getBounds();
             //if the point is not visible in the current bounds
             if (!((point.x < bounds.getBottomRight().x && point.x > bounds.getTopLeft().x)
                 && (point.y < bounds.getBottomRight().y && point.y > bounds.getTopLeft().y))) {
-                viewer.viewport.panTo(viewer.viewport.getHomeCenter());
+                viewer.viewport.panTo(viewer.viewport.getCenter());
                 viewer.viewport.zoomTo(.8 * viewer.viewport.getHomeZoom());
             }
         }();
@@ -367,8 +370,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     */
     function initZoom() {
         if (!disableZoomRLH) {
-            viewerelt && function () {
-                viewerelt.on('dblclick', function () {
+            OSDHolder && function () {
+                OSDHolder.on('dblclick', function () {
                     console.log("Zooming!");
                     zoomToPoint();
                 });
@@ -398,10 +401,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             top = parseFloat($(element).css('top')),
             left = parseFloat($(element).css('left'));
 
-        var topY = pointFromPixel(new Seadragon.Point(1, top - 10)).y,
-            bottomY = pointFromPixel(new Seadragon.Point(1, top + height + 10)).y,
-            leftX = pointFromPixel(new Seadragon.Point(left - 10, 1)).x,
-            rightX = pointFromPixel(new Seadragon.Point(left + width + 10, 1)).x;
+        var topY = pointFromPixel(new OpenSeadragon.Point(1, top - 10)).y,
+            bottomY = pointFromPixel(new OpenSeadragon.Point(1, top + height + 10)).y,
+            leftX = pointFromPixel(new OpenSeadragon.Point(left - 10, 1)).x,
+            rightX = pointFromPixel(new OpenSeadragon.Point(left + width + 10, 1)).x;
 
         if (((rightX < bounds.getBottomRight().x && leftX > bounds.getTopLeft().x)
             && (bottomY < bounds.getBottomRight().y && topY > bounds.getTopLeft().y))) {
@@ -438,28 +441,28 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         var point = locationOf(element);
         var bounds = viewer.viewport.getBounds();
         if (point.x <= 0 && point.y <= 0) { //TOP LEFT
-            return viewer.viewport.pixelFromPoint(new Seadragon.Point(0, 0));
+            return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0));
         }
         if (point.y <= 0 && point.x >= 1) { //TOP RIGHT
-            return viewer.viewport.pixelFromPoint(new Seadragon.Point(1, 0));
+            return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(1, 0));
         }
         if (point.x <= 0 && point.y >= (1 / aspectRatio) + 0) { //BOTTOM LEFT
-            return viewer.viewport.pixelFromPoint(new Seadragon.Point(0, (1 / aspectRatio)));
+            return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, (1 / aspectRatio)));
         }
         if (point.x >= 1 && point.y >= (1 / aspectRatio) + 0) { //BOTTOM RIGHT
-            return viewer.viewport.pixelFromPoint(new Seadragon.Point(1, (1 / aspectRatio)));
+            return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(1, (1 / aspectRatio)));
         }
         if (point.x <= -0.05) { //LEFT
-            return viewer.viewport.pixelFromPoint(new Seadragon.Point(0, point.y));
+            return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, point.y));
         }
         if (point.x >= 1.05) { //RIGHT
-            return viewer.viewport.pixelFromPoint(new Seadragon.Point(1, point.y));
+            return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(1, point.y));
         }
         if (point.y <= -0.05) { //TOP
-            return viewer.viewport.pixelFromPoint(new Seadragon.Point(point.x, 0));
+            return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(point.x, 0));
         }
         if (point.y >= (1 / aspectRatio) + .05) { //BOTTOM
-            return viewer.viewport.pixelFromPoint(new Seadragon.Point(point.x, (1 / aspectRatio)));
+            return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(point.x, (1 / aspectRatio)));
         }
     }
     
@@ -473,7 +476,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         (viewer.viewport && element) && function () {
             var ycoord = parseFloat($(element).css('top')) + parseFloat($(element).css('height'));
             var xcoord = parseFloat($(element).css('left')) + 0.5 * parseFloat($(element).css('width'));
-            point = viewer.viewport.pointFromPixel(new Seadragon.Point(xcoord, ycoord));
+            point = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(xcoord, ycoord));
         }();
         return point;
     }
@@ -501,7 +504,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         var t = parseFloat($(element).css('top')) + $(element).height(),
             l = parseFloat($(element).css('left')) + $(element).width() / 2;
 
-        return viewer.viewport.pointFromPixel(new Seadragon.Point(l, t));
+        return viewer.viewport.pointFromPixel(new OpenSeadragon.Point(l, t));
     }
 
     /** 
@@ -521,7 +524,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     function createStartingPoint() {
         var centerPoint = viewer.viewport.getCenter();
         var bounds = viewer.viewport.getBounds();
-        return new Seadragon.Point(centerPoint.x + .01 * (bounds.getBottomRight().x - bounds.getTopLeft().x),
+        return new OpenSeadragon.Point(centerPoint.x + .01 * (bounds.getBottomRight().x - bounds.getTopLeft().x),
             centerPoint.y + .01 * (bounds.getBottomRight().y - bounds.getTopLeft().y));
     };
 
@@ -559,10 +562,107 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         doManipulation = true;
     }
 
+    	/**
+	 *Inits the OpenSeadragon viewer
+	 */
+	function initOSD(){
+
+		//Creates element that the OSD viewer will be appended to
+		viewerelt = document.createElement("div");
+	    
+        
+		var holderID;
+		if (locationHist) {
+		    holderID = "locationHistViewer";
+		} else {
+		    holderID = "annotatedImageViewer";
+		}
+	    //OSD enforces unique viewer ids, so we need to create unique ids for when there are multiple viewers (such as w/ custom maps)
+		holderID = holderID + Math.floor(Math.random() * 1000000000);
+		OSDHolder = $(viewerelt)
+			.attr("id", holderID)
+			.on('mousedown scroll click mousemove resize', function(evt){
+				evt.preventDefault();
+			});
+		root.append(OSDHolder);
+		OSDHolder.css({
+		        'height': '100%',
+		        'width': '100%',
+		        'position': 'absolute',
+		        'z-index': '0'
+		});
+	    //The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or width at which the zoom out will be constrained.
+		//Setting it to 0, for example will allow you to zoom out infinitly.
+		var minZoomImageRatio = 0.9; //OSD default- don't allow as much zoom out on deep zooms as in tour player
+		if (inArtworkEditor) {
+		    minZoomImageRatio = 0.4; //Allow a lot of zoom out in artwork editor for thumbnail capture
+		}
+		//creates and sets up the OSD viewer
+		viewer = new OpenSeadragon.Viewer({
+			id : holderID,
+			element: viewerelt,
+			zoomPerClick: 1,  //disables click to zoom
+            artworkViewer: true,
+            constrainDuringPan: true,
+            minZoomImageRatio: minZoomImageRatio,
+			maxZoomPixelRatio: 2, //The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. 
+			visibilityRatio: .2, //set for consistency with ITE
+			gestureSettingsTouch: { flickEnabled: false }, //don't allow flick gesture to throw art off screen
+		});
+		if (locationHist) {
+		    viewer.setMouseNavEnabled(false);
+		}
+		viewer.clearControls();
+		OSDHolder.css({ 'position': 'absolute' })
+
+		//the canvas
+		var canvas = $(viewer.canvas).addClass("artworkCanvasTesting");
+
+		//sets up manipulation 
+		if (IS_WINDOWS){
+			TAG.Util.makeManipulatableWin(canvas[0], {
+				onScroll: function (delta, pivot) {
+					dzScroll(delta, pivot);
+				},
+				onManipulate: function (res) {
+					if (doManipulation) {
+						res.translation.x = -res.translation.x;        //Flip signs for dragging
+						res.translation.y = -res.translation.y;
+						dzManip(res);
+					}
+				}
+			}, null, true); // NO ACCELERATION FOR NOW
+		} else {
+			TAG.Util.makeManipulatable(canvas[0], {
+				onScroll: function (delta, pivot) {
+					dzScroll(delta, pivot);
+				},
+				onManipulate: function (res) {
+					if (doManipulation) {
+						res.translation.x = -res.translation.x;        //Flip signs for dragging
+						res.translation.y = -res.translation.y;
+						dzManip(res);
+					}
+				}
+			}, null, true); // NO ACCELERATION FOR NOW
+		}
+
+		//adds assetCanvas for associated media
+		assetCanvas = $(document.createElement('div'));
+		assetCanvas.attr('id', 'annotatedImageAssetCanvas');
+		root.append(assetCanvas);
+
+		// this is stupid, but it seems to work (for being able to reference zoomimage in artmode)
+		noMedia ? setTimeout(function() { callback && callback() }, 1) : loadAssociatedMedia(callback);
+
+	}
+   
+
     /**
-     * Initialize seadragon, set up handlers for the deepzoom image, load assoc media if necessary
+     * Initialize seadragon, set up handlers for the deepzoom image, load assoc media if necessary -- should be deprecated now
      * @method init
      */
+    /**
     function init() {
         var canvas;
 
@@ -620,7 +720,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         // this is stupid, but it seems to work (for being able to reference zoomimage in artmode)
         noMedia ? setTimeout(function() { callback && callback() }, 1) : loadAssociatedMedia(callback);
-    }
+}
+**/
 
     /**
      * Adds an animation handler to the annotated image. This is used to allow the image to move
@@ -629,7 +730,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @param {Function} handler      the handler to add
      */
     function addAnimateHandler(handler) {
-        viewer.addEventListener("animation", handler);
+        viewer.addHandler("animation", handler, { "viewport": viewer.viewport });
     }
 
     /**
@@ -706,7 +807,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             IS_XFADE = linq.Metadata.Type ? (linq.Metadata.Type === "Layer") : false, //TODO ADD BACK WHEN LAYERS COME BACK
             X = parseFloat(linq.Offset._x),
             Y = parseFloat(linq.Offset._y),
-            position = new Seadragon.Point(X, Y),
+            position = new OpenSeadragon.Point(X, Y),
             rect,   //For layer
             TITLE = unescape(TAG.Util.htmlEntityDecode(mdoq.Name)),
             CONTENT_TYPE = mdoq.Metadata.ContentType,
@@ -1387,9 +1488,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     x: x,
                     y: y
                 }
-                rect = new Seadragon.Rect(x, y, w, h);
+                rect = new OpenSeadragon.Rect(x, y, w, h);
 
-                viewer.drawer.addOverlay(outerContainer[0], rect);
+                viewer.addOverlay(outerContainer[0], rect);
             } else {
                 //closeButton = createCloseButton();
                 //mediaContainer.append(closeButton[0]);
@@ -1870,7 +1971,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (IS_HOTSPOT) {
                     if (!isHotspotIcon) {
                         circle.css('visibility', 'visible');
-                        addOverlay(circle[0], position, Seadragon.OverlayPlacement.CENTER);
+                        addOverlay(circle[0], position, OpenSeadragon.OverlayPlacement.CENTER);
                     }
                     viewer.viewport.panTo(position, false);
                     viewer.viewport.applyConstraints()

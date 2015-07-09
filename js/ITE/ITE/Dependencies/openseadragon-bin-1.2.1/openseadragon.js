@@ -6397,10 +6397,12 @@ $.Viewer = function( options ) {
         }).setTracking( true ); // default state
 
     function bindAnimationFinishHandler() {
-        if (this.orchestrator.animationFinishHandlerBound) {
-            this.addHandler('animation-finish', function () {
-                this.orchestrator.currentManipulatedObject = null;
-            });
+        if (!this.artworkViewer) {
+            if (this.orchestrator.animationFinishHandlerBound) {
+                this.addHandler('animation-finish', function () {
+                    this.orchestrator.currentManipulatedObject = null;
+                });
+            }
         }
     }
 
@@ -8375,35 +8377,35 @@ function onCanvasDblClick(event, first) {
 
 /*Augmented function for layers fix*/
 function onCanvasDrag(event, isTopTrack) {
-    //get zindex of current dz track
-    var zIndex = this.ITE_track.trackData.zIndex;
+    if (!this.artworkViewer) {
+        //get zindex of current dz track
+        var zIndex = this.ITE_track.trackData.zIndex;
 
-    // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
-    //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
-    if (this.orchestrator.currentManipulatedObject && (isTopTrack !== false)) {
-        if (this.orchestrator.currentManipulatedObject.viewer) {
-            this.orchestrator.currentManipulatedObject.viewer.onCanvasDrag(event, false);
-        } else {
-            this.orchestrator.currentManipulatedObject.manipFromDZRecursion(event);
-        }
-        return;
-    }
-
-    // otherwise, check if this is the top dz track
-    if ((isTopTrack === undefined) || (isTopTrack === true)) {
-        //find the first dz track in the stack to have the click/touch event in bounds
-        var track = this.orchestrator.getTrackBehind(zIndex, event);
-        this.orchestrator.currentManipulatedObject = track;
-        
-        //if the track exists, pass the event to that track 
-        if (track) {
-            if (track.viewer) {
-                //track.viewer.bindAnimationFinishHandler();
-                track.viewer.onCanvasDrag(event, false);
+        // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
+        //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
+        if (this.orchestrator.currentManipulatedObject && (isTopTrack !== false)) {
+            if (this.orchestrator.currentManipulatedObject.viewer) {
+                this.orchestrator.currentManipulatedObject.viewer.onCanvasDrag(event, false);
             } else {
-                track.manipFromDZRecursion(event);
+                this.orchestrator.currentManipulatedObject.manipFromDZRecursion(event);
             }
+            return;
         }
+    }
+    // otherwise, check if this is the top dz track
+    if (((isTopTrack === undefined) || (isTopTrack === true)) && (!this.artworkViewer)) {
+        //find the first dz track in the stack to have the click/touch event in bounds
+            var track = this.orchestrator.getTrackBehind(zIndex, event);
+            this.orchestrator.currentManipulatedObject = track;
+            //if the track exists, pass the event to that track 
+            if (track) {
+                if (track.viewer) {
+                    //track.viewer.bindAnimationFinishHandler();
+                    track.viewer.onCanvasDrag(event, false);
+                } else {
+                    track.manipFromDZRecursion(event);
+                }
+            }
     } else {
         // if the "false" flag is set then the manipulation object should already be set and we have just called movement on the active manipulation object.
         var gestureSettings;
@@ -8451,26 +8453,27 @@ function onCanvasDrag(event, isTopTrack) {
 }
 
 function onCanvasDragEnd(event, isTopTrack) {
-    var zIndex = this.ITE_track.trackData.zIndex;
+   
 
-    // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
-    //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
-    if (this.orchestrator.currentManipulatedObject && (isTopTrack !== false)) {
-        if (this.orchestrator.currentManipulatedObject.viewer) {
-            this.orchestrator.currentManipulatedObject.viewer.onCanvasDragEnd(event, false);
-        } else {
-            this.orchestrator.currentManipulatedObject.endManipFromDZRecursion(event);
-            this.orchestrator.currentManipulatedObject = null;
+    if (!this.artworkViewer) {
+        var zIndex = this.ITE_track.trackData.zIndex;
+        // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
+        //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
+        if (this.orchestrator.currentManipulatedObject && (isTopTrack !== false)) {
+            if (this.orchestrator.currentManipulatedObject.viewer) {
+                this.orchestrator.currentManipulatedObject.viewer.onCanvasDragEnd(event, false);
+            } else {
+                this.orchestrator.currentManipulatedObject.endManipFromDZRecursion(event);
+                this.orchestrator.currentManipulatedObject = null;
+            }
+            return;
         }
-        return;
     }
-
     // otherwise, check if this is the top dz track
-    if ((isTopTrack === undefined) || (isTopTrack === true)) {
-        //find the first dz track in the stack to have the click/touch event in bounds
-        var track = this.orchestrator.getTrackBehind(zIndex, event);
-        this.orchestrator.currentManipulatedObject = track;
-
+    if (((isTopTrack === undefined) || (isTopTrack === true)) && (!this.artworkViewer)) {
+            //find the first dz track in the stack to have the click/touch event in bounds
+            var track = this.orchestrator.getTrackBehind(zIndex, event);
+            this.orchestrator.currentManipulatedObject = track;
         //if the track exists, pass the event to that track 
         if (track) {
             if (track.viewer) {
@@ -8523,10 +8526,11 @@ function onCanvasDragEnd(event, isTopTrack) {
             shift: event.shift,
             originalEvent: event.originalEvent
         });
-
-        //for layers fix: when drag ends, set the current manipulated object to be null
-        this.orchestrator.currentManipulatedObject = null;
-        //this.orchestrator.interactionStarted = false;
+        if (!this.artworkViewer) {
+            //for layers fix: when drag ends, set the current manipulated object to be null
+            this.orchestrator.currentManipulatedObject = null;
+            //this.orchestrator.interactionStarted = false;
+        }
     }
 }
 
@@ -8557,11 +8561,12 @@ function onCanvasRelease(event, first) {
 
 /*Augmented function for layers fix*/
 function onCanvasPinch(event, isTopLayer) {
-    var zIndex = this.ITE_track.trackData.zIndex;
+    if (!this.artworkViewer) {
+        var zIndex = this.ITE_track.trackData.zIndex;
 
-    //takes the first dz track in the stack that has the click/touch event in bounds
-    var track = this.orchestrator.getTrackBehind(zIndex, event, false);
-
+        //takes the first dz track in the stack that has the click/touch event in bounds
+        var track = this.orchestrator.getTrackBehind(zIndex, event, false);
+    }
     ////if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
     //if ((isTopLayer === undefined || isTopLayer) && track != null) {
     //    track.viewer.onCanvasPinch(event, false);
@@ -8577,11 +8582,10 @@ function onCanvasPinch(event, isTopLayer) {
     //}
 
     // otherwise, check if this is the top dz track
-    if ((isTopLayer === undefined) || (isTopLayer === true)) {
-        //find the first dz track in the stack to have the click/touch event in bounds
-        var track = this.orchestrator.getTrackBehind(zIndex, event);
-        this.orchestrator.currentManipulatedObject = track;
-
+    if (((isTopLayer === undefined) || (isTopLayer === true)) && (!this.artworkViewer)) {
+            //find the first dz track in the stack to have the click/touch event in bounds
+            var track = this.orchestrator.getTrackBehind(zIndex, event);
+            this.orchestrator.currentManipulatedObject = track;
         //if the track exists, pass the event to that track 
         if (track) {
             if (track.viewer) {
@@ -8590,6 +8594,7 @@ function onCanvasPinch(event, isTopLayer) {
                 //track.scrollFromDZRecursion(event);
                 track.pinchFromDZRecursion(event);
             }
+            this.orchestrator.currentManipulatedObject = null;
         }
     } else {
         var gestureSettings,
@@ -8650,6 +8655,9 @@ function onCanvasPinch(event, isTopLayer) {
             originalEvent: event.originalEvent
         });
         //cancels event
+        if (!this.artworkViewer) {
+            this.orchestrator.currentManipulatedObject = null;
+        }
         return false;
     }
 }
@@ -8657,49 +8665,53 @@ function onCanvasPinch(event, isTopLayer) {
 /*Augmented function for layers fix*/
 function onCanvasScroll(event, isTopLayer) {
     //////////////////////////////////////////////////////////
-    var zIndex = this.ITE_track.trackData.zIndex;
+    if (!this.artworkViewer) {
+        var zIndex = this.ITE_track.trackData.zIndex;
 
-    //takes the first dz track in the stack that has the click/touch event in bounds
-    var track = this.orchestrator.getTrackBehind(zIndex, event, false);
+        //takes the first dz track in the stack that has the click/touch event in bounds
+        var track = this.orchestrator.getTrackBehind(zIndex, event, false);
 
-    ////if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
-    //if ((isTopLayer === undefined || isTopLayer) && track != null) {
-    //    if (track.viewer) {
-    //        track.viewer.onCanvasScroll(event, false);
-    //    } else {
-    //        track.scrollFromDZRecursion(event);
-    //    }
-    //}
-    //////////////////////////////////////////////////////////
-    var zIndex = this.ITE_track.trackData.zIndex;
+        ////if this is the top dz layer, and there is a dz track in the stack that has the event coordinates in bounds, pass the dz event to that track
+        //if ((isTopLayer === undefined || isTopLayer) && track != null) {
+        //    if (track.viewer) {
+        //        track.viewer.onCanvasScroll(event, false);
+        //    } else {
+        //        track.scrollFromDZRecursion(event);
+        //    }
+        //}
+        //////////////////////////////////////////////////////////
+        var zIndex = this.ITE_track.trackData.zIndex;
 
-    // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
-    //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
-    if (this.orchestrator.currentManipulatedObject && (isTopLayer !== false)) {
-        if (this.orchestrator.currentManipulatedObject.viewer) {
-            this.orchestrator.currentManipulatedObject.viewer.onCanvasScroll(event, false);
-        } else {
-            //this.orchestrator.currentManipulatedObject.scrollFromDZRecursion(event);
-            this.orchestrator.currentManipulatedObject.pinchFromDZRecursion(event);
-        }
-        return;
-    }
-
-    // otherwise, check if this is the top dz track
-    if ((isTopLayer === undefined) || (isTopLayer === true)) {
-        //find the first dz track in the stack to have the click/touch event in bounds
-        var track = this.orchestrator.getTrackBehind(zIndex, event);
-        this.orchestrator.currentManipulatedObject = track;
-
-        //if the track exists, pass the event to that track 
-        if (track) {
-            if (track.viewer) {
-                track.viewer.onCanvasScroll(event, false);
+        // if manipulation object already set and this object is NOT the manipulation object, then "false" flag should not be set. Call movement on active manipulation object and break.
+        //if (this.orchestrator.currentManipulatedObject && this.orchestrator.interactionStarted && (isTopTrack !== false)) {
+        if (this.orchestrator.currentManipulatedObject && (isTopLayer !== false)) {
+            if (this.orchestrator.currentManipulatedObject.viewer) {
+                this.orchestrator.currentManipulatedObject.viewer.onCanvasScroll(event, false);
             } else {
-                //track.scrollFromDZRecursion(event);
-                track.pinchFromDZRecursion(event);
+                this.orchestrator.currentManipulatedObject.scrollFromDZRecursion(event);
+                //this.orchestrator.currentManipulatedObject.pinchFromDZRecursion(event);
             }
+            this.orchestrator.currentManipulatedObject = null;
+            return;
         }
+
+    }
+    // otherwise, check if this is the top dz track
+    if (((isTopLayer === undefined) || (isTopLayer === true)) && (!this.artworkViewer)) {
+            //find the first dz track in the stack to have the click/touch event in bounds
+            var track = this.orchestrator.getTrackBehind(zIndex, event);
+            this.orchestrator.currentManipulatedObject = track;
+
+            //if the track exists, pass the event to that track 
+            if (track) {
+                if (track.viewer) {
+                    track.viewer.onCanvasScroll(event, false);
+                } else {
+                    track.scrollFromDZRecursion(event);
+                    //track.pinchFromDZRecursion(event);
+                }
+                this.orchestrator.currentManipulatedObject = null;
+            }
     } else {
         var gestureSettings,
             factor;
@@ -8737,8 +8749,9 @@ function onCanvasScroll(event, isTopLayer) {
             originalEvent: event.originalEvent
         });
         //cancels event
-        this.orchestrator.currentManipulatedObject = null;
-
+        if (!this.artworkViewer) {
+            this.orchestrator.currentManipulatedObject = null;
+        }
         return false;
     }
 }
@@ -13681,6 +13694,7 @@ ImageJob.prototype = {
         this.image.onload = this.image.onerror = this.image.onabort = null;
         if (!successful) {
             this.image = null;
+            console.log("failed to load image");
         }
 
         if ( this.jobId ) {
@@ -13956,7 +13970,7 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
     drawHTML: function( container ) {
         if ( !this.loaded || !this.image ) {
             $.console.warn(
-                "Attempting to draw tile %s when it's not yet loaded.",
+                "Attempting to draw tile %s when it's not yet loaded in draw html.",
                 this.toString()
             );
             return;
@@ -14007,9 +14021,12 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
 
         if ( !this.loaded || !( this.image || TILE_CACHE[ this.url ] ) ){
             $.console.warn(
-                "Attempting to draw tile %s when it's not yet loaded.",
+                "Attempting to draw tile %s when it's not yet loaded in drawCanvas.",
                 this.toString()
             );
+            console.log("unloaded:");
+            console.log(this.unloaded);
+            console.log(this.image);
             return;
         }
         context.globalAlpha = this.opacity;
@@ -14042,6 +14059,7 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
             //since we are caching the prerendered image on a canvas
             //allow the image to not be held in memory
             this.image = null;
+            console.log('cached');
         }
 
         rendered = TILE_CACHE[ this.url ];
@@ -14085,7 +14103,9 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
         this.imgElement = null;
         this.image      = null;
         this.loaded     = false;
-        this.loading    = false;
+        this.loading = false;
+        this.unloaded = true;
+        console.log("unloaded");
     }
 };
 

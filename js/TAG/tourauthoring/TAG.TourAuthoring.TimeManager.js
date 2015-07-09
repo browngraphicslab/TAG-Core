@@ -221,6 +221,10 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         player = p;
     }
 
+    function getPlayer() {
+        return player;
+    }
+
     function play () {
         var interval = 100, last = -10,
             pct = ((current - start) / (end - start));
@@ -229,8 +233,8 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         _sendPlayStart({ current: current, percent: pct });
 
         function updateTime() {
-            if (player) {
-                current = player.getTime();
+            if (getPlayer()) {
+                current = getPlayer().getTime();
 
                 if (current >= end) {
                     current = end;
@@ -251,7 +255,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
      * Stops playback if time manager is playing
      */
     function stop () {
-        if (player) {
+        if (getPlayer()) {
             _sendStop();
         }
     }

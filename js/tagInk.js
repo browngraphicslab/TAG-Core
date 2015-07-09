@@ -116,7 +116,7 @@ var tagInk = function (canvId, html_elt) {
      * @param dims   the current dimensions of our artwork in absolute coordinates
      */
     function adjustViewBox(dims, no_opac_check) {
-        var new_px = dims.x,
+         var new_px = dims.x,
             new_py = dims.y,
             new_pw = dims.width,
             new_ph = dims.height,
@@ -423,6 +423,10 @@ var tagInk = function (canvId, html_elt) {
                         marqueeFillOpacity = get_attr(shape, "opac", "f");
                         trans_mode = get_attr(shape, "mode", 's');
                         transCoords = pathstringt.match(/[0-9.\-]+/g);
+                        var i = 0;
+                        for (i = 0; i < transCoords.length; i++) {
+                            transCoords[i] = parseFloat(transCoords[i]);
+                        }
                         transLetters = pathstringt.match(/[CMLz]/g);
                         drawTrans();
                         break;

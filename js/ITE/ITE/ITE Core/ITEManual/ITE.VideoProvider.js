@@ -46,7 +46,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	var attachedInks 				= [];
 
 	self.polling = false;
-
 	//lvk- for network error handling
 	self.lastPauseTime = 0;
 	self.lastActualTime = Date.now();
@@ -111,31 +110,54 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		_videoControls.onerror = function (err){
             switch (err.target.error.code){
                 case err.target.error.MEDIA_ERR_NETWORK:
-                	console.log("caught media error");
+                    console.log("caught media error");
+                    orchestrator.pause();
                 	//Sets the image’s URL source
-                	self.load();
-                    var timeOffset = Date.now()/1000 - self.lastActualTime;
+                	//orchestrator.load();
+                	var timeOffset = Date.now() / 1000 - self.lastActualTime;
+                	_videoControls.load();
                     //if playback fails after reloading the video, we display an error message and then wait
                     //3 seconds before replaying the video from the beginning. The timeout and message 
                     //are for the benefit of the person watching the video. The message also displays when seeking to an unloaded time
-                    if (self.lastError === self.lastPauseTime){
-                        if (!self.errorAppended){
+                    if (self.lastError === self.lastPauseTime) {
+                        console.log("the error was the same as the last pause time")
+                        self.waiting = true;
+
+                        if (!self.errorAppended) {
                             $("#ITEContainer").append(errorDiv);
                             self.errorAppended = true;
                         }
+                        //orchestrator.pause();
+                        //orchestrator.load();
+                        _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
+                        console.log("reloaded to time: " + _videoControls.currentTime);
+                        //orchestrator.play();
+                        self.polling = false;
+                        orchestrator.pause();
                         setTimeout(function(){
                             console.log("waited then tried again");
-                            self.load();
-                            self.play();
-                        }, 5000);
+                            _videoControls.currentTime = orchestrator.getElapsedTime();
+                            _videoControls.removeAttribute("controls");
+                            _videoControls.load();
+                            setTimeout(function () {
+                                console.log("finally playing now")
+                                self.polling = true;
+                                poll();
+                                orchestrator.play();
+                            }, 1500)
+                        }, 1500);
+                        
                         return;
                     }
-                    self.lastError = self.lastPauseTime;
-                    console.log("self.lastPauseTime: " + self.lastPauseTime);
-                    console.log("timeOffset: " + timeOffset);
-                    _videoControls.currentTime = self.lastPauseTime + timeOffset;
-                    self.play();
-                    break;
+                    else {
+                        self.lastError = self.lastPauseTime;
+                        console.log("self.lastPauseTime: " + self.lastPauseTime);
+                        console.log("timeOffset: " + timeOffset);
+                        _videoControls.currentTime = self.lastPauseTime + timeOffset;
+                        orchestrator.play();
+                        break;
+                    }
+                    //orchestrator.play();
             }
         }
         
@@ -147,33 +169,48 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
      * O/P:     none
      */
 	function poll() {
-	        if (orchestrator.getStatus() != 2 && orchestrator.currentTime<self.lastKeyframe.time) {
-	            if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
-	                console.log("video controls played");
-	                _videoControls.play();
-	                if (_videoControls.currentTime >= (orchestrator.getElapsedTime() - self.firstKeyframe.time)) {
-	                    console.log("orchestrator played");
-	                    orchestrator.play();
-	                }
+	    //console.log("polled orch time: " + orchestrator.getElapsedTime() + "    video time: " + _videoControls.currentTime + "    first keyframe time: " + self.firstKeyframe.time + "    computed offset: " + (orchestrator.getElapsedTime() - _videoControls.currentTime));
+        //console.log("orchestrator status: "+orchestrator.getStatus() + "   last key frame time: "+self.lastKeyframe.time+"    _videwoControls readystate: "+_videoControls.readyState)
+        if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() < self.lastKeyframe.time) {
+            //console.log("entered if statement")
+	        if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4 && Math.abs(orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < .150) {
+                //console.log("video played")
+	            _videoControls.play();
+	            if (_videoControls.currentTime >= (orchestrator.getElapsedTime() - self.firstKeyframe.time)) {
+                    //console.log("orch played")
+	                orchestrator.play();
 	            }
-	            else if (_videoControls.readyState < 3) {
-
-	                console.log("readystate was below 3, pausing orchestrator and changing status to 4")
-	                orchestrator.pause();
-	                orchestrator.status = 4;
-	            }
-	            else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
-	                console.log('pausing orchestrator and changing status to 4')
-	                orchestrator.pause();
-	                orchestrator.status = 4;
-	                //_videoControls.pause();
-	            }/*
-		        else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
-		            console.log("just pausing orchestrator");
-		            orchestrator.pause();
-		        }
-            */
 	        }
+	        else if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
+	            //console.log("reset video time to " + orchestrator.getElapsedTime() - self.firstKeyframe.time)
+	            _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
+	        }
+	        else if (_videoControls.readyState < 3) {
+                //console.log("video not ready")
+	            orchestrator.pause();
+	            orchestrator.status = 4;
+	            if (Math.abs(orchestrator.getElapsedTime() - _videoControls.currentTime - self.firstKeyframe.time) > .150) {
+	                _videoControls.currentTime = orchestrator.getElapsedTime();
+	            }
+	        }
+	        else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
+                //console.log("orch paused and status set to 4")
+	            orchestrator.pause();
+	            orchestrator.status = 4;
+	            _videoControls.pause();
+	        }
+	        else {
+                //console.log("else loop ended with no calls")
+	        }/*
+		    else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
+		        console.log("just pausing orchestrator");
+		        orchestrator.pause();
+		    }
+        */
+	        //console.log("                ")
+            //console.log("                   ")
+	    }
+        
 	    if (self.polling) {
 	        setTimeout(function () { poll(); }, 200);
 	    }
@@ -186,13 +223,25 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.load = function () {
-		_super.load();
+	    _super.load();
 
-		//Sets the image’s URL source
+	    var sourceWithoutExtension = self.trackData.assetUrl.substring(0, self.trackData.assetUrl.lastIndexOf('.'));
+	    var sourceExt = self.trackData.assetUrl.substring(self.trackData.assetUrl.lastIndexOf('.'));
+
+		// Set the video source.
 		_video.attr({
-			"src"	: self.trackData.assetUrl,
-			"type" 	: self.trackData.type
+			'src'	    : self.trackData.assetUrl,
+			'type' 	    : self.trackData.type,
+			'preload'   : 'none',
+			'controls'  : false,
+			'filename'  : sourceWithoutExtension
 		});
+		var sourceMP4 = sourceWithoutExtension + ".mp4";
+		var sourceWEBM = sourceWithoutExtension + ".webm";
+		var sourceOGG = sourceWithoutExtension + ".ogg";
+		addSourceToVideo(_video, sourceMP4, 'video/mp4');
+		addSourceToVideo(_video, sourceWEBM, 'video/webm');
+		addSourceToVideo(_video, sourceOGG, 'video/ogg');
 
 		_videoControls.load();
 
@@ -250,6 +299,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	    	console.log("seeked to time: " + time);
 	    	console.log(_videoControls);
 	    	_videoControls.currentTime = time;
+	    	updateInk(true);
 		}
 	}
 	/*
@@ -257,7 +307,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Plays video asset.
 	 * O/P: 	none
 	 */
-	self.play = function(endKeyframe) {
+	self.play = function (endKeyframe) {
+	    console.log("video played");
 		if (self.status === 3) {
 			return;
 		}
@@ -298,14 +349,14 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Pauses video asset.
 	 * O/P: 	none
 	 */
-	self.pause = function(){
+	self.pause = function () {
+        console.log("video pause called")
 		if (self.status === 3) {
 			return;
 		}
 		self.lastPauseTime = _videoControls.currentTime;
 		self.lastActualTime = Date.now()/1000;
 		self.status = 2;
-		console.log("Video paused");
 		self.stopDelayStart();
 
 		self.getState();
@@ -324,7 +375,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Pauses track and changes its state based on new time from timeManager.
 	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
-	self.seek = function() {
+	self.seek = function () {
 		if (self.status === 3) {
 			return null;
 		}
@@ -358,6 +409,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			self.setState(soughtState);
 			nextKeyframe = surKeyframes[1];
 		}
+
+		updateInk(true);
+
 		return nextKeyframe;
 	};
 
@@ -445,8 +499,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	        "width":		state.size.width,
 	        "opacity":		state.opacity
 	    });
-	    console.log("WIDTH: " + _UIControl.width())
-	    console.log("width of iteholder " + $('#tagRoot').width())
 	    _videoControls.volume = state.volume * self.player.currentVolumeLevel;
 	    if(orchestrator.getStatus()!=4){
 	        state.videoOffset ? (_videoControls.currentTime = parseFloat(state.videoOffset)) : 0
@@ -519,8 +571,19 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	};
 
 	///////////////////////////////////////////////////////////////////////////
-	// InkProvider functions.
+	// VideoProvider functions.
 	///////////////////////////////////////////////////////////////////////////
+
+    /*nest source tag inside video element*/
+	function addSourceToVideo(element, src, type) {
+	    var source = document.createElement('source');
+
+	    source.src = src;
+	    source.type = type;
+
+	    element[0].appendChild(source);
+	}
+
 
     /*
 	 * I/P: 	none
@@ -570,7 +633,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Updates ink so that it animates with image
 	 * O/P: 	none 
 	 */
-	updateInk = function() {
+	updateInk = function (isForcedRefresh) {
+	    if (self.orchestrator.status === 2 && !isForcedRefresh) {
+	        return;
+	    }
 		var i;
 		for (i = 0; i < attachedInks.length; i++){
 			var bounds = {

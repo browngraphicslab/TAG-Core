@@ -335,6 +335,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             'height': '75%',
             'float': 'left',
             'z-index': '5',
+            'display': 'none' // edit by Nate 7/6/15, this ain't workin, so we axed it.
         });
 
         var multiSelButton = $(document.createElement('button')).css('border-radius', '3.5px');
@@ -582,6 +583,11 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
         editInkOverlay.hide();
     }
     that.hideEditorOverlay = hideEditorOverlay;
+
+    function setITE(player) {
+        ITE = player;
+    }
+    that.setITE = setITE;
 
     // Creating a vertical scroll visualizer widget
     function createVerticalScroller(container) {
@@ -1852,7 +1858,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
         //    tracks[i].addScreenPlayEntries(screenplayStorage);
         //}
         dataHolder.mapTracks(function (i) {
-            i.track.addScreenPlayEntries(screenplayStorage);
+            i.track.addScreenPlayEntries(screenplayStorage, true);
         });
         screenplayStorage.sort(function (a, b) { return a.begin - b.begin; }); // Screenplay must be sorted
         return screenplayStorage;
@@ -1887,7 +1893,9 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             viewer.reloadTour(data, getAllCaptureHandlers(), function () {
                 setTimeout(function () {
                     viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
+                    viewer.getPlayer().updateInkPositions();
                     viewer.setIsReloading(false);
+                    viewer.capturingBackOn();
                 }, 500);
             });
         }

@@ -9,8 +9,9 @@ TAG.Util.makeNamespace("TAG.Layout.TourPlayer");
  *    prevScroll       value of scrollbar from new catalog page
  * @param artmodeOptions      options to pass into TAG.Layout.ArtworkViewer
  * @param tourObj      the tour doq object, so we can return to the proper tour in the collections screen
+ * @param idletimer    the idle timer 
  */
-TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj) {
+TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj, idletimer) {
     "use strict";
     var artworkPrev;
     var prevScroll = prevInfo.prevScroll;
@@ -63,9 +64,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
     // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
     // idleTimer.start();
-    idleTimer && idleTimer.kill();
-    idleTimer = null;
-
+    //idleTimer && idleTimer.kill();
+    //idleTimer = null;
     backButton.attr('src', tagPath+'images/Back_wshadow.svg');
 
     //clicked effect for back button
@@ -217,7 +217,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                     setStartingOffset:          0,
                     setEndTime:                 NaN
             };
-            player = new ITE.Player(testOptions, self, rinPlayer);
+            player = new ITE.Player(testOptions, self, rinPlayer, idleTimer);
             player.load(self.getTourData());
         }
     };

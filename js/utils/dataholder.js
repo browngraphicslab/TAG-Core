@@ -12,6 +12,8 @@ function DataHolder() {
     };
     this._selectedTrack;
 
+    this._lastPreviewerHeight;
+
     //multi-select heaps used for storing the movement constraints
     this._leftExternal = new binaryHeap(this._scoreFunctionMin);
     this._leftInternal = new binaryHeap(this._scoreFunctionMin);
@@ -62,6 +64,14 @@ function DataHolder() {
         }
     }
 };
+
+DataHolder.prototype.getLastPreviewerHeight = function () {
+    return this._lastPreviewerHeight;
+}
+
+DataHolder.prototype.setLastPreviewerHeight = function (height) {
+    this._lastPreviewerHeight = height;
+}
 
 DataHolder.prototype.reInitHeaps = function () {
     this._leftExternal = new binaryHeap(this._scoreFunctionMin);

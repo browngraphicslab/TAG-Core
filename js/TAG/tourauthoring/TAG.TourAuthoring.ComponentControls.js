@@ -138,13 +138,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             // gotta do this up here to do creation check
             if (linked) {
                 artname = linkedTrack.getTitle();
+                var linkType = linkedTrack.getType();
+                var proxy_div = $("#" + escape(artname));
 
-                var proxy_div = $("[data-proxy='" + escape(artname) + "']");
                 proxy = {
-                    x: proxy_div.data("x"),
-                    y: proxy_div.data("y"),
-                    w: proxy_div.data("w"),
-                    h: proxy_div.data("h")
+                    x: parseInt(proxy_div.position().left),
+                    y: parseInt(proxy_div.position().top),
+                    w: proxy_div.width(),
+                    h: proxy_div.height()
                 };
 
                 var keyframe = viewer.captureKeyframe(artname);
@@ -153,8 +154,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     creationError("The track this annotation is attached to must be fully on screen in order to edit this annotation. Please seek to a location where the track is visible.");
                     return false;
                 }
-                var kfvx, kfvy, kfvw, kfvh,
-                    linkType = linkedTrack.getType();
+                var kfvx, kfvy, kfvw, kfvh;
                 if (linkType === TAG.TourAuthoring.TrackType.artwork) {
                     kfvx = keyframe.bounds.x;
                     kfvy = keyframe.bounds.y;
@@ -166,11 +166,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     //kfvh = keyframe.state.viewport.region.span.y;
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.width;
-                    var rw = keyframe.width * $("#ITEHolder").width();
-                    kfvh = keyframe.height; // not used
-                    kfvx = -keyframe.left * kfvw;
-                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    //kfvw = 1.0 / keyframe.width;
+                    //var rw = keyframe.width * $("#ITEHolder").width();
+                    //kfvh = keyframe.height; // not used
+                    //kfvx = -keyframe.left * kfvw;
+                    //kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    kfvw = 1.0 / (keyframe.width / $('#ITEContainer').width());
+                    kfvh = keyframe.height;
+                    kfvx = -keyframe.left / proxy.w;// * kfvw;
+                    var rw = keyframe.width;// * domelement.width();
+                    kfvy = (-(proxy.h / rw) * keyframe.top) / proxy.h;
+
+
                     //kfvw = 1.0 / keyframe.state.viewport.region.span.x;
                     //var rw = keyframe.state.viewport.region.span.x * $("#ITEHolder").width();
                     //kfvh = keyframe.state.viewport.region.span.y; // not used
@@ -213,7 +220,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 timeline.onUpdate(true);
                 timeline.setModifyingInk(false);
                 timeline.hideEditorOverlay();
-
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display" : "block"
+                });
                 brushEditSliderPoint.attr('value', 7.0);
                 currentInkController.updatePenWidth("brushEditSlider");
                 currentInkController.remove_all();
@@ -302,11 +312,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         new_kfvh = new_keyframe.bounds.height;
                     }
                     else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                        new_kfvw = 1.0 / new_keyframe.width;
-                        var rw = new_keyframe.width * currcanv.width();
-                        new_kfvh = new_keyframe.height; // not used
-                        new_kfvx = -new_keyframe.left * new_kfvw;
-                        new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
+                        //new_kfvw = 1.0 / new_keyframe.width;
+                        //var rw = new_keyframe.width * currcanv.width();
+                        //new_kfvh = new_keyframe.height; // not used
+                        //new_kfvx = -new_keyframe.left * new_kfvw;
+                        //new_kfvy = -(currcanv.height() / rw) * new_keyframe.top;
+
                     }
                     track.setInkInitKeyframe({ "x": new_kfvx, "y": new_kfvy, "w": new_kfvw, "h": new_kfvh });
                     track.setInkRelativeArtPos(currentInkController.getArtRelativePos(new_proxy, currcanv.width(), currcanv.height()));
@@ -420,12 +431,13 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if (linked) {
                 initKeyframe = track.getInkInitKeyframe();
                 artname = linkedTrack.getTitle();
-                var proxy_div = $("[data-proxy='" + escape(artname) + "']");
+                var proxy_div = $("#" + escape(artname));
+
                 proxy = {
-                    x: proxy_div.data("x"),
-                    y: proxy_div.data("y"),
-                    w: proxy_div.data("w"),
-                    h: proxy_div.data("h")
+                    x: parseInt(proxy_div.position().left),
+                    y: parseInt(proxy_div.position().top),
+                    w: proxy_div.width(),
+                    h: proxy_div.height()
                 };
 
                 var keyframe = viewer.captureKeyframe(artname);
@@ -479,7 +491,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 timeline.setModifyingInk(false);
                 timeline.setEditInkOn(false);
                 timeline.hideEditorOverlay();
-
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display" : "block"
+                });
                 currentInkController.remove_all();
                 removeInkCanv();
                 inkEditTransparency.hide();
@@ -695,13 +710,14 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             if (linked) {
                 initKeyframe = track.getInkInitKeyframe();
                 artname = linkedTrack.getTitle();
+                var linkType = linkedTrack.getType();
+                var proxy_div = $("#" + escape(artname));
 
-                var proxy_div = $("[data-proxy='" + escape(artname) + "']");
                 proxy = {
-                    x: proxy_div.data("x"),
-                    y: proxy_div.data("y"),
-                    w: proxy_div.data("w"),
-                    h: proxy_div.data("h")
+                    x: parseInt(proxy_div.position().left),
+                    y: parseInt(proxy_div.position().top),
+                    w: proxy_div.width(),
+                    h: proxy_div.height()
                 };
 
                 var keyframe = viewer.captureKeyframe(artname);
@@ -711,8 +727,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     return false;
                 }
 
-                var kfvx, kfvy, kfvw, kfvh,
-                    linkType = linkedTrack.getType();
+                var kfvx, kfvy, kfvw, kfvh;
                 if (linkType === TAG.TourAuthoring.TrackType.artwork) {
                     kfvx = keyframe.bounds.x;
                     kfvy = keyframe.bounds.y;
@@ -720,11 +735,16 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     kfvh = keyframe.bounds.height;
                 }
                 else if (linkType === TAG.TourAuthoring.TrackType.image) {
-                    kfvw = 1.0 / keyframe.width;
-                    var rw = keyframe.width * $("#ITEHolder").width();
-                    kfvh = keyframe.height; // not used
-                    kfvx = -keyframe.left * kfvw;
-                    kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    //kfvw = 1.0 / keyframe.width;
+                    //var rw = keyframe.width * $("#ITEHolder").width();
+                    //kfvh = keyframe.height; // not used
+                    //kfvx = -keyframe.left * kfvw;
+                    //kfvy = -($("#ITEHolder").height() / rw) * keyframe.top;
+                    kfvw = 1.0 / (keyframe.width / $('#ITEContainer').width());
+                    kfvh = keyframe.height;
+                    kfvx = -keyframe.left / domelement.width();// * kfvw;
+                    var rw = keyframe.width;// * domelement.width();
+                    kfvy = (-(domelement.height() / rw) * keyframe.top) / domelement.height();
                 }
             }
             
@@ -757,7 +777,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 currentInkController.remove_all();
                 removeInkCanv();
                 inkEditText.hide();
-
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display" : "block"
+                });
                 playbackControls.undoButton.off("click");
                 playbackControls.redoButton.off("click");
 
@@ -935,7 +958,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             var currentcolor = p1.get_attr(datastring, "color", 's'); //update the current color
             colorEditTextLabel1.text(currentcolor);
             
-            //myPicker = new jscolor.color(itemEditText, {});
+            myPicker = new jscolor.color(itemEditText, {});
             myEditTextPicker.fromString(currentcolor);
             currentInkController = p1;
             firstUpdate();
@@ -955,8 +978,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'top': '0px',
             'left': '0px',
             'position': 'relative',
-            'float': 'left',
-            'z-index': 100000
+            'float': 'left'
         }); // Had to do tops and heights as CSS to prevent overlap on small screens
 
         /** Drop Down icon
@@ -1168,7 +1190,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             container.track.updatePos(i);
                         });
                         viewer.forceITEPlayerReload();
-                        timeline.onUpdate(true);
+
+                        //setTimeout((function () {
+                            //viewer.forceITEPlayerReload();
+                        //}), 1000);
                         TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                             tobj.track_type = "Audio File";
                             tobj.quantity = urls.length;
@@ -1223,7 +1248,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
             }
 
-            if (title === "Video (MP4, WEBM, OGV)") {
+            if (title === "Video (MP4)") {
                 upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
                 function (files, localURLs, confirmCallback, cancelCallback) {
                     var file,
@@ -1331,7 +1356,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             tobj.quantity = urls.length;
                         });
                         viewer.forceITEPlayerReload();
-                        timeline.onUpdate(true);
+                        //setTimeout((function () {
+                            //viewer.forceITEPlayerReload();
+                        //}), 1000);
                     }
                     uploadHappening = false; //enables button
                     fileButton.css({ 'background-color': 'transparent', 'color': 'white' })
@@ -1386,7 +1413,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         container.track.updatePos(i);
                     });
                     viewer.forceITEPlayerReload();
-                    timeline.onUpdate(true);
+                    //timeline.onUpdate(true);
+
+                    //setTimeout((function () {
+                        //viewer.forceITEPlayerReload();
+                        //timeline.onUpdate(true);
+                    //}), 1000);
                     TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                         tobj.track_type = "Image File";
                         tobj.quantity = urls.length;
@@ -1482,7 +1514,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         
                         break;
                     case "Audio (MP3)":
-                    case "Video (MP4, WEBM, OGV)":
+                    case "Video (MP4)":
                     case "Image":
                         isInFileSubMenu = true;
                         break;
@@ -1607,7 +1639,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "Audio (MP3)":
-                    case "Video (MP4, WEBM, OGV)":
+                    case "Video (MP4)":
                     case "Image":
                         closeComponentMenu();
                         exitInk();
@@ -1632,6 +1664,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "Write":
+                        console.log("write ink clicked")
                         $('.undoButton').css({ 'opacity': '0.4' });
                         $('.redoButton').css({ 'opacity': '0.4' });
                         self.css({
@@ -1668,9 +1701,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         $('.changeColor')[0].innerHTML = "#" + $("#textColorToggle").attr('value');
                         updateToggle(textArray, textArea);
                         timeline.setEditInkOn(true);
+                        addComponentLabel.prop("disabled", true).css({
+                            "opacity": "0",
+                            "display" : "none"
+                        });
+                        $("#inkTextControls").css({
+                            "display": "block",
+                            'position': 'static'
+                        });
                         break;
 
                     case "Draw":
+                        console.log("draw ink clicked")
                         $('.undoButton').css({ 'opacity': '0.4' });
                         $('.redoButton').css({ 'opacity': '0.4' });
                         self.css({ 'background-color': 'white', 'color': 'black' });
@@ -1701,10 +1743,18 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         p1.updatePenOpacity("opacitySlider");
                         currentInkController = p1;
                         timeline.setEditInkOn(true);
-
+                        addComponentLabel.prop("disabled", true).css({
+                            "opacity": "0",
+                            "display": "none"
+                        });
+                        $("#inkDrawControls").css({
+                            "display": "block",
+                            'position' : 'static'
+                        });
                         break;
 
                     case "Highlight":
+                        console.log("highlight ink clicked")
                         $('.undoButton').css({ 'opacity': '0.4' });
                         $('.redoButton').css({ 'opacity': '0.4' });
                         self.css({ 'background-color': 'white', 'color': 'black' });
@@ -1716,7 +1766,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         var newHeight = $("#resizableArea").offset().top + $("#resizableArea").height() - inkTransparencyControls.offset().top - 10;
                         inkTransparencyControls.css({ 'height': newHeight });
                         initTrans();
-
+                        addComponentLabel.prop("disabled", true).css({
+                            "opacity": "0",
+                            "display": "none"
+                        });
                         //create an ink canvas and inkController
                         var inkdiv = createInkCanv();
                         var p1 = new TAG.TourAuthoring.InkAuthoring("inkCanv", null, "componentControls", spec);
@@ -1725,6 +1778,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         p1.set_mode(TAG.TourAuthoring.InkMode.shapes);
                         p1.set_editable(); //in this case, we're just making sure that the artwork can't be manipulated
                         currentInkController = p1;
+                        $("#inkTransControls").css({
+                            "display": "block",
+                            'position': 'static'
+                        });
                         timeline.setEditInkOn(true);
                         break;
                 }
@@ -1756,6 +1813,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          are deleted; disables ink functionality by graying out "Ink" button
          */
         function disableInk() {
+            console.log("ink disabled");
             allowInk = false;
             inkButton.css({ 'background-color': 'transparent', 'color': 'gray' });
             dropInk.hide();
@@ -1912,7 +1970,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // heading
         var associatedMediaPickerHeader = document.createElement('div');
         $(associatedMediaPickerHeader).addClass('associatedMediaPickerInfo');
-        $(associatedMediaPickerHeader).text("Select media to import");
+        $(associatedMediaPickerHeader).text("Select media to add");
         $(associatedMediaPickerHeader).css({
             'font-size': '100%',
         });
@@ -2184,7 +2242,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     container.track.updatePos(i);
                 });
                 viewer.forceITEPlayerReload();
-                timeline.onUpdate(true);
+                //timeline.onUpdate(true);
             }
 
             //this handles discriminating between the double and single clicks for importing media
@@ -2314,7 +2372,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             // create import button
             var associatedMediaPickerImport = document.createElement('button');
             associatedMediaPickerImport.disabled = true;
-            $(associatedMediaPickerImport).text("Import");
+            $(associatedMediaPickerImport).text("Add");
             $(associatedMediaPickerImport).css({
                 position: 'absolute',
                 bottom: '1%',
@@ -2401,7 +2459,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     container.track.updatePos(i);
                 });
                 viewer.forceITEPlayerReload();
-                timeline.onUpdate(true);
+                //timeline.onUpdate(true);
             });
             associatedMediaPicker.append(associatedMediaPickerImport);
 
@@ -2996,10 +3054,6 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 //searchbar.attr('placeholder', PICKER_SEARCH_TEXT);
                 searchbar.val("");
                 // add the artwork track to the timeline
-                console.log("                          ");
-                console.log("                          ");
-                console.log("                          ");
-                console.log("                          ");
                 for (i = 0; i < selectedArtworks.length; i++) {
                     selectedArt = selectedArtworks[i];
                     var track;
@@ -3051,7 +3105,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 });
                 
                 viewer.forceITEPlayerReload();
-                timeline.onUpdate(true);
+                //timeline.onUpdate(true);
             }
 
             //this handles discriminating between the double and single clicks for importing artworks
@@ -3194,7 +3248,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     container.track.updatePos(i);
                 });
                 viewer.forceITEPlayerReload();
-                timeline.onUpdate(true);
+                //timeline.onUpdate(true);
             });
             catalogPicker.append(catalogPickerImport);
 
@@ -3258,7 +3312,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             'height': '425%',
             'width': '100%',
             top: '130%',
-            position: 'absolute',
+            position: 'aboslute',
             'z-index': 0,
             'overflow-x': 'none',
             'overflow-y': 'auto',
@@ -3285,6 +3339,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         cancelTextButton.get(0).innerHTML = "Cancel";
         cancelTextButton.click(function () {
             removeInkCanv();
+            addComponentLabel.prop("disabled", false).css({
+                "opacity": "1",
+                "display" : "block"
+            });
             inkTextControls.hide();
             timeline.setModifyingInk(false);
             timeline.setEditInkOn(false);
@@ -3661,7 +3719,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var textEditDocfrag = document.createDocumentFragment();
         inkEditText = $(document.createElement('div'));
         inkEditText.attr("id", "inkEditText");
-        inkEditText.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
+        inkEditText.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         //functionsPanel.append(inkEditText);
         textEditDocfrag.appendChild(inkEditText[0]);
         inkEditText.css({ "display": "none" });
@@ -3995,7 +4053,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var inkDrawDocfrag = document.createDocumentFragment();
         inkDrawControls = $(document.createElement('div'));
         inkDrawControls.attr("id", "inkDrawControls");
-        inkDrawControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
+        inkDrawControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         inkDrawDocfrag.appendChild(inkDrawControls[0]);
         inkDrawControls.css({ "display": "none" });
 
@@ -4020,7 +4078,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             inkDrawControls.hide();
             timeline.setModifyingInk(false);
             timeline.setEditInkOn(false);
-
+            addComponentLabel.prop("disabled", false).css({
+                "opacity": "1",
+                "display" : "block"
+            });
             inkAuthoring.getInkUndoManager().clear();
             undoManager.greyOutBtn();
             // reset undo/redo buttons to global undo/redo functionality
@@ -4204,6 +4265,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // div to contain color picker
         var colorDiv = $(document.createElement('div'));
         colorDiv.css('display', 'none');
+        colorDiv.css("position", "static");
         inkDrawControls.append(colorDiv);
         drawArray.push(colorDiv);
 
@@ -4223,7 +4285,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var item = document.createElement('input');
         $(item).attr('id', 'brushColorToggle');
         $(item).attr('readonly', 'readonly');
-        $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%'});
+        $(item).css({ 'margin-left': '8%', 'float': 'left', 'margin-top': '3%', 'clear': 'left', 'width': '40%', 'position':'static'});
         item.onfocus = function () {
             currentInkController.set_mode(TAG.TourAuthoring.InkMode.draw);
         };
@@ -4231,6 +4293,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             event.stopPropagation();
         });
         if (item.addEventListener) {
+            console.log("item.addEventListener called in component controls")
             item.addEventListener('DOMNodeInserted', function () {
                 //initialize colorpicker object on current element
                 myPicker = new jscolor.color(item, {});
@@ -4366,7 +4429,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var editDrawDocfrag = document.createDocumentFragment();
         inkEditDraw = $(document.createElement('div'));
         inkEditDraw.attr("id", "inkEditDraw");
-        inkEditDraw.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%', });
+        inkEditDraw.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%', });
         editDrawDocfrag.appendChild(inkEditDraw[0]);
         inkEditDraw.css('display', 'none');
 
@@ -4683,7 +4746,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var inkTransparencyDocfrag = document.createDocumentFragment();
         inkTransparencyControls = $(document.createElement('div'));
         inkTransparencyControls.attr("id","inkTransControls");
-        inkTransparencyControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
+        inkTransparencyControls.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         inkTransparencyDocfrag.appendChild(inkTransparencyControls[0]);
         inkTransparencyControls.css({ "display": "none" });
 
@@ -4696,6 +4759,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             inkTransparencyControls.hide();
             timeline.setModifyingInk(false);
             timeline.setEditInkOn(false);
+            addComponentLabel.prop("disabled", false).css({
+                "opacity": "1",
+                "display" : "block"
+            });
 
             inkAuthoring.getInkUndoManager().clear();
             undoManager.greyOutBtn();
@@ -4858,7 +4925,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var editTransparencyDocfrag = document.createDocumentFragment();
         inkEditTransparency = $(document.createElement('div'));
         inkEditTransparency.attr("id", "inkEditTransparency");
-        inkEditTransparency.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'absolute', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
+        inkEditTransparency.css({ 'height': '425%', 'width': '100%', top: '130%', position: 'static', 'z-index': 0, 'overflow-y': 'auto', 'margin-top': '8%' });
         editTransparencyDocfrag.appendChild(inkEditTransparency[0]);
         inkEditTransparency.css({ "display": "none" });
 
@@ -5165,7 +5232,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     check = currentInkController.link();
                 if (!check)
                     return;
-
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display": "block"
+                });
                 TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
                     tobj.track_type = "Ink";
                     tobj.quantity = 1;
@@ -5239,6 +5309,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
                 timeline.setModifyingInk(false);
                 timeline.setEditInkOn(false);
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display": "block"
+                });
             });
             newDiv.append(freeInkButton);
             return newDiv;
@@ -5248,6 +5322,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
          * Sets display:none for each of the ink control panels
          */
         function hideInkControls() {
+            console.log("hide ink controls called")
             inkTransparencyControls.css({ 'display': 'none' });
             inkTextControls.css({ 'display': 'none' });
             inkDrawControls.css({ 'display': 'none' });

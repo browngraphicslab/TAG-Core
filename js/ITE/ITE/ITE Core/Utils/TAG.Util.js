@@ -1183,7 +1183,6 @@ TAG.Util_ITE = (function () {
             element.addEventListener("MSPointerDown", function (evt) {
                 console.log(evt);
                 if (stopNextClick) {
-                    console.log("STOPPING CLICK");
                     evt.stopPropagation();
                     setTimeout(function () {
                         stopNextClick = false;
@@ -1192,9 +1191,7 @@ TAG.Util_ITE = (function () {
                 }
             }, true);
             element.addEventListener("mouseup", function (evt) {
-                console.log("CLICK");
                 if (stopNextClick) {
-                    console.log("STOPPING CLICK");
                     evt.stopPropagation();
                     setTimeout(function () {
                         stopNextClick = false;

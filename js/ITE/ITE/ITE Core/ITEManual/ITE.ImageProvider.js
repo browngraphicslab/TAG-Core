@@ -106,10 +106,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		_image.css({
 		    "top": "0px",
 		    "left": "0px",
-		    "min-width": "100%",
-            "min-height": "100%",
-		    "max-width": "100%",
-            "max-height": "100%"
+		    "width": "100%",
+		    "height": "100%"
 		})
 
 		self.setState(self.getKeyframeState(self.firstKeyframe));
