@@ -44,7 +44,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             "position": "relative",
             'display': 'inline-block'
         });
-        playButton.attr('src', tagPath + 'images/Play.svg');
+        playButton.attr('src', tagPath + 'images/icons/Play.svg');
         playButton.attr('id', 'playButton');
         playButton.click(function () { // Start and stop playback
             togglePlay();
@@ -82,7 +82,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             playing = true;
         });
         timeManager.onStop(function () {
-            playButton.attr('src', tagPath + 'images/Play.svg');
+            playButton.attr('src', tagPath + 'images/icons/Play.svg');
             playing = false;
         });
 
