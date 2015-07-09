@@ -3390,10 +3390,9 @@ TAG.Util.UI = (function () {
             $(messageLabel).css('height', 'auto')
             $(namesLabel).css('font-size', fontsize);
             for (var i = 0; i < displayNames.length; i++) {
-
                 var para = document.createElement('div');
                 $(para).text(displayNames[i]);
-                $(para).css('font-size', fontsize);
+               // $(para).css('font-size', fontsize);
                 $(para).css({color: 'white', 'z-index': '99999999999'});
                 $(namesLabel).append(para);
                 TAG.Util.multiLineEllipsis($(para));
@@ -3401,7 +3400,10 @@ TAG.Util.UI = (function () {
         }
 
         $(confirmBox).append(messageLabel);
-        $(confirmBox).append(namesLabel);
+        if (displayNames) {
+            $(confirmBox).append(namesLabel);
+        }
+        
 
         TAG.Util.multiLineEllipsis($(messageLabel));
         var optionButtonDiv = document.createElement('div');
@@ -3428,6 +3430,7 @@ TAG.Util.UI = (function () {
             'margin-left': '12%',
             'color': 'white',
             'border-radius': '3.5px',
+            'display': 'inline-block',
             'margin-top': '1%'
 
         }).attr('id', 'popupConfirmButton');
@@ -3464,7 +3467,8 @@ TAG.Util.UI = (function () {
             'margin-right': '3%',
             'color': 'white',
             'margin-top': '1%',
-            'border-radius': '3.5px'
+            'border-radius': '3.5px',
+            'display': 'inline-block'
         }).attr('id', 'popupCancelButton');
         $cancelButton.text('Cancel');
 
@@ -3496,6 +3500,7 @@ TAG.Util.UI = (function () {
                 'margin-top': '1%',
                 'border-radius': '3.5px'
             }).text("Cancel");
+            realcancelbtn.attr('id', 'realCancelButton');
             var btnwidth = $(cancelButton).width();
             var dontleft = ($(optionButtonDiv).width() - btnwidth) / 2;
             $cancelButton.css({
@@ -6852,8 +6857,7 @@ TAG.Util.RLH = function (input) {
                     }
                 },
                 noMedia: true,
-                disableZoom: false,
-                locationHist: true
+                disableZoom : false
             });
         }
 
@@ -6923,7 +6927,7 @@ TAG.Util.RLH = function (input) {
             });
 
             //all pins start off in an overlay
-            annotImg.addOverlay(pushpin[0], new OpenSeadragon.Point(location.x, location.y), OpenSeadragon.OverlayPlacement.BOTTOM);
+            annotImg.addOverlay(pushpin[0], new Seadragon.Point(location.x, location.y), Seadragon.OverlayPlacement.BOTTOM);
 
             var isOverlay = true,
                 x,
@@ -6942,7 +6946,6 @@ TAG.Util.RLH = function (input) {
                             t = pushpin.css('top');
                             l = pushpin.css('left');
                             annotImg.removeOverlay(pushpin[0]); //seems like this changes the CSS of the pushpin?
-                            pushpin.css('display', 'block');
                             pushpin.appendTo(mapHolders[mapdoq.Identifier]);
                             pushpin.css({
                                 top: t,
@@ -6979,9 +6982,9 @@ TAG.Util.RLH = function (input) {
                             var coord = annotImg.returnElementToBounds(pushpin);
                             pushpin.css("top", (coord.y - h) + "px");
                             pushpin.css("left", (coord.x - 0.5 * w) + "px");
-                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new OpenSeadragon.Point(coord.x, coord.y)), OpenSeadragon.OverlayPlacement.BOTTOM);
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(coord.x, coord.y)), Seadragon.OverlayPlacement.BOTTOM);
                         } else {
-                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new OpenSeadragon.Point(x, y)), OpenSeadragon.OverlayPlacement.BOTTOM);
+                            annotImg.addOverlay(pushpin[0], annotImg.pointFromPixel(new Seadragon.Point(x, y)), Seadragon.OverlayPlacement.BOTTOM);
                         }
                         annotImg.restartManip(); //allow manipulation of the DZ image after the pin is put down
                     }
@@ -8432,17 +8435,17 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "opacity": 1,
 				            "size": {
 				                "x": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
-				                "y": currKeyframe.state.viewport.region.span.y * parseInt($(window).width()*(9/16))
+				                "y": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
 				            },
 				            "pos": {
 				                "x": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
-				                "y": currKeyframe.state.viewport.region.center.y * parseInt($(window).width()*(9/16))
+				                "y": currKeyframe.state.viewport.region.center.y * parseInt($(window).height())
 				            },
 				            "data": {},
 				            "left": currKeyframe.state.viewport.region.center.x * parseInt($(window).width()),
-				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).width()*(9/16)),
+				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).height()),
 				            "width": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
-				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).width()*(9/16))
+				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
 				        }
 				    } else {
 				        keyframeObject = {
