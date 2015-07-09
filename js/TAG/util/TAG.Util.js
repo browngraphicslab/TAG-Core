@@ -8516,7 +8516,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
                         },
                         "pos": {
                             "x": 0,//currKeyframe.state.viewport.region.center.x * $('#tagRoot').width(),
-                            "y": currKeyframe.state.viewport.region.center.y * $('#ITEHolder').innerHeight()
+                            "y": 0
                         },
 						"data": {},
 						"volume": currKeyframe.state.sound.volume,
