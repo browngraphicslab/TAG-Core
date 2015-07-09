@@ -1008,12 +1008,12 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         addDropDownIconComponent.attr('id', 'addDropDownIconComponent');
         addDropDownIconComponent.attr('src', tagPath + 'images/icons/Down.png');
         addDropDownIconComponent.css({
-            'width': '10%',
-            'height': '10%',
+            'width': '7%',
+            'height': '7%',
             'display': 'inline-block',
             'float': 'right',
-            'margin-top': '3%',
-            'margin-right': '3%'
+            'margin-top': '5%',
+            'margin-right': '5%'
         });
 
         /**
@@ -1068,6 +1068,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         var dropMain = $(document.createElement('div'));
         dropMain.css({
             "left": menuOffsetL,
+            "top": "5%",
             "position": "relative",
             "color": "rgb(256, 256, 256)",
             'width': '74%',
