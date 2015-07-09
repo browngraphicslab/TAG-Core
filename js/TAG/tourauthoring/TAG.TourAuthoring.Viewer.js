@@ -125,7 +125,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             "width": '100%',
             "height" : "100%"
         })
-        infoDiv.text("Adding artwork...");
+        infoDiv.text("Adding track(s)...");
         temp2.append(infoDiv);
 
         var root = $(document.body);
