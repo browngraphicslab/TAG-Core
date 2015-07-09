@@ -570,7 +570,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             {
                 "height": tourOptionsSpecs.height + "px",
                 "width": tourOptionsSpecs.width + 'px',
-                "left": "41s%",
+                "left": "41%",
                 'margin-left' : '2%',
                 'top': tourOptionsSpecs.y + 'px',
                 "position": 'absolute',
