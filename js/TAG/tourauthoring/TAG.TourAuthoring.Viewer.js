@@ -121,7 +121,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             "top": "59%",
             "display": "block",
             "position": "absolute",
-            "font-size": "3.55em",
+            "font-size": "3em",
             "width": '100%',
             "height" : "100%"
         })
