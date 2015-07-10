@@ -90,6 +90,32 @@ TAG.TourAuthoring.Track = function (spec, my) {
     that.compOpsOpen = compOpsOpen;
     function checkVideoConverted() {
         var retstring;
+
+        function removeTrackOnFailure() {
+            remove();
+
+            //if artwork is removed, also check if ink functionality should be removed
+            if (!my.timeline.checkForArtworks(0)) {
+                my.timeline.disableInk();
+            }
+
+            //code to snap down track list such that the track list is always full if it can be
+            if (dataHolder.numTracks() > 0) {
+                var last = $('#Track-' + (dataHolder.numTracks() - 1) + '-title');
+                var trackBottom = ($(document.getElementById('playback-controls')).offset().top);
+                var lastDivBottom = ($(last).offset().top + TAG.TourAuthoring.Constants.trackHeight);
+                my.timeline.setEditInkOn(false);
+                $("#addComponentLabel").prop("disabled", false).css({
+                    "opacity": "1",
+                    'display': 'block'
+                })
+            }
+            my.update();
+            my.timeline.removeInkSession();
+            updateTrackArray();
+            my.update();
+        }
+
         if (my.converted === false && my.toConvert === true) {
             var videotag = $(document.createElement('video'));
             videotag.attr('preload', 'metadata');
@@ -135,9 +161,11 @@ TAG.TourAuthoring.Track = function (spec, my) {
                             //}
                             clearInterval(chkIntervalVal);
                             console.log("Error ocurred when converting");
+                            removeTrackOnFailure();
                         }
                         else {
                             console.log("not converted: ");
+                            removeTrackOnFailure();
                         }
                     }
                 })(videotag), null, filename, basefilename);

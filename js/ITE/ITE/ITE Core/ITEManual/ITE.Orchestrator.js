@@ -273,7 +273,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		var i;
 		for (i = 0; i < trackManager.length; i++) {
 		    if (trackManager[i].isVisible()) {
-		        trackManager[i].setZIndex(i * 10);
+		        trackManager[i].setZIndex((i * 10) + 1);
 		    } else {
 		        trackManager[i].setZIndex(-1);
 		    }
