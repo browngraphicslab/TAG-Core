@@ -1165,7 +1165,12 @@ TAG.Worktop.Database = (function () {
     }
 
     function getKioskLocked() {
-        return _main.Metadata["isKioskLocked"] || 'true';
+        //if (_main) {
+
+            console.log("isKioskLocked = " + _main.Metadata["isKioskLocked"]);
+            return _main.Metadata["isKioskLocked"] || 'true';
+        //}
+        
     }
 
     function getKeywordSets() {

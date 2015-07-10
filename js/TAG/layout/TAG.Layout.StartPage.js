@@ -37,6 +37,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordError = root.find('#passwordError'),
         serverSubmit = root.find('#serverSubmit'),
         passwordSubmit = root.find('#passwordSubmit'),
+        lockedMessage = root.find('#lockedMessage'),
         //tutorialButton = root.find('#tutorialButton'),
         serverURL,
         tagContainer,
@@ -46,6 +47,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : null;
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
+
+    
+    lockedMessage.css({'display': 'none'});
+    
 
     //PREVIEW STYLING
     isPreview && function () {
