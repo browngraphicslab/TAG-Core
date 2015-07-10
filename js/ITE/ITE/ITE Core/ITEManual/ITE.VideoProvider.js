@@ -419,10 +419,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			nextKeyframe = surKeyframes[1];
 		}
 
-		self.constrainVideoSize();
-		pollHelper();
-		updateInk(true);
-
 		return nextKeyframe;
 	};
 
