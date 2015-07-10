@@ -247,6 +247,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             saveDrawButton.on('click', function () {
                 saveDraw();
                 timeline.hideEditorOverlay();
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display": "block"
+                });
                 timeline.setEditInkOn(false);
                 timeline.setModifyingInk(false);
             });
@@ -541,6 +545,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             saveTransButton.on('click', function () {
                 saveTrans();
                 timeline.hideEditorOverlay();
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display": "block"
+                });
                 timeline.setModifyingInk(false);
                 timeline.setEditInkOn(false);
             });
@@ -852,6 +860,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 textEditArea.val("");
                 textEditBodyLabel1.text("");
                 timeline.hideEditorOverlay();
+                addComponentLabel.prop("disabled", false).css({
+                    "opacity": "1",
+                    "display": "block"
+                });
                 timeline.setModifyingInk(false);
                 timeline.setEditInkOn(false);
             });
