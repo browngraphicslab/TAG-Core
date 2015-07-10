@@ -152,6 +152,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         
         locationList = TAG.Util.UI.getLocationList(doq.Metadata);
 
+        sideBar.css('visibility', 'hidden');
+
         annotatedImage = TAG.AnnotatedImage({
             root: root,
             doq:  doq,
@@ -611,6 +613,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             xfadeSlider,
             xfadeSliderPoint,
             isFading = false;
+        
+        sideBar.css('visibility', 'visible');
 
         sideBarInfo.css({
             'height' : sideBarSections.height()-25 + 'px'

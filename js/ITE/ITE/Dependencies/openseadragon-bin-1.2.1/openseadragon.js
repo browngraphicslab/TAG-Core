@@ -7768,7 +7768,9 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
         while ( this.currentOverlays.length > 0 ) {
             this.currentOverlays.pop().destroy();
         }
-        THIS[ this.hash ].forceRedraw = true;
+        if (THIS[this.hash]){
+            THIS[ this.hash ].forceRedraw = true;
+        }
         /**
          * Raised when all overlays are removed from the viewer (see {@link OpenSeadragon.Drawer#clearOverlays}).
          *
