@@ -47,6 +47,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
 
+    goToCollectionsButton.css('top', '70%');
+
     //PREVIEW STYLING
     isPreview && function () {
         serverInput.css({ 'min-height': '0px','min-width': '0px',});
