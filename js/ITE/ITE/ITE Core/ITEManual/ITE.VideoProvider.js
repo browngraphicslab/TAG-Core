@@ -175,11 +175,22 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
         //console.log("orchestrator status: "+orchestrator.getStatus() + "   last key frame time: "+self.lastKeyframe.time+"    _videwoControls readystate: "+_videoControls.readyState)
 	    if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() <= self.lastKeyframe.time && orchestrator.getElapsedTime() >= self.firstKeyframe.time) {
             //console.log("entered if statement")
+	        pollHelper();
+	    }
+        
+	    if (self.polling) {
+	        setTimeout(function () { poll(); }, 200);
+	    }
+	    _videoControls.removeAttribute("controls");
+	};
+
+	function pollHelper() {//to be called durring poll and seeking
+	    if (orchestrator.getElapsedTime() <= self.lastKeyframe.time && orchestrator.getElapsedTime() >= self.firstKeyframe.time) {
 	        if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4 && Math.abs(orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < .150) {
-                //console.log("video played")
+	            //console.log("video played")
 	            _videoControls.play();
 	            if (_videoControls.currentTime >= (orchestrator.getElapsedTime() - self.firstKeyframe.time)) {
-                    //console.log("orch played")
+	                //console.log("orch played")
 	                orchestrator.play();
 	            }
 	        }
@@ -188,12 +199,12 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	            _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
 	        }
 	        else if (_videoControls.readyState < 3) {
-                //console.log("video not ready")
+	            //console.log("video not ready")
 	            orchestrator.pause();
 	            orchestrator.status = 4;
 	        }
 	        else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
-                //console.log("orch paused and status set to 4")
+	            //console.log("orch paused and status set to 4")
 	            orchestrator.pause();
 	            orchestrator.status = 4;
 	            _videoControls.pause();
@@ -201,23 +212,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	        else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < -.150) {
 	            _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
 	        }
-	        else {
-	            //console.log("else loop ended with no calls")
-	        }/*
-		    else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
-		        console.log("just pausing orchestrator");
-		        orchestrator.pause();
-		    }
-        */
-	        //console.log("                ")
-            //console.log("                   ")
 	    }
-        
-	    if (self.polling) {
-	        setTimeout(function () { poll(); }, 200);
-	    }
-	    _videoControls.removeAttribute("controls");
-	};
+	}
 
 	/*
 	 * I/P: 	none
@@ -305,6 +301,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	    	console.log(_videoControls);
 	    	_videoControls.currentTime = time;
 	    	updateInk(true);
+	    	pollHelper();
 		}
 	}
 	/*
