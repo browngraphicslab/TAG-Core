@@ -420,7 +420,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		}
 
 		self.constrainVideoSize();
-
+		pollHelper();
 		updateInk(true);
 
 		return nextKeyframe;
