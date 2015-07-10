@@ -165,7 +165,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                         }
                         else {
                             console.log("not converted: ");
-                            removeTrackOnFailure();
+                            //removeTrackOnFailure();
                         }
                     }
                 })(videotag), null, filename, basefilename);
