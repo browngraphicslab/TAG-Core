@@ -1880,7 +1880,6 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
         onUpdateNumCalls = onUpdateNumCalls + 1;
 
         timeManager.stop();
-        
         var data;
         if (loaded) {
             viewer.setIsReloading(true);
@@ -1903,7 +1902,6 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
         enableDisableDrag();
         
     }
-
     function getAllCaptureHandlers() {
         var handlers = [];
         for (var i = 0; i < dataHolder.numTracks() ; i++) {

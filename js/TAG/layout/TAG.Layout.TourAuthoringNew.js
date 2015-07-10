@@ -219,6 +219,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             tourobj: tourobj,
             timeline:timeline
         });
+        timeManager.setViewer(viewer);
         var tour = viewer.getTour();
         ITE = viewer.getPlayer();
         timeline = TAG.TourAuthoring.Timeline({

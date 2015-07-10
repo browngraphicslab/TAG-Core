@@ -79,7 +79,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                 'overflow': 'hidden'
             });
 
-            viewerPanel.append(ITEContainer);
+            viewerPanel.append(ITEContainer);  
         }
 
         // create ITE player

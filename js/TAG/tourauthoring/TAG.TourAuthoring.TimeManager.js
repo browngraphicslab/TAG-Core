@@ -34,10 +34,12 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         // viewer state
         ready = false,
         getViewerTime = null,
+        viewer,
 
     /////////
     // PUBLIC
         that = {
+            setViewer : setViewer,
             setTime: setTime,
             setPlayer: setPlayer,
             setStart : setStart,
@@ -68,10 +70,11 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
             onMove : onMove,
         };
  
-
     // SETTERS
 
-    
+    function setViewer(v) {
+        viewer = v;
+    }
 
     /**
      * Generally should use setTime once everything has been initialized:
@@ -225,7 +228,10 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         return player;
     }
 
-    function play () {
+    function play() {
+        if (viewer && viewer.getIsReloading()) {
+            return
+        }
         var interval = 100, last = -10,
             pct = ((current - start) / (end - start));
 
