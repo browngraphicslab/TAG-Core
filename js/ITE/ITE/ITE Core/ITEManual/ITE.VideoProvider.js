@@ -83,10 +83,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			.addClass("UIControl")
 			.append(_video)
             .append(_coveringDiv);
-
-		_UIControl.css({
-		    position: 'relative'
-		})
         
 		$("#ITEHolder").append(_UIControl);
 		self._UIControl = _UIControl;
@@ -101,7 +97,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		self.polling = true;
 		poll();
 		_UIControl.css({
-            "opacity" : "1"
+		    'position': 'absolute',
+		    "opacity": "1",
+            'left': '0px', 
+            'top': '0px'
 		})
 		_videoControls.opacity = 1;
 		_videoControls.removeAttribute("controls");
@@ -238,6 +237,13 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			'controls'  : false,
 			'filename'  : sourceWithoutExtension
 		});
+		
+		_video.css({
+		    'left': '0px',
+		    'top': '0px',
+		    'position': 'absolute'
+		})
+
 		var sourceMP4 = sourceWithoutExtension + ".mp4";
 		var sourceWEBM = sourceWithoutExtension + ".webm";
 		var sourceOGG = sourceWithoutExtension + ".ogg";
