@@ -1,4 +1,4 @@
-
+﻿
 TAG.Telemetry = (function () {
 
     var metaDataRequests = [],

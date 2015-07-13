@@ -1,4 +1,4 @@
-var Panorama = function () {
+﻿var Panorama = function () {
     var self = this;
     self.frameCount = 0;
     self.culler = new TiledImagePyramidCuller;

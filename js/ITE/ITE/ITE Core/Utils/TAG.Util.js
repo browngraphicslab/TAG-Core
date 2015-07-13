@@ -1,4 +1,4 @@
-window.ITE = window.ITE || {};
+﻿window.ITE = window.ITE || {};
 
 var TAG = TAG || {},
     Worktop = Worktop || {};

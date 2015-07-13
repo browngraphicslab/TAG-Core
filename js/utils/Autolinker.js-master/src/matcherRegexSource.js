@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @member Autolinker
  * @private
  * @property {RegExp} matcherRegex

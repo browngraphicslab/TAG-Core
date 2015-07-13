@@ -1,4 +1,4 @@
-// This file is run by PhantomJS to compile the regular expression from its source into a single regex
+﻿// This file is run by PhantomJS to compile the regular expression from its source into a single regex
 // It is a very specific compilation file. It basically expects to see a doc header (created with /** and */ comments),
 // and expects the file to evaluate to a compiled regular expression for the regex.
 // It will then put the doc header in, the variable name (Autolinker.matcherRegex), and the source of the compiled regex.

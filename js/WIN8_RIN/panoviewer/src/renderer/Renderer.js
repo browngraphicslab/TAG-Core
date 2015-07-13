@@ -1,4 +1,4 @@
-function extend(subclass, base) {
+﻿function extend(subclass, base) {
     function f() {
     }
     f.prototype = base.prototype;

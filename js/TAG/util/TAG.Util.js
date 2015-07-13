@@ -1,4 +1,4 @@
-//TAG Utilities
+﻿//TAG Utilities
 TAG.Util = (function () {
     "use strict";
 

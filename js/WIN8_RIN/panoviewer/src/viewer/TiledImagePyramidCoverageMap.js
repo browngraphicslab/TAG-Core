@@ -1,4 +1,4 @@
-//
+﻿//
 // This class manages walking up and down quad tree of tiles to compute what tiles are
 // overlapping with deeper levels of the image pyramid.
 

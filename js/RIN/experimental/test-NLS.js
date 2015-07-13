@@ -1,4 +1,4 @@
-var rin;
+﻿var rin;
 (function (rin) {
     /// <reference path="../src/storyboard/nonLinearStoryboard.ts" />
     /// <reference path="../src/storyboard/trajectory.ts" />

@@ -1,4 +1,4 @@
-/**
+﻿/**
 * This controls camera
 * @constructor
 */

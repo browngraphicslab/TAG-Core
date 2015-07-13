@@ -1,4 +1,4 @@
-// Original Source (MIT License): https://github.com/arian/CSSMatrix
+﻿// Original Source (MIT License): https://github.com/arian/CSSMatrix
 
 // Modified to wrap code inside an anonymous function and also only
 // enable the shim if native support isn't available (see end of file)

@@ -1,4 +1,4 @@
-var objectCollection = {
+﻿var objectCollection = {
     loop : function(obj, propertyName, keyCollectionFunction) {
         var k;
         for(k in obj[propertyName]) {

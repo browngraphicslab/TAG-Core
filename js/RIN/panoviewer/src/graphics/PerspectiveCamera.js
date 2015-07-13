@@ -1,4 +1,4 @@
-function PerspectiveCameraPose(viewport, digitalPan, position, up, look, fieldOfView) {
+﻿function PerspectiveCameraPose(viewport, digitalPan, position, up, look, fieldOfView) {
     this.width = (viewport) ? viewport.getWidth() : 0;
     this.height = (viewport) ? viewport.getHeight() : 0;
     //this.digitalPan = Vector2.clone(digitalPan);

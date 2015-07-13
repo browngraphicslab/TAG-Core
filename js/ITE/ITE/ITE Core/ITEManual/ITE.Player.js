@@ -1,4 +1,4 @@
-window.ITE = window.ITE || {};
+﻿window.ITE = window.ITE || {};
 
 ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE object that contains the orchestrator, etc
    var totalTourDuration;

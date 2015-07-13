@@ -1,4 +1,4 @@
-/*
+﻿/*
  * dz - AVL Tree Node for AVL Tree implementation
  * 
  * This AVLNode performs various things like tree rebalancing, node 

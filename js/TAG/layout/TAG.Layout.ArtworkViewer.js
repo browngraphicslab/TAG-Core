@@ -1,4 +1,4 @@
-TAG.Util.makeNamespace("TAG.Layout.ArtworkViewer");
+﻿TAG.Util.makeNamespace("TAG.Layout.ArtworkViewer");
 
 /**
  * The artwork viewer, which contains a sidebar with tools and thumbnails as well

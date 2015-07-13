@@ -1,4 +1,4 @@
-// Original Source (MIT License): https://github.com/arian/CSSMatrix
+﻿// Original Source (MIT License): https://github.com/arian/CSSMatrix
 // Browserified Version: https://raw.github.com/camupod/CSSMatrix/browserified/CSSMatrix.js
 
 (function () {

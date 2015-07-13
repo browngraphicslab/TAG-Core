@@ -1,4 +1,4 @@
-/*
+﻿/*
 	krpano Flash/HTML5 Embedding script
 	krpano 1.0.8.15 (build 2012-10-05)
 
