@@ -146,6 +146,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         }
         var toureditor;
         TAG.Worktop.Database.changeTour(tourobj, options, function () {//update tour object (save tour)
+            stop();
+            unload();
             TAG.Worktop.Database.getDoq(tourobj.Identifier, function (tour) {
                 $(".rootPage").remove();
                 toureditor = new TAG.Layout.TourAuthoringNew(
