@@ -53,18 +53,43 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    * O/P: none
 	    */
 		function loadHelper(){
-			//Creates tracks
-			for (i = 0; i < tourData.tracks.length; i++){
-				var track = tourData.tracks[i]
-				self.loadQueue.add(createTrackByProvider(track))
+		    //Creates tracks
+		    var i;
+			for (i = 0; i < tourData.tracks.length; i++) {
+			    //var track = tourData.tracks[i];
+			    //var createFn = function () {
+			    //    createTrackByProvider(track);
+			    //};
+			    //self.loadQueue.add(createFn);
+			    createTrackByProvider(tourData.tracks[i]);
 			};
 
 			//...Initializes them
 			initializeTracks();
 
+			var j;
 			//...Loads them
-	    	for (i = 0; i < trackManager.length; i++){
-	    		trackManager[i].load()
+			for (j = 0; j < trackManager.length; j++) {
+			    var track = trackManager[j];
+			    //var trackLoad = function () {
+			    //    track.load();
+			    //}
+			    //self.loadQueue.add(trackLoad);
+			    track.load();
+	    	}
+
+			var k;
+			for (k = 0; k < trackManager.length; k++) {
+			    var track = trackManager[k];
+			    if (track.type === 'ink') {
+			        if (track.findAttachedAssetDelayed) {
+			            //var bind = function () {
+			            //    track.findAttachedAssetDelayed();
+			            //};
+			            //self.loadQueue.add(bind);
+			            track.findAttachedAssetDelayed();
+			        }
+			    }
 	    	}
 		}
 
@@ -133,6 +158,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	function getStatus(){
 		return this.status;
 	}
+
 
 	function play() {
 	    updateZIndices();
@@ -211,13 +237,16 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		// Inform tracks of seek.
 		var nextKeyframes = new Array(trackManager.length);
 		for (i = 0; i < self.trackManager.length; i++) {
-			nextKeyframes[i] = self.trackManager[i].seek();
+		    var track = self.trackManager[i];
+			nextKeyframes[i] = track.seek();
 		}
 
 		// If we're playing, continue playing!
 		if (self.prevStatus === 1) {
-			for (i = 0; i < self.trackManager.length; i++) {
-				self.trackManager[i].play(nextKeyframes[i]);
+		    for (i = 0; i < self.trackManager.length; i++) {
+		        var track = self.trackManager[i];
+		        var kf = nextKeyframes[i];
+				track.play(kf);
 			}
 			self.timeManager.startTimer();
 			self.status = 1;
@@ -317,15 +346,15 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	  	* initializes a single track by subscribing it properly to the applicable events
 	    * O/P: none
 	 */
-	function initializeTrack(track){
+	function initializeTrack (track) {
 			// Subscribe video and audios to volume changes
 			if (track.trackData.providerId === "video" || track.trackData.providerId === "audio") {
 				self.volumeChangedEvent.subscribe(track.setVolume, track.trackData.assetUrl, track);
 				self.muteChangedEvent.subscribe(track.toggleMute, track.trackData.assetUrl, track);
 			}
 			// Subscribes everything to other orchestrator events
-			self.narrativeSeekedEvent.subscribe(track.seek, null, track)
-			self.narrativeLoadedEvent.subscribe(track.load, null, track)
+			self.narrativeSeekedEvent.subscribe(track.seek, null, track);
+			self.narrativeLoadedEvent.subscribe(track.load, null, track);
 	}
 	/**
 	    * I/P: none

@@ -129,8 +129,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         temp2.append(infoDiv);
 
         var root = $(document.body);
-        root.append(temp)
-        root.append(temp2)
+        root.append(temp);
+        root.append(temp2);
 
         TAG.Util.showLoading(temp2, '10%', '42.5%', '45%')//to show the loading screen
         temp.css('background-color','rgb(0,0,0,1)')
@@ -144,7 +144,43 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             Content: content,
             RelatedArtworks: related
         }
+        var toureditor;
         TAG.Worktop.Database.changeTour(tourobj, options, function () {//update tour object (save tour)
+            stop();
+            unload();
+            TAG.Worktop.Database.getDoq(tourobj.Identifier, function (tour) {
+                $(".rootPage").remove();
+                toureditor = new TAG.Layout.TourAuthoringNew(
+                    tour,
+                    function () {
+                        TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
+                            toureditor.getViewer().loadITE();
+                            toureditor.getTimeline().onUpdate();
+                            toureditor.getViewer().setIsReloading(true);
+                            TAG.Util.hideLoading(temp2)
+                            temp.remove();
+                            temp2.remove();
+                        });
+                    })
+            },function () {
+                // unauth
+                dialogOverlay.hide();
+                var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  You must log in to save changes.");
+                $('body').append(popup);
+                $(popup).show();
+            }, function (jqXHR, ajaxCall) {
+                // conflict
+                // Ignore conflict for now
+                ajaxCall.force();
+            }, function () {
+                // error
+                dialogOverlay.hide();
+                var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  There was an error contacting the server.");
+                $('body').append(popup);
+                $(popup).show();
+            });
+
+            /*
             // then upon sucess of saving,
             stop();
             unload();
@@ -180,8 +216,9 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                 /*
                 if (progressBarLength > 0) { //other upload happening - disable import
                     toureditor.uploadStillHappening(true);
-                }*/
+                }
             })
+            */
         }, function () {
             // unauth
             dialogOverlay.hide();

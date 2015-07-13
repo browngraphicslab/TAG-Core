@@ -76,6 +76,14 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 			attachToAsset(_attachedAsset);
 		};
 
+		self.findAttachedAssetDelayed = function () {
+		    var ref = trackData.experienceReference;
+		    if ((ref !== "null") && (ref !== '')) {
+		        _attachedAsset = findAttachedAsset(ref);
+		        attachToAsset(_attachedAsset);
+		    };
+		};
+
 		// Get first and last keyframes and set state to first.
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
@@ -323,7 +331,8 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		for (j = 0; j < self.orchestrator.trackManager.length; j++) {
 			track = self.orchestrator.trackManager[j];
 			if (track.trackData.name === experienceReference){
-				_attachedAsset = track;
+			    _attachedAsset = track;
+			    break;
 			};
 		};
 

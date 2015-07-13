@@ -2190,7 +2190,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         magY = ch;
         var proxy_div = $("[id='" + artName + "']").length > 0 ?
             $("[id='" + artName + "']") :
-            $("[id='" + artName + + "holder" + "']");
+            $("[id='" + artName + "holder" + "']");
 
         var proxy = {
             x: parseInt(proxy_div.position().left),

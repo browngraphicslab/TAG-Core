@@ -111,7 +111,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		})
 		_UIControl.attr("id", self.trackData.name);
 		self.setState(self.getKeyframeState(self.firstKeyframe));
-		TweenLite.ticker.addEventListener("tick", updateInk)
+		TweenLite.ticker.addEventListener("tick", self.updateInk)
 
 		// Ensure that the image is completely loaded.
 		// Kinda jank, but according to the onlines, stuff like $().load() can't be trusted.
@@ -146,7 +146,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		_UIControl.remove()
 		self.removeCaptureHandler(captureHandlers);
 		self.removeCaptureFinishedHandler(captureFinishedHandlers);
-		TweenLite.ticker.removeEventListener("tick", updateInk);
+		TweenLite.ticker.removeEventListener("tick", self.updateInk);
 		for(var v in self) {
 			v = null;
 		}
@@ -245,7 +245,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 			nextKeyframe = surKeyframes[1];
 		}
 
-		updateInk(true);
+		self.updateInk(true);
 
 		return nextKeyframe;
 	};
@@ -553,7 +553,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	        captureHandlers(evt);
 	    }
 
-	    updateInk(true);
+	    self.updateInk(true);
 	}
 	self.manipFromDZRecursion = manipFromDZRecursion;
 
@@ -565,7 +565,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	        captureHandlers(evt);
 	    }
 
-	    updateInk(true);
+	    self.updateInk(true);
 	}
 	self.endManipFromDZRecursion = endManipFromDZRecursion;
 
@@ -683,7 +683,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	    }
     	}
 
-    	updateInk(true);
+    	self.updateInk(true);
     };
     self.mediaManip = mediaManip;
 	
@@ -748,7 +748,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             captureHandlers(evt);
         }
 
-        updateInk(true);
+        self.updateInk(true);
     };
     self.mediaScroll = mediaScroll;
 
@@ -812,7 +812,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
             captureHandlers(evt);
         }
 
-        updateInk(true);
+        self.updateInk(true);
     };
     self.mediaPinch = mediaPinch;
     
