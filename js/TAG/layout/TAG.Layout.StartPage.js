@@ -48,9 +48,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
 
-    
-    lockedMessage.css({'display': 'none'});
-    
+
+    goToCollectionsButton.css('top', '70%');
+
 
     //PREVIEW STYLING
     isPreview && function () {
