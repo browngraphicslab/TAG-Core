@@ -1025,6 +1025,7 @@ TAG.Util = (function () {
                 //if ((evt.type === "pinch" || evt.type === "pinchin" || evt.type === "pinchout") && typeof functions.onScroll === "function")
                 //    functions.onScroll(1 + scale, pivot);
             } else {
+                return;
                 // Update Dir
                 getDir(evt, true);
                 var pivot = { x: evt.pageX - $element.offset().left, y: evt.pageY - $element.offset().top };
