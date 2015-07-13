@@ -348,8 +348,8 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         //videoElt.innerHTML  = '<source src="' + sourceMP4  + '" type='+"'"+'video/mp4; codecs="avc1.42E01E, mp4a.40.2"'+"'"+'>';
         //videoElt.innerHTML += '<source src="' + sourceWEBM + '" type='+"'"+'video/webm; codecs="vorbis, vp8"'+"'"+'>';
         //videoElt.innerHTML += '<source src="' + sourceOGG  + '" type='+"'"+'video/ogg; codecs="theora, vorbis"'+"'"+'>';
-        videoElt.innerHTML += '<source src="' + sourceWEBM + '" type="video/webm">';
         videoElt.innerHTML = '<source src="' + sourceMP4 + '" type="video/mp4">';
+        videoElt.innerHTML += '<source src="' + sourceWEBM + '" type="video/webm">';
         videoElt.innerHTML += '<source src="' + sourceOGV + '" type="video/ogv">';
 
         //lucy vk- this error handler is a patch for an issue we had with video playback in Chrome.
