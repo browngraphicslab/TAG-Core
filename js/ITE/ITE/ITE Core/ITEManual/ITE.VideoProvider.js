@@ -199,7 +199,19 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	        }
 	        else if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
 	            //console.log("reset video time to " + orchestrator.getElapsedTime() - self.firstKeyframe.time)
-	            _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
+	            try{
+	                _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
+	            }
+	            catch (err) {
+	                console.log("error: " + err);
+	                try{
+	                    ochestrator.seek((_videoControls.currentTime + self.firstKeyframe.time) / orchestrator.getTourData().totalDuration);
+	                }
+	                catch (error) {
+                        console.log("second error: "+error)
+	                }
+	            }
+	            //orchestrator.seek((_videoControls.currentTime + self.firstKeyframe.time) / orchestrator.getTourData().totalDuration);
 	        }
 	        else if (_videoControls.readyState < 3) {
 	            //console.log("video not ready")
