@@ -156,6 +156,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                         TAG.Util.UI.slidePageLeft(toureditor.getRoot(), function () {
                             toureditor.getViewer().loadITE();
                             toureditor.getTimeline().onUpdate();
+                            toureditor.getViewer().setIsReloading(true);
                             TAG.Util.hideLoading(temp2)
                             temp.remove();
                             temp2.remove();
