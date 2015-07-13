@@ -205,7 +205,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	            catch (err) {
 	                console.log("error: " + err);
 	                try{
-	                    ochestrator.seek((_videoControls.currentTime + self.firstKeyframe.time) / orchestrator.getTourData().totalDuration);
+	                    orchestrator.seek((_videoControls.currentTime + self.firstKeyframe.time) / orchestrator.getTourData().totalDuration);
 	                }
 	                catch (error) {
                         console.log("second error: "+error)
