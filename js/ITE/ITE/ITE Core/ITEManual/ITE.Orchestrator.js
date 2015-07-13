@@ -134,6 +134,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		return this.status;
 	}
 
+
 	function play() {
 	    updateZIndices();
 		var i;
