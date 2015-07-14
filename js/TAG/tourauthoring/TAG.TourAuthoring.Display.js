@@ -2289,6 +2289,14 @@ TAG.TourAuthoring.Display = function (spec, my) {
                 }
             }
 
+            //console.log("start display.addKeyframe");
+            //console.log("incoming:");
+            //console.log({ width: data.width, height: data.height });
+            //console.log({ x: data.left, y: data.top });
+            //console.log("calculated:");
+            //console.log(rinData.viewport.region.span);
+            //console.log(rinData.viewport.region.center);
+
             var keyspec = {
                     loc: {
                         x: Math.twoDecPlaces(my.timeManager.pxToTime(x)),
@@ -2679,20 +2687,27 @@ TAG.TourAuthoring.Display = function (spec, my) {
                                     //x: (first.left / parseInt($('#ITEContainer').width())),
                                     //y: (first.top / parseInt($('#ITEContainer').height()))
                                     // -2 is because left should be done from inner left, not border left
-                                    x: (first.left / (parseInt(dataHolder.getLastPreviewerHeight()) * 16 / 9 - 2)),
+                                    x: (first.left / (Math.round(dataHolder.getLastPreviewerHeight() * 16 / 9))),
                                     // same for top
-                                    y: (first.top / (parseInt(dataHolder.getLastPreviewerHeight()) - 2))
+                                    y: (first.top / parseInt(dataHolder.getLastPreviewerHeight()))
                                 },
                                 span: {
                                     //x: (first.width / parseInt($('#ITEContainer').width())),
                                     //y: (first.height / parseInt($('#ITEContainer').height()))
-                                    x: (first.width / (parseInt(dataHolder.getLastPreviewerHeight() * 16 / 9) - 4)),
-                                    y: (first.height / (parseInt(dataHolder.getLastPreviewerHeight()- 4)))
+                                    x: (first.width / (Math.round(dataHolder.getLastPreviewerHeight() * 16 / 9))),
+                                    y: (first.height / parseInt(dataHolder.getLastPreviewerHeight()))
                                 }
                             },
                         },
                     },
                 };
+                //console.log("start display.getKeyframesRIN");
+                //console.log("incoming:")
+                //console.log({ width: first.width, height: first.height });
+                //console.log({ x: first.left, y: first.top });
+                //console.log("calculated:")
+                //console.log(rin_first.state.viewport.region.span);
+                //console.log(rin_first.state.viewport.region.center);
                 first = rin_first;
             }
             //first.holdDuration = 0;

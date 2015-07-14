@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @fileoverview This contains utilies for computed tiled image level of detail.
  */
 

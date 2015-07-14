@@ -1,4 +1,4 @@
-/*global module:true, require: true */
+﻿/*global module:true, require: true */
 
 module.exports = function(grunt) {
 

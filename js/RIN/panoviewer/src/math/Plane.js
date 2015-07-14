@@ -1,4 +1,4 @@
-/**
+﻿/**
  * A plane in 3D space.  Created from the generalized plane equation coefficients
  * @param {number} a A plane coefficient of Ax + By + Cz + D = 0
  * @param {number} b B plane coefficient of Ax + By + Cz + D = 0

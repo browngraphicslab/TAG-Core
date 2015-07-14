@@ -150,9 +150,9 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
      * @param {Integer} newTime     in seconds
      */
     function seek(newTime) {
-        if (viewer && viewer.getIsReloading()) {
-            return
-        }
+        //if (viewer && viewer.getIsReloading()) {
+        //    return
+        //}
         if (newTime < 0) { //prevent seeking to -1 sec
             newTime = 0;
         } else if (newTime > end) { // prevent seeking past the end of the timeline
@@ -173,9 +173,9 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
      * @param {Integer} amount        in seconds
      */
     function seekByAmount(amount) {
-        if (viewer && viewer.getIsReloading()) {
-            return
-        }
+        //if (viewer && viewer.getIsReloading()) {
+        //    return
+        //}
         currentPx = null;
         //TODO- should probably have check to make sure doesn't pass end
         current += amount;
@@ -192,9 +192,9 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
      * @param {Integer} per         percent (as decimal)
      */
     function seekToPercent(per) {
-        if (viewer && viewer.getIsReloading()) {
-            return
-        }
+        //if (viewer && viewer.getIsReloading()) {
+        //    return
+        //}
         currentPx = null;
         current = (end - start) * per;
         _sendMove({ current: current, percent: ((current - start) / (end - start)) });

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * Popcorn.prototype.capture()
  *
  * Copyright 2011, Rick Waldron

@@ -1,4 +1,4 @@
-//
+﻿//
 // Basic unit tests AND common code for Embedded Artifacts testing
 //
 // Copyright (C) 2013 Microsoft Research

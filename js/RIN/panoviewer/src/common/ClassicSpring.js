@@ -1,4 +1,4 @@
-/**
+﻿/**
 * Provides an exponential spring for animations
 * @constructor
 * @param {number} springConstant

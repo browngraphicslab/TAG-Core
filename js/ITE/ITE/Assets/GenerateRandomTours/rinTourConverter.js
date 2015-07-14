@@ -1,4 +1,4 @@
-	function rinTourConvertor(rintour){
+﻿	function rinTourConvertor(rintour){
 		var rawFile = new XMLHttpRequest();
 	    rawFile.open("GET", rintour, false);
 	    rawFile.onreadystatechange = function ()

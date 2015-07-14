@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * Autolinker.js
  * Version 0.6.0
  * 

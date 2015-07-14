@@ -1,4 +1,4 @@
-
+﻿
 (function () {
     var PATH = "js/rin/js/rin/";      // the path to the scripts, relative to HTML page
 

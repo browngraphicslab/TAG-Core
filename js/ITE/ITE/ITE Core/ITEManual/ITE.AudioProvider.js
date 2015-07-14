@@ -1,4 +1,4 @@
-window.ITE = window.ITE || {};
+﻿window.ITE = window.ITE || {};
 
 /*
  * I/P: 	trackData : 	Holds data on the track, such as duration.

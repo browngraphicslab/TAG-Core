@@ -1,4 +1,4 @@
-
+﻿
 // TODO: (Joel) we need to abstract away browser differences for
 // style and transform property names rather than setting them 
 // all for each change.

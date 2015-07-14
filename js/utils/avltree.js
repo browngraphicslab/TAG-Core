@@ -1,4 +1,4 @@
-/* 
+﻿/* 
  * dz - AVL Tree implementation
  *
  * An AVL tree is a self-balancing binary search tree with average and 

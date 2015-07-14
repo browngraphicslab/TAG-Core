@@ -2407,6 +2407,9 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                                     fadeOut = 0;
                                 }
                                 display = track.addDisplay(timeManager.timeToPx(begin));
+                                if (!display) {
+                                    break;
+                                }
                                 display.setMain(length);
                                 display.setIn(fadeIn);
                                 display.setOut(fadeOut);

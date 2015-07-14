@@ -693,7 +693,6 @@ TAG.TourAuthoring.Track = function (spec, my) {
             'left': '10%',
             'top': '12.5%',
             'font-size': '1.25em',
-            'position': 'relative',
             'text-align': 'center',
             'word-wrap': 'break-word',
         });

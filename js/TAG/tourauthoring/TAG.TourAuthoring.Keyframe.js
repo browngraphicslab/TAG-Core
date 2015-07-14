@@ -712,17 +712,25 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 viewport: {
                     region: {
                         center: {
-                            x: (data.bounds ? data.bounds.x : data.left / (ITEContainer.width() - 2)), // -2 is for border!
-                            y: (data.bounds ? data.bounds.y : data.top / (ITEContainer.height() - 2))
+                            x: (data.bounds ? data.bounds.x : data.left / (ITEContainer.width())), // -2 is for border!
+                            y: (data.bounds ? data.bounds.y : data.top / (ITEContainer.height()))
                         },
                         span: {
-                            x: (data.bounds ? data.bounds.width : data.width / (ITEContainer.width() - 4)),
-                            y: (data.bounds ? data.bounds.height : data.height / (ITEContainer.height() - 4))
+                            x: (data.bounds ? data.bounds.width : data.width / (ITEContainer.width())),
+                            y: (data.bounds ? data.bounds.height : data.height / (ITEContainer.height()))
                         }
                     }
                 }
             }
             _data = rinData;
+
+            //console.log("start keyframe.loadRIN");
+            //console.log("incoming:");
+            //console.log({ width: data.width, height: data.height });
+            //console.log({ x: data.left, y: data.top });
+            //console.log("calculated:");
+            //console.log(rinData.viewport.region.span);
+            //console.log(rinData.viewport.region.center);
         }
         if (_updateKeyFrameCommand) {
             (function (command) {

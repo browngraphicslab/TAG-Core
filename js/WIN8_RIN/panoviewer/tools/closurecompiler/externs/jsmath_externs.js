@@ -1,4 +1,4 @@
-var MathHelper = {};
+﻿var MathHelper = {};
 MathHelper.max = function (a, b) {};
 MathHelper.isZero = function(value) {};
 MathHelper.min = function (a, b) {};

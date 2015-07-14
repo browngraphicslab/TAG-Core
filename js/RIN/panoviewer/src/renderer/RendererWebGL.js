@@ -1,4 +1,4 @@
-
+﻿
 function RendererWebGL(win, width, height) {
 	RendererWebGL.__super.call(this, win);
 

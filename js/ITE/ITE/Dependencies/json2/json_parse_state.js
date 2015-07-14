@@ -1,4 +1,4 @@
-/*
+﻿/*
     json_parse_state.js
     2013-05-26
 

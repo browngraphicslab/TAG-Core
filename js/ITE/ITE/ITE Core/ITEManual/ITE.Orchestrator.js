@@ -1,4 +1,4 @@
-window.ITE = window.ITE || {};
+﻿window.ITE = window.ITE || {};
 ITE.Orchestrator = function(player, isAuthoring) {
 	status = 3;		// Current status of Orchestrator (played (1), paused (2), loading (3), buffering(4))
     // Defaulted to ‘loading’
