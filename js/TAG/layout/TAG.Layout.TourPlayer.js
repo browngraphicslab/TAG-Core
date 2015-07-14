@@ -147,7 +147,6 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     this.getTourData = getTourData;
 
     function goBack () {
-
         var artmode, collectionsPage;
 
         // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
@@ -189,6 +188,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
             currentPage.obj  = collectionsPage;
             $('#ITEHolder').remove();
+        }
+        if (player) {
+            player.clearControlsTimeout();
         }
     }
     this.goBack = goBack;

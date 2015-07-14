@@ -1151,6 +1151,9 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
                 root.find('#collectionMenu').css('width', '70%');
                 root.find('#backButtonArea').css('display', 'none');
             }
+            else {
+                root.find('#backButtonArea').css('display', 'auto');
+            }
             if (!IS_WINDOWS) {
                 root.find('#backButtonArea').css('position', 'relative');
             }

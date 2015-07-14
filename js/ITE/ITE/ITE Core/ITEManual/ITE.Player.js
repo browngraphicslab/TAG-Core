@@ -35,18 +35,19 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
    }
 
     //Buttons
-    var volumeButton            = $(document.createElement("img")),
-        volumeLevel             = $(document.createElement("img")),
-        playPauseButton         = $(document.createElement("img")),
-        loopButton              = $(document.createElement("img")),
-        progressBar             = $(document.createElement("div")),
-        fullScreenButton        = $(document.createElement("img")),
-        progressIndicator       = $(document.createElement("div")),
-        volumeLevelContainer    = $(document.createElement("div")),
+   var volumeButton = $(document.createElement("img")),
+       volumeLevel = $(document.createElement("img")),
+       playPauseButton = $(document.createElement("img")),
+       loopButton = $(document.createElement("img")),
+       progressBar = $(document.createElement("div")),
+       fullScreenButton = $(document.createElement("img")),
+       progressIndicator = $(document.createElement("div")),
+       volumeLevelContainer = $(document.createElement("div")),
 
 
-    //Other atributes
-        timeOffset,
+   //Other atributes
+       timeOffset,
+       controlsTimeout,
         isMuted,
         isLooped,
         isFullScreen,
@@ -440,6 +441,21 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
         playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
        setControlsFade();
     };
+
+    /*
+    * I/P:   none
+    * clears the timeout to make the controls invisible and also removes the handlers that set the fading timeout again
+    * O/P:   none
+    */
+
+    function clearControlsTimeout() {
+        console.log("controls timeout clear called")
+        if (controlsTimeout) {
+            window.clearTimeout(controlsTimeout);
+        }
+        $("#backButton").off('mouseleave');
+        bottomContainer.off('mouseleave');
+    }
     /*
     * I/P:   none
     * Sets the buttons to fade in 2 seconds from function call
@@ -448,7 +464,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
     function setControlsFade() {
         console.log("set controls fade called")
         if (playerConfiguration.fadeControls) {
-            window.setTimeout(function () {
+            controlsTimeout = window.setTimeout(function () {
                 time = 500
                 volumeButton.fadeTo(time,0,null);
                 volumeLevel.fadeTo(time,0,null);
@@ -828,4 +844,5 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
     this.bindCaptureHandlers = bindCaptureHandlers;
     this.getOrchestrator = getOrchestrator;
     this.updateInkPositions = updateInkPositions;
+    this.clearControlsTimeout = clearControlsTimeout;
 };
