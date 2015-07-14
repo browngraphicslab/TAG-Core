@@ -46,7 +46,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	var attachedInks 				= [];
 
 	self.polling = false;
-	//lvk- for network error handling
+    //lvk- for network error handling
 	self.lastPauseTime = 0;
 	self.lastActualTime = Date.now();
 	self.lastError = undefined;
@@ -198,18 +198,48 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	            }
 	        }
 	        else if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
+                console.log("CAUTION possible video error during forced video seek")
 	            //console.log("reset video time to " + orchestrator.getElapsedTime() - self.firstKeyframe.time)
+	            //orchestrator.seek((self.firstKeyframe.time + _videoControls.currentTime) / orchestrator.getTourData().totalDuration)
+                
 	            try{
 	                _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
 	            }
 	            catch (err) {
 	                console.log("error: " + err);
+	                self.resetVideo();
+	                self.polling = false;
+	                orchestrator.pause();
+	                // Ensure that the video is completely loaded.
+	                _videoControls.addEventListener("canplay", function () {
+	                    console.log("~~~~~~  VIDEO CAN PLAY AGAIN ~~~~~~");
+	                    self.polling = true;
+	                    poll();
+	                    orchestrator.play();
+	                })
+                    /*
 	                try{
 	                    orchestrator.seek((_videoControls.currentTime + self.firstKeyframe.time) / orchestrator.getTourData().totalDuration);
 	                }
 	                catch (error) {
-                        console.log("second error: "+error)
+	                    console.log("second error: " + error)
+	                    self.resetVideo();
+	                    orchestrator.pause();
+	                    orchestrator.status = 4;
+	                    self.polling = false;
+	                    window.setTimeout(function () {
+	                        self.polling = true;
+	                        try{
+	                            _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
+	                        }
+	                        catch (e) {
+	                            console.log("post-timeout error: " + error)
+	                        }
+	                        poll();
+	                    }, 400);
 	                }
+                    */
+                    
 	            }
 	            //orchestrator.seek((_videoControls.currentTime + self.firstKeyframe.time) / orchestrator.getTourData().totalDuration);
 	        }
@@ -279,7 +309,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 			self.constrainVideoSize();
 
-			//Tell orchestrator to play (if other tracks are ready)
+		    //Tell orchestrator to play (if other tracks are ready)
 			self.orchestrator.playWhenAllTracksReady();
 		});
 
@@ -297,10 +327,47 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		
 	};
+    /*
+     * I/P: 	none
+     * remakes the video object
+     * O/P: 	none
+     */
+	self.resetVideo = function () {
+	    _UIControl.empty();
+	    _video.remove();
+	    video = $(document.createElement("video"))
+			.addClass("assetVideo");
+	    var sourceWithoutExtension = self.trackData.assetUrl.substring(0, self.trackData.assetUrl.lastIndexOf('.'));
+
+	    // Set the video source.
+	    _video.attr({
+	        'src': self.trackData.assetUrl,
+	        'type': self.trackData.type,
+	        'preload': 'none',
+	        'controls': false,
+	        'filename': sourceWithoutExtension
+	    });
+
+	    _video.css({
+	        'left': '0px',
+	        'top': '0px',
+	        'position': 'absolute'
+	    })
+
+	    var sourceMP4 = sourceWithoutExtension + ".mp4";
+	    var sourceWEBM = sourceWithoutExtension + ".webm";
+	    var sourceOGG = sourceWithoutExtension + ".ogg";
+	    addSourceToVideo(_video, sourceMP4, 'video/mp4');
+	    addSourceToVideo(_video, sourceWEBM, 'video/webm');
+	    addSourceToVideo(_video, sourceOGG, 'video/ogg');
+
+	    _UIControl.append(_video);
+	    _UIControl.append(_coveringDiv);
+	}
 
 	/*
 	 * I/P: 	none
-	 * Unoads track asset.
+	 * Unloads track asset.
 	 * O/P: 	none
 	 */
 	self.unload = function () {
@@ -394,7 +461,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 			self.audioAnimation.stop();
 		}
 		_videoControls.pause()
-		_videoControls.setAttribute("controls", "controls")
 	};
 
 	/*
