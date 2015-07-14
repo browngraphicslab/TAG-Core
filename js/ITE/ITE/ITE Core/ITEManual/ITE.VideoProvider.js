@@ -198,7 +198,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	            }
 	        }
 	        else if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
-                console.log("CAUTION possible video error during forced video seek")
 	            //console.log("reset video time to " + orchestrator.getElapsedTime() - self.firstKeyframe.time)
 	            //orchestrator.seek((self.firstKeyframe.time + _videoControls.currentTime) / orchestrator.getTourData().totalDuration)
                 
@@ -402,7 +401,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.play = function (endKeyframe) {
-	    console.log("video played");
 		if (self.status === 3) {
 			return;
 		}
@@ -444,7 +442,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.pause = function () {
-        console.log("video pause called")
 		if (self.status === 3) {
 			return;
 		}
