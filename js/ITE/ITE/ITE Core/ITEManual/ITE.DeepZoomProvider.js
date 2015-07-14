@@ -176,6 +176,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	        var x = evt.position.x
 	        var y = evt.position.y
 	    }
+	    if (!_viewer.viewport) {
+	        return false;
+	    }
 	    var clickP = _viewer.viewport.pointFromPixel(new OpenSeadragon.Point(x, y))
 	    if (
 			(clickP.x < 1) &&
