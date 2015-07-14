@@ -8468,7 +8468,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "top": currKeyframe.state.viewport.region.center.y * parseInt($(window).height()),
 				            "width": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
 				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
-				        }
+				        };
+				        console.log("dummy load call to util");
 				    } else {
 				        keyframeObject = {
 				            "dispNum": k,
@@ -8490,6 +8491,14 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "height": currKeyframe.state.viewport.region.span.y * (parseInt($('#ITEContainer').height()))
 				        }
 				    }
+
+				    //console.log("start util");
+				    //console.log("incoming:");
+				    //console.log(currKeyframe.state.viewport.region.span);
+				    //console.log(currKeyframe.state.viewport.region.center);
+				    //console.log("calculated:");
+				    //console.log({ width: keyframeObject.width, height: keyframeObject.height });
+				    //console.log({ x: keyframeObject.left, y: keyframeObject.top });
 				}
 				else if (providerID == "deepZoom"){
 					keyframeObject = {
