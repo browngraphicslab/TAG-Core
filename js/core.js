@@ -177,7 +177,7 @@
         var TAGSCRIPTS = [                                    // scripts to load
                 'js/raphael.js',
                 'js/tagInk.js',
-                'js/RIN/web/lib/rin-core-1.0.js'
+                //'js/RIN/web/lib/rin-core-1.0.js'
             ],
             i,                                                // index
             oHead,                                            // head element
@@ -185,10 +185,10 @@
             oCss,                                             // link element
             tagContainer;                                     // div containing TAG
 
-        TAGSCRIPTS.push(
-            IS_WINDOWS ? 'js/WIN8_RIN/web/lib/rin-core-1.0.js'   : 'js/RIN/web/lib/rin-core-1.0.js',
-            IS_WINDOWS ? 'js/WIN8_RIN/web/lib/knockout-2.1.0.js' : 'js/RIN/web/lib/knockout-2.2.1.js'
-        );
+        //TAGSCRIPTS.push(
+        //    IS_WINDOWS ? 'js/WIN8_RIN/web/lib/rin-core-1.0.js'   : 'js/RIN/web/lib/rin-core-1.0.js',
+        //    IS_WINDOWS ? 'js/WIN8_RIN/web/lib/knockout-2.1.0.js' : 'js/RIN/web/lib/knockout-2.2.1.js'
+        //);
 
         tagPath = tagPath || '';
         if(tagPath.length > 0 && tagPath[tagPath.length - 1] !== '/') {
