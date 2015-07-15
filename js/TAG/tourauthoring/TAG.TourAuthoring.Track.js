@@ -2633,34 +2633,7 @@ function trackTitleReleased(evt) {
                     keyframe.setSelected(true); // delay logging of edits
                     my.dirtyKeyframe = true; // dirty b/c it's new
                 }
-                //my.update();
             }
-            //else {
-            //    var time_2dec = Math.twoDecPlaces(time);
-
-            //    // check that you are not making a keyframe right on top of another
-            //    var neighbors = currentDisplay.getKeyframes().nearestNeighbors(time_2dec, 1);
-            //    if (neighbors[0] && (Math.abs(neighbors[0].getTime() - time_2dec) < 0.05)) {
-            //        if (neighbors[1] && (Math.abs(neighbors[1].getTime() - time_2dec) < 0.05)) {
-            //            keyframe = (Math.abs(neighbors[0].getTime() - time_2dec) - Math.abs(neighbors[1].getTime() - time_2dec) > 0) ? neighbors[1] : neighbors[0];
-            //        } else {
-            //            keyframe = neighbors[0];
-            //        }
-            //    } else if (neighbors[1] && (Math.abs(neighbors[1].getTime() - time_2dec) < 0.05)) {
-            //        keyframe = neighbors[1];
-            //    }
-
-            //    my.timeline.allDeselected();
-            //    if (my.type == TAG.TourAuthoring.TrackType.audio) {
-            //        my.allKeyframes.push(keyframe);
-            //        that.drawLines();
-            //    }
-            //    else { // initialize keyframe and select it for further movements
-            //        keyframe.loadRIN(my.timeline.captureKeyframe(my.title)); // send in my.title to specify which keyframe should be captured (works for images and artworks)
-            //        keyframe.setSelected(true); // delay logging of edits
-            //        my.dirtyKeyframe = true; // dirty b/c it's new
-            //    }
-            //}
         }
     }
     that.captureTween = captureTween;

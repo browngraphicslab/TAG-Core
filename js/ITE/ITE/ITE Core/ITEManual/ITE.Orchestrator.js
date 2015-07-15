@@ -391,8 +391,16 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    for (i = 0; i < trackManager.length; i++) {
 	        var track = trackManager[i];
 	        if (track.type === "dz" || track.type === "image") {
-	            track.registerCaptureHandler(handlers[i]);
-	            track.registerCaptureFinishedHandler(handlers[i]);
+	            var handler_i = i;
+	            while (handlers[handler_i].trackname !== track.name) {
+	                handler_i++;
+	            }
+	            if (handlers[handler_i].trackname === track.name) {
+	                track.registerCaptureHandler(handlers[handler_i]);
+	                track.registerCaptureFinishedHandler(handlers[handler_i]);
+	            } else {
+	                console.log('error binding handler for track ' + track.name);
+	            }
 	        }
 	    }
 	}

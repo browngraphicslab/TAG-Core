@@ -31,6 +31,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	// Creates the field "self.keyframes", an AVL tree of keyframes arranged by "keyframe.time" field.
 	self.loadKeyframes(trackData.keyframes);
 	self.type = "image";
+	self.name = trackData.name;
 
     // DOM related.
     var _image,
