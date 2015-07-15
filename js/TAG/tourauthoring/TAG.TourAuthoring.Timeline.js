@@ -1727,6 +1727,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
      * @returns     Keyframe data in xml
      */
     function captureKeyframe(title) {
+        viewer.setIsReloading(true);
         return viewer.captureKeyframe(title);
     }
     that.captureKeyframe = captureKeyframe;
