@@ -9109,6 +9109,14 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			            "videoOffset": 0,
 			            "data": {}
 			        }
+			        keyFrame0.lead = keyFrame0;
+			        keyFrame1.lead = keyFrame0;
+			        keyFrame2.lead = keyFrame0;
+			        keyFrame3.lead = keyFrame0;
+			        keyFrame0.end = keyFrame3;
+			        keyFrame1.end = keyFrame3;
+			        keyFrame2.end = keyFrame3;
+			        keyFrame3.end = keyFrame3;
 			        keyFrames.push(keyFrame0);
 			        keyFrames.push(keyFrame1);
 			        keyFrames.push(keyFrame2);

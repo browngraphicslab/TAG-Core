@@ -34,6 +34,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	self.loadKeyframes(trackData.keyframes);
 	self.type = "video";
 	self.name = trackData.name;
+	self.displayNum = 0;
+	self.nextDisplayLeadKeyframe;
 
     // DOM related.
     var _video,
@@ -91,6 +93,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		// Get first and last keyframes.
 		self.firstKeyframe = self.keyframes.min();
 		self.lastKeyframe = self.keyframes.max();
+
+		self.displayNum = self.firstKeyframe.dispNum;
+		self.displayLeadKeyframe = self.firstKeyframe;
 
 		// Attach Handlers.
 		//attachHandlers();
@@ -444,9 +449,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		if (nextKeyframe) {
 			self.animate(nextKeyframe.time - startTime, self.getKeyframeState(nextKeyframe));
 		}
-        if(orchestrator.getElapsedTime())
-		_videoControls.play();
-		_videoControls.hasAttribute("controls") ? _videoControls.removeAttribute("controls") : null;
+		if (orchestrator.getElapsedTime()) {
+		    _videoControls.play();
+		    _videoControls.hasAttribute("controls") ? _videoControls.removeAttribute("controls") : null;
+		}
 	};
 
 	/*
@@ -553,12 +559,18 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		//If we're fading in, set the z-index to be the track's real z-index (as opposed to -1)
 		(state.opacity !== 0) && _UIControl.css("z-index", self.zIndex)
-
+		
 		// OnComplete function.
 		var onComplete = function () {
-			
-			//If we're fading out, set the z-index to -1 to prevent touches
-			(state.opacity === 0) && _UIControl.css("z-index", -1);
+		    self.displayNum = state.dispNum;
+		    //If we're fading out, set the z-index to -1 to prevent touches
+		    if (state.opacity === 0) {
+		        _UIControl.css("z-index", -1);
+		        self.displayLeadKeyframe = state.lead;
+		        self.displayEndKeyframe = state.end;
+		        _videoControls.pause();
+		        _videoControls.currentTime = 0;
+		    } 
 			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
 		};
 
@@ -617,6 +629,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.setState = function (state) {
+	    self.displayNum = state.dispNum;
+	    self.displayLeadKeyframe = state.lead;
+	    self.displayEndKeyframe = state.end;
 	    _UIControl.css({
 	        "opacity":		state.opacity
 	    });
@@ -669,16 +684,18 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		var lerpSizeY = startKeyframe.size.y + (interp * (endKeyframe.size.y - startKeyframe.size.y));
 		var lerpVolume = startKeyframe.volume + (interp * (endKeyframe.volume - startKeyframe.volume));
 		var state = {
-						"opacity"	: lerpOpacity,
-						"pos" : {
-									"top"	: lerpPosY + "px",
-								  	"left"	: lerpPosX + "px"
-								},
-						"size" : {
-						  			"width"	: lerpSizeX + "px"
-								},
-						"volume"	: lerpVolume
-					};
+		    "opacity": lerpOpacity,
+		    "pos": {
+		        "top": lerpPosY + "px",
+		        "left": lerpPosX + "px"
+		    },
+		    "size": {
+		        "width": lerpSizeX + "px"
+		    },
+		    "volume": lerpVolume,
+		    lead: endKeyframe.lead,
+            end: endKeyframe.end
+		};
 		return state;
 	};
 
