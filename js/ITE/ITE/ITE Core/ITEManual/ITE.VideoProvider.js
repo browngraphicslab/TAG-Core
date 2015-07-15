@@ -35,7 +35,6 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	self.type = "video";
 	self.name = trackData.name;
 	self.displayNum = 0;
-	self.nextDisplayLeadKeyframe;
 
     // DOM related.
     var _video,
@@ -96,6 +95,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		self.displayNum = self.firstKeyframe.dispNum;
 		self.displayLeadKeyframe = self.firstKeyframe;
+		self.displayEndKeyframe = self.firstKeyframe.end;
 
 		// Attach Handlers.
 		//attachHandlers();
@@ -185,7 +185,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	    if (_video.css('opacity') === 0) {
 	        _videoControls.pause();
 	    }
-	    else if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() <= self.lastKeyframe.time && orchestrator.getElapsedTime() >= self.firstKeyframe.time) {
+	    else if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() <= self.displayEndKeyframe.time && orchestrator.getElapsedTime() >= self.displayLeadKeyframe.time) {
             //console.log("entered if statement")
 	        pollHelper();
 	    }
@@ -203,11 +203,11 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	    if (_video.css('opacity') === 0) {
 	        _videoControls.pause();
 	    }
-	    else if (orchestrator.getElapsedTime() <= self.lastKeyframe.time && orchestrator.getElapsedTime() >= self.firstKeyframe.time) {
-	        if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4 && Math.abs(orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < .150) {
+	    else if (orchestrator.getElapsedTime() <= self.displayEndKeyframe.time && orchestrator.getElapsedTime() >= self.displayLeadKeyframe.time) {
+	        if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4 && Math.abs(orchestrator.getElapsedTime() - self.displayLeadKeyframe.time - _videoControls.currentTime) < .150) {
 	            //console.log("video played")
 	            _videoControls.play();
-	            if (_videoControls.currentTime >= (orchestrator.getElapsedTime() - self.firstKeyframe.time)) {
+	            if (_videoControls.currentTime >= (orchestrator.getElapsedTime() - self.displayLeadKeyframe.time)) {
 	                //console.log("orch played")
 	                orchestrator.play();
 	            }
@@ -217,7 +217,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	            //orchestrator.seek((self.firstKeyframe.time + _videoControls.currentTime) / orchestrator.getTourData().totalDuration)
                 
 	            try{
-	                _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
+	                _videoControls.currentTime = orchestrator.getElapsedTime() - self.displayLeadKeyframe.time;
 	            }
 	            catch (err) {
 	                console.log("error: " + err);
@@ -233,7 +233,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	                })
                     /*
 	                try{
-	                    orchestrator.seek((_videoControls.currentTime + self.firstKeyframe.time) / orchestrator.getTourData().totalDuration);
+	                    orchestrator.seek((_videoControls.currentTime + self.displayLeadKeyframe.time) / orchestrator.getTourData().totalDuration);
 	                }
 	                catch (error) {
 	                    console.log("second error: " + error)
@@ -244,7 +244,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	                    window.setTimeout(function () {
 	                        self.polling = true;
 	                        try{
-	                            _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
+	                            _videoControls.currentTime = orchestrator.getElapsedTime() - self.displayLeadKeyframe.time;
 	                        }
 	                        catch (e) {
 	                            console.log("post-timeout error: " + error)
@@ -255,21 +255,21 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
                     */
                     
 	            }
-	            //orchestrator.seek((_videoControls.currentTime + self.firstKeyframe.time) / orchestrator.getTourData().totalDuration);
+	            //orchestrator.seek((_videoControls.currentTime + self.displayLeadKeyframe.time) / orchestrator.getTourData().totalDuration);
 	        }
 	        else if (_videoControls.readyState < 3) {
 	            //console.log("video not ready")
 	            orchestrator.pause();
 	            orchestrator.status = 4;
 	        }
-	        else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) > .150) {
+	        else if ((orchestrator.getElapsedTime() - self.displayLeadKeyframe.time - _videoControls.currentTime) > .150) {
 	            //console.log("orch paused and status set to 4")
 	            orchestrator.pause();
 	            orchestrator.status = 4;
 	            _videoControls.pause();
 	        }
-	        else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < -.150) {
-	            _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
+	        else if ((orchestrator.getElapsedTime() - self.displayLeadKeyframe.time - _videoControls.currentTime) < -.150) {
+	            _videoControls.currentTime = orchestrator.getElapsedTime() - self.displayLeadKeyframe.time;
 	        }
 	    }
 	    else {
@@ -618,7 +618,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 				width	: _UIControl.width()
 			},
 			videoOffset	: _videoControls.currentTime,
-			volume		: _videoControls.volume/self.player.currentVolumeLevel
+			volume: _videoControls.volume / self.player.currentVolumeLevel,
+			lead: self.displayLeadKeyframe,
+			end: self.displayEndKeyframe,
+		    dispNum: self.displayNum
 		};	
 		return self.savedState;
 	};
@@ -652,16 +655,19 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.getKeyframeState = function(keyframe) {
 		var state = {
-						"opacity"	: keyframe.opacity,
-						"pos" : {
-									"top"	: keyframe.pos.y + "px",
-								  	"left"	: keyframe.pos.x + "px"
-								},
-						"size" : {
-						  			"width"	: keyframe.size.x + "px"
-								},
-						"volume"	: keyframe.volume
-					};
+		    "opacity": keyframe.opacity,
+		    "pos": {
+		        "top": keyframe.pos.y + "px",
+		        "left": keyframe.pos.x + "px"
+			},
+		    "size": {
+		        "width": keyframe.size.x + "px"
+		    },
+		    "volume": keyframe.volume,
+		    "lead": keyframe.lead,
+		    "end": keyframe.end,
+            "dispNum": keyframe.dispNum
+		};
 		return state;
 	}
 
@@ -694,7 +700,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		    },
 		    "volume": lerpVolume,
 		    lead: endKeyframe.lead,
-            end: endKeyframe.end
+		    end: endKeyframe.end,
+            dispNum: endKeyframe.dispNum
 		};
 		return state;
 	};
