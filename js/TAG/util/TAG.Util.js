@@ -9017,123 +9017,110 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			}
 			else if (providerID == 'video') {
 			    keyFrames = [];
-			    currExperienceStreamKey = Object.keys(currExperience.experienceStreams).sort()[0]
-                currExperienceStream = currExperience.experienceStreams[currExperienceStreamKey]
-			    /*
-			    keyframeObject = {
-			        "dispNum": k,
-			        "zIndex": track.data.zIndex,
-			        "time": time_offset + currKeyframe.offset,
-			        "opacity": 1,
-			        "size": {
-			            "x": currKeyframe.state.viewport.region.span.x * 100,
-			            "y": currKeyframe.state.viewport.region.span.y * 100
-			        },
-			        "pos": {
-			            "x": currKeyframe.state.viewport.region.center.x * 100,
-			            "y": currKeyframe.state.viewport.region.center.y * 100
-			        },
-			        "data": {}
-			    }
-                
-			    VIDEO:
-			        *			dispNum: display number
-                    *			time: time
-                    *			opacity: opacity
-                    *			pos{x, y}: position in x, y
-                    *			size{x, y}: size	
-                    *			volume: volume
-                    *			videoOffset: offset from the beginning of the video itsself
-                */
-                var w = $("#ITEContainer").width() ? $("#ITEContainer").width() : $("#tagRoot").width();
-                var h = $("#ITEContainer").height() ? $("#ITEContainer").height() : $("#tagRoot").height();
-                var screenplay = referenceDataMap[currExperienceStreamKey];
-                var fadeIn = 0, fadeOut = 0;
-                if (currExperienceStream.data.transition) {
-                    fadeIn = currExperienceStream.data.transition.inDuration;
-                    fadeOut = currExperienceStream.data.transition.outDuration;
-                }
+			    var idx;
+			    var keys = Object.keys(currExperience.experienceStreams).sort();
+			    for (idx = 0; idx < keys.length; idx++) {
+			        currExperienceStreamKey = Object.keys(currExperience.experienceStreams).sort()[idx]
+			        currExperienceStream = currExperience.experienceStreams[currExperienceStreamKey]
+			        /*
+                    VIDEO:
+                        *			dispNum: display number
+                        *			time: time
+                        *			opacity: opacity
+                        *			pos{x, y}: position in x, y
+                        *			size{x, y}: size	
+                        *			volume: volume
+                        *			videoOffset: offset from the beginning of the video itsself
+                    */
+			        var w = $("#ITEContainer").width() ? $("#ITEContainer").width() : $("#tagRoot").width();
+			        var h = $("#ITEContainer").height() ? $("#ITEContainer").height() : $("#tagRoot").height();
+			        var screenplay = referenceDataMap[currExperienceStreamKey];
+			        var fadeIn = 0, fadeOut = 0;
+			        if (currExperienceStream.data.transition) {
+			            fadeIn = currExperienceStream.data.transition.inDuration;
+			            fadeOut = currExperienceStream.data.transition.outDuration;
+			        }
 
-			    keyFrame0 = {
-			        "dispNum": 1,
-			        "zIndex": currExperienceStream.data.zIndex,
-			        "time": screenplay.begin,
-			        "opacity": 1,
-			        "size": {
-			            "x": w,
-			            "y": h
-			        },
-			        "pos": {
-			            "x": 0,
-			            "y": 0
-			        },
-			        "volume": 1,
-			        "videoOffset": 0,
-			        "data": {}
+			        keyFrame0 = {
+			            "dispNum": 1,
+			            "zIndex": currExperienceStream.data.zIndex,
+			            "time": screenplay.begin,
+			            "opacity": 0,
+			            "size": {
+			                "x": w,
+			                "y": h
+			            },
+			            "pos": {
+			                "x": 0,
+			                "y": 0
+			            },
+			            "volume": 1,
+			            "videoOffset": 0,
+			            "data": {}
+			        }
+			        keyFrame1 = {
+			            "dispNum": 1,
+			            "zIndex": currExperienceStream.data.zIndex,
+			            "time": screenplay.begin + fadeIn + 0.01,
+			            "opacity": 1,
+			            "size": {
+			                "x": w,
+			                "y": h
+			            },
+			            "pos": {
+			                "x": 0,
+			                "y": 0
+			            },
+			            "volume": 1,
+			            "videoOffset": 0,
+			            "data": {}
+			        }
+			        keyFrame2 = {
+			            "dispNum": 1,
+			            "zIndex": currExperienceStream.data.zIndex,
+			            "time": screenplay.begin + currExperienceStream.duration + 0.01,
+			            "opacity": 1,
+			            "size": {
+			                "x": w,
+			                "y": h
+			            },
+			            "pos": {
+			                "x": 0,
+			                "y": 0
+			            },
+			            "volume": 1,
+			            "videoOffset": 0,
+			            "data": {}
+			        }
+			        keyFrame3 = {
+			            "dispNum": 1,
+			            "zIndex": currExperienceStream.data.zIndex,
+			            "time": screenplay.begin + currExperienceStream.duration + fadeOut + 0.01,
+			            "opacity": 0,
+			            "size": {
+			                "x": w,
+			                "y": h
+			            },
+			            "pos": {
+			                "x": 0,
+			                "y": 0
+			            },
+			            "volume": 1,
+			            "videoOffset": 0,
+			            "data": {}
+			        }
+			        keyFrames.push(keyFrame0);
+			        keyFrames.push(keyFrame1);
+			        keyFrames.push(keyFrame2);
+			        keyFrames.push(keyFrame3);
+			        tracks.push({
+			            "name": rinDataExperiencesKeys[i],
+			            "providerId": providerID,
+			            "assetUrl": ITE_assetUrl(currExperience),
+			            "keyframes": keyFrames,
+			            "zIndex": currExperience.data.zIndex
+			        });
 			    }
-			    keyFrame1 = {
-			        "dispNum": 1,
-			        "zIndex": currExperienceStream.data.zIndex,
-			        "time": screenplay.begin + fadeIn + 0.01,
-			        "opacity": 1,
-			        "size": {
-			            "x": w,
-			            "y": h
-			        },
-			        "pos": {
-			            "x": 0,
-			            "y": 0
-			        },
-			        "volume": 1,
-			        "videoOffset": 0,
-			        "data": {}
-			    }
-			    keyFrame2 = {
-			        "dispNum": 1,
-			        "zIndex": currExperienceStream.data.zIndex,
-			        "time": screenplay.begin + currExperienceStream.duration + 0.01,
-			        "opacity": 1,
-			        "size": {
-			            "x": w,
-			            "y": h
-			        },
-			        "pos": {
-			            "x": 0,
-			            "y": 0
-			        },
-			        "volume": 1,
-			        "videoOffset": 0,
-			        "data": {}
-			    }
-			    keyFrame3 = {
-			        "dispNum": 1,
-			        "zIndex": currExperienceStream.data.zIndex,
-			        "time": screenplay.begin + currExperienceStream.duration + fadeOut + 0.01,
-			        "opacity": 0,
-			        "size": {
-			            "x": w,
-			            "y": h
-			        },
-			        "pos": {
-			            "x": 0,
-			            "y": 0
-			        },
-			        "volume": 1,
-			        "videoOffset": 0,
-			        "data": {}
-			    }
-			    keyFrames.push(keyFrame0);
-			    keyFrames.push(keyFrame1);
-			    keyFrames.push(keyFrame2);
-			    keyFrames.push(keyFrame3);
-			    tracks.push({
-			        "name": rinDataExperiencesKeys[i],
-			        "providerId": providerID,
-			        "assetUrl": ITE_assetUrl(currExperience),
-			        "keyframes": keyFrames,
-			        "zIndex": currExperience.data.zIndex
-			    });
-
 			} else {
 				tracks.push({
 				    "name": rinDataExperiencesKeys[i],
