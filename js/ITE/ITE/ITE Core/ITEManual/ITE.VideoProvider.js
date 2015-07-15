@@ -182,7 +182,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	function poll() {
 	    //console.log("polled orch time: " + orchestrator.getElapsedTime() + "    video time: " + _videoControls.currentTime + "    first keyframe time: " + self.firstKeyframe.time + "    computed offset: " + (orchestrator.getElapsedTime() - _videoControls.currentTime));
         //console.log("orchestrator status: "+orchestrator.getStatus() + "   last key frame time: "+self.lastKeyframe.time+"    _videwoControls readystate: "+_videoControls.readyState)
-	    if (_video.css('opacity') === 0) {
+	    if (_UIControl.css('z-index')==='-1') {
 	        _videoControls.pause();
 	    }
 	    else if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() <= self.displayEndKeyframe.time && orchestrator.getElapsedTime() >= self.displayLeadKeyframe.time) {
@@ -200,7 +200,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	};
 
 	function pollHelper() {//to be called durring poll and seeking
-	    if (_video.css('opacity') === 0) {
+	    if (_UIControl.css('z-index') === '-1') {
 	        _videoControls.pause();
 	    }
 	    else if (orchestrator.getElapsedTime() <= self.displayEndKeyframe.time && orchestrator.getElapsedTime() >= self.displayLeadKeyframe.time) {
