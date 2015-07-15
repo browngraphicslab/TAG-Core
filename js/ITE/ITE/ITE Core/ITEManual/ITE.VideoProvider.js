@@ -177,7 +177,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	function poll() {
 	    //console.log("polled orch time: " + orchestrator.getElapsedTime() + "    video time: " + _videoControls.currentTime + "    first keyframe time: " + self.firstKeyframe.time + "    computed offset: " + (orchestrator.getElapsedTime() - _videoControls.currentTime));
         //console.log("orchestrator status: "+orchestrator.getStatus() + "   last key frame time: "+self.lastKeyframe.time+"    _videwoControls readystate: "+_videoControls.readyState)
-	    if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() <= self.lastKeyframe.time && orchestrator.getElapsedTime() >= self.firstKeyframe.time) {
+	    if (_video.css('opacity') === 0) {
+	        _videoControls.pause();
+	    }
+	    else if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() <= self.lastKeyframe.time && orchestrator.getElapsedTime() >= self.firstKeyframe.time) {
             //console.log("entered if statement")
 	        pollHelper();
 	    }
@@ -192,7 +195,10 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	};
 
 	function pollHelper() {//to be called durring poll and seeking
-	    if (orchestrator.getElapsedTime() <= self.lastKeyframe.time && orchestrator.getElapsedTime() >= self.firstKeyframe.time) {
+	    if (_video.css('opacity') === 0) {
+	        _videoControls.pause();
+	    }
+	    else if (orchestrator.getElapsedTime() <= self.lastKeyframe.time && orchestrator.getElapsedTime() >= self.firstKeyframe.time) {
 	        if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4 && Math.abs(orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < .150) {
 	            //console.log("video played")
 	            _videoControls.play();
