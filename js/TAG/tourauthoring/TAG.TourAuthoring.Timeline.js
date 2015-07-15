@@ -1897,6 +1897,11 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                     viewer.setIsReloading(false);
                     viewer.setCaptureStarted(false);
                     viewer.capturingBackOn();
+                    //if (dataHolder.numTracks() < 1) {
+                    //    viewer.setIsReloading(false);
+                    //    viewer.setCaptureStarted(false);
+                    //    viewer.capturingBackOn();
+                    //}
                 }, 500);
             });
         }
