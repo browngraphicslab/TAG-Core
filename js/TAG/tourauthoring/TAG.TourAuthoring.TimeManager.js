@@ -238,7 +238,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     }
 
     function play() {
-        if (viewer && viewer.getIsReloading()) {
+        if (viewer && (viewer.getIsReloading()||viewer.getCaptureStarted())) {
             return
         }
         var interval = 100, last = -10,

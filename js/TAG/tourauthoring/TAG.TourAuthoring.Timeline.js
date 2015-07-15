@@ -1727,7 +1727,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
      * @returns     Keyframe data in xml
      */
     function captureKeyframe(title) {
-        viewer.setIsReloading(true);
+        viewer.setCaptureStarted(true);
         return viewer.captureKeyframe(title);
     }
     that.captureKeyframe = captureKeyframe;
@@ -1895,6 +1895,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                     viewer.getPlayer().scrubTimeline(timeManager.getCurrentPercent());
                     viewer.getPlayer().updateInkPositions();
                     viewer.setIsReloading(false);
+                    viewer.setCaptureStarted(false);
                     viewer.capturingBackOn();
                 }, 500);
             });

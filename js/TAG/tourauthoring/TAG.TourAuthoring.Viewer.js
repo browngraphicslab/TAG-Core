@@ -51,7 +51,11 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         },
 
         // reload state boolean
-        isReloading = false;
+        isReloading = false,
+
+        captureStarted = false;
+
+        
 
     that.tour = tour;
 
@@ -540,6 +544,16 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         isReloading = bool;
     }
     that.setIsReloading = setIsReloading;
+
+    function setCaptureStarted(started) {
+        captureStarted = started;
+    }
+    that.setCaptureStarted = setCaptureStarted;
+
+    function getCaptureStarted() {
+        return captureStarted;
+    }
+    that.getCaptureStarted = getCaptureStarted;
 
     function initializeTour(data) {
         var ctime;

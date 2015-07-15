@@ -2452,6 +2452,11 @@ function trackTitleReleased(evt) {
 
      //adds a key frame or display    
     function addKeyorDisplay(evt) {
+        console.log("~~~~~~~~~~ Add key or display called in tour athoring track~~~~~~~~~~~~~~")
+        console.log("is reloading: " + my.timeline.getViewer().getIsReloading() + "         capture started: " + my.timeline.getViewer().getCaptureStarted());
+        if (my.timeline.getViewer().getIsReloading() || my.timeline.getViewer().getCaptureStarted) {
+            return;
+        }
         var positionX = evt.position.x,
             newTime = my.timeManager.pxToTime(positionX),
             positionY = evt.position.y,
@@ -2569,6 +2574,9 @@ function trackTitleReleased(evt) {
 
     function captureHandler(evt) {
         my.timeManager.stop();
+        if (my.timeline.getViewer().getIsReloading()) {
+            return;
+        }
         captureTween(evt);
         my.update();
     }
