@@ -9042,7 +9042,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			        }
 
 			        keyFrame0 = {
-			            "dispNum": 1,
+			            "dispNum": idx + 1,
 			            "zIndex": currExperienceStream.data.zIndex,
 			            "time": screenplay.begin,
 			            "opacity": 0,
@@ -9059,7 +9059,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			            "data": {}
 			        }
 			        keyFrame1 = {
-			            "dispNum": 1,
+			            "dispNum": idx + 1,
 			            "zIndex": currExperienceStream.data.zIndex,
 			            "time": screenplay.begin + fadeIn + 0.01,
 			            "opacity": 1,
@@ -9076,7 +9076,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			            "data": {}
 			        }
 			        keyFrame2 = {
-			            "dispNum": 1,
+			            "dispNum": idx + 1,
 			            "zIndex": currExperienceStream.data.zIndex,
 			            "time": screenplay.begin + currExperienceStream.duration + 0.01,
 			            "opacity": 1,
@@ -9093,7 +9093,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			            "data": {}
 			        }
 			        keyFrame3 = {
-			            "dispNum": 1,
+			            "dispNum": idx + 1,
 			            "zIndex": currExperienceStream.data.zIndex,
 			            "time": screenplay.begin + currExperienceStream.duration + fadeOut + 0.01,
 			            "opacity": 0,
@@ -9113,14 +9113,15 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 			        keyFrames.push(keyFrame1);
 			        keyFrames.push(keyFrame2);
 			        keyFrames.push(keyFrame3);
-			        tracks.push({
-			            "name": rinDataExperiencesKeys[i],
-			            "providerId": providerID,
-			            "assetUrl": ITE_assetUrl(currExperience),
-			            "keyframes": keyFrames,
-			            "zIndex": currExperience.data.zIndex
-			        });
 			    }
+
+			    tracks.push({
+			        "name": rinDataExperiencesKeys[i],
+			        "providerId": providerID,
+			        "assetUrl": ITE_assetUrl(currExperience),
+			        "keyframes": keyFrames,
+			        "zIndex": currExperience.data.zIndex
+			    });
 			} else {
 				tracks.push({
 				    "name": rinDataExperiencesKeys[i],
