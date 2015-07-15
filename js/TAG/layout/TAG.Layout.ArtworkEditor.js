@@ -895,6 +895,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 width: '100%',
                 display: 'none',
             });
+            tnBorderWrapper.css("pointer-events", 'none');
 
             tnBorderCenter = $(document.createElement('div'));
             tnBorderCenter.addClass("tnBorderCenter");
