@@ -180,6 +180,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
             //console.log("entered if statement")
 	        pollHelper();
 	    }
+	    else if (orchestrator.getElapsedTime() >= self.lastKeyframe.time || orchestrator.getElapsedTime() <= self.firstKeyframe.time) {
+	        _videoControls.pause();
+	    }
         
 	    if (self.polling) {
 	        setTimeout(function () { poll(); }, 200);
@@ -256,6 +259,9 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	        else if ((orchestrator.getElapsedTime() - self.firstKeyframe.time - _videoControls.currentTime) < -.150) {
 	            _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
 	        }
+	    }
+	    else {
+	        _videoControls.pause();
 	    }
 	}
 
