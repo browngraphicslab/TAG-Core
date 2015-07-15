@@ -983,6 +983,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 'top': '8%',
                 'float': 'right'
             });
+            tnSave.css("pointer-events", 'all');
             tnSave.on("click", save);
 
             tnBorderBottom.append(tnHelp);
