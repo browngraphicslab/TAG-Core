@@ -377,7 +377,9 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	function getTrackBehind(zIndex, evt) {
 	    manipulated = null;
 	    for (var i = zIndex - 1; i >= 0; i--) {
-	        depth = self.trackManager[i].trackData.zIndex;
+	        if (!self.trackManager[i]) {
+	            continue;
+	        }
 	        if (self.trackManager[i].isInImageBounds && self.trackManager[i].isInImageBounds(evt)) {
 	            return self.trackManager[i];
 	        }
