@@ -2207,13 +2207,24 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             tileDiv.empty();
             tileDivHeight = tileDiv.height();
 
+            var hiddenTours = 0;
             
             for (j = 0; j < works.length; j++) {
-                if (tag){
-                    loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i+j, j === works.length-1));
+                if (tag) {
+                    if (works[j].artwork.Metadata.ContentType !== 'tour' || works[j].artwork.Metadata.Private !== "true") {
+                        loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i + j - hiddenTours, j === works.length - 1));
+                    }
+                    else {
+                        hiddenTours++;
+                    }
                 }
-                else{
-                    loadQueue.add(drawArtworkTile(works[j], null, onSearch, i+j, j === works.length-1));
+                else {
+                    if (works[j].Metadata.ContentType !== 'tour' || works[j].Metadata.Private !== "true") {
+                        loadQueue.add(drawArtworkTile(works[j], null, onSearch, i + j - hiddenTours, j === works.length - 1));
+                    }
+                    else {
+                        hiddenTours++;
+                    }
                 }
             }
             if (works.length == 0) {
