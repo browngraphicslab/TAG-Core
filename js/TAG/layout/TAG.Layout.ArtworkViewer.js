@@ -166,7 +166,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     annotatedImage.openArtwork(doq);
                 } catch(err) {
                     debugger;
-                    console.log(err); // TODO if we hit a network error, show an error message
+                    doNothing(err); // TODO if we hit a network error, show an error message
                 }
                 TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                 initSplitscreen();
@@ -271,8 +271,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         var splitScreenLabel = $(document.createElement('div')).css({'font-size':'40%', 'bottom':'0%', 'margin-top':'-2%'}).text('Splitscreen').appendTo(splitscreenContainer);
 
         root.append(splitscreenContainer);
-        console.log('locked' + locked);
-        console.log(!locked);
+        doNothing('locked' + locked);
+        doNothing(!locked);
         if (TAG.Util.Splitscreen.isOn() || (locked !== undefined && locked !== 'undefined')) {
             splitscreenContainer.css('display', 'none');
         }
@@ -350,7 +350,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
             tobj.current_artwork = doq.Identifier;
             tobj.time_spent = telemetry_timer.get_elapsed();
-            //console.log(tobj.time_spent);
+            //doNothing(tobj.time_spent);
         });
 
 
@@ -363,7 +363,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         container.append(sdupbtn);
 
         if (sddownbtn.width()) {
-            console.log("got valid height"+ sddownbtn.height());
+            doNothing("got valid height"+ sddownbtn.height());
             sdleftbtn.css('height', sddownbtn.width());
             sdrightbtn.css('height', sddownbtn.width());
         }
@@ -698,7 +698,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             tobj.sidebar_open = !isBarOpen;
             tobj.current_artwork = doq.Identifier;   
             tobj.time_spent = t_timer.get_elapsed();
-            //console.log(tobj.time_spent);
+            //doNothing(tobj.time_spent);
         });
 
         TAG.Util.UI.setUpBackButton(backButton, goBack);
@@ -1410,7 +1410,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
         //PART OF CUSTOM BUILD FOR THE SAM
         /*for (i = 0; i < associatedMedia.guids.length; i++) {
-            //console.log("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
+            //doNothing("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
             if (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type && (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type === "Hotspot")) {
                 loadQueue.add(associatedMedia[associatedMedia.guids[i]].showHotspot());
             }

@@ -121,7 +121,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		_videoControls.onerror = function (err){
             switch (err.target.error.code){
                 case err.target.error.MEDIA_ERR_NETWORK:
-                    console.log("caught media error");
+                    doNothing("caught media error");
                     orchestrator.pause();
                 	//Sets the image’s URL source
                 	//orchestrator.load();
@@ -131,7 +131,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
                     //3 seconds before replaying the video from the beginning. The timeout and message 
                     //are for the benefit of the person watching the video. The message also displays when seeking to an unloaded time
                     if (self.lastError === self.lastPauseTime) {
-                        console.log("the error was the same as the last pause time")
+                        doNothing("the error was the same as the last pause time")
                         self.waiting = true;
 
                         if (!self.errorAppended) {
@@ -141,17 +141,17 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
                         //orchestrator.pause();
                         //orchestrator.load();
                         _videoControls.currentTime = orchestrator.getElapsedTime() - self.firstKeyframe.time;
-                        console.log("reloaded to time: " + _videoControls.currentTime);
+                        doNothing("reloaded to time: " + _videoControls.currentTime);
                         //orchestrator.play();
                         self.polling = false;
                         orchestrator.pause();
                         setTimeout(function(){
-                            console.log("waited then tried again");
+                            doNothing("waited then tried again");
                             _videoControls.currentTime = orchestrator.getElapsedTime();
                             _videoControls.removeAttribute("controls");
                             _videoControls.load();
                             setTimeout(function () {
-                                console.log("finally playing now")
+                                doNothing("finally playing now")
                                 self.polling = true;
                                 poll();
                                 orchestrator.play();
@@ -162,8 +162,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
                     }
                     else {
                         self.lastError = self.lastPauseTime;
-                        console.log("self.lastPauseTime: " + self.lastPauseTime);
-                        console.log("timeOffset: " + timeOffset);
+                        doNothing("self.lastPauseTime: " + self.lastPauseTime);
+                        doNothing("timeOffset: " + timeOffset);
                         _videoControls.currentTime = self.lastPauseTime + timeOffset;
                         orchestrator.play();
                         break;
@@ -180,13 +180,13 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
      * O/P:     none
      */
 	function poll() {
-	    //console.log("polled orch time: " + orchestrator.getElapsedTime() + "    video time: " + _videoControls.currentTime + "    first keyframe time: " + self.firstKeyframe.time + "    computed offset: " + (orchestrator.getElapsedTime() - _videoControls.currentTime));
-        //console.log("orchestrator status: "+orchestrator.getStatus() + "   last key frame time: "+self.lastKeyframe.time+"    _videwoControls readystate: "+_videoControls.readyState)
+	    //doNothing("polled orch time: " + orchestrator.getElapsedTime() + "    video time: " + _videoControls.currentTime + "    first keyframe time: " + self.firstKeyframe.time + "    computed offset: " + (orchestrator.getElapsedTime() - _videoControls.currentTime));
+        //doNothing("orchestrator status: "+orchestrator.getStatus() + "   last key frame time: "+self.lastKeyframe.time+"    _videwoControls readystate: "+_videoControls.readyState)
 	    if (_UIControl.css('z-index')==='-1') {
 	        _videoControls.pause();
 	    }
 	    else if (orchestrator.getStatus() != 2 && orchestrator.getElapsedTime() <= self.displayEndKeyframe.time && orchestrator.getElapsedTime() >= self.displayLeadKeyframe.time) {
-            //console.log("entered if statement")
+            //doNothing("entered if statement")
 	        pollHelper();
 	    }
 	    else if (orchestrator.getElapsedTime() >= self.lastKeyframe.time || orchestrator.getElapsedTime() <= self.firstKeyframe.time) {
@@ -205,28 +205,28 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	    }
 	    else if (orchestrator.getElapsedTime() <= self.displayEndKeyframe.time && orchestrator.getElapsedTime() >= self.displayLeadKeyframe.time) {
 	        if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4 && Math.abs(orchestrator.getElapsedTime() - self.displayLeadKeyframe.time - _videoControls.currentTime) < .150) {
-	            //console.log("video played")
+	            //doNothing("video played")
 	            _videoControls.play();
 	            if (_videoControls.currentTime >= (orchestrator.getElapsedTime() - self.displayLeadKeyframe.time)) {
-	                //console.log("orch played")
+	                //doNothing("orch played")
 	                orchestrator.play();
 	            }
 	        }
 	        else if (orchestrator.getStatus() == 4 && _videoControls.readyState == 4) {
-	            //console.log("reset video time to " + orchestrator.getElapsedTime() - self.firstKeyframe.time)
+	            //doNothing("reset video time to " + orchestrator.getElapsedTime() - self.firstKeyframe.time)
 	            //orchestrator.seek((self.firstKeyframe.time + _videoControls.currentTime) / orchestrator.getTourData().totalDuration)
                 
 	            try{
 	                _videoControls.currentTime = orchestrator.getElapsedTime() - self.displayLeadKeyframe.time;
 	            }
 	            catch (err) {
-	                console.log("error: " + err);
+	                doNothing("error: " + err);
 	                self.resetVideo();
 	                self.polling = false;
 	                orchestrator.pause();
 	                // Ensure that the video is completely loaded.
 	                _videoControls.addEventListener("canplay", function () {
-	                    console.log("~~~~~~  VIDEO CAN PLAY AGAIN ~~~~~~");
+	                    doNothing("~~~~~~  VIDEO CAN PLAY AGAIN ~~~~~~");
 	                    self.polling = true;
 	                    poll();
 	                    orchestrator.play();
@@ -236,7 +236,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	                    orchestrator.seek((_videoControls.currentTime + self.displayLeadKeyframe.time) / orchestrator.getTourData().totalDuration);
 	                }
 	                catch (error) {
-	                    console.log("second error: " + error)
+	                    doNothing("second error: " + error)
 	                    self.resetVideo();
 	                    orchestrator.pause();
 	                    orchestrator.status = 4;
@@ -247,7 +247,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	                            _videoControls.currentTime = orchestrator.getElapsedTime() - self.displayLeadKeyframe.time;
 	                        }
 	                        catch (e) {
-	                            console.log("post-timeout error: " + error)
+	                            doNothing("post-timeout error: " + error)
 	                        }
 	                        poll();
 	                    }, 400);
@@ -258,12 +258,12 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	            //orchestrator.seek((_videoControls.currentTime + self.displayLeadKeyframe.time) / orchestrator.getTourData().totalDuration);
 	        }
 	        else if (_videoControls.readyState < 3) {
-	            //console.log("video not ready")
+	            //doNothing("video not ready")
 	            orchestrator.pause();
 	            orchestrator.status = 4;
 	        }
 	        else if ((orchestrator.getElapsedTime() - self.displayLeadKeyframe.time - _videoControls.currentTime) > .150) {
-	            //console.log("orch paused and status set to 4")
+	            //doNothing("orch paused and status set to 4")
 	            orchestrator.pause();
 	            orchestrator.status = 4;
 	            _videoControls.pause();
@@ -314,7 +314,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Ensure that the video is completely loaded.
 		_videoControls.addEventListener("canplay", function () {
-		    console.log("video can play")
+		    doNothing("video can play")
 
 
 			// Update first state.
@@ -334,7 +334,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 		// function monitor(timeWaited) {
 		// 	timeWaited = timeWaited || 0;
 		// 	if (timeWaited > 2000) {
-		// 		console.log("Video failed to load!");
+		// 		doNothing("Video failed to load!");
 		// 	}
 		// 	else if (_videoControls.readyState !== 4) {
 		// 		setTimeout(function(){ monitor(timeWaited+100); }, 100);
@@ -405,8 +405,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	self.seekToTime = function (time) {
 		if (time < self.lastKeyframe.time - self.firstKeyframe.time) {
-	    	console.log("seeked to time: " + time);
-	    	console.log(_videoControls);
+	    	doNothing("seeked to time: " + time);
+	    	doNothing(_videoControls);
 	    	_videoControls.currentTime = time;
 	    	updateInk(true);
 	    	pollHelper();
@@ -904,7 +904,7 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
     	         top: top + res.translation.y,
     	         left: left + res.translation.x
     	     })
-            console.log(_UIControl.position().top)
+            doNothing(_UIControl.position().top)
 
     	} else {
 

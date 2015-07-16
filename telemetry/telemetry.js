@@ -52,7 +52,7 @@ TAG.Telemetry = (function () {
                 metaDataRequests.push(property);
                 metaDataRequests.push(main_tobj);
                 postMetaDataRequests();
-                // console.log("metadataobj is " + " " + main_tobj);
+                // doNothing("metadataobj is " + " " + main_tobj);
             }
         }
     }
@@ -91,7 +91,7 @@ TAG.Telemetry = (function () {
             };
             tobj.is_splitscreen = TAG.Util.Splitscreen.isOn();
             TAG.TelemetryEvents.initEventProperties(tobj);
-            // console.log("sessiondataobj is " + " " + tobj);
+            // doNothing("sessiondataobj is " + " " + tobj);
 
             // if preHandler returns true, return
             if ((preHandler && preHandler(tobj, evt)) || TELEMETRY_SWITCH === 'off') {
@@ -112,7 +112,7 @@ TAG.Telemetry = (function () {
 
     //Manually record events from the existing event handlers instead of registering an additional handler
     function recordEvent(ttype, preHandler) {
-        // console.log("record called in telemetry.js");
+        // doNothing("record called in telemetry.js");
         var tobj = {
             ttype: ttype,
             session_id: TELEMETRY_SESSION_ID,
@@ -137,7 +137,7 @@ TAG.Telemetry = (function () {
 	 * @method postTelemetryRequests
 	 */
     function postMetaDataRequests() {
-        // console.log("post metadata requests called");
+        // doNothing("post metadata requests called");
         var data = JSON.stringify(metaDataRequests);
 
         metaDataRequests.length = 0;
@@ -148,16 +148,16 @@ TAG.Telemetry = (function () {
             data: data, // this should be encrypted.toString() for encrypting the data
             async: true, // this is the default, but just make it explicit
             success: function () {
-                // console.log('POST request to server worked');
+                // doNothing('POST request to server worked');
             },
             error: function (e) {
-                // console.log('telemetry error! look at node output...');
+                // doNothing('telemetry error! look at node output...');
             }
         });
     }
 
     function postSessionDataRequests() {
-        // console.log("post session data requests called");
+        // doNothing("post session data requests called");
         var data = JSON.stringify(sessionDataRequests);
 
         sessionDataRequests.length = 0;
@@ -168,10 +168,10 @@ TAG.Telemetry = (function () {
             data: data, // this should be encrypted.toString() for encrypting the data
             async: true, // this is the default, but just make it explicit
             success: function () {
-                // console.log('POST request to server worked');
+                // doNothing('POST request to server worked');
             },
             error: function (e) {
-                // console.log('telemetry error! look at node output...');
+                // doNothing('telemetry error! look at node output...');
             }
         });
     }

@@ -156,10 +156,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     });
 
     if (lockKioskMode == "true") {
-        console.log("kiosk mode locked, back button disabled")
+        doNothing("kiosk mode locked, back button disabled")
         backButton.css('display', 'none');
     } else {
-        console.log("kiosk mode unlocked, back button enabled")
+        doNothing("kiosk mode unlocked, back button enabled")
         //collectionMenu.css('left', '5%');
         if (IS_WINDOWS) {
             backButton.css('padding-top', '');
@@ -1436,7 +1436,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                     }
                                 });
             } else {
-                console.log(collection.Metadata);
+                doNothing(collection.Metadata);
                 filtersDiv.css('display','none');
                 divideDiv.css('display','none');
             }
@@ -1568,7 +1568,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         $(root).click(function(event) {
             if (event.target.id != 'dropDownArrow' && event.target.id !='collection-title' && event.target.id != 'centeredCollectionHeader' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
                 if (menu.style.display == 'block') {
-                    console.log("here " + event.target.id)
+                    doNothing("here " + event.target.id)
                     menu.style.display = 'none';
                     arrow.style.transform = 'rotate(270deg)';
                     arrow.style.webkitTransform = 'rotate(270deg)';
@@ -1657,8 +1657,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                          .off()
                             .on('mousedown', function () {
                                 //currentArtwork = null;
-                                console.log($(this).attr('id'));
-                                console.log(sortButtonTags[$(this).attr('id')]);
+                                doNothing($(this).attr('id'));
+                                doNothing(sortButtonTags[$(this).attr('id')]);
                                 changeDisplayTag(currentArtworks, sortButtonTags[this.textContent == "Tours" ? 'Tour' : this.textContent]);
                             });
                
@@ -2429,9 +2429,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                 tobj.close = false; //it was closed
                                 tobj.assoc_media = false;
                                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                //console.log(tobj.time_spent);
+                                //doNothing(tobj.time_spent);
                                 //timer reset in showArtwork
-                                console.log("DOUBLE CLICKED ON THE TILE");
+                                doNothing("DOUBLE CLICKED ON THE TILE");
                             });
 
 
@@ -2462,9 +2462,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                     tobj.close = false; //it was closed
                                     tobj.assoc_media = false;
                                     tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                    //console.log(tobj.time_spent);
+                                    //doNothing(tobj.time_spent);
                                     //timer reset in showArtwork
-                                    console.log("DOUBLE CLICKED ON THE ASSOC MEDIA TILE");
+                                    doNothing("DOUBLE CLICKED ON THE ASSOC MEDIA TILE");
                                 });
 
 
@@ -3011,7 +3011,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     }
     
     function zoomTimeline(circle) {
-        console.log("zoom timeline called");
+        doNothing("zoom timeline called");
         var i,
             j,
             k,
@@ -3025,7 +3025,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
         for (i = 0; i < timelineEventCircles.length ; i++) {
             //if (!circle) {
-                //console.log("no particular circle to zoom on - all circles visible");
+                //doNothing("no particular circle to zoom on - all circles visible");
                 timelineEventCircles[i].css('visibility', 'visible');
                 timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
             //}
@@ -3043,11 +3043,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             //When last animation done, loop through and hide/show date labels
             if (i === timelineEventCircles.length-1){
                 otherCircle.on('webkitTransitionEnd transitionend msTransitionEnd oTransitionEnd', function () {
-                    console.log("Webkit transition end now")
+                    doNothing("Webkit transition end now")
                     for (k=0; k < timelineEventCircles.length; k++){
                         displayLabels(timelineEventCircles[k], circle);
                         if (circle) {
-                            console.log("CIRCLE IS NOT NULL")
+                            doNothing("CIRCLE IS NOT NULL")
                             //  timelineEventCircles[k].css('visibility', 'visible');
                             //timelineEventCircles[k].timelineDateLabel.css('visibility', 'visible');
                         }
@@ -3134,7 +3134,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             zoomTimeline();
 
             for (var i = 0; i < timelineEventCircles.length; ++i) {
-                console.log("no particular circle to zoom on - all circles visible");
+                doNothing("no particular circle to zoom on - all circles visible");
                 timelineEventCircles[i].css('visibility', 'visible');
                 timelineEventCircles[i].timelineDateLabel.css('visibility', 'visible');
             }
@@ -3155,9 +3155,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 tobj.close = true; //it was closed
                 tobj.assoc_media = false;  
                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                //console.log(tobj.time_spent);
+                //doNothing(tobj.time_spent);
                 //timer reset in showArtwork
-                // console.log("ARTWORK PREVIEWER WAS CLOSED");
+                // doNothing("ARTWORK PREVIEWER WAS CLOSED");
             });
             
         };
@@ -3230,7 +3230,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             if (!artworkShown){ //FOR NOW - switching between artworks in the previewer does not 
                                 //reset the timer, and the total time spent with the previewer
                                 //open is recorded (this is only one event)
-                //console.log("restarting previewer timer");
+                //doNothing("restarting previewer timer");
                 global_artwork_prev_timer.restart(); //restarts the previewer timer for telemetry
             }
 
@@ -3353,9 +3353,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 /*
                 if (e.target.id.toString()){
                     previewer_exit_click = e.target.id.toString();
-                    console.log(previewer_exit_click);
+                    doNothing(previewer_exit_click);
                 } else {
-                    console.log("closed previewer; target has no id");
+                    doNothing("closed previewer; target has no id");
                 }
                 */
 
@@ -3486,9 +3486,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             tobj.close = false; //it was closed
                             tobj.assoc_media = false;  
                             tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                            //console.log(tobj.time_spent);
+                            //doNothing(tobj.time_spent);
                             //timer reset in showArtwork
-                            console.log("TAP TO EXPLORE");
+                            doNothing("TAP TO EXPLORE");
                         });
 
                     });
@@ -3560,9 +3560,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         tobj.close = false; //it was closed
                         tobj.assoc_media = false;  
                         tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                        //console.log(tobj.time_spent);
+                        //doNothing(tobj.time_spent);
                         //timer reset in showArtwork
-                        // console.log("CLICKED ON THE ARTWORK TILE");
+                        // doNothing("CLICKED ON THE ARTWORK TILE");
                     });
 
                 });
@@ -3774,9 +3774,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             tobj.close = false; //it was closed
                             tobj.assoc_media = true;  
                             tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                            //console.log(tobj.time_spent);
+                            //doNothing(tobj.time_spent);
                             //timer reset in showArtwork
-                            console.log("CLICKED ON AN ASSOCIATED MEDIA");
+                            doNothing("CLICKED ON AN ASSOCIATED MEDIA");
                         });
 
 
@@ -3856,9 +3856,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                 tobj.close = false; //it was closed
                                 tobj.assoc_media = true;  
                                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                //console.log(tobj.time_spent);
+                                //doNothing(tobj.time_spent);
                                 //timer reset in showArtwork
-                                console.log("CLICKED ON EXPLORE TAB (FIRST ARTWORK) IN ASSOCIATED MEDIA VIEW");
+                                doNothing("CLICKED ON EXPLORE TAB (FIRST ARTWORK) IN ASSOCIATED MEDIA VIEW");
                             });
 
                         });
@@ -3880,9 +3880,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                 tobj.close = false; //it was closed
                                 tobj.assoc_media = true;  
                                 tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                //console.log(tobj.time_spent);
+                                //doNothing(tobj.time_spent);
                                 //timer reset in showArtwork
-                                console.log("CLICKED ON THUMBNAIL (FIRST ARTWORK) IN ASSOCIATED MEDIA VIEW");
+                                doNothing("CLICKED ON THUMBNAIL (FIRST ARTWORK) IN ASSOCIATED MEDIA VIEW");
                             });
 
                         });
@@ -3942,7 +3942,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
 
                 if (timelineEventCircles[i] && artworkCircles[artwork.Identifier] && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(artworkCircles[artwork.Identifier].yearKey)) && (timelineEventCircles[i] != artworkCircles[artwork.Identifier])) {
-                    console.log("Artwork circles should hide?!?");
+                    doNothing("Artwork circles should hide?!?");
                     timelineEventCircles[i].css('visibility', 'hidden');
                     timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
                 }

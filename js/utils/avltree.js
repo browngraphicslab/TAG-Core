@@ -69,7 +69,7 @@ AVLTree.prototype.add = function (toAdd) {
         var added = this._root.add(toAdd);
         this._root = added[0];
         if (!added[1] || !added[0]) {
-            console.log("failed to add data");
+            doNothing("failed to add data");
         }
         return added[1];
     }
@@ -132,7 +132,7 @@ AVLTree.prototype.printAVL = function () {
     var contents = this.getContents();
     
     for (var i=0; i<contents.length; i++){
-        console.log(contents[i].key);
+        doNothing(contents[i].key);
     }
 };
 
@@ -222,7 +222,7 @@ AVLTree.prototype.debugNN = function (value) {
     var result = this.nearestNeighbors(value);
     var a = (result[0]) ? result[0].key : "is null";
     var b = (result[1]) ? result[1].key : "is null";
-    console.log(a + ", " + b);
+    doNothing(a + ", " + b);
 }
 
 // public findnext

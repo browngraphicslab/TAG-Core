@@ -139,7 +139,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      * @method playVideo
      */
     function playVideo() {
-        console.log('PLAY VID');
+        doNothing('PLAY VID');
         errorDiv.remove();
         errorAppended = false;
         videoElt.play();
@@ -157,7 +157,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
      * @method pauseVideo
      */
     function pauseVideo() {
-        console.log('PAUSE VID');
+        doNothing('PAUSE VID');
         videoElt.pause();
         lastStop = videoElt.currentTime;
         lastPauseTime = Date.now()/1000;
@@ -360,7 +360,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
         videoElt.onerror = function (err){
             switch (err.target.error.code){
                 case err.target.error.MEDIA_ERR_NETWORK:
-                    console.log("caught network error");
+                    doNothing("caught network error");
                     initPage();
                     videoElt.load();
                     var timeOffset = Date.now()/1000 - lastPauseTime;
@@ -373,7 +373,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
                             errorAppended = true;
                         }
                         setTimeout(function(){
-                            console.log("couldn't restart, waited then tried again");
+                            doNothing("couldn't restart, waited then tried again");
                             initPage();
                             videoElt.load();
                             playVideo();

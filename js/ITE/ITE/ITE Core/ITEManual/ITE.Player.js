@@ -449,7 +449,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
     */
 
     function clearControlsTimeout() {
-        console.log("controls timeout clear called")
+        doNothing("controls timeout clear called")
         if (controlsTimeout) {
             window.clearTimeout(controlsTimeout);
         }
@@ -462,7 +462,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
     * O/P:   none
     */
     function setControlsFade() {
-        console.log("set controls fade called")
+        doNothing("set controls fade called")
         if (playerConfiguration.fadeControls) {
             controlsTimeout = window.setTimeout(function () {
                 time = 500
@@ -485,7 +485,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
     * O/P:   none
     */
     function makeControlsVisible() {
-        console.log("make controls visible called")
+        doNothing("make controls visible called")
         volumeButton.css({ 'opacity' : 1 })
         volumeLevel.css({ 'opacity' : 1 })
         playPauseButton.css({ 'opacity' : 1 })
@@ -638,7 +638,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
 //     // Supports most browsers and their versions.
 //     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
 //     if (requestMethod) { // Native full screen.
-//             console.log("requesting full screen")
+//             doNothing("requesting full screen")
 //         requestMethod.call(element);
 //     } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
 //         var wscript = new ActiveXObject("WScript.Shell");
@@ -765,7 +765,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer) { //acts as ITE
     */ 
     function changeTrackZIndex(track, index){
         if (index > trackManager.length - 1){
-            console.log("ERROR: trying to change index of a track to an index that does not exist")
+            doNothing("ERROR: trying to change index of a track to an index that does not exist")
             return
         }
         trackManger = self.getTracks();

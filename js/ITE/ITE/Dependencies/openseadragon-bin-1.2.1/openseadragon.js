@@ -1936,7 +1936,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                     if ( request.status === successStatus ) {
                         onSuccess( request );
                     } else {
-                        $.console.log( "AJAX request returned %d: %s", request.status, url );
+                        doNothing( "AJAX request returned %d: %s", request.status, url );
 
                         if ( $.isFunction( onError ) ) {
                             onError( request );
@@ -1967,7 +1967,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                     msg += "\nSee http://msdn.microsoft.com/en-us/library/ms537505(v=vs.85).aspx#xdomain";
                 }
 
-                $.console.log( "%s while making AJAX request: %s", e.name, msg );
+                doNothing( "%s while making AJAX request: %s", e.name, msg );
 
                 request.onreadystatechange = function(){};
 
@@ -2844,7 +2844,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      */
     raiseEvent: function( eventName, eventArgs ) {
         //uncomment if you want to get a log of all events
-        //$.console.log( eventName );
+        //doNothing( eventName );
         var handler = this.getHandler( eventName );
 
         if ( handler ) {
@@ -3962,7 +3962,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
         var delegate = THIS[ tracker.hash ];
 
         delegate.pointerCaptureCount++;
-        //$.console.log('pointerCaptureCount++ ', delegate.pointerCaptureCount);
+        //doNothing('pointerCaptureCount++ ', delegate.pointerCaptureCount);
 
         if ( delegate.pointerCaptureCount === 1 ) {
             // We emulate mouse capture by hanging listeners on the window object.
@@ -3992,7 +3992,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
         var delegate = THIS[ tracker.hash ];
 
         delegate.pointerCaptureCount--;
-        //$.console.log('pointerCaptureCount-- ', delegate.pointerCaptureCount);
+        //doNothing('pointerCaptureCount-- ', delegate.pointerCaptureCount);
 
         if ( delegate.pointerCaptureCount === 0 ) {
             // We emulate mouse capture by hanging listeners on the window object.
@@ -4112,7 +4112,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      * @inner
      */
     function onKeyPress( tracker, event ) {
-        //console.log( "keypress %s %s %s %s %s", event.keyCode, event.charCode, event.ctrlKey, event.shiftKey, event.altKey );
+        //doNothing( "keypress %s %s %s %s %s", event.keyCode, event.charCode, event.ctrlKey, event.shiftKey, event.altKey );
         var propagate;
         if ( tracker.keyHandler ) {
             event = $.getEvent( event );
@@ -4139,7 +4139,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      * @inner
      */
     function onFocus( tracker, event ) {
-        //console.log( "focus %s", event );
+        //doNothing( "focus %s", event );
         var propagate;
         if ( tracker.focusHandler ) {
             event = $.getEvent( event );
@@ -4163,7 +4163,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      * @inner
      */
     function onBlur( tracker, event ) {
-        //console.log( "blur %s", event );
+        //doNothing( "blur %s", event );
         var propagate;
         if ( tracker.blurHandler ) {
             event = $.getEvent( event );
@@ -5098,7 +5098,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
             }
 
             pointsList.contacts++;
-            //$.console.log('contacts++ ', pointsList.contacts);
+            //doNothing('contacts++ ', pointsList.contacts);
 
             if ( tracker.dragHandler || tracker.dragEndHandler || tracker.pinchHandler ) {
                 $.MouseTracker.gesturePointVelocityTracker.addPoint( tracker, curGPoint );
@@ -5225,7 +5225,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
                     // Pointer was activated in our element but could have been removed in any element since events are captured to our element
 
                     pointsList.contacts--;
-                    //$.console.log('contacts-- ', pointsList.contacts);
+                    //doNothing('contacts-- ', pointsList.contacts);
 
                     if ( tracker.dragHandler || tracker.dragEndHandler || tracker.pinchHandler ) {
                         $.MouseTracker.gesturePointVelocityTracker.removePoint( tracker, updateGPoint );
@@ -6389,7 +6389,7 @@ $.Viewer = function( options ) {
                             _this.viewport.applyConstraints();
                             return false;
                         default:
-                            //console.log( 'navigator keycode %s', event.keyCode );
+                            //doNothing( 'navigator keycode %s', event.keyCode );
                             return true;
                     }
                 }
@@ -8961,7 +8961,7 @@ function updateOnce( viewer ) {
         THIS[viewer.hash].animating = animated;
     } else {
         viewer.source = null;
-        console.log("failed animation null-check in OSD");
+        doNothing("failed animation null-check in OSD");
     }
 
     //viewer.profiler.endUpdate();
@@ -11822,14 +11822,14 @@ $.TileSourceCollection = function( tileSize, tileSources, rows, layout  ) {
     //different kind of abstraction
 
     while( levelSize  <  ( options.tileSize ) * longSide ){
-        //$.console.log( '%s levelSize %s minLevel %s', options.tileSize * longSide, levelSize, minLevel );
+        //doNothing( '%s levelSize %s minLevel %s', options.tileSize * longSide, levelSize, minLevel );
         levelSize = levelSize * 2.0;
         minLevel++;
     }
     options.minLevel = minLevel;
 
     //for( var name in options ){
-    //    $.console.log( 'Collection %s %s', name, options[ name ] );
+    //    doNothing( 'Collection %s %s', name, options[ name ] );
     //}
 
     $.TileSource.apply( this, [ options ] );
@@ -11874,7 +11874,7 @@ $.extend( $.TileSourceCollection.prototype, $.TileSource.prototype, /** @lends O
      * @param {Number} y
      */
     getTileUrl: function( level, x, y ) {
-        //$.console.log([  level, '/', x, '_', y ].join( '' ));
+        //doNothing([  level, '/', x, '_', y ].join( '' ));
         return null;
     }
 
@@ -12213,7 +12213,7 @@ $.Button = function( options ) {
         },
 
         keyHandler: function( event ){
-            //console.log( "%s : handling key %s!", _this.tooltip, event.keyCode);
+            //doNothing( "%s : handling key %s!", _this.tooltip, event.keyCode);
             if( 13 === event.keyCode ){
                 /***
                  * Raised when a mouse button is pressed and released or touch is initiated and ended in the Button element within the time and distance threshold.
@@ -13087,7 +13087,7 @@ $.extend( $.ReferenceStrip.prototype, $.EventSource.prototype, $.Viewer.prototyp
      */
     update: function () {
         if ( THIS[this.id].animating ) {
-            $.console.log( 'image reference strip update' );
+            doNothing( 'image reference strip update' );
             return true;
         }
         return false;
@@ -13320,7 +13320,7 @@ function onStripExit( event ) {
  * @function
  */
 function onKeyPress( event ) {
-    //console.log( event.keyCode );
+    //doNothing( event.keyCode );
 
     switch ( event.keyCode ) {
         case 61: //=|+
@@ -13349,7 +13349,7 @@ function onKeyPress( event ) {
             onStripScroll.call( this, { eventSource: this.tracker, position: null, scroll: 1, shift: null } );
             return false;
         default:
-            //console.log( 'navigator keycode %s', event.keyCode );
+            //doNothing( 'navigator keycode %s', event.keyCode );
             return true;
     }
 }
@@ -13696,7 +13696,7 @@ ImageJob.prototype = {
         this.image.onload = this.image.onerror = this.image.onabort = null;
         if (!successful) {
             this.image = null;
-            console.log("failed to load image");
+            doNothing("failed to load image");
         }
 
         if ( this.jobId ) {
@@ -14058,7 +14058,7 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
             //since we are caching the prerendered image on a canvas
             //allow the image to not be held in memory
             this.image = null;
-            console.log('cached');
+            doNothing('cached');
         }
 
         rendered = TILE_CACHE[ this.url ];
@@ -14104,7 +14104,7 @@ $.Tile.prototype = /** @lends OpenSeadragon.Tile.prototype */{
         this.loaded     = false;
         this.loading = false;
         this.unloaded = true;
-        console.log("unloaded");
+        doNothing("unloaded");
     }
 };
 
@@ -15177,13 +15177,13 @@ function onTileLoad( drawer, tile, time, image ) {
         $.console.warn( "Tile load callback in middle of drawing routine." );
         return;
     } else if ( !image  && !drawer.viewport.collectionMode ) {
-        $.console.log( "Tile %s failed to load: %s", tile, tile.url );
+        doNothing( "Tile %s failed to load: %s", tile, tile.url );
         if( !drawer.debugMode ){
             tile.exists = false;
             return;
         }
     } else if ( time < drawer.lastResetTime ) {
-        $.console.log( "Ignoring tile %s loaded before reset: %s", tile, tile.url );
+        doNothing( "Ignoring tile %s loaded before reset: %s", tile, tile.url );
         return;
     }
 
@@ -15457,7 +15457,7 @@ function drawTiles( drawer, lastDrawn ){
                     tileSource = null;
                 }
 
-                //$.console.log("Rendering collection tile %s | %s | %s", tile.y, tile.y, position);
+                //doNothing("Rendering collection tile %s | %s | %s", tile.y, tile.y, position);
                 if( tileSource ){
                     drawer.collectionOverlays[ tileKey ] = viewer = new $.Viewer({
                         hash:                   viewport.viewer.hash + "-" + tileKey,

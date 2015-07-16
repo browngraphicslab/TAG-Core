@@ -90,7 +90,7 @@ DataHolder.prototype.insertTrack = function (trackObj, index) {
     //}
 
     //if (dupCheck.indexOf(trackObj) >= 0) {
-    //    console.log("DUPLICATE TRACK!");
+    //    doNothing("DUPLICATE TRACK!");
     //}
     // end debug
 

@@ -554,7 +554,7 @@ TAG.Util_ITE = (function () {
         step: Optional.  The step to increment by when testing font size.
     */
     function getMaxFontSizeEM(text, minFontSize, maxWidth, maxHeight, step) {
-        console.log('getting max font size.....');
+        doNothing('getting max font size.....');
         if (!text) {
             return;
         }
@@ -592,7 +592,7 @@ TAG.Util_ITE = (function () {
 		Gets the maximum font size without em.
 	*/
 	function getMaxFontSize(text, minFontSize, maxWidth, maxHeight, step) {
-        console.log('getting max font size.....');
+        doNothing('getting max font size.....');
         if (!text) {
             return;
         }
@@ -822,7 +822,7 @@ TAG.Util_ITE = (function () {
                     translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
                 } else {
                     translation = { x: evt.pageX - lastPos.x, y: evt.pageY - lastPos.y };
-                    console.log('translation.y = '+translation.y);
+                    doNothing('translation.y = '+translation.y);
                 }
                 var scale = evt.gesture.scale - lastScale; /////////////////// HEREHEHEHEHEHRHERIEREIRHER ///
                 lastScale = evt.gesture.scale;
@@ -1010,7 +1010,7 @@ TAG.Util_ITE = (function () {
         function getDir(evt, noReturn) {
             if (!firstEvtX) {
                 firstEvtX = evt;
-                //console.log("firstEvtX SETA");
+                //doNothing("firstEvtX SETA");
                 firstEvtX.currentDir = firstEvtX.gesture.deltaX / Math.abs(firstEvtX.gesture.deltaX) || 0;
                 if (!prevEvt) {
                     prevEvt = evt;
@@ -1019,26 +1019,26 @@ TAG.Util_ITE = (function () {
             } else {
                 if (evt.gesture.deltaX > prevEvt.gesture.deltaX && firstEvtX.currentDir !== 1) {
                     firstEvtX = evt;
-                    //console.log("firstEvtX SETB");
+                    //doNothing("firstEvtX SETB");
                     firstEvtX.currentDir = 1;
                 } else if (evt.gesture.deltaX < prevEvt.gesture.deltaX && firstEvtX.currentDir !== -1) {
                     firstEvtX = evt;
-                    //console.log("firstEvtX SETC");
+                    //doNothing("firstEvtX SETC");
                     firstEvtX.currentDir = -1;
                 }
             }
             if (!firstEvtY) {
                 firstEvtY = evt;
-                //console.log("firstEvtY SETA");
+                //doNothing("firstEvtY SETA");
                 firstEvtY.currentDir = firstEvtY.gesture.deltaY / Math.abs(firstEvtY.gesture.deltaY) || 0;
             } else {
                 if (evt.gesture.deltaY > prevEvt.gesture.deltaY && firstEvtY.currentDir !== 1) {
                     firstEvtY = evt;
-                    //console.log("firstEvtY SETB");
+                    //doNothing("firstEvtY SETB");
                     firstEvtY.currentDir = 1;
                 } else if (evt.gesture.deltaY < prevEvt.gesture.deltaY && firstEvtY.currentDir !== -1) {
                     firstEvtY = evt;
-                    //console.log("firstEvtY SETC");
+                    //doNothing("firstEvtY SETC");
                     firstEvtY.currentDir = -1;
                 }
             }
@@ -1051,24 +1051,24 @@ TAG.Util_ITE = (function () {
             }
         }
         function processScrollFirefox(evt) {
-                // console.log("capturing wheel events");
+                // doNothing("capturing wheel events");
                 var pivot = { x: evt.clientX - $element.offset().left, y: evt.clientY - $element.offset().top };
-                console.log(evt.detail);
+                doNothing(evt.detail);
                 var delta = -evt.detail;
                 
                 //delta = delta * 1.1;
                 /*
                 if (delta < 0) { 
-                    console.log("here; " + delta);
+                    doNothing("here; " + delta);
                     delta = 1.0 / 1.1;
                 } else { 
-                    console.log("there; " + delta);
+                    doNothing("there; " + delta);
                     delta = 1.1;
                 }
                 */
 				if (delta < 0) delta = 1.0 / 1.1;
             	else delta = 1.1;
-				console.log("delta processed " + delta);
+				doNothing("delta processed " + delta);
                 evt.cancelBubble = true;
                 if (typeof functions.onScroll === "function") { 
                     functions.onScroll(delta, pivot);
@@ -1150,7 +1150,7 @@ TAG.Util_ITE = (function () {
         }
 
         //var debugLog = function(evt) {
-        //    console.log(evt.type);
+        //    doNothing(evt.type);
         //}
 
         //hammer.on('release hold tap touch drag doubletap', debugLog);
@@ -1181,7 +1181,7 @@ TAG.Util_ITE = (function () {
                 functions.onTappedRight(event);
             };
             element.addEventListener("MSPointerDown", function (evt) {
-                console.log(evt);
+                doNothing(evt);
                 if (stopNextClick) {
                     evt.stopPropagation();
                     setTimeout(function () {
@@ -1430,7 +1430,7 @@ TAG.Util_ITE = (function () {
                     msg = "Error: please see FAQs on the TAG website.";
                     break;
             }
-            console.log("video error: " + msg);
+            doNothing("video error: " + msg);
             var msgdiv = $(document.createElement('div'));
             msgdiv.css({
                 'position':'absolute',
@@ -1462,8 +1462,8 @@ TAG.Util_ITE = (function () {
                 ret = $(data);
             },
             error: function (err) {
-                console.log("url = " + path);
-                console.log("error: "+err.statusText);
+                doNothing("url = " + path);
+                doNothing("error: "+err.statusText);
                 ret = null;
             },
             dataType: 'html'
@@ -2716,7 +2716,7 @@ TAG.Util_ITE.UI = (function () {
         try {
             locationList = JSON.parse(data);
         } catch (e) {
-            console.log('artwork location metadata cannot be parsed.');
+            doNothing('artwork location metadata cannot be parsed.');
             locationList = [];
         }
 
@@ -3093,7 +3093,7 @@ TAG.Util_ITE.UI = (function () {
         }
 
         function error() {
-            console.log("ERROR IN TABHELPER");
+            doNothing("ERROR IN TABHELPER");
         }
 
         function cacheError() {
@@ -3133,7 +3133,7 @@ TAG.Util_ITE.UI = (function () {
                 });
                 var isSelected = (origComps.indexOf(comp.Identifier) >= 0);//selectedArtworksUrls[compArray[i].Metadata.Source] ? true : false;
                 if (isSelected) {
-                    console.log("is selected");
+                    doNothing("is selected");
                 }
                 compHolder.data('selected', isSelected);
                 compHolder.css({
@@ -3267,9 +3267,9 @@ TAG.Util_ITE.UI = (function () {
                     addedCompsObjs.push(compHolder.data('comp'));
                 }
             }
-            //console.log("added length = " + addedComps.length);
-            //console.log("remove length = " + removedComps.length);
-            //console.log("orig length = " + origComps.length + "\n");
+            //doNothing("added length = " + addedComps.length);
+            //doNothing("remove length = " + removedComps.length);
+            //doNothing("orig length = " + origComps.length + "\n");
         }
 
         // double clicking on associated media will import all selected media
@@ -3338,13 +3338,13 @@ TAG.Util_ITE.UI = (function () {
                         pickerOverlay.remove();
                     }, function (err) {
                         // AUTH ERROR HANDLER
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
                         // CONFLICT HANDLER
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
                         // GENERAL ERROR HANDLER
-                        console.log(err.message);
+                        doNothing(err.message);
                     });
                 } else if (type === 'artwork' && target.type === 'media') {
                     TAG.Worktop.Database.changeHotspot(target.comp.Identifier, options, function () { // TODO (Add/RemoveIDs for changeHotspot)
@@ -3353,11 +3353,11 @@ TAG.Util_ITE.UI = (function () {
                         pickerOverlay.empty();
                         pickerOverlay.remove();
                     }, function (err) {
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
-                        console.log(err.message);
+                        doNothing(err.message);
                     });
                 } else if (type === 'exhib' && target.type === 'exhib') {
                     TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function() {
@@ -3366,11 +3366,11 @@ TAG.Util_ITE.UI = (function () {
                         pickerOverlay.empty();
                         pickerOverlay.remove();
                     }, function (err) {
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
-                        console.log(err.message);
+                        doNothing(err.message);
                     });
                 }
             } else {

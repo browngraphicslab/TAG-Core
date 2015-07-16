@@ -1034,7 +1034,7 @@ TAG.Util = (function () {
                     translation = { x: evt.gesture.deltaX, y: evt.gesture.deltaY };
                 } else {
                     translation = { x: evt.pageX - lastPos.x, y: evt.pageY - lastPos.y };
-                    console.log('translation.y = '+translation.y);
+                    doNothing('translation.y = '+translation.y);
                 }
                 var scale = evt.gesture.scale - lastScale; /////////////////// HEREHEHEHEHEHRHERIEREIRHER ///
                 lastScale = evt.gesture.scale;
@@ -1242,11 +1242,11 @@ TAG.Util = (function () {
             } else {
                 if (evt.gesture.deltaY > prevEvt.gesture.deltaY && firstEvtY.currentDir !== 1) {
                     firstEvtY = evt;
-                    //console.log("firstEvtY SETB");
+                    //doNothing("firstEvtY SETB");
                     firstEvtY.currentDir = 1;
                 } else if (evt.gesture.deltaY < prevEvt.gesture.deltaY && firstEvtY.currentDir !== -1) {
                     firstEvtY = evt;
-                    //console.log("firstEvtY SETC");
+                    //doNothing("firstEvtY SETC");
                     firstEvtY.currentDir = -1;
                 }
             }
@@ -1259,24 +1259,24 @@ TAG.Util = (function () {
             }
         }
         function processScrollFirefox(evt) {
-                // console.log("capturing wheel events");
+                // doNothing("capturing wheel events");
                 var pivot = { x: evt.clientX - $element.offset().left, y: evt.clientY - $element.offset().top };
-                console.log(evt.detail);
+                doNothing(evt.detail);
                 var delta = -evt.detail;
                 
                 //delta = delta * 1.1;
                 /*
                 if (delta < 0) { 
-                    console.log("here; " + delta);
+                    doNothing("here; " + delta);
                     delta = 1.0 / 1.1;
                 } else { 
-                    console.log("there; " + delta);
+                    doNothing("there; " + delta);
                     delta = 1.1;
                 }
                 */
 				if (delta < 0) delta = 1.0 / 1.1;
             	else delta = 1.1;
-				console.log("delta processed " + delta);
+				doNothing("delta processed " + delta);
                 evt.cancelBubble = true;
                 if (typeof functions.onScroll === "function") { 
                     functions.onScroll(delta, pivot);
@@ -1358,7 +1358,7 @@ TAG.Util = (function () {
         }
 
         //var debugLog = function(evt) {
-        //    console.log(evt.type);
+        //    doNothing(evt.type);
         //}
 
         //hammer.on('release hold tap touch drag doubletap', debugLog);
@@ -1389,7 +1389,7 @@ TAG.Util = (function () {
                 functions.onTappedRight(event);
             };
             element.addEventListener("MSPointerEvent", function (evt) {
-                console.log(evt);
+                doNothing(evt);
                 if (stopNextClick) {
                     evt.stopPropagation();
                     setTimeout(function () {
@@ -1632,7 +1632,7 @@ TAG.Util = (function () {
                     (function (i, track, media, videotag) {
                         return function (output) {
                             if (output !== "False") {
-                                console.log("converted/ or not being written now");
+                                doNothing("converted/ or not being written now");
                                 var mp4filepath = "/Images/" + output.substr(0, output.lastIndexOf('.')) + ".mp4";
                                 var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
                                 videotag.attr('src', mp4file);
@@ -1645,7 +1645,7 @@ TAG.Util = (function () {
                                 });
 
                             } else {
-                                console.log("not converted: ");
+                                doNothing("not converted: ");
                             }
                         }
                     })(i, track, media, videotag), null, filename);
@@ -1775,8 +1775,8 @@ TAG.Util = (function () {
                 ret = data;
             },
             error: function (err) {
-                console.log("url = " + path);
-                console.log("error: "+err.statusText);
+                doNothing("url = " + path);
+                doNothing("error: "+err.statusText);
                 ret = null;
             },
             dataType: 'html'
@@ -1885,8 +1885,8 @@ TAG.Util = (function () {
                 tobj.current_collection = collection.Identifier;
             }
             tobj.time_spent = telemetry_timer.get_elapsed();
-            //console.log("current collection " + tobj.current_collection);
-            //console.log("elapsed " + tobj.time_spent);
+            //doNothing("current collection " + tobj.current_collection);
+            //doNothing("elapsed " + tobj.time_spent);
         });
 
         infoBox.css({
@@ -3151,7 +3151,7 @@ TAG.Util.UI = (function () {
 
         origin = true;
         overlay = blockInteractionOverlay();
-        console.log("Made new overlay");
+        doNothing("Made new overlay");
 
         origin
         container = container || window;
@@ -3308,7 +3308,7 @@ TAG.Util.UI = (function () {
 
         origin = true;
         overlay = blockInteractionOverlay();
-        console.log("Made new overlay");
+        doNothing("Made new overlay");
 
         origin
         container = container || window;
@@ -3748,7 +3748,7 @@ TAG.Util.UI = (function () {
 
     // slide towards left (splitscreen)
     function slidePageLeftSplit(oldpage, newpage, callback) {
-        console.log("sliding page left")
+        doNothing("sliding page left")
         var outgoingDone = false,
             incomingDone = false,
             metaContainer = oldpage.parent(),
@@ -4114,7 +4114,7 @@ TAG.Util.UI = (function () {
         try {
             locationList = JSON.parse(data);
         } catch (e) {
-            console.log('artwork location metadata cannot be parsed.');
+            doNothing('artwork location metadata cannot be parsed.');
             locationList = [];
             return locationList;
         }
@@ -4181,12 +4181,12 @@ TAG.Util.UI = (function () {
     */
 
     function mergeCollectionsIntoOneCollection(guids, targetguid, callback) {
-        console.log("about to merge collections into another collection with the guid "+targetguid)//TODO: add in telemetry call?
+        doNothing("about to merge collections into another collection with the guid "+targetguid)//TODO: add in telemetry call?
         var totalGuids = [], // the compilation of all artwork guids in all the collections being merged
             j=0//counter to see how many getArtworksIn calls have been recieved
 
         for (var i = 0; i < guids.length; i++) {//for every collection in guids
-            TAG.Worktop.Database.getArtworksIn(guids[i], addArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
+            TAG.Worktop.Database.getArtworksIn(guids[i], addArtworks, function (err) { doNothing(err.message) }, function (err) { doNothing(err.message) })
         }
         function addArtworks(artworks) {
             j++
@@ -4196,7 +4196,7 @@ TAG.Util.UI = (function () {
                 }
             }
             if (j === guids.length) {//when the counter has recieved every 'addArtworks' call, call the server to get the guids of the artworks in the original collection
-                TAG.Worktop.Database.getArtworksIn(targetguid, getPreviousArtworks, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
+                TAG.Worktop.Database.getArtworksIn(targetguid, getPreviousArtworks, function (err) { doNothing(err.message) }, function (err) { doNothing(err.message) })
             }
         }
 
@@ -4211,7 +4211,7 @@ TAG.Util.UI = (function () {
             if (finalGuids.length > 0) {
                 options.AddIDs = finalGuids.join(',')//join to make into the neede string format
             }
-            TAG.Worktop.Database.changeExhibition(targetguid, options, callback, function (err) { console.log(err.message) }, function (err) { console.log(err.message) }, function (err) { console.log(err.message) })
+            TAG.Worktop.Database.changeExhibition(targetguid, options, callback, function (err) { doNothing(err.message) }, function (err) { doNothing(err.message) }, function (err) { doNothing(err.message) })
         }
     }
 
@@ -4331,7 +4331,7 @@ TAG.Util.UI = (function () {
                 tab.text(tabs[i].name);
 
                 if (queueLength > 0 && tabs[i].name == 'Import') { //already upload happening - grey out and disable import tab only 
-                    console.log("disable import tab");
+                    doNothing("disable import tab");
                     tab.css({ 'opacity': '.4' });
                     tab.unbind('click');
                 } else{
@@ -4564,7 +4564,7 @@ TAG.Util.UI = (function () {
             confirmButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             cancelButton.attr('disabled', true).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
             
-            console.log("Called import on click");
+            doNothing("Called import on click");
             $('.compHolder').off();
             picker.remove();
             pickerOverlay.fadeOut();
@@ -4644,8 +4644,8 @@ TAG.Util.UI = (function () {
         function tabHelper(j, tabName, queueLength) {
             
             
-            console.log("J and tabs: "+j)
-            console.log(tabs)
+            doNothing("J and tabs: "+j)
+            doNothing(tabs)
             return function () {                
                 if (progressCirc != undefined || progressCirc != null) {
                     TAG.Util.removeProgressCircle(progressCirc);
@@ -4688,11 +4688,11 @@ TAG.Util.UI = (function () {
                 /*if(tabName == 'Artworks in this Collection' && queueLength <= 0){ //in Artworks in Collection tab, AND there isn't an upload happening already
                     $(importButton).prop('disabled', false);
                     importButton.css({'opacity': '1'});
-                    console.log("import button should be enabled");
+                    doNothing("import button should be enabled");
                 } else{
                     importButton.css({'opacity': '0'}); //invisible in 'all artworks tab'
                     $(importButton).prop('disabled', true);
-                    console.log("import button should be disabled");
+                    doNothing("import button should be disabled");
                 } */
 
             }
@@ -4750,8 +4750,8 @@ TAG.Util.UI = (function () {
         }
 
         function drawComp(comp, applyClick, i) {
-            console.log("drawing component: ")
-            console.log(comp)
+            doNothing("drawing component: ")
+            doNothing(comp)
             return function () {
                 var compHolder = $(document.createElement('div'));
                 compHolder.addClass("compHolder");
@@ -4767,7 +4767,7 @@ TAG.Util.UI = (function () {
                 });
                 var isSelected = (origComps.indexOf(comp.Identifier) >= 0);//selectedArtworksUrls[compArray[i].Metadata.Source] ? true : false;
                 if (isSelected) {
-                    console.log("is selected");
+                    doNothing("is selected");
                 }
                 compHolder.data('selected', isSelected);
                 compHolder.css({
@@ -4946,9 +4946,9 @@ TAG.Util.UI = (function () {
                     addedCompsObjs.push(compHolder.data('comp'));
                 }
             }
-            //console.log("added length = " + addedComps.length);
-            //console.log("remove length = " + removedComps.length);
-            //console.log("orig length = " + origComps.length + "\n");
+            //doNothing("added length = " + addedComps.length);
+            //doNothing("remove length = " + removedComps.length);
+            //doNothing("orig length = " + origComps.length + "\n");
         }
 
         // double clicking on associated media will import all selected media
@@ -5053,13 +5053,13 @@ TAG.Util.UI = (function () {
                         pickerOverlay.remove();
                     }, function (err) {
                         // AUTH ERROR HANDLER
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
                         // CONFLICT HANDLER
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
                         // GENERAL ERROR HANDLER
-                        console.log(err.message);
+                        doNothing(err.message);
                     });
                 } else if (type === 'artwork' && target.type === 'media') {
                     TAG.Worktop.Database.changeHotspot(target.comp.Identifier, options, function () { // TODO (Add/RemoveIDs for changeHotspot)
@@ -5068,11 +5068,11 @@ TAG.Util.UI = (function () {
                         pickerOverlay.empty();
                         pickerOverlay.remove();
                     }, function (err) {
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
-                        console.log(err.message);
+                        doNothing(err.message);
                     }, function (err) {
-                        console.log(err.message);
+                        doNothing(err.message);
                     });
                 } else if (type === 'exhib' && target.type === 'exhib') {
                     if (mergeBoolean) {
@@ -5084,18 +5084,18 @@ TAG.Util.UI = (function () {
                         })
                     }
                     else {
-                        console.log("in correct statement");
+                        doNothing("in correct statement");
                         TAG.Worktop.Database.changeExhibition(target.comp.Identifier, options, function () {                      
                             callback();
                             pickerOverlay.fadeOut();
                             pickerOverlay.empty();
                             pickerOverlay.remove();
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         });
                     }
                 } else if (type === 'exhib' && target.type === 'artwork') {
@@ -5111,11 +5111,11 @@ TAG.Util.UI = (function () {
                                 pickerOverlay.remove();
                             }
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         });
                     }
 
@@ -5140,11 +5140,11 @@ TAG.Util.UI = (function () {
                                 pickerOverlay.remove();
                             }
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         });
                     }
                 } else if (type === 'artwork' && target.type === 'mediaMulti') {
@@ -5153,7 +5153,7 @@ TAG.Util.UI = (function () {
                     viewer.append(progressText);
                     TAG.Util.showProgressCircle(viewer, progressCircCSS, horz, vert, true);
                     /**
-                    console.log("adding associated medias to artworks")
+                    doNothing("adding associated medias to artworks")
                     for (var i = 0; i < addedComps.length; i++) {
                         TAG.Worktop.Database.changeArtwork(addedComps[i], { AddIDs: [target.comp] }, function () {
                             if (i == addedComps.length - 1) {
@@ -5163,11 +5163,11 @@ TAG.Util.UI = (function () {
                                 pickerOverlay.remove();
                             }
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         });
                     }
                 }
@@ -5190,11 +5190,11 @@ TAG.Util.UI = (function () {
                                 pickerOverlay.remove();
                             }
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         }, function (err) {
-                            console.log(err.message);
+                            doNothing(err.message);
                         });
                     }
                 }
@@ -5515,7 +5515,7 @@ TAG.Util.RLH = function (input) {
         locationsRegion;     // contains location list
 
     if (!artwork || !root) {
-        console.log("need to provide input.artwork and input.root");
+        doNothing("need to provide input.artwork and input.root");
         return;
     }
 
@@ -5895,7 +5895,7 @@ TAG.Util.RLH = function (input) {
                     .text('Import Map').css('border-radius', '3.5px');
             
             var progressBar = $(document.getElementById("progressBarUploads"));
-            //console.log("prog bar length = " + $(progressBar).length);
+            //doNothing("prog bar length = " + $(progressBar).length);
 
             if (uploadHappening === true) {
                 importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
@@ -6141,7 +6141,7 @@ TAG.Util.RLH = function (input) {
      * @param {Function} callback      function to call when loading is complete
      */
     function loadMaps(callback) {
-        //console.log("loading maps called");
+        //doNothing("loading maps called");
         var i,
             holder,
             m,
@@ -6193,11 +6193,11 @@ TAG.Util.RLH = function (input) {
         //var progressBar = $(document.getElementById("progressBarUploads"));
 
         /**
-        console.log("loading maps called, prog bar length = " + $(progressBar).length);
+        doNothing("loading maps called, prog bar length = " + $(progressBar).length);
 
         
         if (uploadHappening===false) {
-            console.log("other upload is happening, disable import maps PLEASE!!!!!");
+            doNothing("other upload is happening, disable import maps PLEASE!!!!!");
             importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
             importMapButton.prop('disabled', 'true');
 
@@ -6512,7 +6512,7 @@ TAG.Util.RLH = function (input) {
             //save
             TAG.Worktop.Database.changeArtwork(artwork.Identifier, { RichLocationHistory: generateRichLocationData() }, success, error, error, error);
             function success() {}
-            function error() { console.log('An error occured while saving.'); }
+            function error() { doNothing('An error occured while saving.'); }
         }
     }
 
@@ -6545,7 +6545,7 @@ TAG.Util.RLH = function (input) {
             //save
             TAG.Worktop.Database.changeArtwork(artwork.Identifier, { RichLocationHistory: generateRichLocationData() }, success, error, error, error);
             function success() { }
-            function error() { console.log('An error occured while saving.'); }
+            function error() { doNothing('An error occured while saving.'); }
 
         }
     }
@@ -6942,7 +6942,7 @@ TAG.Util.RLH = function (input) {
                     tobj.location_clicked = null;
                     tobj.map_viewed = mapdoq;
                     tobj.map_interaction = "pushpin_clicked";
-                    console.log("custom map pushpin clicked");
+                    doNothing("custom map pushpin clicked");
                 });
 
             });
@@ -7106,7 +7106,7 @@ TAG.Util.RLH = function (input) {
         location && (location.container = container);
 
         if (!location) {
-            console.log("please provide all options");
+            doNothing("please provide all options");
             return;
         }
 
@@ -7142,7 +7142,7 @@ TAG.Util.RLH = function (input) {
                         tobj.location_clicked = location;
                         tobj.map_viewed = mapDoqs[mapguid] || "Bing Map";
                         tobj.map_interaction = "location_clicked";
-                        console.log("location clicked");
+                        doNothing("location clicked");
                     });
 
                     if (custom) {
@@ -7180,7 +7180,7 @@ TAG.Util.RLH = function (input) {
                         locations.splice(index, 1);
                         saveRichLocationHistory();
                     } else {
-                        console.log("error");
+                        doNothing("error");
                     }
                 }, "Are you sure you want to delete this location?", "Yes");
                 root.append(overlay);
@@ -7723,7 +7723,7 @@ TAG.Util.RLH = function (input) {
         }
 
         function error() {
-            console.log('An error occured while saving.');
+            doNothing('An error occured while saving.');
             enableButtons();
             disabledOverlay.remove();
         }
@@ -7824,7 +7824,7 @@ TAG.Util.RLH = function (input) {
 
         //webfileupload
         if (!IS_WINDOWS){
-            console.log("maps");
+            doNothing("maps");
         TAG.Authoring.WebFileUploader(
             root,
             TAG.Authoring.FileUploadTypes.Map, // TODO RLH TESTING: change this to TAG.Authoring.FileUploadTypes.Map to test map uploading
@@ -7840,7 +7840,7 @@ TAG.Util.RLH = function (input) {
                 try {
                     newDoq = new Worktop.Doq(urls[0]);
                 } catch (error) {
-                    console.log("error in uploading: " + error.message);
+                    doNothing("error in uploading: " + error.message);
                     return;
                 }
                 mapGuids.push(newDoq.Identifier);
@@ -7860,7 +7860,7 @@ TAG.Util.RLH = function (input) {
                 //TAG.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
                 // TODO this is just in here for testing purposes
                 //TAG.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
-                //    console.log('success in changeMap');
+                //    doNothing('success in changeMap');
                 //}, function () { }, function () { }, function () { }); // TODO RLH TESTING: make sure map doq is updated properly (the next time it's loaded, it should have these metadata)
             },
             ['.jpg', '.png', '.gif'],//, '.tif', '.tiff' these two crashes visual studio every time we click on the dot to show map. haven't found why though
@@ -7887,7 +7887,7 @@ TAG.Util.RLH = function (input) {
                 try {
                     newDoq = new Worktop.Doq(urls[0]);
                 } catch (error) {
-                    console.log("error in uploading: " + error.message);
+                    doNothing("error in uploading: " + error.message);
                     return;
                 }
                 mapGuids.push(newDoq.Identifier);
@@ -7910,7 +7910,7 @@ TAG.Util.RLH = function (input) {
                 //TAG.Worktop.Database.changeArtwork(artwork.Identifier, {AddMaps:JSON.stringify(maps)});
                 // TODO this is just in here for testing purposes
                 //TAG.Worktop.Database.changeMap(newDoq.Identifier, { Name: "Custom Map", Description: "Test description", AdditionalInfo: "Middle Pharaoh Period" }, function () {
-                //    console.log('success in changeMap');
+                //    doNothing('success in changeMap');
                 //}, function () { }, function () { }, function () { }); // TODO RLH TESTING: make sure map doq is updated properly (the next time it's loaded, it should have these metadata)
             },
             ['.jpg', '.png', '.gif'],//, '.tif', '.tiff' these two crashes visual studio every time we click on the dot to show map. haven't found why though
@@ -7922,7 +7922,7 @@ TAG.Util.RLH = function (input) {
             null,
             null,
             function () {
-                console.log("import maps should be disabled while map uploads");
+                doNothing("import maps should be disabled while map uploads");
                 uploadHappening = true;
                 $(importMapButton).prop('disabled', true);
                 $(importMapButton).css({ 'color': 'rgba(255, 255, 255, 0.5)' });
@@ -8370,7 +8370,7 @@ TAG.Util.Artwork = (function () {
 //Utilities for RIN parsing
 TAG.Util.RIN_TO_ITE = function (tour) {
 
-	console.log(">>>>>>>>>>>>> Starting ITE Parsing >>>>>>>>>>>>>");
+	doNothing(">>>>>>>>>>>>> Starting ITE Parsing >>>>>>>>>>>>>");
 
 	if (!tour){
 		return {};
@@ -8391,7 +8391,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 		rinData.screenplays.SCP1 && 
 		rinData.screenplays.SCP1.data && 
 		rinData.screenplays.SCP1.data.experienceStreamReferences)) {
-			console.log("ERROR: no data for experience stream time offsets");
+			doNothing("ERROR: no data for experience stream time offsets");
 			referenceDataMap = {};
 	} else {
 		referenceDataMap = function(){
@@ -8405,8 +8405,8 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 		}();
 	}
 
-	// console.log("REFERENCE DATA")
-	// console.log(referenceDataMap)
+	// doNothing("REFERENCE DATA")
+	// doNothing(referenceDataMap)
 		
 	//parses keyframes from a RIN experience track
 	var ITE_keyframes = function(track, providerID){
@@ -8432,7 +8432,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 			var referenceData = referenceDataMap[currKey];
 			if (!referenceData) {
-				console.log("ERROR: no data for experience stream time offsets")
+				doNothing("ERROR: no data for experience stream time offsets")
 			}
 			var time_offset = referenceData.begin;
 			var l = 0;
@@ -8469,7 +8469,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				            "width": currKeyframe.state.viewport.region.span.x * parseInt($(window).width()),
 				            "height": currKeyframe.state.viewport.region.span.y * parseInt($(window).height())
 				        };
-				        console.log("dummy load call to util");
+				        doNothing("dummy load call to util");
 				    } else {
 				        keyframeObject = {
 				            "dispNum": k,
@@ -8492,13 +8492,13 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				        }
 				    }
 
-				    //console.log("start util");
-				    //console.log("incoming:");
-				    //console.log(currKeyframe.state.viewport.region.span);
-				    //console.log(currKeyframe.state.viewport.region.center);
-				    //console.log("calculated:");
-				    //console.log({ width: keyframeObject.width, height: keyframeObject.height });
-				    //console.log({ x: keyframeObject.left, y: keyframeObject.top });
+				    //doNothing("start util");
+				    //doNothing("incoming:");
+				    //doNothing(currKeyframe.state.viewport.region.span);
+				    //doNothing(currKeyframe.state.viewport.region.center);
+				    //doNothing("calculated:");
+				    //doNothing({ width: keyframeObject.width, height: keyframeObject.height });
+				    //doNothing({ x: keyframeObject.left, y: keyframeObject.top });
 				}
 				else if (providerID == "deepZoom"){
 					keyframeObject = {
@@ -8606,7 +8606,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 				//assert that the duration of the asset is longer than RIN's inDuration + outDuration
 				if (track.data.duration < fadeInDuration + fadeOutDuration){
-					console.log("ERROR: track duration shorter than fadein/fadeout duration")
+					doNothing("ERROR: track duration shorter than fadein/fadeout duration")
 				}
 
 				//each provider has this - the opacity is zero, and the time is -inDuration and +outDuration
@@ -8628,7 +8628,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 				currKeyframes.unshift(initialKeyframe)
 
 			} else {
-				console.log("ERROR: " + providerID + " track has no transition data available.")
+				doNothing("ERROR: " + providerID + " track has no transition data available.")
 			}
 
 			//at the end - merges onto the end of the total keyframes array, preserving ordering of experience streams
@@ -8668,7 +8668,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 		        referenceData = referenceDataMap[Object.keys(track.experienceStreams)[i]];
 		        if (!referenceData) {
 		            //this shouldn't ever happen - but why is it?
-		            console.log("An error occurred retrieving the reference data for: " + track)
+		            doNothing("An error occurred retrieving the reference data for: " + track)
 		        } 
 
 		        //this is where the four keyframes are actually parsed
@@ -8923,7 +8923,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 			//TODO - is this a problem?
 			if (transitionKeyframe.time < 0){
-				// console.log("ERROR: initial keyframe with time < 0")
+				// doNothing("ERROR: initial keyframe with time < 0")
 			}
 
 			transitionKeyframe.opacity = 0
@@ -8983,7 +8983,7 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 
 			//ignore experiences with no experience streams
 			if (Object.keys(currExperience.experienceStreams).length == 0){
-				console.log("Found an experience with no experience streams")
+				doNothing("Found an experience with no experience streams")
 				continue;
 			}
 
@@ -9154,9 +9154,9 @@ TAG.Util.RIN_TO_ITE = function (tour) {
 	        "tracks": ITE_tracks()
 	    };
 
-	    //console.log("ITE tour object is: ");
-	    //console.log(ITE_tour);
-	    console.log(">>>>>>>>>>>>> Finished ITE Parsing >>>>>>>>>>>>>");
+	    //doNothing("ITE tour object is: ");
+	    //doNothing(ITE_tour);
+	    doNothing(">>>>>>>>>>>>> Finished ITE Parsing >>>>>>>>>>>>>");
 
 	    return ITE_tour;
 	}

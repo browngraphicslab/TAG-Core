@@ -246,7 +246,7 @@ TAG.TelemetryEvents = (function () {
 
             //default error
             default:
-                console.log(tobj.ttype + " is not a valid event.");
+                doNothing(tobj.ttype + " is not a valid event.");
                 break;
         }
     }

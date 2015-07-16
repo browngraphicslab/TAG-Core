@@ -313,7 +313,7 @@ var tagInk = function (canvId, html_elt) {
             else if (transLetters[i] == "z") // if z, close the path
                 path += "z"
             // else
-            //     console.log("ELSE: " + transLetters[i]);
+            //     doNothing("ELSE: " + transLetters[i]);
         }
         var final_path = path;
         if (trans_mode == 'isolate') // if the mode is 'isolate,' reverse the path and add an outer path
@@ -793,7 +793,7 @@ var tagInk = function (canvId, html_elt) {
             if (MRL[i] === 'M') {
                 pathsToSave += "BEZIER::[pathstring]";
             }
-            //console.log("ch*coords["+(2*i+1)+"] = "+ch*coords[2*i+1]);
+            //doNothing("ch*coords["+(2*i+1)+"] = "+ch*coords[2*i+1]);
             pathToDraw += MRL[i] + (cw * coords[2 * i]) + ',' + (ch * coords[2 * i + 1]); // absolute coords
             pathsToSave += MRL[i] + coords[2 * i] + ',' + coords[2 * i + 1]; // relative coords
             if (MRL[i + 1] === 'M' || i === MRL.length - 1) {
@@ -803,9 +803,9 @@ var tagInk = function (canvId, html_elt) {
                 paCount++;
             }
         }
-        // console.log("to save: " + pathsToSave);
+        // doNothing("to save: " + pathsToSave);
         for (i = 0; i < pathsToDraw.length; i++) { // need to split up the paths so we can style each separately
-            // console.log("to draw: " + pathsToDraw[i]);
+            // doNothing("to draw: " + pathsToDraw[i]);
             var drawing = paper.path(pathsToDraw[i]); // draw the path to the canvas
             drawing.data("type", "bezier");
             drawing.attr({

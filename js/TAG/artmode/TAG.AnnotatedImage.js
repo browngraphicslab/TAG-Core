@@ -127,7 +127,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     function openArtwork(doq) {
         if(!viewer || !doq || !doq.Metadata || !doq.Metadata.DeepZoom) {
             //debugger;
-            console.log("ERROR IN openDZI");
+            doNothing("ERROR IN openDZI");
             return false;
         }
         viewer.openDzi(FIX_PATH(doq.Metadata.DeepZoom));
@@ -350,7 +350,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method panToPoint
     */
     function panToPoint(element) {
-        console.log("Panning");
+        doNothing("Panning");
         viewer.viewport && function () {
             var ycoord = parseFloat($(element).css('top')) + parseFloat($(element).css('height'));
             var xcoord = parseFloat($(element).css('left')) + 0.5 * parseFloat($(element).css('width'));
@@ -373,7 +373,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         if (!disableZoomRLH) {
             OSDHolder && function () {
                 OSDHolder.on('dblclick', function () {
-                    console.log("Zooming!");
+                    doNothing("Zooming!");
                     zoomToPoint();
                 });
             }();
@@ -385,7 +385,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     * @method zoomToPoint()
     */
     function zoomToPoint() { //TODO zoom to where the mouse is
-        console.log("Also zooming");
+        doNothing("Also zooming");
         viewer.viewport.zoomBy(2);
     }
 
@@ -426,9 +426,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1/aspectRatio) + .05)) {
             val = true;
         }
-        //console.log(point.x + ', ' + point.y);
-        //console.log((1 / aspectRatio) + .05);
-        //console.log('inBounds= ' + val);
+        //doNothing(point.x + ', ' + point.y);
+        //doNothing((1 / aspectRatio) + .05);
+        //doNothing('inBounds= ' + val);
         return val;
     }
 
@@ -690,7 +690,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             TAG.Util.makeManipulatableWin(canvas[0], {
                 onScroll: function (delta, pivot) {
                     dzScroll(delta, pivot);
-                    console.log("Scrolling map!");
+                    doNothing("Scrolling map!");
                 },
                 onManipulate: function (res) {
                     if (doManipulation) {
@@ -971,7 +971,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             x: outerContainer.position().left,
                             y: outerContainer.position().top
                     };
-                    console.log("startin location is getting set")
+                    doNothing("startin location is getting set")
                     outerContainer.manipulationOffset = {
                         x: event.clientX - outerContainer.position().left,
                         y: event.clientY - outerContainer.position().top
@@ -1550,7 +1550,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
                     initMediaControls(mediaElt);
                     $mediaElt.on('error', function () {
-                        console.log("Here's an error ");
+                        doNothing("Here's an error ");
                     });
                     outerContainer.css({
                         'width': '675px',
@@ -1956,12 +1956,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             // temporary crashfix for errors where viewport isn't properly initialized
             // need to root-cause this issue ASAP
             if (!viewer.viewport) {
-                console.log("[DIAGNOSTIC] viewer or viewer.viewport is null in showMediaObject() call for " + (TITLE ? TITLE : "untitled") + "asset");
+                doNothing("[DIAGNOSTIC] viewer or viewer.viewport is null in showMediaObject() call for " + (TITLE ? TITLE : "untitled") + "asset");
                 return;
             }
 
             if (IS_XFADE) {
-                //console.log(appending);
+                //doNothing(appending);
                 //assetCanvas.append(outerContainer);
                 outerContainer.show();
                 root.find('.xfadeImg').css("opacity", root.find('#xfadeSliderPoint').width() / root.find('#xfadeSlider').width());

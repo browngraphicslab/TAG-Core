@@ -127,7 +127,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                     return function (output) {
                         retstring = output;
                         if (output !== "False" && output !== "Error") {
-                            console.log("converted: ");
+                            doNothing("converted: ");
                             var mp4filepath = "/Images/" + basefilename + ".mp4";
                             var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
                             videotag.attr('src', mp4file);
@@ -160,11 +160,11 @@ TAG.TourAuthoring.Track = function (spec, my) {
                             $(popup).show();
                             //}
                             clearInterval(chkIntervalVal);
-                            console.log("Error ocurred when converting");
+                            doNothing("Error ocurred when converting");
                             removeTrackOnFailure();
                         }
                         else {
-                            console.log("not converted: ");
+                            doNothing("not converted: ");
                             //removeTrackOnFailure();
                         }
                     }
@@ -466,7 +466,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         });
 
         deleteButton.on('mouseup', function () {
-            console.log("track delete button press")
+            doNothing("track delete button press")
         });
 
         deleteButton.on('mouseout', function () {
@@ -972,7 +972,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                 }
             }
             my.timeManager.setScale(my.timeManager.getScale()); // bleveque: TODO hacky fix before SAM release -- figure out why displays were showing up strangely otherwise
-            console.log("combining " + (my.undoManager.undoStackSize() - undoStackSize));
+            doNothing("combining " + (my.undoManager.undoStackSize() - undoStackSize));
             my.undoManager.combineLast(my.undoManager.undoStackSize() - undoStackSize);
         }
 
@@ -1475,7 +1475,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         my.resource = 'R-' + arrayPos;
         //prevTrack = my.track.prev(".track");
         //prevTitleDiv = titlediv.prev(".titlediv");
-        //console.log("new position assigned: " + pos);
+        //doNothing("new position assigned: " + pos);
     }
     that.updatePos = updatePos;
 
@@ -1551,7 +1551,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
     function debugTrackArray() {
         for (var i = 0; i < dataHolder._trackArray.length; i++) {
-            console.log(i + " - " + dataHolder._trackArray[i].track.getTitle());
+            doNothing(i + " - " + dataHolder._trackArray[i].track.getTitle());
         }
     }
 
@@ -1917,7 +1917,7 @@ function trackTitleReleased(evt) {
         } else if (that.getCurrentDisplay() !== null) {
             that.getCurrentDisplay().released(evt);
         } else {
-            console.log("skipping release");
+            doNothing("skipping release");
 
 
 
@@ -2452,14 +2452,14 @@ function trackTitleReleased(evt) {
 
      //adds a key frame or display    
     function addKeyorDisplay(evt) {
-        console.log("~~~~~~~~~~ Add key or display called in tour athoring track~~~~~~~~~~~~~~")
-        console.log("is reloading: " + my.timeline.getViewer().getIsReloading() + "         capture started: " + my.timeline.getViewer().getCaptureStarted());
+        doNothing("~~~~~~~~~~ Add key or display called in tour athoring track~~~~~~~~~~~~~~")
+        doNothing("is reloading: " + my.timeline.getViewer().getIsReloading() + "         capture started: " + my.timeline.getViewer().getCaptureStarted());
         if (my.timeline.getViewer().getIsReloading() || my.timeline.getViewer().getCaptureStarted()) {
             if (dataHolder.numTracks() !== 1 || dataHolder.getDisplays(that.getPos()).getContents().length !== 0) {
                 return;
             }
         }
-        console.log("here");
+        doNothing("here");
         var positionX = evt.position.x,
             newTime = my.timeManager.pxToTime(positionX),
             positionY = evt.position.y,
@@ -3136,7 +3136,7 @@ function trackTitleReleased(evt) {
         if (my.attachedInks.indexOf(tr) < 0) {
             my.attachedInks.push(tr);
         } else {
-            console.log("duplicate added");
+            doNothing("duplicate added");
         }
     }
     function removeAttachedInkTrack(tr) {
@@ -3249,7 +3249,7 @@ function trackTitleReleased(evt) {
                 exp.resourceReferences = [];
                 break;
             default:
-                console.log('Track type not yet implemented in RIN');
+                doNothing('Track type not yet implemented in RIN');
         }
 
         // don't pass through if track is currently selected or there is no selection

@@ -45,7 +45,7 @@
         if(containerId && $('#'+containerId).length > 0) {
             container = $('#'+containerId);
         } else {
-            console.log('no containerId specified, or the containerId does not match an element');
+            doNothing('no containerId specified, or the containerId does not match an element');
             return; // no TAG for you
         }
 
@@ -53,7 +53,7 @@
             pageToLoad = parseQueryParams();
         }
 
-        console.log(TELEMETRY_SESSION_ID);
+        doNothing(TELEMETRY_SESSION_ID);
         // if we're in the windows app, localStorage.ip should take precedence (starting on the last server
         // running makes more sense than in the web app, where TAG should start to whichever server is specified
         // by the museum/institution)

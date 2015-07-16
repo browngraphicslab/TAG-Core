@@ -205,7 +205,8 @@ module.exports = function(grunt) {
 					        \n        idleTimer, \
                             \n        Worktop = {}, \
 							\n 		  itePath 			   = tagPath + "/js/ITE/ITE/",\
-			                \n        TAG                  = {}; \n\n',
+			                \n        TAG                  = {}; \
+                            \n        var doNothing = function() { return; }; \n\n',
 				footer: '};'
 			},
 			dist: {

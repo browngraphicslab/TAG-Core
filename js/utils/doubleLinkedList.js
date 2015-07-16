@@ -142,14 +142,14 @@ DoublyLinkedList.prototype.size = function () {
 DoublyLinkedList.prototype.printList = function () {
     var curNode = this._head;
     if (curNode === null) {
-        console.log("Empty List\n");
+        doNothing("Empty List\n");
     } else {
-        console.log("Printing List...");
+        doNothing("Printing List...");
         for (var i = 0; i < this._length; i++) {
-            console.log(curNode.data + " ");
+            doNothing(curNode.data + " ");
             curNode = curNode.next;
         }
-        console.log("\n");
+        doNothing("\n");
     }
 };
 
@@ -159,7 +159,7 @@ DoublyLinkedList.prototype.printList = function () {
 */
 DoublyLinkedList.prototype.remove = function (index) {
     if (index < 0 || index >= this._length || this._length === 0) {
-        console.log("index is out of bounds");
+        doNothing("index is out of bounds");
     } else {
 
         var curNode = this.item(index);

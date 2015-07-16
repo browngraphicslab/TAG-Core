@@ -1167,7 +1167,7 @@ TAG.Worktop.Database = (function () {
     function getKioskLocked() {
         //if (_main) {
 
-            console.log("isKioskLocked = " + _main.Metadata["isKioskLocked"]);
+            doNothing("isKioskLocked = " + _main.Metadata["isKioskLocked"]);
             return _main.Metadata["isKioskLocked"] || 'true';
         //}
         
@@ -1291,7 +1291,7 @@ TAG.Worktop.Database = (function () {
                             callback(false, xmlHotspot);
                         }
                         catch (err) {
-                            console.log("error in getLinqXML: " + err);
+                            doNothing("error in getLinqXML: " + err);
                             getLinqXML(guid, callback);
                         }
                     }
@@ -1299,7 +1299,7 @@ TAG.Worktop.Database = (function () {
             });
 
             request.fail(function (request, error) {
-                console.log(error);
+                doNothing(error);
             });
 
         }
@@ -1361,7 +1361,7 @@ TAG.Worktop.Database = (function () {
     //                            callback(_exhibitions);
     //                        }
     //                        catch (err) {
-    //                            console.log("error in getExhibitions: " + err);
+    //                            doNothing("error in getExhibitions: " + err);
     //                            callback([]);
     //                        }
     //                    } else {
@@ -1369,7 +1369,7 @@ TAG.Worktop.Database = (function () {
     //                    }
     //                },
     //                error: function (err) {
-    //                    console.log("ajax fails in getExhibition");
+    //                    doNothing("ajax fails in getExhibition");
     //                }
     //            });
     //        } else {
@@ -1570,7 +1570,7 @@ TAG.Worktop.Database = (function () {
                         _artworks = new Worktop.Doq(request.responseText);
                     }
                     catch (err) {
-                        console.log("error in getAllArtworks: " + err);
+                        doNothing("error in getAllArtworks: " + err);
                         getAllArtworks(callback);
                     }
                 }
@@ -1596,7 +1596,7 @@ TAG.Worktop.Database = (function () {
                         _artworks = new Worktop.Doq(request.responseText);
                     }
                     catch (err) {
-                        console.log("error in getAllArtworks: " + err.message);
+                        doNothing("error in getAllArtworks: " + err.message);
                         getAllArtworks(callback);
                     }
                 }
@@ -1628,13 +1628,13 @@ TAG.Worktop.Database = (function () {
                         callback(newDoq, flag);
                         //}
                         //catch (err) {
-                        //console.log("bad xml response in getDoqByGuid: " + err.message);
+                        //doNothing("bad xml response in getDoqByGuid: " + err.message);
                         // getDoqByGuid(guid, flag, callback);
                         //}
                     }
                 },
                 error: function (err) {
-                    console.log(err);
+                    doNothing(err);
                     error && error();
                 }
             });
@@ -1869,7 +1869,7 @@ TAG.Worktop.Database = (function () {
                         }
                     },
                     error: function (err) {
-                        console.log("ajax fail in getAlltours");
+                        doNothing("ajax fail in getAlltours");
                     }
                 });
 
@@ -1909,13 +1909,13 @@ TAG.Worktop.Database = (function () {
                         feedback = new Worktop.Doq(request.responseText);
                         onSuccess(feedback[0] ? feedback : []);
                     } catch (e) {
-                        console.log(e.message);
+                        doNothing(e.message);
                         onError && onError();
                     }
                 }
             },
             error: function (err) {
-                console.log("ajax fail in getAllFeedback");
+                doNothing("ajax fail in getAllFeedback");
                 onError && onError();
             }
         });
@@ -2089,10 +2089,10 @@ TAG.Worktop.Database = (function () {
         try {
             name = fn.toString().split('function ')[1].split('(')[0].trim() + ' ';
         } catch (exception) {
-            console.log(exception);
+            doNothing(exception);
         }
         return function () {
-            console.log("Warning: Call to deprecated function " + name + "in TAG.Worktop.Database");
+            doNothing("Warning: Call to deprecated function " + name + "in TAG.Worktop.Database");
             var passedArgs = [];
             for (var i = 0; i < arguments.length; i++) {
                 passedArgs[i] = arguments[i];

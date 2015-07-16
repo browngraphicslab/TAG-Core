@@ -44,7 +44,7 @@ TAG.Util.IdleTimer = (function() {
          */
         function start() {
             if (jQuery.data(document.body, "isKiosk") == true && $.find("video").length==0 && tourIsPlaying==false) {
-                console.log("timer start")
+                doNothing("timer start")
                 if(idleDuration !== 0) { // default is no idle timer
                     s1TimeoutID = setTimeout(fireS1, s1d);
                     started = true;
@@ -61,7 +61,7 @@ TAG.Util.IdleTimer = (function() {
          * @method kill
          */
         function kill() {
-            console.log("timer killed")
+            doNothing("timer killed")
             s1TimeoutID && clearTimeout(s1TimeoutID);
             s2TimeoutID && clearTimeout(s2TimeoutID);
             overlayInterval && clearInterval(overlayInterval);
@@ -290,7 +290,7 @@ TAG.Util.IdleTimer = (function() {
      */
     function restartTimer() {
         idleTimer && idleTimer.restart();
-        //console.log('idle timer started');
+        //doNothing('idle timer started');
     }
 
     return {

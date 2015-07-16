@@ -1034,7 +1034,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             textEditSizeLabel.append(textEditSizeLabel1);
             var pointvalue = (fontsize - 8) / (maxFontSize - 8);
             textEditSizeSlider.attr("value", Math.round(fontsize) + "px");
-            //console.log(pointleft);
+            //doNothing(pointleft);
             var currentcolor = p1.get_attr(datastring, "color", 's'); //update the current color
             colorEditTextLabel1.text(currentcolor);
 
@@ -1222,10 +1222,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             callback && callback();
                         }
                     }, function (error) {
-                        console.log(error);
+                        doNothing(error);
                     });
                 } catch (err) {
-                    console.log(err.message);
+                    doNothing(err.message);
                     mediaLengths.push(TAG.TourAuthoring.Constants.maxTourLength);
                     if (i < files.length - 1) {
                         getMusicPropertiesHelper(files, i + 1, callback);
@@ -1310,7 +1310,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 					        'background-color': 'transparent',
 					        'color': 'gray'
 					    })
-					    console.log("disable import from tours")
+					    doNothing("disable import from tours")
 
 					},
 					function () {
@@ -1319,7 +1319,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 					        'background-color': 'transparent',
 					        'color': 'white'
 					    })
-					    console.log("enable import from tours");
+					    doNothing("enable import from tours");
 					});
                 upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
                 upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
@@ -1337,7 +1337,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         }
                     },
 						function (error) {
-						    console.log(error);
+						    doNothing(error);
 						});
                 } catch (err) {
                     mediaLengths.push(TAG.TourAuthoring.Constants.maxTourLength);
@@ -1478,7 +1478,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 					        'background-color': 'transparent',
 					        'color': 'gray'
 					    })
-					    console.log("disable import from tours")
+					    doNothing("disable import from tours")
 
 					},
 					function () {
@@ -1487,7 +1487,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 					        'background-color': 'transparent',
 					        'color': 'white'
 					    })
-					    console.log("enable import from tours");
+					    doNothing("enable import from tours");
 					});
                 upldr.setMaxDuration(TAG.TourAuthoring.Constants.maxTourLength);
                 upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
@@ -1550,7 +1550,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 					        'background-color': 'transparent',
 					        'color': 'gray'
 					    })
-					    console.log("disable import from tours")
+					    doNothing("disable import from tours")
 
 					},
 					function () {
@@ -1559,7 +1559,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 					        'background-color': 'transparent',
 					        'color': 'white'
 					    })
-					    console.log("enable import from tours");
+					    doNothing("enable import from tours");
 					});
             }
 
@@ -1750,7 +1750,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             dropInk.hide();
                             assetButton.data('selected', false);
                             fileClick = true;
-                            console.log("no upload happening - from file button enabled");
+                            doNothing("no upload happening - from file button enabled");
 
                             self.css({
                                 'background-color': 'white',
@@ -1801,7 +1801,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "Write":
-                        console.log("write ink clicked")
+                        doNothing("write ink clicked")
                         $('.undoButton').css({
                             'opacity': '0.4'
                         });
@@ -1857,7 +1857,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "Draw":
-                        console.log("draw ink clicked")
+                        doNothing("draw ink clicked")
                         $('.undoButton').css({
                             'opacity': '0.4'
                         });
@@ -1910,7 +1910,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         break;
 
                     case "Highlight":
-                        console.log("highlight ink clicked")
+                        doNothing("highlight ink clicked")
                         $('.undoButton').css({
                             'opacity': '0.4'
                         });
@@ -1989,7 +1989,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 		 are deleted; disables ink functionality by graying out "Ink" button
 		 */
         function disableInk() {
-            console.log("ink disabled");
+            doNothing("ink disabled");
             allowInk = false;
             inkButton.css({
                 'background-color': 'transparent',
@@ -2042,7 +2042,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 closeFunc();
             }
 
-            //console.log('addcomponent click');
+            //doNothing('addcomponent click');
 
             evt.stopImmediatePropagation();
 
@@ -2376,7 +2376,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     }
                     _clearAssMedia(); // interesting name....
                     $(associatedMediaPickerOverlay).fadeOut();
-                    //console.log(selectedArt.type);
+                    //doNothing(selectedArt.type);
                     associatedMediaPickerImport.disabled = true;
                     //associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
                     if (selectedArtworks && selectedArtworks.length) {
@@ -2430,7 +2430,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                                 //    timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                                 //}
                             } else {
-                                console.log('Unrecognized file type imported!!!???');
+                                doNothing('Unrecognized file type imported!!!???');
                             }
                         }
                         undoManager.combineLast(2 * selectedArtworks.length);
@@ -2585,7 +2585,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 var selectedArt, i, track, positionX, newDisplay, dispLen, displayLength, diff;
                 _clearAssMedia(); // interesting name....
                 $(associatedMediaPickerOverlay).fadeOut();
-                //console.log(selectedArt.type);
+                //doNothing(selectedArt.type);
                 associatedMediaPickerImport.disabled = true;
                 //associatedsearchbar.attr('placeholder', PICKER_SEARCH_TEXT);
                 if (selectedArtworks && selectedArtworks.length) {
@@ -2644,7 +2644,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                             //    timeline.getTracks()[0].leftAndRight({ translation: { x: 0 } }, false);
                             //}
                         } else {
-                            console.log('Unrecognized file type imported!!!???');
+                            doNothing('Unrecognized file type imported!!!???');
                         }
                     }
                     TAG.Telemetry.recordEvent("AddTrack", function (tobj) {
@@ -2702,7 +2702,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             //mediaQueue.clear();
             if (mediaArray) {
                 for (var i = 0; i < mediaArray.length; i++) {
-                    console.log(usedAssocMediaGuids)
+                    doNothing(usedAssocMediaGuids)
                     if (usedAssocMediaGuids.indexOf(mediaArray[i].Identifier) < 0) {
                         mediaQueue.add(createMediaHolder(mediaArray[i], applyClick));
                         usedAssocMediaGuids.push(mediaArray[i].Identifier)
@@ -3032,9 +3032,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         $('.' + selected).show().data('visible', true);
                         TAG.Util.searchData(searchbar.val(), '.artButton', IGNORE_IN_SEARCH);
                         TAG.Worktop.Database.getArtworksIn(exhibHolder.attr('id'), loadInArtworks, function () {
-                            console.log("error");
+                            doNothing("error");
                         }, function () {
-                            console.log("error2");
+                            doNothing("error2");
                         });
 
 
@@ -3042,9 +3042,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 }
 
                 TAG.Worktop.Database.getArtworks(loadInArtworks, function () {
-                    console.log("error");
+                    doNothing("error");
                 }, function () {
-                    console.log("error2");
+                    doNothing("error2");
                 });
             });
 
@@ -3215,7 +3215,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     artworkIndicesViaURL.splice(urlindex, 1);
                     selectedArtworksUrls[artHolder.data('url')] = false;
                     catalogPickerImport.disabled = selectedArtworks.length ? false : true;
-                    //console.log(selectedArtworks.length);
+                    //doNothing(selectedArtworks.length);
                 } else {
                     artHolder.css('background', '#999');
                     artHolder.data({
@@ -3290,10 +3290,10 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         var positionX = timeManager.getCurrentPx();
                         var displayLength = 5;
                         var dispLen = Math.min(displayLength, timeManager.getDuration().end - timeManager.pxToTime(positionX));
-                        console.log("display len: " + dispLen);
+                        doNothing("display len: " + dispLen);
                         var newDisplay = (dispLen < TAG.TourAuthoring.Constants.displayEpsilon) ? track.addDisplay(timeManager.timeToPx(timeManager.getDuration().end - TAG.TourAuthoring.Constants.displayEpsilon), TAG.TourAuthoring.Constants.displayEpsilon) : track.addDisplay(positionX, dispLen);
-                        console.log("new Display: ");
-                        console.log(newDisplay);
+                        doNothing("new Display: ");
+                        doNothing(newDisplay);
                         if (dispLen < 1.5 && dispLen >= TAG.TourAuthoring.Constants.displayEpsilon) {
                             newDisplay.setIn(0);
                             newDisplay.setOut(0);
@@ -3310,7 +3310,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 isUploading = false;
                 timeline.getDataHolder().mapTracks(function (container, i) {
                     container.track.updatePos(i);
-                    console.log("mapping track " + i);
+                    doNothing("mapping track " + i);
                 });
 
                 viewer.forceITEPlayerReload();
@@ -3351,9 +3351,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                     loadInArtworks(allArtworks);
                 } else {
                     TAG.Worktop.Database.getArtworks(loadInArtworks, function () {
-                        console.log("error");
+                        doNothing("error");
                     }, function () {
-                        console.log("error2");
+                        doNothing("error2");
                     });
                 }
             });
@@ -3979,7 +3979,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             scroll: false,
             drag: function (event) {
                 textSliderPoint.value = textSliderPoint.css("left").replace('px', '') / (textSizeSlider.offset().left + textSizeSlider.width()) * 1.28;
-                //console.log(textSliderPoint.value);
+                //doNothing(textSliderPoint.value);
                 textSizeSlider.attr("value", (textSliderPoint.value * 39 + 8) + "px");
                 var val = Math.round(textSliderPoint.value * 39) + 8;
                 textSizeLabel1.text(val + "px");
@@ -4460,9 +4460,9 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             containment: "parent",
             scroll: false,
             drag: function (event, ui) {
-                //console.log(ui.position.left);
+                //doNothing(ui.position.left);
                 textEditSliderPoint.value = ui.position.left / (textEditSizeSlider.width() - textEditSliderPoint.width());
-                //console.log(textEditSliderPoint.value);
+                //doNothing(textEditSliderPoint.value);
                 textEditSizeSlider.attr("value", (textEditSliderPoint.value * (maxFontSize - 8) + 8) + "px"); // font size goes from 12-43 (maybe the slider point goes past 1.0?)
                 var val = Math.round(textEditSliderPoint.value * (maxFontSize - 8)) + 8;
                 currentFontSize = val;
@@ -4674,7 +4674,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 currentInkController.setEraserWidth($('#brushSlider').attr('value'));
                 $('.brushLabel1').text(Math.round($('#brushSlider').attr('value')) + "px");
                 //
-                //console.log('setting draw thickness to '+ saveDrawThickness);
+                //doNothing('setting draw thickness to '+ saveDrawThickness);
                 currentInkController.set_mode(1); // draw mode
             }
         });
@@ -4714,7 +4714,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 currentInkController.setEraserWidth($('#brushSlider').attr('value'));
                 $('.brushLabel1').text(Math.round($('#brushSlider').attr('value')) + "px");
                 //
-                //console.log('setting erase thickness to ' + saveEraseThickness);
+                //doNothing('setting erase thickness to ' + saveEraseThickness);
                 currentInkController.set_mode(2); // erase mode
             }
         });
@@ -4893,7 +4893,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             event.stopPropagation();
         });
         if (item.addEventListener) {
-            console.log("item.addEventListener called in component controls")
+            doNothing("item.addEventListener called in component controls")
             item.addEventListener('DOMNodeInserted', function () {
                 //initialize colorpicker object on current element
                 myPicker = new jscolor.color(item, {});
@@ -5646,7 +5646,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             playbackControls.redoButton.on('click', function () {
                 undoManager.redo();
             });
-            //console.log("reseting undo-redo buttons to global");
+            //doNothing("reseting undo-redo buttons to global");
             playbackControls.undoRedoInkOnly.css({
                 'display': 'none'
             });
@@ -6449,7 +6449,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 		 * Sets display:none for each of the ink control panels
 		 */
         function hideInkControls() {
-            console.log("hide ink controls called")
+            doNothing("hide ink controls called")
             inkTransparencyControls.css({
                 'display': 'none'
             });

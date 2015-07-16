@@ -8,7 +8,7 @@ Worktop.Doq.Test = function () {
         url: 'js/TAG/worktop/main_test.xml',
         dataType: "text",
         success: function (data) {
-            console.log(data);
+            doNothing(data);
             doq = new Worktop.Doq(data);
             run();
         }
@@ -20,18 +20,18 @@ Worktop.Doq.Test = function () {
 
         // Prints out all matching tag values and attributes
         $exhibitions.each(function (index, element) {
-            console.log("name ", index, ": ", $(element).text());
-            console.log("\t artist: ", $(element).attr("artist"));
+            doNothing("name ", index, ": ", $(element).text());
+            doNothing("\t artist: ", $(element).attr("artist"));
         });
 
-        console.log("length of jQuery object with no matching tags: ", $blorg.length);
+        doNothing("length of jQuery object with no matching tags: ", $blorg.length);
     };
 
     this.containsTagTest = function () {
         var validTag = doq.contains("Type");
         var invalidTag = doq.contains("BLORG");
-        console.log("doq contains 'Type' tag: ", validTag);
-        console.log("doq contains 'BLORG' tag: ", invalidTag);
+        doNothing("doq contains 'Type' tag: ", validTag);
+        doNothing("doq contains 'BLORG' tag: ", invalidTag);
     };
 
     this.getTagValueTest = function () {
@@ -39,9 +39,9 @@ Worktop.Doq.Test = function () {
         for (var i = 0; i < 3; ++i) {
             validTags.push(doq.getTagValue("Name", i, "uh-oh not found"));
         }
-        console.log("valid tags: ", validTags);
+        doNothing("valid tags: ", validTags);
         var invalidTag = doq.getTagValue("BLORG", 0, "not found");
-        console.log("invalid tag value: ", invalidTag);
+        doNothing("invalid tag value: ", invalidTag);
     };
 
     // run all tests
@@ -52,8 +52,8 @@ Worktop.Doq.Test = function () {
     function run() {
         for (var method in that) {
             if (typeof that[method] == 'function') {
-                console.log(method);
-                console.log("----------------------");
+                doNothing(method);
+                doNothing("----------------------");
                 that[method]();
             }
         }

@@ -416,7 +416,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	        opacity: window.getComputedStyle(_canvasHolder[0]).opacity
 	    };
 	    if (!_viewer.viewport) {
-	        console.log("viewport undefined when getting OSD state");
+	        doNothing("viewport undefined when getting OSD state");
 	    }
 		return self.savedState;
 	};
@@ -441,7 +441,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		// _viewer.viewport.fitBounds(state.bounds, false);  // End of old janky fix.
 
 	    _canvasHolder.css("opacity", state.opacity)
-	    //console.log("setting opacity to " + state.opacity + " : " + self.trackData.name)
+	    //doNothing("setting opacity to " + state.opacity + " : " + self.trackData.name)
         setZIndex(self.zIndex)
 		_viewer.viewport.fitBounds(state.bounds, true);
 		_viewer.viewport.update();	
@@ -591,7 +591,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function addInk(inkTrack) {
 		if (!_viewer.viewport){
-			// console.log("failed to load ink as DZ is not ready... trying again" );
+			// doNothing("failed to load ink as DZ is not ready... trying again" );
 			setTimeout(function(){
 				addInk(inkTrack) } , 100);
 		} else {
@@ -799,14 +799,14 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		if (window.getComputedStyle(_canvasHolder[0]).opacity == 0){
 		    _UIControl.css("z-index", -1)
 		    _proxy.css("z-index", -1)
-           // console.log("zindex being set for "+ self.trackData.name + " to -1")
+           // doNothing("zindex being set for "+ self.trackData.name + " to -1")
 		} 
 		else //Otherwise set it to its correct z index
 		{
 			_UIControl.css("z-index", index)
 			_canvasHolder.css("z-index", 1)
 			_proxy.css("z-index", index + 5)
-			//console.log("zindex being set for " + self.trackData.name + " to " + index)
+			//doNothing("zindex being set for " + self.trackData.name + " to " + index)
 
 		}
     	self.zIndex = index

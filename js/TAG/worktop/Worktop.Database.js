@@ -402,7 +402,7 @@ Worktop.Database = function (mainID) {
     }
 
     function batchDeleteDoq(guids, handlers) {
-        console.log("GuidList: " + guids)
+        doNothing("GuidList: " + guids)
         batchDeleteRequest(
             'Doq',
             handlers,
@@ -570,7 +570,7 @@ Worktop.Database = function (mainID) {
                 if (throwOnWarn) {
                     throw "'" + key + "' is not a valid request parameter for " + name;
                 } else {
-                    console.log("Warning: '" + key + "' is not a valid request parameter for " + name);
+                    doNothing("Warning: '" + key + "' is not a valid request parameter for " + name);
                 }
             }
             if (_util.contains(params.body, key)) {

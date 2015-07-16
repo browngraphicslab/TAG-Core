@@ -190,7 +190,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
                 tobj.item = "artwork_editor";
                 tobj.time_spent = SPENT_TIMER.get_elapsed();
-                console.log("artwork editor spent time: " + tobj.time_spent);
+                doNothing("artwork editor spent time: " + tobj.time_spent);
             });
 
             TAG.Util.removeYoutubeVideo();
@@ -1166,13 +1166,13 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                
                 //var progressBar = $(document.getElementById("progressBarUploads"));
                 if (uploadHappening === true) {
-                    console.log("import map should be disabled - artwork editor");
+                    doNothing("import map should be disabled - artwork editor");
                     importMapButton.css({ 'color': 'rgba(255, 255, 255, .5)' });
                     importMapButton.prop('disabled', 'true');
                 }
 
                /* if ($(progressBar).length >0) {
-                    console.log("upload is happening, disable import maps PLEASE!!");
+                    doNothing("upload is happening, disable import maps PLEASE!!");
                     $(importMapButton).css({ 'color': 'rgba(255, 255, 255, .5)' });
                     $(importMapButton).prop('disabled', 'true');
 
@@ -1396,8 +1396,8 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                 height = layerContainer.height(),
                 topLeft = annotatedImage.viewer.viewport.pointFromPixel(new OpenSeadragon.Point(offset.left, offset.top)),
                 bottomRight = annotatedImage.viewer.viewport.pointFromPixel(new OpenSeadragon.Point(offset.left + width, offset.top + height));
-            console.log("width" + width);
-            console.log("height" + height);
+            doNothing("width" + width);
+            doNothing("height" + height);
             return new OpenSeadragon.Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
         }
 
@@ -1471,10 +1471,10 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
            
             /**
             layerContainer.hover(function () {
-                console.log("freezing");
+                doNothing("freezing");
                 annotatedImage.freezeArtwork();
             }, function () {
-                console.log("unfreezing");
+                doNothing("unfreezing");
                 annotatedImage.unfreezeArtwork();
             });
             **/
@@ -1775,7 +1775,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             assetType = isHotspot ? 'Hotspot' : (isLayer ? 'Layer' : 'Asset');
 
             if (titleTextVal != oldTitle || descriptionTextVal != oldDescription || positionChanged) {
-                console.log(titleTextVal + " " + oldTitle + " " + descriptionTextVal + " " + oldDescription + " " + positionChanged);
+                doNothing(titleTextVal + " " + oldTitle + " " + descriptionTextVal + " " + oldDescription + " " + positionChanged);
                 updateAssocMedia({
                     title: TAG.Util.htmlEntityEncode(titleTextVal),
                     desc: TAG.Util.htmlEntityEncode($('.description').val()),
@@ -2214,11 +2214,11 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         createMediaList();
                         rightbarLoadingDelete.fadeOut();
                     }, function () {
-                        console.log("error 1");
+                        doNothing("error 1");
                     }, function () {
-                        console.log("error 2");
+                        doNothing("error 2");
                     }, function () {
-                        console.log("error 3");
+                        doNothing("error 3");
                     });
                 } else {
                     close();
@@ -2233,7 +2233,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     assetType;
 
                 //$('.assetHolder').css('background-color', '');
-                console.log("save associated media button clicked");
+                doNothing("save associated media button clicked");
                 addRemoveMediaButton.prop('disabled', true);
                 addRemoveMediaButton.css('color', 'rgba(255,255,255,0.5)');
                 addTextButton.prop('disabled', true);
@@ -3197,7 +3197,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
 
             // Make sure everything's coo.
             if (!keywordSets || !categorySelects) {
-                console.log('Tried creating selects before initializing the keywords editor!');
+                doNothing('Tried creating selects before initializing the keywords editor!');
                 return;
             }
 

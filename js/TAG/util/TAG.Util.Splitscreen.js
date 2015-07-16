@@ -156,7 +156,7 @@ TAG.Util.Splitscreen = (function () {
             root = $(pickedScreen.children('.rootPage')[0]); // only child should be root
 
         on = false;
-        console.log($("#annotatedImageViewer").length)
+        doNothing($("#annotatedImageViewer").length)
         root.data('split', 'L');
         
         // remove all unnecessary metacontainers and contents

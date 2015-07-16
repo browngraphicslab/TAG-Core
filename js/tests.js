@@ -127,7 +127,7 @@ TAG.TESTS = (function () {
 						tile = randElt(artTiles),
 						alreadySelected;
 					if(!tile) {
-						console.log("RETURNING: no artwork tiles yet");
+						doNothing("RETURNING: no artwork tiles yet");
 						return;
 					}
 					alreadySelected = $('.already_selected_in_test');
@@ -264,7 +264,7 @@ TAG.TESTS = (function () {
 			showStartOverlay();
 			runTest(0, tests, intervals);
 		} catch(e) {
-			console.log('error in runTests: '+e.message);
+			doNothing('error in runTests: '+e.message);
 			return -1;
 		}
 	}
@@ -279,7 +279,7 @@ TAG.TESTS = (function () {
 			type = typeof tests[index];
 			testTimeout = setTimeout(function() {
 				if(type === "function") {
-					console.log("RUNNING TEST #"+testNum);
+					doNothing("RUNNING TEST #"+testNum);
 					tests[index]();
 					runTest(index+1, tests, intervals, testNum+1);
 				} else if(type === "number" && intervals[index] > 0) { // repeat previous tests[index] commands intervals[index] times
@@ -520,12 +520,12 @@ TAG.TESTS = (function () {
 	 */
 	function randElt(arr) {
 		var ind;
-		console.log("arr.length = "+arr.length);
+		doNothing("arr.length = "+arr.length);
 		if(arr.length === 0) {
 			return null;
 		} else {
 			ind = randIndex(arr);
-			console.log('index = '+ind);
+			doNothing('index = '+ind);
 			return arr[ind];
 		}
 	}
@@ -539,7 +539,7 @@ TAG.TESTS = (function () {
 	function genErrorHandler(calling) {
 		var str = calling ? ('error in '+calling) : 'error';
 		return function(err) {
-			console.log(str + ': ' + e.message);
+			doNothing(str + ': ' + e.message);
 		};
 	}
 

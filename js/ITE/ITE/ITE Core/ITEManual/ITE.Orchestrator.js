@@ -401,7 +401,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	                track.registerCaptureHandler(handlers[handler_i]);
 	                track.registerCaptureFinishedHandler(handlers[handler_i]);
 	            } else {
-	                console.log('error binding handler for track ' + track.name);
+	                doNothing('error binding handler for track ' + track.name);
 	            }
 	        }
 	    }

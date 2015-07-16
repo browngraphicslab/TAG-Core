@@ -321,14 +321,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 (function (i, artwork) {
                     return function (output) {
                         if (output !== "" || output !== "False") {
-                            console.log("converted: ");
+                            doNothing("converted: ");
                             var element = $(document.getElementById("videoInPreview"));
                             if (element && element.attr("identifier") === output) {
                                 reloadVideo(element);
                                 conversionVideos.remove(artwork);
                             }
                         } else {
-                            console.log("not converted: ");
+                            doNothing("not converted: ");
                         }
                     }
                 })(i, artwork), null, conversionVideos[i]);
@@ -364,7 +364,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
 
                 } else {
-                    console.log("not converted: ");
+                    doNothing("not converted: ");
                 }
             }, null, doq.Identifier);
     }
@@ -389,7 +389,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             mediaElement.css("padding-top", "6%");
             mediaElement.live('playing', function() { 
             mediaElement.css("padding-top","0%"); 
-                console.log("video clicked");
+                doNothing("video clicked");
             });
         }; // adjust the position for video previewing in web app
 
@@ -422,7 +422,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //            (function (i, artwork) {
     //                return function (output) {
     //                    if (output !== "" && output !== "False" && output !== "Error") {
-    //                        //console.log("converted: ");
+    //                        //doNothing("converted: ");
     //                        var element = $(document.getElementById("videoInPreview"));
     //                        if (element && element.attr("identifier") === output) {
     //                            reloadVideo(element);
@@ -436,7 +436,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //                        conversionVideos.remove(artwork);
     //                    }
     //                    else {
-    //                        //console.log("not converted: ");
+    //                        //doNothing("not converted: ");
     //                    }
     //                }
     //            })(i, artwork), null, conversionVideos[i]);
@@ -480,7 +480,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function enterKeyHandlerSettingsView(event) {
         if (event.target.className == "metadataPickerSearchbar") {
-            console.log('searching metadata');
+            doNothing('searching metadata');
             event.stopPropagation();
             event.preventDefault();
         }
@@ -678,7 +678,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
                 tobj.item = "settings_view";
                 tobj.time_spent = SETTINGSVIEW_TIMER.get_elapsed();
-                console.log("settings view spent time: " + tobj.time_spent);
+                doNothing("settings view spent time: " + tobj.time_spent);
             });
 
             TAG.Telemetry.recordEvent("LeftBarSelection", function (tobj) {
@@ -830,7 +830,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} id           the id of the middle label to start on
      */
     function importFiles() {
-    //    console.log("Import button was clicked");
+    //    doNothing("Import button was clicked");
     }
 
     function switchView(view, id) {
@@ -1050,7 +1050,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param cancelFunction {Function}     Function to call on delete cancel; this will likely update UI.
      */
     function deleteKeyword(setIndex, keyword, successFunction, failFunction, cancelFunction) {
-        console.log('deleting ' + keyword);
+        doNothing('deleting ' + keyword);
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
             //Change the settings in the database
             var set = keywordSets[setIndex];
@@ -2602,7 +2602,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             descInput = createTextAreaInput(TAG.Util.htmlEntityDecode(exhibition.Metadata.Description), false, 2000);
             bgInput = createButton('Import', function () {
                 //changesHaveBeenMade = true;    
-                //console.log("collection bg");
+                //doNothing("collection bg");
 
                 //experimentation for background issue
                 /**
@@ -2649,7 +2649,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         assocMediaInput: assocMediaShown
                     }, function () {
                         $('#uploadingOverlay').remove();
-                        console.log("should remove overlay now!!");
+                        doNothing("should remove overlay now!!");
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
                             //remove progress stuff
                             $('#uploadingOverlay').remove();
@@ -2919,7 +2919,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 //currCollection= exhibition.Identifier;
                 //root.append(uploadingOverlay);
 
-                //console.log(exhibition.Identifier);
+                //doNothing(exhibition.Identifier);
 
                 TAG.Util.UI.createAssociationPicker(root, "Add and Remove Artworks in this Collection",
                     { comp: exhibition, type: 'exhib' },
@@ -3764,7 +3764,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         tobj.destination_page = "tour_authoring";
                         tobj.load_time = timer.get_elapsed();
                         tobj.identifier = tour.Identifier;
-                        //console.log("tour editor load time: " + tobj.load_time);
+                        //doNothing("tour editor load time: " + tobj.load_time);
                     });
                     SPENT_TIMER.restart();
                     toureditor.getViewer().loadITE();
@@ -3850,15 +3850,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         };
 
         TAG.Worktop.Database.createTour(options, function (tewer) {
-            console.log("success");
+            doNothing("success");
             if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.tour.text]) {
                 return;
             }
             loadTourView(tewer.Identifier);
         }, function () {
-            console.log("error");
+            doNothing("error");
         }, function () {
-            console.log("cacheError");
+            doNothing("cacheError");
         });
     }
 
@@ -4059,8 +4059,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
                     if (labelList.length > 0) {
-                        console.log(func(p))
-                        console.log(labelList[0][0])
+                        doNothing(func(p))
+                        doNothing(labelList[0][0])
                     }
                     while (labelList.length > 0 && func(p) > labelList[0][0]) {
                         var label = labelList.shift();
@@ -4073,7 +4073,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     labelWasLast = false;
                     */
                 }
-                console.log("done popping")
+                doNothing("done popping")
                 displayLabels();
             }
 
@@ -4237,7 +4237,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     holder.css("padding-top", "6%");
                     holder.live('playing', function() { 
                         holder.css("padding-top","0%"); 
-                        console.log("video clicked");
+                        doNothing("video clicked");
                     });
                 }; // adjust the position for video previewing in web app
 
@@ -4859,7 +4859,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 clearRight();
                 prepareViewer(true);
 
-                console.log(mediaMULTIPLE.length + " things to delete.")
+                doNothing(mediaMULTIPLE.length + " things to delete.")
                 var deleteCounter = 0;
 
                 chunkDelete(mediaGuids.slice(0), function () {
@@ -4867,14 +4867,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         toLoad = currDoq;
                         onlyMiddle = true;
                     }
-                    console.log("done chunk deleting");
+                    doNothing("done chunk deleting");
                     loadAssocMediaView(toLoad, undefined, onlyMiddle);
                 }, function () {
-                    console.log("noauth error");
+                    doNothing("noauth error");
                 }, function () {
-                    console.log("conflict error");
+                    doNothing("conflict error");
                 }, function () {
-                    console.log("general error");
+                    doNothing("general error");
                 });
 
             }
@@ -4904,14 +4904,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             TAG.Worktop.Database.changeHotspot(media.Identifier, { Name: media.Name }, function () {
                 // success handler
                 TAG.Worktop.Database.deleteDoq(media.Identifier, function () {
-                    console.log("deleted");
+                    doNothing("deleted");
                     loadAssocMediaView();
                 }, function () {
-                    console.log("noauth error");
+                    doNothing("noauth error");
                 }, function () {
-                    console.log("conflict error");
+                    doNothing("conflict error");
                 }, function () {
-                    console.log("general error");
+                    doNothing("general error");
                 });
             }, function () {
                 // unauth handler
@@ -4932,7 +4932,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Object} media    media to associate to artworks
      */
     function assocToArtworks(media) {
-        console.log("called assocToArtworks");
+        doNothing("called assocToArtworks");
         if (!media) {
             return;
         }
@@ -5016,7 +5016,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createAsset() {
         if ($('.progressBarUploads').length != 0) {
-            //console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
+            //doNothing("THERE IS ALREADY AN UPLOAD HAPPENING")
             return
         }
 
@@ -5024,7 +5024,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             var check, i, url, name, done = 0, total = urls.length, durations = [], toScroll, alphaName;
 
             //implementing background uploads - david
-            // console.log("createAsset called")
+            // doNothing("createAsset called")
             // hideUploadingProgress();
             //prepareNextView(false);
             //clearRight();
@@ -5053,7 +5053,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             durations.push(VideoProperties.duration / 1000); // duration in seconds
                             updateDoq(j);
                         }, function (err) {
-                            console.log(err);
+                            doNothing(err);
                         });
                     }
 
@@ -5075,7 +5075,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             durations.push(MusicProperties.duration / 1000); // duration in seconds
                             updateDoq(j);
                         }, function (error) {
-                            console.log(error);
+                            doNothing(error);
                         });
                     }
                 } else {
@@ -5103,11 +5103,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         if (editedNames[i] != null) {
                             var stringName = editedNames[i].toString();
                             if (stringName.length >= 30) { //name too long - needs ellipsis
-                                console.log("NAME IS TOO LONG");
+                                doNothing("NAME IS TOO LONG");
                                 var shortName = stringName;
 
                                 while (shortName.length > 29) {
-                                    console.log("shortening long name!");
+                                    doNothing("shortening long name!");
                                     shortName = shortName.substr(0, shortName.length - 1);
                                 }
                                 stringName = shortName + "...";
@@ -5268,7 +5268,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }*/
                 } catch (error) {
                     done++;
-                    console.log("error in uploading: " + error.message);
+                    doNothing("error in uploading: " + error.message);
                     return;
                 }
                 if (!alphaName || names[j] < alphaName) {
@@ -5566,12 +5566,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (inArtworkView) {
             loadArtView(null, matches);
             if (matches.length == 0) {
-                console.log("No matches in artwork view");
+                doNothing("No matches in artwork view");
             }
         } else if (inAssociatedView) {
             loadAssocMediaView(null, matches);
             if (matches.length == 0) {
-                console.log("no matches in associated media view");
+                doNothing("no matches in associated media view");
             }
         } else if (inCollectionsView) {
             loadExhibitionsView(null, matches);
@@ -5615,7 +5615,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @param {Boolean} justMiddle true if you should only reload middle
      */
     function loadArtView(id, matches, justMiddle) {
-        console.log(sortByArt);
+        doNothing(sortByArt);
 
         inGeneralView = false;
         inCollectionsView = false;
@@ -5723,12 +5723,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             collectionList = [];
             guidsInCollection = [];
             if (sortByArt == "Title") {
-                //console.log("sort by title");
+                //doNothing("sort by title");
                 sortAZ(list);
                 displayLabels();
             }
             else if (sortByArt == "Collection") {
-                //console.log("sort by collection");
+                //doNothing("sort by collection");
                 TAG.Worktop.Database.getExhibitions(function (result) {
                     if (cancel) return;
                     sortAZ(result);
@@ -5768,7 +5768,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             }
             else if (sortByArt == "Recently Added") {
                 //create sort list for added before and other
-                console.log("sort by recently added")
+                doNothing("sort by recently added")
                 //sortAZ(list);
                 var func = function (e) {
                     return (Date.now() - (new Date(String(e.Metadata.__Created)).getTime()));
@@ -5812,8 +5812,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
 
                     if (labelList.length > 0) {
-                        console.log(func(p))
-                        console.log(labelList[0][0])
+                        doNothing(func(p))
+                        doNothing(labelList[0][0])
                     }
                     while (labelList.length > 0 && func(p) > labelList[0][0]) {
                         var label = labelList.shift();
@@ -5826,7 +5826,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     labelWasLast = false;
                     */
                 }
-                console.log("done popping")
+                doNothing("done popping")
                 displayLabels();
             }
 
@@ -5920,11 +5920,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             }
                             if (i == list.length - 1 && i > 1) {
                                 middleQueue.add(function () {
-                                    console.log("adding extra space");
+                                    doNothing("adding extra space");
                                     var extraSpace = $(document.createElement("div"));
                                     extraSpace.width(middleLabelContainer.width());
                                     extraSpace.height($($(".middleLabel")[0]).height() / 2);
-                                    //console.log($(".middleLabel"));
+                                    //doNothing($(".middleLabel"));
                                     middleLoading.before(extraSpace)
                                 });
                             }
@@ -5934,7 +5934,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         //sort name
                     else if (val) {
                         middleQueue.add(function () {
-                            console.log(val);
+                            doNothing(val);
                             middleLoading.before(label = createSortLabel(val));
                         });
                     }
@@ -5991,7 +5991,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method addArtworksToCollections 
      */
     function addArtworksToCollections(artworks) {
-        console.log("called addArtworksToCollections");
+        doNothing("called addArtworksToCollections");
         if (!artworks.length) {
             return;
         }
@@ -6046,7 +6046,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method addAssocMediaToArtworks
      */
     function addAssocMediaToArtworks(assocMedia) {
-        //console.log("called addAssocMediaToArtworks");
+        //doNothing("called addAssocMediaToArtworks");
         if (!assocMedia.length) {
             return;
         }
@@ -6175,7 +6175,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 mediaElement.css("padding-top", "6%");
                 mediaElement.live('playing', function() { 
                     mediaElement.css("padding-top","0%"); 
-                    console.log("video clicked");
+                    doNothing("video clicked");
                 });
             }; // adjust the position for video previewing in web app
             var source = TAG.Worktop.Database.fixPath(artwork.Metadata.Source);
@@ -6639,13 +6639,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         TAG.Worktop.Database.uploadImage(dataurl, function (imageURL) {
             if (isArtwork) {
                 TAG.Worktop.Database.changeArtwork(id, { Thumbnail: imageURL }, function () {
-                    console.log("success?")
+                    doNothing("success?")
                     loadArtView(component.Identifier);
                 }, unauth, conflict, error);
 
             } else { // here, it must be a video assoc media
                 TAG.Worktop.Database.changeHotspot(id, { Thumbnail: imageURL }, function () {
-                    console.log("success?");
+                    doNothing("success?");
                     loadAssocMediaView(component.Identifier);
                 }, unauth, conflict, error);
             }
@@ -6672,7 +6672,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
     function hideUploadingProgress() {
         //updates loading UI
-        console.log("FINISHED THE UPLOAD PROCESS")
+        doNothing("FINISHED THE UPLOAD PROCESS")
         var settingsViewTopBar = $(document.getElementById("setViewTopBar"));
         // $('.progressBarUploads').remove()
         // $('.progressBarUploadsButton').remove()
@@ -6685,7 +6685,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     function createArtwork(fromImportPopUp, currCollection) {
 
         if ($('.progressBarUploads').length != 0) {
-            console.log("THERE IS ALREADY AN UPLOAD HAPPENING");
+            doNothing("THERE IS ALREADY AN UPLOAD HAPPENING");
             return
         }
 
@@ -6712,7 +6712,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             };
 
             //implementing background uploads - david
-            console.log("createArtwork called")
+            doNothing("createArtwork called")
             hideUploadingProgress();
             //prepareNextView(false);
             //clearRight();
@@ -6755,11 +6755,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (editedNames[i] != null) {
                                 var stringName = editedNames[i].toString();
                                 if (stringName.length >= 21) { //name too long - needs ellipsis
-                                    console.log("NAME IS TOO LONG");
+                                    doNothing("NAME IS TOO LONG");
                                     var shortName = stringName;
 
                                     while (shortName.length > 21) {
-                                        console.log("shortening long name!");
+                                        doNothing("shortening long name!");
                                         shortName = shortName.substr(0, shortName.length - 1);
                                     }
                                     stringName = shortName + "...";
@@ -6778,7 +6778,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         }
 
                         //Confirmation pop up that artworks have been imported
-                        console.log("confirm that artworks were imported");
+                        doNothing("confirm that artworks were imported");
 
                         var importConfirmedBox = TAG.Util.UI.PopUpConfirmation(function () {
                             //remove progress stuff
@@ -6824,7 +6824,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                         root.append(importConfirmedBox);
                         $(importConfirmedBox).show();
-                        console.log("importConfirmedBox should be visible here!!");
+                        doNothing("importConfirmedBox should be visible here!!");
                         TAG.Util.multiLineEllipsis($($($(importConfirmedBox).children()[0]).children()[0]));
 
                     } else {
@@ -6832,7 +6832,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }
                 } else { //win8 app
                     if (done >= total) {
-                        console.log("upload is ACTUALLY done");
+                        doNothing("upload is ACTUALLY done");
 
                         var duplicates = new HashTable();
                         var editedNames = names;
@@ -6848,11 +6848,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             if (editedNames[i] != null) {
                                 var stringName = editedNames[i].toString();
                                 if (stringName.length >= 30) { //name too long - needs ellipsis
-                                    console.log("NAME IS TOO LONG");
+                                    doNothing("NAME IS TOO LONG");
                                     var shortName = stringName;
 
                                     while (shortName.length > 29) {
-                                        console.log("shortening long name!");
+                                        doNothing("shortening long name!");
                                         shortName = shortName.substr(0, shortName.length - 1);
                                     }
                                     stringName = shortName + "...";
@@ -6914,7 +6914,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $(importConfirmedBox).hide();
 
                             if (fromImportPopUp == true && inCollectionsView == true) { //reload collections tab if in collections and artworks were added to collection
-                                console.log("reload queue");
+                                doNothing("reload queue");
                                 loadExhibitionsView(currDoq, undefined, false);
 
                             }
@@ -6945,9 +6945,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             $(textHolder).css({ 'overflow-y': 'auto' });
                             textHolder.parent().append(t);
                             var func = t.height() > textHolder.height();
-                            console.log("t height is " + t.height() + " textHolder height is " + textHolder.height());
+                            doNothing("t height is " + t.height() + " textHolder height is " + textHolder.height());
                             while (text.length > 0 && (t.height() > textHolder.height())) {
-                                console.log("in while loop")
+                                doNothing("in while loop")
                                 text = text.substr(0, text.length - 1);
                                 t.html(text + "...");
                             }
@@ -6960,7 +6960,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         root.append(importConfirmedBox);
 
                         $(importConfirmedBox).show();
-                        console.log("importConfirmed box should be visible");
+                        doNothing("importConfirmed box should be visible");
 
                     } else {
                         durationHelper(done);
@@ -6992,7 +6992,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                             durations.push(VideoProperties.duration / 1000); // duration in seconds
                             updateDoq(j);
                         }, function (err) {
-                            console.log(err);
+                            doNothing(err);
                         });
                     }
                 } else {
@@ -7007,7 +7007,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     newDoq = new Worktop.Doq(urls[j]);
                 } catch (error) {
                     done++;
-                    console.log("error in uploading: " + error.message);
+                    doNothing("error in uploading: " + error.message);
                     return;
                 }
                 var ops = { Name: names[j] };
@@ -7033,7 +7033,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     }, null, newFileName, fileExtension, baseFileName, newDoq.Identifier);
                 }
                 if (fromImportPopUp == true) {
-                    TAG.Worktop.Database.changeExhibition(currCollection.Identifier, { AddIDs: [newDoq.Identifier] }, console.log("This worked maybe"));
+                    TAG.Worktop.Database.changeExhibition(currCollection.Identifier, { AddIDs: [newDoq.Identifier] }, doNothing("This worked maybe"));
                 }
                 var progressPopUp = $(document.getElementById("uploadProgressPopup"));
 
@@ -7076,7 +7076,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     }
 
     // var optionButtons = document.getElementById('optionButtons');
-    //console.log(optionButtons == null);
+    //doNothing(optionButtons == null);
 
 
     /*upload xml for single artwork
@@ -7625,14 +7625,14 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     tobj.destination_page = "artwork_editor";
                     tobj.load_time = timer.get_elapsed();
                     tobj.identifier = artwork.Identifier;
-                    //console.log("artwork editor load time: " + tobj.load_time);
+                    //doNothing("artwork editor load time: " + tobj.load_time);
                 });
                 SPENT_TIMER.restart();
 
             });
 
             if (progressBarLength > 0) { //other upload happening - disable import maps
-                console.log("import map should be disabled - settings view slidePageLeft")
+                doNothing("import map should be disabled - settings view slidePageLeft")
                 artworkeditor.uploadStillHappening(true);
 
             }
@@ -7654,11 +7654,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 loadArtView();
             }, function () {
-                console.log("noauth error");
+                doNothing("noauth error");
             }, function () {
-                console.log("conflict error");
+                doNothing("conflict error");
             }, function () {
-                console.log("general error");
+                doNothing("general error");
             });
         }, "Are you sure you want to delete " + artwork.Name + " ?", "Delete", true, function () { $(confirmationBox).hide(); });
         root.append(confirmationBox);
@@ -7689,7 +7689,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 prepareViewer(true);
                 // actually delete the artwork
                 chunkDelete(artworks, function () {
-                    console.log("complete")
+                    doNothing("complete")
                     if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.art.text]) {
                         return;
                     }
@@ -7745,20 +7745,20 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 chunks.push([guids[i]])
             }
         }
-        console.log("number of chunks: " + chunks.length);
+        doNothing("number of chunks: " + chunks.length);
         function nextChunk() {
-            console.log("next Chunk called for batch artwork delete")
+            doNothing("next Chunk called for batch artwork delete")
             if (chunks.length > 0) {
-                console.log("sending out next request")
+                doNothing("sending out next request")
                 TAG.Worktop.Database.batchDeleteDoq(
                     chunks.shift(),
-                    function () { console.log("success of chunk"); nextChunk() },
-                    function () { console.log("unauth error"); nextChunk(); if (unauth) { unauth() } },
-                    function () { console.log("conflict error"); nextChunk(); if (conflict) { conflict() } },
-                    function () { console.log("general error in batch doq delete"); nextChunk(); if (error) { error() } });
+                    function () { doNothing("success of chunk"); nextChunk() },
+                    function () { doNothing("unauth error"); nextChunk(); if (unauth) { unauth() } },
+                    function () { doNothing("conflict error"); nextChunk(); if (conflict) { conflict() } },
+                    function () { doNothing("general error in batch doq delete"); nextChunk(); if (error) { error() } });
             }
             else {
-                console.log("chunking delete finished, calling callback...");
+                doNothing("chunking delete finished, calling callback...");
                 success();
             }
         }
@@ -10047,13 +10047,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         names = [names];
                     }
                     for (i = 0; i < urls.length; i++) {
-                        console.log("trying that new URL thing");
+                        doNothing("trying that new URL thing");
                         urlArray.push(urls[i]);
-                        //console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
+                        //doNothing("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
                     }
 
                     for (var i = 0; i < names.length; i++) {
-                        console.log("The files being passed through names: " + names[i]);
+                        doNothing("The files being passed through names: " + names[i]);
                     }
                     callback(urls, names, contentTypes, fileArray);
                 },
@@ -10174,7 +10174,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         names = [names];
                     }
                     for (i = 0; i < urls.length; i++) {
-                        //console.log("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
+                        //doNothing("urls[" + i + "] = " + urls[i] + ", names[" + i + "] = " + names[i]);
                     }
                     callback(urls, names, contentTypes, fileArray);
                 },
@@ -10431,9 +10431,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //};
 
     //function refreshSplashScreen() {
-    //    //console.log('\nsaveSplashScreen has finished.');
+    //    //doNothing('\nsaveSplashScreen has finished.');
     //    TAG.Worktop.Database.getMain(function () {
-    //        //console.log('reloading... ' + (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.general.text]));
+    //        //doNothing('reloading... ' + (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.general.text]));
     //        if (prevSelectedSetting && prevSelectedSetting === nav[NAV_TEXT.general.text]) {
     //            if (!(prevSelectedMiddleLabel && (prevSelectedMiddleLabel.text() === "Password Settings"))) {
     //                loadGeneralView(); //refreshes the general settings
@@ -10444,7 +10444,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //}
 
     //function refreshExhibition(exhibition) {
-    //    //console.log('\nsaveExhibition has finished.');
+    //    //doNothing('\nsaveExhibition has finished.');
     //    TAG.Worktop.Database.getDoq(exhibition.Identifier, function (doq) {
     //        exhibition.label.text(doq.Name);
     //    });
@@ -10452,7 +10452,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //}
 
     //function refreshTour(tour) {
-    //    //console.log('\nsaveTour has finished.');
+    //    //doNothing('\nsaveTour has finished.');
     //    TAG.Worktop.Database.getDoq(tour.Identifier, function (doq) {
     //        tour.label.text(doq.Name);
     //    });
@@ -10460,7 +10460,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //}
 
     //function refreshAssocMedia(media) {
-    //    //console.log('\nsaveAssocMedia has finished.');
+    //    //doNothing('\nsaveAssocMedia has finished.');
     //    //TAG.Worktop.Database.getDoq(media.Identifier, function (doq) {
     //    //    media.label.text(doq.Name);
     //    //});
@@ -10468,7 +10468,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
     //}
 
     //function refreshArtwork(artwork) {
-    //    //console.log('\nsaveArtwork has finished.');
+    //    //doNothing('\nsaveArtwork has finished.');
     //    //TAG.Worktop.Database.getDoq(artwork.Identifier, function (doq) {
     //    //    artwork.label.text(doq.Name);
     //    //});
@@ -10748,7 +10748,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'padding-right': '7%',
                     //'float':'right'
                 });
-                console.log(findContainer.css('display'));
+                doNothing(findContainer.css('display'));
                 if (findContainer.css('display') != 'none') {
                     if (!IS_WINDOWS) {
                         dropDown.css('top', (searchContainer.height() - findContainer.height()) * 0.5 + 'px');
@@ -10890,7 +10890,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 }
             }
         }
-        console.log(multiSelected);
+        doNothing(multiSelected);
     }
 
     return that;

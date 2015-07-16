@@ -492,7 +492,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             }
         } catch (e) {
             // file access failed
-            console.log("file access failed: "+e.message);
+            doNothing("file access failed: "+e.message);
             if (errorCallback)
                 errorCallback();
         }
@@ -668,7 +668,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
             } catch (err) {
                 removeOverlay();
-                console.log(err.message);
+                doNothing(err.message);
             }
         };
 
@@ -679,7 +679,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             try {
                 disableButton()
                 upload = loadedUpload;
-                console.log("Is this being called twice?");
+                doNothing("Is this being called twice?");
                 promise = upload.attachAsync().then(complete, error, progress(upload));
             } catch (err) {
                 removeOverlay();
@@ -722,7 +722,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             //removeOverlay();
             finishedCallback(dataReaderLoads);
             //sets individual progress bars to 100
-            console.log("length = " + $(uploadGuids).length);
+            doNothing("length = " + $(uploadGuids).length);
             for (var i = 0; i < uploadGuids.length-1; i++) {
                 $(".uploadProgressLabel" + uploadGuids[i]).text((100).toString().substring(0, 4) + "%")
                 $(".uploadProgressInner" + uploadGuids[i]).css({ 'width': '100%' });
@@ -807,8 +807,8 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
             $(errorAlert).show();
         }
         if (shouldContinue) {
-            console.log('file upload error: ' + err.message);
-            console.log(err.message);
+            doNothing('file upload error: ' + err.message);
+            doNothing(err.message);
             removeOverlay();
             
             if (errorCallback) {
@@ -831,7 +831,7 @@ TAG.Authoring.FileUploader = function (root, type, localCallback, finishedCallba
 
         /*var incrPercent = 1 / (globalFiles.length);
         for (var i in globalFiles) {
-            console.log("percentComplete = " + percentComplete);
+            doNothing("percentComplete = " + percentComplete);
             percentComplete = percentComplete += incrPercent;
         }*/
 

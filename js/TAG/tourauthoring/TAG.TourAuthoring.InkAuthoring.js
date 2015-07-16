@@ -441,7 +441,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
 
             var command = TAG.TourAuthoring.Command({
                 execute: function () {
-                    //console.log("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
+                    //doNothing("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
                     elt.data("currx", bboxx);
                     elt.data("curry", bboxy);
                     elt.data("currw", bboxw);
@@ -485,7 +485,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                     });
                 },
                 unexecute: function () {
-                    //console.log("origposition in unexecute: {" + ox + "," + oy + "," + ow + "," + oh + "}");
+                    //doNothing("origposition in unexecute: {" + ox + "," + oy + "," + ow + "," + oh + "}");
                     elt.data("currx", ox);
                     elt.data("curry", oy);
                     elt.data("currw", ow);
@@ -658,7 +658,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             // log command
             var command = TAG.TourAuthoring.Command({
                 execute: function () {
-                    //console.log("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
+                    //doNothing("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
                     elt.data("currx", bboxx);
                     elt.data("curry", bboxy);
                     elt.data("currw", bboxw);
@@ -702,7 +702,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                     });
                 },
                 unexecute: function () {
-                    //console.log("origposition in unexecute: {" + ox + "," + oy + "," + ow + "," + oh + "}");
+                    //doNothing("origposition in unexecute: {" + ox + "," + oy + "," + ow + "," + oh + "}");
                     elt.data("currx", ox);
                     elt.data("curry", oy);
                     elt.data("currw", ow);
@@ -902,7 +902,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             // log command
             var command = TAG.TourAuthoring.Command({
                 execute: function () {
-                    //console.log("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
+                    //doNothing("bbox in execute: {" + bboxx + "," + bboxy + "," + bboxw + "," + bboxh + "}");
                     elt.data("currx", bboxx);
                     elt.data("curry", bboxy);
                     elt.data("currw", bboxw);
@@ -946,7 +946,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                     });
                 },
                 unexecute: function () {
-                    //console.log("origposition in unexecute: {" + ox + "," + oy + "," + ow + "," + oh + "}");
+                    //doNothing("origposition in unexecute: {" + ox + "," + oy + "," + ow + "," + oh + "}");
                     elt.data("currx", ox);
                     elt.data("curry", oy);
                     elt.data("currw", ow);
@@ -1031,7 +1031,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     function add_ellipse(cx, cy, rx, ry) {
         var ellipse;
         set_mode(TAG.TourAuthoring.InkMode.shapes);
-        //console.log("setting cx and cy for the ellipse");
+        //doNothing("setting cx and cy for the ellipse");
         if (cx === undefined)
             cx = 100 + Math.random() * 10;
         if (cy === undefined)
@@ -1069,7 +1069,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         var origmousey;
         var w = domelement.width();
         var h = domelement.height();
-        //console.log("w=" + w + ", h=" + h);
+        //doNothing("w=" + w + ", h=" + h);
         if (marqFillColor === undefined)
             marqFillColor = marqueeFillColor;////////FIX "#" + document.getElementById("marq_color").value;
         if (marqFillOpacity === undefined)
@@ -1156,8 +1156,8 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                         height: bbox.height + mousey - origmousey
                     });
                 }
-                //console.log("this.attr.x = " + this.attr("x") + ", y = " + this.attr("y"));
-                //console.log(update_datastring());
+                //doNothing("this.attr.x = " + this.attr("x") + ", y = " + this.attr("y"));
+                //doNothing(update_datastring());
                 origmousex = mousex;
                 origmousey = mousey;
             }
@@ -1167,7 +1167,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                 origmousex = x;
                 origmousey = y;
                 var bbox = this.getBBox();
-                //console.log("diff = " + (x - bbox.x));
+                //doNothing("diff = " + (x - bbox.x));
                 var offset_x = parseFloat(domelement.css("left"));
                 var offset_y = parseFloat(domelement.css("top"));
                 if ((arguments[2].offsetX > (bbox.x + bbox.width * 0.5)) && (arguments[2].offsetY > (bbox.y + bbox.height * 0.5))) {
@@ -1375,7 +1375,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             real_kfy = -initKeyframe.y * real_kfw; // (WEIRD -- seems to place too high if use -kfy * real_kfh)
         }
         catch (err) {
-            console.log("ERROR in adjustViewBox: " + err);
+            doNothing("ERROR in adjustViewBox: " + err);
             real_kfx = origpx;
             real_kfy = origpy;
             real_kfw = origpw;
@@ -1413,11 +1413,11 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             panObjects(nvx / origPaperW, nvy / origPaperH, { cw: cw, ch: ch }, 1);//no_opac_check || parseFloat(eid_elt[0].style.opacity));
             //if (true || parseFloat(eid_elt[0].style.opacity)) { // only draw if the ink is on screen or if we're on the initial load
             //    panObjects(nvx / origPaperW, nvy / origPaperH);
-            //    console.log("DRAWING");
+            //    doNothing("DRAWING");
             //}
             //else {
             //    panObjects(nvx / origPaperW, nvy / origPaperH, 'do not draw');
-            //    console.log("NOT DRAWING");
+            //    doNothing("NOT DRAWING");
             //}
 
             // reset coordinates
@@ -1435,7 +1435,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                 new_opac = parseInt(no_opac_check || eid_elt[0].style.opacity,10);
             }
             catch (err) {
-                console.log("error in adjustViewBox: " + err);
+                doNothing("error in adjustViewBox: " + err);
             }
             oldOpac = new_opac;
         }
@@ -1786,7 +1786,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             else if (transLetters[i] == "z") // if z, close the path
                 path += "z";
             else
-                console.log("ELSE: " + transLetters[i]);
+                doNothing("ELSE: " + transLetters[i]);
         }
         var final_path = path;
         if (trans_mode == 'isolate') // if the mode is 'isolate,' reverse the path and add an outer path
@@ -1943,7 +1943,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         var cw = domelement.width();
         var ch = domelement.height();
         if (datastr === "") {
-            //console.log("no elements to attach");
+            //doNothing("no elements to attach");
             return;
         }
         var shapes2 = datastr.split("|");
@@ -1996,7 +1996,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      * @return    whether or not there are no inks on the canvas (i.e. the datastring does not represent anything useful)
      */
     function isDatastringEmpty(datastring) {
-        //console.log("is data string empty :" + datastring);
+        //doNothing("is data string empty :" + datastring);
         if (!pathstring && datastring === "") // MODIFIED
             return true;
         var type = datastring.split("::")[0].toLowerCase();
@@ -3278,10 +3278,10 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function showInkPath() {
         try {
-            console.log("showInkPath gives: " + inktrack.getInkPath());
+            doNothing("showInkPath gives: " + inktrack.getInkPath());
         }
         catch (err) {
-            console.log("error in showInkPath: " + err.message);
+            doNothing("error in showInkPath: " + err.message);
         }
     }
     that.showInkPath = showInkPath;
@@ -3545,7 +3545,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
      */
     function updatePenColor(id) {
         var val = document.getElementById(id).value;
-        //console.log("col = " + val);
+        //doNothing("col = " + val);
         if (val !== undefined) {
             if (val.indexOf("#") == -1)
                 val = "#" + val;
@@ -3554,13 +3554,13 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
     }
     function updatePenOpacity(id) {
         var val = document.getElementById(id).value;
-        //console.log("opac = " + val);
+        //doNothing("opac = " + val);
         if (val !== undefined)
             penOpacity = val;
     }
     function updatePenWidth(id) {
         var val = document.getElementById(id).value;
-        //console.log("wid = " + val);
+        //doNothing("wid = " + val);
         if (val !== undefined)
             penWidth = val;
     }
@@ -3737,7 +3737,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             pt = [e.offsetX / canvW, e.offsetY / canvH],
             ptAbs = [e.offsetX, e.offsetY];
         if (mode === 1) { // draw
-            //console.log("ptAbs = " + ptAbs[0] + "," + ptAbs[1]);
+            //doNothing("ptAbs = " + ptAbs[0] + "," + ptAbs[1]);
             if (len === 0 || distance(ptAbs, [points[len - 1][0]*canvW, points[len-1][1]*canvH]) > thresh) {
                 roughPoints.length = 0;
                 points.push(pt);
@@ -3781,7 +3781,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         command.execute();
         inkUndoManager.logCommand(command);
 
-        //console.log('pathstring = '+pathstring);
+        //doNothing('pathstring = '+pathstring);
     }
 
     // draws either the given path or pathstring if none is provided
@@ -3803,7 +3803,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             if (MRL[i] === 'M') {
                 pathsToSave += "BEZIER::[pathstring]";
             }
-            //console.log("ch*coords["+(2*i+1)+"] = "+ch*coords[2*i+1]);
+            //doNothing("ch*coords["+(2*i+1)+"] = "+ch*coords[2*i+1]);
             pathToDraw += MRL[i] + (cw * coords[2*i]) + ',' + (ch * coords[2*i+1]); // absolute coords
             pathsToSave += MRL[i] + coords[2*i] + ',' + coords[2*i+1]; // relative coords
             if (MRL[i + 1] === 'M' || i === MRL.length - 1) {
@@ -3813,9 +3813,9 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                 paCount++;
             }
         }
-        //console.log("to save: "+pathsToSave);
+        //doNothing("to save: "+pathsToSave);
         for (i = 0; i < pathsToDraw.length; i++) { // need to split up the paths so we can style each separately
-            //console.log("to draw: " + pathsToDraw[i]);
+            //doNothing("to draw: " + pathsToDraw[i]);
             var drawing = paper.path(pathsToDraw[i]); // draw the path to the canvas
             drawing.data("type", "bezier");
             drawing.attr({
@@ -3889,7 +3889,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
             coords = extractCoords(pathstring),
             letters = extractLetters(pathstring),
             currentPAIndex = -1;
-        //console.log("start pathstring = " + pathstring);
+        //doNothing("start pathstring = " + pathstring);
         for (var i = 0; i < letters.length; i++) { // for each coordinate, test for proximity to location
             if (letters[i] === 'M') {
                 currentPAIndex++;
@@ -3898,68 +3898,68 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
                 if (letters[i] === 'M') {
                     if (letters[i + 1] === 'R') {
                         if (letters[i + 3] === 'M' || !letters[i + 3]) { // here, we have M-R-_-M, turn to gone-M-L-M
-                            //console.log('case 1');
+                            //doNothing('case 1');
                             letters.splice(i, 3, 'M', 'L');
                             coords.splice(2*i, 2);
                         } else { // here, M-R-_-_, turn to gone-M-R-_
-                            //console.log('case 2');
+                            //doNothing('case 2');
                             letters.splice(i, 3, 'M', 'R');
                             coords.splice(2 * i, 2);
                         }
                     } else if (letters[i + 1] === 'L') { // M-L-M or M-L-done, turn to gone-M or gone-done
-                        //console.log('case 3');
+                        //doNothing('case 3');
                         letters.splice(i, 2);
                         coords.splice(2 * i, 4);
                         pa.splice(currentPAIndex, 1);
                     }
                 } else if (letters[i] === 'L') { // M-L, turn to gone
-                    //console.log('case 4');
+                    //doNothing('case 4');
                     letters.splice(i - 1, 2);
                     coords.splice(2 * (i - 1), 4);
                     pa.splice(currentPAIndex, 1);
                 } else if (letters[i] === 'R') {
                     if (letters[i + 2] === 'M' || !letters[i + 2]) { // M-R-_-M or M-R-_-done, turn to gone-M or gone
-                        //console.log('case 5');
+                        //doNothing('case 5');
                         letters.splice(i - 1, 3);
                         coords.splice(2 * (i - 1), 6);
                         pa.splice(currentPAIndex, 1);
                     } else if (letters[i+3] ===' ') { // M-R-_-_-_-, turn to M-R-_-
-                        //console.log('case 6');
+                        //doNothing('case 6');
                         letters.splice(i - 1, 4,'M','R');
                         coords.splice(2 * (i - 1), 4);
                     } else {
-                        //console.log('case 6.5');
+                        //doNothing('case 6.5');
                         letters.splice(i - 1, 4, 'M', 'L');
                         coords.splice(2 * (i - 1), 4);
                     }
                 } else if (letters[i] === " ") {
                     if (letters[i + 1] === 'M' || !letters[i + 1]) {
                         if (letters[i - 1] === 'R') { // M-R-_-M or M-R-_-M, turn to gone-M or gone
-                            //console.log('case 7');
+                            //doNothing('case 7');
                             letters.splice(i - 2, 3);
                             coords.splice(2 * (i - 2), 6);
                             pa.splice(currentPAIndex, 1);
                         } else { // R-_-_-M or R-_-_, turn to R-_
-                            //console.log('case 8');
+                            //doNothing('case 8');
                             letters.splice(i, 1);
                             coords.splice(2 * i, 2);
                         }
                     } else if (letters[i + 1] === ' ' && letters[i + 2] === ' ' && letters[i + 3] === ' ') { // R-_-*-_, turn to R-_-M-R-_
-                        //console.log('case 8.1');
+                        //doNothing('case 8.1');
                         letters.splice(i, 3, "M", "R");
                         coords.splice(2 * i, 2);
                         pa.splice(currentPAIndex,0,pa[currentPAIndex]);
                     } else if (letters[i + 1] === ' ' && letters[i + 2] === ' ') {
-                        //console.log('case 8.2');
+                        //doNothing('case 8.2');
                         letters.splice(i,3,"M","L");
                         coords.splice(2 * i, 2);
                         pa.splice(currentPAIndex, 0, pa[currentPAIndex]);
                     } else if (letters[i + 1] === ' ') {
-                        //console.log('case 8.3');
+                        //doNothing('case 8.3');
                         letters.splice(i,2);
                         coords.splice(2*i,4);
                     } else {
-                        //console.log('case 8.4');
+                        //doNothing('case 8.4');
                         letters.splice(i,1);
                         coords.splice(2*i,2);
                     }
@@ -3998,7 +3998,7 @@ TAG.TourAuthoring.InkAuthoring = function (canvId, html_elt, calling_file, spec)
         }
         pathstring = mergeToPath(letters, coords);
         if (pathstring.match(/undefined/) || (pathstring && pathstring[0] !== 'M')) {
-            console.log('uh oh');
+            doNothing('uh oh');
         }
     }
     that.erase = erase;

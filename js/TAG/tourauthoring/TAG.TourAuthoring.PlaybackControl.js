@@ -606,7 +606,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         //    drag: function () {
         //        var percent = Math.constrain(volumefader.position().left / (volumeslider.width()-volumefader.width()), 0, 1);
         //        viewer.volume(percent);
-        //        console.log("volume: " + percent);
+        //        doNothing("volume: " + percent);
         //    }
         //});
 

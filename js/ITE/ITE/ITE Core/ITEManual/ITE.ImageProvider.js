@@ -119,7 +119,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		function monitor(timeWaited) {
 			timeWaited = timeWaited || 0;
 			if (timeWaited > 2000) {
-				console.log("Image failed to load!");
+				doNothing("Image failed to load!");
 			}
 			else if (!_image[0].complete) {
 				setTimeout(function(){ monitor(timeWaited+100); }, 100);
@@ -613,7 +613,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	    //Target location is just current location plus translation
 
     	    /*if (res.grEvent.type === 'manipulationstarted') {
-                console.log("STARTED")
+                doNothing("STARTED")
     	        startLocation = {
     	            x: left,
     	            y: top
@@ -630,7 +630,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
     	            x: startLocation.x + (res.pivot.x - pointerStartLocation.x),
     	            y: startLocation.y + (res.pivot.y - pointerStartLocation.y)
     	        };
-    	       // console.log(finalPosition)
+    	       // doNothing(finalPosition)
     	        _UIControl.css({
     	            top: finalPosition.y,
     	            left: finalPosition.x

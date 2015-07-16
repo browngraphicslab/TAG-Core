@@ -168,7 +168,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         //});
 
         $(circle[0][0]).on('mousedown', function (e) {
-            console.log("using new events");
+            doNothing("using new events");
             var offsetX = e.offsetX;
             var offsetY = e.offsetY;
             _keyframeMousedown(offsetX - parseInt(circle.attr('cx'), 10), offsetY - parseInt(circle.attr('cy'), 10));
@@ -192,7 +192,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         //});
 
         $(innerCircle[0][0]).on('mousedown', function (e) {
-            console.log("using new events");
+            doNothing("using new events");
             var offsetX = e.offsetX;
             var offsetY = e.offsetY;
             _keyframeMousedown(offsetX - parseInt(innerCircle.attr('cx'), 10), offsetY - parseInt(innerCircle.attr('cy'), 10));
@@ -522,7 +522,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
 
         // error checking
         if ((!offsetx && offsetx !== 0) || (!offsety && offsety !== 0) || !my.currentKeyframe) {
-            console.log('Move keyframe called when no keyframe is selected!');
+            doNothing('Move keyframe called when no keyframe is selected!');
         }
         // Editing
         else {
@@ -666,7 +666,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 };
                 break;
             default:
-                console.log('RIN track type not yet implemented');
+                doNothing('RIN track type not yet implemented');
                 break;
         }
         return keyframe;
@@ -674,7 +674,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
     that.toRIN = toRIN;
 
     function loadData(data) {
-        console.log("initializing keyframe with provided ITE data");
+        doNothing("initializing keyframe with provided ITE data");
     }
     that.loadData = loadData;
 
@@ -724,13 +724,13 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
             }
             _data = rinData;
 
-            //console.log("start keyframe.loadRIN");
-            //console.log("incoming:");
-            //console.log({ width: data.width, height: data.height });
-            //console.log({ x: data.left, y: data.top });
-            //console.log("calculated:");
-            //console.log(rinData.viewport.region.span);
-            //console.log(rinData.viewport.region.center);
+            //doNothing("start keyframe.loadRIN");
+            //doNothing("incoming:");
+            //doNothing({ width: data.width, height: data.height });
+            //doNothing({ x: data.left, y: data.top });
+            //doNothing("calculated:");
+            //doNothing(rinData.viewport.region.span);
+            //doNothing(rinData.viewport.region.center);
         }
         if (_updateKeyFrameCommand) {
             (function (command) {

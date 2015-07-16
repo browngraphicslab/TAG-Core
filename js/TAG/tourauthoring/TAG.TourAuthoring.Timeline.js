@@ -251,8 +251,8 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             onManipulate: function (res) {
                 manipObjects.ruler.cancelAccel();
                 if (res.translation.x !== 0) {
-                    console.log('trans = '+res.translation.x);
-                    console.log('pivot = '+res.pivot.x);
+                    doNothing('trans = '+res.translation.x);
+                    doNothing('pivot = '+res.pivot.x);
                     trackBody.scrollLeft(trackBody.scrollLeft() - res.translation.x);
                 }
                 if (res.translation.y !== 0) {
@@ -807,7 +807,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             var i;
             divChilds.remove();
             timeRuler.append(newLabels);
-            console.log('time ruler update elapsed: ' + (Date.now() - start));
+            doNothing('time ruler update elapsed: ' + (Date.now() - start));
         });
 
         // creates a time label and appends it to the time ruler
@@ -2072,7 +2072,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                                     //y = 0;
                                     //key = display.addKeyframe(keyloc, y);
                                 } else {
-                                    console.log('Experience not yet implemented');
+                                    doNothing('Experience not yet implemented');
                                 }
                             }
                         }
@@ -2383,12 +2383,12 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                 inks.push({ 'track': track, 'link': exp.data.linkToExperience.embedding.experienceId }); // do link init later
                 //create ink canvas and load datastring
             } else {
-                console.log('Experience not yet implemented');
+                doNothing('Experience not yet implemented');
             }
 
             // check track ordering is correct
             if (track.getPos() !== experienceArray.length - zIndex) {
-                console.log('zIndex and track array position are not the same for: ' + trackname);
+                doNothing('zIndex and track array position are not the same for: ' + trackname);
             }
 
             // add displays from experience streams
@@ -2449,7 +2449,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
                                             //y = 0;
                                             //key = display.addKeyframe(keyloc, y);
                                         } else {
-                                            console.log('Experience not yet implemented');
+                                            doNothing('Experience not yet implemented');
                                         }
                                     }
                                 }

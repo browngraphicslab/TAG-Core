@@ -91,7 +91,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
 
         // load from URL (TODO)
         //if (url) {
-        //    loadTour(url, function () { console.log('Viewer: initial loading complete'); });
+        //    loadTour(url, function () { doNothing('Viewer: initial loading complete'); });
         //}
 
     };
@@ -192,12 +192,12 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
 
             TAG.Util.UI.slidePageRight(tempSettings.getRoot(), function () {//LITERALLY MOVE THE PAGE RIGHT
                 //when done moving right
-                console.log($("#setViewButtonContainer"));
+                doNothing($("#setViewButtonContainer"));
 
                 var poll = function () {
-                    console.log("polling to look for edit button")
+                    doNothing("polling to look for edit button")
                     if ($("#setViewButtonContainer")[0].firstChild) {
-                        console.log("found first child");
+                        doNothing("found first child");
                         $("#setViewButtonContainer")[0].firstChild.click();//click on the 'edit tour' button
                         window.setTimeout(function () {
                             TAG.Util.hideLoading(temp2)//after .25 second delay, remove the loading circle
@@ -264,7 +264,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param eventArgs     sender, eventId, ? (RIN)
      */
     function _onPlayerESEvent(eventArgs) {
-        console.log(eventArgs.eventId);
+        doNothing(eventArgs.eventId);
         if (timeline) {
             switch (eventArgs.eventId) {
                 case rin.contracts.esEventIds.interactionActivatedEventId:
@@ -291,7 +291,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             capture = sender.captureKeyframe();
             if (capture === '') { // continue capturing until successful
                 //setTimeout(function () { _sendKeyframe(sender); }, 10);
-				console.log('No keyframe captured!?');
+				doNothing('No keyframe captured!?');
                 return;
             }
             trackName = sender._esData.experienceId;
@@ -558,14 +558,14 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     function initializeTour(data) {
         var ctime;
         isReloading = true;
-        console.log("isReloading: true, in initializeTour");
-        // console.log("player: "+player);
+        doNothing("isReloading: true, in initializeTour");
+        // doNothing("player: "+player);
         if (timeline.getTrackslength() === 0) {
             ctime = timeManager.getCurrentTime();
             //setTimeout(function () {
             //seek(ctime);
             isReloading = false;
-            console.log("no tracks. isReloading: false, in initializeTour");
+            doNothing("no tracks. isReloading: false, in initializeTour");
             //}, 50);
         } else if (player) {
             ctime = timeManager.getCurrentTime();
@@ -574,7 +574,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             //    setTimeout(function () {
             //        seek(ctime);
             //        isReloading = false;
-            //        console.log("isReloading: false, in initializeTour");
+            //        doNothing("isReloading: false, in initializeTour");
             //    }, 50);
             //});
         } else {

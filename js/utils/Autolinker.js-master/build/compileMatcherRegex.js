@@ -17,7 +17,7 @@ var fs = require( 'fs' );
 
 
 if( phantom.args.length !== 2 ) {
-	console.log( 'Usage: phantomjs compileRegex.js sourceRegexFile destinationRegexFile\n\n' +
+	doNothing( 'Usage: phantomjs compileRegex.js sourceRegexFile destinationRegexFile\n\n' +
 	             'Where sourceRegexFile is the path to the .js file that holds the source regular expression, ' +
 	             'and destinationRegexFile is the path to where the compiled output regex should be placed.' );
 	
@@ -42,7 +42,7 @@ if( phantom.args.length !== 2 ) {
 	try {
 		stream = fs.open( sourceFilePath, 'r' );
 	} catch( ex ) {
-		console.log( ex );
+		doNothing( ex );
 		phantom.exit();
 	}
 	var fileContents = stream.read();
@@ -78,9 +78,9 @@ if( phantom.args.length !== 2 ) {
 	// Write the output (destination) file
 	try {
 		fs.write( destinationFilePath, output, 'w' );
-		console.log( "Wrote output file: " + destinationFilePath );
+		doNothing( "Wrote output file: " + destinationFilePath );
 	} catch( ex ) {
-		console.log( ex );
+		doNothing( ex );
 		phantom.exit();
 	}
 }
