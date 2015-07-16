@@ -1884,6 +1884,7 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
         var data;
         if (loaded) {
             viewer.setIsReloading(true);
+            viewer.setCaptureStarted(true);
             timeManager.stop();
 
             viewer.capturingOff();

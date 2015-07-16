@@ -2455,7 +2455,7 @@ function trackTitleReleased(evt) {
         console.log("~~~~~~~~~~ Add key or display called in tour athoring track~~~~~~~~~~~~~~")
         console.log("is reloading: " + my.timeline.getViewer().getIsReloading() + "         capture started: " + my.timeline.getViewer().getCaptureStarted());
         if (my.timeline.getViewer().getIsReloading() || my.timeline.getViewer().getCaptureStarted()) {
-            if (dataHolder.numTracks() !== 1 && dataHolder.getDisplays(that.getPos()).getContents().length !== 0) {
+            if (dataHolder.numTracks() !== 1 || dataHolder.getDisplays(that.getPos()).getContents().length !== 0) {
                 return;
             }
         }
