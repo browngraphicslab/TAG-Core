@@ -10305,7 +10305,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var label = $(document.createElement('label'));
         label.css({
             'position': 'absolute',
-            'left': ($(window).width() - widthFinder.width()) / 2 + 'px',
+            'left': ($(window).width() - 1.7*widthFinder.width()) / 2 + 'px',
             'top': ($(window).height() - $(window).width() * 0.1) / 2 + $(window).width() * 0.1 + 'px',
             'font-size': '200%',
             'color': 'white',
