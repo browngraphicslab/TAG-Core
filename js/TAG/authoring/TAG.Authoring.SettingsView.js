@@ -5016,7 +5016,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      */
     function createAsset() {
         if ($('.progressBarUploads').length != 0) {
-            console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
+            //console.log("THERE IS ALREADY AN UPLOAD HAPPENING")
             return
         }
 
@@ -5723,12 +5723,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             collectionList = [];
             guidsInCollection = [];
             if (sortByArt == "Title") {
-                console.log("sort by title");
+                //console.log("sort by title");
                 sortAZ(list);
                 displayLabels();
             }
             else if (sortByArt == "Collection") {
-                console.log("sort by collection");
+                //console.log("sort by collection");
                 TAG.Worktop.Database.getExhibitions(function (result) {
                     if (cancel) return;
                     sortAZ(result);
@@ -5924,7 +5924,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                                     var extraSpace = $(document.createElement("div"));
                                     extraSpace.width(middleLabelContainer.width());
                                     extraSpace.height($($(".middleLabel")[0]).height() / 2);
-                                    console.log($(".middleLabel"));
+                                    //console.log($(".middleLabel"));
                                     middleLoading.before(extraSpace)
                                 });
                             }
@@ -6046,7 +6046,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method addAssocMediaToArtworks
      */
     function addAssocMediaToArtworks(assocMedia) {
-        console.log("called addAssocMediaToArtworks");
+        //console.log("called addAssocMediaToArtworks");
         if (!assocMedia.length) {
             return;
         }
@@ -10311,6 +10311,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'font-size': '200%',
             'color': 'white',
         });
+        if (IS_WINDOWS) {
+            label.css('left', ($(window).width() - widthFinder.width()) / 2 + 'px');
+        }
         widthFinder.remove();
         label.text(text);
         overlay.append(label);
