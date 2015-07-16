@@ -1724,6 +1724,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             options.KeywordSet2Shown = keywordSets[1].shown;
             options.KeywordSet3Shown = keywordSets[2].shown;
         }
+        
 
         //Change the settings in the database
         TAG.Worktop.Database.changeMain(options, function () {

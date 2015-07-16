@@ -5,9 +5,10 @@
  * @class TAG.Layout.CollectionsPage
  * @constructor
  * @param {Object} options         some options for the collections page
+ * @param {int} idletimerDuration  the duration in milliseconds of the maindoq's idle timer stage one 
  * @return {Object}                some public methods
  */
-TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, container, forSplitscreen) {
+TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo, backExhibition, container, forSplitscreen) {
     "use strict";
 
     options = options || {}; // cut down on null checks later
@@ -60,6 +61,7 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
         previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
 
         // misc initialized vars
+        idleTimerDuration = idletimerDuration,
         loadQueue = TAG.Util.createQueue(),           // an async queue for artwork tile creation, etc
         artworkSelected = false,                            // whether an artwork is selected
         visibleCollections = [],                               // array of collections that are visible and published
@@ -173,8 +175,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
      */
     function init() {
         if (!idleTimer && !previewing) {
-            idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+            var timerDuration = {
+                duration: idleTimerDuration ? idleTimerDuration : null
+            }
+            idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
             idleTimer.start();
+        }
+        else if (idleTimer && !previewing && idleTimerDuration) {
+            var timerDuration = {
+                duration: idleTimerDuration
+            }
+            var timerStopped = idleTimer.isStopped();
+            idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
+            if (!timerStopped) {
+                idleTimer.start();
+            }
         }
         if ((previewing || lockKioskMode) && idleTimer) {
             idleTimer.kill();
@@ -1088,8 +1103,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
             })
             // if the idle timer hasn't started already, start it
             if (!idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true) { // loadCollection is called without an event to show the first collection
-                idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                var timerDuration = {
+                    duration: idleTimerDuration ? idleTimerDuration : null
+                }
+                idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
                 idleTimer.start();
+            }
+            else if (idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true && idleTimerDuration) {
+                var timerDuration = {
+                    duration: idleTimerDuration
+                }
+                var timerStopped = idleTimer.isStopped();
+                idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
+                if (!timerStopped) {
+                    idleTimer.start();
+                }
             }
             //Set background image
             if (collection.Metadata.BackgroundImage) {
@@ -2439,8 +2467,21 @@ TAG.Layout.CollectionsPage = function (options) { // backInfo, backExhibition, c
 
                     // if the idle timer hasn't started already, start it
                     if (!idleTimer && !previewing && !lockKioskMode) {
-                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
+                        var timerDuration = {
+                            duration: idleTimerDuration ? idleTimerDuration : null
+                        }
+                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
                         idleTimer.start();
+                    }
+                    else if (idleTimer && !previewing && !lockKioskMode && idleTimerDuration) {
+                        var timerDuration = {
+                            duration: idleTimerDuration
+                        }
+                        var timerStopped = idleTimer.isStopped();
+                        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
+                        if (!timerStopped) {
+                            idleTimer.start();
+                        }
                     }
                     //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
                     setTimeout(function () { showArtwork(currentWork, false)() }, 10)

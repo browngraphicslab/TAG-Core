@@ -405,7 +405,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             var collectionsPage;
 
             goToCollectionsButton.off('click');
-            collectionsPage = TAG.Layout.CollectionsPage(); // TODO merging
+            collectionsPage = TAG.Layout.CollectionsPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration)); // TODO merging
             TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
 
             currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;

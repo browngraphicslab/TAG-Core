@@ -11,7 +11,7 @@ TAG.Util.IdleTimer = (function() {
     var overlay,
         stageTwoDuration,
         overlayInterval,
-        tourIsPlaying;
+        tourIsPlaying = false;
 
      /**
       * This two-stage timer takes in two duration-callback pairs. The stage one 
