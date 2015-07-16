@@ -118,16 +118,25 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
                 var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  You must log in to save changes.");
                 $('body').append(popup);
                 $(popup).show();
+                if (callback) {
+                    callback();
+                }
             }, function (jqXHR, ajaxCall) {
                 // conflict
                 // Ignore conflict for now
                 ajaxCall.force();
+                if (callback) {
+                    callback();
+                }
             }, function () {
                 // error
                 dialogOverlay.hide();
                 var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  There was an error contacting the server.");
                 $('body').append(popup);
                 $(popup).show();
+                if (callback) {
+                    callback();
+                }
             });   
         }
         // Takes you back to the tour authoring menu page
