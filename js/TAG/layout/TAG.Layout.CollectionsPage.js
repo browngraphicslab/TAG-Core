@@ -2676,13 +2676,13 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             tileDiv.append(main);
 
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
-            var tileHeight = (0.45) * tileDivHeight;
-            main.css({ 'height': (0.45) * tileDivHeight });
+            var tileHeight =   (0.2)* tileDivHeight;  //(0.45) * tileDivHeight;
+            main.css({ 'height': (0.2) * tileDivHeight });//.css({ 'height': (0.45) * tileDivHeight });
             main.css({ 'width': (tileHeight / TILE_HEIGHT_RATIO) * TILE_WIDTH_RATIO });
             // Align tile so that it follows the grid pattern we want
             main.css({
-                'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER),
-                'top': Math.floor(i % 2) * (main.height() + TILE_BUFFER)
+                'left': Math.floor(i / 4) * (main.width() + TILE_BUFFER),//Math.floor(i / 2) * (main.width() + TILE_BUFFER),
+                'top': Math.floor(i % 4) * (main.height() + TILE_BUFFER)//Math.floor(i % 2) * (main.height() + TILE_BUFFER)
             });
 
             //Add scrollbar to catalog div if needed
@@ -3170,9 +3170,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         artworksForYear = artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()];
         previewWidth = (0.38) * $("#tagRoot").width();
         if (showAllAtYear && artworksForYear){
-            containerWidth = Math.min(($("#tagRoot").width()*.80), (artworksForYear.length) * previewWidth);
+            containerWidth = (Math.min(($("#tagRoot").width()*.80), (artworksForYear.length) * previewWidth));///2;
         } else {
-            containerWidth = previewWidth;
+            containerWidth = (previewWidth);///2;
         }
         return containerWidth || 0;
     }
@@ -3498,7 +3498,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 exploreText = $(document.createElement('div'))
                     .addClass('exploreText')
                     .css("font-size",  BASE_FONT_SIZE*2/3 + 'em')
-                    .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Tap to Explore");
+                    .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Tap to Learn More");
 
                 exploreTab.append(exploreText)
 
