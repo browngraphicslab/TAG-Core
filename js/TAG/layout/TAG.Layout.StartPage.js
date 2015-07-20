@@ -21,16 +21,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
-    var root = TAG.Util.getHtmlAjax('../tagcore/html/SplashScreenOverlay.html'), // use AJAX to load html from .html file
-        //overlay = root.find('#overlay'),
-        //primaryFont = root.find('.primaryFont'),
-        //secondaryFont = root.find('.secondaryFont'),
-        //serverTagBuffer = root.find('#serverTagBuffer'),
-        //serverSetUpContainer = root.find('#serverSetUpContainer'),
-        //authoringButtonContainer = root.find('#authoringButtonContainer'),
-        //authoringButtonBuffer = root.find('#authoringButtonBuffer'),
-        //loginDialog = root.find('#loginDialog'),
-        goToCollectionsButton = root.find('#goToCollectionsButton'),
+    var root = TAG.Util.getHtmlAjax('../tagcore/html/SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
+        goToWillButton = root.find('#goToWillButton'),
+        goToHistoryButton = root.find('#goToHistoryButton'), 
+        goToWinnersButton = root.find('#goToWinnersButton'),
+        goToLifeButton = root.find('#goToLifeButton'),
+        willImage = root.find('#willImage'),
+        lifeImage= root.find('#lifeImage'),
+        historyImage= root.find('#historyImage'),
+        winnersImage= root.find('#winnersImage'),
         serverInput = root.find('#serverInput'),
         authoringInput = root.find('#passwordInput'),
         serverError = root.find('#serverError'),
@@ -44,12 +43,30 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         newUser = options.newUser,
         mainDoq,
         PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : null,
-        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : null;
+        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : null,
+        HISTORY_NAME = "Nobel Prize History and Impact", //name of collection about nobel history
+        LIFE_NAME = "The Life of Alfred Nobel",
+        LAUREATE_NAME = "Nobel Laureates"; //name of collection about nobel laureates
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
 
-
-    goToCollectionsButton.css('top', '70%');
+    willImage.attr('src', tagPath + 'images/NOBEL1F.svg').css('height','175%');
+    lifeImage.attr('src', tagPath + 'images/Alfred.png').css({
+        'height': '200%',
+        'position': 'relative',
+        'top': '-15%',
+        'left': '-20%'
+    });
+    historyImage.attr('src', tagPath + 'images/prize.jpg').css({
+        'position': 'relative',
+        'left': '-20%',
+        'top': '-5%'
+    });
+    winnersImage.attr('src', tagPath + 'images/nobelprize_facts_intro.jpg').css({
+        'position': 'relative',
+        'top': '-10%',
+        'height': '110%'
+    });
 
 
     //PREVIEW STYLING
@@ -349,10 +366,45 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     $('#authoringButtonBuffer').remove();
         // }
         
+        /**
         if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
             goToCollectionsButton.text("Go to Artwork");
         }
+        **/
+
+        winnersImage.on('click', function() {
+            switchPage(LAUREATE_NAME);
+        });
+
+        historyImage.on('click', function(){
+            switchPage(HISTORY_NAME);
+        });
+
+        willImage.on('click', function(){
+
+        });
+
+        lifeImage.on('click', function(){
+            switchPage(LIFE_NAME);
+        });
+
+        goToWinnersButton.on('click', function() {
+            switchPage(LAUREATE_NAME);
+        });
+
+        goToHistoryButton.on('click', function(){
+            switchPage(HISTORY_NAME);
+        });
+
+        goToWillButton.on('click', function(){
+
+        });
+
+        goToLifeButton.on('click', function(){
+            switchPage(LIFE_NAME);
+        });
         
+        /**
         goToCollectionsButton.on('click', function () {
             jQuery.data(document.body, "isKiosk", true);
             if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
@@ -388,6 +440,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 switchPage();
             }
         });
+        **/
         
         setImagePaths(main);
         setUpCredits();
@@ -401,21 +454,41 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // });
 
         //opens the collections page on touch/click
-        function switchPage() {
-            var collectionsPage;
+        //@param collectionName     string representing name of collection to start with
+        function switchPage(collectionName) {
+            var collectionsPage,
+                options = {},
+                i,
+                currName;
 
-            goToCollectionsButton.off('click');
-            collectionsPage = TAG.Layout.CollectionsPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration)); // TODO merging
-            TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+            $('.goToWrapper').off('click');
 
-            currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
-            currentPage.obj  = collectionsPage;
+            // Test for browser compatibility
+            if(!isBrowserCompatible()) {
+                handleIncompatibleBrowser();
+            }
+            if (collectionName){
+                TAG.Worktop.Database.getExhibitions( function (collections) {
+                    for (i =0; i< collections.length; i++){
+                        currName = collections[i].Name;
+                        if (currName === collectionName){
+                            options.backCollection = collections[i];
+                        }
+                    }
+                    collectionsPage = TAG.Layout.CollectionsPage(options);
+                    TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+                    currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+                    currentPage.obj  = collectionsPage;
+                });
+            } else {
+                collectionsPage = TAG.Layout.CollectionsPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration)); // TODO merging
+                TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+                currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+                currentPage.obj  = collectionsPage;
+            }           
         }
 
-        // Test for browser compatibility
-        if(!isBrowserCompatible()) {
-            handleIncompatibleBrowser();
-        }
+        
     }   
     
     var saveClick = $.debounce(500, false, function (e) {
@@ -489,10 +562,22 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit.css({ "background-color": "transparent", "color": PRIMARY_FONT_COLOR });
 
     })
-    goToCollectionsButton.on("mouseleave", function () {
-        goToCollectionsButton.css({ "background-color": "white", "color": "black" });
+    goToWinnersButton.on("mouseleave", function () {
+        goToWinnersButton.css({ "background-color": "white", "color": "black" });
 
-    })
+    });
+    goToHistoryButton.on("mouseleave", function () {
+        goToHistoryButton.css({ "background-color": "white", "color": "black" });
+
+    });
+    goToWillButton.on("mouseleave", function () {
+        goToWillButton.css({ "background-color": "white", "color": "black" });
+
+    });
+    goToLifeButton.on("mouseleave", function () {
+        goToLifeButton.css({ "background-color": "white", "color": "black" });
+
+    });
 
     serverInput.focusout(function () {
         if (!serverInput.val()) {
@@ -771,8 +856,22 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     evt.stopPropagation();
         // });
 
-        goToCollectionsButton.css({ "border": "1px solid #fff" });
+        $('.goToCollectionsButton').css({ "border": "1px solid #fff" });
 
+        goToWinnersButton.on("mousedown", function () {
+            goToWinnersButton.css({"background-color": "transparent", "color": "white"});
+        });
+        goToHistoryButton.on("mousedown", function () {
+            goToHistoryButton.css({"background-color": "transparent", "color": "white"});
+        });
+        goToWillButton.on("mousedown", function () {
+            goToWillButton.css({"background-color": "transparent", "color": "white"});
+        });
+        goToLifeButton.on("mousedown", function () {
+            goToLifeButton.css({"background-color": "transparent", "color": "white"});
+        });
+
+        /**
         goToCollectionsButton.on('click', 'a', function (evt) {
             // this === the link that was clicked
             var href = $(this).attr("href");
@@ -781,6 +880,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToCollectionsButton.on("mousedown", function () {
             goToCollectionsButton.css({"background-color": "transparent", "color": "white"});
         });
+        **/
     }
 
 
@@ -1043,7 +1143,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      */
     function enterAuthoringMode() {
         var timer = new TelemetryTimer();
-        goToCollectionsButton.on('click', function() {;});
+        //goToCollectionsButton.on('click', function() {;});
         // authoringButtonContainer.off('click');
         var authoringMode = new TAG.Authoring.SettingsView();
         TAG.Util.UI.slidePageLeft(authoringMode.getRoot(), function () {

@@ -3,12 +3,11 @@
 	#innerContainer
 		#overlay
 		#title
-			span.titleone.primaryFont Touch Art Gallery-TAG
+			span.titleone.primaryFont The Nobel Will
 			span.titletwo.primaryFont   
 		#topDesc.description
 			span.bodyDescone.primaryFont
-				|Welcome to Touch Art Gallery! To change servers, put in the address below. <br />
-				|To access authoring for the current server, put in your authoring password. <br/>
+				| Choose an experience below to learn more
 		#inputRow
 			#serverInputDiv
 				input#serverInput.primaryFont
@@ -23,10 +22,22 @@
 				#lockedMessage
 					|By tapping the button below, you'll enter the TAG kiosk mode and will <br />
 					|not be able to return to this splash screen until TAG is restarted.
-		#goToCollectionsButton Go to Collections
-		img#tutorialButton
-		#logoRow
-			img#msLogo
-			img#brownLogo
+		#buttonDiv
+			#goToWillWrapper.goToWrapper
+				#goToWillImage.goToImage
+					img#willImage
+				#goToWillButton.goToCollectionsButton Alfred Nobel's Will
+			#goToLifeWrapper.goToWrapper
+				#goToLifeImage.goToImage
+					img#lifeImage
+				#goToLifeButton.goToCollectionsButton Alfred Nobel's Life
+			#goToHistoryWrapper.goToWrapper
+				#goToHistoryImage.goToImage
+					img#historyImage
+				#goToHistoryButton.goToCollectionsButton History and Impact
+			#goToWinnersWrapper.goToWrapper
+				#goToWinnersImage.goToImage
+					img#winnersImage
+				#goToWinnersButton.goToCollectionsButton Nobel Laureates
 
 
