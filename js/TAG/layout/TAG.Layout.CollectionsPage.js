@@ -1660,6 +1660,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                 doNothing($(this).attr('id'));
                                 doNothing(sortButtonTags[$(this).attr('id')]);
                                 changeDisplayTag(currentArtworks, sortButtonTags[this.textContent == "Tours" ? 'Tour' : this.textContent]);
+                                $(this).css('color', 'white');
                             });
                
                 //var spec = {
