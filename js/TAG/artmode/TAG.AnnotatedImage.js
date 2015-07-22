@@ -588,6 +588,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         OSDHolder.css({
             'height': '100%',
             'width': '100%',
+            'left' : '12%',
             'position': 'absolute',
             'z-index': '0'
         });
