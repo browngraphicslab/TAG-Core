@@ -54,7 +54,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         wasOnAssocMediaView = options.onAssocMediaView,
         smallPreview        = options.smallPreview,
         titleIsName         = options.titleIsName,
-        isNobelWill = true,
+        isNobelWill = options.isNobelWill,
         NOBEL_WILL_COLOR = 'rgb(189,125,13)',
 
 
@@ -1346,6 +1346,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var collectionsPage,
                 collectionsPageRoot;
             backButton.off('click');
+
+            //going back from will goes to splash screen
+            if (isNobelWill){
+                TAG.Layout.StartPage(null, function (page) {
+                    TAG.Util.UI.slidePageRight(page);
+                });
+                return;
+            } 
 
             //idleTimer && idleTimer.kill();
             //idleTimer = null;
