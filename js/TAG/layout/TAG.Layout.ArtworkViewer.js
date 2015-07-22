@@ -52,6 +52,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         previewing 	        = options.previewing, 	   // if we are previewing in authoring (for styling)
         assocMediaToShow    = options.assocMediaToShow,
         wasOnAssocMediaView = options.onAssocMediaView,
+        smallPreview        = options.smallPreview,
+        titleIsName         = options.titleIsName,
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -753,7 +755,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 backMult: prevMult,
                 backSearch: prevSearch,
                 wasOnAssocMediaView: wasOnAssocMediaView,
-                splitscreen: root.data('split')
+                splitscreen: root.data('split'),
+                smallPreview: smallPreview,
+                titleIsName: titleIsName
             });
             //if (root.data('split') === 'R') {
 

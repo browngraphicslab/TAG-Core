@@ -30,6 +30,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         lifeImage= root.find('#lifeImage'),
         historyImage= root.find('#historyImage'),
         winnersImage= root.find('#winnersImage'),
+        introImage = root.find("#introImage"),
         serverInput = root.find('#serverInput'),
         authoringInput = root.find('#passwordInput'),
         serverError = root.find('#serverError'),
@@ -67,7 +68,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         'top': '-10%',
         'height': '110%'
     });
-
+    introImage.attr('src', tagPath + 'images/nobelprize_facts_intro.jpg').css({
+        'position': 'relative',
+        'top': '-10%',
+        'height': '110%'
+    });
 
     //PREVIEW STYLING
     isPreview && function () {
@@ -373,11 +378,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         **/
 
         winnersImage.on('click', function() {
-            switchPage(LAUREATE_NAME);
+            switchPage(LAUREATE_NAME,false,true,true);
         });
 
         historyImage.on('click', function(){
-            switchPage(HISTORY_NAME);
+            switchPage(HISTORY_NAME,true);
         });
 
         willImage.on('click', function(){
@@ -385,15 +390,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         lifeImage.on('click', function(){
-            switchPage(LIFE_NAME);
+            switchPage(LIFE_NAME,true);
         });
 
         goToWinnersButton.on('click', function() {
-            switchPage(LAUREATE_NAME);
+            switchPage(LAUREATE_NAME,false,true,true);
         });
 
         goToHistoryButton.on('click', function(){
-            switchPage(HISTORY_NAME);
+            switchPage(HISTORY_NAME,true);
         });
 
         goToWillButton.on('click', function(){
@@ -401,7 +406,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         goToLifeButton.on('click', function(){
-            switchPage(LIFE_NAME);
+            switchPage(LIFE_NAME,true);
         });
         
         /**
@@ -455,7 +460,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         //opens the collections page on touch/click
         //@param collectionName     string representing name of collection to start with
-        function switchPage(collectionName) {
+        function switchPage(collectionName, hideKeywords, smallPreview, titleIsName) {
             var collectionsPage,
                 options = {},
                 i,
@@ -473,6 +478,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                         currName = collections[i].Name;
                         if (currName === collectionName){
                             options.backCollection = collections[i];
+                            if (hideKeywords){
+                                options.hideKeywords = true;
+                            }
+                            if (smallPreview){
+                                options.smallPreview = true;
+                            }
+                            if (titleIsName){
+                                options.titleIsName = true;
+                            }
                         }
                     }
                     collectionsPage = TAG.Layout.CollectionsPage(options);
