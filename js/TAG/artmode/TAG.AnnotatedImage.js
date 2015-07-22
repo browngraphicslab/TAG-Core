@@ -11,7 +11,7 @@
 
 TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shouldNotLoadHotspots) {
     "use strict";
-    
+
 
     var // input options
         root = options.root,           // root of the artwork viewing page
@@ -20,6 +20,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         noMedia = options.noMedia,        // should we not have assoc media? (set to true in artwork editor)
         locationHist = options.locationHist,
         inArtworkEditor = options.inArtworkEditor,
+        isNobelWill = options.isNobelWill,
+        getNobelAssociatedMediaLocation = options.getNobelAssociatedMediaLocation,
 
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,   // prepend server address to given path
@@ -48,14 +50,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         OSDHolder,
         viewer,
         assetCanvas;
-
-
     var xFadeOffset;
 
     // get things rolling
     //init();
     initOSD();
-
     return {
         getAssociatedMedia: getAssociatedMedia,
         unload: unload,
@@ -95,7 +94,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @return {Object}     manipulation method object
      */
     function getToManip() {
-        return toManip;   
+        return toManip;
     }
 
 
@@ -105,7 +104,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @return {Object}     object with dimensions
      */
     function getMediaPivot() {
-        return outerContainerPivot;   
+        return outerContainerPivot;
     }
 
 
@@ -125,7 +124,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @return {Boolean}          whether opening was successful
      */
     function openArtwork(doq) {
-        if(!viewer || !doq || !doq.Metadata || !doq.Metadata.DeepZoom) {
+        if (!viewer || !doq || !doq.Metadata || !doq.Metadata.DeepZoom) {
             //debugger;
             doNothing("ERROR IN openDZI");
             return false;
@@ -144,7 +143,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function updateOverlay(element, placement) {
         var $elt = $(element),
-            top  = parseFloat($elt.css('top')),
+            top = parseFloat($elt.css('top')),
             left = parseFloat($elt.css('left'));
         if (top && left) { // TODO is this check necessary?
             viewer.updateOverlay(element, viewer.viewport.pointFromPixel(new OpenSeadragon.Point(left, top)), placement);
@@ -201,7 +200,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function dzManipPreprocessing() {
         outerContainerPivot = {
-            x: root.width()/ 2,//+ root.offset().left,
+            x: root.width() / 2,//+ root.offset().left,
             y: root.height() / 2// + root.offset().top
         };
         toManip = dzManip;
@@ -225,7 +224,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         var transRel;
         dzManipPreprocessing();
 
-        if (!artworkFrozen) {
+        if (!artworkFrozen && isNobelWill !== true) {
             pivotRel = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y));
             var piv = {
                 x: pivotRel.x,
@@ -233,7 +232,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             };
             transRel = viewer.viewport.deltaPointsFromPixels(new OpenSeadragon.Point(trans.x, trans.y));
             if (xFadeOffset) {
-                
+
                 // testing 
                 //var zoom = viewer.viewport.getZoom(true);
 
@@ -241,7 +240,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 //var correctionRel = new Seadragon.Point(xFadeOffset.x, xFadeOffset.y); // ver 2
 
                 //var correctionAbs = viewer.viewport.pixelFromPoint(correctionRel);
-                
+
                 //var pivotCorrectedRel = new Seadragon.Point(pivotRel.x - correctionRel.x, pivotRel.y - correctionRel.y);
 
                 //var pivotCorrectedAbs = viewer.viewport.pixelFromPoint(pivotCorrectedRel); // ver 1
@@ -324,7 +323,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     function unfreezeArtwork() {
         artworkFrozen = false;
     }
-    
+
     /**
      * Scroll/pinch-zoom handler for makeManipulatable on the deepzoom image
      * @method dzScroll
@@ -423,7 +422,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
         var val = false;
         var point = locationOf(element);
-        if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1/aspectRatio) + .05)) {
+        if ((point.x < 1.05 && point.x > -0.05) && (point.y > -0.05 && point.y < (1 / aspectRatio) + .05)) {
             val = true;
         }
         //doNothing(point.x + ', ' + point.y);
@@ -466,7 +465,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             return viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(point.x, (1 / aspectRatio)));
         }
     }
-    
+
     /**
     * Calculates the location (point) of an element (bottom center)
     * Used in rich location history.
@@ -550,7 +549,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     /*
     * functions used to stop panning of image in RLH when pins are being dragged
     * @method pauseManip
-    */ 
+    */
     function pauseManip() {
         doManipulation = false;
     }
@@ -563,101 +562,112 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         doManipulation = true;
     }
 
-    	/**
-	 *Inits the OpenSeadragon viewer
-	 */
-	function initOSD(){
+    /**
+ *Inits the OpenSeadragon viewer
+ */
+    function initOSD() {
 
-		//Creates element that the OSD viewer will be appended to
-		viewerelt = document.createElement("div");
-	    
-        
-		var holderID;
-		if (locationHist) {
-		    holderID = "locationHistViewer";
-		} else {
-		    holderID = "annotatedImageViewer";
-		}
-	    //OSD enforces unique viewer ids, so we need to create unique ids for when there are multiple viewers (such as w/ custom maps)
-		holderID = holderID + Math.floor(Math.random() * 1000000000);
-		OSDHolder = $(viewerelt)
+        //Creates element that the OSD viewer will be appended to
+        viewerelt = document.createElement("div");
+
+
+        var holderID;
+        if (locationHist) {
+            holderID = "locationHistViewer";
+        } else {
+            holderID = "annotatedImageViewer";
+        }
+        //OSD enforces unique viewer ids, so we need to create unique ids for when there are multiple viewers (such as w/ custom maps)
+        holderID = holderID + Math.floor(Math.random() * 1000000000);
+        OSDHolder = $(viewerelt)
 			.attr("id", holderID)
-			.on('mousedown scroll click mousemove resize', function(evt){
-				evt.preventDefault();
+			.on('mousedown scroll click mousemove resize', function (evt) {
+			    evt.preventDefault();
 			});
-		root.append(OSDHolder);
-		OSDHolder.css({
-		        'height': '100%',
-		        'width': '100%',
-		        'position': 'absolute',
-		        'z-index': '0'
-		});
-	    //The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or width at which the zoom out will be constrained.
-		//Setting it to 0, for example will allow you to zoom out infinitly.
-		var minZoomImageRatio = 0.9; //OSD default- don't allow as much zoom out on deep zooms as in tour player
-		if (inArtworkEditor) {
-		    minZoomImageRatio = 0.4; //Allow a lot of zoom out in artwork editor for thumbnail capture
-		}
-		//creates and sets up the OSD viewer
-		viewer = new OpenSeadragon.Viewer({
-			id : holderID,
-			element: viewerelt,
-			zoomPerClick: 1,  //disables click to zoom
+        root.append(OSDHolder);
+        OSDHolder.css({
+            'height': '100%',
+            'width': '100%',
+            'position': 'absolute',
+            'z-index': '0'
+        });
+        //The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or width at which the zoom out will be constrained.
+        //Setting it to 0, for example will allow you to zoom out infinitly.
+        var minZoomImageRatio = 0.9; //OSD default- don't allow as much zoom out on deep zooms as in tour player
+        if (inArtworkEditor) {
+            minZoomImageRatio = 0.4; //Allow a lot of zoom out in artwork editor for thumbnail capture
+        }
+
+        var maxZoomImageRatio = null;
+        var panHorizontal = true;
+        var panVertical = true;
+        if (isNobelWill === true) {
+            maxZoomImageRatio = 1;
+            minZoomImageRatio = 1;
+            panVertical = false;
+            panHorizontal = false;
+        }
+        //creates and sets up the OSD viewer
+        viewer = new OpenSeadragon.Viewer({
+            id: holderID,
+            element: viewerelt,
+            zoomPerClick: 1,  //disables click to zoom
             artworkViewer: true,
+            panVertical: panVertical,
             constrainDuringPan: true,
+            panHorizontal: panHorizontal,
             minZoomImageRatio: minZoomImageRatio,
-			maxZoomPixelRatio: 2, //The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. 
-			visibilityRatio: .2, //set for consistency with ITE
-			gestureSettingsTouch: { flickEnabled: false }, //don't allow flick gesture to throw art off screen
-		});
-		if (locationHist) {
-		    viewer.setMouseNavEnabled(false);
-		}
-		viewer.clearControls();
-		OSDHolder.css({ 'position': 'absolute' })
+            maxZoomImageRatio: maxZoomImageRatio,
+            maxZoomPixelRatio: isNobelWill === false ? 2 : 0, //The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. 
+            visibilityRatio: isNobelWill === false ? .2 : 0, //set for consistency with ITE
+            gestureSettingsTouch: { flickEnabled: false }, //don't allow flick gesture to throw art off screen
+        });
+        if (locationHist) {
+            viewer.setMouseNavEnabled(false);
+        }
+        viewer.clearControls();
+        OSDHolder.css({ 'position': 'absolute' })
 
-		//the canvas
-		var canvas = $(viewer.canvas).addClass("artworkCanvasTesting");
+        //the canvas
+        var canvas = $(viewer.canvas).addClass("artworkCanvasTesting");
+        //sets up manipulation 
+        if (IS_WINDOWS) {
+            TAG.Util.makeManipulatableWin(canvas[0], {
+                onScroll: function (delta, pivot) {
+                    dzScroll(delta, pivot);
+                },
+                onManipulate: function (res) {
+                    if (doManipulation) {
+                        res.translation.x = -res.translation.x;        //Flip signs for dragging
+                        res.translation.y = -res.translation.y;
+                        dzManip(res);
+                    }
+                }
+            }, null, true); // NO ACCELERATION FOR NOW
+        } else {
+            TAG.Util.makeManipulatable(canvas[0], {
+                onScroll: function (delta, pivot) {
+                    dzScroll(delta, pivot);
+                },
+                onManipulate: function (res) {
+                    if (doManipulation) {
+                        res.translation.x = -res.translation.x;        //Flip signs for dragging
+                        res.translation.y = -res.translation.y;
+                        dzManip(res);
+                    }
+                }
+            }, null, true); // NO ACCELERATION FOR NOW
+        }
 
-		//sets up manipulation 
-		if (IS_WINDOWS){
-			TAG.Util.makeManipulatableWin(canvas[0], {
-				onScroll: function (delta, pivot) {
-					dzScroll(delta, pivot);
-				},
-				onManipulate: function (res) {
-					if (doManipulation) {
-						res.translation.x = -res.translation.x;        //Flip signs for dragging
-						res.translation.y = -res.translation.y;
-						dzManip(res);
-					}
-				}
-			}, null, true); // NO ACCELERATION FOR NOW
-		} else {
-			TAG.Util.makeManipulatable(canvas[0], {
-				onScroll: function (delta, pivot) {
-					dzScroll(delta, pivot);
-				},
-				onManipulate: function (res) {
-					if (doManipulation) {
-						res.translation.x = -res.translation.x;        //Flip signs for dragging
-						res.translation.y = -res.translation.y;
-						dzManip(res);
-					}
-				}
-			}, null, true); // NO ACCELERATION FOR NOW
-		}
+        //adds assetCanvas for associated media
+        assetCanvas = $(document.createElement('div'));
+        assetCanvas.attr('id', 'annotatedImageAssetCanvas');
+        root.append(assetCanvas);
 
-		//adds assetCanvas for associated media
-		assetCanvas = $(document.createElement('div'));
-		assetCanvas.attr('id', 'annotatedImageAssetCanvas');
-		root.append(assetCanvas);
+        // this is stupid, but it seems to work (for being able to reference zoomimage in artmode)
+        noMedia ? setTimeout(function () { callback && callback() }, 1) : loadAssociatedMedia(callback);
+    }
 
-		// this is stupid, but it seems to work (for being able to reference zoomimage in artmode)
-		noMedia ? setTimeout(function() { callback && callback() }, 1) : loadAssociatedMedia(callback);
-
-	}
-   
 
     /**
      * Initialize seadragon, set up handlers for the deepzoom image, load assoc media if necessary -- should be deprecated now
@@ -837,7 +847,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             thumbnailButton,
             startLocation,
             play;
-        
         // get things rolling
         initMediaObject();
 
@@ -850,8 +859,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.css({
                     'border': '1px solid rgba(255,255,255,0.4)',
                     'background': 'rgba(0,0,0,0)',
-                    'width' : parseFloat(parseInt(linq.Dimensions._x) || 50),
-                    'height' : parseFloat(parseInt(linq.Dimensions._y) || 50),
+                    'width': parseFloat(parseInt(linq.Dimensions._x) || 50),
+                    'height': parseFloat(parseInt(linq.Dimensions._y) || 50),
                     'position': 'absolute'
                 });
                 assetCanvas.append(outerContainer);
@@ -874,12 +883,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     'position': 'relative',
                     'margin-bottom': '5px',
                     'width': '100%',
-                    });
+                });
                 titleTextHolder = $(document.createElement('div'));
                 titleTextHolder.addClass('annotatedImageMediaTitle');//.css({'text-overflow':'ellipsis','white-space':'nowrap'});
 
                 titleDiv.append(titleTextHolder);
-                var titlefontsize = LADS.Util.getMaxFontSizeEM("WWWWW", 0.6, 999999, parseInt(titleHeight)+1, 0.025);
+                var titlefontsize = LADS.Util.getMaxFontSizeEM("WWWWW", 0.6, 999999, parseInt(titleHeight) + 1, 0.025);
                 if (TITLE) {
                     titleTextHolder.text(TITLE);
                 } else {
@@ -897,13 +906,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 closeButton.on('click', function (evt) {
                     evt.stopPropagation();
                     hideMediaObject();
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
                         tobj.assoc_media_interactions = "close"; //TODO what is this
                     });
                 });
-                titleDiv.append(closeButton[0]);               
+                titleDiv.append(closeButton[0]);
 
                 innerContainer.append(titleDiv);
                 innerContainer.append(mediaContainer);
@@ -938,18 +947,23 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
                 // create hotspot circle if need be
                 if (IS_HOTSPOT) {
-                    circle = $(document.createElement("img"));
-                    circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
-                    circle.addClass('annotatedImageHotspotCircle');
-                    circle.click(function () {
-                        toggleMediaObject(true);
-                        TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
-                            tobj.current_artwork = doq.Identifier;
-                            tobj.assoc_media = mdoq.Identifier;
-                            tobj.assoc_media_interactions = "hotspot_toggle";
+                    if (isNobelWill !== true) {
+                        circle = $(document.createElement("img"));
+                        circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
+                        circle.addClass('annotatedImageHotspotCircle');
+                        circle.click(function () {
+                            toggleMediaObject(true);
+                            TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
+                                tobj.current_artwork = doq.Identifier;
+                                tobj.assoc_media = mdoq.Identifier;
+                                tobj.assoc_media_interactions = "hotspot_toggle";
+                            });
                         });
-                    });
-                    root.append(circle);
+                        root.append(circle);
+                    }
+                    else {
+
+                    }
                 }
 
                 // allows asset to be dragged, despite the name
@@ -961,15 +975,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     event.preventDefault();
                     TAG.Util.IdleTimer.restartTimer();
                     mediaManipPreprocessing();
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
                         tobj.assoc_media_interactions = "set_active"; //TODO what is this
                     });
                     // If event is initial touch on artwork, save current position of media object to use for animation
                     outerContainer.startLocation = {
-                            x: outerContainer.position().left,
-                            y: outerContainer.position().top
+                        x: outerContainer.position().left,
+                        y: outerContainer.position().top
                     };
                     doNothing("startin location is getting set")
                     outerContainer.manipulationOffset = {
@@ -1017,7 +1031,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             play = $(document.createElement('img')).addClass('mediaPlayButton');
 
             play.attr('src', tagPath + 'images/icons/PlayWhite.svg');
-            vol.attr('src', tagPath+'images/icons/VolumeUpWhite.svg');
+            vol.attr('src', tagPath + 'images/icons/VolumeUpWhite.svg');
             currentTimeDisplay.text("00:00");
 
             // dz17 - don't move this out - these divs are dynamically generated. The holders help with scaled positioning substantially.
@@ -1039,15 +1053,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'display': "block",
                 'margin': '4px 1% 0px 1%'
             });
-            
+
             sliderContainer.css({
                 'position': 'absolute',
                 'display': "block",
                 'height': '17px',
-                'width' :'475px',
+                'width': '475px',
                 'max-width': '600px',
                 'left': '55px',
-                'top': '13px' 
+                'top': '13px'
             });
 
             sliderPoint.css({
@@ -1096,13 +1110,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             playHolder.append(play);
             sliderContainer.append(sliderPoint);
             volHolder.append(vol);
-            
+
             // set up handlers
             play.on('click', function () {
                 if (elt.paused) {
                     elt.play();
                     play.attr('src', tagPath + 'images/icons/PauseWhite.svg');
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier;
                         tobj.assoc_media_interactions = "play_media";
@@ -1110,7 +1124,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 } else {
                     elt.pause();
                     play.attr('src', tagPath + 'images/icons/PlayWhite.svg');
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier;
                         tobj.assoc_media_interactions = "pause_media";
@@ -1122,7 +1136,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (elt.muted) {
                     elt.muted = false;
                     vol.attr('src', tagPath + 'images/icons/VolumeUpWhite.svg');
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier;
                         tobj.assoc_media_interactions = "volume_up";
@@ -1130,7 +1144,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 } else {
                     elt.muted = true;
                     vol.attr('src', tagPath + 'images/icons/VolumeDownWhite.svg');
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier;
                         tobj.assoc_media_interactions = "volume_down";
@@ -1143,49 +1157,49 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 play.attr('src', tagPath + 'images/icons/PlayWhite.svg');
             });
 
-            sliderContainer.on('mousedown', function(evt) {
+            sliderContainer.on('mousedown', function (evt) {
                 var time = elt.duration * ((evt.pageX - $(evt.target).offset().left) / sliderContainer.width()),
                     origPoint = evt.pageX,
                     timePxRatio = elt.duration / sliderContainer.width(),
                     currTime = Math.max(0, Math.min(elt.duration, elt.currentTime)),
                     origTime = time,
-                    currPx   = currTime / timePxRatio,
+                    currPx = currTime / timePxRatio,
                     minutes = Math.floor(currTime / 60),
                     seconds = Math.floor(currTime % 60),
-                    adjMin = (minutes < 10) ? '0'+minutes : minutes,
-                    adjSec = (seconds < 10) ? '0'+seconds : seconds;
+                    adjMin = (minutes < 10) ? '0' + minutes : minutes,
+                    adjSec = (seconds < 10) ? '0' + seconds : seconds;
 
                 evt.stopPropagation();
-                TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                     tobj.current_artwork = doq.Identifier;
                     tobj.assoc_media = mdoq.Identifier;
                     tobj.assoc_media_interactions = "media_seek";
                 });
-                if(!isNaN(time)) {
+                if (!isNaN(time)) {
                     currentTimeDisplay.text(adjMin + ":" + adjSec);
                     elt.currentTime = time;
-                    sliderPoint.css('width', 100*(currPx / sliderContainer.width()) + '%');
+                    sliderPoint.css('width', 100 * (currPx / sliderContainer.width()) + '%');
                 }
 
-                sliderContainer.on('mousemove.seek', function(e) {
+                sliderContainer.on('mousemove.seek', function (e) {
                     var currPoint = e.pageX,
                         timeDiff = (currPoint - origPoint) * timePxRatio;
 
                     currTime = Math.max(0, Math.min(elt.duration, origTime + timeDiff));
-                    currPx   = currTime / timePxRatio;
-                    minutes  = Math.floor(currTime / 60);
-                    seconds  = Math.floor(currTime % 60);
-                    adjMin   = (minutes < 10) ? '0'+minutes : minutes;
-                    adjSec   = (seconds < 10) ? '0'+seconds : seconds;
+                    currPx = currTime / timePxRatio;
+                    minutes = Math.floor(currTime / 60);
+                    seconds = Math.floor(currTime % 60);
+                    adjMin = (minutes < 10) ? '0' + minutes : minutes;
+                    adjSec = (seconds < 10) ? '0' + seconds : seconds;
 
-                    if(!isNaN(currTime)) {
+                    if (!isNaN(currTime)) {
                         currentTimeDisplay.text(adjMin + ":" + adjSec);
                         elt.currentTime = currTime;
-                        sliderPoint.css('width', 100*(currPx / sliderContainer.width()) + '%');
+                        sliderPoint.css('width', 100 * (currPx / sliderContainer.width()) + '%');
                     }
                 });
 
-                $('body').on('mouseup.seek mouseleave.seek', function() {
+                $('body').on('mouseup.seek mouseleave.seek', function () {
                     sliderContainer.off('mouseup.seek mouseleave.seek mousemove.seek');
                     // if(!isNaN(getCurrTime())) {
                     //     currentTimeDisplay.text(adjMin + ":" + adjSec);
@@ -1205,9 +1219,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     adjMin = (minutes < 10) ? '0' + minutes : minutes,
                     adjSec = (seconds < 10) ? '0' + seconds : seconds;
 
-                if(!isNaN(elt.currentTime)) {
+                if (!isNaN(elt.currentTime)) {
                     currentTimeDisplay.text(adjMin + ":" + adjSec);
-                    sliderPoint.css('width', 100*(currPx / sliderContainer.width()) + '%');
+                    sliderPoint.css('width', 100 * (currPx / sliderContainer.width()) + '%');
                 }
             });
 
@@ -1239,7 +1253,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (elt.paused) {
                     elt.play();
                     playButton.attr('src', tagPath + 'images/icons/PauseWhite.svg');
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier;
                         tobj.assoc_media_interactions = "play_media";
@@ -1247,7 +1261,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 } else {
                     elt.pause();
                     playButton.attr('src', tagPath + 'images/icons/PlayWhite.svg');
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier;
                         tobj.assoc_media_interactions = "pause_media";
@@ -1259,7 +1273,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 if (elt.muted) {
                     elt.muted = false;
                     vol.attr('src', tagPath + 'images/icons/VolumeUpWhite.svg');
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier;
                         tobj.assoc_media_interactions = "volume_up";
@@ -1267,7 +1281,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 } else {
                     elt.muted = true;
                     vol.attr('src', tagPath + 'images/icons/VolumeDownWhite.svg');
-                    TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+                    TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier;
                         tobj.assoc_media_interactions = "volume_down";
@@ -1293,11 +1307,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     adjSec = (seconds < 10) ? '0' + seconds : seconds;
 
                 evt.stopPropagation();
-                TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
-                        tobj.current_artwork = doq.Identifier;
-                        tobj.assoc_media = mdoq.Identifier;
-                        tobj.assoc_media_interactions = "media_seek";
-                    });
+                TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
+                    tobj.current_artwork = doq.Identifier;
+                    tobj.assoc_media = mdoq.Identifier;
+                    tobj.assoc_media_interactions = "media_seek";
+                });
                 if (!isNaN(time)) {
                     currentTimeDisplay.text(adjMin + ":" + adjSec);
                     elt.currentTime = time;
@@ -1363,7 +1377,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 y,
                 w,
                 h;
-                //rect;
+            //rect;
 
             if (!mediaLoaded) {
                 mediaLoaded = true;
@@ -1554,22 +1568,22 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     });
                     outerContainer.css({
                         'width': '675px',
-                        'height' : 'auto'
+                        'height': 'auto'
                     });
                 } else if (CONTENT_TYPE === 'iframe') {
                     outerContainer.css({
-                        'width':'30%',
+                        'width': '30%',
                     });
-                    if (descDiv){
-                        outerContainer.css('height', outerContainer.width()*1.15);
-                    }else{
-                        outerContainer.css('height',outerContainer.width()*0.89);
+                    if (descDiv) {
+                        outerContainer.css('height', outerContainer.width() * 1.15);
+                    } else {
+                        outerContainer.css('height', outerContainer.width() * 0.89);
                     }
                     innerContainer.css({
-                        'height':'100%'
+                        'height': '100%'
                     });
                     var mediaHeight;
-                    DESCRIPTION ? mediaHeight = '85%' : mediaHeight ='100%';
+                    DESCRIPTION ? mediaHeight = '85%' : mediaHeight = '100%';
                     mediaContainer.css({
                         'height': mediaHeight
                     });
@@ -1583,23 +1597,23 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         height: '100%'
                     });
                     mediaContainer.append(iframe);
-                    
+
                     //Create an overlay to help with interaction (problems with mouse "sticking" to iframe)
                     //Basically, create an overlay that only exists while you have clicked down on the media, and then is removed when you release it (i.e, when you want to actually play the iframe)
-                    if (!IS_WINDOWS){
+                    if (!IS_WINDOWS) {
                         var interactionOverlay = $(document.createElement('div'))
                         interactionOverlay.css({
                             height: "100%",
                             width: "100%",
-                            position: "absolute", 
-                            left: 0, 
+                            position: "absolute",
+                            left: 0,
                             top: 0
                         })
 
-                        outerContainer.on('mousedown', function() {
+                        outerContainer.on('mousedown', function () {
                             interactionOverlay.css("pointer-events", "auto");
                         });
-                        $("body").on('mouseup', function() {
+                        $("body").on('mouseup', function () {
                             interactionOverlay && interactionOverlay.css("pointer-events", "none")
                         });
                         mediaContainer.append(interactionOverlay)
@@ -1752,11 +1766,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             });
         }
 
-    /**
-     * I/P {Object} res     object containing hammer event info
-     * Drag/manipulation handler for associated media
-     * Manipulation for touch and drag events
-     */
+        /**
+         * I/P {Object} res     object containing hammer event info
+         * Drag/manipulation handler for associated media
+         * Manipulation for touch and drag events
+         */
         function mediaManip(res, evt, fromSeadragonControls) {
             res && res.grEvent && (res.grEvent.target.autoProcessInertia = false);
 
@@ -1792,7 +1806,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 //     y: top + res.pivot.y  - outerContainer.manipulationOffset.y
                 // } 
                 //  
-              finalPosition = {
+                finalPosition = {
                     x: (res.center.pageX - res.startEvent.center.pageX) + outerContainer.startLocation.x,
                     y: (res.center.pageY - res.startEvent.center.pageY) + outerContainer.startLocation.y
                 };
@@ -1822,7 +1836,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
              * If object is not on screen, reset and hide it
              */
             function checkForOffscreen() {
-                var offscreenBuffer = (!IS_WINDOWS ? root.width() / 8: 0);
+                var offscreenBuffer = (!IS_WINDOWS ? root.width() / 8 : 0);
                 if (!(
                     (0 < finalPosition.y + height - offscreenBuffer) //top
                     && (finalPosition.y + offscreenBuffer < root.height()) //bottom
@@ -1838,10 +1852,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     pauseResetMediaObject();
                     //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
                     //if (IS_WINDOWS) {
-                        //res.grEvent.target.isInertial = false;
-                        //res.grEvent.target.velocities.linear.x = 0;
-                        //res.grEvent.target.velocities.linear.y = 0;
-                        //res.grEvent.stop();
+                    //res.grEvent.target.isInertial = false;
+                    //res.grEvent.target.velocities.linear.x = 0;
+                    //res.grEvent.target.velocities.linear.y = 0;
+                    //res.grEvent.stop();
                     //}
                     return;
                     IS_WINDOWS && (outerContainer.manipulationOffset = null);
@@ -1849,11 +1863,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             }
         }
 
-    /**
-     * I/P {Number} scale     scale factor
-     * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
-     * Zoom handler for associated media (e.g., for mousewheel scrolling)
-     */
+        /**
+         * I/P {Number} scale     scale factor
+         * I/P {Object} pivot     point of contact (with regards to image container, NOT window)
+         * Zoom handler for associated media (e.g., for mousewheel scrolling)
+         */
         function mediaScroll(scale, pivot) {
             if (descscroll === true) {
                 return;
@@ -1861,63 +1875,63 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 // disallowing resizing of audio - doesn't make sense anyway
                 return;
             }
-            var t       = outerContainer.position().top,
-            l       = outerContainer.position().left,
-            w       = outerContainer.width(),
-            h       = outerContainer.height(),
-            newW    = w * scale,
+            var t = outerContainer.position().top,
+            l = outerContainer.position().left,
+            w = outerContainer.width(),
+            h = outerContainer.height(),
+            newW = w * scale,
             newH,
             maxW,
             minW,
             newX,
             newY;
-        scrollingMedia = true;
-        if (CONTENT_TYPE === 'Video') {
-            minW = 450;
-            maxW = 800;
-        } else {
-            minW = 250;
-            maxW = 800;
-        }
-        if (CONTENT_TYPE === "iframe") {
-            minW = parseInt(rootWidth * 0.33);
-            maxW = parseInt(rootWidth * 0.75);
-        }
+            scrollingMedia = true;
+            if (CONTENT_TYPE === 'Video') {
+                minW = 450;
+                maxW = 800;
+            } else {
+                minW = 250;
+                maxW = 800;
+            }
+            if (CONTENT_TYPE === "iframe") {
+                minW = parseInt(rootWidth * 0.33);
+                maxW = parseInt(rootWidth * 0.75);
+            }
 
-        // Constrain new width
-        if((newW < minW) || (newW > maxW)) {
-            newW    = Math.min(maxW, Math.max(minW, newW));
-        };
+            // Constrain new width
+            if ((newW < minW) || (newW > maxW)) {
+                newW = Math.min(maxW, Math.max(minW, newW));
+            };
 
-        // Update scale, new X and new Y according to newly constrained values.
-        scale   = newW / w;
-        newH = h * scale;
-        newX = l + pivot.x * (1 - scale);
-        newY = t + pivot.y * (1 - scale);
+            // Update scale, new X and new Y according to newly constrained values.
+            scale = newW / w;
+            newH = h * scale;
+            newX = l + pivot.x * (1 - scale);
+            newY = t + pivot.y * (1 - scale);
 
-        //Animate outerContainer to this new position
-        outerContainer.stop()
-        outerContainer.css({
-            top: newY,
-            left: newX,
-            width: newW,
-            height: newH
-        });
-
-        outerContainer.find('.annotatedImageMediaTitle').css({
-            'width': (newW - 65) + 'px'
-        });
-
-        if (CONTENT_TYPE === 'Video') {
-            outerContainer.find('.mediaSliderContainer').css({
-                'width': (newW - 200) + 'px'
+            //Animate outerContainer to this new position
+            outerContainer.stop()
+            outerContainer.css({
+                top: newY,
+                left: newX,
+                width: newW,
+                height: newH
             });
+
+            outerContainer.find('.annotatedImageMediaTitle').css({
+                'width': (newW - 65) + 'px'
+            });
+
+            if (CONTENT_TYPE === 'Video') {
+                outerContainer.find('.mediaSliderContainer').css({
+                    'width': (newW - 200) + 'px'
+                });
+            }
+            setTimeout(function () {
+                scrollingMedia = false;
+            }, 100);
         }
-        setTimeout(function () {
-            scrollingMedia = false;
-        }, 100);
-    }
-        
+
         /**
          * Create a closeButton for associated media
          * @method createCloseButton
@@ -1939,7 +1953,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             });
             return closeButton;
         }
-         
+
         /**
          * Show the associated media on the seadragon canvas. If the media is not
          * a hotspot, show it in a slightly random position.
@@ -1969,7 +1983,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 viewer.viewport.applyConstraints()
             } else {
                 //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
-                if (IS_HOTSPOT) {
+                if (IS_HOTSPOT && isNobelWill !== true) {
                     if (!isHotspotIcon) {
                         circle.css('visibility', 'visible');
                         addOverlay(circle[0], position, OpenSeadragon.OverlayPlacement.CENTER);
@@ -1979,11 +1993,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     t = viewer.viewport.pixelFromPoint(position).y - h / 2 + circleRadius / 2;
                     l = viewer.viewport.pixelFromPoint(position).x + circleRadius;
                 }
-                 else {
-                    (root.data('split') === 'R') && (splitscreenOffset =  - root.find('#sideBar').width());
-                    (root.data('split') === 'L') && (splitscreenOffset =   root.find('#sideBar').width());
+                else {
+                    (root.data('split') === 'R') && (splitscreenOffset = -root.find('#sideBar').width());
+                    (root.data('split') === 'L') && (splitscreenOffset = root.find('#sideBar').width());
                     t = root.height() * 1 / 10 + Math.random() * root.height() * 2 / 10;
-                    l = (root.width() + splitscreenOffset)/3 + (.5 - Math.random()) * root.width()/8  ;
+                    l = (root.width() + splitscreenOffset) / 3 + (.5 - Math.random()) * root.width() / 8;
                 };
                 outerContainer.css({
                     'top': t + "px",
@@ -1995,10 +2009,27 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
                 assetCanvas.append(outerContainer);
                 outerContainer.show();
+                //viewer.viewport.fitBounds(new OpenSeadragon.Rect(.1,.1,.2,.5),true)
+                if (isNobelWill === true) {
+                    var cs = window.getComputedStyle(outerContainer[0]);
+                    var x = cs.getPropertyValue('left') + cs.getPropertyValue('width') / 2;
+                    var y = cs.getPropertyValue('top') + cs.getPropertyValue('height') / 2;
+                    if (IS_WINDOWS) {
+                        mediaScrollWin(.1, { x: x, y: y })
+                    }
+                    else {
+                        mediaScroll(.1, { x: x, y: y })
+                    }
+                    var loc = getNobelAssociatedMediaLocation(doq.Identifier);
+                    outerContainer.css({
+                        'top': loc.y + 'px',
+                        'left': loc.x + 'px'
+                    })
+                }
             }
 
             mediaHidden = false;
-            TAG.Telemetry.recordEvent("AssociatedMedia", function(tobj) {
+            TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                 tobj.current_artwork = doq.Identifier;
                 tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
                 tobj.assoc_media_interactions = "open"; //TODO what is this
@@ -2015,7 +2046,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             if (!thumbnailButton) {
                 thumbnailButton = $(toHideID);
             }
-            
+
             thumbnailButton.css({
                 'color': 'black',
                 'background-color': 'rgba(255,255,255, 0.3)'
@@ -2040,7 +2071,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             var toHideID = '#thumbnailButton-' + mdoq.Identifier;
             if (outerContainer.parents('#metascreen-R').length) {
                 toHideID += 'R';
-            } 
+            }
             if (!thumbnailButton) {
                 thumbnailButton = $(toHideID);
             }
@@ -2063,10 +2094,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             } else {
                 pauseResetMediaObject();
                 if (!isHotspotIcon) {
-                    IS_HOTSPOT && removeOverlay(circle[0]); 
+                    IS_HOTSPOT && isNobelWill !== true && removeOverlay(circle[0]);
                     outerContainer.remove();
                     outerContainer = $(document.createElement('div'));
-                }else {
+                } else {
                     outerContainer.hide();
                 }
             }
@@ -2117,7 +2148,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * @pauseResetMediaObject
          */
         function pauseResetMediaObject() {
-            if(!mediaElt || mediaElt.readyState < 4) { // see https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+            if (!mediaElt || mediaElt.readyState < 4) { // see https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
                 return;
             }
             mediaElt.currentTime = 0;
@@ -2127,16 +2158,16 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
 
         return {
-            doq:                 mdoq,
-            linq:                linq,
-            show:                showMediaObject,
-            hide:                hideMediaObject,
-            create:              createMediaElements,
-            pauseReset:          pauseResetMediaObject,
+            doq: mdoq,
+            linq: linq,
+            show: showMediaObject,
+            hide: hideMediaObject,
+            create: createMediaElements,
+            pauseReset: pauseResetMediaObject,
             toggle: toggleMediaObject,
             showHotspot: showHotspot,
             createMediaElements: createMediaElements,
-            isVisible:           isVisible,
+            isVisible: isVisible,
             mediaManipPreprocessing: mediaManipPreprocessing
         };
     }
