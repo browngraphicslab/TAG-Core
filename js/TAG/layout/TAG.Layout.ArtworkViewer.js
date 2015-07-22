@@ -229,23 +229,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     function getNobelAssociatedMediaLocation(identifier) {
         if (isNobelWill === true) {
             if (!associatedMediaNobelLocations) {
-                if (root.width() * .14 > 250) {
-                    associatedMediaNobelLocations = [false, false, false, false];
-                    var w = root.width() * .28;
-                    var h = root.height() / 2;
-                    nobelAssociatedMediaCoordinates = [{ x: root.width() - w, y: 0 }, { x: root.width() - w, y: h }, { x: root.width() - 250, y: 0 }, { x: root.width() - 250, y: h }]
-                }
-                else {
-                    associatedMediaNobelLocations = [false, false];
-                    var w = (root.width() * .28) / 2 + 125;
-                    var h = root.height() / 2;
-                    nobelAssociatedMediaCoordinates = [{ x: root.width() - w, y: 0 }, { x: root.width() - w, y: h }];
-                }
+                associatedMediaNobelLocations = [false, false];
+                var w = (root.width() * .16) / 2 + 125;
+                nobelAssociatedMediaCoordinates = [{ x: root.width() - w, y: 0 }, { x: root.width() - w, y: root.height() / 2 }];
                 return getNobelAssociatedMediaLocation();
             }
             else {
                 for (var i = 0; i < associatedMediaNobelLocations.length; i++) {
-                    if (associatedMediaNobelLocations[i] != false && associatedMediaNobelLocations[i].length && associatedMediaNobelLocations[i][0] === identifier) {
+                    if (associatedMediaNobelLocations[i] !== false && associatedMediaNobelLocations[i].length && associatedMediaNobelLocations[i][0] === identifier) {
                         return associatedMediaNobelLocations[i][1];
                     }
                 }
@@ -254,10 +245,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         associatedMediaNobelLocations[i] = [identifier, nobelAssociatedMediaCoordinates[i]]
                         return nobelAssociatedMediaCoordinates[i]
                     }
-                }
-                if (associatedMediaNobelLocations.length === 4) {
-                    var w = (root.width() * .28) / 2 + 125;
-                    return { x: root.width() - w, y: 0 };
                 }
                 return { x: root.width() - 250, y: 200 }
             }
@@ -279,7 +266,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         $("#sideBarSections").hide();
         $("#sideBarSections").off('click');
         $("#sideBar").css({
-            "width": '26%',
+            "width": '40%',
             'background-color': 'rgb(102,102,102)'
         });
         root.css("background-color", 'rgb(60,60,60)')
@@ -308,16 +295,16 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         switch (pageNumber) {
             case 1:
                 associatedMediaNobelKeywords = [['Alfred Bernhard', 0], ['Robert Nobel', 1], ['Emanuel Nobel', 2], ['Sofie Kapy von Kapivar', 5], ['Alarik Liedbeck', 6]]
-                hardcodedHotspotSpecs = [[51.5, 15, 17, 3.5], [54.5, 30, 11, 3], [49, 34.5, 12.5, 2.5], [35, 54, 23.5, 3], [35.5, 65.4, 18.5, 3]]
+                hardcodedHotspotSpecs = [[63.5, 15, 17, 3.5], [66.5, 30, 11, 3], [61, 34.5, 12.5, 2.5], [47, 54, 23.5, 3], [47.5, 65.4, 18.5, 3]]
 
                 leftTextArray = [
                     ['I, the undersigned, Alfred Bernhard Nobel, do hereby, after mature deliberation, declare the following to be my last Will and Testament with respect to such property as may be left by me at the time of my death:', 17],
                     ['To my nephews, Hjalmar and Ludvig Nobel, the sons of my brother Robert Nobel, I bequeath the sum of Two Hundred Thousand Crowns each;', 28.5],
                     ['To my nephew Emanuel Nobel, the sum of Three Hundred Thousand, and to my niece Mina Nobel, One Hundred Thousand Crowns;', 35.5],
-                    ['To my brother Robert Nobel’s daughters, Ingeborg and Tyra, the sum of One Hundred Thousand Crowns each;', 43],
+                    ['To my brother Robert Nobel’s daughters, Ingeborg and Tyra, the sum of One Hundred Thousand Crowns each;', 42.5],
                     ['Miss Olga Boettger, at present staying with Mrs Brand, 10 Rue St Florentin, Paris, will receive One Hundred Thousand Francs;', 48.5],
                     ['Mrs Sofie Kapy von Kapivar, whose address is known to the Anglo-Oesterreichische Bank in Vienna, is hereby entitled to an annuity of 6000 Florins Ö.W. which is paid to her by the said Bank, and to this end I have deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;', 55],
-                    ['Mr Alarik Liedbeck, presently living at 26 Sturegatan, Stockholm, will receive One Hundred Thousand Crowns;', 66],
+                    ['Mr Alarik Liedbeck, presently living at 26 Sturegatan, Stockholm, will receive One Hundred Thousand Crowns;', 65.5],
                     ['Miss Elise Antun, presently living at 32 Rue de Lubeck, Paris, is entitled to an annuity of Two Thousand Five Hundred Francs. In addition, Forty Eight Thousand Francs owned by her are at present in my custody, and shall be refunded;', 71.5],
                     ['Mr Alfred Hammond, Waterford, Texas, U.S.A. will receive Ten Thousand Dollars;', 81.5],
                     ['The Misses Emy and Marie Winkelmann,', 87]
@@ -337,7 +324,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 break;
             case 2:
                 associatedMediaNobelKeywords = [['Georges Fehrenbach', 4], ['estate', 6], ['fund', 6], ['greatest benefit to mankind', 6], ['physics', 6], ['chemical', 6], ['physiology or medicine', 6], ['literature', 6]];
-                hardcodedHotspotSpecs = [[40.5, 39.75, 14, 3.75], [63.5, 58, 5, 3.5], [34.5, 66, 4.5, 3.5], [51.5, 15, 17, 3.5], [51.5, 15, 17, 3.5], [51.5, 15, 17, 3.5], [51.5, 15, 17, 3.5], [51.5, 15, 17, 3.5]]
+                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.5, 70.5, 9, 3], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5,81,20,2.75], [65.5, 83.25, 16.25, 2.5]]
 
                 leftTextArray = [
                     ['Potsdamerstrasse, 51, Berlin, will receive Fifty Thousand Marks each;', 8.5],
@@ -355,7 +342,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 ['The Misses Emy and Marie Winkelmann,', 87]
             ]*/
                 sliderPositions = [
-                    [7.5, 6],
+                    [7.75, 5.75],
                     [12, 5.5],
                     [18.5, 8],
                     [24.5, 16],
@@ -381,7 +368,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'color': 'black',
                 'height': '25%',
                 'top': leftTextArray[i][1] + '%',
-                'font-size': '.5em',
+                'font-size': '.6em',
             }).text(leftTextArray[i][0])
             tempText.attr('class', 'textChunkDiv');
             sideBar.append(tempText);
@@ -404,7 +391,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'background-color': 'transparent',
                     'width': '6%',
                     'bottom': '20px',
-                    'left': "28%",
+                    'left': "40%",
                     'z-index': '88888889'
                 });
                 leftArrow.click(function () {
@@ -415,7 +402,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'width': '6%',
                     'background-color': 'transparent',
                     'bottom': '20px',
-                    'left': "66%",
+                    'left': "78%",
                     'z-index': '88888889'
                 }).click(nextPage)
 
@@ -446,8 +433,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'position': 'absolute',
                     'background-color': "rgb(254,161,0)",
                     'opacity': '.4',
-                    'left': '36.35%',
-                    'width': '63.65%',
+                    'left': '45.4%',
+                    'width': '54.6%',
                     'height': '100%',
                 })
                 sliderBar = $(document.createElement('div'));
@@ -459,7 +446,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'border': '3px solid rgb(254,161,0)',
                     'border-radius': '12px',
                     'left': '1%',
-                    'width': '74%',
+                    'width': '86%',
                     'height': '10%',
                     'z-index': '9999999'
                 })
@@ -549,6 +536,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $("#titleDiv").die();
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
+            textDivArray = [];
             init();
         }
     }
@@ -580,6 +568,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $("#titleDiv").die();
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
+            textDivArray = [];
             init();
         }
     }
@@ -707,7 +696,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     }
                 }
             }
-            fadeText(textDivArray[chunk], 'white');
+            fadeText(textDivArray[chunk], 'white', null, duration || 1000);
             if (chunk === 0) {
                 $("#upIcon").fadeOut(duration || 1000, 'easeInOutQuart');
             }
