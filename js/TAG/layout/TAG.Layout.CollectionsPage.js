@@ -4489,7 +4489,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             root.css({ 'overflow-x': 'hidden' });
         }
     }
-
+    this.switchPage = switchPage;
     //UNCOMMENT IF WE EVER WANT SPLITSCREEN ACCESS FROM CATALOG
     //     /**
     //  * Initializes splitscreen functionality
@@ -4557,7 +4557,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         loadCollection: loadCollection,
         loadFirstCollection: loadFirstCollection,
         showArtwork : showArtwork,
-        getState : getState
+        getState: getState,
+        switchPage : switchPage
     };
 };
 

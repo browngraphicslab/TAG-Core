@@ -3935,7 +3935,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
             event,
             i;
 
-        if ( delegate.tracking ) {
+        if ( delegate && delegate.tracking ) {
             for ( i = 0; i < $.MouseTracker.subscribeEvents.length; i++ ) {
                 event = $.MouseTracker.subscribeEvents[ i ];
                 $.removeEvent(
