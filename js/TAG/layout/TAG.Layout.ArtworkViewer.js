@@ -54,7 +54,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         wasOnAssocMediaView = options.onAssocMediaView,
         originalOptions = options,
         isNobelWill = options.isNobelWill,
+        smallPreview        = options.smallPreview,
+        titleIsName = options.titleIsName,
+
         NOBEL_WILL_COLOR = 'rgb(189,125,13)',
+
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -1441,7 +1445,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 backMult: prevMult,
                 backSearch: prevSearch,
                 wasOnAssocMediaView: wasOnAssocMediaView,
-                splitscreen: root.data('split')
+                splitscreen: root.data('split'),
+                smallPreview: smallPreview,
+                titleIsName: titleIsName
             });
             //if (root.data('split') === 'R') {
 

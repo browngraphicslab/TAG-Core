@@ -59,6 +59,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         backSearch = options.backSearch,
         //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
         previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
+        hideKeywords = options.hideKeywords, //true if should be hidden for a particular collection
+        smallPreview= options.smallPreview,
+        titleIsName = options.titleIsName,
+        showOtherCollections = options.showOtherCollections,
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -718,6 +722,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @method addKeywords
      */
     function addKeywords() {
+
+        if (hideKeywords){
+            return;
+        }
         // Don't repeat this.
         if (root.find('.ui-dropdownchecklist').length > 0) {
             return;
@@ -749,6 +757,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 select1.append(andOptn); // Add AND option.
                 select1.append(notOptn); // Add NOT option.
                 listItem1.append(select1); // Wrap the select element in a list item.
+                if (setIndex === 0){
+                    listItem1.css('display','none');
+                }
                 // Hide if not shown.
                 if (set.shown !== 'true') {
                     listItem1.css('display', 'none');
@@ -1229,9 +1240,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 "height": "90%",
                 "top": "10%",
                 "cursor": "pointer",
-                "white-space" : "nowrap"
-            }).off()
-                .on('mousedown', function (j) {
+                "white-space" : "nowrap",
+                'position': 'relative'
+            }).off();
+            centeredCollectionHeader.on('mousedown', function (j) {
                     if (visibleCollections.length > 1) {
                         return function () {
                             showCollectionMenu();
@@ -1528,6 +1540,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     function showCollectionMenu() {
         var menu,
             arrow;
+
+        if (!showOtherCollections){
+            return;
+        }
         menu = $(root).find('#collectionMenu');
         arrow = $(root).find('#dropDownArrow');
 
@@ -1650,6 +1666,12 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 // uiDocfrag.appendChild(sortButton[0]);
                 //Because stored on server as "Tour" but should be displayed as "Tours"
                 sortOptions[i]==="Tour" ? text = "Tours" : text = sortOptions[i];
+                if ((sortOptions[i] === "Title") && titleIsName){
+                    text = "Name";
+                }
+                if (sortOptions[i]==="Citizenship 1"){
+                    text = "Primary Citizenship";
+                }
                 sortButton.addClass('secondaryFont');
                 sortButton.addClass('rowButton').addClass('sortButton')
                             .text(text)   
@@ -2335,6 +2357,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         * @method styleBottomContainer
         */
     function styleBottomContainer(){
+        console.log('smallPreview' + smallPreview);
         if (timelineShown){   
                 bottomContainer.css({
                     'height' : '75%',
@@ -2351,10 +2374,17 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 'top':'13%',
                 'z-index':'100005',
             });
-            selectedArtworkContainer.css({
-                'height': '100%',
-                'bottom':'-4%'
-            })
+            if (!smallPreview){
+                selectedArtworkContainer.css({
+                    'height': '100%',
+                    'bottom':'-5%'
+                });
+            } else {
+                selectedArtworkContainer.css({
+                    'height': '79%',
+                    'bottom':'4%'
+                });
+            }
         }
     }
 
@@ -3169,11 +3199,15 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             artworksForYear,
             containerWidth;
         artworksForYear = artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()];
-        previewWidth = (0.38) * $("#tagRoot").width();
+        if (smallPreview){
+             previewWidth = (0.25) * $("#tagRoot").width();
+        } else {
+             previewWidth = (0.38) * $("#tagRoot").width();
+        }      
         if (showAllAtYear && artworksForYear){
             containerWidth = (Math.min(($("#tagRoot").width()*.80), (artworksForYear.length) * previewWidth));///2;
         } else {
-            containerWidth = (previewWidth);///2;
+            containerWidth = (previewWidth);
         }
         return containerWidth || 0;
     }
@@ -3380,8 +3414,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 closeButton.css({
                     'position': 'absolute',
                     'top': '1.5%',
-                    'width': '4%',
-                    'height': '4%',
+                    'width': '8%',
+                    'height': '8%',
                     'min-height': '15px',
                     'min-width': '15px',
                     'background-color': '',
@@ -3636,7 +3670,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     });
                     if (artworksKeywordList !== '') {
                         artworksKeywordList = artworksKeywordList.substring(0, artworksKeywordList.length - 1);
-                        descriptionContent = descriptionContent + '<p><span style="font-weight: bold">' + keywordSets[0].name + ': </span>' + artworksKeywordList + '</p>';
+                        descriptionContent = descriptionContent + '<p><span>' + keywordSets[0].name + ':   </span>' + artworksKeywordList + '</p>';
                     }
                 }
                 if (keywordSets && keywordSets[1] && keywordSets[1].keywords && keywordSets[1].shown && artwork.Metadata.KeywordsSet2) {
@@ -3648,7 +3682,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     });
                     if (artworksKeywordList !== '') {
                         artworksKeywordList = artworksKeywordList.substring(0, artworksKeywordList.length - 1);
-                        descriptionContent = descriptionContent + '<p><span style="font-weight: bold">' + keywordSets[1].name + ': </span>' + artworksKeywordList + '</p>';
+                        descriptionContent = descriptionContent + '<p><span >' + keywordSets[1].name + ':   </span>' + artworksKeywordList + '</p>';
                     }
                 }
                 if (keywordSets && keywordSets[2] && keywordSets[2].keywords && keywordSets[2].shown && artwork.Metadata.KeywordsSet3) {
@@ -3660,7 +3694,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     });
                     if (artworksKeywordList !== '') {
                         artworksKeywordList = artworksKeywordList.substring(0, artworksKeywordList.length - 1);
-                        descriptionContent = descriptionContent + '<p><span style="font-weight: bold">' + keywordSets[2].name + ': </span>' + artworksKeywordList + '</p>';
+                        descriptionContent = descriptionContent + '<p><span >' + keywordSets[2].name + ':   </span>' + artworksKeywordList + '</p>';
                     }
                    
                 }
@@ -3670,7 +3704,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     .css({
                     'color': SECONDARY_FONT_COLOR,
                     //'font-family': FONT,
-                    'font-size': "80%"
+                    'font-size': "110%",
+                    'height': '100%'
                 });
                 if (IS_WINDOWS) {
                     if (descText){
@@ -4439,7 +4474,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     prevMult: multipleShown,
                     prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions },
                     assocMediaToShow: associatedMedia,
-                    onAssocMediaView : onAssocMediaView
+                    onAssocMediaView : onAssocMediaView,
+                    smallPreview: smallPreview,
+                    titleIsName: titleIsName
                 });
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
