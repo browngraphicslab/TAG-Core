@@ -55,7 +55,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         originalOptions = options,
         isNobelWill = options.isNobelWill || false,
         isImpactMap = options.isImpactMap,
-        smallPreview        = options.smallPreview,
+        smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
         NOBEL_WILL_COLOR = 'rgb(189,125,13)',
 
@@ -71,6 +71,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         telemetry_timer = new TelemetryTimer(),       //Timer for telemetry
 
         //nobel will variables
+        showInitialNobelWillBox = true,
         sliderBar,//the big yellow div sliding up and down
         chunkNumber,//the current chunk number (0-based) being observed
         leftTextArray,//the array of textDiv-spacingPercent tuples
@@ -89,6 +90,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         prevPageAssociatedMedia,
         nobelIsPlaying = false,
         nobelPlayPauseButton,
+        currentAudio,
 
 
         // misc uninitialized vars
@@ -595,9 +597,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 }
 
 
-                
-
-
                 makeNobelHotspots(associatedMediaNobelKeywords, hardcodedHotspotSpecs)
 
 
@@ -635,9 +634,18 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             if ($("#annotatedImageAssetCanvas").css('z-index') !== '50') {
                 hideNobelAssociatedMedia();
             }
+            stopAudio();
         }
     }
-
+    function stopAudio() {
+        if (isNobelWill === true && currentAudio){
+            currentAudio.pause();
+        }
+    }
+    function getAudioSource() {
+        return tagPath + 'images/nobel_sounds/1_1.mp3';
+        return tagPath + 'images/nobel_sounds/'+pageNumber+'_'+chunkNumber+'.mp3'
+    }
     function playNobel() {
         if (isNobelWill === true) {
             nobelIsPlaying = true;
@@ -674,11 +682,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $(".audioFile").die();
             var soundTest = $(document.createElement('audio'));
             soundTest.attr({
-                src: tagPath + 'images/nobel_sounds/1_1.mp3',
+                src: getAudioSource(),
                 class: 'audioFile'
             })
             soundTest[0].play();
             soundTest[0].addEventListener('ended', callback)
+            currentAudio = soundTest[0]
             return soundTest[0];
         }
     }
@@ -863,6 +872,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
         if (isNobelWill === true && chunk >= 0 && chunk < textDivArray.length) {
             hideNobelAssociatedMedia();
+            stopAudio();
+
             for (var i = 0; i < textDivArray.length; i++) {
                 if (i !== chunk) {
                     fadeText(textDivArray[i], 'black', null, duration || 1000)
@@ -893,7 +904,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             else {
                 $("#downIcon").fadeIn(duration || 1000, 'easeInOutQuart');
             }
-            moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? callback : null, duration || 1000);
+            moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { nobelIsPlaying && makeAndPlaySound(callback); } : function () { nobelIsPlaying && makeAndPlaySound() }, duration || 1000);
 
             //TODO :  add enabling associated media
             if (associatedMediaNobelLocations) {
@@ -939,10 +950,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      */
 
     function showNobelInitialPopup(onClose) {
-        if (pageNumber > 1) {
+        if (pageNumber > 1 || showInitialNobelWillBox===false) {
             onClose && onClose()
             return;
         }
+        showInitialNobelWillBox = true;
         var popup = $(document.createElement('div'))
         popup.css({
             'display': 'block',
