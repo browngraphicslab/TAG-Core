@@ -389,7 +389,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     ['Paris, 27 November, 1895', 13],
                     ['Alfred Bernhard Nobel', 13],
                     ['That Mr Alfred Bernhard Nobel, being of sound mind, has of his own free will declared the above to be his last Will and Testament, and that he has signed the same, we have, in his presence and the presence of each other, hereunto subscribed our names as witnesses:', 13],
-                    [['Sigurd Ehrenborg      R. W. Strehlenert'],['former Lieutenant      Civil Engineer'],['84 Boulevard      4, Passage Caroline'],['Haussmann'],['Thos Nordenfelt      Leonard Hwass'],['Constructor      Civil Engineer'],['8, Rue Auber, Paris    4, Passage Caroline'], 45],
+                    [[['Sigurd Ehrenborg','R. W. Strehlenert'],['former Lieutenant','Civil Engineer'],['84 Boulevard','4, Passage Caroline'],['Haussmann'],['Thos Nordenfelt','Leonard Hwass'],['Constructor','Civil Engineer'],['8, Rue Auber, Paris','4, Passage Caroline']], 45],
                 ]
                 sliderPositions = [
                     [7.75, 5.75],
@@ -413,16 +413,40 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'height': '25%',
                 'top': leftTextArray[i][1] + '%',
                 'font-size': '.6em',
-            });/*
-            if (leftTextArray[i][0].length) {
+            });
+            if (leftTextArray[i][0].length<10) {
                 for (var j = 0; j < leftTextArray[i][0].length; j++) {
                     var temp2 = $(document.createElement('div'));
-
+                    temp2.css({
+                        'position': 'absolute',
+                        'background-color': "transparent",
+                        'left': '0%',
+                        'width': '50%',
+                        'color': 'inherit',
+                        'height': '9%',
+                        'top': (j) * 9 + leftTextArray[i][1] + '%',
+                        'font-size' : 'inherit'
+                    }).text(leftTextArray[i][0][j][0])
+                    if (leftTextArray[i][0][j].length === 2) {
+                        var temp3 = $(document.createElement('div'));
+                        temp3.css({
+                            'position': 'absolute',
+                            'background-color': "transparent",
+                            'left': parseInt(tempText.css('width'))/2+'%',
+                            'width': '50%',
+                            'color': 'inherit',
+                            'height': '9%',
+                            'top': (j) * 9 + leftTextArray[i][1] + '%',
+                            'font-size': 'inherit'
+                        }).text(leftTextArray[i][0][j][1])
+                        tempText.append(temp3);
+                    }
+                    tempText.append(temp2);
                 }
             }
-            else {*/
+            else {
                 tempText.text(leftTextArray[i][0])
-            //}
+            }
             tempText.attr('class', 'textChunkDiv');
             sideBar.append(tempText);
             textDivArray.push(tempText);
