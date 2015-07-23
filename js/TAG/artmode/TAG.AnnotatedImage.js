@@ -21,7 +21,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         locationHist = options.locationHist,
         inArtworkEditor = options.inArtworkEditor,
         isNobelWill = options.isNobelWill,
-        isImpactMap = true, //options.isImpactMap,
+        isImpactMap = options.isImpactMap,
         getNobelAssociatedMediaLocation = options.getNobelAssociatedMediaLocation,
 
         // constants
@@ -1474,8 +1474,27 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             //if(CONTENT_TYPE === 'iframe'){
                             //    descDiv.css({top:'110%'});
                             //}
+                            console.log("description is here!")
+
+                            /*if (isImpactMap === true) {
+                                console.log("should create button now")
+                                var fieldsMapButton = $(document.createElement("BUTTON"));
+                                fieldsMapButton.text("Learn More");
+                                fieldsMapButton.css({
+                                    'color': 'black',
+                                    "background-color": "transparent",
+                                    'float': 'bottom',
+                                    'left': '50%',
+                                    'position': 'relative'
+                                });
+                                descDiv.append(fieldsMapButton);
+
+                            }*/
                             outerContainer.append(descDiv);
                         }
+
+                        
+                        
                         return;
                     }
                 } else {
@@ -1962,7 +1981,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * a hotspot, show it in a slightly random position.
          * @method showMediaObject
          */
-        function showMediaObject(isHotspotIcon) {
+        function showMediaObject(isHotspotIcon, hideOuterContainer) {
             var t,
                 l,
                 h = outerContainer.height(),
@@ -2060,6 +2079,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'background-color': 'rgba(255,255,255, 0.3)'
             });
 
+            /**
+            if (hideOuterContainer) {
+                toggleMediaObject(true);
+            }
+            **/
+
             // TODO is this necessary? 
             // dz17: this WAS necessary due to scaling. Please ask before disabling anything to do with resizing
             // if ((info.contentType === 'Video') || (info.contentType === 'Audio')) {
@@ -2123,9 +2148,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * Show if hidden, hide if shown
          * @method toggleMediaObject
          */
-        function toggleMediaObject(isHotspotIcon) {
+        function toggleMediaObject(isHotspotIcon, hideOuterContainer) {
             if (hotspotMediaHidden) {
-                showMediaObject(isHotspotIcon);
+                showMediaObject(isHotspotIcon, hideOuterContainer);
             } else {
                 mediaHidden ? showMediaObject(isHotspotIcon) : hideMediaObject(isHotspotIcon);
             }
