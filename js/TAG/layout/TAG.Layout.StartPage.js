@@ -21,7 +21,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
-    var root = TAG.Util.getHtmlAjax('../tagcore/html/SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
+    var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
         goToWillButton = root.find('#goToWillButton'),
         goToHistoryButton = root.find('#goToHistoryButton'), 
         goToWinnersButton = root.find('#goToWinnersButton'),
