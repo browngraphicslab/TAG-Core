@@ -21,6 +21,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         locationHist = options.locationHist,
         inArtworkEditor = options.inArtworkEditor,
         isNobelWill = options.isNobelWill,
+        isImpactMap = true, //options.isImpactMap,
         getNobelAssociatedMediaLocation = options.getNobelAssociatedMediaLocation,
 
         // constants
@@ -1006,6 +1007,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         onScroll: mediaScroll
                     }, null, true); // NO ACCELERATION FOR NOW  
                 }
+
             }
         }
 
@@ -1986,10 +1988,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 //If associated media object is a hotspot, then position it next to circle.  Otherwise, put it in a slightly random position near the middle
                 if (IS_HOTSPOT && isNobelWill !== true) {
                     if (!isHotspotIcon) {
-                        circle.css('visibility', 'visible');
+                        circle.css('visibility', 'visible');                       
                         addOverlay(circle[0], position, OpenSeadragon.OverlayPlacement.CENTER);
                     }
-                    viewer.viewport.panTo(position, false);
+                    //don't pan to position 
+                    if (!isImpactMap) {
+                        viewer.viewport.panTo(position, false);
+                    }
                     viewer.viewport.applyConstraints()
                     t = viewer.viewport.pixelFromPoint(position).y - h / 2 + circleRadius / 2;
                     l = viewer.viewport.pixelFromPoint(position).x + circleRadius;
@@ -2009,7 +2014,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 });
 
                 assetCanvas.append(outerContainer);
+
                 outerContainer.show();
+
                 //viewer.viewport.fitBounds(new OpenSeadragon.Rect(.1,.1,.2,.5),true)
                 if (isNobelWill === true) {
                     var cs = window.getComputedStyle(outerContainer[0]);
@@ -2028,7 +2035,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     })
                 }
             }
-
             mediaHidden = false;
             TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                 tobj.current_artwork = doq.Identifier;
@@ -2039,6 +2045,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             if (hotspotMediaHidden) {
                 hotspotMediaHidden = false;
             }
+
             var toHideID = '#thumbnailButton-' + mdoq.Identifier;
             if (outerContainer.parents('#metascreen-R').length) {
                 toHideID += 'R';

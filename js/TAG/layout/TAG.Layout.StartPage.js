@@ -47,6 +47,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : null,
         HISTORY_NAME = "Nobel Prize History and Impact", //name of collection about nobel history
         LIFE_NAME = "The Life of Alfred Nobel",
+        WILL_NAME = "Nobel Will Page 1",
         LAUREATE_NAME = "Nobel Laureates"; //name of collection about nobel laureates
     serverInput.attr('placeholder', localStorage.ip);
     serverInput.attr('value', localStorage.ip);
@@ -60,7 +61,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     });
     historyImage.attr('src', tagPath + 'images/prize.jpg').css({
         'position': 'relative',
-        'left': '-20%',
+        'left': '-4%',
         'top': '-5%'
     });
     winnersImage.attr('src', tagPath + 'images/nobelprize_facts_intro.jpg').css({
@@ -386,7 +387,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         willImage.on('click', function(){
-
+            switchPage(WILL_NAME);
         });
 
         lifeImage.on('click', function(){
@@ -402,7 +403,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         goToWillButton.on('click', function(){
-
+            switchPage(WILL_NAME);
         });
 
         goToLifeButton.on('click', function(){
@@ -473,27 +474,46 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 handleIncompatibleBrowser();
             }
             if (collectionName){
-                TAG.Worktop.Database.getExhibitions( function (collections) {
-                    for (i =0; i< collections.length; i++){
-                        currName = collections[i].Name;
-                        if (currName === collectionName){
-                            options.backCollection = collections[i];
-                            if (hideKeywords){
-                                options.hideKeywords = true;
-                            }
-                            if (smallPreview){
-                                options.smallPreview = true;
-                            }
-                            if (titleIsName){
-                                options.titleIsName = true;
+                if (collectionName === WILL_NAME){
+                    TAG.Worktop.Database.getArtworks(function (result) {
+                        $.each(result, function (index, artwork) {
+                            console.log(artwork);
+                            if (artwork.Name === WILL_NAME) {                      
+                                var artworkViewer = TAG.Layout.ArtworkViewer({
+                                    doq: artwork,
+                                    isNobelWill: true
+                                });
+                                var newPageRoot = artworkViewer.getRoot();
+                                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                                currentPage.obj = artworkViewer;
+                            }                                   
+                        });
+                    });                        
+                } else {
+                    TAG.Worktop.Database.getExhibitions( function (collections) {
+                        for (i =0; i< collections.length; i++){
+                            currName = collections[i].Name;
+                            if (currName === collectionName){
+                                options.backCollection = collections[i];
+                                if (hideKeywords){
+                                    options.hideKeywords = true;
+                                }
+                                if (smallPreview){
+                                    options.smallPreview = true;
+                                }
+                                if (titleIsName){
+                                    options.titleIsName = true;
+                                }
                             }
                         }
-                    }
-                    collectionsPage = TAG.Layout.CollectionsPage(options);
-                    TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
-                    currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
-                    currentPage.obj  = collectionsPage;
-                });
+                        collectionsPage = TAG.Layout.CollectionsPage(options);
+                        TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+                        currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+                        currentPage.obj  = collectionsPage;
+                    });
+                }
             } else {
                 collectionsPage = TAG.Layout.CollectionsPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration)); // TODO merging
                 TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
