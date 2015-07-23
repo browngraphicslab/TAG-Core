@@ -474,23 +474,35 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 handleIncompatibleBrowser();
             }
             if (collectionName){
-                if (collectionName === WILL_NAME){
-                    TAG.Worktop.Database.getArtworks(function (result) {
-                        $.each(result, function (index, artwork) {
-                            console.log(artwork);
-                            if (artwork.Name === WILL_NAME) {                      
-                                var artworkViewer = TAG.Layout.ArtworkViewer({
-                                    doq: artwork,
-                                    isNobelWill: true
-                                });
-                                var newPageRoot = artworkViewer.getRoot();
-                                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
-                                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                                currentPage.obj = artworkViewer;
-                            }                                   
-                        });
-                    });                        
+                if (collectionName === WILL_NAME) {
+                    TAG.Worktop.Database.getDoq("f4b858e5-130c-4cd9-b4f9-45502fed8123",
+                        function (result) {
+                            var artworkViewer = TAG.Layout.ArtworkViewer({
+                                doq: result,
+                                isNobelWill: true
+                            });
+                            var newPageRoot = artworkViewer.getRoot();
+                            newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                            TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                            currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                            currentPage.obj = artworkViewer;
+                    });
+                    //TAG.Worktop.Database.getArtworks(function (result) {
+                    //    $.each(result, function (index, artwork) {
+                    //        console.log(artwork);
+                    //        if (artwork.Name === WILL_NAME) {                      
+                    //            var artworkViewer = TAG.Layout.ArtworkViewer({
+                    //                doq: artwork,
+                    //                isNobelWill: true
+                    //            });
+                    //            var newPageRoot = artworkViewer.getRoot();
+                    //            newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                    //            TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                    //            currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                    //            currentPage.obj = artworkViewer;
+                    //        }                                   
+                    //    });
+                    //});                        
                 } else {
                     TAG.Worktop.Database.getExhibitions( function (collections) {
                         for (i =0; i< collections.length; i++){
