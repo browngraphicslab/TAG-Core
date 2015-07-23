@@ -2021,7 +2021,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     else {
                         mediaScroll(.1, { x: x, y: y })
                     }
-                    var loc = getNobelAssociatedMediaLocation(doq.Identifier);
+                    var loc = getNobelAssociatedMediaLocation(outerContainer[0].uniqueID);
                     outerContainer.css({
                         'top': loc.y + 'px',
                         'left': loc.x + 'px'

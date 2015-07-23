@@ -83,10 +83,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         nobelHotspots,//array of hotspots in form [[[hotspotDiv,assocMedia],[hotspotDiv,assocMedia]],[[hotspotDiv,assocMedia],[hotspotDiv,assocMedia]]]
         hardcodedHotspotSpecs,//array of hardcoded info about the locations of the hotspots
         pageNumber = 0,//nobel will page number
-        nextPageDoq,
+        nextPageDoq, //these four variables a self explainatory and are fetched from ther server upon loading
         nextPageAssociatedMedia,
         prevPageDoq,
         prevPageAssociatedMedia,
+        nobelIsPlaying = false,
+        nobelPlayPauseButton,
 
 
         // misc uninitialized vars
@@ -286,6 +288,23 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             id: "titleDiv"
         })
         sideBar.append(titleDiv);
+
+        nobelPlayPauseButton = $(document.createElement('img'));
+        nobelPlayPauseButton.attr({
+            src: tagPath+'images/icons/nobel_play.svg'
+        })
+        nobelPlayPauseButton.css({
+            'position': 'absolute',
+            'left': '2%',
+            'bottom': '1.5%',
+            'height': '8%',
+            'background-color': 'transparent',
+        }).click(toggleNobelPlaying)
+        var playPauseButtonHeight = nobelPlayPauseButton.height();
+        nobelPlayPauseButton.width(playPauseButtonHeight + '%');
+
+        sideBar.append(nobelPlayPauseButton);
+
         for (var i = 1; i < 5; i++) {
             if (doq.Name.indexOf(i) > -1) {
                 pageNumber = i;
@@ -323,8 +342,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 ]
                 break;
             case 2:
-                associatedMediaNobelKeywords = [['Georges Fehrenbach', 4], ['estate', 6], ['fund', 6], ['greatest benefit to mankind', 6], ['physics', 6], ['chemical', 6], ['physiology or medicine', 6], ['literature', 6]];
-                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.5, 70.5, 9, 3], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5,81,20,2.75], [65.5, 83.25, 16.25, 2.5]]
+                associatedMediaNobelKeywords = [['Georges Fehrenbach', 4], ['estate', 6], ['fund', 6], ['greatest benefit to mankind', 6], ['physics', 6], ['chemical', 6], ['physiology or medicine', 6], ['Literature', 6]];
+                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.5, 70.5, 9, 3], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5]]
 
                 leftTextArray = [
                     ['Potsdamerstrasse, 51, Berlin, will receive Fifty Thousand Marks each;', 8.5],
@@ -395,6 +414,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'z-index': '88888889'
                 });
                 leftArrow.click(function () {
+                    pauseNobel();
                     goPrevPage();
                 })
                 rightArrow.css({
@@ -404,7 +424,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'bottom': '20px',
                     'left': "78%",
                     'z-index': '88888889'
-                }).click(nextPage)
+                });
+                rightArrow.click(
+                    function () {
+                        pauseNobel();
+                        nextPage()
+                    }
+                )
 
                 var arrowWidth = rightArrow.width();
                 rightArrow.css('height', arrowWidth + '%');
@@ -436,7 +462,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'left': '45.4%',
                     'width': '54.6%',
                     'height': '100%',
-                })
+                }).click(pauseNobel)
                 sliderBar = $(document.createElement('div'));
                 sliderBar.attr('id', 'sliderBar');
                 sliderBar.append(sliderBarInnerds);
@@ -449,7 +475,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'width': '86%',
                     'height': '10%',
                     'z-index': '9999999'
-                })
+                }).click(pauseNobel)
 
                 var up = $(document.createElement('img'))
                 var down = $(document.createElement('img'))
@@ -465,7 +491,17 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'height': '50%',
                     'top': '0px',
                     'right': '0px'
-                }).click(prevChunk)
+                })
+                up.click(
+                    function () {
+                        if (nobelIsPlaying === true) {
+                            pauseNobel()
+                        }
+                        else {
+                            prevChunk();
+                        }
+                    }
+                )
                 down.attr({
                     id: 'downIcon',
                     src: tagPath + 'images/icons/down_nobel_icon.svg'
@@ -478,7 +514,17 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'height': '50%',
                     'bottom': '0px',
                     'right': '0px'
-                }).click(nextChunk)
+                });
+                down.click(
+                    function () {
+                        if (nobelIsPlaying === true) {
+                            pauseNobel();
+                        }
+                        else {
+                            nextChunk();
+                        }
+                    }
+                )
 
                 sliderBar.append(down)
                 sliderBar.append(up)
@@ -507,15 +553,73 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     }, 2500)
                 }
                 //test();
+                var soundTest = makeAndPlaySound(function () { console.log("DONE!") });
             }
         )
+    }
+
+    function toggleNobelPlaying() {
+        if (isNobelWill === true) {
+            if (nobelIsPlaying) {
+                pauseNobel();
+            }
+            else {
+                playNobel();
+            }
+        }
+    }
+    function pauseNobel() {
+        if (isNobelWill === true) {
+            nobelIsPlaying = false;
+            nobelPlayPauseButton.attr({
+                src : tagPath+'/images/icons/nobel_play.svg'
+            })
+        }
+    }
+
+    function playNobel() {
+        if (isNobelWill === true) {
+            nobelIsPlaying = true;
+            nobelPlayPauseButton.attr({
+                src: tagPath + '/images/icons/nobel_pause.svg'
+            })
+            incrNext();
+        }
+    }
+
+    function incrNext() {
+        if (pageNumber === 4 && chunkNumber === textDivArray.length - 1) {
+            pauseNobel();
+        }
+        if (nobelIsPlaying===true) {
+            nextChunk(incrNext);
+        }
+    }
+
+    /*
+    * makes an audio file, plays it, and attaces a handler to fire when the audio finishes
+    * @param function callback      callback function after the audio is done
+    */
+    function makeAndPlaySound(callback) {
+        if (isNobelWill === true) {
+            $(".audioFile").remove();
+            $(".audioFile").die();
+            var soundTest = $(document.createElement('audio'));
+            soundTest.attr({
+                src: tagPath + 'images/nobel_sounds/1_1.mp3',
+                class: 'audioFile'
+            })
+            soundTest[0].play();
+            soundTest[0].addEventListener('ended', callback)
+            return soundTest[0];
+        }
     }
     /*
     *
     *goes to the previous nobel will page
     */
     function goPrevPage() {
-        if (isNobelWill === true) {
+        if (isNobelWill === true && prevPageDoq && prevPageAssociatedMedia && pageNumber>0) {
             doq = prevPageDoq;
             assocMediaToShow = prevPageAssociatedMedia;
             sliderBar.remove();
@@ -527,6 +631,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $("#titleDiv").remove();
             $("#annotatedImageAssetCanvas").remove();
             $(".nobelHotspot").remove();
+            $("#nobelPlayPauseButton").remove();
             sliderBar.die();
             $("#upIcon").die();
             $("#downIcon").die();
@@ -536,6 +641,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $("#titleDiv").die();
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
+            $("#nobelPlayPauseButton").die();
             textDivArray = [];
             init();
         }
@@ -544,9 +650,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     /*
     *
     *goes to the next nobel will page
+    * @param boolean isPlaying      to set the status to playing upon loading next page
     */
-    function nextPage() {
-        if (isNobelWill === true && nextPageDoq && nextPageAssociatedMedia) {
+    function nextPage(isPlaying) {
+        if (isNobelWill === true && nextPageDoq && nextPageAssociatedMedia && pageNumber<4) {
             //annotatedImage && annotatedImage.unload();
             doq = nextPageDoq;
             assocMediaToShow = nextPageAssociatedMedia;
@@ -557,6 +664,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $("#leftPageArrow").remove();
             $(".textChunkDiv").remove();
             $("#titleDiv").remove();
+            $("#nobelPlayPauseButton").remove();
             $("#annotatedImageAssetCanvas").remove();
             $(".nobelHotspot").remove();
             sliderBar.die();
@@ -568,8 +676,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $("#titleDiv").die();
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
+            $("#nobelPlayPauseButton").die();
             textDivArray = [];
             init();
+            if (isPlaying === true) {
+                setTimeout(function(){
+                    playNobel();
+                },2500)
+            }
         }
     }
     
@@ -675,6 +789,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     * @param int duration          for the excpetionally picky a duration of animation can be specified in milliseconds
     */
     function setChunkNumber(chunk, callback, duration) {
+        if (isNobelWill === true && chunk === textDivArray.length && nobelIsPlaying) {
+            nextPage(true);
+        }
         if (isNobelWill === true && chunk >= 0 && chunk < textDivArray.length) {
             for (var j = 0; j < associatedMedia.guids.length; j++) {
                 associatedMedia[associatedMedia.guids[j]].hide();
