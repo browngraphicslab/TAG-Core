@@ -368,39 +368,39 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 break;
             case 3:
                 associatedMediaNobelKeywords = [['peace', 0], ['Swedish Academy of Sciences', 0], ['Caroline Institute', 0], ['Academy', 0], ['a committee of five persons to be elected by the Norwegian Storting', 0], ['Scandinavian or not', 0], ['RagnarSohlman', 1], ['Paris', 2], ['San Remo', 2], ['Glasgow', 2], ['Petersburg', 2], ['Stockholm', 2]];
-                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.25, 70.5, 9.25, 2.5], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5], [65.5, 83.5, 16.25, 2.5], [65.5, 83.5, 16.25, 2.5], [65.5, 83.5, 16.25, 2.5], [65.5, 83.5, 16.25, 2.5]]
+                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.5, 5, 2.5], [54.5, 21.75, 6.25, 2.5], [53.5, 24.5, 8, 2], [53, 26, 7.4, 2.5], [58, 38.5, 8.25, 2.5], [71.25, 43, 5.5, 2.5], [61, 64, 4, 2.5], [68.5, 64, 8, 2.5], [51.25, 70.25, 6.25, 2.5], [66.5, 81.75, 7.25, 2.5], [76.75, 84.5, 5.75, 2.5]]
 
                 leftTextArray = [
-                    ['the most outstanding work in an ideal direction; and one part to the person who shall have done the most or the best work for fraternity between nations, for the abolition or reduction of standing armies and for the holding and promotion of peace congresses. The prizes for physics and chemistry shall be awarded by the Swedish Academy of Sciences; that for physiological or medical work by the Caroline Institute in Stockholm; that for literature by the Academy in Stockholm, and that for champions of peace by a committee of five persons to be elected by the Norwegian Storting. It is my express wish that in awarding the prizes no consideration whatever shall be given to the nationality of the candidates, but that the most worthy shall receive the prize, whether he be a Scandinavian or not.', 8.5],
-                    ['As Executors of my testamentary dispositions, I hereby appoint Mr Ragnar Sohlman, resident at Bofors, Värmland, and Mr Rudolf Lilljequist, 31 Malmskillnadsgatan, Stockholm, and at Bengtsfors near Uddevalla. To compensate for their pains and attention, I grant to Mr Ragnar Sohlman, who will presumably have to devote most time to this matter, One Hundred Thousand Crowns, and to Mr Rudolf Lilljequist, Fifty Thousand Crowns;', 13],
-                    ['At the present time, my property consists in part of real estate in Paris and San Remo, and in part of securities deposited as follows: with The Union Bank of Scotland Ltd in Glasgow and London, Le Crédit Lyonnais, Comptoir National d’Escompte, and with Alphen Messin & Co. in Paris; with the stockbroker M.V. Peter of Banque Transatlantique, also in Paris; with Direction der Disconto Gesellschaft and Joseph Goldschmidt & Cie, Berlin; with the Russian Central Bank, and with Mr Emanuel Nobel in Petersburg; with Skandinaviska Kredit Aktiebolaget in Gothenburg and Stockholm,', 19.5],
+                    ['the most outstanding work in an ideal direction; and one part to the person who shall have done the most or the best work for fraternity between nations, for the abolition or reduction of standing armies and for the holding and promotion of peace congresses. The prizes for physics and chemistry shall be awarded by the Swedish Academy of Sciences; that for physiological or medical work by the Caroline Institute in Stockholm; that for literature by the Academy in Stockholm, and that for champions of peace by a committee of five persons to be elected by the Norwegian Storting. It is my express wish that in awarding the prizes no consideration whatever shall be given to the nationality of the candidates, but that the most worthy shall receive the prize, whether he be a Scandinavian or not.', 11.5],
+                    ['As Executors of my testamentary dispositions, I hereby appoint Mr Ragnar Sohlman, resident at Bofors, Värmland, and Mr Rudolf Lilljequist, 31 Malmskillnadsgatan, Stockholm, and at Bengtsfors near Uddevalla. To compensate for their pains and attention, I grant to Mr Ragnar Sohlman, who will presumably have to devote most time to this matter, One Hundred Thousand Crowns, and to Mr Rudolf Lilljequist, Fifty Thousand Crowns;', 45],
+                    ['At the present time, my property consists in part of real estate in Paris and San Remo, and in part of securities deposited as follows: with The Union Bank of Scotland Ltd in Glasgow and London, Le Crédit Lyonnais, Comptoir National d’Escompte, and with Alphen Messin & Co. in Paris; with the stockbroker M.V. Peter of Banque Transatlantique, also in Paris; with Direction der Disconto Gesellschaft and Joseph Goldschmidt & Cie, Berlin; with the Russian Central Bank, and with Mr Emanuel Nobel in Petersburg; with Skandinaviska Kredit Aktiebolaget in Gothenburg and Stockholm,', 66],
                 ]
                 sliderPositions = [
-                    [7.75, 5.75],
-                    [12, 5.5],
-                    [18.5, 8]
+                    [7.75, 33.75],
+                    [41.5, 21],
+                    [63, 25]
                 ]
                 break;
             case 4:
                 associatedMediaNobelKeywords = [['strong-box', 0], ['crematorium', 2]];
-                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5]]
+                hardcodedHotspotSpecs = [[48, 10.75, 7.3, 2.75], [66.75, 36.75, 10, 2.75]]
                 leftTextArray = [
-                    ['and in my strong-box at 59, Avenue Malakoff, Paris; further to this are accounts receivable, patents, patent fees or so-called royalties etc. in connection with which my Executors will find full information in my papers and books.', 8.5],
-                    ['This Will and Testament is up to now the only one valid, and revokes all my previous testamentary dispositions, should any such exist after my death.', 13],
-                    ['Finally, it is my express wish that following my death my veins shall be opened,and when this has been done and competent Doctors have confirmed clear signs of death, my remains shall be cremated in a so-called crematorium.', 19.5],
-                    ['Paris, 27 November, 1895', 13],
-                    ['Alfred Bernhard Nobel', 13],
-                    ['That Mr Alfred Bernhard Nobel, being of sound mind, has of his own free will declared the above to be his last Will and Testament, and that he has signed the same, we have, in his presence and the presence of each other, hereunto subscribed our names as witnesses:', 13],
-                    [[['Sigurd Ehrenborg','R. W. Strehlenert'],['former Lieutenant','Civil Engineer'],['84 Boulevard','4, Passage Caroline'],['Haussmann'],['Thos Nordenfelt','Leonard Hwass'],['Constructor','Civil Engineer'],['8, Rue Auber, Paris','4, Passage Caroline']], 45],
+                    ['and in my strong-box at 59, Avenue Malakoff, Paris; further to this are accounts receivable, patents, patent fees or so-called royalties etc. in connection with which my Executors will find full information in my papers and books.', 11.25],
+                    ['This Will and Testament is up to now the only one valid, and revokes all my previous testamentary dispositions, should any such exist after my death.', 22.75],
+                    ['Finally, it is my express wish that following my death my veins shall be opened,and when this has been done and competent Doctors have confirmed clear signs of death, my remains shall be cremated in a so-called crematorium.', 30.5],
+                    ['Paris, 27 November, 1895', 40.25],
+                    ['Alfred Bernhard Nobel', 45],
+                    ['That Mr Alfred Bernhard Nobel, being of sound mind, has of his own free will declared the above to be his last Will and Testament, and that he has signed the same, we have, in his presence and the presence of each other, hereunto subscribed our names as witnesses:', 50.75],
+                    [[['Sigurd Ehrenborg','R. W. Strehlenert'],['former Lieutenant','Civil Engineer'],['84 Boulevard','4, Passage Caroline'],['Haussmann'],['Thos Nordenfelt','Leonard Hwass'],['Constructor','Civil Engineer'],['8, Rue Auber, Paris','4, Passage Caroline']], 49.5],
                 ]
                 sliderPositions = [
-                    [7.75, 5.75],
-                    [12, 5.5],
-                    [18.5, 8],
-                    [7.75, 5.75],
-                    [12, 5.5],
-                    [18.5, 8],
-                    [3,5]
+                    [7.75, 14],
+                    [21.75, 6.5],
+                    [28.5, 11],
+                    [39, 5],
+                    [43.5, 5],
+                    [50, 10.75],
+                    [60.6, 19.5]
                 ]
                 break;
         }
