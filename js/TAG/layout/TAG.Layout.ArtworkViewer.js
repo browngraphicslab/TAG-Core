@@ -343,7 +343,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 break;
             case 2:
                 associatedMediaNobelKeywords = [['Georges Fehrenbach', 4], ['estate', 6], ['fund', 6], ['greatest benefit to mankind', 6], ['physics', 6], ['chemical', 6], ['physiology or medicine', 6], ['Literature', 6]];
-                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.5, 70.5, 9, 3], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5]]
+                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.25, 70.5, 9.25, 2.5], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5]]
 
                 leftTextArray = [
                     ['Potsdamerstrasse, 51, Berlin, will receive Fifty Thousand Marks each;', 8.5],
@@ -354,12 +354,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     ['A sum of Twenty Thousand Crowns each, which has been placed in my custody, is the property of my brother’s children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be repaid to them.', 50],
                     ['The whole of my remaining realizable estate shall be dealt with in the following way: the capital, invested in safe securities by my executors, shall constitute a fund, the interest on which shall be annually distributed in the form of prizes to those who, during the preceding year, shall have conferred the greatest benefit to mankind. The said interest shall be divided into five equal parts, which shall be apportioned as follows: one part to the person who shall have made the most important discovery or invention within the field of physics; one part to the person who shall have made the most important chemical discovery or improvement; one part to the person who shall have made the most important discovery within the domain of physiology or medicine; one part to the person who shall have produced in the field of literature', 59]
                 ]
-                /*
-                ['Mr Alarik Liedbeck, presently living at 26 Sturegatan, Stockholm, will receive One Hundred Thousand Crowns;', 66],
-                ['Miss Elise Antun, presently living at 32 Rue de Lubeck, Paris, is entitled to an annuity of Two Thousand Five Hundred Francs. In addition, Forty Eight Thousand Francs owned by her are at present in my custody, and shall be refunded;', 71.5],
-                ['Mr Alfred Hammond, Waterford, Texas, U.S.A. will receive Ten Thousand Dollars;', 81.5],
-                ['The Misses Emy and Marie Winkelmann,', 87]
-            ]*/
                 sliderPositions = [
                     [7.75, 5.75],
                     [12, 5.5],
@@ -368,14 +362,45 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     [39, 10.75],
                     [48.5, 10.75],
                     [58.25, 28.5]
-                ]/*
-                            [65, 5],
-                            [69.5, 12],
-                            [80.5, 5.5],
-                            [85, 5]
-                        ]*/
+                ]
                 break;
+            case 3:
+                associatedMediaNobelKeywords = [['peace', 0], ['Swedish Academy of Sciences', 0], ['Caroline Institute', 0], ['Academy', 0], ['a committee of five persons to be elected by the Norwegian Storting', 0], ['Scandinavian or not', 0], ['RagnarSohlman', 1], ['Paris', 2], ['San Remo', 2], ['Glasgow', 2], ['Petersburg', 2], ['Stockholm', 2]];
+                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.25, 70.5, 9.25, 2.5], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5], [65.5, 83.5, 16.25, 2.5], [65.5, 83.5, 16.25, 2.5], [65.5, 83.5, 16.25, 2.5], [65.5, 83.5, 16.25, 2.5]]
 
+                leftTextArray = [
+                    ['the most outstanding work in an ideal direction; and one part to the person who shall have done the most or the best work for fraternity between nations, for the abolition or reduction of standing armies and for the holding and promotion of peace congresses. The prizes for physics and chemistry shall be awarded by the Swedish Academy of Sciences; that for physiological or medical work by the Caroline Institute in Stockholm; that for literature by the Academy in Stockholm, and that for champions of peace by a committee of five persons to be elected by the Norwegian Storting. It is my express wish that in awarding the prizes no consideration whatever shall be given to the nationality of the candidates, but that the most worthy shall receive the prize, whether he be a Scandinavian or not.', 8.5],
+                    ['As Executors of my testamentary dispositions, I hereby appoint Mr Ragnar Sohlman, resident at Bofors, Värmland, and Mr Rudolf Lilljequist, 31 Malmskillnadsgatan, Stockholm, and at Bengtsfors near Uddevalla. To compensate for their pains and attention, I grant to Mr Ragnar Sohlman, who will presumably have to devote most time to this matter, One Hundred Thousand Crowns, and to Mr Rudolf Lilljequist, Fifty Thousand Crowns;', 13],
+                    ['At the present time, my property consists in part of real estate in Paris and San Remo, and in part of securities deposited as follows: with The Union Bank of Scotland Ltd in Glasgow and London, Le Crédit Lyonnais, Comptoir National d’Escompte, and with Alphen Messin & Co. in Paris; with the stockbroker M.V. Peter of Banque Transatlantique, also in Paris; with Direction der Disconto Gesellschaft and Joseph Goldschmidt & Cie, Berlin; with the Russian Central Bank, and with Mr Emanuel Nobel in Petersburg; with Skandinaviska Kredit Aktiebolaget in Gothenburg and Stockholm,', 19.5],
+                ]
+                sliderPositions = [
+                    [7.75, 5.75],
+                    [12, 5.5],
+                    [18.5, 8]
+                ]
+                break;
+            case 4:
+                associatedMediaNobelKeywords = [['strong-box', 0], ['crematorium', 2]];
+                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5]]
+                leftTextArray = [
+                    ['and in my strong-box at 59, Avenue Malakoff, Paris; further to this are accounts receivable, patents, patent fees or so-called royalties etc. in connection with which my Executors will find full information in my papers and books.', 8.5],
+                    ['This Will and Testament is up to now the only one valid, and revokes all my previous testamentary dispositions, should any such exist after my death.', 13],
+                    ['Finally, it is my express wish that following my death my veins shall be opened,and when this has been done and competent Doctors have confirmed clear signs of death, my remains shall be cremated in a so-called crematorium.', 19.5],
+                    ['Paris, 27 November, 1895', 13],
+                    ['Alfred Bernhard Nobel', 13],
+                    ['That Mr Alfred Bernhard Nobel, being of sound mind, has of his own free will declared the above to be his last Will and Testament, and that he has signed the same, we have, in his presence and the presence of each other, hereunto subscribed our names as witnesses:', 13],
+                    [['Sigurd Ehrenborg      R. W. Strehlenert'],['former Lieutenant      Civil Engineer'],['84 Boulevard      4, Passage Caroline'],['Haussmann'],['Thos Nordenfelt      Leonard Hwass'],['Constructor      Civil Engineer'],['8, Rue Auber, Paris    4, Passage Caroline'], 45],
+                ]
+                sliderPositions = [
+                    [7.75, 5.75],
+                    [12, 5.5],
+                    [18.5, 8],
+                    [7.75, 5.75],
+                    [12, 5.5],
+                    [18.5, 8],
+                    [3,5]
+                ]
+                break;
         }
         for (var i = 0; i < leftTextArray.length; i++) {
             var tempText = $(document.createElement('div'));
@@ -388,7 +413,16 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'height': '25%',
                 'top': leftTextArray[i][1] + '%',
                 'font-size': '.6em',
-            }).text(leftTextArray[i][0])
+            });/*
+            if (leftTextArray[i][0].length) {
+                for (var j = 0; j < leftTextArray[i][0].length; j++) {
+                    var temp2 = $(document.createElement('div'));
+
+                }
+            }
+            else {*/
+                tempText.text(leftTextArray[i][0])
+            //}
             tempText.attr('class', 'textChunkDiv');
             sideBar.append(tempText);
             textDivArray.push(tempText);
@@ -574,6 +608,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             nobelPlayPauseButton.attr({
                 src : tagPath+'/images/icons/nobel_play.svg'
             })
+            if ($("#annotatedImageAssetCanvas").css('z-index') !== '50') {
+                hideNobelAssociatedMedia();
+            }
         }
     }
 
@@ -595,7 +632,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             nextChunk(incrNext);
         }
     }
-
+    function hideNobelAssociatedMedia() {
+        if (isNobelWill === true) {
+            $("#annotatedImageAssetCanvas").css("z-index", '50');
+            for (var j = 0; j < associatedMedia.guids.length; j++) {
+                associatedMedia[associatedMedia.guids[j]].hide();
+            }
+        }
+    }
     /*
     * makes an audio file, plays it, and attaces a handler to fire when the audio finishes
     * @param function callback      callback function after the audio is done
@@ -715,7 +759,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         for (var i = 0; i < names.length; i++) {
             for (var k = 0; k < associatedMedia.guids.length; k++) {
                 if (associatedMedia[associatedMedia.guids[k]].doq.Name.indexOf(names[i][0]) > -1) {
-                    assocMediaOrder.push(associatedMedia[associatedMedia.guids[k]])
+                    assocMediaOrder.push(associatedMedia[associatedMedia.guids[k]]);
+                    break;
                 }
             }
         }
@@ -793,9 +838,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             nextPage(true);
         }
         if (isNobelWill === true && chunk >= 0 && chunk < textDivArray.length) {
-            for (var j = 0; j < associatedMedia.guids.length; j++) {
-                associatedMedia[associatedMedia.guids[j]].hide();
-            }
+            hideNobelAssociatedMedia();
             for (var i = 0; i < textDivArray.length; i++) {
                 if (i !== chunk) {
                     fadeText(textDivArray[i], 'black', null, duration || 1000)
