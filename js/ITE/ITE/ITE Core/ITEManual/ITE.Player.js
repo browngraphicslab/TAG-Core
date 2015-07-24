@@ -942,16 +942,26 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         $("#infoPaneTitleDiv").text(doq.Metadata.Name || "");
         var top = 0;
         if (doq.Metadata.Description) {
-            $("#infoBlock").append(makeInfoField("Description: "+doq.Metadata.Description).css('top', top + '%'));
-            top += 10;
+            var d = makeInfoField("Description: " + doq.Metadata.Description).css('top', top + 'px');
+            $("#infoBlock").append(d);
+            top += d.height() +10;
         }
         if (doq.Metadata.Artist) {
-            $("#infoBlock").append(makeInfoField("Artist: "+doq.Metadata.Artist).css('top', top + '%'));
-            top += 10;
+            var d = makeInfoField("Artist: " + doq.Metadata.Artist).css('top', top + 'px');
+            $("#infoBlock").append(d);
+            top += d.height()+10;
         }
         if (doq.Metadata.Date) {
-            $("#infoBlock").append(makeInfoField("Date: "+doq.Metadata.Date).css('top', top + '%'));
-            top += 10;
+            var d = makeInfoField("Date: " + doq.Metadata.Date).css('top', top + 'px');
+            $("#infoBlock").append(d);
+            top += d.height()+10;
+        }
+        var keys = Object.keys(doq.Metadata.InfoFields);
+        for (var key = 0; key < keys.length;key++) {
+            var val = doq.Metadata.InfoFields[keys[key]];
+            var d = makeInfoField(keys[key] + ": " + val).css('top', top + 'px');
+            $("#infoBlock").append(d);
+            top += d.height() + 10;
         }
     }
     function makePaneVisible(b) {
@@ -977,7 +987,6 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         })
         outer.css({
             'position': 'absolute',
-            'height': '10%',
             'z-index': '9999999999',
             'width': '90%',
             'left': '0%',
