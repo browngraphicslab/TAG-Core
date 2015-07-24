@@ -3744,6 +3744,7 @@ TAG.Util.UI = (function () {
             cgBackColor("backButton", elt, false);
         });
         elt.on('click', clickHandler);
+        console.log('click');
     }
 
     // slide towards left (splitscreen)

@@ -1659,7 +1659,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             //doNothing(tobj.time_spent);
         });
 
-        TAG.Util.UI.setUpBackButton(backButton, goBack);
+        //TAG.Util.UI.setUpBackButton(backButton, goBack);
+        backButton.on('click', goBack);
         TAG.Telemetry.register(backButton, 'click', 'BackButton', function (tobj) {
 
             //for the seadragon controls, if the back button is pressed when they are open

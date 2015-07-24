@@ -121,7 +121,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     
     testConnection();
     if(newUser){
-        telemetryDialogDisplay();
+        //telemetryDialogDisplay();
     }
 
     
@@ -520,6 +520,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                                 if (titleIsName){
                                     options.titleIsName = true;
                                 }
+                                if (currName === LIFE_NAME){
+                                    options.twoDeep = true;
+                                }
                             }
                         }
                         collectionsPage = TAG.Layout.CollectionsPage(options);
@@ -627,7 +630,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     });
      goToIntroButton.on("mouseleave", function () {
-        goToLifeButton.css({"color": "black" });
+        goToIntroButton.css({"color": "black" });
 
     });
     goToWinnersButton.on("mouseenter", function () {

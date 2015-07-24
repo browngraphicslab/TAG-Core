@@ -636,19 +636,21 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 width: "100%",
                 position: "absolute",
                 left: 0,
-                top: 0
+                top: 0,
+                'pointer-events': 'none'
             });
             root.append(interactionOverlayOSD);
-            viewer.addHandler('canvas-release', function(){
-                console.log('release');
-            });
             var mouseDown = false;
             var setMouse = function(){
                 //viewer.setMouseNavEnabled(mouseDown);
                 if (mouseDown = false){
-                    interactionOverlayOSD.css('pointer-events', 'none');
-                } else{
                     interactionOverlayOSD.css('pointer-events', 'auto');
+                    interactionOverlayOSD.on('mousedown',function(evt){
+                        evt.stopPropagation();
+                    });
+                } else{
+                    interactionOverlayOSD.off();
+                    interactionOverlayOSD.css('pointer-events', 'none');
                 }
             };
             //var keyDown = false;
@@ -673,6 +675,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 setMouse();
             })
 **/
+
         }
 
         viewer.clearControls();
