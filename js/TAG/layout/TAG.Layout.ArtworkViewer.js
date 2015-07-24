@@ -91,6 +91,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         nobelIsPlaying = false,
         nobelPlayPauseButton,
         currentAudio,
+        muteButton,
+        nobelMuted = false,
 
 
         // misc uninitialized vars
@@ -280,11 +282,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'font-size': '1.4em',
             'color': 'black',
             'font-weight': 'bold',
-            'width': '85%',
+            'width': '100%',
             'text-align': 'center',
             'height': '10%',
             'top': '2%',
-            'left': '15%'
+            'left': '0%'
         }).text(doq.Name);
         titleDiv.attr({
             id: "titleDiv"
@@ -297,14 +299,31 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         })
         nobelPlayPauseButton.css({
             'position': 'absolute',
-            'left': '2%',
-            'bottom': '1.5%',
+            'left': '2.5%',
+            'bottom': '1.3%',
             'height': '8%',
             'background-color': 'transparent',
         }).click(toggleNobelPlaying)
+        
         var playPauseButtonHeight = nobelPlayPauseButton.height();
         nobelPlayPauseButton.width(playPauseButtonHeight + '%');
 
+        muteButton = $(document.createElement('img'));
+        muteButton.attr({
+            src: tagPath + 'images/icons/nobel_sound.svg'
+        })
+        muteButton.css({
+            'position': 'absolute',
+            'left': '12%',
+            'bottom': '1.3%',
+            'height': '8%',
+            'background-color': 'transparent',
+        }).click(toggleNobelMute)
+
+        var muteButtonHeight = muteButton.height();
+        muteButton.width(muteButtonHeight + '%');
+
+        sideBar.append(muteButton);
         sideBar.append(nobelPlayPauseButton);
 
         for (var i = 1; i < 5; i++) {
@@ -367,8 +386,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 ]
                 break;
             case 3:
-                associatedMediaNobelKeywords = [['peace', 0], ['Swedish Academy of Sciences', 0], ['Caroline Institute', 0], ['Academy', 0], ['a committee of five persons to be elected by the Norwegian Storting', 0], ['Scandinavian or not', 0], ['RagnarSohlman', 1], ['Paris', 2], ['San Remo', 2], ['Glasgow', 2], ['Petersburg', 2], ['Stockholm', 2]];
-                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.5, 5, 2.5], [54.5, 21.75, 6.25, 2.5], [53.5, 24.5, 8, 2], [53, 26, 7.4, 2.5], [58, 38.5, 8.25, 2.5], [71.25, 43, 5.5, 2.5], [61, 64, 4, 2.5], [68.5, 64, 8, 2.5], [51.25, 70.25, 6.25, 2.5], [66.5, 81.75, 7.25, 2.5], [76.75, 84.5, 5.75, 2.5]]
+                associatedMediaNobelKeywords = [['peace', 0], ['Swedish Academy of Sciences', 0], ['Caroline Institute', 0], ['Academy', 0], ['a committee of five persons to be elected by the Norwegian Storting', 0], ['Scandinavian or not', 0], ['Ragnar Sohlman', 1], ['Paris', 2], ['San Remo', 2], ['Glasgow', 2], ['Petersburg', 2], ['Stockholm', 2]];
+                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [61, 64, 4, 2.5], [68.5, 64, 8, 2.5], [51.25, 70.25, 6.25, 2.5], [66.5, 81.75, 7.25, 2.5], [76.75, 84.5, 5.75, 2.5]]
 
                 leftTextArray = [
                     ['the most outstanding work in an ideal direction; and one part to the person who shall have done the most or the best work for fraternity between nations, for the abolition or reduction of standing armies and for the holding and promotion of peace congresses. The prizes for physics and chemistry shall be awarded by the Swedish Academy of Sciences; that for physiological or medical work by the Caroline Institute in Stockholm; that for literature by the Academy in Stockholm, and that for champions of peace by a committee of five persons to be elected by the Norwegian Storting. It is my express wish that in awarding the prizes no consideration whatever shall be given to the nationality of the candidates, but that the most worthy shall receive the prize, whether he be a Scandinavian or not.', 11.5],
@@ -378,11 +397,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 sliderPositions = [
                     [7.75, 33.75],
                     [41.5, 21],
-                    [63, 25]
+                    [62.25, 25.75]
                 ]
                 break;
             case 4:
-                associatedMediaNobelKeywords = [['strong-box', 0], ['crematorium', 2]];
+                associatedMediaNobelKeywords = [['strong box', 0], ['crematorium', 2]];
                 hardcodedHotspotSpecs = [[48, 10.75, 7.3, 2.75], [66.75, 36.75, 10, 2.75]]
                 leftTextArray = [
                     ['and in my strong-box at 59, Avenue Malakoff, Paris; further to this are accounts receivable, patents, patent fees or so-called royalties etc. in connection with which my Executors will find full information in my papers and books.', 11.25],
@@ -395,7 +414,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 ]
                 sliderPositions = [
                     [7.75, 14],
-                    [21.75, 6.5],
+                    [21.5, 6.75],
                     [28.5, 11],
                     [39, 5],
                     [43.5, 5],
@@ -556,6 +575,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     function () {
                         if (nobelIsPlaying === true) {
                             pauseNobel()
+                            prevChunk();
                         }
                         else {
                             prevChunk();
@@ -579,6 +599,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     function () {
                         if (nobelIsPlaying === true) {
                             pauseNobel();
+                            nextChunk();
                         }
                         else {
                             nextChunk();
@@ -603,18 +624,50 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 setChunkNumber(0, null, 1);
 
                 var j = 1
+                /*
                 var test = function () {
                     setTimeout(function () {
                         setChunkNumber(j, test);
                         j = (j + 1) % textDivArray.length;
                     }, 2500)
-                }
+                }*/
                 //test();
-                var soundTest = makeAndPlaySound(function () { console.log("DONE!") });
+               // var soundTest = makeAndPlaySound(function () { console.log("DONE!") });
             }
         )
     }
-
+    function toggleNobelMute() {
+        if (isNobelWill === true) {
+            if (nobelMuted === false) {
+                nobelMute()
+            }
+            else if (nobelMuted === true) {
+                nobelUnmute();
+            }
+        }
+    }
+    function nobelMute() {
+        if (isNobelWill === true) {
+            nobelMuted = true;
+            muteButton.attr({
+                src: tagPath + 'images/icons/nobel_mute.svg'
+            })
+            if (currentAudio) {
+                currentAudio.volume = 0;
+            }
+        }
+    }
+    function nobelUnmute() {
+        if (isNobelWill === true) {
+            nobelMuted = false;
+            muteButton.attr({
+                src: tagPath + 'images/icons/nobel_sound.svg'
+            })
+            if (currentAudio) {
+                currentAudio.volume = 1;
+            }
+        }
+    }
     function toggleNobelPlaying() {
         if (isNobelWill === true) {
             if (nobelIsPlaying) {
@@ -640,28 +693,40 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     function stopAudio() {
         if (isNobelWill === true && currentAudio){
             currentAudio.pause();
+            $("#audioFile").off();
         }
     }
     function getAudioSource() {
-        return tagPath + 'images/nobel_sounds/1_1.mp3';
+        if (pageNumber === 2 && chunkNumber == 0) {
+            return tagPath + 'images/nobel_sounds/1_2.mp3';
+        }
+        if (pageNumber > 1 || chunkNumber > 5) {
+            return tagPath + 'images/nobel_sounds/1_1.mp3';
+        }
+        console.log(tagPath + 'images/nobel_sounds/' + pageNumber + '_' + chunkNumber + '.mp3')
         return tagPath + 'images/nobel_sounds/'+pageNumber+'_'+chunkNumber+'.mp3'
     }
     function playNobel() {
         if (isNobelWill === true) {
+            if (!nobelIsPlaying) {
+                makeAndPlaySound(incrNext);
+            }
             nobelIsPlaying = true;
             nobelPlayPauseButton.attr({
                 src: tagPath + '/images/icons/nobel_pause.svg'
             })
-            incrNext();
+
         }
     }
 
     function incrNext() {
-        if (pageNumber === 4 && chunkNumber === textDivArray.length - 1) {
-            pauseNobel();
-        }
-        if (nobelIsPlaying===true) {
-            nextChunk(incrNext);
+        if (isNobelWill === true) {
+            if (pageNumber === 4 && chunkNumber === textDivArray.length - 1) {
+                pauseNobel();
+            }
+            if (nobelIsPlaying === true) {
+                nextChunk(incrNext);
+            }
         }
     }
     function hideNobelAssociatedMedia() {
@@ -674,19 +739,22 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     }
     /*
     * makes an audio file, plays it, and attaces a handler to fire when the audio finishes
-    * @param function callback      callback function after the audio is done
+    * @param function callback      callback function after the audio is done 
     */
     function makeAndPlaySound(callback) {
         if (isNobelWill === true) {
+            stopAudio();
             $(".audioFile").remove();
             $(".audioFile").die();
             var soundTest = $(document.createElement('audio'));
             soundTest.attr({
                 src: getAudioSource(),
-                class: 'audioFile'
+                id: 'audioFile'
             })
             soundTest[0].play();
-            soundTest[0].addEventListener('ended', callback)
+            soundTest[0].addEventListener('ended', function () { callback && callback(); console.log("done playing a sound") });
+            soundTest[0].volume = nobelMuted ? 0 : 1;
+
             currentAudio = soundTest[0]
             return soundTest[0];
         }
@@ -709,6 +777,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $("#annotatedImageAssetCanvas").remove();
             $(".nobelHotspot").remove();
             $("#nobelPlayPauseButton").remove();
+            $("#audioFile").off();
+            $("#audioFile").remove();
+            $("#audioFile").die();
             sliderBar.die();
             $("#upIcon").die();
             $("#downIcon").die();
@@ -744,6 +815,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $("#nobelPlayPauseButton").remove();
             $("#annotatedImageAssetCanvas").remove();
             $(".nobelHotspot").remove();
+            $("#audioFile").off();
+            $("#audioFile").remove();
+            $("#audioFile").die();
             sliderBar.die();
             $("#upIcon").die();
             $("#downIcon").die();
@@ -867,8 +941,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     * @param int duration          for the excpetionally picky a duration of animation can be specified in milliseconds
     */
     function setChunkNumber(chunk, callback, duration) {
-        if (isNobelWill === true && chunk === textDivArray.length && nobelIsPlaying) {
+        if (isNobelWill === true && chunk === textDivArray.length && nobelIsPlaying === true) {
+            stopAudio();
             nextPage(true);
+            return;
         }
         if (isNobelWill === true && chunk >= 0 && chunk < textDivArray.length) {
             hideNobelAssociatedMedia();
@@ -984,8 +1060,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         })
         nobelIcon.css({
             'position': 'absolute',
-            'width': '80%',
-            'left': '20%',
+            'width': '90%',
+            'height' : '80%',
+            'left': '18%',
             'top': '5%'
         })
         popupRightBar.append(nobelIcon);
@@ -1611,6 +1688,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         function goBack() {
+            stopAudio();
             TAG.Util.removeYoutubeVideo();
             var collectionsPage,
                 collectionsPageRoot;

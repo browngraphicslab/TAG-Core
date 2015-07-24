@@ -1672,6 +1672,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
 
         function mediaManipWin(res) {
+            if (isNobelWill === true) {
+                $("#annotatedImageAssetCanvas").css("z-index", '9999999');
+            }
             var t = outerContainer.css('top');
             var l = outerContainer.css('left');
             var w = outerContainer.css('width');
@@ -1775,6 +1778,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * Manipulation for touch and drag events
          */
         function mediaManip(res, evt, fromSeadragonControls) {
+            if (isNobelWill === true) {
+                $("#annotatedImageAssetCanvas").css("z-index", '888888899');
+            }
+
             res && res.grEvent && (res.grEvent.target.autoProcessInertia = false);
 
             if (descscroll === true) {
@@ -1814,9 +1821,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     y: (res.center.pageY - res.startEvent.center.pageY) + outerContainer.startLocation.y
                 };
             }
-            if (isNobelWill === true) {
-                $("#annotatedImageAssetCanvas").css("z-index",'88888899');
-            }
+
             // Animate to target location (or don't, if you're on the win8 app)
             outerContainer.stop()
             if (IS_WINDOWS) {
@@ -2030,6 +2035,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     else {
                         mediaScroll(.1, { x: x, y: y })
                     }
+                    $("#annotatedImageAssetCanvas").css("z-index", '50');
                     var loc = getNobelAssociatedMediaLocation(outerContainer[0].innerText);
                     outerContainer.css({
                         'top': loc.y + 'px',
@@ -2111,7 +2117,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     outerContainer.hide();
                 }
             }
-
         }
 
         /* SAM custom build */
