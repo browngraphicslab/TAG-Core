@@ -328,6 +328,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         sideBar.append(muteButton);
         sideBar.append(nobelPlayPauseButton);
 
+        $("#backButton").remove();
+
         for (var i = 1; i < 5; i++) {
             if (doq.Name.indexOf(i) > -1) {
                 pageNumber = i;
@@ -1605,7 +1607,24 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'color': '#' + PRIMARY_FONT_COLOR,
             //'font-family': FONT
         });
+        if (isNobelWill === true) {
+            var bb = $(document.createElement('img'));
+            bb.attr({
+                src: tagPath + 'images/icons/Back.svg',
+                id: 'nobelBackButton'
+            })
+            bb.css({
+                'position': 'absolute',
+                'left': '2.5%',
+                'top': '1.75%',
+                'height': '6.5%',
+                'background-color': 'transparent',
+            }).click(goBack);
 
+            var bbheight = bb.height();
+            bb.css('width', bbheight + '%');
+            sideBar.append(bb);
+        }
         // splitscreen
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
             sideBar.css({
