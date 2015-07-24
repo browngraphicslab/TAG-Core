@@ -922,7 +922,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 if (previewing) {
                     $(".selector-dropdown").css('top', '-4px');
                 } else {
-                    $(".selector-dropdown").css('top', '-1px');
+                    //$(".selector-dropdown").css('top', '-1px');
                 }
             }
 

@@ -627,6 +627,54 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         if (locationHist) {
             viewer.setMouseNavEnabled(false);
         }
+        //fix for sticky mouse- in progress
+        if (!IS_WINDOWS){
+            /**
+            var interactionOverlayOSD = $(document.createElement('div')).attr('id', "interactionOverlayOSD");
+            interactionOverlayOSD.css({
+                height: "100%",
+                width: "100%",
+                position: "absolute",
+                left: 0,
+                top: 0
+            });
+            root.append(interactionOverlayOSD);
+            viewer.addHandler('canvas-release', function(){
+                console.log('release');
+            });
+            var mouseDown = false;
+            var setMouse = function(){
+                //viewer.setMouseNavEnabled(mouseDown);
+                if (mouseDown = false){
+                    interactionOverlayOSD.css('pointer-events', 'none');
+                } else{
+                    interactionOverlayOSD.css('pointer-events', 'auto');
+                }
+            };
+            //var keyDown = false;
+            viewer.addHandler('canvas-drag', function(){
+                console.log('canvas-drag');
+                mouseDown = true;
+                setMouse();
+            });
+            viewer.addHandler('canvas-drag-end', function(){
+                console.log('canvas-drag-end');
+                mouseDown = false;
+                setMouse();
+            })
+            viewer.addHandler('canvas-release', function(){
+                console.log('canvas-release');
+                mouseDown = false;
+                setMouse();
+            })
+            viewer.addHandler('mousedown', function(){
+                console.log('mousedown');
+                mouseDown = true;
+                setMouse();
+            })
+**/
+        }
+
         viewer.clearControls();
         OSDHolder.css({ 'position': 'absolute' })
 

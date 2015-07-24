@@ -1692,6 +1692,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         function goBack() {
+            console.log("going back");
             stopAudio();
             TAG.Util.removeYoutubeVideo();
             var collectionsPage,
