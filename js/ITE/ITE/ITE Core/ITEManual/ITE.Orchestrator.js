@@ -11,6 +11,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.stateChangeEvent 		= new ITE.PubSubStruct();
 	self.muteChangedEvent		= new ITE.PubSubStruct();
 	self.tourData;
+	self.lastManipZIndex = -1;
 	self.player = player;
 	self.isAuthoring = isAuthoring;
 	self.currentManipulatedObject = null;
@@ -93,7 +94,6 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    	}
 		}
 
-
 	   /**
 	    * I/P: {object}	trackData	object with parsed JSON data about the track
 	  	* Creates track based on providerID
@@ -121,6 +121,13 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			}
 		}
 	};
+
+	function setLastMovedObjectByZIndex(z) {
+	    if (z!== self.lastManipZIndex) {
+	        self.player.updateManipObjectZ(z);
+	    }
+	    self.lastManipZIndex = z;
+	}
 
 	function reload(tourData) {
 	    self.tourData = tourData;
@@ -161,6 +168,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 
 	function play() {
+	    self.setLastMovedObjectByZIndex(-1);
 	    updateZIndices();
 		var i;
 		for (i=0; i<self.trackManager.length; i++) {
@@ -193,6 +201,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 	function scrub(seekPercent) {
 	    if (!self.tourData) return;
+	    self.setLastMovedObjectByZIndex(-1);
 	    self.updateZIndices();
 		// Pause.
 		if (self.prevStatus === 0) {
@@ -216,6 +225,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 
 	function seek(seekPercent) {
+	    self.setLastMovedObjectByZIndex(-1);
 	    self.updateZIndices();
 		// Pause.
 		if (self.prevStatus === 0) {
@@ -433,6 +443,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.seek = seek;
 	self.refresh = refresh;
 	self.setVolume = setVolume;
+	self.setLastMovedObjectByZIndex = setLastMovedObjectByZIndex;
 	self.toggleMute = toggleMute;
 	self.getElapsedTime = self.timeManager.getElapsedOffset;
 	self.getStatus = getStatus;

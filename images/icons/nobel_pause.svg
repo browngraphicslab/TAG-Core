@@ -6,7 +6,7 @@
 	.st0{fill:#FEA100;}
 	.st1{fill:#FFFFFF;}
 </style>
-<circle class="st0" cx="-375" cy="281.3" r="50"/>
-<rect x="-392.4" y="256.2" class="st1" width="10.2" height="49.2"/>
-<rect x="-368.9" y="256.2" class="st1" width="10.2" height="49.2"/>
+<circle class="st0" cx="-375" cy="283" r="50"/>
+<rect x="-392.4" y="257.9" class="st1" width="10.2" height="49.2"/>
+<rect x="-368.9" y="257.9" class="st1" width="10.2" height="49.2"/>
 </svg>

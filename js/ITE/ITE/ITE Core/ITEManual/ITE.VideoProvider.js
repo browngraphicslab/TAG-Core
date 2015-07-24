@@ -867,7 +867,8 @@ ITE.VideoProvider = function (trackData, player, timeManager, orchestrator) {
      * Manipulation for touch and drag events.
      * O/P: 	none
      */
-    function mediaManip(res) {
+	function mediaManip(res) {
+	    _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
         var top = _UIControl.position().top,
             left = _UIControl.position().left,
             width = _UIControl.width(),
