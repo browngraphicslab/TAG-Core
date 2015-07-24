@@ -842,10 +842,10 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         var infoBlock = $(document.createElement('div'));
         infoBlock.css({
             'position': 'absolute',
-            'height': '80%',
+            'height': '90%',
             'z-index': '9999999999',
-            'top': '20%',
-            'width': '100%',
+            'top': '10%',
+            'width': '90%',
             'left': '5.5%',
             'background-color': 'transparent',
             'color': 'white',
@@ -892,18 +892,18 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         })
         title.css({
             'position': 'absolute',
-            'height': '20%',
-            'width': '96%',
-            'left' : '4%',
+            'top' : '1%',
+            'height': '8%',
+            'width': '94%',
+            'left' : '6%',
             'background-color': 'transparent',
             'color': 'white',
             'font-size': '1.25em',
+            'white-space' : 'nowrap',
             'font-weight': 'bold',
             'text-overflow': 'ellipsis',
             'overflow' : 'hidden',
             'z-index': '9999999',
-            'text-align': 'center',
-            'vetical-align' : 'bottom'
         })
         tab.css({
             'position': 'absolute',
@@ -940,7 +940,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         makePaneVisible(true);
         $(".infoPaneInfoField").remove();
         $("#infoPaneTitleDiv").text(doq.Metadata.Name || "");
-        var top = 5;
+        var top = 0;
         if (doq.Metadata.Description) {
             $("#infoBlock").append(makeInfoField("Description: "+doq.Metadata.Description).css('top', top + '%'));
             top += 10;
