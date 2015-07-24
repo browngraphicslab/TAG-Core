@@ -37,6 +37,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     	_proxy,//For touch handling. We want to be able to click through the transparent parts of the layers, so we're just adding a div over the part of the canvas that has the image.
     			//TODO: there has GOT to be a better way to do this
     	_canvasHolder,
+        _circle = null,
     	_viewer;
         self._UIControl = _UIControl;
 
@@ -248,7 +249,22 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Plays DeepZoom asset.
 	 * O/P: 	none
 	 */
-	self.play = function(endKeyframe) {
+	self.play = function (endKeyframe) {
+	    if (_super.trackData.guid && _circle === null && false) {
+	        var point = new OpenSeadragon.Point(.5, .5);
+	        _circle = $(document.createElement('img'));
+	        _circle.attr('src', itePath + "ITE Core/ITEManual/ITEPlayerImages/hotspot_circle.svg")
+	        _circle.css({
+	            'position': 'relative',
+	            'width': '5%',
+	            'height': '5%',
+	            'top': point.y+'px',
+	            'left': point.x+'px',
+	            'display': 'inherit',
+                'opacity' : 'inherit',
+	        })
+	        $(_viewer.canvas).append(_circle);
+	    }
 		if (self.status === 3) {
 			return;
 		}
