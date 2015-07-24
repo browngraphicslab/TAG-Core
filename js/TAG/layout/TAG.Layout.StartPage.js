@@ -26,6 +26,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToHistoryButton = root.find('#goToHistoryButton'), 
         goToWinnersButton = root.find('#goToWinnersButton'),
         goToLifeButton = root.find('#goToLifeButton'),
+        goToIntroButton = root.find("#goToIntroButton"),
         willImage = root.find('#willImage'),
         lifeImage= root.find('#lifeImage'),
         historyImage= root.find('#historyImage'),
@@ -59,17 +60,18 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         'top': '-15%',
         'left': '-20%'
     });
-    historyImage.attr('src', tagPath + 'images/prize.jpg').css({
+    historyImage.attr('src', tagPath + 'images/Nobel-Prize.jpg').css({
         'position': 'relative',
         'left': '-4%',
-        'top': '-5%'
+        'top': '-5%',
+        'height': '120%'
     });
-    winnersImage.attr('src', tagPath + 'images/nobelprize_facts_intro.jpg').css({
+    winnersImage.attr('src', tagPath + 'images/curie.jpg').css({
         'position': 'relative',
         'top': '-10%',
         'height': '110%'
     });
-    introImage.attr('src', tagPath + 'images/nobelprize_facts_intro.jpg').css({
+    introImage.attr('src', tagPath + 'images/einstein.jpg').css({
         'position': 'relative',
         'top': '-10%',
         'height': '110%'
@@ -119,7 +121,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     
     testConnection();
     if(newUser){
-        telemetryDialogDisplay();
+        //telemetryDialogDisplay();
     }
 
     
@@ -383,7 +385,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         historyImage.on('click', function(){
-            switchPage(HISTORY_NAME,true);
+            //switchPage(HISTORY_NAME,true);
         });
 
         willImage.on('click', function(){
@@ -399,7 +401,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         goToHistoryButton.on('click', function(){
-            switchPage(HISTORY_NAME,true);
+            //switchPage(HISTORY_NAME,true);
         });
 
         goToWillButton.on('click', function(){
@@ -518,6 +520,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                                 if (titleIsName){
                                     options.titleIsName = true;
                                 }
+                                if (currName === LIFE_NAME){
+                                    options.twoDeep = true;
+                                }
                             }
                         }
                         collectionsPage = TAG.Layout.CollectionsPage(options);
@@ -609,19 +614,43 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     })
     goToWinnersButton.on("mouseleave", function () {
-        goToWinnersButton.css({ "background-color": "white", "color": "black" });
+        goToWinnersButton.css({ "color": "black" });
 
     });
     goToHistoryButton.on("mouseleave", function () {
-        goToHistoryButton.css({ "background-color": "white", "color": "black" });
+        goToHistoryButton.css({ "color": "black" });
 
     });
     goToWillButton.on("mouseleave", function () {
-        goToWillButton.css({ "background-color": "white", "color": "black" });
+        goToWillButton.css({ "color": "black" });
 
     });
     goToLifeButton.on("mouseleave", function () {
-        goToLifeButton.css({ "background-color": "white", "color": "black" });
+        goToLifeButton.css({"color": "black" });
+
+    });
+     goToIntroButton.on("mouseleave", function () {
+        goToIntroButton.css({"color": "black" });
+
+    });
+    goToWinnersButton.on("mouseenter", function () {
+        goToWinnersButton.css({ "color": "white" });
+
+    });
+    goToHistoryButton.on("mouseenter", function () {
+        goToHistoryButton.css({ "color": "white" });
+
+    });
+    goToWillButton.on("mouseenter", function () {
+        goToWillButton.css({"color": "white" });
+
+    });
+    goToLifeButton.on("mouseenter", function () {
+        goToLifeButton.css({"color": "white" });
+
+    });
+    goToIntroButton.on("mouseenter", function () {
+        goToIntroButton.css({"color": "white" });
 
     });
 
@@ -902,19 +931,19 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     evt.stopPropagation();
         // });
 
-        $('.goToCollectionsButton').css({ "border": "1px solid #fff" });
+        $('.goToCollectionsButton').css({ "border": "1px solid #fea100" });
 
         goToWinnersButton.on("mousedown", function () {
-            goToWinnersButton.css({"background-color": "transparent", "color": "white"});
+            goToWinnersButton.css({"color": "white"});
         });
         goToHistoryButton.on("mousedown", function () {
-            goToHistoryButton.css({"background-color": "transparent", "color": "white"});
+            goToHistoryButton.css({ "color": "white"});
         });
         goToWillButton.on("mousedown", function () {
-            goToWillButton.css({"background-color": "transparent", "color": "white"});
+            goToWillButton.css({"color": "white"});
         });
         goToLifeButton.on("mousedown", function () {
-            goToLifeButton.css({"background-color": "transparent", "color": "white"});
+            goToLifeButton.css({"color": "white"});
         });
 
         /**

@@ -538,6 +538,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 	    //var translation = { x: evt.pageX - lastPos.x, y: evt.pageY - lastPos.y };
 	    //var scale = evt.gesture.scale - lastScale;
+	    _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
 	    var pos = _UIControl.position();
 	    var newTop = pos.top + evt.delta.y;
 	    var newLeft = pos.left + evt.delta.x;
@@ -573,6 +574,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 
 	function scrollFromDZRecursion(evt) {
+	    _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
 	    var scale = 1.1;
 	    if (evt.scroll < 0) {
 	        scale = 1.0 / 1.1;
@@ -592,7 +594,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
      * Manipulation for touch and drag events.
      * O/P: 	none
      */
-    function mediaManip(res) {
+	function mediaManip(res) {
+	    _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
         var top = _UIControl.position().top,
             left = _UIControl.position().left,
             width = _UIControl.width(),
@@ -696,6 +699,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
      * O/P: 	none
      */
     function mediaScroll(scale, pivot, isFromTouch) {
+        _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
     	var t    	= _UIControl.position().top,
             l    	= _UIControl.position().left,
             w   	= _UIControl.width(),
@@ -760,6 +764,7 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
      * O/P: 	none
      */
     function mediaPinch(scale, pivot) {
+        _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
         var t = _UIControl.position().top,
             l = _UIControl.position().left,
             w = _UIControl.width(),

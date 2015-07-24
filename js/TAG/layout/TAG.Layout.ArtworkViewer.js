@@ -55,7 +55,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         wasOnAssocMediaView = options.onAssocMediaView,
         originalOptions = options,
         isNobelWill = options.isNobelWill || false,
-        isImpactMap = true,// options.isImpactMap,
+        isImpactMap = options.isImpactMap,
         smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
         NOBEL_WILL_COLOR = 'rgb(189,125,13)',
@@ -88,6 +88,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         nextPageDoq, //these four variables a self explainatory and are fetched from ther server upon loading
         nextPageAssociatedMedia,
         prevPageDoq,
+        audioFinishedHandler,
         prevPageAssociatedMedia,
         nobelIsPlaying = false,
         nobelPlayPauseButton,
@@ -326,6 +327,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         sideBar.append(muteButton);
         sideBar.append(nobelPlayPauseButton);
+
+        $("#backButton").remove();
 
         for (var i = 1; i < 5; i++) {
             if (doq.Name.indexOf(i) > -1) {
@@ -681,6 +684,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     }
     function pauseNobel() {
         if (isNobelWill === true) {
+            stopAudio();
             nobelIsPlaying = false;
             nobelPlayPauseButton.attr({
                 src : tagPath+'/images/icons/nobel_play.svg'
@@ -688,28 +692,24 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             if ($("#annotatedImageAssetCanvas").css('z-index') !== '50') {
                 hideNobelAssociatedMedia();
             }
-            stopAudio();
         }
     }
     function stopAudio() {
         if (isNobelWill === true && currentAudio){
             currentAudio.pause();
+            currentAudio.removeEventListener('ended', audioFinishedHandler);
             $("#audioFile").off();
         }
     }
     function getAudioSource() {
-        if (pageNumber === 2 && chunkNumber == 0) {
-            return tagPath + 'images/nobel_sounds/1_2.mp3';
-        }
-        if (pageNumber > 1 || chunkNumber > 5) {
-            return tagPath + 'images/nobel_sounds/1_1.mp3';
-        }
-        console.log(tagPath + 'images/nobel_sounds/' + pageNumber + '_' + chunkNumber + '.mp3')
         return tagPath + 'images/nobel_sounds/'+pageNumber+'_'+chunkNumber+'.mp3'
     }
     function playNobel() {
         if (isNobelWill === true) {
-            if (!nobelIsPlaying) {
+            if (currentAudio && currentAudio.paused === false) {
+                currentAudio.addEventListener('ended', incrNext);
+            }
+            else {
                 makeAndPlaySound(incrNext);
             }
             nobelIsPlaying = true;
@@ -725,7 +725,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             if (pageNumber === 4 && chunkNumber === textDivArray.length - 1) {
                 pauseNobel();
             }
-            if (nobelIsPlaying === true) {
+            if (chunkNumber === textDivArray.length - 1) {
+                nextChunk(nextPage);
+            }
+            else if (nobelIsPlaying === true) {
                 nextChunk(incrNext);
             }
         }
@@ -753,7 +756,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 id: 'audioFile'
             })
             soundTest[0].play();
-            soundTest[0].addEventListener('ended', function () { callback && callback(); console.log("done playing a sound") });
+            audioFinishedHandler = soundTest[0].addEventListener('ended', function () { callback && callback(); });
             soundTest[0].volume = nobelMuted ? 0 : 1;
 
             currentAudio = soundTest[0]
@@ -769,6 +772,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             doq = prevPageDoq;
             assocMediaToShow = prevPageAssociatedMedia;
             sliderBar.remove();
+            stopAudio();
             $("#upIcon").remove();
             $("#downIcon").remove();
             $("#rightPageArrow").remove();
@@ -807,6 +811,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             doq = nextPageDoq;
             assocMediaToShow = nextPageAssociatedMedia;
             sliderBar.remove();
+            stopAudio();
             $("#upIcon").remove();
             $("#downIcon").remove();
             $("#rightPageArrow").remove();
@@ -981,7 +986,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             else {
                 $("#downIcon").fadeIn(duration || 1000, 'easeInOutQuart');
             }
-            moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { nobelIsPlaying && makeAndPlaySound(callback); } : function () { nobelIsPlaying && makeAndPlaySound() }, duration || 1000);
+            moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { if (nobelIsPlaying) { makeAndPlaySound(callback) }; } : function () { if (nobelIsPlaying) { makeAndPlaySound() } }, duration || 1000);
 
             //TODO :  add enabling associated media
             if (associatedMediaNobelLocations) {
@@ -1031,7 +1036,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             onClose && onClose()
             return;
         }
-        showInitialNobelWillBox = true;
+        showInitialNobelWillBox = false;
         var popup = $(document.createElement('div'))
         popup.css({
             'display': 'block',
@@ -1602,7 +1607,24 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'color': '#' + PRIMARY_FONT_COLOR,
             //'font-family': FONT
         });
+        if (isNobelWill === true) {
+            var bb = $(document.createElement('img'));
+            bb.attr({
+                src: tagPath + 'images/icons/Back.svg',
+                id: 'nobelBackButton'
+            })
+            bb.css({
+                'position': 'absolute',
+                'left': '2.5%',
+                'top': '1.75%',
+                'height': '6.5%',
+                'background-color': 'transparent',
+            }).click(goBack);
 
+            var bbheight = bb.height();
+            bb.css('width', bbheight + '%');
+            sideBar.append(bb);
+        }
         // splitscreen
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
             sideBar.css({
@@ -1656,7 +1678,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             //doNothing(tobj.time_spent);
         });
 
-        TAG.Util.UI.setUpBackButton(backButton, goBack);
+        //TAG.Util.UI.setUpBackButton(backButton, goBack);
+        backButton.on('click', goBack);
         TAG.Telemetry.register(backButton, 'click', 'BackButton', function (tobj) {
 
             //for the seadragon controls, if the back button is pressed when they are open
@@ -1689,6 +1712,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         function goBack() {
+            console.log("going back");
             stopAudio();
             TAG.Util.removeYoutubeVideo();
             var collectionsPage,

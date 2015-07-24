@@ -22,7 +22,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     var prevSearch = prevSearch;
     var prevS;
     var self = this;
-    var rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
+    var rinPath = IS_WINDOWS ? tagPath + 'js/WIN8_RIN/web' : tagPath + 'js/RIN/web';
     var ispagetoload = pageToLoad && (pageToLoad.pagename === 'tour');
     this.iteTour = tour;
     var tagContainer = $('#tagRoot');
@@ -219,8 +219,48 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                     setStartingOffset:          0,
                     setEndTime:                 NaN
             };
-            player = new ITE.Player(testOptions, self, rinPlayer, idleTimer);
-            player.load(self.getTourData());
+            var nobelDoq = []
+            var needed = 0;
+            var returned = 0;
+            function doqReturn(doq) {
+                returned++;
+                for (var i = 0 ; i < nobelDoq.length; i++) {
+                    if (doq.Identifier === nobelDoq[i]) {
+                        nobelDoq[i] = doq;
+                        break;
+                    }
+                }
+            }
+            for (var i = 0; i < self.iteTour.tracks.length; i++) {
+                if (self.iteTour.tracks[i].guid && self.iteTour.tracks[i].guid !== null && self.iteTour.tracks[i].guid !== [] && self.iteTour.tracks[i].guid !== '') {
+                    TAG.Worktop.Database.getDoq(self.iteTour.tracks[i].guid, doqReturn,
+                        function () {
+                            console.log("error getting doq in tourplayer")
+                        }, function () {
+                            console.log("error getting doq in tourplayer 2")
+                    });
+                    nobelDoq.push(self.iteTour.tracks[i].guid);
+                    needed++;
+
+                }
+                else {
+                    nobelDoq.push(false)
+                }
+            }
+
+            function pollForData() {
+                if (returned < needed) {
+                    setTimeout(pollForData, 250);
+                }
+                else {
+                    donePolling();
+                }
+            }
+            function donePolling() {
+                player = new ITE.Player(testOptions, self, rinPlayer, idleTimer,nobelDoq);
+                player.load(self.getTourData());
+            }
+            pollForData();
         }
     };
 
