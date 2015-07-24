@@ -30,6 +30,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locationPanelDiv = null,
         locHistoryToggle = null,
         locHistoryToggleSign = null,
+        fieldsMapButton = $(document.createElement("BUTTON")),
         isOpen = false,
         that = this,
         locked = TAG.Worktop.Database.getLocked(),     //Check for locked
@@ -54,7 +55,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         wasOnAssocMediaView = options.onAssocMediaView,
         originalOptions = options,
         isNobelWill = options.isNobelWill || false,
-        isImpactMap = options.isImpactMap,
+        isImpactMap = true,// options.isImpactMap,
         smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
         NOBEL_WILL_COLOR = 'rgb(189,125,13)',
@@ -1953,19 +1954,23 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          */
         function mediaClicked(media) {
             //var toggleFunction = toggleLocationPanel;
-            if(isNobelWill === true){
+            if (isNobelWill === true) {
+               
                 return function(){return};
             }
             return function (evt) {
                 evt && evt.stopPropagation();
                 locHistoryActive = true;
                 media.create(); // returns if already created
-                media.toggle();
-                /**
                 if (isImpactMap) {
-                    media.hide();
+                    console.log("just clicked on associated media")
+
                 }
-                **/
+               // if (!isImpactMap) {
+                    media.toggle();
+                //} else {
+                  //  media.toggle(true, true);
+               // }
                 if (locked !== doq.Identifier) {
                     TAG.Util.IdleTimer.restartTimer();
                 }
@@ -2384,9 +2389,46 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         //show hotspots
         if (isImpactMap) {
+            
+
+            //
+
             for (var y = 0; y < associatedMedia.guids.length; y++) {
                 loadQueue.add(mediaClicked(associatedMedia[associatedMedia.guids[y]]));
+                console.log("showing hotspots and isImpactMap is true");
             }
+            var buttonDiv = $(document.createElement('div'));
+            buttonDiv.attr('id', 'buttonDiv');
+            buttonDiv.css({
+                'background-color': 'black', //FIX OPACITY??
+                'width': '100%',
+                'height': 'auto',
+                'top': '100%',
+                'position': 'absolute',
+                'padding-bottom': '1.5%',
+                'margin-top': '1%',
+                'z-index': '1000001',
+            });
+
+            fieldsMapButton.text("Learn More");
+            fieldsMapButton.css({
+                'color': 'white',
+                'border-color': 'white',
+                "background-color": "transparent",
+                'width': '20%',
+                'top': '100%',
+                'left': '40%',
+                'padding-bottom': '1.5%',
+                'position': 'relative'
+            });
+
+            fieldsMapButton.on('click', function () { 
+                //initSplitScreen to artwork viewer
+
+            });
+
+            $('.mediaMediaContainer').append(buttonDiv);
+            buttonDiv.append(fieldsMapButton);
         }
         //PART OF CUSTOM BUILD FOR THE SAM
         /*for (i = 0; i < associatedMedia.guids.length; i++) {
