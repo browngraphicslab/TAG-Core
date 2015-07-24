@@ -852,7 +852,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg",
             id : 'tabImg'
         })
-        tabImg.click(toggleInfoPane);
+        //tabImg.click(toggleInfoPane);
         tabImg.css({
             'position': 'absolute',
             'height': '80%',
@@ -902,7 +902,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'border': '3px solid rgb(189,125,13)',
             'z-index': '9999999',
             'top': '44%'
-        });
+        }).click(toggleInfoPane)
         title.attr({
             id : 'infoPaneTitleDiv'
         })

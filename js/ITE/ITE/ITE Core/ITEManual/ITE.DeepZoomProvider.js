@@ -403,7 +403,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Grabs current actual state of DeepZoom, and sets savedState to it.
 	 * O/P: 	state : 	Object holding track's current state, as used in animation.
 	 */
-	self.getState = function() {
+	self.getState = function () {
 	    self.savedState = {
 	        time: self.timeManager.getElapsedOffset(),
 	        bounds: (_viewer.viewport ? _viewer.viewport.getBounds(true) : {

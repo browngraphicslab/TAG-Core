@@ -8563,6 +8563,12 @@ function onCanvasRelease(event, first) {
 
 /*Augmented function for layers fix*/
 function onCanvasPinch(event, isTopLayer) {
+    if (this.orchestrator && this.ITE_track && this.ITE_track.trackData && this.ITE_track.trackData.zIndex) {
+        this.orchestrator.setLastMovedObjectByZIndex(this.ITE_track.trackData.zIndex)
+        if (this.orchestrator.status !== 2) {
+            this.orchestrator.player.pause();
+        }
+    }
     if (!this.artworkViewer) {
         var zIndex = this.ITE_track.trackData.zIndex;
 
