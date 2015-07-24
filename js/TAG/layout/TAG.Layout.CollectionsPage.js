@@ -1078,7 +1078,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      */
 
     function loadCollection(collection, sPos, artwrk) {
-        TAG.Worktop.Database.getArtworksIn("f85369bb-9b89-4adc-9f46-a25296ae9738", function (doq) { console.log(doq) });
         return function (evt) {
             var cancelLoad = false;
             assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });

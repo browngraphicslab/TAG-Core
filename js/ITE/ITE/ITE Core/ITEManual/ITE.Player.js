@@ -838,27 +838,40 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         var title = $(document.createElement('div'));
         var tab = $(document.createElement('div'));
         var tabImg = $(document.createElement('img'));
+        var block = $(document.createElement('div'));
+        block.css({
+            'position': 'absolute',
+            'height': '12%',
+            'width': '8%',
+            'background-color': 'black',
+            'right': '-1%',
+            'z-index': '9999999',
+            'top': '44.4%'
+        })
         tabImg.attr({
             src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg",
             id : 'tabImg'
         })
-        tabImg.click(toggleInfoPane);
+        //tabImg.click(toggleInfoPane);
         tabImg.css({
             'position': 'absolute',
-            'height': '100%',
-            'width': '100%',
+            'height': '80%',
+            'width': '80%',
+            'left': '10%',
+            'top' : '10%',
             'z-index': '9999999',
         })
         pane.css({
             'position': 'absolute',
             'height': '70%',
             'top' : '12%',
-            'width':'25%',
+            'width':'26%',
             'background-color' : 'black',
             'z-index': '9999999',
-            'border-top-right-radius': '5px',
-            'border-bottom-right-radius': '5px',
-            'left' : '-25%'
+            'border-top-right-radius': '12px',
+            'border-bottom-right-radius': '12px',
+            'border' : '3px solid rgb(189,125,13)',
+            'left' : '-26%'
         })
         pane.attr({
             id : 'infoPaneDiv'
@@ -866,10 +879,14 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         title.css({
             'position': 'absolute',
             'height': '20%',
-            'width': '100%',
+            'width': '96%',
+            'left' : '4%',
             'background-color': 'transparent',
             'color': 'white',
-            'font-size': '1.3em',
+            'font-size': '1.25em',
+            'font-weight': 'bold',
+            'text-overflow': 'ellipsis',
+            'overflow' : 'hidden',
             'z-index': '9999999',
             'text-align': 'center',
             'vetical-align' : 'bottom'
@@ -879,17 +896,19 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'height': '12%',
             'width': '8%',
             'background-color': 'black',
-            'border-top-right-radius': '5px',
-            'border-bottom-right-radius': '5px',
-            'right': '-8%',
+            'border-top-right-radius': '12px',
+            'border-bottom-right-radius': '12px',
+            'right': '-9.25%',
+            'border': '3px solid rgb(189,125,13)',
             'z-index': '9999999',
             'top': '44%'
-        });
+        }).click(toggleInfoPane)
         title.attr({
             id : 'infoPaneTitleDiv'
         })
         tab.append(tabImg);
         pane.append(tab);
+        pane.append(block)
         pane.append(title);
         $("#ITEContainer").append(pane);
         pane.hide();
@@ -930,11 +949,11 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     }
     function showInfoPane(callback){
         infoPaneOut = true;
-        $("#infoPaneDiv").animate({ left: '0%' }, 1000, 'easeInOutQuart', callback ? function () { callback(), $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg") } : function () { $("#tabImg").attr('src', itePath + 'ITE%20Core/ITEManual/ITEPlayerImages/Close.svg') })
+        $("#infoPaneDiv").animate({ left: '-1%' }, 1000, 'easeInOutQuart', callback ? function () { callback(), $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg") } : function () { $("#tabImg").attr('src', itePath + 'ITE%20Core/ITEManual/ITEPlayerImages/Close.svg') })
     }
     function hideInfoPane(callback){
         infoPaneOut = false;
-        $("#infoPaneDiv").animate({ left: '-25%' }, 500, 'easeInOutQuart', callback ? function () { callback(), $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg") } : function () { $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg") })
+        $("#infoPaneDiv").animate({ left: '-26%' }, 500, 'easeInOutQuart', callback ? function () { callback(), $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg") } : function () { $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg") })
     }
     function makeInfoField(text) {
         var outer = $(document.createElement('div'));
@@ -946,7 +965,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'height': '10%',
             'z-index': '9999999999',
             'width': '95%',
-            'left': '5%',
+            'left': '5.5%',
             'background-color': 'transparent',
             'color': 'white',
             'font-size': '.9em',
