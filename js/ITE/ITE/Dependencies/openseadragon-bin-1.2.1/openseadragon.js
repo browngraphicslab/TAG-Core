@@ -3658,6 +3658,8 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
 ///////////////////////////////////////////////////////////////////////////////
 // Pointer event model and feature detection
 ///////////////////////////////////////////////////////////////////////////////
+  
+    $.MouseTracker.captureElement = document;
 
     /**
      * Detect available mouse wheel event name.
@@ -3896,6 +3898,64 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
 ///////////////////////////////////////////////////////////////////////////////
 // Utility functions
 ///////////////////////////////////////////////////////////////////////////////
+  
+    /**
+     * Removes all tracked pointers.
+     * @private
+     * @inner
+     */
+    function clearTrackedPointers( tracker ) {
+        var delegate = THIS[ tracker.hash ],
+            i,
+            pointerListCount = delegate.activePointersLists.length;
+
+        for ( i = 0; i < pointerListCount; i++ ) {
+            if ( delegate.activePointersLists[ i ].captureCount > 0 ) {
+                $.removeEvent(
+                    $.MouseTracker.captureElement,
+                    'mousemove',
+                    delegate.mousemovecaptured,
+                    true
+                );
+                $.removeEvent(
+                    $.MouseTracker.captureElement,
+                    'mouseup',
+                    delegate.mouseupcaptured,
+                    true
+                );
+                $.removeEvent(
+                    $.MouseTracker.captureElement,
+                    $.MouseTracker.unprefixedPointerEvents ? 'pointermove' : 'MSPointerMove',
+                    delegate.pointermovecaptured,
+                    true
+                );
+                $.removeEvent(
+                    $.MouseTracker.captureElement,
+                    $.MouseTracker.unprefixedPointerEvents ? 'pointerup' : 'MSPointerUp',
+                    delegate.pointerupcaptured,
+                    true
+                );
+                $.removeEvent(
+                    $.MouseTracker.captureElement,
+                    'touchmove',
+                    delegate.touchmovecaptured,
+                    true
+                );
+                $.removeEvent(
+                    $.MouseTracker.captureElement,
+                    'touchend',
+                    delegate.touchendcaptured,
+                    true
+                );
+
+                delegate.activePointersLists[ i ].captureCount = 0;
+            }
+        }
+
+        for ( i = 0; i < pointerListCount; i++ ) {
+            delegate.activePointersLists.pop();
+        }
+    }
 
     /**
      * Starts tracking pointer events on the tracked element.
@@ -3948,7 +4008,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
 
             // handle mouse out of document area
             $.removeEvent(document, "mouseout",  delegate['mouseoutdocument']);
-
+            clearTrackedPointers(tracker);
             delegate.tracking = false;
         }
     }
@@ -3968,13 +4028,15 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
             // We emulate mouse capture by hanging listeners on the window object.
             //    (Note we listen on the capture phase so the captured handlers will get called first)
             $.addEvent(
-                window,
+                //window,
+                $.MouseTracker.captureElement,
                 isLegacyMouse ? 'mouseup' : ($.MouseTracker.unprefixedPointerEvents ? 'pointerup' : 'MSPointerUp'),
                 isLegacyMouse ? delegate.mouseupcaptured : delegate.pointerupcaptured,
                 true
             );
             $.addEvent(
-                window,
+                $.MouseTracker.captureElement,
+               // window,
                 isLegacyMouse ? 'mousemove' : ($.MouseTracker.unprefixedPointerEvents ? 'pointermove' : 'MSPointerMove'),
                 isLegacyMouse ? delegate.mousemovecaptured : delegate.pointermovecaptured,
                 true
@@ -3998,13 +4060,15 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
             // We emulate mouse capture by hanging listeners on the window object.
             //    (Note we listen on the capture phase so the captured handlers will get called first)
             $.removeEvent(
-                window,
+                //window,
+                $.MouseTracker.captureElement,
                 isLegacyMouse ? 'mousemove' : ($.MouseTracker.unprefixedPointerEvents ? 'pointermove' : 'MSPointerMove'),
                 isLegacyMouse ? delegate.mousemovecaptured : delegate.pointermovecaptured,
                 true
             );
             $.removeEvent(
-                window,
+               // window,
+                $.MouseTracker.captureElement,
                 isLegacyMouse ? 'mouseup' : ($.MouseTracker.unprefixedPointerEvents ? 'pointerup' : 'MSPointerUp'),
                 isLegacyMouse ? delegate.mouseupcaptured : delegate.pointerupcaptured,
                 true
@@ -4523,6 +4587,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
 
         if ( updatePointersDown( tracker, event, gPoints, 0 ) ) { // 0 means primary button press/release or touch contact
             // Touch event model start, end, and move events are always captured so we don't need to capture explicitly
+            $.stopEvent(event);
         }
 
         $.cancelEvent( event );
