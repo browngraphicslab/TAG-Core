@@ -589,10 +589,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         OSDHolder.css({
             'height': '100%',
             'width': '100%',
-            'left' : '12%',
             'position': 'absolute',
             'z-index': '0'
         });
+        if (isNobelWill === true) {
+            OSDHolder.css('left', '12%');
+        }
         //The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or width at which the zoom out will be constrained.
         //Setting it to 0, for example will allow you to zoom out infinitly.
         var minZoomImageRatio = 0.9; //OSD default- don't allow as much zoom out on deep zooms as in tour player

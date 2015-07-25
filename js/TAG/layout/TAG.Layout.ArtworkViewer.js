@@ -504,7 +504,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'width': '6%',
                     'bottom': '20px',
                     'left': "40%",
-                    'z-index': '88888889'
+                    'z-index': '99'
                 });
                 leftArrow.click(function () {
                     pauseNobel();
@@ -516,7 +516,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'background-color': 'transparent',
                     'bottom': '20px',
                     'left': "78%",
-                    'z-index': '88888889'
+                    'z-index': '99'
                 });
                 rightArrow.click(
                     function () {
@@ -552,8 +552,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'position': 'absolute',
                     'background-color': "rgb(254,161,0)",
                     'opacity': '.4',
-                    'left': '45.4%',
-                    'width': '54.6%',
+                    'left': '47%',
+                    'width': '53%',
                     'height': '100%',
                 }).click(pauseNobel)
                 sliderBar = $(document.createElement('div'));
@@ -565,11 +565,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'border': '3px solid rgb(254,161,0)',
                     'border-radius': '12px',
                     'left': '1%',
-                    'width': '86%',
+                    'width': '83.25%',
                     'height': '10%',
-                    'z-index': '9999999'
+                    'z-index': '99'
                 }).click(pauseNobel)
-
+                sideBar.css('z-index', '10');
                 var up = $(document.createElement('img'))
                 var down = $(document.createElement('img'))
                 up.attr({
@@ -583,7 +583,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'max-width': '50px',
                     'height': '50%',
                     'top': '0px',
-                    'right': '0px'
+                    'left': '100.5%'
                 })
                 up.click(
                     function () {
@@ -607,7 +607,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'max-width': '50px',
                     'height': '50%',
                     'bottom': '0px',
-                    'right': '0px'
+                    'left': '100.5%'
                 });
                 down.click(
                     function () {
@@ -722,6 +722,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             else {
                 makeAndPlaySound(incrNext);
             }
+            hideNobelAssociatedMedia();
             nobelIsPlaying = true;
             nobelPlayPauseButton.attr({
                 src: tagPath + '/images/icons/nobel_pause.svg'
@@ -891,7 +892,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             nobelHotspots.push([]);
         }
         for (var i = 0; i < assocMediaOrder.length; i++) {
-            var div = $(document.createElement('div'));
+            var div = $(document.createElement('img'));
             div.css({
                 'position': 'absolute',
                 'background-color': 'rgb(200,20,20)',
@@ -903,7 +904,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'top': hotSpotInfo[i][1] + '%',
                 'width': hotSpotInfo[i][2] + '%',
                 'height': hotSpotInfo[i][3] + '%',
-                'z-index': '99999999'
+                'z-index': '99'
             })
             div.attr({
                 id: assocMediaOrder[i].doq.Identifier,
