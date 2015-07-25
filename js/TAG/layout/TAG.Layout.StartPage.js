@@ -618,7 +618,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     });
     goToHistoryButton.on("mouseleave", function () {
-        goToHistoryButton.css({ "color": "black" });
+        //goToHistoryButton.css({ "color": "black" });
 
     });
     goToWillButton.on("mouseleave", function () {
@@ -630,7 +630,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     });
      goToIntroButton.on("mouseleave", function () {
-        goToIntroButton.css({"color": "black" });
+        //goToIntroButton.css({"color": "black" });
 
     });
     goToWinnersButton.on("mouseenter", function () {
@@ -638,7 +638,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     });
     goToHistoryButton.on("mouseenter", function () {
-        goToHistoryButton.css({ "color": "white" });
+       // goToHistoryButton.css({ "color": "white" });
 
     });
     goToWillButton.on("mouseenter", function () {
@@ -650,7 +650,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     });
     goToIntroButton.on("mouseenter", function () {
-        goToIntroButton.css({"color": "white" });
+        //goToIntroButton.css({"color": "white" });
 
     });
 

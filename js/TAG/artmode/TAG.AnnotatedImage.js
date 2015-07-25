@@ -627,9 +627,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         if (locationHist) {
             viewer.setMouseNavEnabled(false);
         }
-        //fix for sticky mouse- in progress
-        if (!IS_WINDOWS){
-            /**
+
+        //This is a fix for the "sticky mouse" open seadragon issue in web browsers
+        //this issue is a known bug in the version of OSD we are using and is related
+        //to a buggy implementation on their end of the "setMouseNavEnabled/Disabled" functions
+        //and causes mousemove events to continue to drag viewer elements after mouseup
+        //this bug has been fixed in later versions of OSD- LVK
+        if (!IS_WINDOWS && !isNobelWill){
+            //overlay over the viewer that selectively stops mousemove events from propogating to the viewer
             var interactionOverlayOSD = $(document.createElement('div')).attr('id', "interactionOverlayOSD");
             interactionOverlayOSD.css({
                 height: "100%",
@@ -640,42 +645,30 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'pointer-events': 'none'
             });
             root.append(interactionOverlayOSD);
-            var mouseDown = false;
-            var setMouse = function(){
-                //viewer.setMouseNavEnabled(mouseDown);
-                if (mouseDown = false){
+            var setMouse = function(mouseDown){
+                if (mouseDown === false){
                     interactionOverlayOSD.css('pointer-events', 'auto');
-                    interactionOverlayOSD.on('mousedown',function(evt){
+                    interactionOverlayOSD.on('mousemove',function(evt){
                         evt.stopPropagation();
                     });
+                    //on mousedown, trigger an event on the viewer so interaction can resume
+                    interactionOverlayOSD.on('mousedown', function(){
+                        viewer.raiseEvent('mousedown');
+                        setMouse(true);
+                    });
                 } else{
+                    //clear handlers and let pointer events filter through
                     interactionOverlayOSD.off();
                     interactionOverlayOSD.css('pointer-events', 'none');
                 }
             };
-            //var keyDown = false;
             viewer.addHandler('canvas-drag', function(){
-                console.log('canvas-drag');
-                mouseDown = true;
-                setMouse();
+                setMouse(true);
             });
-            viewer.addHandler('canvas-drag-end', function(){
-                console.log('canvas-drag-end');
-                mouseDown = false;
-                setMouse();
-            })
+            //when canvas-release fires (rather than 'mouseup', which never fires) then stop allowing mousemove evts on the viewer
             viewer.addHandler('canvas-release', function(){
-                console.log('canvas-release');
-                mouseDown = false;
-                setMouse();
+                setMouse(false);
             })
-            viewer.addHandler('mousedown', function(){
-                console.log('mousedown');
-                mouseDown = true;
-                setMouse();
-            })
-**/
-
         }
 
         viewer.clearControls();
