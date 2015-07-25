@@ -63,6 +63,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         smallPreview= options.smallPreview,
         titleIsName = options.titleIsName,
         showOtherCollections = options.showOtherCollections,
+        twoDeep = options.twoDeep, //show two tiles per column
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -168,7 +169,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         if (IS_WINDOWS) {
             backButton.css('padding-top', '');
         }
-        backButton.css('display', 'auto');
+        backButton.css('display', 'inline');
     }
 
     // get things rolling
@@ -2707,14 +2708,26 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             tileDiv.append(main);
 
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
-            var tileHeight =   (0.3)* tileDivHeight;  //(0.45) * tileDivHeight;
-            main.css({ 'height': (0.3) * tileDivHeight });//.css({ 'height': (0.45) * tileDivHeight });
+            if (!twoDeep) {
+                var tileHeight = (0.3) * tileDivHeight;  
+                main.css({ 'height': (0.3) * tileDivHeight });
+            } else {
+                var tileHeight = (0.45) * tileDivHeight;
+                main.css({ 'height': (0.45) * tileDivHeight });
+            }
             main.css({ 'width': (tileHeight / TILE_HEIGHT_RATIO) * TILE_WIDTH_RATIO });
             // Align tile so that it follows the grid pattern we want
-            main.css({
-                'left': Math.floor(i / 3) * (main.width() + TILE_BUFFER),//Math.floor(i / 2) * (main.width() + TILE_BUFFER),
-                'top': Math.floor(i % 3) * (main.height() + TILE_BUFFER)//Math.floor(i % 2) * (main.height() + TILE_BUFFER)
-            });
+            if (!twoDeep) {
+                main.css({
+                    'left': Math.floor(i / 3) * (main.width() + TILE_BUFFER),//Math.floor(i / 2) * (main.width() + TILE_BUFFER),
+                    'top': Math.floor(i % 3) * (main.height() + TILE_BUFFER)//Math.floor(i % 2) * (main.height() + TILE_BUFFER)
+                });
+            } else {
+                main.css({
+                    'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER),
+                    'top': Math.floor(i % 2) * (main.height() + TILE_BUFFER)
+                });
+            }
 
             //Add scrollbar to catalog div if needed
             /**

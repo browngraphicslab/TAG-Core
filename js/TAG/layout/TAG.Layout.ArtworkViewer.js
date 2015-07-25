@@ -56,8 +56,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         originalOptions = options,
         isNobelWill = options.isNobelWill || false,
         isImpactMap = true,// options.isImpactMap,
-        smallPreview        = options.smallPreview,
-        titleIsName = options.titleIsName,
+        isSecondaryArt = options.isSecondaryArt,
+        smallPreview = options.smallPreview, //for reloading back into collections page
+        titleIsName = options.titleIsName, // for reloading back into collections page
         NOBEL_WILL_COLOR = 'rgb(189,125,13)',
 
 
@@ -107,6 +108,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
     return {
         getRoot: getRoot,
+        getArt: getArt
     };
     root.attr('unselectable', 'on');
     root.css({
@@ -201,7 +203,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     debugger;
                     doNothing(err); // TODO if we hit a network error, show an error message
                 }
-                if (isNobelWill !== true) {
+                if (isNobelWill !== true && isImpactMap !== true ) {
                     TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                     initSplitscreen();
                 }
@@ -1875,12 +1877,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 if (isImpactMap) {
                     console.log("just clicked on associated media")
 
+                }             
+                media.toggle();
+                if (isImpactMap) {
+                    media.toggle(true);
                 }
-               // if (!isImpactMap) {
-                    media.toggle();
-                //} else {
-                  //  media.toggle(true, true);
-               // }
                 if (locked !== doq.Identifier) {
                     TAG.Util.IdleTimer.restartTimer();
                 }
@@ -2297,12 +2298,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         annotatedImage.addAnimateHandler(dzMoveHandler);
         assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
 
-        //show hotspots
         if (isImpactMap) {
-            
-
-            //
-
+            var secondaryArtPage,
+                secondaryArtPageRoot,
+                currName,
+                collectionsPage,
+                collectionsPageRoot;
+            //show hotspots
             for (var y = 0; y < associatedMedia.guids.length; y++) {
                 loadQueue.add(mediaClicked(associatedMedia[associatedMedia.guids[y]]));
                 console.log("showing hotspots and isImpactMap is true");
@@ -2319,7 +2321,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'margin-top': '1%',
                 'z-index': '1000001',
             });
-
             fieldsMapButton.text("Learn More");
             fieldsMapButton.css({
                 'color': 'white',
@@ -2331,15 +2332,46 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'padding-bottom': '1.5%',
                 'position': 'relative'
             });
-
-            fieldsMapButton.on('click', function () { 
-                //initSplitScreen to artwork viewer
-
-            });
+            var NEXT_GUID = 'b5f21f5f-8c92-4b76-965f-5d4013f4e45c'; //hardcoded for now- this would really need to be rethought for extensibility 
+            var NEXT_EXHIB = '1986 Nobel Prize in Physics';
+            if (isSecondaryArt) {
+                fieldsMapButton.on('click', function () {
+                    //load final collection
+                    TAG.Worktop.Database.getExhibitions(function (collections) {
+                        for (i = 0; i < collections.length; i++) {
+                            currName = collections[i].Name;
+                            if (currName === NEXT_EXHIB) {
+                                options.backCollection = collections[i];
+                            }
+                        }
+                        options.twoDeep = true;
+                        TAG.Util.Splitscreen.setOn(false);
+                        collectionsPage = TAG.Layout.CollectionsPage(options);
+                        TAG.Util.UI.slidePageLeft(collectionsPage.getRoot(), function () {
+                            collectionsPage.getRoot().find("backButtonArea").css('display', 'inline');
+                        });
+                    });
+                });
+            } else {
+                fieldsMapButton.on('click', function () {
+                    //load artwork
+                    TAG.Worktop.Database.getDoq(NEXT_GUID, function (doq) {
+                        //initSplitScreen to artwork viewer
+                        secondaryArtPage = TAG.Layout.ArtworkViewer({ doq: doq, isSecondaryArt: true });
+                        secondaryArtPageRoot = secondaryArtPage.getRoot();
+                        secondaryArtPageRoot.data('split', 'R');
+                        TAG.Util.Splitscreen.init(root, secondaryArtPageRoot);
+                        annotatedImage.viewer.clearOverlays();
+                        TAG.Util.Splitscreen.setViewers(root, annotatedImage);
+                        TAG.Util.Splitscreen.setViewers(secondaryArtPageRoot, secondaryArtPage.getArt());
+                    });
+                });
+            }
 
             $('.mediaMediaContainer').append(buttonDiv);
             buttonDiv.append(fieldsMapButton);
         }
+
         //PART OF CUSTOM BUILD FOR THE SAM
         /*for (i = 0; i < associatedMedia.guids.length; i++) {
             //doNothing("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
@@ -2565,6 +2597,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      */
     function getRoot() {
         return root;
+    }
+
+    function getArt() {
+        return annotatedImage;
     }
 
     /**
