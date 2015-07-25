@@ -58,6 +58,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         isImpactMap = options.isImpactMap,
         smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
+        twoDeep = options.twoDeep,
         NOBEL_WILL_COLOR = 'rgb(189,125,13)',
 
 
@@ -1743,7 +1744,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 wasOnAssocMediaView: wasOnAssocMediaView,
                 splitscreen: root.data('split'),
                 smallPreview: smallPreview,
-                titleIsName: titleIsName
+                titleIsName: titleIsName,
+                twoDeep: twoDeep
             });
             //if (root.data('split') === 'R') {
 

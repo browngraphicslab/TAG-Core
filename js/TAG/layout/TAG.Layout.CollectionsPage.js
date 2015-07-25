@@ -4494,7 +4494,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     onAssocMediaView : onAssocMediaView,
                     smallPreview: smallPreview,
                     titleIsName: titleIsName,
-                    isNobelWill: false
+                    isNobelWill: false,
+                    twoDeep: twoDeep,
                 });
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
