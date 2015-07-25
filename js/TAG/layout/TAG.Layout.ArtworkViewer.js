@@ -57,13 +57,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         //Nobel will customizations
         isNobelWill = options.isNobelWill || false,
-<<<<<<< HEAD
         isImpactMap = true,// options.isImpactMap,
         isSecondaryArt = options.isSecondaryArt,
         smallPreview = options.smallPreview, //for reloading back into collections page
         titleIsName = options.titleIsName, // for reloading back into collections page
-=======
->>>>>>> 1cbdfa8e4dbc7a18dcd1f77a5cbdf683bb006633
         NOBEL_WILL_COLOR = 'rgb(189,125,13)',
         
         //options to maintain customizations when going back to collections page
@@ -2459,7 +2456,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'padding-bottom': '1.5%',
                 'position': 'relative'
             });
-            var NEXT_GUID = 'b5f21f5f-8c92-4b76-965f-5d4013f4e45c'; //hardcoded for now- this would really need to be rethought for extensibility 
+            var NEXT_GUID = '80f7f3fa-2a85-450e-b61c-79d8721080c3'; //hardcoded for now- this would really need to be rethought for extensibility 
             var NEXT_EXHIB = '1986 Nobel Prize in Physics';
             if (isSecondaryArt) {
                 fieldsMapButton.on('click', function () {

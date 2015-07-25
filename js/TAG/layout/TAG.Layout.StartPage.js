@@ -488,23 +488,21 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
                             currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                             currentPage.obj = artworkViewer;
-                    });
-                    //TAG.Worktop.Database.getArtworks(function (result) {
-                    //    $.each(result, function (index, artwork) {
-                    //        console.log(artwork);
-                    //        if (artwork.Name === WILL_NAME) {                      
-                    //            var artworkViewer = TAG.Layout.ArtworkViewer({
-                    //                doq: artwork,
-                    //                isNobelWill: true
-                    //            });
-                    //            var newPageRoot = artworkViewer.getRoot();
-                    //            newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                    //            TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
-                    //            currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                    //            currentPage.obj = artworkViewer;
-                    //        }                                   
-                    //    });
-                    //});                        
+                        }); 
+                }
+                if (collectionName === HISTORY_NAME){
+                    TAG.Worktop.Database.getDoq("79bb289b-0e18-4091-8e3b-f21e5d65e793",
+                        function (result) {
+                            var artworkViewer = TAG.Layout.ArtworkViewer({
+                                doq: result,
+                                isImpactMap: true
+                            });
+                            var newPageRoot = artworkViewer.getRoot();
+                            newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                            TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                            currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                            currentPage.obj = artworkViewer;
+                        });
                 } else {
                     TAG.Worktop.Database.getExhibitions( function (collections) {
                         for (i =0; i< collections.length; i++){
