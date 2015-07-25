@@ -54,12 +54,17 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         assocMediaToShow = options.assocMediaToShow,
         wasOnAssocMediaView = options.onAssocMediaView,
         originalOptions = options,
+
+        //Nobel will customizations
         isNobelWill = options.isNobelWill || false,
+        NOBEL_WILL_COLOR = 'rgb(189,125,13)',
+        
+        //options to maintain customizations when going back to collections page
         isImpactMap = options.isImpactMap,
         smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
-        NOBEL_WILL_COLOR = 'rgb(189,125,13)',
-
+        twoDeep = options.twoDeep,
+        hideKeywords = options.hideKeywords,
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -1679,7 +1684,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             //doNothing(tobj.time_spent);
         });
 
-        TAG.Util.UI.setUpBackButton(backButton, goBack);
+        //TAG.Util.UI.setUpBackButton(backButton, goBack);
+        backButton.on('click', goBack);
         TAG.Telemetry.register(backButton, 'click', 'BackButton', function (tobj) {
 
             //for the seadragon controls, if the back button is pressed when they are open
@@ -1743,7 +1749,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 wasOnAssocMediaView: wasOnAssocMediaView,
                 splitscreen: root.data('split'),
                 smallPreview: smallPreview,
-                titleIsName: titleIsName
+                titleIsName: titleIsName,
+                twoDeep: twoDeep,
+                hideKeywords: hideKeywords,
             });
             //if (root.data('split') === 'R') {
 
