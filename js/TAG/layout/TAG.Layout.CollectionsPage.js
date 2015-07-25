@@ -100,7 +100,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
         TILE_BUFFER = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
         TILE_HEIGHT_RATIO = 200,                                          //ratio between width and height of artwork tiles
-        TILE_WIDTH_RATIO = 200,
+        TILE_WIDTH_RATIO = twoDeep ? 255 : 200,
         ANIMATION_DURATION = 800,                                         // duration of timeline zoom animation
         DIMMING_FACTOR = 1.7,                                          //dimming of unhighlighted text
         PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
@@ -4496,6 +4496,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     titleIsName: titleIsName,
                     isNobelWill: false,
                     twoDeep: twoDeep,
+                    hideKeywords: hideKeywords,
                 });
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');

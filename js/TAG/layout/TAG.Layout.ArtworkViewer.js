@@ -54,13 +54,17 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         assocMediaToShow = options.assocMediaToShow,
         wasOnAssocMediaView = options.onAssocMediaView,
         originalOptions = options,
+
+        //Nobel will customizations
         isNobelWill = options.isNobelWill || false,
+        NOBEL_WILL_COLOR = 'rgb(189,125,13)',
+        
+        //options to maintain customizations when going back to collections page
         isImpactMap = options.isImpactMap,
         smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
         twoDeep = options.twoDeep,
-        NOBEL_WILL_COLOR = 'rgb(189,125,13)',
-
+        hideKeywords = options.hideKeywords,
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -1745,7 +1749,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 splitscreen: root.data('split'),
                 smallPreview: smallPreview,
                 titleIsName: titleIsName,
-                twoDeep: twoDeep
+                twoDeep: twoDeep,
+                hideKeywords: hideKeywords,
             });
             //if (root.data('split') === 'R') {
 
