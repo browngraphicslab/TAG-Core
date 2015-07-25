@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 19.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="-424 226 110 109" style="enable-background:new -424 226 110 109;" xml:space="preserve">
+	 viewBox="-427 229.3 104 103.7" style="enable-background:new -427 229.3 104 103.7;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FEA100;}
-	.st1{fill:#FFFFFF;}
+	.st0{fill:#FFFFFF;}
+	.st1{fill:#FEA100;}
 </style>
-<circle class="st0" cx="-369" cy="280.5" r="50"/>
-<polygon class="st1" points="-379.6,304.6 -348.9,280 -379.6,255.4 "/>
+<rect x="-393.4" y="260.1" class="st0" width="10.2" height="49.2"/>
+<rect x="-369.9" y="260.1" class="st0" width="10.2" height="49.2"/>
+<g>
+	<circle class="st1" cx="-375" cy="283" r="50"/>
+	<polygon class="st0" points="-385.6,307.1 -354.9,282.5 -385.6,257.9 	"/>
+</g>
 </svg>

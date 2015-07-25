@@ -627,6 +627,50 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         if (locationHist) {
             viewer.setMouseNavEnabled(false);
         }
+
+        //This is a fix for the "sticky mouse" open seadragon issue in web browsers
+        //this issue is a known bug in the version of OSD we are using and is related
+        //to a buggy implementation on their end of the "setMouseNavEnabled/Disabled" functions
+        //and causes mousemove events to continue to drag viewer elements after mouseup
+        //this bug has been fixed in later versions of OSD- LVK
+        if (!IS_WINDOWS && !isNobelWill){
+            //overlay over the viewer that selectively stops mousemove events from propogating to the viewer
+            var interactionOverlayOSD = $(document.createElement('div')).attr('id', "interactionOverlayOSD");
+            interactionOverlayOSD.css({
+                height: "100%",
+                width: "100%",
+                position: "absolute",
+                left: 0,
+                top: 0,
+                'pointer-events': 'none'
+            });
+            root.append(interactionOverlayOSD);
+            var setMouse = function(mouseDown){
+                if (mouseDown === false){
+                    interactionOverlayOSD.css('pointer-events', 'auto');
+                    interactionOverlayOSD.on('mousemove',function(evt){
+                        evt.stopPropagation();
+                    });
+                    //on mousedown, trigger an event on the viewer so interaction can resume
+                    interactionOverlayOSD.on('mousedown', function(){
+                        viewer.raiseEvent('mousedown');
+                        setMouse(true);
+                    });
+                } else{
+                    //clear handlers and let pointer events filter through
+                    interactionOverlayOSD.off();
+                    interactionOverlayOSD.css('pointer-events', 'none');
+                }
+            };
+            viewer.addHandler('canvas-drag', function(){
+                setMouse(true);
+            });
+            //when canvas-release fires (rather than 'mouseup', which never fires) then stop allowing mousemove evts on the viewer
+            viewer.addHandler('canvas-release', function(){
+                setMouse(false);
+            })
+        }
+
         viewer.clearControls();
         OSDHolder.css({ 'position': 'absolute' })
 
@@ -1691,6 +1735,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
 
         function mediaManipWin(res) {
+            if (isNobelWill === true) {
+                $("#annotatedImageAssetCanvas").css("z-index", '9999999');
+            }
             var t = outerContainer.css('top');
             var l = outerContainer.css('left');
             var w = outerContainer.css('width');
@@ -1794,6 +1841,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * Manipulation for touch and drag events
          */
         function mediaManip(res, evt, fromSeadragonControls) {
+            if (isNobelWill === true) {
+                $("#annotatedImageAssetCanvas").css("z-index", '888888899');
+            }
+
             res && res.grEvent && (res.grEvent.target.autoProcessInertia = false);
 
             if (descscroll === true) {
@@ -1833,9 +1884,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     y: (res.center.pageY - res.startEvent.center.pageY) + outerContainer.startLocation.y
                 };
             }
-            if (isNobelWill === true) {
-                $("#annotatedImageAssetCanvas").css("z-index",'88888899');
-            }
+
             // Animate to target location (or don't, if you're on the win8 app)
             outerContainer.stop()
             if (IS_WINDOWS) {
@@ -2049,7 +2098,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     else {
                         mediaScroll(.1, { x: x, y: y })
                     }
-                    var loc = getNobelAssociatedMediaLocation(outerContainer[0].textContext);
+                    $("#annotatedImageAssetCanvas").css("z-index", '50');
+                    var loc = getNobelAssociatedMediaLocation(outerContainer[0].innerText);
                     outerContainer.css({
                         'top': loc.y + 'px',
                         'left': loc.x + 'px'
@@ -2136,7 +2186,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     outerContainer.hide();
                 }
             }
-
         }
 
         /* SAM custom build */

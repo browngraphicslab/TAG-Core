@@ -37,6 +37,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
     	_proxy,//For touch handling. We want to be able to click through the transparent parts of the layers, so we're just adding a div over the part of the canvas that has the image.
     			//TODO: there has GOT to be a better way to do this
     	_canvasHolder,
+        _circle = null,
     	_viewer;
         self._UIControl = _UIControl;
 
@@ -248,7 +249,22 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Plays DeepZoom asset.
 	 * O/P: 	none
 	 */
-	self.play = function(endKeyframe) {
+	self.play = function (endKeyframe) {
+	    if (_super.trackData.guid && _circle === null && false) {
+	        var point = new OpenSeadragon.Point(.5, .5);
+	        _circle = $(document.createElement('img'));
+	        _circle.attr('src', itePath + "ITE Core/ITEManual/ITEPlayerImages/hotspot_circle.svg")
+	        _circle.css({
+	            'position': 'relative',
+	            'width': '5%',
+	            'height': '5%',
+	            'top': point.y+'px',
+	            'left': point.x+'px',
+	            'display': 'inherit',
+                'opacity' : 'inherit',
+	        })
+	        $(_viewer.canvas).append(_circle);
+	    }
 		if (self.status === 3) {
 			return;
 		}
@@ -403,7 +419,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Grabs current actual state of DeepZoom, and sets savedState to it.
 	 * O/P: 	state : 	Object holding track's current state, as used in animation.
 	 */
-	self.getState = function() {
+	self.getState = function () {
 	    self.savedState = {
 	        time: self.timeManager.getElapsedOffset(),
 	        bounds: (_viewer.viewport ? _viewer.viewport.getBounds(true) : {
@@ -517,10 +533,12 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	    _viewer.addHandler('canvas-scroll',
             function (evt) {
                 handlers.scroll(evt);
+                _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
             });
 	    _viewer.addHandler('canvas-drag',
             function (evt) {
                 handlers.drag(evt);
+                _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
             });
 	}
 
@@ -648,10 +666,10 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
      */
 
 	function dzManip(res) {
-
-
         //Pause
-        (self.orchestrator.status === 1) ? self.player.pause() : null
+	    (self.orchestrator.status === 1) ? self.player.pause() : null
+	    _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
+
       	self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
 		resetSeadragonConfig()
 
@@ -680,7 +698,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
      * @param {Number} scale          scale factor
      * @param {Object} pivot          location of event (x,y)
      */
-    function dzScroll(scale, pivot) {
+	function dzScroll(scale, pivot) {
+	    _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
         dzManip({
             scale: scale,
             translation: {
@@ -730,6 +749,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	                dzScroll(delta, pivot);
 	            },
 	            onManipulate: function (res) {
+	                _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
 	                if (!res.translation || !res.pivot) { return; }
 
                     res.translation.x = -res.translation.x;        //Flip signs for dragging
@@ -743,6 +763,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	                dzScroll(delta, pivot);
 	            },
 	            onManipulate: function (res) {
+	                _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
 	            	if (!res.translation || !res.pivot) { return; }
                     res.translation.x = -res.translation.x;        //Flip signs for dragging
                     res.translation.y = -res.translation.y;
@@ -758,6 +779,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	    _viewer.addHandler(
             'canvas-scroll', function (evt) {
                 (self.orchestrator.status === 1) ? self.player.pause() : null
+                _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
                 self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
                 resetSeadragonConfig()
             });
@@ -769,7 +791,8 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
  	    //	});
  		_viewer.addHandler(
  			'canvas-drag', function(evt) {
- 					(self.orchestrator.status === 1) ? self.player.pause() : null
+ 			    (self.orchestrator.status === 1) ? self.player.pause() : null
+ 			        _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
  		    		self.imageHasBeenManipulated = true; // To know whether or not to reset state after pause() in play() function
  		    		resetSeadragonConfig()
  	    	});
