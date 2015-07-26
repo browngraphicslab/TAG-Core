@@ -32,6 +32,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         artworkName = doq.Name,        // artwork's title
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
                                            // also contains an array of GUIDs for cleaner iteration
+        hotspots = { guids: [] }, //associated media that are hotspots and array of guids for iteration
         toManip = dzManip,         // media to manipulate, i.e. artwork or associated media
         rootHeight = $('#tagRoot').height(), //tag root height
         rootWidth = $('#tagRoot').width(),  //total tag root width for manipulation (use root.width() instead for things that matter for splitscreen styling)
@@ -58,6 +59,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     initOSD();
     return {
         getAssociatedMedia: getAssociatedMedia,
+        getHotspots: getHotspots,
         unload: unload,
         dzManip: dzManip,
         dzScroll: dzScroll,
@@ -116,6 +118,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function getAssociatedMedia() {
         return associatedMedia;
+    }
+
+    function getHotspots(){
+        return hotspots;
     }
 
     /**
@@ -837,7 +843,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             return function (linq) {
                 associatedMedia[assocMedia.Identifier] = createMediaObject(assocMedia, linq);
                 associatedMedia.guids.push(assocMedia.Identifier);
-
+                if (associatedMedia[assocMedia.Identifier].isHotspot){
+                    hotspots[assocMedia.Identifier] = associatedMedia[assocMedia.Identifier];
+                    hotspots.guids.push(assocMedia.Identifier);
+                }
                 if (++done >= total && callback) {
                     callback(associatedMedia);
                 }
@@ -895,6 +904,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             thumbnailButton,
             startLocation,
             play;
+        
         // get things rolling
         initMediaObject();
 
@@ -2254,7 +2264,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             showHotspot: showHotspot,
             createMediaElements: createMediaElements,
             isVisible: isVisible,
-            mediaManipPreprocessing: mediaManipPreprocessing
+            mediaManipPreprocessing: mediaManipPreprocessing,
+            isHotspot : IS_HOTSPOT
         };
     }
 };
