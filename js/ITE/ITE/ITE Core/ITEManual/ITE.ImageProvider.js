@@ -92,6 +92,18 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Attach handlers.
 		attachHandlers();
+		_UIControl.click(function () {
+		    if (_UIControl.css('z-index') !== '-1') {
+		        self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, true);
+		        if (orchestrator.status === 1) {
+		            orchestrator.player.pause();
+		        }
+		        _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
+		    }
+		    else {
+		        self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, false);
+		    }
+		})
 	};
 
 	/*
@@ -212,11 +224,17 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	 * Pauses track and changes its state based on new time from timeManager.
 	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
-	self.seek = function() {
+	self.seek = function () {
+
 		if (self.status === 3) {
 			return null;
 		}
-
+		if (_UIControl.css('z-index') !== '-1') {
+		    self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, true);
+		}
+		else {
+		    self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, false);
+		}
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
 		var prevStatus = self.status; // Store what we were previously doing.
 		self.pause(); // Stop any animations and stop the delayStart timer.
@@ -260,11 +278,17 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 	self.animate = function(duration, state) {
 
 		//If we're fading in, set the z-index to be the track's real z-index (as opposed to -1)
-		(state.opacity !== 0) && _UIControl.css("z-index", self.zIndex)
+	    if (state.opacity !== 0) {
+	        _UIControl.css("z-index", self.zIndex)
+	        self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, true);
+	    }
 
 		state.onComplete = function () {
-			//If we're fading out, set the z-index to -1 to prevent touches
-			(state.css.opacity === 0) && _UIControl.css("z-index", -1);
+		    //If we're fading out, set the z-index to -1 to prevent touches
+		    if (state.css.opacity === 0) {
+		        _UIControl.css("z-index", -1);
+		        self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, false);
+		    }
 			self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
 		};
 

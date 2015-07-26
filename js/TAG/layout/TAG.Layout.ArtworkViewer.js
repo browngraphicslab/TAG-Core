@@ -574,12 +574,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 up.css({
                     'position': 'absolute',
                     'background-color': "transparent",
-                    'max-height': '50px',
-                    'max-width': '50px',
-                    'height': '50%',
-                    'top': '0px',
-                    'left': '100.5%'
+                    'max-height': '20px',
+                    'max-width': '20px',
+                    'min-height': '20px',
+                    'min-width': '20px',
+                    'left': '100.5%',
+                    'bottom' : '50%',
                 })
+                up.css('bottom', up.css('bottom') + 15 + 'px');
                 up.click(
                     function () {
                         if (nobelIsPlaying === true) {
@@ -598,12 +600,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 down.css({
                     'position': 'absolute',
                     'background-color': "transparent",
-                    'max-height': '50px',
-                    'max-width': '50px',
-                    'height': '50%',
-                    'bottom': '0px',
+                    'max-height': '20px',
+                    'max-width': '20px',
+                    'min-height': '20px',
+                    'min-width': '20px',
+                    'top': '50%',
                     'left': '100.5%'
                 });
+              down.css('top', down.css('top') + 15 + 'px');
                 down.click(
                     function () {
                         if (nobelIsPlaying === true) {
