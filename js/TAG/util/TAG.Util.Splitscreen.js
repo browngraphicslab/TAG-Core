@@ -87,6 +87,12 @@ TAG.Util.Splitscreen = (function () {
             rootL.find('.bottomButton').css("float", "left");
         };
 
+        if (rootL.attr('id') === 'artmodeRoot') {
+            rootL.find('.mediaOuterContainer').each(function(index){
+                $(this).css('left', (parseInt($(this).css('left')) / 2) + 'px');
+            });
+        };
+
         // right screen
         Rscreen.attr('id', 'metascreen-R');
         Rscreen.append(rootR);
@@ -175,6 +181,12 @@ TAG.Util.Splitscreen = (function () {
                 viewerL.viewport.applyConstraints();
                 viewerL.viewport.update();
                 **/
+            }
+
+            if (root.attr('id') === "artmodeRoot") {
+                root.find('.mediaOuterContainer').each(function (index) {
+                    $(this).css('left', (parseInt($(this).css('left')) * 2) + 'px');
+                });
             }
             viewerR = null;
 

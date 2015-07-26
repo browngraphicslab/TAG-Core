@@ -32,6 +32,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         artworkName = doq.Name,        // artwork's title
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
                                            // also contains an array of GUIDs for cleaner iteration
+        hotspots = { guids: [] }, //associated media that are hotspots and array of guids for iteration
         toManip = dzManip,         // media to manipulate, i.e. artwork or associated media
         rootHeight = $('#tagRoot').height(), //tag root height
         rootWidth = $('#tagRoot').width(),  //total tag root width for manipulation (use root.width() instead for things that matter for splitscreen styling)
@@ -58,6 +59,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     initOSD();
     return {
         getAssociatedMedia: getAssociatedMedia,
+        getHotspots: getHotspots,
         unload: unload,
         dzManip: dzManip,
         dzScroll: dzScroll,
@@ -116,6 +118,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function getAssociatedMedia() {
         return associatedMedia;
+    }
+
+    function getHotspots(){
+        return hotspots;
     }
 
     /**
@@ -644,7 +650,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 position: "absolute",
                 left: 0,
                 top: 0,
-                'pointer-events': 'none'
+                'pointer-events': 'none',
+                'z-index': '5'
             });
             root.append(interactionOverlayOSD);
             var setMouse = function(mouseDown){
@@ -837,7 +844,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             return function (linq) {
                 associatedMedia[assocMedia.Identifier] = createMediaObject(assocMedia, linq);
                 associatedMedia.guids.push(assocMedia.Identifier);
-
+                if (associatedMedia[assocMedia.Identifier].isHotspot){
+                    hotspots[assocMedia.Identifier] = associatedMedia[assocMedia.Identifier];
+                    hotspots.guids.push(assocMedia.Identifier);
+                }
                 if (++done >= total && callback) {
                     callback(associatedMedia);
                 }
@@ -895,6 +905,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             thumbnailButton,
             startLocation,
             play;
+        
         // get things rolling
         initMediaObject();
 
@@ -999,7 +1010,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         circle = $(document.createElement("img"));
                         circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
                         circle.addClass('annotatedImageHotspotCircle');
-                        circle.click(function () {
+                        circle.click(function (evt) {
+                            evt && evt.stopPropagation();
                             toggleMediaObject(true);
                             TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                                 tobj.current_artwork = doq.Identifier;
@@ -1808,6 +1820,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         tobj.assoc_media_interactions = "pan"; //TODO what is this
                         tobj.offscreen = "true";
                     });
+                    console.log('media offscreen');
                     hideMediaObject();
                     pauseResetMediaObject();
                     //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
@@ -1923,6 +1936,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         tobj.assoc_media_interactions = "pan"; //TODO what is this
                         tobj.offscreen = "true";
                     });
+                    console.log('media offscreen');
                     hideMediaObject();
                     pauseResetMediaObject();
                     //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
@@ -2201,13 +2215,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * Show if hidden, hide if shown
          * @method toggleMediaObject
          */
-        function toggleMediaObject(isHotspotIcon, hideOuterContainer) {
+        function toggleMediaObject(isHotspotIcon) {
+            console.log('toggling media object');
             if (hotspotMediaHidden) {
-                showMediaObject(isHotspotIcon, hideOuterContainer);
+                showMediaObject(isHotspotIcon);
             } else {
                 mediaHidden ? showMediaObject(isHotspotIcon) : hideMediaObject(isHotspotIcon);
             }
-
             outerContainerhidden = mediaHidden;
         }
 
@@ -2218,6 +2232,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function isVisible() {
             return !mediaHidden;
+        }
+
+        function isHotspotMediaVisible(){
+            return !hotspotMediaHidden;
         }
 
         function toggleHotspot() {
@@ -2254,7 +2272,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             showHotspot: showHotspot,
             createMediaElements: createMediaElements,
             isVisible: isVisible,
-            mediaManipPreprocessing: mediaManipPreprocessing
+            mediaManipPreprocessing: mediaManipPreprocessing,
+            isHotspot : IS_HOTSPOT,
+            isHotspotMediaVisible: isHotspotMediaVisible
         };
     }
 };
