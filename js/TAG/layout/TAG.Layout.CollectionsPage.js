@@ -64,6 +64,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         titleIsName = options.titleIsName,
         showOtherCollections = options.showOtherCollections,
         twoDeep = options.twoDeep, //show two tiles per column
+        backToGuid = options.backToGuid, //for impact map experience
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -150,7 +151,22 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
     backButton.attr('src', tagPath + 'images/icons/Back.svg');
 
-    backButton.click(function () {    
+    backButton.click(function () {   
+        if (backToGuid){
+            TAG.Worktop.Database.getDoq(backToGuid,
+                function (result) {
+                    var artworkViewer = TAG.Layout.ArtworkViewer({
+                        doq: result,
+                        isNobelWill: false,
+                        isImpactMap: true,
+                });
+                var newPageRoot = artworkViewer.getRoot();
+                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                currentPage.obj = artworkViewer;
+            });             
+        } 
         TAG.Layout.StartPage(null, function (page) {
             // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
             // For now, we'll just hide the whole keywords div.

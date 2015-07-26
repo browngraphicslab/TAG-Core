@@ -221,7 +221,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     debugger;
                     doNothing(err); // TODO if we hit a network error, show an error message
                 }
-                if (isNobelWill !== true) {
+                if (isNobelWill !== true && !isImpactMap) {
                     TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                     initSplitscreen();
                 }
@@ -1308,10 +1308,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
             if (count === 0) {
                 top = '0px';
-                slideButton.html("Show Controls");
+                slideButton.html("Show Pan and Zoom Controls");
             } else {
                 top = '-' + containerHeight + 'px';
-                slideButton.html('Hide Controls');
+                slideButton.html('Hide Pan and Zoom Controls');
             }
         });
 
@@ -1739,7 +1739,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             backButton.off('click');
 
             //going back from will goes to splash screen
-            if (isNobelWill){
+            if (isNobelWill||isImpactMap){
                 TAG.Layout.StartPage(null, function (page) {
                     TAG.Util.UI.slidePageRight(page);
                 });
@@ -1908,7 +1908,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         if (!toggleHotspotButton){
                             createToggleHotspotButton();
                         }
-                    } else {
+                    } 
                     if (!mediaDrawer) {
                         mediaDrawer = createDrawer('Associated Media', null, assocMediaToShow);
                         if (mediaDrawer.drawerToggle) {
@@ -1916,7 +1916,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         }
                     }
                     loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
-                    }
                 }
             }
             if (mediaDrawer) {
@@ -2001,22 +2000,18 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          * @method mediaClicked
          * @param {Object} media       the associated media object (from AnnotatedImage)
          */
-        function mediaClicked(media) {
+        function mediaClicked(media, justCircle) {
             //var toggleFunction = toggleLocationPanel;
-            if (isNobelWill === true) {
-               
+            if (isNobelWill === true) {              
                 return function(){return};
             }
             return function (evt) {
                 evt && evt.stopPropagation();
+                console.log('hotspot media visible: ' + media.isHotspotMediaVisible());
                 locHistoryActive = true;
-                media.create(); // returns if already created
-                if (isImpactMap) {
-                    console.log("just clicked on associated media")
-
-                }             
+                media.create(); // returns if already created             
                 media.toggle();
-                if (isImpactMap) {
+                if (justCircle) {
                     media.toggle(true);
                 }
                 if (locked !== doq.Identifier) {
@@ -2028,6 +2023,72 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 // toggleLocationPanel();
             };
         }
+
+        function createToggleHotspotButton(){
+        toggleArea.css('display','block');
+        toggleHotspotButton = $(document.createElement('div'))
+        .css({
+            'position': 'relative',
+            'width': '80%',
+            'margin': '10px auto 0px auto',
+            'background-color': NOBEL_WILL_COLOR,
+            'font-weight': 'normal',
+            'color' : '#000',
+            'cursor': 'pointer',
+            'border-radius': '3.5px',
+            'font-size': '110%',
+            'display': 'block', 
+            'text-align': 'center'
+        })
+        .text('Show Hotspots')
+        .on('mouseenter', function(){
+            toggleHotspotButton.css('color','white');
+        })
+        .on('mouseleave', function(){
+            toggleHotspotButton.css('color','black');
+        })
+        .on('click', function(){
+            toggleHotspotsShown();
+        });
+        toggleArea.append(toggleHotspotButton);
+    }
+
+    //TO-DO
+    function toggleHotspotsShown(){
+        if (hotspotsShown){
+            hideHotspots();
+        } else {
+            showHotspots();
+        }
+    }
+
+    function hideHotspots(initial){
+        hotspotsShown = false;
+        toggleHotspotButton.text('Show Hotspots');
+        for (var y = 0; y < hotspots.guids.length; y++) {
+            //double click to open media before closing
+            if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible() && !initial){
+                mediaClicked(hotspots[hotspots.guids[y]])();
+            }
+            mediaClicked(hotspots[hotspots.guids[y]])();
+            console.log('hiding: '+ hotspots.guids[y]);
+        }        
+    }
+
+    function showHotspots(){
+        hotspotsShown = true;
+        toggleHotspotButton.text('Hide Hotspots');
+        for (var y = 0; y < hotspots.guids.length; y++) {
+            //don't re-click hotspots that are already visible
+            if (hotspots[hotspots.guids[y]].isVisible()){
+                console.log('skipping: '+ hotspots.guids[y]);
+                continue;
+            }
+            mediaClicked(hotspots[hotspots.guids[y]],true)();
+            console.log('showing: '+ hotspots.guids[y]);
+        }        
+    }
+
 
         // Load tours and filter for tours associated with this artwork
         TAG.Worktop.Database.getTours(function (tours) {
@@ -2436,10 +2497,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
 
         console.log('hotspots: ' + hotspots);
-        //show hotspots
+        //load hotspots
         for (var y = 0; y < hotspots.guids.length; y++) {
-            loadQueue.add(mediaClicked(hotspots[hotspots.guids[y]]));
-            console.log("showing hotspots and isImpactMap is true");
+            loadQueue.add(mediaClicked(hotspots[hotspots.guids[y]],true));
+            loadQueue.add(hideHotspots(true));
         }        
 
         if (isImpactMap) {
@@ -2467,7 +2528,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'margin-top': '1%',
                 'z-index': '1000001',
             });
-            fieldsMapButton.text("Learn More");
+            fieldsMapButton.text("See an Example");
             fieldsMapButton.css({
                 'color': 'white',
                 'border-color': 'white',
@@ -2480,7 +2541,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
             var NEXT_GUID = '80f7f3fa-2a85-450e-b61c-79d8721080c3'; //hardcoded for now- this would really need to be rethought for extensibility 
             var NEXT_EXHIB = '1986 Nobel Prize in Physics';
-            if (isSecondaryArt) {
                 fieldsMapButton.on('click', function () {
                     //load final collection
                     TAG.Worktop.Database.getExhibitions(function (collections) {
@@ -2491,6 +2551,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                             }
                         }
                         options.twoDeep = true;
+                        options.backToGuid = "79bb289b-0e18-4091-8e3b-f21e5d65e793";
+                        options.hideKeywords = true;
                         TAG.Util.Splitscreen.setOn(false);
                         collectionsPage = TAG.Layout.CollectionsPage(options);
                         TAG.Util.UI.slidePageLeft(collectionsPage.getRoot(), function () {
@@ -2498,23 +2560,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         });
                     });
                 });
-            } else {
-                fieldsMapButton.on('click', function () {
-                    console.log('click');
-                    //load artwork
-                    TAG.Worktop.Database.getDoq(NEXT_GUID, function (doq) {
-                        //initSplitScreen to artwork viewer
-                        secondaryArtPage = TAG.Layout.ArtworkViewer({ doq: doq, isSecondaryArt: true });
-                        secondaryArtPageRoot = secondaryArtPage.getRoot();
-                        secondaryArtPageRoot.data('split', 'R');
-                        TAG.Util.Splitscreen.init(root, secondaryArtPageRoot);
-                        annotatedImage.viewer.clearOverlays();
-                        TAG.Util.Splitscreen.setViewers(root, annotatedImage);
-                        TAG.Util.Splitscreen.setViewers(secondaryArtPageRoot, secondaryArtPage.getArt());
-                    });
-                });
-            }
-
             $('.mediaMediaContainer').append(buttonDiv);
             buttonDiv.append(fieldsMapButton);
         }
@@ -2750,55 +2795,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         return annotatedImage;
     }
 
-    function createToggleHotspotButton(){
-        toggleArea.css('display','block');
-        toggleHotspotButton = $(document.createElement('div'))
-        .css({
-            'position': 'relative',
-            'width': '80%',
-            'margin': '10px auto 0px auto',
-            'background-color': NOBEL_WILL_COLOR,
-            'font-weight': 'normal',
-            'color' : '#000',
-            'cursor': 'pointer',
-            'border-radius': '3.5px',
-            'font-size': '110%',
-            'display': 'block', 
-            'text-align': 'center'
-        })
-        .text('Show Hotspots')
-        .on('mouseenter', function(){
-            toggleHotspotButton.css('color','white');
-        })
-        .on('mouseleave', function(){
-            toggleHotspotButton.css('color','black');
-        })
-        .on('click', function(){
-            toggleHotspotsShown();
-        });
-        toggleArea.append(toggleHotspotButton);
-    }
-
-    //TO-DO
-    function toggleHotspotsShown(){
-        if (hotspotsShown){
-            hotspotsShown = false;
-            hideHotspots();
-        } else {
-            hotspotsShown = true;
-            showHotspots();
-        }
-    }
-
-    function hideHotspots(){
-        toggleHotspotButton.text('Show Hotspots');
-        //annotatedImage.hideHotspots();
-    }
-
-    function showHotspots(){
-        toggleHotspotButton.text('Hide Hotspots');
-        //annotatedImage.showHotspots();
-    }
+    
 
     /**
      * Make the map for location History.
