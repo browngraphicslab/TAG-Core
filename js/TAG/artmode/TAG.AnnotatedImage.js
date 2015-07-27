@@ -976,26 +976,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 innerContainer.append(titleDiv);
                 innerContainer.append(mediaContainer);
 
-                /**
-                if (DESCRIPTION) {
-                    descDiv = $(document.createElement('div'));
-                    descDiv.addClass('annotatedImageMediaDescription');
-                    descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
-                    if (IS_WINDOWS) {
-                        var links = descDiv.find('a');
-                        links.each(function (index, element) {
-                            $(element).replaceWith(function () {
-                                return $.text([this]);
-                            });
-                        });
-                    }
-                    descDiv.css({
-                        'top' : innerContainer.height() + 'px';
-                    });
-                    innerContainer.append(descDiv);
-                }
-                **/
-
                 if (RELATED_ARTWORK) {
                     // TODO append related artwork button here
                 }
@@ -1007,19 +987,23 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 // create hotspot circle if need be
                 if (IS_HOTSPOT) {
                     if (isNobelWill !== true) {
-                        circle = $(document.createElement("img"));
-                        circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
-                        circle.addClass('annotatedImageHotspotCircle');
-                        circle.click(function (evt) {
-                            evt && evt.stopPropagation();
-                            toggleMediaObject(true);
-                            TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
-                                tobj.current_artwork = doq.Identifier;
-                                tobj.assoc_media = mdoq.Identifier;
-                                tobj.assoc_media_interactions = "hotspot_toggle";
+                        console.log("circlewidth: " + ($('#circle' + mdoq.Identifier).width()));
+                        if ($('#circle' + mdoq.Identifier).width()===null){
+                            circle = $(document.createElement("img"));
+                            circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
+                            circle.attr('id', 'circle' + mdoq.Identifier);
+                            circle.addClass('annotatedImageHotspotCircle');
+                            circle.click(function (evt) {
+                                evt && evt.stopPropagation();
+                                toggleMediaObject(true);
+                                TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
+                                    tobj.current_artwork = doq.Identifier;
+                                    tobj.assoc_media = mdoq.Identifier;
+                                    tobj.assoc_media_interactions = "hotspot_toggle";
+                                });
                             });
-                        });
-                        root.append(circle);
+                            root.append(circle);
+                        }
                     }
                     else {
 
@@ -1513,46 +1497,32 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             }
                         }
                         if (DESCRIPTION) {
-                            descDiv = $(document.createElement('div'));
-                            descDiv.addClass('annotatedImageMediaDescription');
-                            descDiv.css({
-                                'font-size': descTextSize
-                            });
-                            descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
-                            if (IS_WINDOWS) {
-                                var links = descDiv.find('a');
-                                links.each(function (index, element) {
-                                    $(element).replaceWith(function () {
-                                        return $.text([this]);
+                            if ((outerContainer.find('.annotatedImageMediaDescription').length === 0) && (outerContainer.find('.mediaInnerContainer').length > 0)) {
+                                descDiv = $(document.createElement('div'));
+                                descDiv.addClass('annotatedImageMediaDescription');
+                                descDiv.css({
+                                    'font-size': descTextSize
+                                });
+                                descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
+                                if (IS_WINDOWS) {
+                                    var links = descDiv.find('a');
+                                    links.each(function (index, element) {
+                                        $(element).replaceWith(function () {
+                                            return $.text([this]);
+                                        });
                                     });
-                                });
+                                }
+                                descDiv.mouseover(function () { descscroll = true });
+                                descDiv.mouseleave(function () { descscroll = false; });
+                                //if(CONTENT_TYPE === 'iframe'){
+                                //    descDiv.css({top:'110%'});
+                                //}
+                                console.log("description is here!")
+                                outerContainer.append(descDiv);
                             }
-                            descDiv.mouseover(function () { descscroll = true });
-                            descDiv.mouseleave(function () { descscroll = false; });
-                            //if(CONTENT_TYPE === 'iframe'){
-                            //    descDiv.css({top:'110%'});
-                            //}
-                            console.log("description is here!")
-
-                            /*if (isImpactMap === true) {
-                                console.log("should create button now")
-                                var fieldsMapButton = $(document.createElement("BUTTON"));
-                                fieldsMapButton.text("Learn More");
-                                fieldsMapButton.css({
-                                    'color': 'black',
-                                    "background-color": "transparent",
-                                    'float': 'bottom',
-                                    'left': '50%',
-                                    'position': 'relative'
-                                });
-                                descDiv.append(fieldsMapButton);
-
-                            }*/
-                            outerContainer.append(descDiv);
                         }
 
-                        
-                        
+                      
                         return;
                     }
                 } else {
@@ -1700,26 +1670,28 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     }
                 }
                 if (DESCRIPTION) {
-                    descDiv = $(document.createElement('div'));
-                    descDiv.addClass('annotatedImageMediaDescription');
-                    descDiv.css({
-                        'font-size': descTextSize
-                    });
-                    descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
-                    if (IS_WINDOWS) {
-                        var links = descDiv.find('a');
-                        links.each(function (index, element) {
-                            $(element).replaceWith(function () {
-                                return $.text([this]);
-                            });
+                    if ((outerContainer.find('.annotatedImageMediaDescription').length === 0) && (outerContainer.find('mediaInnerContainer').length>0)) {
+                        descDiv = $(document.createElement('div'));
+                        descDiv.addClass('annotatedImageMediaDescription');
+                        descDiv.css({
+                            'font-size': descTextSize
                         });
+                        descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
+                        if (IS_WINDOWS) {
+                            var links = descDiv.find('a');
+                            links.each(function (index, element) {
+                                $(element).replaceWith(function () {
+                                    return $.text([this]);
+                                });
+                            });
+                        }
+                        descDiv.mouseover(function () { descscroll = true });
+                        descDiv.mouseleave(function () { descscroll = false; });
+                        //if(CONTENT_TYPE === 'iframe'){
+                        //    descDiv.css({top:'110%'});
+                        //}
+                        outerContainer.append(descDiv);
                     }
-                    descDiv.mouseover(function () { descscroll = true });
-                    descDiv.mouseleave(function () { descscroll = false; });
-                    //if(CONTENT_TYPE === 'iframe'){
-                    //    descDiv.css({top:'110%'});
-                    //}
-                    outerContainer.append(descDiv);
                 }
             }
         }

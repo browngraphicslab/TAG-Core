@@ -485,7 +485,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             });
                             var newPageRoot = artworkViewer.getRoot();
                             newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                            TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                            TAG.Util.UI.slidePageLeft(newPageRoot,artworkViewer.initializeHotspots);
                             currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                             currentPage.obj = artworkViewer;
                         }); 
@@ -499,7 +499,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             });
                             var newPageRoot = artworkViewer.getRoot();
                             newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                            TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                            TAG.Util.UI.slidePageLeft(newPageRoot, artworkViewer.initializeHotspots);
                             currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                             currentPage.obj = artworkViewer;
                         });
