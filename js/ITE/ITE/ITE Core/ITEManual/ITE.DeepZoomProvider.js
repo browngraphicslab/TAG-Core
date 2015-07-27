@@ -152,9 +152,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
                 orchestrator.player.pause();
                 _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
             }
-            else {
-                self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, false);
-            }
         })
 	};
 

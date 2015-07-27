@@ -44,6 +44,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
        fullScreenButton = $(document.createElement("img")),
        progressIndicator = $(document.createElement("div")),
        volumeLevelContainer = $(document.createElement("div")),
+       infoAvailableIcon = $(document.createElement("img")),
        slidingPane = createSlidingPane(),
        infoTracksVisible = [],
 
@@ -92,6 +93,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             attachPlay();
             attachLoop();
             attachProgressBar();
+            attachInfoIcon()
             //attachFullScreen();
             attachProgressIndicator();
         };
@@ -101,6 +103,29 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
     function getOrchestrator() {
         return orchestrator;
+    }
+
+
+    /*
+    * I/P:   none
+    * Attach information icon 
+    * O/P:   none
+    */
+    function attachInfoIcon() {
+        infoAvailableIcon.css({
+            'width': '40px',
+            'height': '40px',
+            'top': '10px',
+            'right': '10px',
+            'background-color': 'transparent',
+            'position': 'absolute',
+            'z-index': '1000000',
+            'opacity' : '.25'
+        })
+        infoAvailableIcon.attr({
+            src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/unlit_info.svg"
+        })
+        ITEHolder.append(infoAvailableIcon);
     }
 
     /*
@@ -854,10 +879,21 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
     function setInfoAvailable(yes) {
         if (yes === true) {
-            volumeLevelContainer.text('info available')
+            infoAvailableIcon.attr({
+                src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/lit_info.svg"
+            })
+            infoAvailableIcon.css({
+                'opacity' : '1'
+            })
+            
         }
         else {
-            volumeLevelContainer.text('no info')
+            infoAvailableIcon.attr({
+                src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/unlit_info.svg"
+            })
+            infoAvailableIcon.css({
+                'opacity': '.25'
+            })
         }
     }
 
