@@ -1800,7 +1800,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             infoTitle.css({
                 'font-family': 'Trajan',
                 'text-transform': 'uppercase',
-                'font-size': '20px'
+                'font-size': '150%'
             });
             infoYear.css('display','none');
 
@@ -1818,7 +1818,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     yearBorn = doq.Metadata.InfoFields[item];
                 }
                 if (item === 'Affilitation') {
-                    affiliation = doq.Metadata.InfoFields[item];
+                    affiliation = doq.Metadata.InfoFields[item].split(',');
                 }
                 if (item === 'Citizenship 1') citizenship = doq.Metadata.InfoFields[item];
                 if (item === 'Citizenship 2') citizenship = citizenship + ", " + doq.Metadata.InfoFields[item];
@@ -1828,15 +1828,15 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
             infoPerson = $(document.createElement('div'));
             infoPerson.addClass('infoPerson');
-            infoPerson.css('font-size','14px');
+            infoPerson.css('font-size','85%');
 
             infoCountry = $(document.createElement('div'));
             infoCountry.addClass('infoCountry');
-            infoCountry.css('font-size','14px');
+            infoCountry.css('font-size','85%');
 
             infoAffiliation = $(document.createElement('div'));
             infoAffiliation.addClass('infoCountry');
-            infoAffiliation.css('font-size','14px');
+            infoAffiliation.css('font-size','85%');
 
             infoCountry.text(citizenship);
             infoPerson.text((gender ? gender + ", " : "") + (yearBorn ? "Born in " + yearBorn : ""));
@@ -1847,7 +1847,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 infoPrize = $(document.createElement('div'));
                 infoPrize.addClass('infoPrize');
                 infoPrize.text(category[i].trim() + ", " + yearAward[i].trim());
-                infoPrize.css('font-size','14px');
+                infoPrize.css('font-size','85%');
                 infoPrize.appendTo(info);
             }
 
@@ -1858,7 +1858,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 var description = doq.Metadata.Description;
                 var descriptionDiv = $(document.createElement('div'));
                 descriptionDiv.css({
-                    'font-size':'14px',
+                    'font-size':'75%',
                     'margin-top':'4%',
                     'overflow-y': 'scroll',
                     'max-height': '70%'
@@ -1868,142 +1868,35 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 descriptionDiv.appendTo(assetContainer);
             }
 
-            // for (item in doq.Metadata.InfoFields) {
-            //     if (doq.Metadata.InfoFields.hasOwnProperty(item)) {
-            //         console.log(fieldTitle);
-            //         fieldTitle = item;
-            //         fieldValue = doq.Metadata.InfoFields[item];
-            //         infoCustom = $(document.createElement('div'));
-            //         infoCustom.addClass('infoCustom');
-            //         infoCustom.text(fieldTitle + ': ' + fieldValue);
-            //         infoCustom.css({
-            //             'color': '#' + PRIMARY_FONT_COLOR,
-            //         //'font-family': FONT
-            //         });
-            //         infoCustom.appendTo(info);
-            //     }
-            // }
             // make sure the info text fits in the div (TODO is this necessary?)
-            // TAG.Util.fitText(info, 1.1);
+            TAG.Util.fitText(info, 1.1);
 
-            // // create drawers
-            // if (doq.Metadata.Description) {
-            //     descriptionDrawer = createDrawer("Description");
-            //     descriptionDrawer.contents.html(Autolinker.link(doq.Metadata.Description.replace(/\n/g, "<br />"), { email: false, twitter: false }));
-            //     if (IS_WINDOWS) {
-            //         var links = descriptionDrawer.find('a');
-            //         links.each(function (index, element) {
-            //             $(element).replaceWith(function () {
-            //                 return $.text([this]);
-            //             });
-            //         });
-            //     }
-            //     assetContainer.append(descriptionDrawer);
-            //     currBottom = descriptionDrawer.height();
-            // }
-
-            // if (keywordSets && keywordSets[0] && keywordSets[0].shown && doq.Metadata.KeywordsSet1 && doq.Metadata.KeywordsSet1 !== '') {
-            //     keywordsSet1Drawer = initKeywordsSetDrawer(keywordSets[0].name, keywordSets[0].keywords, doq.Metadata.KeywordsSet1);
-            //     if (keywordsSet1Drawer) {
-            //         assetContainer.append(keywordsSet1Drawer);
-            //         currBottom += keywordsSet1Drawer.height();
-            //     }
-            // }
-
-            // if (keywordSets && keywordSets[1] && keywordSets[1].shown && doq.Metadata.KeywordsSet2 && doq.Metadata.KeywordsSet2 !== '') {
-            //     keywordsSet2Drawer = initKeywordsSetDrawer(keywordSets[1].name, keywordSets[1].keywords, doq.Metadata.KeywordsSet2);
-            //     if (keywordsSet2Drawer) {
-            //         assetContainer.append(keywordsSet2Drawer);
-            //         currBottom += keywordsSet2Drawer.height();
-            //     }
-            // }
-
-            // if (keywordSets && keywordSets[2] && keywordSets[2].shown && doq.Metadata.KeywordsSet3 && doq.Metadata.KeywordsSet3 !== '') {
-            //     keywordsSet3Drawer = initKeywordsSetDrawer(keywordSets[2].name, keywordSets[2].keywords, doq.Metadata.KeywordsSet3);
-            //     if (keywordsSet3Drawer) {
-            //         assetContainer.append(keywordsSet3Drawer);
-            //         currBottom += keywordsSet3Drawer.height();
-            //     }
-            // }
-
-            // var drawerToggleFn = null;
-            // if (associatedMedia.guids.length > 0) {
-            //     for (i = 0; i < associatedMedia.guids.length; i++) {
-            //         curr = associatedMedia[associatedMedia.guids[i]];
-            //         if (curr.linq.Metadata.Type === 'Layer') {
-            //             if (!xfadeDrawer) {
-            //                 xfadeSlider = $(document.createElement('div'))
-            //                     .attr('id', 'xfadeSlider');
-            //                 xfadeSlider.css({
-            //                     border: '2px solid rgba(255,255,255,0.8)',
-            //                     height: '25px',
-            //                     left: '10%',
-            //                     margin: '5px 0px 5px 0px',
-            //                     position: 'relative',
-            //                     width: '80%'
-            //                 });
-            //                 xfadeSliderPoint = $(document.createElement('div'))
-            //                     .attr('id', 'xfadeSliderPoint');
-            //                 xfadeSliderPoint.css({
-            //                     'background-color': 'rgba(255,255,255,0.8)',
-            //                     height: '100%',
-            //                     left: '0%',
-            //                     position: 'absolute',
-            //                     top: '0%',
-            //                     width: '50%'
-            //                 });
-            //                 xfadeSlider.append(xfadeSliderPoint);
-
-            //                 var updateOverlay = function (evt) {
-            //                     if (isFading) {
-            //                         var leftPercent = (evt.clientX - xfadeSlider.offset().left) / xfadeSlider.width();
-            //                         xfadeSliderPoint.css('width', Math.min(leftPercent * 100, 100) + '%');
-            //                         root.find('.xfadeImg').css('opacity', leftPercent);
-            //                     }
-            //                 }
-
-            //                 xfadeSlider.on('mousedown', function (evt) {
-            //                     isFading = true;
-            //                     updateOverlay(evt)
-            //                 });
-            //                 xfadeSlider.on('mousemove', function (evt) {
-            //                     updateOverlay(evt)
-            //                 });
-
-            //                 root.on('mouseup', function (evt) {
-            //                     isFading = false;
-            //                 });
-
-            //                 xfadeDrawer = createDrawer('Layers', xfadeSlider);
-            //             }
-            //             loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
-            //         } else {
-            //             if (curr.isHotspot){
-            //                 if (!toggleHotspotButton){
-            //                     createToggleHotspotButton();
-            //                 }
-            //             } 
-            //             if (!mediaDrawer) {
-            //                 mediaDrawer = createDrawer('Associated Media', null, assocMediaToShow);
-            //                 if (mediaDrawer.drawerToggle) {
-            //                     drawerToggleFn = mediaDrawer.drawerToggle;
-            //                 }
-            //             }
-            //             loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
-            //         }
-            //     }
-            //     if (mediaDrawer) {
-            //         assetContainer.append(mediaDrawer);
-            //         currBottom += mediaDrawer.height();
-            //     }
-            //     if (xfadeDrawer) {
-            //         assetContainer.append(xfadeDrawer);
-            //         currBottom += xfadeDrawer.height();
-            //     }
-            //     if (drawerToggleFn && (typeof drawerToggleFn === "function")) {
-            //         loadQueue.add(drawerToggleFn);
-            //     }
-        //}
+            var drawerToggleFn = null;
+            if (associatedMedia.guids.length > 0) {
+                for (i = 0; i < associatedMedia.guids.length; i++) {
+                    curr = associatedMedia[associatedMedia.guids[i]];
+                    if (curr.isHotspot){
+                        if (!toggleHotspotButton){
+                            createToggleHotspotButton();
+                        }
+                    } 
+                    if (!mediaDrawer) {
+                        var mediaHeader = $(document.createElement('div'));
+                        mediaHeader.text("Associated Media and Tours:");
+                        var mediaDrawer = $(document.createElement('div'));
+                        mediaHeader.appendTo(assetContainer);
+                        mediaDrawer.appendTo(assetContainer);
+                        //mediaDrawer = createDrawer('Associated Media and Tours:', null, assocMediaToShow);
+                        // if (mediaDrawer.drawerToggle) {
+                        //     drawerToggleFn = mediaDrawer.drawerToggle;
+                        // }
+                    }
+                    loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
+                }
+            }
+            if (drawerToggleFn && (typeof drawerToggleFn === "function")) {
+                loadQueue.add(drawerToggleFn);
+            }
 
         /**
          * Creates a tour thumbnail button
@@ -2185,18 +2078,23 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             });
 
             if (relatedTours.length > 0) {
-                tourDrawer = createDrawer('Tours');
-                assetContainer.append(tourDrawer);
-                currBottom += tourDrawer.height();
-
-                tourDrawer.contents.text('');
+                if (!mediaDrawer) {
+                    mediaDrawer = createDrawer('Associated Media and Tours', null, assocMediaToShow);
+                    if (mediaDrawer.drawerToggle) {
+                        drawerToggleFn = mediaDrawer.drawerToggle;
+                    }
+                }
                 for (i = 0; i < relatedTours.length; i++) {
-                    loadQueue.add(createTourButton(tourDrawer.contents, relatedTours[i]));
+                    loadQueue.add(createTourButton(mediaDrawer.contents, relatedTours[i]));
                 }
             }
 
-            // set max height of drawers to avoid expanding into minimap area
+            if (mediaDrawer) {
+                assetContainer.append(mediaDrawer);
+                currBottom += mediaDrawer.height();
+            }
 
+            // set max height of drawers to avoid expanding into minimap area
             maxHeight = Math.max(1, assetContainer.height() - currBottom); //to account for the height of the drawerLabel of the current drawer.
 
             root.find(".drawerContents").css({
@@ -2204,7 +2102,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 //'max-height':2*0.19 * $('#tagRoot').height() + 'px', //height of two thumbnails
             });
         });
-
 
         /**
          * Generates a click handler for a specific tour
@@ -2818,6 +2715,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         drawer.append(drawerContents);
         topContents && drawerContents.append(topContents);
+
         var drawerToggle = function (evt) {
             if (toggle.attr('expanded') !== 'true') {
                 root.find(".drawerPlusToggle").attr({
