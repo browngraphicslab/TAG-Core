@@ -322,6 +322,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'position': 'absolute',
             'left': '40.1275%',
             'height': '100%',
+            'width' : '43.73%'
         })
         root.append(willImage)
 
