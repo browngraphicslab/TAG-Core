@@ -2003,7 +2003,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             //     if (drawerToggleFn && (typeof drawerToggleFn === "function")) {
             //         loadQueue.add(drawerToggleFn);
             //     }
-        }
+        //}
 
         /**
          * Creates a tour thumbnail button
