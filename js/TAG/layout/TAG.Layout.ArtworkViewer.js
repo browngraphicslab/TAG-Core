@@ -1885,7 +1885,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'color': NOBEL_ORANGE_COLOR
         });
 
-        infoCountry.text(citizenship);
+        infoCountry.text((citizenship ? citizenship : ""));
         infoPerson.text((gender ? gender + ", " : "") + (yearBorn ? "Born in " + yearBorn : ""));
         infoCountry.appendTo(info);
         infoPerson.appendTo(info);
