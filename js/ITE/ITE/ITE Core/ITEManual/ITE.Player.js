@@ -47,6 +47,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
        infoAvailableIcon = $(document.createElement("img")),
        slidingPane = createSlidingPane(),
        infoTracksVisible = [],
+       initialOverlay,
+       initialLoading = true,
 
 
    //Other atributes
@@ -77,6 +79,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P: {object}   ITEPlayer       a new ITE player object 
     */
     function createITEPlayer(playerParent, options) {
+        makeInitialOverlay();
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
         this.playerConfiguration    = playerConfiguration; 
         this.playerParent           = playerParent;
@@ -105,6 +108,36 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         return orchestrator;
     }
 
+    function makeInitialOverlay() {
+        initialLoading = true;
+        initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(1));
+
+        var infoDiv = $(document.createElement('div'));
+        infoDiv.css({
+            "color": "white",
+            "background-color": "transparent",
+            "text-align": "center",
+            "top": "59%",
+            "display": "block",
+            "position": "absolute",
+            "font-size": "3em",
+            "width": '100%',
+            "height": "100%"
+        })
+        infoDiv.text("loading tour...");
+        TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
+        initialOverlay.append(infoDiv);
+        var root = $(document.body);
+        root.append(initialOverlay);
+    }
+
+    function hideInitialOverlay() {
+        if (initialLoading === true) {
+            initialLoading = false
+            TAG.Util.hideLoading(initialOverlay)
+            initialOverlay.remove();
+        }
+    }
 
     /*
     * I/P:   none
@@ -467,6 +500,9 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function play() {
+        if (initialLoading === true) {
+            hideInitialOverlay();
+        }
         orchestrator.play();
         playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
        setControlsFade();
