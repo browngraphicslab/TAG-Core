@@ -111,7 +111,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     function makeInitialOverlay() {
         initialLoading = true;
         initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(1));
-
+        initialOverlay.css('display','block')
         var infoDiv = $(document.createElement('div'));
         infoDiv.css({
             "color": "white",
@@ -127,8 +127,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         infoDiv.text("loading tour...");
         TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
         initialOverlay.append(infoDiv);
-        var root = $(document.body);
-        root.append(initialOverlay);
+        $("#ITEContainer").append(initialOverlay);
+        initialOverlay.append($("#backButton"));
     }
 
     function hideInitialOverlay() {
