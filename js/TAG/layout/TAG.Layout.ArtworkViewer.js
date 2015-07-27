@@ -65,6 +65,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         smallPreview = options.smallPreview, //for reloading back into collections page
         titleIsName = options.titleIsName, // for reloading back into collections page
         NOBEL_WILL_COLOR = 'rgb(189,125,13)',
+        NOBEL_ORANGE_COLOR = 'rgb(254,161,0)',
         
         //options to maintain customizations when going back to collections page
         isImpactMap = options.isImpactMap,
@@ -126,6 +127,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
     // get things rolling if doq is defined (it better be)
     doq && init();
+    console.log(SECONDARY_FONT_COLOR);
 
     return {
         getRoot: getRoot,
@@ -1830,58 +1832,70 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         // add more information for the artwork if curator added in the authoring mode
-            infoTitle.css({
-                'font-family': 'Trajan',
-                'text-transform': 'uppercase',
-                'font-size': '150%'
-            });
-            infoYear.css('display','none');
+        infoTitle.css({
+            'font-family': 'Trajan',
+            'text-transform': 'uppercase',
+            'font-size': '150%'
+        });
+        infoYear.css('display','none');
 
-            var infoPrize, infoPerson, infoCountry, infoAffiliation, 
-                category, yearAward, yearBorn, affiliation, citizenship, gender, prizeText;
+        var infoPrize, infoPerson, infoCountry, infoAffiliation, 
+            category, yearAward, yearBorn, affiliation, citizenship, gender, prizeText;
 
-            for (item in doq.Metadata.InfoFields) {
-                if (item === 'Category') {
-                    category = doq.Metadata.InfoFields[item].split(',');
-                }
-                if (item === 'Year of Award') {
-                    yearAward = doq.Metadata.InfoFields[item].split(',');
-                }
-                if (item === 'Year of Birth') {
-                    yearBorn = doq.Metadata.InfoFields[item];
-                }
-                if (item === 'Affilitation') {
-                    affiliation = doq.Metadata.InfoFields[item].split(',');
-                }
-                if (item === 'Citizenship 1') citizenship = doq.Metadata.InfoFields[item];
-                if (item === 'Citizenship 2') citizenship = citizenship + ", " + doq.Metadata.InfoFields[item];
-                if (item === 'Gender') gender = doq.Metadata.InfoFields[item];
-                if (item === 'Name') infoTitle.text(doq.Metadata.InfoFields[item]);
+        for (item in doq.Metadata.InfoFields) {
+            if (item === 'Category') {
+                category = doq.Metadata.InfoFields[item].split(',');
             }
+            if (item === 'Year of Award') {
+                yearAward = doq.Metadata.InfoFields[item].split(',');
+            }
+            if (item === 'Year of Birth') {
+                yearBorn = doq.Metadata.InfoFields[item];
+            }
+            if (item === 'Affilitation') {
+                affiliation = doq.Metadata.InfoFields[item].split(',');
+            }
+            if (item === 'Citizenship 1') citizenship = doq.Metadata.InfoFields[item];
+            if (item === 'Citizenship 2') citizenship = citizenship + ", " + doq.Metadata.InfoFields[item];
+            if (item === 'Gender') gender = doq.Metadata.InfoFields[item];
+            if (item === 'Name') infoTitle.text(doq.Metadata.InfoFields[item]);
+        }
 
-            infoPerson = $(document.createElement('div'));
-            infoPerson.addClass('infoPerson');
-            infoPerson.css('font-size','85%');
+        infoPerson = $(document.createElement('div'));
+        infoPerson.addClass('infoPerson');
+        infoPerson.css({
+            'font-size': '80%',
+            'color': NOBEL_ORANGE_COLOR
+        });
 
-            infoCountry = $(document.createElement('div'));
-            infoCountry.addClass('infoCountry');
-            infoCountry.css('font-size','85%');
+        infoCountry = $(document.createElement('div'));
+        infoCountry.addClass('infoCountry');
+        infoCountry.css({
+            'font-size':'80%',
+            'color': NOBEL_ORANGE_COLOR
+        });
 
-            infoAffiliation = $(document.createElement('div'));
-            infoAffiliation.addClass('infoCountry');
-            infoAffiliation.css('font-size','85%');
+        infoAffiliation = $(document.createElement('div'));
+        infoAffiliation.addClass('infoCountry');
+        infoAffiliation.css({
+            'font-size': '80%',
+            'color': NOBEL_ORANGE_COLOR
+        });
 
-            infoCountry.text(citizenship);
-            infoPerson.text((gender ? gender + ", " : "") + (yearBorn ? "Born in " + yearBorn : ""));
-            infoCountry.appendTo(info);
-            infoPerson.appendTo(info);
+        infoCountry.text(citizenship);
+        infoPerson.text((gender ? gender + ", " : "") + (yearBorn ? "Born in " + yearBorn : ""));
+        infoCountry.appendTo(info);
+        infoPerson.appendTo(info);
 
             if (category && category.length) {
                 for (i = 0; i < category.length; i++) {
                     infoPrize = $(document.createElement('div'));
                     infoPrize.addClass('infoPrize');
                     infoPrize.text(category[i].trim() + ", " + yearAward[i].trim());
-                    infoPrize.css('font-size', '85%');
+                    infoPrize.css({
+                        'font-size': '80%',
+                        'color': NOBEL_ORANGE_COLOR
+                    });
                     infoPrize.appendTo(info);
                 }
             }
@@ -1894,9 +1908,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 var descriptionDiv = $(document.createElement('div'));
                 descriptionDiv.css({
                     'font-size':'75%',
-                    'margin-top':'4%',
-                    'overflow-y': 'scroll',
-                    'max-height': '70%'
+                    'overflow-y': 'visible'
                 });
                 descriptionDiv.addClass('description');
                 descriptionDiv.text(description);
@@ -1917,18 +1929,19 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     } 
                     if (!mediaDrawer) {
                         var mediaHeader = $(document.createElement('div'));
-                        mediaHeader.text("Associated Media and Tours:");
+                        var mediaDrawer = $(document.createElement('div'));
                         mediaHeader.appendTo(assetContainer);
-                        mediaDrawer = createDrawer('Associated Media and Tours:', null, assocMediaToShow);
-                         if (mediaDrawer.drawerToggle) {
-                             drawerToggleFn = mediaDrawer.drawerToggle;
-                         }
+                        mediaDrawer.appendTo(assetContainer);
+                        mediaHeader.text("Associated Media and Tours:");
+                        mediaHeader.css({
+                            'margin-top': '3%',
+                            'font-size': '85%',
+                            'color': NOBEL_ORANGE_COLOR,
+                            'font-weight': 'bold'
+                        });
                     }
-                    loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
+                    loadQueue.add(createMediaButton(mediaDrawer, curr));
                 }
-            }
-            if (drawerToggleFn && (typeof drawerToggleFn === "function")) {
-                loadQueue.add(drawerToggleFn);
             }
 
         /**
@@ -1991,8 +2004,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 }
             }
         }
-
-
 
         /**
          * Generates a click handler for a specific associated media object
@@ -2112,13 +2123,20 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
             if (relatedTours.length > 0) {
                 if (!mediaDrawer) {
-                    mediaDrawer = createDrawer('Associated Media and Tours', null, assocMediaToShow);
-                    if (mediaDrawer.drawerToggle) {
-                        drawerToggleFn = mediaDrawer.drawerToggle;
-                    }
+                    var mediaHeader = $(document.createElement('div'));
+                    var mediaDrawer = $(document.createElement('div'));
+                    mediaHeader.appendTo(assetContainer);
+                    mediaDrawer.appendTo(assetContainer);
+                    mediaHeader.text("Associated Media and Tours:");
+                    mediaHeader.css({
+                        'margin-top': '3%',
+                        'font-size': '85%',
+                        'color': NOBEL_ORANGE_COLOR,
+                        'font-weight': 'bold'
+                    });
                 }
                 for (i = 0; i < relatedTours.length; i++) {
-                    loadQueue.add(createTourButton(mediaDrawer.contents, relatedTours[i]));
+                    loadQueue.add(createTourButton(mediaDrawer, relatedTours[i]));
                 }
             }
 
@@ -2202,8 +2220,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         //if the #info div exceeds the half the length of the sidebar, the div's max-height is set to its default with an auto scroll property.
         info.css({
-            'overflow-y': 'auto',
-            'max-height': sideBar.height() * 2 / 5 - (info.offset().top - sideBar.offset().top) + 'px',
+            'overflow-y': 'auto'
+            //'max-height': sideBar.height() * 2 / 5 - (info.offset().top - sideBar.offset().top) + 'px',
 
         });
 
@@ -2217,14 +2235,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             .text('Navigation');
         minimapContainer.append(minimapDescription);
 
-
-
         //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
         assetContainer.css({
-            'max-height': sideBarInfo.height() - info.height() + (info.offset().top - sideBar.offset().top) + 'px',
+            'max-height': sideBarInfo.height() - info.height() - infoTitle.height() + 'px',
+            'overflow-y': 'auto',
+            'margin-top': '4%',
         });
-
-
 
         sideBarSections.append(minimapContainer);
 
@@ -2738,54 +2754,54 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
         toggle.attr({
             src: tagPath + 'images/icons/plus.svg',
-            expanded: false
+            expanded: true
         });
 
         drawer.append(drawerHeader);
         drawerHeader.append(label);
-        drawerHeader.append(toggleContainer);
-        toggleContainer.append(toggle);
+        //drawerHeader.append(toggleContainer);
+        //toggleContainer.append(toggle);
 
         drawer.append(drawerContents);
         topContents && drawerContents.append(topContents);
 
-        var drawerToggle = function (evt) {
-            if (toggle.attr('expanded') !== 'true') {
-                root.find(".drawerPlusToggle").attr({
-                    src: tagPath + 'images/icons/plus.svg',
-                    expanded: false
-                });
+        //var drawerToggle = function (evt) {
+        //    if (toggle.attr('expanded') !== 'true') {
+        //        root.find(".drawerPlusToggle").attr({
+        //            src: tagPath + 'images/icons/plus.svg',
+        //            expanded: false
+        //        });
 
-                root.find(".drawerContents").slideUp();
+        //        root.find(".drawerContents").slideUp();
 
-                toggle.attr({
-                    src: tagPath + 'images/icons/minus.svg',
-                    expanded: true
-                });
-            } else {
-                toggle.attr({
-                    src: tagPath + 'images/icons/plus.svg',
-                    expanded: false
-                });
+        //        toggle.attr({
+        //            src: tagPath + 'images/icons/minus.svg',
+        //            expanded: true
+        //        });
+        //    } else {
+        //        toggle.attr({
+        //            src: tagPath + 'images/icons/plus.svg',
+        //            expanded: false
+        //        });
 
-            }
+        //    }
 
-            drawerContents.slideToggle();
-            isOpen && that.locationClose()
-        }
+        //    drawerContents.slideToggle();
+        //    isOpen && that.locationClose()
+        //}
 
         //have the toggler icon minus when is is expanded, plus otherwise.
-        drawerHeader.on('click', drawerToggle);
+        //drawerHeader.on('click', drawerToggle);
         TAG.Telemetry.register(drawerHeader, 'click', 'Drawer', function (tobj) {
             tobj.current_artwork = doq.Identifier;
             tobj.toggle = toggle.attr("expanded"); //expanded or collapsed
             tobj.drawer_header = drawerHeader.text();
         });
         drawer.contents = drawerContents;
-        if (assocMediaToShow && title === 'Associated Media') {
-            //drawerHeader.click();
-            drawer.drawerToggle = drawerToggle;
-        }
+        //if (assocMediaToShow && title === 'Associated Media') {
+            drawerHeader.click();
+            //drawer.drawerToggle = drawerToggle;
+        //}
         return drawer;
     }
 
