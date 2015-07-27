@@ -962,7 +962,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'position': 'absolute',
             'border-left': '2px solid rgb(254,161,0)',
             'width': '2%',
-            'height': '42%',
+            'height': '41.9%',
             'left': '100%',
             'bottom': '2%'
         })
@@ -1071,29 +1071,49 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     function updateInfoPane(doq) {
         makePaneVisible(true);
         $(".infoPaneInfoField").remove();
-        $("#infoPaneTitleDiv").text(doq.Metadata.Name || "");
+        if (doq.Metadata.InfoFields && doq.Metadata.InfoFields.Name) {
+            $("#infoPaneTitleDiv").text(doq.Metadata.InfoFields.Name);
+        }
+        else {
+            $("#infoPaneTitleDiv").text(doq.Metadata.Name || "");
+        }
         var top = 0;
+
+        var special = ['Category', 'Year of Award', 'Gender','Citizenship 1','Citizenship 2'];
+        var keys = Object.keys(doq.Metadata.InfoFields);
+
+        for (var i = 0; i < special.length; i++) {
+            if (doq.Metadata.InfoFields[special[i]]) {
+                var d = makeInfoField(doq.Metadata.InfoFields[special[i]],true).css('top', top + 'px');
+                $("#infoBlock").append(d);
+                top += d.height() + 10;
+            }
+        }
+
         if (doq.Metadata.Description) {
             var d = makeInfoField("Description: " + doq.Metadata.Description).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height() +10;
+            top += d.height() + 10;
         }
         if (doq.Metadata.Artist) {
             var d = makeInfoField("Artist: " + doq.Metadata.Artist).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height()+10;
+            top += d.height() + 10;
         }
         if (doq.Metadata.Date) {
             var d = makeInfoField("Date: " + doq.Metadata.Date).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height()+10;
-        }
-        var keys = Object.keys(doq.Metadata.InfoFields);
-        for (var key = 0; key < keys.length;key++) {
-            var val = doq.Metadata.InfoFields[keys[key]];
-            var d = makeInfoField(keys[key] + ": " + val).css('top', top + 'px');
-            $("#infoBlock").append(d);
             top += d.height() + 10;
+        }
+
+        for (var key = 0; key < keys.length; key++) {
+            var val = doq.Metadata.InfoFields[keys[key]];
+            var d;
+            if (special.indexOf(keys[key]) === -1) {
+                d = makeInfoField(keys[key] + ": " + val).css('top', top + 'px');
+                $("#infoBlock").append(d);
+                top += d.height() + 10;
+            }
         }
     }
     function makePaneVisible(b) {
@@ -1106,40 +1126,81 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     }
     function showInfoPane(callback){
         infoPaneOut = true;
-        $("#infoPaneDiv").animate({ left: '-1%' }, 1000, 'easeInOutQuart', callback ? function () { callback(), $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg") } : function () { $("#tabImg").attr('src', itePath + 'ITE%20Core/ITEManual/ITEPlayerImages/Close.svg') })
-        $("#infoPaneTab").css({
-            'background-color': 'rgba(0,0,0,.6)',
-            'border-right': '2px solid rgb(254,161,0)',
-            'border-top': '2px solid rgb(254,161,0)',
-            'border-bottom': '2px solid rgb(254,161,0)',
+        $("#infoPaneDiv").animate({ left: '-1%' }, 1000, 'easeInOutQuart', callback ? function () {
+            callback(),
+            $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg")
+            $("#infoPaneTab").css({
+                'background-color': 'rgba(0,0,0,.6)',
+                'border-right': '2px solid rgb(254,161,0)',
+                'border-top': '2px solid rgb(254,161,0)',
+                'border-bottom': '2px solid rgb(254,161,0)',
+            })
+        } : function () {
+            $("#tabImg").attr('src', itePath + 'ITE%20Core/ITEManual/ITEPlayerImages/Close.svg');
+            $("#infoPaneTab").css({
+                'background-color': 'rgba(0,0,0,.6)',
+                'border-right': '2px solid rgb(254,161,0)',
+                'border-top': '2px solid rgb(254,161,0)',
+                'border-bottom': '2px solid rgb(254,161,0)',
+            })
         })
+        
     }
     function hideInfoPane(callback){
         infoPaneOut = false;
-        $("#infoPaneDiv").animate({ left: '-26.1%' }, 500, 'easeInOutQuart', callback ? function () { callback(), $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg") } : function () { $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg") })
-        $("#infoPaneTab").css({
-            'background-color': 'rgb(254,161,0)',
-            'border-right': '2px solid rgb(254,161,0)',
-            'border-top': '2px solid rgb(254,161,0)',
-            'border-bottom': '2px solid rgb(254,161,0)',
+        $("#infoPaneDiv").animate({ left: '-26.1%' }, 500, 'easeInOutQuart', callback ? function () {
+            callback(),
+            $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
+            $("#infoPaneTab").css({
+                'background-color': 'rgb(254,161,0)',
+                'border-right': '2px solid rgb(254,161,0)',
+                'border-top': '2px solid rgb(254,161,0)',
+                'border-bottom': '2px solid rgb(254,161,0)',
+            })
+        } : function () {
+            $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
+            $("#infoPaneTab").css({
+                'background-color': 'rgb(254,161,0)',
+                'border-right': '2px solid rgb(254,161,0)',
+                'border-top': '2px solid rgb(254,161,0)',
+                'border-bottom': '2px solid rgb(254,161,0)',
+            })
         })
+        
 
     }
-    function makeInfoField(text) {
+
+    function makeInfoField(text, special) {
         var outer = $(document.createElement('div'));
         outer.attr({
-            class : 'infoPaneInfoField'
+            class: 'infoPaneInfoField'
         })
-        outer.css({
-            'position': 'absolute',
-            'z-index': '9999999999',
-            'width': '90%',
-            'left': '0%',
-            'background-color': 'transparent',
-            'color': 'white',
-            'font-size': '.9em',
-            'text-align': 'left'
-        }).text(text);
+        if (special === true) {
+            outer.css({
+                'position': 'absolute',
+                'z-index': '9999999999',
+                'width': '90%',
+                'left': '0%',
+                'background-color': 'transparent',
+                'color': 'rgb(254,161,0)',
+                'font-size': '1.05em',
+                'text-align': 'left',
+                'font-weight' : 'bold'
+            });
+        }
+        else{ 
+            outer.css({
+                'position': 'absolute',
+                'z-index': '9999999999',
+                'width': '90%',
+                'left': '0%',
+                'background-color': 'transparent',
+                'color': 'white',
+                'font-size': '.9em',
+                'text-align': 'left'
+            });
+        }
+        outer.text(text);
         return outer;
     }
 
