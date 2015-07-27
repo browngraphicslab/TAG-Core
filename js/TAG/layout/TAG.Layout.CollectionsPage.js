@@ -2698,13 +2698,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             artTitle.css('background-color', 'rgba(0,0,0,.5)');
             if (!onSearch && (searchInput.val() !== '' || numKeywordsChecked !== 0)) {
                 main.css({
-                    'border': '0px solid black',
-                    'opacity': '0.1'
+                    'opacity': '0.3'
                 });
                 
             } else if (onSearch) {
                 main.css({
-                    'border': '0px solid black',
                     'opacity': '1'
                 });
             }
