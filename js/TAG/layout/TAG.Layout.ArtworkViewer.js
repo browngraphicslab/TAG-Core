@@ -2017,7 +2017,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function mediaClicked(media, justCircle, noPanToPoint) {
             console.log('mediaClicked'+ noPanToPoint);
             if (isNobelWill === true) {              
-                return function(){return};
+                return function () { return };
             }
             return function (evt) {
                 evt && evt.stopPropagation();
@@ -2081,19 +2081,21 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         if (toggleHotspotButton) {
             toggleHotspotButton.text('Show Hotspots');
         }
-        for (var y = 0; y < hotspots.guids.length; y++) {
-            //don't re-click hotspots that are already hidden
-            if (!hotspots[hotspots.guids[y]].isVisible()) {
-                console.log('skipping: ' + hotspots.guids[y]);
-                continue;
-            }
-            //double click to open media before closing
-            if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible()){
+            toggleHotspotButton.text('Show Hotspots');
+            for (var y = 0; y < hotspots.guids.length; y++) {
+                //don't re-click hotspots that are already hidden
+                if (!hotspots[hotspots.guids[y]].isVisible()) {
+                    console.log('skipping: ' + hotspots.guids[y]);
+                    continue;
+                }
+                //double click to open media before closing
+                if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible()) {
+                    mediaClicked(hotspots[hotspots.guids[y]])();
+                }
                 mediaClicked(hotspots[hotspots.guids[y]])();
+                console.log('hiding: ' + hotspots.guids[y]);
             }
-            mediaClicked(hotspots[hotspots.guids[y]])();
-            console.log('hiding: '+ hotspots.guids[y]);
-        }        
+        }
     }
 
     function showHotspots(){
