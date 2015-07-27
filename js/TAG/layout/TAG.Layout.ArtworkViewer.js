@@ -111,6 +111,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         toggleHotspotButton,
         hotspotsShown,
         willImage,
+        smallWillImage,
 
         // misc uninitialized vars
         keywordSets,
@@ -314,6 +315,17 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         })
         sideBar.append(titleDiv);
 
+       
+        smallWillImage = $(document.createElement('img'));
+        smallWillImage.attr({
+            src: FIX_PATH(doq.URL)
+        })
+        smallWillImage.css({
+            'position': 'absolute',
+            'left': '40.1275%',
+            'height': '100%',
+            'width': '43.73%'
+        })
         willImage = $(document.createElement('img'));
         willImage.attr({
             src: FIX_PATH(doq.Metadata.Source.substring(0, doq.Metadata.Source.length - 4))
@@ -322,8 +334,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'position': 'absolute',
             'left': '40.1275%',
             'height': '100%',
-            'width' : '43.73%'
+            'width': '43.73%'
         })
+
+        root.append(smallWillImage);
         root.append(willImage)
 
         nobelPlayPauseButton = $(document.createElement('img'));
