@@ -4529,7 +4529,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     titleIsName: titleIsName,
                     isNobelWill: false,
                     twoDeep: twoDeep,
-                    hideKeywords: hideKeywords,
+                    hideKeywords: hideKeywords
                 });
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
