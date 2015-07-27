@@ -81,6 +81,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         loadQueue = TAG.Util.createQueue(),  // async queue for thumbnail button creation, etc
         screenWidth = $('#tagRoot').width(),      // Width of entire tag screen (for split screen styling)
         telemetry_timer = new TelemetryTimer(),       //Timer for telemetry
+        firstShowHotspots = true,
 
         //nobel will variables
         showInitialNobelWillBox = true,
@@ -584,12 +585,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 up.css({
                     'position': 'absolute',
                     'background-color': "transparent",
-                    'max-height': '50px',
-                    'max-width': '50px',
-                    'height': '50%',
-                    'top': '0px',
-                    'left': '100.5%'
+                    'max-height': '20px',
+                    'max-width': '20px',
+                    'min-height': '20px',
+                    'min-width': '20px',
+                    'left': '100.5%',
+                    'bottom' : '50%',
                 })
+                up.css('bottom', up.css('bottom') + 15 + 'px');
                 up.click(
                     function () {
                         if (nobelIsPlaying === true) {
@@ -608,12 +611,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 down.css({
                     'position': 'absolute',
                     'background-color': "transparent",
-                    'max-height': '50px',
-                    'max-width': '50px',
-                    'height': '50%',
-                    'bottom': '0px',
+                    'max-height': '20px',
+                    'max-width': '20px',
+                    'min-height': '20px',
+                    'min-width': '20px',
+                    'top': '50%',
                     'left': '100.5%'
                 });
+              down.css('top', down.css('top') + 15 + 'px');
                 down.click(
                     function () {
                         if (nobelIsPlaying === true) {
@@ -2069,7 +2074,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          * @method mediaClicked
          * @param {Object} media       the associated media object (from AnnotatedImage)
          */
-        function mediaClicked(media, justCircle) {
+        function mediaClicked(media, justCircle, noPanToPoint) {
+            console.log('mediaClicked'+ noPanToPoint);
             //var toggleFunction = toggleLocationPanel;
             if (isNobelWill === true) {              
                 return function(){return};
@@ -2079,9 +2085,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 console.log('hotspot media visible: ' + media.isHotspotMediaVisible());
                 locHistoryActive = true;
                 media.create(); // returns if already created             
-                media.toggle();
+                media.toggle(false, noPanToPoint);
                 if (justCircle) {
-                    media.toggle(true);
+                    media.toggle(true, noPanToPoint);
                 }
                 if (locked !== doq.Identifier) {
                     TAG.Util.IdleTimer.restartTimer();
@@ -2127,7 +2133,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         if (hotspotsShown){
             hideHotspots();
         } else {
-            showHotspots();
+            showHotspots(firstShowHotspots);
         }
     }
 
@@ -2144,12 +2150,15 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }        
     }
 
-    function showHotspots(){
+    function showHotspots(initial){
+        if (firstShowHotspots){
+            firstShowHotspots = false;
+        }
         hotspotsShown = true;
         toggleHotspotButton.text('Hide Hotspots');
         for (var y = 0; y < hotspots.guids.length; y++) {
             //don't re-click hotspots that are already visible
-            if (hotspots[hotspots.guids[y]].isVisible()){
+            if (hotspots[hotspots.guids[y]].isVisible() && !initial){
                 console.log('skipping: '+ hotspots.guids[y]);
                 continue;
             }
@@ -2566,7 +2575,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         console.log('hotspots: ' + hotspots);
         //load hotspots
         for (var y = 0; y < hotspots.guids.length; y++) {
-            loadQueue.add(mediaClicked(hotspots[hotspots.guids[y]],true));
+            loadQueue.add(mediaClicked(hotspots[hotspots.guids[y]],true,true));
             loadQueue.add(hideHotspots(true));
         }        
 

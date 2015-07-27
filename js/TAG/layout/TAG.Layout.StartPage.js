@@ -490,7 +490,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             currentPage.obj = artworkViewer;
                         }); 
                 }
-                if (collectionName === HISTORY_NAME){
+                else if (collectionName === HISTORY_NAME){
                     TAG.Worktop.Database.getDoq("79bb289b-0e18-4091-8e3b-f21e5d65e793",
                         function (result) {
                             var artworkViewer = TAG.Layout.ArtworkViewer({

@@ -145,7 +145,14 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
         // Create _deepZoom, the canvas with the deepZoom image files.
         _deepZoom = $(_viewer.canvas)
-			.addClass("deepZoomImage"); 
+			.addClass("deepZoomImage");
+        _UIControl.click(function () {
+            if (_UIControl.css('z-index') !== '-1' && orchestrator.status===1) {
+                self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, true);
+                orchestrator.player.pause();
+                _super.orchestrator.setLastMovedObjectByZIndex(_super.trackData.zIndex);
+            }
+        })
 	};
 
 
@@ -268,6 +275,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		if (self.status === 3) {
 			return;
 		}
+
 		self.status = 1;
 		self.orchestrator.updateZIndices();
 
@@ -341,9 +349,15 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	nextKeyframe : 		The next keyframe to play to, if the track is playing, or null otherwise.
 	 */
 	self.seek = function() {
-		seeked = true;
+	    seeked = true;
 		if (self.status === 3) {
 			return null;
+		}
+		if (_UIControl.css('z-index') !== '-1') {
+		    self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, true);
+		}
+		else {
+		    self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, false);
 		}
 		var seekTime = self.timeManager.getElapsedOffset(); // Get the new time from the timerManager.
 		var prevStatus = self.status; // Store what we were previously doing.
@@ -388,12 +402,14 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		setSeadragonConfig(duration);
 		_viewer.viewport.fitBounds(state.bounds, false);
 
+        
+
 		//If we're fading in, set the z-index to be the track's real z-index (as opposed to -1)
 		if (state.opacity !== 0) {
 		    _UIControl.css("z-index", self.zIndex)
 		    _proxy.css("z-index", self.zIndex + 5)
+		    self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, true);
 		}
-
 		self.animation = TweenLite.to(
 			// What object to animate.
 			_canvasHolder,
@@ -404,7 +420,9 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 				opacity: state.opacity, // Change in opacity
 				onComplete: function() { // OnComplete function.
 					self.play(self.getNextKeyframe(self.timeManager.getElapsedOffset()));
-					
+					if (state.opacity === 0) {
+					    self.orchestrator.player.setInfoTrack(_super.trackData.zIndex, false);
+					}
 					//If we're fading out, set the z-index to -1 to prevent touches
 					if (state.opacity == 0) {
 					    _UIControl.css("z-index",-1)

@@ -2048,7 +2048,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * a hotspot, show it in a slightly random position.
          * @method showMediaObject
          */
-        function showMediaObject(isHotspotIcon, hideOuterContainer) {
+        function showMediaObject(isHotspotIcon, noPanToPoint) {
             var t,
                 l,
                 h = outerContainer.height(),
@@ -2078,7 +2078,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         addOverlay(circle[0], position, OpenSeadragon.OverlayPlacement.CENTER);
                     }
                     //don't pan to position 
-                    if (!isImpactMap) {
+                    console.log(noPanToPoint);
+                    //if (!noPanToPoint) {
+                    if (!isImpactMap){
                         viewer.viewport.panTo(position, false);
                     }
                     viewer.viewport.applyConstraints()
@@ -2215,12 +2217,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * Show if hidden, hide if shown
          * @method toggleMediaObject
          */
-        function toggleMediaObject(isHotspotIcon) {
+        function toggleMediaObject(isHotspotIcon, noPanToPoint) {
             console.log('toggling media object');
             if (hotspotMediaHidden) {
-                showMediaObject(isHotspotIcon);
+                showMediaObject(isHotspotIcon, noPanToPoint);
             } else {
-                mediaHidden ? showMediaObject(isHotspotIcon) : hideMediaObject(isHotspotIcon);
+                mediaHidden ? showMediaObject(isHotspotIcon, noPanToPoint) : hideMediaObject(isHotspotIcon);
             }
             outerContainerhidden = mediaHidden;
         }
