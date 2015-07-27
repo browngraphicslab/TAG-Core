@@ -23,6 +23,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         linkButton = root.find('#linkButton'),
         linkButtonContainer = root.find('#linkContainer'),
         //locHistoryDiv       = root.find('#locationHistoryDiv'),
+        FIX_PATH = TAG.Worktop.Database.fixPath,
         info = root.find('#info'),
         loadingArea = root.find('#loadingArea'),
         locHistory = root.find('#locationHistory'),
@@ -109,6 +110,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         nobelMuted = false,
         toggleHotspotButton,
         hotspotsShown,
+        willImage,
 
         // misc uninitialized vars
         keywordSets,
@@ -283,6 +285,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * simply initializes everything the nobel will special case needs
      */
     function nobelWillInit() {
+        $(annotatedImage.viewer.canvas).hide()
         $("#toggler").hide();
         $("#toggler").off('click');
         $("#seadragonManipContainer").off('click');
@@ -310,6 +313,17 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             id: "titleDiv"
         })
         sideBar.append(titleDiv);
+
+        willImage = $(document.createElement('img'));
+        willImage.attr({
+            src: FIX_PATH(doq.Metadata.Source.substring(0, doq.Metadata.Source.length - 4))
+        })
+        willImage.css({
+            'position': 'absolute',
+            'left': '40.1275%',
+            'height': '100%',
+        })
+        root.append(willImage)
 
         nobelPlayPauseButton = $(document.createElement('img'));
         nobelPlayPauseButton.attr({
@@ -794,6 +808,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             assocMediaToShow = prevPageAssociatedMedia;
             sliderBar.remove();
             stopAudio();
+            willImage.remove();
+            willImage.die();
             $("#upIcon").remove();
             $("#downIcon").remove();
             $("#rightPageArrow").remove();
@@ -833,6 +849,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             assocMediaToShow = nextPageAssociatedMedia;
             sliderBar.remove();
             stopAudio();
+            willImage.remove();
+            willImage.die();
             $("#upIcon").remove();
             $("#downIcon").remove();
             $("#rightPageArrow").remove();
@@ -1842,13 +1860,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             infoPerson.text((gender ? gender + ", " : "") + (yearBorn ? "Born in " + yearBorn : ""));
             infoCountry.appendTo(info);
             infoPerson.appendTo(info);
-
-            for (i = 0; i < category.length; i++) {
-                infoPrize = $(document.createElement('div'));
-                infoPrize.addClass('infoPrize');
-                infoPrize.text(category[i].trim() + ", " + yearAward[i].trim());
-                infoPrize.css('font-size','14px');
-                infoPrize.appendTo(info);
+            if (category && category.length) {
+                for (i = 0; i < category.length; i++) {
+                    infoPrize = $(document.createElement('div'));
+                    infoPrize.addClass('infoPrize');
+                    infoPrize.text(category[i].trim() + ", " + yearAward[i].trim());
+                    infoPrize.css('font-size', '14px');
+                    infoPrize.appendTo(info);
+                }
             }
 
             infoAffiliation.text(affiliation ? "Affiliated with " + affiliation : "");
