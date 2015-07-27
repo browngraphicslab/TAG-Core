@@ -229,7 +229,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 createSeadragonControls();
                 TAG.Worktop.Database.getMaps(doq.Identifier, function (mps) {
                     customMapsLength = mps.length;
-                    makeSidebar();
+                    setTimeout(function(){makeSidebar();},250);  //hack for some async styling stuff - lucyvk
                 });
 
                 if (isNobelWill === true) {
@@ -1739,6 +1739,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             console.log("going back");
             stopAudio();
             TAG.Util.removeYoutubeVideo();
+            $('.annotatedImageHotspotCircle').remove(); //remove hotspots
+            $('.annotatedImageMediaDescription').remove();
             var collectionsPage,
                 collectionsPageRoot;
             backButton.off('click');
@@ -2007,7 +2009,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
          */
         function mediaClicked(media, justCircle, noPanToPoint) {
             console.log('mediaClicked'+ noPanToPoint);
-            //var toggleFunction = toggleLocationPanel;
             if (isNobelWill === true) {              
                 return function(){return};
             }
@@ -2064,16 +2065,21 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         if (hotspotsShown){
             hideHotspots();
         } else {
-            showHotspots(firstShowHotspots);
+            showHotspots();
         }
     }
 
-    function hideHotspots(initial){
+    function hideHotspots(){
         hotspotsShown = false;
         toggleHotspotButton.text('Show Hotspots');
         for (var y = 0; y < hotspots.guids.length; y++) {
+            //don't re-click hotspots that are already hidden
+            if (!hotspots[hotspots.guids[y]].isVisible()) {
+                console.log('skipping: ' + hotspots.guids[y]);
+                continue;
+            }
             //double click to open media before closing
-            if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible() && !initial){
+            if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible()){
                 mediaClicked(hotspots[hotspots.guids[y]])();
             }
             mediaClicked(hotspots[hotspots.guids[y]])();
@@ -2081,15 +2087,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }        
     }
 
-    function showHotspots(initial){
-        if (firstShowHotspots){
-            firstShowHotspots = false;
-        }
+    function showHotspots(){
         hotspotsShown = true;
         toggleHotspotButton.text('Hide Hotspots');
         for (var y = 0; y < hotspots.guids.length; y++) {
             //don't re-click hotspots that are already visible
-            if (hotspots[hotspots.guids[y]].isVisible() && !initial){
+            if (hotspots[hotspots.guids[y]].isVisible()){
                 console.log('skipping: '+ hotspots.guids[y]);
                 continue;
             }
@@ -2508,9 +2511,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         console.log('hotspots: ' + hotspots);
         //load hotspots
         for (var y = 0; y < hotspots.guids.length; y++) {
-            loadQueue.add(mediaClicked(hotspots[hotspots.guids[y]],true,true));
-            loadQueue.add(hideHotspots(true));
-        }        
+            //loadQueue.add(mediaClicked(hotspots[hotspots.guids[y]],true,true));
+            loadQueue.add(showHotspots());
+        }
+        loadQueue.add(hideHotspots());
+
+        //hack - trigger two clicks because styling was sometimes messing up for unknown reasons. lucyvk
+        //loadQueue.add(showHotspots());
+        //loadQueue.add(hideHotspots());
 
         if (isImpactMap) {
             var secondaryArtPage,
