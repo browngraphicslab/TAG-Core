@@ -36,6 +36,7 @@
 	width 90%
 	position relative
 	left 5%
+	color rgb(189,125,13)
 
 #newCatalogRoot .artTitle
 	background-color rgba(0, 0, 0, 0.6)
@@ -333,13 +334,17 @@
 	height 100%
 	width 75%
 
+
+#newCatalogRoot #topDiv
+	width 100%
+
 #newCatalogRoot #keywords
 	display inline
 	position relative
 	//left 0
 	float left
 	margin-top 1%
-	width 100%
+	width 80%
 
 #newCatalogRoot .keywordsSelect
 	font-size 70%
@@ -355,6 +360,8 @@
 #newCatalogRoot li.rowItem
 	display inline
 	margin-left 10px
+	border-radius 6pt
+	background-color #fea100
 
 #newCatalogRoot #loadingArea
 	background-color rgba(0, 0, 0,1)
@@ -465,22 +472,27 @@
 	text-overflow ellipsis
 	overflow hidden
 	white-space nowrap
+	margin-top 1.5%
+	margin-bottom 1.5%
 
 #newCatalogRoot #sorts
-	display inline
+	width 70%
+	display block
+	position relative
 
 #newCatalogRoot #search
+	width 20%
+	margin-top 1%
 	display inline
 	float left
+	
 
 #newCatalogRoot #searchButton
 	display inline-block
-	background-color #fff
+	background-color #fea100
 	color #000
-	border-color rgb(167,180,174)
-	border-style solid
 	border-width 0.05em
-	border-radius 2%
+	border-radius 6pt
 	font-size 90%
 	vertical-align middle
 	//font-weight bold
@@ -510,15 +522,18 @@
 #newCatalogRoot #searchInput
 	&::-ms-clear
 		display none
-	background-color white
-	border-color rgb(167,180,174)
+	background-color transparent
+	border-color #fea100
 	border-style solid
 	border-width 0.05em
-	color rgb(120,128,119)
+	color #fea100
 	font-size 80%
-	margin-top 0.5%
+	border-color rgb(189,125,13)
+	//margin-top 0.5%
+	margin-right 3%
 	z-index 1000
-	border-radius 2%
+	border-radius 6pt
+	float right
 
 #newCatalogRoot #searchTxt
 	color white
@@ -688,7 +703,7 @@
 	//text-align center
 	
 #newCatalogRoot .ui-dropdownchecklist-item input
-	border 1px solid #777
+	//border 1px solid #777
 	float left
 	//margin-bottom 1%
 	//margin-left 1%
@@ -700,17 +715,17 @@
 	//margin-left 5px
 
 #newCatalogRoot .ui-dropdownchecklist-selector 
-	background #fff
+	background #fea100
 
 #newCatalogRoot .ui-state-hover, .ui-state-active 
 	border-color #5794bf
 
 #newCatalogRoot .ui-dropdownchecklist-dropcontainer 
-	background-color #fff
+	background-color #fea100
 	text-align center
 
 #newCatalogRoot .ui-state-hover 
-	background-color #39f
+	background-color #fea100
 
 #newCatalogRoot .ui-state-disabled label 
 	color #ccc
@@ -726,11 +741,11 @@
 	padding-right 1%
 	padding-left 1%
 	text-align center
-	background-color #fff
-	border-color rgb(167,180,174)
-	border-style solid
-	border-width 0.05em
-	border-radius 2%
+	background-color #fea100
+	//border-color rgb(167,180,174)
+	//border-style solid
+	//border-width 0.05em
+	border-radius 6pt
 	vertical-align middle
 
 
@@ -743,7 +758,7 @@
 	overflow visible 
 
 #newCatalogRoot .ui-dropdownchecklist-selector.ui-state-hover 
-	background-color #fff
+	background-color #fea100
 
 #newCatalogRoot .ui-dropdownchecklist-group 
 	padding: 1px 2px 2px 2px;
