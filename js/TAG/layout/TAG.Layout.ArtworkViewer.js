@@ -1610,7 +1610,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         infoYear.text(doq.Metadata.Year);
         infoTitle.css({
             'color': '#' + PRIMARY_FONT_COLOR,
-            //'font-family': FONT
         });
 
         infoArtist.css({
@@ -1784,66 +1783,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             currentPage.obj = collectionsPage;
         }
 
-
-        // add more information for the artwork if curator added in the authoring mode
-        for (item in doq.Metadata.InfoFields) {
-            if (doq.Metadata.InfoFields.hasOwnProperty(item)) {
-                fieldTitle = item;
-                fieldValue = doq.Metadata.InfoFields[item];
-                infoCustom = $(document.createElement('div'));
-                infoCustom.addClass('infoCustom');
-                infoCustom.text(fieldTitle + ': ' + fieldValue);
-                infoCustom.css({
-                    'color': '#' + PRIMARY_FONT_COLOR,
-                    //'font-family': FONT
-                });
-                infoCustom.appendTo(info);
-            }
-        }
-
-        // make sure the info text fits in the div (TODO is this necessary?)
-        TAG.Util.fitText(info, 1.1);
-
-        // create drawers
-        if (doq.Metadata.Description) {
-            descriptionDrawer = createDrawer("Description");
-            descriptionDrawer.contents.html(Autolinker.link(doq.Metadata.Description.replace(/\n/g, "<br />"), { email: false, twitter: false }));
-            if (IS_WINDOWS) {
-                var links = descriptionDrawer.find('a');
-                links.each(function (index, element) {
-                    $(element).replaceWith(function () {
-                        return $.text([this]);
-                    });
-                });
-            }
-            assetContainer.append(descriptionDrawer);
-            currBottom = descriptionDrawer.height();
-        }
-
-        if (keywordSets && keywordSets[0] && keywordSets[0].shown && doq.Metadata.KeywordsSet1 && doq.Metadata.KeywordsSet1 !== '') {
-            keywordsSet1Drawer = initKeywordsSetDrawer(keywordSets[0].name, keywordSets[0].keywords, doq.Metadata.KeywordsSet1);
-            if (keywordsSet1Drawer) {
-                assetContainer.append(keywordsSet1Drawer);
-                currBottom += keywordsSet1Drawer.height();
-            }
-        }
-
-        if (keywordSets && keywordSets[1] && keywordSets[1].shown && doq.Metadata.KeywordsSet2 && doq.Metadata.KeywordsSet2 !== '') {
-            keywordsSet2Drawer = initKeywordsSetDrawer(keywordSets[1].name, keywordSets[1].keywords, doq.Metadata.KeywordsSet2);
-            if (keywordsSet2Drawer) {
-                assetContainer.append(keywordsSet2Drawer);
-                currBottom += keywordsSet2Drawer.height();
-            }
-        }
-
-        if (keywordSets && keywordSets[2] && keywordSets[2].shown && doq.Metadata.KeywordsSet3 && doq.Metadata.KeywordsSet3 !== '') {
-            keywordsSet3Drawer = initKeywordsSetDrawer(keywordSets[2].name, keywordSets[2].keywords, doq.Metadata.KeywordsSet3);
-            if (keywordsSet3Drawer) {
-                assetContainer.append(keywordsSet3Drawer);
-                currBottom += keywordsSet3Drawer.height();
-            }
-        }
-
         if (customMapsLength > 0 || locationList.length > 0) {
             locHistoryButton = initlocationHistory();
             assetContainer.append(locHistoryButton);
@@ -1852,83 +1791,213 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             root.find('#locationHistoryContainer').remove();
         }
 
-        var drawerToggleFn = null;
-        if (associatedMedia.guids.length > 0) {
-            for (i = 0; i < associatedMedia.guids.length; i++) {
-                curr = associatedMedia[associatedMedia.guids[i]];
-                if (curr.linq.Metadata.Type === 'Layer') {
-                    if (!xfadeDrawer) {
-                        xfadeSlider = $(document.createElement('div'))
-                            .attr('id', 'xfadeSlider');
-                        xfadeSlider.css({
-                            border: '2px solid rgba(255,255,255,0.8)',
-                            height: '25px',
-                            left: '10%',
-                            margin: '5px 0px 5px 0px',
-                            position: 'relative',
-                            width: '80%'
-                        });
-                        xfadeSliderPoint = $(document.createElement('div'))
-                            .attr('id', 'xfadeSliderPoint');
-                        xfadeSliderPoint.css({
-                            'background-color': 'rgba(255,255,255,0.8)',
-                            height: '100%',
-                            left: '0%',
-                            position: 'absolute',
-                            top: '0%',
-                            width: '50%'
-                        });
-                        xfadeSlider.append(xfadeSliderPoint);
+        // add more information for the artwork if curator added in the authoring mode
+            infoTitle.css({
+                'font-family': 'Trajan',
+                'text-transform': 'uppercase',
+                'font-size': '20px'
+            });
+            infoYear.css('display','none');
 
-                        var updateOverlay = function (evt) {
-                            if (isFading) {
-                                var leftPercent = (evt.clientX - xfadeSlider.offset().left) / xfadeSlider.width();
-                                xfadeSliderPoint.css('width', Math.min(leftPercent * 100, 100) + '%');
-                                root.find('.xfadeImg').css('opacity', leftPercent);
-                            }
-                        }
+            var infoPrize, infoPerson, infoCountry, infoAffiliation, 
+                category, yearAward, yearBorn, affiliation, citizenship, gender, prizeText;
 
-                        xfadeSlider.on('mousedown', function (evt) {
-                            isFading = true;
-                            updateOverlay(evt)
-                        });
-                        xfadeSlider.on('mousemove', function (evt) {
-                            updateOverlay(evt)
-                        });
-
-                        root.on('mouseup', function (evt) {
-                            isFading = false;
-                        });
-
-                        xfadeDrawer = createDrawer('Layers', xfadeSlider);
-                    }
-                    loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
-                } else {
-                    if (curr.isHotspot){
-                        if (!toggleHotspotButton){
-                            createToggleHotspotButton();
-                        }
-                    } 
-                    if (!mediaDrawer) {
-                        mediaDrawer = createDrawer('Associated Media', null, assocMediaToShow);
-                        if (mediaDrawer.drawerToggle) {
-                            drawerToggleFn = mediaDrawer.drawerToggle;
-                        }
-                    }
-                    loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
+            for (item in doq.Metadata.InfoFields) {
+                if (item === 'Category') {
+                    category = doq.Metadata.InfoFields[item].split(',');
                 }
+                if (item === 'Year of Award') {
+                    yearAward = doq.Metadata.InfoFields[item].split(',');
+                }
+                if (item === 'Year of Birth') {
+                    yearBorn = doq.Metadata.InfoFields[item];
+                }
+                if (item === 'Affilitation') {
+                    affiliation = doq.Metadata.InfoFields[item];
+                }
+                if (item === 'Citizenship 1') citizenship = doq.Metadata.InfoFields[item];
+                if (item === 'Citizenship 2') citizenship = citizenship + ", " + doq.Metadata.InfoFields[item];
+                if (item === 'Gender') gender = doq.Metadata.InfoFields[item];
+                if (item === 'Name') infoTitle.text(doq.Metadata.InfoFields[item]);
             }
-            if (mediaDrawer) {
-                assetContainer.append(mediaDrawer);
-                currBottom += mediaDrawer.height();
+
+            infoPerson = $(document.createElement('div'));
+            infoPerson.addClass('infoPerson');
+            infoPerson.css('font-size','14px');
+
+            infoCountry = $(document.createElement('div'));
+            infoCountry.addClass('infoCountry');
+            infoCountry.css('font-size','14px');
+
+            infoAffiliation = $(document.createElement('div'));
+            infoAffiliation.addClass('infoCountry');
+            infoAffiliation.css('font-size','14px');
+
+            infoCountry.text(citizenship);
+            infoPerson.text((gender ? gender + ", " : "") + (yearBorn ? "Born in " + yearBorn : ""));
+            infoCountry.appendTo(info);
+            infoPerson.appendTo(info);
+
+            for (i = 0; i < category.length; i++) {
+                infoPrize = $(document.createElement('div'));
+                infoPrize.addClass('infoPrize');
+                infoPrize.text(category[i].trim() + ", " + yearAward[i].trim());
+                infoPrize.css('font-size','14px');
+                infoPrize.appendTo(info);
             }
-            if (xfadeDrawer) {
-                assetContainer.append(xfadeDrawer);
-                currBottom += xfadeDrawer.height();
+
+            infoAffiliation.text(affiliation ? "Affiliated with " + affiliation : "");
+            infoAffiliation.appendTo(info);
+
+            if (doq.Metadata.Description) {
+                var description = doq.Metadata.Description;
+                var descriptionDiv = $(document.createElement('div'));
+                descriptionDiv.css({
+                    'font-size':'14px',
+                    'margin-top':'4%',
+                    'overflow-y': 'scroll',
+                    'max-height': '70%'
+                });
+                descriptionDiv.addClass('description');
+                descriptionDiv.text(description);
+                descriptionDiv.appendTo(assetContainer);
             }
-            if (drawerToggleFn && (typeof drawerToggleFn === "function")) {
-                loadQueue.add(drawerToggleFn);
-            }
+
+            // for (item in doq.Metadata.InfoFields) {
+            //     if (doq.Metadata.InfoFields.hasOwnProperty(item)) {
+            //         console.log(fieldTitle);
+            //         fieldTitle = item;
+            //         fieldValue = doq.Metadata.InfoFields[item];
+            //         infoCustom = $(document.createElement('div'));
+            //         infoCustom.addClass('infoCustom');
+            //         infoCustom.text(fieldTitle + ': ' + fieldValue);
+            //         infoCustom.css({
+            //             'color': '#' + PRIMARY_FONT_COLOR,
+            //         //'font-family': FONT
+            //         });
+            //         infoCustom.appendTo(info);
+            //     }
+            // }
+            // make sure the info text fits in the div (TODO is this necessary?)
+            // TAG.Util.fitText(info, 1.1);
+
+            // // create drawers
+            // if (doq.Metadata.Description) {
+            //     descriptionDrawer = createDrawer("Description");
+            //     descriptionDrawer.contents.html(Autolinker.link(doq.Metadata.Description.replace(/\n/g, "<br />"), { email: false, twitter: false }));
+            //     if (IS_WINDOWS) {
+            //         var links = descriptionDrawer.find('a');
+            //         links.each(function (index, element) {
+            //             $(element).replaceWith(function () {
+            //                 return $.text([this]);
+            //             });
+            //         });
+            //     }
+            //     assetContainer.append(descriptionDrawer);
+            //     currBottom = descriptionDrawer.height();
+            // }
+
+            // if (keywordSets && keywordSets[0] && keywordSets[0].shown && doq.Metadata.KeywordsSet1 && doq.Metadata.KeywordsSet1 !== '') {
+            //     keywordsSet1Drawer = initKeywordsSetDrawer(keywordSets[0].name, keywordSets[0].keywords, doq.Metadata.KeywordsSet1);
+            //     if (keywordsSet1Drawer) {
+            //         assetContainer.append(keywordsSet1Drawer);
+            //         currBottom += keywordsSet1Drawer.height();
+            //     }
+            // }
+
+            // if (keywordSets && keywordSets[1] && keywordSets[1].shown && doq.Metadata.KeywordsSet2 && doq.Metadata.KeywordsSet2 !== '') {
+            //     keywordsSet2Drawer = initKeywordsSetDrawer(keywordSets[1].name, keywordSets[1].keywords, doq.Metadata.KeywordsSet2);
+            //     if (keywordsSet2Drawer) {
+            //         assetContainer.append(keywordsSet2Drawer);
+            //         currBottom += keywordsSet2Drawer.height();
+            //     }
+            // }
+
+            // if (keywordSets && keywordSets[2] && keywordSets[2].shown && doq.Metadata.KeywordsSet3 && doq.Metadata.KeywordsSet3 !== '') {
+            //     keywordsSet3Drawer = initKeywordsSetDrawer(keywordSets[2].name, keywordSets[2].keywords, doq.Metadata.KeywordsSet3);
+            //     if (keywordsSet3Drawer) {
+            //         assetContainer.append(keywordsSet3Drawer);
+            //         currBottom += keywordsSet3Drawer.height();
+            //     }
+            // }
+
+            // var drawerToggleFn = null;
+            // if (associatedMedia.guids.length > 0) {
+            //     for (i = 0; i < associatedMedia.guids.length; i++) {
+            //         curr = associatedMedia[associatedMedia.guids[i]];
+            //         if (curr.linq.Metadata.Type === 'Layer') {
+            //             if (!xfadeDrawer) {
+            //                 xfadeSlider = $(document.createElement('div'))
+            //                     .attr('id', 'xfadeSlider');
+            //                 xfadeSlider.css({
+            //                     border: '2px solid rgba(255,255,255,0.8)',
+            //                     height: '25px',
+            //                     left: '10%',
+            //                     margin: '5px 0px 5px 0px',
+            //                     position: 'relative',
+            //                     width: '80%'
+            //                 });
+            //                 xfadeSliderPoint = $(document.createElement('div'))
+            //                     .attr('id', 'xfadeSliderPoint');
+            //                 xfadeSliderPoint.css({
+            //                     'background-color': 'rgba(255,255,255,0.8)',
+            //                     height: '100%',
+            //                     left: '0%',
+            //                     position: 'absolute',
+            //                     top: '0%',
+            //                     width: '50%'
+            //                 });
+            //                 xfadeSlider.append(xfadeSliderPoint);
+
+            //                 var updateOverlay = function (evt) {
+            //                     if (isFading) {
+            //                         var leftPercent = (evt.clientX - xfadeSlider.offset().left) / xfadeSlider.width();
+            //                         xfadeSliderPoint.css('width', Math.min(leftPercent * 100, 100) + '%');
+            //                         root.find('.xfadeImg').css('opacity', leftPercent);
+            //                     }
+            //                 }
+
+            //                 xfadeSlider.on('mousedown', function (evt) {
+            //                     isFading = true;
+            //                     updateOverlay(evt)
+            //                 });
+            //                 xfadeSlider.on('mousemove', function (evt) {
+            //                     updateOverlay(evt)
+            //                 });
+
+            //                 root.on('mouseup', function (evt) {
+            //                     isFading = false;
+            //                 });
+
+            //                 xfadeDrawer = createDrawer('Layers', xfadeSlider);
+            //             }
+            //             loadQueue.add(createMediaButton(xfadeDrawer.contents, curr));
+            //         } else {
+            //             if (curr.isHotspot){
+            //                 if (!toggleHotspotButton){
+            //                     createToggleHotspotButton();
+            //                 }
+            //             } 
+            //             if (!mediaDrawer) {
+            //                 mediaDrawer = createDrawer('Associated Media', null, assocMediaToShow);
+            //                 if (mediaDrawer.drawerToggle) {
+            //                     drawerToggleFn = mediaDrawer.drawerToggle;
+            //                 }
+            //             }
+            //             loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
+            //         }
+            //     }
+            //     if (mediaDrawer) {
+            //         assetContainer.append(mediaDrawer);
+            //         currBottom += mediaDrawer.height();
+            //     }
+            //     if (xfadeDrawer) {
+            //         assetContainer.append(xfadeDrawer);
+            //         currBottom += xfadeDrawer.height();
+            //     }
+            //     if (drawerToggleFn && (typeof drawerToggleFn === "function")) {
+            //         loadQueue.add(drawerToggleFn);
+            //     }
         }
 
         /**
@@ -2089,7 +2158,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }        
     }
 
-
         // Load tours and filter for tours associated with this artwork
         TAG.Worktop.Database.getTours(function (tours) {
             var relatedTours,
@@ -2215,7 +2283,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
         assetContainer.css({
             'max-height': sideBarInfo.height() - info.height() + (info.offset().top - sideBar.offset().top) + 'px',
-
         });
 
 
