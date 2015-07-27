@@ -1551,11 +1551,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                 outerContainer.append(descDiv);
                             }
                         }
-<<<<<<< HEAD
-=======
-
-                      
->>>>>>> 681a2d062c6fc5cb69acf666cc2e49a2a46f5f3a
                         return;
                     }
                 } else {
@@ -1706,32 +1701,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     }
                 }
                 if (DESCRIPTION) {
-<<<<<<< HEAD
-                    descDiv = $(document.createElement('div'));
-                    descDiv.addClass('annotatedImageMediaDescription');
-                    descDiv.css({
-                        'width': '90%',
-                        'text-align': 'center',
-                        'display': 'block',
-                        'margin-left': 'auto',
-                        'margin-right': 'auto',
-                        'background-color': 'transparent',
-                        'font-size': '100%'
-                    });
-                    descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
-                    if (IS_WINDOWS) {
-                        var links = descDiv.find('a');
-                        links.each(function (index, element) {
-                            $(element).replaceWith(function () {
-                                return $.text([this]);
-                            });
-=======
                     if ((outerContainer.find('.annotatedImageMediaDescription').length === 0) && (outerContainer.find('mediaInnerContainer').length>0)) {
                         descDiv = $(document.createElement('div'));
                         descDiv.addClass('annotatedImageMediaDescription');
                         descDiv.css({
-                            'font-size': descTextSize
->>>>>>> 681a2d062c6fc5cb69acf666cc2e49a2a46f5f3a
+                            'width': '90%',
+                            'text-align': 'center',
+                            'display': 'block',
+                            'margin-left': 'auto',
+                            'margin-right': 'auto',
+                            'background-color': 'transparent',
+                            'font-size': '100%'
                         });
                         descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
                         if (IS_WINDOWS) {
