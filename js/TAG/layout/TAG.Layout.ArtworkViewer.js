@@ -1918,13 +1918,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     if (!mediaDrawer) {
                         var mediaHeader = $(document.createElement('div'));
                         mediaHeader.text("Associated Media and Tours:");
-                        var mediaDrawer = $(document.createElement('div'));
                         mediaHeader.appendTo(assetContainer);
-                        mediaDrawer.appendTo(assetContainer);
-                        //mediaDrawer = createDrawer('Associated Media and Tours:', null, assocMediaToShow);
-                        // if (mediaDrawer.drawerToggle) {
-                        //     drawerToggleFn = mediaDrawer.drawerToggle;
-                        // }
+                        mediaDrawer = createDrawer('Associated Media and Tours:', null, assocMediaToShow);
+                         if (mediaDrawer.drawerToggle) {
+                             drawerToggleFn = mediaDrawer.drawerToggle;
+                         }
                     }
                     loadQueue.add(createMediaButton(mediaDrawer.contents, curr));
                 }
