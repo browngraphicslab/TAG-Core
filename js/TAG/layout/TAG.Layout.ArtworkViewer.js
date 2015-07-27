@@ -2015,7 +2015,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             console.log('mediaClicked'+ noPanToPoint);
             //var toggleFunction = toggleLocationPanel;
             if (isNobelWill === true) {              
-                return function(){return};
+                return function () { return };
             }
             return function (evt) {
                 evt && evt.stopPropagation();
