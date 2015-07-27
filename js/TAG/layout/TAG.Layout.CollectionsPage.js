@@ -66,6 +66,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         twoDeep = options.twoDeep, //show two tiles per column
         backToGuid = options.backToGuid, //for impact map experience
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
+        
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -100,7 +101,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         artworkInCollectionList = [],
         lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
-        NOBEL_COLOR = 'rgb(189,125,13)',
+        NOBEL_COLOR = 'rgb(254,161,0)',
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
         MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
@@ -980,11 +981,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 .hover(
                     function () {
                         if ($(this).attr('disabled') !== 'disabled') {
-                            $(this).css('background-color', '#fea100');
+                            $(this).css('background-color', NOBEL_COLOR);
                             $(this).css('color', 'white');
                         }
                     }, function () {
-                        $(this).css('background-color', '#fea100');
+                        $(this).css('background-color', NOBEL_COLOR);
                         $(this).css('color', 'black');
                     })
                 .click(
@@ -1736,7 +1737,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                 doNothing($(this).attr('id'));
                                 doNothing(sortButtonTags[$(this).attr('id')]);
                                 changeDisplayTag(currentArtworks, sortButtonTags[this.textContent == "Tours" ? 'Tour' : this.textContent]);
-                                $(this).css('color', 'white');
+                                $(this).css('color', NOBEL_COLOR);
                             });
                
                 //var spec = {
@@ -4516,7 +4517,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         var unselectedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR);
        root.find('.rowButton').css('color', unselectedColor);
        if (tag){
-            root.find('#' + tag.toLowerCase() + 'Button').css('color', SECONDARY_FONT_COLOR);
+            root.find('#' + tag.toLowerCase() + 'Button').css('color', NOBEL_COLOR);
        }
     }
 
