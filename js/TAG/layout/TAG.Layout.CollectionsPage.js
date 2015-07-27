@@ -65,6 +65,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         showOtherCollections = options.showOtherCollections,
         twoDeep = options.twoDeep, //show two tiles per column
         backToGuid = options.backToGuid, //for impact map experience
+        NOBEL_WILL_COLOR = 'rgb(254,161,0)',
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -3524,11 +3525,12 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     descText,
                     miniTilesHolder,
                     miniTile;
-                var uiDocfrag = document.createDocumentFragment();
                 //Entire tile
-                previewTile = $(document.createElement('div'))
-                    .addClass('previewTile');
-                uiDocfrag.appendChild(previewTile[0]);
+                previewTile = $(document.createElement('div')); 
+                previewTile.css({
+                    'height': '100%',
+                    'width' : '100%'
+                })
 
                 //Top portion of the tile (with image, title, and subtitle)
                 tileTop = $(document.createElement('div'))
@@ -3540,16 +3542,67 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                          .text(TAG.Util.htmlEntityDecode(artwork.Name))
                     .css({
                         'color': SECONDARY_FONT_COLOR,
+                        'top' : '1%'
                         //'font-family': FONT,
                     });
+
+
+                var yellowTextFields = ['Category', 'Year of Award', 'Citizenship 1', 'Gender']
+                var needsYellowText = true;
+                var yellowTextTop = $(document.createElement('div'));
+                var yellowTextBottom = $(document.createElement('div'));
+                var darkDiv = $(document.createElement('div'));;
+                for (var k = 0; k < yellowTextFields.length;k++) {
+                    if (Object.keys(artwork.Metadata.InfoFields).indexOf(yellowTextFields[k]) === -1) {
+                        needsYellowText = false;
+                        break;
+                    }
+                }
+                if (needsYellowText) {
+                    yellowTextTop.css({
+                        'bottom': '12%',
+                        'height': '8%',
+                        'width': '100%',
+                        'position': 'absolute',
+                        'color': NOBEL_WILL_COLOR,
+                        'background-color': 'transparent',
+                        'text-align': 'center',
+                        'font-weight' : '900',
+                        'font-size': BASE_FONT_SIZE * 1 / 2 + 'em',
+                    }).text(artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ')[artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ').length-1] + ', ' + artwork.Metadata.InfoFields[yellowTextFields[1]]);
+                    yellowTextBottom.css({
+                        'bottom': '2%',
+                        'height': '8%',
+                        'width': '100%',
+                        'position': 'absolute',
+                        'color': NOBEL_WILL_COLOR,
+                        'background-color': 'transparent',
+                        'text-align': 'center',
+                        'font-weight': '900',
+                        'font-size': BASE_FONT_SIZE * 1 / 2 + 'em',
+                    }).text(artwork.Metadata.InfoFields[yellowTextFields[2]] + ', ' + artwork.Metadata.InfoFields[yellowTextFields[3]]);
+                    darkDiv.css({
+                        'bottom': '00%',
+                        'height': '20%',
+                        'width': '100%',
+                        'position': 'absolute',
+                        'background-color': 'rgba(0,0,0,.6)',
+                    })
+                }
+                
 
                 //Image div
                 imgDiv = $(document.createElement('div'))
                     .addClass('imgDiv');
-
+                imgDiv.css({
+                    'width': '80%',
+                    'height': '80%',
+                    'top': '10%',
+                    'left' : '10%'
+                })
+                imgDiv.append(darkDiv).append(yellowTextTop).append(yellowTextBottom);
                 //Explore div
                 exploreTab = $(document.createElement('div'))
-                    .addClass('exploreTab');
                 if (!onAssocMediaView) {
                     exploreTab.on('mousedown', function(){
 
@@ -3580,10 +3633,29 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 } 
 
                 //Explore text
+                var whiteArrow = $(document.createElement('img'))
+                whiteArrow.attr({
+                    src: tagPath + 'images/icons/white_arrow.svg'
+                })
+                whiteArrow.css({
+                    'height': '100%',
+                    'top': '10%',
+                    'right': '15%',
+                    'width': '10%',
+                    'bottom': '0%',
+                    'position' : 'absolute',
+                })
                 exploreText = $(document.createElement('div'))
-                    .addClass('exploreText')
                     .css("font-size",  BASE_FONT_SIZE*2/3 + 'em')
-                    .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Tap to Learn More");
+                    .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Learn More");
+                exploreTab.css({
+                    'top': '90%',
+                    'height': '8%',
+                    'position': 'absolute',
+                    'text-align': 'center',
+                    'width' : '100%'
+                });
+                exploreText.append(whiteArrow);
 
                 exploreTab.append(exploreText)
 
@@ -3769,7 +3841,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                    
                 }
 
-                function addAssociationRow(numberAssociatedDoqs){
+                function addAssociationRow(numberAssociatedDoqs){//depricated!
                     var tileSpacing;
                     if (numberAssociatedDoqs === 0){
                         miniTilesHolder.hide();
@@ -3977,13 +4049,13 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
                 //Append everything
                 infoText.append(artistInfo)
-                        .append(yearInfo);
+                        //.append(yearInfo);    depricated!
 
                 imgDiv.append(currentThumbnail)
-                    .append(exploreTab)  
                     .append(infoText);
 
                 tileTop.append(imgDiv)
+                    .append(exploreTab)
                     .append(titleSpan)
                     .append(infoText);
 
@@ -3998,10 +4070,14 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                            .append(miniTilesLabel);
 
                 previewTile.append(tileTop)
-                           .append(tileBottom);
+                           //.append(tileBottom);
 
                 //selectedArtworkContainer.append(previewTile);
-                selectedArtworkContainer.append($(uiDocfrag));
+                selectedArtworkContainer.css({
+                    'border': '5px solid '+NOBEL_WILL_COLOR,
+                    'border-radius': '14px',
+                })
+                selectedArtworkContainer.append(previewTile);
                 root.find('.tile').css('opacity','0.5');
   
                 var numberAssociatedDoqs = 0;

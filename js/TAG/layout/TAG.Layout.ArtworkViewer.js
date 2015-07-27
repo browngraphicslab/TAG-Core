@@ -64,7 +64,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         isSecondaryArt = options.isSecondaryArt,
         smallPreview = options.smallPreview, //for reloading back into collections page
         titleIsName = options.titleIsName, // for reloading back into collections page
-        NOBEL_WILL_COLOR = 'rgb(189,125,13)',
+        NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         
         //options to maintain customizations when going back to collections page
         isImpactMap = options.isImpactMap,
