@@ -2081,14 +2081,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         if (toggleHotspotButton) {
             toggleHotspotButton.text('Show Hotspots');
         }
-            toggleHotspotButton.text('Show Hotspots');
-            for (var y = 0; y < hotspots.guids.length; y++) {
-                //don't re-click hotspots that are already hidden
+        for (var y = 0; y < hotspots.guids.length; y++) {
+            //don't re-click hotspots that are already hidden
                 if (!hotspots[hotspots.guids[y]].isVisible()) {
                     console.log('skipping: ' + hotspots.guids[y]);
                     continue;
                 }
-                //double click to open media before closing
+                //double click to optoggleHotspotButtonen media before closing
                 if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible()) {
                     mediaClicked(hotspots[hotspots.guids[y]])();
                 }
@@ -2096,7 +2095,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 console.log('hiding: ' + hotspots.guids[y]);
             }
         }
-    }
 
     function showHotspots(){
         hotspotsShown = true;

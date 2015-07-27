@@ -1521,7 +1521,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             }
                         }
                         if (DESCRIPTION) {
-                            if ((outerContainer.find('.annotatedImageMediaDescription').length === 0)) {
+                            if (outerContainer.find('.annotatedImageMediaDescription').length === 0) {
                                 descDiv = $(document.createElement('div'));
                                 descDiv.addClass('annotatedImageMediaDescription');
                                 descDiv.css({
@@ -1701,7 +1701,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     }
                 }
                 if (DESCRIPTION) {
-                    if ((outerContainer.find('.annotatedImageMediaDescription').length === 0)) {
+                    if (outerContainer.find('.annotatedImageMediaDescription').length === 0) {
                         descDiv = $(document.createElement('div'));
                         descDiv.addClass('annotatedImageMediaDescription');
                         descDiv.css({
