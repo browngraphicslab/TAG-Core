@@ -2693,7 +2693,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             $.each(keywordSearchOptions, function (setIndex, set) {
                 numKeywordsChecked += keywordSearchOptions[setIndex].keywords.length;
             });
-            artText.css('font-size', '23pt');
+            artText.css('font-size', '.8em');
             artText.css('color', 'rgb(254,161,0)');
             artTitle.css('background-color', 'rgba(0,0,0,.5)');
             if (!onSearch && (searchInput.val() !== '' || numKeywordsChecked !== 0)) {
