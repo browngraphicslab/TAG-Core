@@ -3,33 +3,33 @@
 ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //acts as ITE object that contains the orchestrator, etc
     var totalTourDuration;
     var data = infoData;
-   var  orchestrator            = new ITE.Orchestrator(this, options.isAuthoring, idleTimer),
-        self = this,
-        playerConfiguration = {
-                attachVolume:               true,
-                attachLoop:                 true,
-                attachPlay:                 true,
-                attachProgressBar:          true,
-                attachFullScreen:           true,
-                attachProgressIndicator:    true,
-                fadeControls:               true,
-                hideControls:               false,
-                autoPlay:                   false,
-                autoLoop:                   false,
-                setMute:                    false,
-                setInitVolume:              1,
-                allowSeek:                  true,
-                setFullScreen:              false,
-                setStartingOffset:          0,
-                setEndTime:                 NaN //defaults to end of tour if NaN
-        },    //dictionary of player configuration options; defaults being set
-    //DOM related
-        ITEHolder = $(document.createElement("div"))
-            .attr("id", "ITEHolder"),
-        bottomContainer = $(document.createElement("div"))
-            .attr("id", "bottomContainer"),
-        buttonContainer = $(document.createElement("div"))
-            .attr("id", "buttonContainer");
+    var orchestrator = new ITE.Orchestrator(this, options.isAuthoring, idleTimer),
+         self = this,
+         playerConfiguration = {
+             attachVolume: true,
+             attachLoop: true,
+             attachPlay: true,
+             attachProgressBar: true,
+             attachFullScreen: true,
+             attachProgressIndicator: true,
+             fadeControls: true,
+             hideControls: false,
+             autoPlay: false,
+             autoLoop: false,
+             setMute: false,
+             setInitVolume: 1,
+             allowSeek: true,
+             setFullScreen: false,
+             setStartingOffset: 0,
+             setEndTime: NaN //defaults to end of tour if NaN
+         },    //dictionary of player configuration options; defaults being set
+     //DOM related
+         ITEHolder = $(document.createElement("div"))
+             .attr("id", "ITEHolder"),
+         bottomContainer = $(document.createElement("div"))
+             .attr("id", "bottomContainer"),
+         buttonContainer = $(document.createElement("div"))
+             .attr("id", "buttonContainer");
    if (!options.isAuthoring) {
        ITEHolder.append(bottomContainer);
        bottomContainer.append(buttonContainer);
@@ -44,7 +44,9 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
        fullScreenButton = $(document.createElement("img")),
        progressIndicator = $(document.createElement("div")),
        volumeLevelContainer = $(document.createElement("div")),
+       infoAvailableIcon = $(document.createElement("img")),
        slidingPane = createSlidingPane(),
+       infoTracksVisible = [],
 
 
    //Other atributes
@@ -91,6 +93,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             attachPlay();
             attachLoop();
             attachProgressBar();
+            attachInfoIcon()
             //attachFullScreen();
             attachProgressIndicator();
         };
@@ -100,6 +103,29 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
     function getOrchestrator() {
         return orchestrator;
+    }
+
+
+    /*
+    * I/P:   none
+    * Attach information icon 
+    * O/P:   none
+    */
+    function attachInfoIcon() {
+        infoAvailableIcon.css({
+            'width': '40px',
+            'height': '40px',
+            'top': '10px',
+            'right': '10px',
+            'background-color': 'transparent',
+            'position': 'absolute',
+            'z-index': '1000000',
+            'opacity' : '.25'
+        })
+        infoAvailableIcon.attr({
+            src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/unlit_info.svg"
+        })
+        ITEHolder.append(infoAvailableIcon);
     }
 
     /*
@@ -546,7 +572,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function seek(e) {
-        if (playerConfiguration.allowSeek){
+        if (playerConfiguration.allowSeek) {
             progressBar.css({
                 width : e.pageX - ITEHolder.offset().left
             })
@@ -814,6 +840,67 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         track.load()
         return track
     }
+
+    function setInfoTrack(z, bool){
+        if (z > -1) {
+            var doq = getDoqFromZIndex(z);
+            if (doq !== null) {
+                if (bool === true) {
+                    if (infoTracksVisible.indexOf(z) === -1) {
+                        infoTracksVisible.push(z);
+                    }
+                }
+                else {
+                    var index = infoTracksVisible.indexOf(z)
+                    if (index > -1) {
+                        var n = []
+                        for (var i = 0; i < infoTracksVisible.length; i++) {
+                            if (infoTracksVisible[i] !== z) {
+                                n.push(infoTracksVisible[i])
+                            }
+                        }
+                        infoTracksVisible = n;
+                    }
+                }
+                updateInfoVisible();
+            }
+        }
+    }
+
+    function updateInfoVisible() {
+        if (infoTracksVisible.length > 0) {
+            setInfoAvailable(true);
+        }
+        else {
+            setInfoAvailable(false);
+        }
+
+    }
+
+    function setInfoAvailable(yes) {
+        if (yes === true) {
+            infoAvailableIcon.attr({
+                src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/lit_info.svg"
+            })
+            infoAvailableIcon.css({
+                'opacity' : '1'
+            })
+            
+        }
+        else {
+            infoAvailableIcon.attr({
+                src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/unlit_info.svg"
+            })
+            infoAvailableIcon.css({
+                'opacity': '.25'
+            })
+        }
+    }
+
+
+
+
+
     function updateManipObjectZ(z) {
         if (z === -1) {
             if (infoPaneOut === true) {
@@ -838,8 +925,47 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         var title = $(document.createElement('div'));
         var tab = $(document.createElement('div'));
         var tabImg = $(document.createElement('img'));
-        var block = $(document.createElement('div'));
         var infoBlock = $(document.createElement('div'));
+        var topRight = $(document.createElement('div'));
+        var bottomRight = $(document.createElement('div'));
+        var outBottom = $(document.createElement('div'));
+        var outTop = $(document.createElement('div'));
+        topRight.css({
+            'position' : 'absolute',
+            'border-top-right-radius': '12px',
+            'border-right': '2px solid rgb(254,161,0)',
+            'border-top': '2px solid rgb(254,161,0)',
+            'width': '2%',
+            'height': '2%',
+            'right': '-2px',
+            'top' : '-2px'
+        })
+        outTop.css({
+            'position': 'absolute',
+            'border-left': '2px solid rgb(254,161,0)',
+            'width': '2%',
+            'height': '42%',
+            'left': '100%',
+            'top': '2%'
+        })
+        bottomRight.css({
+            'position': 'absolute',
+            'border-bottom-right-radius': '12px',
+            'border-right': '2px solid rgb(254,161,0)',
+            'border-bottom': '2px solid rgb(254,161,0)',
+            'width': '2%',
+            'height': '2%',
+            'right': '-2px',
+            'bottom': '-2px'
+        })
+        outBottom.css({
+            'position': 'absolute',
+            'border-left': '2px solid rgb(254,161,0)',
+            'width': '2%',
+            'height': '41.9%',
+            'left': '100%',
+            'bottom': '2%'
+        })
         infoBlock.css({
             'position': 'absolute',
             'height': '90%',
@@ -851,17 +977,11 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'color': 'white',
             'font-size': '.9em',
             'overflow': "auto",
-            'text-align': 'left'
+            'text-align': 'left',
+            'scrollbar-face-color': 'rgb(254,161,0)',
+            'scrollbar-arrow-color': 'transparent',
+            'scrollbar-track-color': 'rgb(254,161,0)',
         }).attr('id', 'infoBlock');
-        block.css({
-            'position': 'absolute',
-            'height': '12%',
-            'width': '8%',
-            'background-color': 'black',
-            'right': '-1%',
-            'z-index': '9999999',
-            'top': '44.4%'
-        })
         tabImg.attr({
             src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg",
             id : 'tabImg'
@@ -880,12 +1000,14 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'height': '70%',
             'top' : '12%',
             'width':'26%',
-            'background-color' : 'black',
+            'background-color': 'rgba(0,0,0,.6)',
             'z-index': '9999999',
             'border-top-right-radius': '12px',
             'border-bottom-right-radius': '12px',
-            'border' : '3px solid rgb(189,125,13)',
-            'left' : '-26%'
+            'border-bottom': '2px solid rgb(254,161,0)',
+            'border-top': '2px solid rgb(254,161,0)',
+            //'border' : '2px solid rgb(254,161,0)',
+            'left' : '-26.1%'
         })
         pane.attr({
             id : 'infoPaneDiv'
@@ -908,21 +1030,31 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         tab.css({
             'position': 'absolute',
             'height': '12%',
-            'width': '8%',
-            'background-color': 'black',
+            'width': '8.5%',
+            'background-color': 'rgb(254,161,0)',
             'border-top-right-radius': '12px',
             'border-bottom-right-radius': '12px',
-            'right': '-9.25%',
-            'border': '3px solid rgb(189,125,13)',
+            'left': '100%',
+            'border-bottom': '2px solid rgb(254,161,0)',
+            'border-top': '2px solid rgb(254,161,0)',
+            'border-right': '2px solid rgb(254,161,0)',
+            'border-left-style': 'none',
+            //'border': '2px solid rgb(254,161,0)',
             'z-index': '9999999',
             'top': '44%'
         }).click(toggleInfoPane)
         title.attr({
             id : 'infoPaneTitleDiv'
         })
+        tab.attr({
+            id:'infoPaneTab'
+        })
         tab.append(tabImg);
         pane.append(tab);
-        pane.append(block)
+        pane.append(outTop);
+        pane.append(topRight);
+        pane.append(outBottom);
+        pane.append(bottomRight);
         pane.append(infoBlock);
         pane.append(title);
         $("#ITEContainer").append(pane);
@@ -939,29 +1071,49 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     function updateInfoPane(doq) {
         makePaneVisible(true);
         $(".infoPaneInfoField").remove();
-        $("#infoPaneTitleDiv").text(doq.Metadata.Name || "");
+        if (doq.Metadata.InfoFields && doq.Metadata.InfoFields.Name) {
+            $("#infoPaneTitleDiv").text(doq.Metadata.InfoFields.Name);
+        }
+        else {
+            $("#infoPaneTitleDiv").text(doq.Metadata.Name || "");
+        }
         var top = 0;
+
+        var special = ['Category', 'Year of Award', 'Gender','Citizenship 1','Citizenship 2'];
+        var keys = Object.keys(doq.Metadata.InfoFields);
+
+        for (var i = 0; i < special.length; i++) {
+            if (doq.Metadata.InfoFields[special[i]]) {
+                var d = makeInfoField(doq.Metadata.InfoFields[special[i]],true).css('top', top + 'px');
+                $("#infoBlock").append(d);
+                top += d.height() + 10;
+            }
+        }
+
         if (doq.Metadata.Description) {
             var d = makeInfoField("Description: " + doq.Metadata.Description).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height() +10;
+            top += d.height() + 10;
         }
         if (doq.Metadata.Artist) {
             var d = makeInfoField("Artist: " + doq.Metadata.Artist).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height()+10;
+            top += d.height() + 10;
         }
         if (doq.Metadata.Date) {
             var d = makeInfoField("Date: " + doq.Metadata.Date).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height()+10;
-        }
-        var keys = Object.keys(doq.Metadata.InfoFields);
-        for (var key = 0; key < keys.length;key++) {
-            var val = doq.Metadata.InfoFields[keys[key]];
-            var d = makeInfoField(keys[key] + ": " + val).css('top', top + 'px');
-            $("#infoBlock").append(d);
             top += d.height() + 10;
+        }
+
+        for (var key = 0; key < keys.length; key++) {
+            var val = doq.Metadata.InfoFields[keys[key]];
+            var d;
+            if (special.indexOf(keys[key]) === -1) {
+                d = makeInfoField(keys[key] + ": " + val).css('top', top + 'px');
+                $("#infoBlock").append(d);
+                top += d.height() + 10;
+            }
         }
     }
     function makePaneVisible(b) {
@@ -974,27 +1126,81 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     }
     function showInfoPane(callback){
         infoPaneOut = true;
-        $("#infoPaneDiv").animate({ left: '-1%' }, 1000, 'easeInOutQuart', callback ? function () { callback(), $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg") } : function () { $("#tabImg").attr('src', itePath + 'ITE%20Core/ITEManual/ITEPlayerImages/Close.svg') })
+        $("#infoPaneDiv").animate({ left: '-1%' }, 1000, 'easeInOutQuart', callback ? function () {
+            callback(),
+            $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg")
+            $("#infoPaneTab").css({
+                'background-color': 'rgba(0,0,0,.6)',
+                'border-right': '2px solid rgb(254,161,0)',
+                'border-top': '2px solid rgb(254,161,0)',
+                'border-bottom': '2px solid rgb(254,161,0)',
+            })
+        } : function () {
+            $("#tabImg").attr('src', itePath + 'ITE%20Core/ITEManual/ITEPlayerImages/Close.svg');
+            $("#infoPaneTab").css({
+                'background-color': 'rgba(0,0,0,.6)',
+                'border-right': '2px solid rgb(254,161,0)',
+                'border-top': '2px solid rgb(254,161,0)',
+                'border-bottom': '2px solid rgb(254,161,0)',
+            })
+        })
+        
     }
     function hideInfoPane(callback){
         infoPaneOut = false;
-        $("#infoPaneDiv").animate({ left: '-26%' }, 500, 'easeInOutQuart', callback ? function () { callback(), $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg") } : function () { $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg") })
+        $("#infoPaneDiv").animate({ left: '-26.1%' }, 500, 'easeInOutQuart', callback ? function () {
+            callback(),
+            $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
+            $("#infoPaneTab").css({
+                'background-color': 'rgb(254,161,0)',
+                'border-right': '2px solid rgb(254,161,0)',
+                'border-top': '2px solid rgb(254,161,0)',
+                'border-bottom': '2px solid rgb(254,161,0)',
+            })
+        } : function () {
+            $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
+            $("#infoPaneTab").css({
+                'background-color': 'rgb(254,161,0)',
+                'border-right': '2px solid rgb(254,161,0)',
+                'border-top': '2px solid rgb(254,161,0)',
+                'border-bottom': '2px solid rgb(254,161,0)',
+            })
+        })
+        
+
     }
-    function makeInfoField(text) {
+
+    function makeInfoField(text, special) {
         var outer = $(document.createElement('div'));
         outer.attr({
-            class : 'infoPaneInfoField'
+            class: 'infoPaneInfoField'
         })
-        outer.css({
-            'position': 'absolute',
-            'z-index': '9999999999',
-            'width': '90%',
-            'left': '0%',
-            'background-color': 'transparent',
-            'color': 'white',
-            'font-size': '.9em',
-            'text-align': 'left'
-        }).text(text);
+        if (special === true) {
+            outer.css({
+                'position': 'absolute',
+                'z-index': '9999999999',
+                'width': '90%',
+                'left': '0%',
+                'background-color': 'transparent',
+                'color': 'rgb(254,161,0)',
+                'font-size': '1.05em',
+                'text-align': 'left',
+                'font-weight' : 'bold'
+            });
+        }
+        else{ 
+            outer.css({
+                'position': 'absolute',
+                'z-index': '9999999999',
+                'width': '90%',
+                'left': '0%',
+                'background-color': 'transparent',
+                'color': 'white',
+                'font-size': '.9em',
+                'text-align': 'left'
+            });
+        }
+        outer.text(text);
         return outer;
     }
 
@@ -1042,4 +1248,5 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     this.updateInkPositions = updateInkPositions;
     this.clearControlsTimeout = clearControlsTimeout;
     this.updateManipObjectZ = updateManipObjectZ;
+    this.setInfoTrack = setInfoTrack;
 };

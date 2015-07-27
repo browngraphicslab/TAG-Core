@@ -32,6 +32,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         artworkName = doq.Name,        // artwork's title
         associatedMedia = { guids: [] },   // object of associated media objects for this artwork, keyed by media GUID;
                                            // also contains an array of GUIDs for cleaner iteration
+        hotspots = { guids: [] }, //associated media that are hotspots and array of guids for iteration
         toManip = dzManip,         // media to manipulate, i.e. artwork or associated media
         rootHeight = $('#tagRoot').height(), //tag root height
         rootWidth = $('#tagRoot').width(),  //total tag root width for manipulation (use root.width() instead for things that matter for splitscreen styling)
@@ -58,6 +59,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     initOSD();
     return {
         getAssociatedMedia: getAssociatedMedia,
+        getHotspots: getHotspots,
         unload: unload,
         dzManip: dzManip,
         dzScroll: dzScroll,
@@ -116,6 +118,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
     function getAssociatedMedia() {
         return associatedMedia;
+    }
+
+    function getHotspots(){
+        return hotspots;
     }
 
     /**
@@ -589,10 +595,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         OSDHolder.css({
             'height': '100%',
             'width': '100%',
-            'left' : '12%',
             'position': 'absolute',
             'z-index': '0'
         });
+        if (isNobelWill === true) {
+            OSDHolder.css('left', '12%');
+        }
         //The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or width at which the zoom out will be constrained.
         //Setting it to 0, for example will allow you to zoom out infinitly.
         var minZoomImageRatio = 0.9; //OSD default- don't allow as much zoom out on deep zooms as in tour player
@@ -627,9 +635,14 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         if (locationHist) {
             viewer.setMouseNavEnabled(false);
         }
-        //fix for sticky mouse- in progress
-        if (!IS_WINDOWS){
-            /**
+
+        //This is a fix for the "sticky mouse" open seadragon issue in web browsers
+        //this issue is a known bug in the version of OSD we are using and is related
+        //to a buggy implementation on their end of the "setMouseNavEnabled/Disabled" functions
+        //and causes mousemove events to continue to drag viewer elements after mouseup
+        //this bug has been fixed in later versions of OSD- LVK
+        if (!IS_WINDOWS && !isNobelWill){
+            //overlay over the viewer that selectively stops mousemove events from propogating to the viewer
             var interactionOverlayOSD = $(document.createElement('div')).attr('id', "interactionOverlayOSD");
             interactionOverlayOSD.css({
                 height: "100%",
@@ -637,45 +650,34 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 position: "absolute",
                 left: 0,
                 top: 0,
-                'pointer-events': 'none'
+                'pointer-events': 'none',
+                'z-index': '5'
             });
             root.append(interactionOverlayOSD);
-            var mouseDown = false;
-            var setMouse = function(){
-                //viewer.setMouseNavEnabled(mouseDown);
-                if (mouseDown = false){
+            var setMouse = function(mouseDown){
+                if (mouseDown === false){
                     interactionOverlayOSD.css('pointer-events', 'auto');
-                    interactionOverlayOSD.on('mousedown',function(evt){
+                    interactionOverlayOSD.on('mousemove',function(evt){
                         evt.stopPropagation();
                     });
+                    //on mousedown, trigger an event on the viewer so interaction can resume
+                    interactionOverlayOSD.on('mousedown', function(){
+                        viewer.raiseEvent('mousedown');
+                        setMouse(true);
+                    });
                 } else{
+                    //clear handlers and let pointer events filter through
                     interactionOverlayOSD.off();
                     interactionOverlayOSD.css('pointer-events', 'none');
                 }
             };
-            //var keyDown = false;
             viewer.addHandler('canvas-drag', function(){
-                console.log('canvas-drag');
-                mouseDown = true;
-                setMouse();
+                setMouse(true);
             });
-            viewer.addHandler('canvas-drag-end', function(){
-                console.log('canvas-drag-end');
-                mouseDown = false;
-                setMouse();
-            })
+            //when canvas-release fires (rather than 'mouseup', which never fires) then stop allowing mousemove evts on the viewer
             viewer.addHandler('canvas-release', function(){
-                console.log('canvas-release');
-                mouseDown = false;
-                setMouse();
+                setMouse(false);
             })
-            viewer.addHandler('mousedown', function(){
-                console.log('mousedown');
-                mouseDown = true;
-                setMouse();
-            })
-**/
-
         }
 
         viewer.clearControls();
@@ -842,7 +844,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             return function (linq) {
                 associatedMedia[assocMedia.Identifier] = createMediaObject(assocMedia, linq);
                 associatedMedia.guids.push(assocMedia.Identifier);
-
+                if (associatedMedia[assocMedia.Identifier].isHotspot){
+                    hotspots[assocMedia.Identifier] = associatedMedia[assocMedia.Identifier];
+                    hotspots.guids.push(assocMedia.Identifier);
+                }
                 if (++done >= total && callback) {
                     callback(associatedMedia);
                 }
@@ -900,6 +905,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             thumbnailButton,
             startLocation,
             play;
+        
         // get things rolling
         initMediaObject();
 
@@ -1004,7 +1010,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         circle = $(document.createElement("img"));
                         circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
                         circle.addClass('annotatedImageHotspotCircle');
-                        circle.click(function () {
+                        circle.click(function (evt) {
+                            evt && evt.stopPropagation();
                             toggleMediaObject(true);
                             TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                                 tobj.current_artwork = doq.Identifier;
@@ -1813,6 +1820,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         tobj.assoc_media_interactions = "pan"; //TODO what is this
                         tobj.offscreen = "true";
                     });
+                    console.log('media offscreen');
                     hideMediaObject();
                     pauseResetMediaObject();
                     //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
@@ -1928,6 +1936,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         tobj.assoc_media_interactions = "pan"; //TODO what is this
                         tobj.offscreen = "true";
                     });
+                    console.log('media offscreen');
                     hideMediaObject();
                     pauseResetMediaObject();
                     //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
@@ -2039,7 +2048,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * a hotspot, show it in a slightly random position.
          * @method showMediaObject
          */
-        function showMediaObject(isHotspotIcon, hideOuterContainer) {
+        function showMediaObject(isHotspotIcon, noPanToPoint) {
             var t,
                 l,
                 h = outerContainer.height(),
@@ -2069,7 +2078,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         addOverlay(circle[0], position, OpenSeadragon.OverlayPlacement.CENTER);
                     }
                     //don't pan to position 
-                    if (!isImpactMap) {
+                    console.log(noPanToPoint);
+                    //if (!noPanToPoint) {
+                    if (!isImpactMap){
                         viewer.viewport.panTo(position, false);
                     }
                     viewer.viewport.applyConstraints()
@@ -2206,13 +2217,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          * Show if hidden, hide if shown
          * @method toggleMediaObject
          */
-        function toggleMediaObject(isHotspotIcon, hideOuterContainer) {
+        function toggleMediaObject(isHotspotIcon, noPanToPoint) {
+            console.log('toggling media object');
             if (hotspotMediaHidden) {
-                showMediaObject(isHotspotIcon, hideOuterContainer);
+                showMediaObject(isHotspotIcon, noPanToPoint);
             } else {
-                mediaHidden ? showMediaObject(isHotspotIcon) : hideMediaObject(isHotspotIcon);
+                mediaHidden ? showMediaObject(isHotspotIcon, noPanToPoint) : hideMediaObject(isHotspotIcon);
             }
-
             outerContainerhidden = mediaHidden;
         }
 
@@ -2223,6 +2234,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
          */
         function isVisible() {
             return !mediaHidden;
+        }
+
+        function isHotspotMediaVisible(){
+            return !hotspotMediaHidden;
         }
 
         function toggleHotspot() {
@@ -2259,7 +2274,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             showHotspot: showHotspot,
             createMediaElements: createMediaElements,
             isVisible: isVisible,
-            mediaManipPreprocessing: mediaManipPreprocessing
+            mediaManipPreprocessing: mediaManipPreprocessing,
+            isHotspot : IS_HOTSPOT,
+            isHotspotMediaVisible: isHotspotMediaVisible
         };
     }
 };

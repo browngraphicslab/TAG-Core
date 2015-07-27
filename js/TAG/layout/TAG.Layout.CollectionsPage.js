@@ -63,7 +63,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         smallPreview= options.smallPreview,
         titleIsName = options.titleIsName,
         showOtherCollections = options.showOtherCollections,
-        twoDeep = options.twoDeep,
+        twoDeep = options.twoDeep, //show two tiles per column
+        backToGuid = options.backToGuid, //for impact map experience
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -100,7 +101,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
         TILE_BUFFER = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
         TILE_HEIGHT_RATIO = 200,                                          //ratio between width and height of artwork tiles
-        TILE_WIDTH_RATIO = 200,
+        TILE_WIDTH_RATIO = twoDeep ? 255 : 200,
         ANIMATION_DURATION = 800,                                         // duration of timeline zoom animation
         DIMMING_FACTOR = 1.7,                                          //dimming of unhighlighted text
         PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
@@ -150,7 +151,22 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
     backButton.attr('src', tagPath + 'images/icons/Back.svg');
 
-    backButton.click(function () {    
+    backButton.click(function () {   
+        if (backToGuid){
+            TAG.Worktop.Database.getDoq(backToGuid,
+                function (result) {
+                    var artworkViewer = TAG.Layout.ArtworkViewer({
+                        doq: result,
+                        isNobelWill: false,
+                        isImpactMap: true,
+                });
+                var newPageRoot = artworkViewer.getRoot();
+                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                currentPage.obj = artworkViewer;
+            });             
+        } 
         TAG.Layout.StartPage(null, function (page) {
             // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
             // For now, we'll just hide the whole keywords div.
@@ -169,7 +185,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         if (IS_WINDOWS) {
             backButton.css('padding-top', '');
         }
-        backButton.css('display', 'auto');
+        backButton.css('display', 'inline');
     }
 
     // get things rolling
@@ -2712,25 +2728,26 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             tileDiv.append(main);
 
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
-            if (!twoDeep){
-                var tileHeight =   (0.3)* tileDivHeight;  //(0.45) * tileDivHeight;
-                main.css({ 'height': (0.3) * tileDivHeight });//.css({ 'height': (0.45) * tileDivHeight });
+            if (!twoDeep) {
+                var tileHeight = (0.3) * tileDivHeight;  
+                main.css({ 'height': (0.3) * tileDivHeight });
             } else {
-                var tileHeight =   (0.45) * tileDivHeight;
+                var tileHeight = (0.45) * tileDivHeight;
                 main.css({ 'height': (0.45) * tileDivHeight });
             }
             main.css({ 'width': (tileHeight / TILE_HEIGHT_RATIO) * TILE_WIDTH_RATIO });
             // Align tile so that it follows the grid pattern we want
-            if (!twoDeep){
-            main.css({
-                'left': Math.floor(i / 3) * (main.width() + TILE_BUFFER),//Math.floor(i / 2) * (main.width() + TILE_BUFFER),
-                'top': Math.floor(i % 3) * (main.height() + TILE_BUFFER)//Math.floor(i % 2) * (main.height() + TILE_BUFFER)
-            });
+
+            if (!twoDeep) {
+                main.css({
+                    'left': Math.floor(i / 3) * (main.width() + TILE_BUFFER),//Math.floor(i / 2) * (main.width() + TILE_BUFFER),
+                    'top': Math.floor(i % 3) * (main.height() + TILE_BUFFER)//Math.floor(i % 2) * (main.height() + TILE_BUFFER)
+                });
             } else {
                 main.css({
-                'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER),//Math.floor(i / 2) * (main.width() + TILE_BUFFER),
-                'top': Math.floor(i % 2) * (main.height() + TILE_BUFFER)//Math.floor(i % 2) * (main.height() + TILE_BUFFER)
-            });
+                    'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER),
+                    'top': Math.floor(i % 2) * (main.height() + TILE_BUFFER)
+                });
             }
 
             //Add scrollbar to catalog div if needed
@@ -4494,7 +4511,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     onAssocMediaView : onAssocMediaView,
                     smallPreview: smallPreview,
                     titleIsName: titleIsName,
-                    isNobelWill: false
+                    isNobelWill: false,
+                    twoDeep: twoDeep,
+                    hideKeywords: hideKeywords,
                 });
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');

@@ -237,7 +237,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                         function () {
                             console.log("error getting doq in tourplayer")
                         }, function () {
-                            console.log("error getting doq in tourplayer 2")
+                            console.log("error getting doq in tourplayer .")
                     });
                     nobelDoq.push(self.iteTour.tracks[i].guid);
                     needed++;
