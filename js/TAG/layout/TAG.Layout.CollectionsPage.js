@@ -2693,13 +2693,29 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             $.each(keywordSearchOptions, function (setIndex, set) {
                 numKeywordsChecked += keywordSearchOptions[setIndex].keywords.length;
             });
+            artText.css('font-size', '.8em');
+            artText.css('color', 'rgb(254,161,0)');
+            artTitle.css('background-color', 'rgba(0,0,0,.5)');
             if (!onSearch && (searchInput.val() !== '' || numKeywordsChecked !== 0)) {
-                main.css({ 'opacity': '0.2' });
-                main.css('border', '1px solid black');
+                main.css({
+                    'opacity': '0.3'
+                });
+                
             } else if (onSearch) {
-                tileImage.css({ 'opacity': '1.0' });
-                main.css('border', '1px solid rgba(255, 255, 255, 0.5)');
+                main.css({
+                    'opacity': '1'
+                });
             }
+            main.hover(
+                function () {
+                    artText.css('color', 'white');
+                    artTitle.css('background-color','rgb(254,161,0)')
+                },
+                function(){
+                    artText.css('color', 'rgb(254,161,0)');
+                    artTitle.css('background-color', 'rgba(0,0,0,.5)')
+                }
+            )
             main.append(tileImage)
                 .append(artTitle)
                 .append(yearTextBox);
@@ -2769,9 +2785,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 artworksButton.removeAttr('disabled');
                 displayArea.append($(tileDivDocFrag));
             }
-            if (artworkShown) {
-                main.css({ "opacity": .5 });
-            };
         };
     }
 
@@ -3188,7 +3201,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 });
             root.find('.tile').each(function (tileIndex, tile) {
                 if (!searchResultsLength || tileIndex < searchResultsLength) { // If searchResultsLength is nul||undefined there was no search done.
-                    $(this).css('opacity', '1');
+                    $(this).css({
+                        'opacity': '1',
+                    });
+
                 } else {
                     $(this).css('opacity', '0.2');
                 }
