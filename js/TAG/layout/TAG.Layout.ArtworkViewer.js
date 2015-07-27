@@ -2076,24 +2076,25 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
     }
 
-    function hideHotspots(){
+    function hideHotspots() {
         hotspotsShown = false;
         if (toggleHotspotButton) {
+            hotspotsShown = false;
             toggleHotspotButton.text('Show Hotspots');
-        }
-        for (var y = 0; y < hotspots.guids.length; y++) {
-            //don't re-click hotspots that are already hidden
-            if (!hotspots[hotspots.guids[y]].isVisible()) {
-                console.log('skipping: ' + hotspots.guids[y]);
-                continue;
-            }
-            //double click to open media before closing
-            if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible()){
+            for (var y = 0; y < hotspots.guids.length; y++) {
+                //don't re-click hotspots that are already hidden
+                if (!hotspots[hotspots.guids[y]].isVisible()) {
+                    console.log('skipping: ' + hotspots.guids[y]);
+                    continue;
+                }
+                //double click to open media before closing
+                if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible()) {
+                    mediaClicked(hotspots[hotspots.guids[y]])();
+                }
                 mediaClicked(hotspots[hotspots.guids[y]])();
+                console.log('hiding: ' + hotspots.guids[y]);
             }
-            mediaClicked(hotspots[hotspots.guids[y]])();
-            console.log('hiding: '+ hotspots.guids[y]);
-        }        
+        }
     }
 
     function showHotspots(){
