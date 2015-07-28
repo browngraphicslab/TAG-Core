@@ -425,7 +425,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToIntroButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("Loading Introductory Tour...");
                 switchPage(INTRO_TOUR, null, null, null);
             }
         });
@@ -433,7 +432,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToWinnersButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("Loading Laureates...");
                 switchPage(LAUREATE_NAME, false, true, true);
             }
         });
@@ -441,7 +439,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToHistoryButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("Loading History and Impact...");
                 switchPage(HISTORY_NAME, true);
             }
         });
@@ -449,7 +446,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToWillButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("Loading Alfred Nobel's Will...");
                 switchPage(WILL_NAME);
             }
         });
@@ -457,7 +453,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToLifeButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("Loading Alfred Nobel's Life...");
                 switchPage(LIFE_NAME, true);
             }
         });
@@ -540,6 +535,24 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 options = {},
                 i,
                 currName;
+
+            switch (collectionName) {
+                case WILL_NAME:
+                    loadingScreen("Loading Alfred Nobel's Will...");
+                    break;
+                case LIFE_NAME:
+                    loadingScreen("Loading Alfred Nobel's Life...");
+                    break;
+                case HISTORY_NAME:
+                    loadingScreen("Loading History and Impact...");
+                    break;
+                case INTRO_TOUR:
+                    loadingScreen("Loading Introductory Tour...");
+                    break;
+                case LAUREATE_NAME:
+                    loadingScreen("Loading Laureates...");
+                    break;
+            }
 
             $('.goToWrapper').off('click');
 
