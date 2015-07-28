@@ -2582,7 +2582,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 return function () {
                     if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
-                        if (previouslyClicked === main || currCollection.Name === "The Life of Alfred Nobel") {
+                        if (previouslyClicked === main) {
                             //click = "double";
                             switchPage(currentWork, null, getContainerLeft(currentWork, false))();
 
@@ -2658,6 +2658,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }();
             }
             main.on('click', function () {
+                if (currCollection.Name === "The Life of Alfred Nobel") {
+                    artworkSelected = true;
+                    switchPage(currentWork, null, getContainerLeft(currentWork, false))();
+                    return;
+                }
                 doubleClickHandler()
 
                 // if the idle timer hasn't started already, start it
@@ -2818,7 +2823,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             });
             artText.css('font-size', '.8em');
             artText.css('color', 'rgb(254,161,0)');
-            artTitle.css('background-color', 'rgba(0,0,0,.5)');
+            artTitle.css('background-color', 'rgba(0,0,0,.8)');
             if (!onSearch && (searchInput.val() !== '' || numKeywordsChecked !== 0)) {
                 main.css({
                     'opacity': '0.3'
@@ -3678,11 +3683,16 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 var yellowTextTop = $(document.createElement('div'));
                 var yellowTextBottom = $(document.createElement('div'));
                 var darkDiv = $(document.createElement('div'));;
-                for (var k = 0; k < yellowTextFields.length;k++) {
-                    if (Object.keys(artwork.Metadata.InfoFields).indexOf(yellowTextFields[k]) === -1) {
-                        needsYellowText = false;
-                        break;
+                if (artwork.Metadata && artwork.Metadata.InfoFields) {
+                    for (var k = 0; k < yellowTextFields.length; k++) {
+                        if (Object.keys(artwork.Metadata.InfoFields).indexOf(yellowTextFields[k]) === -1) {
+                            needsYellowText = false;
+                            break;
+                        }
                     }
+                }
+                else {
+                    needsYellowText = false;
                 }
                 if (needsYellowText) {
                     yellowTextTop.css({
@@ -4747,8 +4757,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
-                    prevPreview: currentArtwork,
-                    prevTag : currentTag,
+                    prevPreview: currCollection.Name === "The Life of Alfred Nobel" ? null : currentArtwork,
+                    prevTag: currCollection.Name === "The Life of Alfred Nobel" ? null : currentTag,
                     prevScroll: catalogDiv.scrollLeft(),
                     prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
                     prevCollection: currCollection,
