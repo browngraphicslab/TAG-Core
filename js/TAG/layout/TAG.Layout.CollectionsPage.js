@@ -2656,6 +2656,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }();
             }
             main.on('click', function () {
+                if (currCollection.Name === "The Life of Alfred Nobel") {
+                    previouslyClicked = main;
+                }
                 doubleClickHandler()
 
                 // if the idle timer hasn't started already, start it

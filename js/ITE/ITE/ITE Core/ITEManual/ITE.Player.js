@@ -102,7 +102,6 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             //attachFullScreen();
             attachProgressIndicator();
         };
-        showInfoPopup();
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls
         // Must be able to dynamically resize and position buttons based on screen size, TAG frame size, and number of buttons
     };
@@ -186,10 +185,10 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     */
     function hideInitialOverlay() {
         if (initialLoading === true) {
+            $("#backButtonContainer").append($("#backButton"));
             initialLoading = false
             TAG.Util.hideLoading(initialOverlay)
             initialOverlay.remove();
-            $("#backButtonContainer").append($("#backButton"));
         }
     }
 

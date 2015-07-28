@@ -1026,7 +1026,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         if (isNobelWill === true && pageNum > 0 && pageNum < 5) {
             switch (pageNum) {
                 case 1:
-                    return "f4b858e5-130c-4cd9-b4f9-45502fed8123"
+                    return "9f3ed716-af94-4934-8c5e-79d1065a9fa2"
                 case 2:
                     return "eada3ca7-27f1-42e1-98e6-ea79d7438f36"
                 case 3:

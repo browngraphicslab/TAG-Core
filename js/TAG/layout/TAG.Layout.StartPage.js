@@ -528,7 +528,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             }
             if (collectionName){
                 if (collectionName === WILL_NAME) {
-                    TAG.Worktop.Database.getDoq("f4b858e5-130c-4cd9-b4f9-45502fed8123",
+                    TAG.Worktop.Database.getDoq("9f3ed716-af94-4934-8c5e-79d1065a9fa2",
                         function (result) {
                             var artworkViewer = TAG.Layout.ArtworkViewer({
                                 doq: result,

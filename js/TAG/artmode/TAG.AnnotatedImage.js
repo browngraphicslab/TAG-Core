@@ -1597,6 +1597,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                     'font-size': '100%',
                                     'background-color': 'transparent',
                                     'text-align': 'center',
+                                    'max-height' : root.height()/3 + 'px',
                                     'width': '90%',
                                     'display': 'block',
                                     'margin-left': 'auto',
@@ -1780,6 +1781,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             'text-align': 'center',
                             'display': 'block',
                             'margin-left': 'auto',
+                            'max-height': root.height() / 3 + 'px',
                             'margin-right': 'auto',
                             'background-color': 'transparent',
                             'font-size': '100%'
@@ -2259,8 +2261,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function hideMediaObject(isHotspotIcon) {
             //TAG.Util.removeYoutubeVideo();
             outerContainer.stop();
-
-            circle.attr('src', tagPath + 'images/unlit_info.svg');
+            if (circle) {
+                circle.attr('src', tagPath + 'images/unlit_info.svg');
+            }
 
             var toHideID = '#thumbnailButton-' + mdoq.Identifier;
             if (outerContainer.parents('#metascreen-R').length) {
