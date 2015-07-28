@@ -2140,7 +2140,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             if ((IS_HOTSPOT && hotspotMediaHidden) || (IS_HOTSPOT && !isHotspotIcon && !hotspotMediaHidden)) {
                 circle.attr('src', tagPath + 'images/lit_info.svg');
             } else {
-                circle.attr('src', tagPath + 'images/unlit_info.svg');
+                if (circle) {
+                    circle.attr('src', tagPath + 'images/unlit_info.svg');
+                }
             }
 
             // temporary crashfix for errors where viewport isn't properly initialized
@@ -2149,7 +2151,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 doNothing("[DIAGNOSTIC] viewer or viewer.viewport is null in showMediaObject() call for " + (TITLE ? TITLE : "untitled") + "asset");
                 return;
             }
-
+            
             if (IS_XFADE) {
                 //doNothing(appending);
                 //assetCanvas.append(outerContainer);
