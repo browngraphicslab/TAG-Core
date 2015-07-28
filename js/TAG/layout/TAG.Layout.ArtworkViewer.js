@@ -228,10 +228,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     debugger;
                     doNothing(err); // TODO if we hit a network error, show an error message
                 }
+                //hiding splitscreen for nobel demo
+                /**
                 if (isNobelWill !== true && !isImpactMap) {
                     TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                     initSplitscreen();
                 }
+                **/
                 createSeadragonControls();
                 TAG.Worktop.Database.getMaps(doq.Identifier, function (mps) {
                     customMapsLength = mps.length;
