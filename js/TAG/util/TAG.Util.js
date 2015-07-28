@@ -8217,7 +8217,7 @@ TAG.Util.Artwork = (function () {
                 //border: '1px solid rgba(255,255,255,0.4)',
             });
             titleDiv.css({
-                margin: '1% 2% 0% 2%',
+                margin: '1% 2% 2% 2%',
                 top: '80%',
                 height: '20%',
                 'white-space': 'nowrap',

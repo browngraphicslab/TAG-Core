@@ -926,8 +926,20 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.hide();
             } else {
                 // set up divs for the associated media
-                outerContainer.css('width', 0.29 * root.width() + 'px');
-                innerContainer.css('backgroundColor', 'rgba(0,0,0,0.65)');
+                outerContainer.css({
+                    'width': 0.29 * root.width() + 'px',
+                    'border-radius': '2%',
+                    'padding-top': '1%',
+                    'padding-left': '2%',
+                    'padding-right': '2%',
+                    'padding-bottom': '2%',
+                    'border': '6px solid rgb(254,161,0)',
+                    'background-color': 'black'
+                });
+                //innerContainer.css({
+                //    'backgroundColor': 'rgba(0,0,0,0.65)',
+                //    'height': '90%'
+                //});
                 // for scaling and preventing overflow issues with the close button, we use a holder for the title
                 // .remove is safety check for inertia looping issue
                 titleDiv && titleDiv.remove();
@@ -942,9 +954,21 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     'position': 'relative',
                     'margin-bottom': '5px',
                     'width': '100%',
+                    'margin-left': 'auto',
+                    'margin-right': 'auto',
                 });
                 titleTextHolder = $(document.createElement('div'));
-                titleTextHolder.addClass('annotatedImageMediaTitle');//.css({'text-overflow':'ellipsis','white-space':'nowrap'});
+                titleTextHolder.addClass('annotatedImageMediaTitle');
+                titleTextHolder.css({
+                    'font-family': 'Trajan',
+                    'font-weight': 'normal',
+                    'text-transform': 'uppercase',
+                    'font-size': '35%',
+                    'text-align': 'center',
+                    'display': 'block',
+                    'margin-left': 'auto',
+                    'margin-right': 'auto'
+                })
 
                 titleDiv.append(titleTextHolder);
                 var titlefontsize = LADS.Util.getMaxFontSizeEM("WWWWW", 0.6, 999999, parseInt(titleHeight) + 1, 0.025);
@@ -1459,7 +1483,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                 outerContainer.css('height', outerContainer.width() * 0.89);
                             }
                             innerContainer.css({
-                                'height': '100%'
+                                'height': '90%'
                             });
                             var mediaHeight;
                             DESCRIPTION ? mediaHeight = '85%' : mediaHeight = '100%';
@@ -1497,11 +1521,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             }
                         }
                         if (DESCRIPTION) {
-                            if ((outerContainer.find('.annotatedImageMediaDescription').length === 0) && (outerContainer.find('.mediaInnerContainer').length > 0)) {
+                            if (outerContainer.find('.annotatedImageMediaDescription').length === 0) {
                                 descDiv = $(document.createElement('div'));
                                 descDiv.addClass('annotatedImageMediaDescription');
                                 descDiv.css({
-                                    'font-size': descTextSize
+                                    'font-size': '100%',
+                                    'background-color': 'transparent',
+                                    'text-align': 'center',
+                                    'width': '90%',
+                                    'display': 'block',
+                                    'margin-left': 'auto',
+                                    'margin-right': 'auto'
                                 });
                                 descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
                                 if (IS_WINDOWS) {
@@ -1521,8 +1551,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                 outerContainer.append(descDiv);
                             }
                         }
-
-                      
                         return;
                     }
                 } else {
@@ -1569,8 +1597,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     img.src = FIX_PATH(SOURCE);
                     $(img).css({
                         position: 'relative',
-                        width: '100%',
-                        height: 'auto'
+                        width: '80%',
+                        height: 'auto',
+                        display: 'block',
+                        'margin-left': 'auto',
+                        'margin-right': 'auto'
                     });
                     mediaContainer.append(img);
                     outerContainer.css('min-width', '');
@@ -1625,7 +1656,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         'width': '30%',
                     });
                     if (descDiv) {
-                        outerContainer.css('height', outerContainer.width() * 1.15);
+                        outerContainer.css('height', outerContainer.width() * 1.20);
                     } else {
                         outerContainer.css('height', outerContainer.width() * 0.89);
                     }
@@ -1633,9 +1664,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         'height': '100%'
                     });
                     var mediaHeight;
-                    DESCRIPTION ? mediaHeight = '85%' : mediaHeight = '100%';
+                    DESCRIPTION ? mediaHeight = '85%' : mediaHeight = '85%';
                     mediaContainer.css({
-                        'height': mediaHeight
+                        'height': 1.25*mediaHeight
                     });
                     iframe = $(document.createElement('iframe'));
                     iframe.attr({
@@ -1670,11 +1701,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     }
                 }
                 if (DESCRIPTION) {
-                    if ((outerContainer.find('.annotatedImageMediaDescription').length === 0) && (outerContainer.find('mediaInnerContainer').length>0)) {
+                    if (outerContainer.find('.annotatedImageMediaDescription').length === 0) {
                         descDiv = $(document.createElement('div'));
                         descDiv.addClass('annotatedImageMediaDescription');
                         descDiv.css({
-                            'font-size': descTextSize
+                            'width': '90%',
+                            'text-align': 'center',
+                            'display': 'block',
+                            'margin-left': 'auto',
+                            'margin-right': 'auto',
+                            'background-color': 'transparent',
+                            'font-size': '100%'
                         });
                         descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
                         if (IS_WINDOWS) {
@@ -2009,8 +2046,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'height': cssHeight,
                 'min-width': '30px',
                 'z-index': '1',
-                'right': '1.5%',
-                'margin-top': '7px'
+                'right': '-3%',
+                'margin-top': '-1%'
             });
             return closeButton;
         }

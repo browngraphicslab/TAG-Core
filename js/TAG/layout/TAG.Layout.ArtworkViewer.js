@@ -64,7 +64,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         isSecondaryArt = options.isSecondaryArt,
         smallPreview = options.smallPreview, //for reloading back into collections page
         titleIsName = options.titleIsName, // for reloading back into collections page
-        NOBEL_WILL_COLOR = 'rgb(189,125,13)',
+        NOBEL_WILL_COLOR = 'rgb(254,161,0)',
+        //NOBEL_WILL_COLOR = 'rgb(189,125,13)',
         NOBEL_ORANGE_COLOR = 'rgb(254,161,0)',
         
         //options to maintain customizations when going back to collections page
@@ -1884,7 +1885,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'color': NOBEL_ORANGE_COLOR
         });
 
-        infoCountry.text(citizenship);
+        infoCountry.text((citizenship ? citizenship : ""));
         infoPerson.text((gender ? gender + ", " : "") + (yearBorn ? "Born in " + yearBorn : ""));
         infoCountry.appendTo(info);
         infoPerson.appendTo(info);
@@ -2016,7 +2017,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         function mediaClicked(media, justCircle, noPanToPoint) {
             console.log('mediaClicked'+ noPanToPoint);
             if (isNobelWill === true) {              
-                return function(){return};
+                return function () { return };
             }
             return function (evt) {
                 evt && evt.stopPropagation();
@@ -2075,23 +2076,25 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
     }
 
-    function hideHotspots(){
+    function hideHotspots() {
         hotspotsShown = false;
-        toggleHotspotButton.text('Show Hotspots');
+        if (toggleHotspotButton) {
+            toggleHotspotButton.text('Show Hotspots');
+        }
         for (var y = 0; y < hotspots.guids.length; y++) {
             //don't re-click hotspots that are already hidden
-            if (!hotspots[hotspots.guids[y]].isVisible()) {
-                console.log('skipping: ' + hotspots.guids[y]);
-                continue;
-            }
-            //double click to open media before closing
-            if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible()){
+                if (!hotspots[hotspots.guids[y]].isVisible()) {
+                    console.log('skipping: ' + hotspots.guids[y]);
+                    continue;
+                }
+                //double click to optoggleHotspotButtonen media before closing
+                if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible()) {
+                    mediaClicked(hotspots[hotspots.guids[y]])();
+                }
                 mediaClicked(hotspots[hotspots.guids[y]])();
+                console.log('hiding: ' + hotspots.guids[y]);
             }
-            mediaClicked(hotspots[hotspots.guids[y]])();
-            console.log('hiding: '+ hotspots.guids[y]);
-        }        
-    }
+        }
 
     function showHotspots(){
         hotspotsShown = true;
