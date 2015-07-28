@@ -65,6 +65,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         showOtherCollections = options.showOtherCollections,
         twoDeep = options.twoDeep, //show two tiles per column
         backToGuid = options.backToGuid, //for impact map experience
+        backToAssoc = options.backToAssoc, // for impact map experience
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         
 
@@ -168,13 +169,15 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         doq: result,
                         isNobelWill: false,
                         isImpactMap: true,
+                        assocMediaToShow: backToAssoc
                 });
                 var newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
                 TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                 currentPage.obj = artworkViewer;
-            });             
+                });
+            return;
         } 
         TAG.Layout.StartPage(null, function (page) {
             // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
@@ -761,7 +764,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      */
     function addKeywords() {
 
-        if (hideKeywords){
+        if (hideKeywords) {
+            //hacky way to do styling- better structure would need to happen for extensibility
+            $("#searchInput").css('margin-top', '2.5%');
+            $(".sortButton").css({ 'margin-top': '0%', 'margin-right': '1%' });
+            $("#bottomContainer").css({ 'top': '15%', 'height': '80%' });
             return;
         }
         // Don't repeat this.
