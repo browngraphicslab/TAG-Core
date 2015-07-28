@@ -2171,10 +2171,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     }
                     //don't pan to position 
                     console.log(noPanToPoint);
+                    //disabling pan to point for now -lucyvk
                     //if (!noPanToPoint) {
-                    if (!isImpactMap){
-                        viewer.viewport.panTo(position, false);
-                    }
+                    //if (!isImpactMap){
+                       // viewer.viewport.panTo(position, false);
+                    //}
                     viewer.viewport.applyConstraints()
                     t = viewer.viewport.pixelFromPoint(position).y - h / 2 + circleRadius / 2;
                     l = viewer.viewport.pixelFromPoint(position).x + circleRadius;

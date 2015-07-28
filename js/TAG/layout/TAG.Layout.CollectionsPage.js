@@ -64,6 +64,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         titleIsName = options.titleIsName,
         showOtherCollections = options.showOtherCollections,
         twoDeep = options.twoDeep, //show two tiles per column
+        oneDeep = options.oneDeep, //show one tile per column
         backToGuid = options.backToGuid, //for impact map experience
         backToAssoc = options.backToAssoc, // for impact map experience
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
@@ -2878,8 +2879,13 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
             if (!twoDeep) {
-                var tileHeight = (0.3) * tileDivHeight;  
-                main.css({ 'height': (0.3) * tileDivHeight });
+                if (oneDeep){
+                    var tileHeight = (0.9) * tileDivHeight;  
+                    main.css({ 'height': (0.9) * tileDivHeight });
+                } else {
+                    var tileHeight = (0.3) * tileDivHeight;  
+                    main.css({ 'height': (0.3) * tileDivHeight });
+                }
             } else {
                 var tileHeight = (0.45) * tileDivHeight;
                 main.css({ 'height': (0.45) * tileDivHeight });
@@ -2888,10 +2894,17 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             // Align tile so that it follows the grid pattern we want
 
             if (!twoDeep) {
-                main.css({
-                    'left': Math.floor(i / 3) * (main.width() + TILE_BUFFER),//Math.floor(i / 2) * (main.width() + TILE_BUFFER),
-                    'top': Math.floor(i % 3) * (main.height() + TILE_BUFFER)//Math.floor(i % 2) * (main.height() + TILE_BUFFER)
+                if (oneDeep){
+                    main.css({
+                    'left': i * (main.width() + TILE_BUFFER),
+                    'top': 0,
                 });
+                } else {
+                main.css({
+                    'left': Math.floor(i / 3) * (main.width() + TILE_BUFFER),
+                    'top': Math.floor(i % 3) * (main.height() + TILE_BUFFER)
+                });
+                }
             } else {
                 main.css({
                     'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER),
@@ -4773,6 +4786,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     isSlideMode: slideMode,
                     slidesArray : avlArray,
                     twoDeep: twoDeep,
+                    oneDeep: oneDeep,
                     hideKeywords: hideKeywords,
                 });
                 newPageRoot = artworkViewer.getRoot();

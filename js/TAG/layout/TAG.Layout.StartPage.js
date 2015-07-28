@@ -605,7 +605,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                                     options.titleIsName = true;
                                 }
                                 if (currName === LIFE_NAME){
-                                    options.twoDeep = true;
+                                    options.oneDeep = true;
                                 }
                             }
                         }

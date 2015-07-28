@@ -77,6 +77,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
         twoDeep = options.twoDeep,
+        oneDeep = options.oneDeep,
         hideKeywords = options.hideKeywords,
 
         // misc initialized vars  
@@ -1948,6 +1949,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 smallPreview: smallPreview,
                 titleIsName: titleIsName,
                 twoDeep: twoDeep,
+                oneDeep: oneDeep,
                 hideKeywords: hideKeywords,
             });
             //if (root.data('split') === 'R') {
