@@ -156,19 +156,20 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         // idleTimer.kill();
         // idleTimer = null;
         
-        if(player) {
+        if (player) {
             player.pause();
             player.unload();
         }
-
         backButton.off('click'); // prevent user from clicking twice
-
         if (artmodeOptions) {
             artmode = new TAG.Layout.ArtworkViewer(artmodeOptions);
             TAG.Util.UI.slidePageRightSplit(root, artmode.getRoot());
-
             currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
             currentPage.obj  = artmode;
+        } else if (nobel){
+            TAG.Layout.StartPage(null, function (page) {
+                TAG.Util.UI.slidePageRight(page);
+            });
         } else {
             var backInfo = { backArtwork: tourObj, backScroll: prevScroll };
             collectionsPage = new TAG.Layout.CollectionsPage({
