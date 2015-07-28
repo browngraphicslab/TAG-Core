@@ -228,10 +228,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     debugger;
                     doNothing(err); // TODO if we hit a network error, show an error message
                 }
+                //hiding splitscreen for nobel demo
+                /**
                 if (isNobelWill !== true && !isImpactMap) {
                     TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                     initSplitscreen();
                 }
+                **/
                 createSeadragonControls();
                 TAG.Worktop.Database.getMaps(doq.Identifier, function (mps) {
                     customMapsLength = mps.length;
@@ -1886,7 +1889,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'color': NOBEL_ORANGE_COLOR
         });
 
-        infoCountry.text(citizenship);
+        infoCountry.text((citizenship ? citizenship : ""));
         infoPerson.text((gender ? gender + ", " : "") + (yearBorn ? "Born in " + yearBorn : ""));
         infoCountry.appendTo(info);
         infoPerson.appendTo(info);
@@ -2080,15 +2083,15 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     function hideHotspots() {
         hotspotsShown = false;
         if (toggleHotspotButton) {
-            hotspotsShown = false;
             toggleHotspotButton.text('Show Hotspots');
-            for (var y = 0; y < hotspots.guids.length; y++) {
-                //don't re-click hotspots that are already hidden
+        }
+        for (var y = 0; y < hotspots.guids.length; y++) {
+            //don't re-click hotspots that are already hidden
                 if (!hotspots[hotspots.guids[y]].isVisible()) {
                     console.log('skipping: ' + hotspots.guids[y]);
                     continue;
                 }
-                //double click to open media before closing
+                //double click to optoggleHotspotButtonen media before closing
                 if (!hotspots[hotspots.guids[y]].isHotspotMediaVisible()) {
                     mediaClicked(hotspots[hotspots.guids[y]])();
                 }
@@ -2096,11 +2099,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 console.log('hiding: ' + hotspots.guids[y]);
             }
         }
-    }
 
     function showHotspots(){
         hotspotsShown = true;
-        toggleHotspotButton.text('Hide Hotspots');
+        if (toggleHotspotButton) {
+            toggleHotspotButton.text('Hide Hotspots');
+        }
         for (var y = 0; y < hotspots.guids.length; y++) {
             //don't re-click hotspots that are already visible
             if (hotspots[hotspots.guids[y]].isVisible()){
