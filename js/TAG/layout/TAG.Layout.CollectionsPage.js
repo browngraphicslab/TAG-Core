@@ -204,7 +204,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @method init
      */
     function init() {
-        $("#startPageLoadingOverlay").remove();
+        
         if (!idleTimer && !previewing) {
             var timerDuration = {
                 duration: idleTimerDuration ? idleTimerDuration : null
@@ -238,8 +238,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'left': '47.5%',
             'top': '42.5%'
         };
-        
-        circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
+        if (!$("#startPageLoadingOverlay").length) {
+            circle = TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
+        }
         var loadingLabel = $(document.createElement('div'));
         loadingLabel.attr('id','loadingLabel');
         loadingLabel.css({
@@ -252,7 +253,12 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         });  
 
         loadingLabel.text('Loading Collections');
-        loadingArea.append(loadingLabel);
+        if (!$("#startPageLoadingOverlay").length) {
+            loadingArea.append(loadingLabel);
+        }
+        else {
+            loadingArea.append($("#startPageLoadingOverlay"));
+        }
 
         //Or else the search bar loses focus immediately when you come back from artwork viewer
         $('#tagContainer').off();
@@ -752,6 +758,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         } else if (toShowFirst) {
             loadFirstCollection();
         }
+        $("#startPageLoadingOverlay").remove();
         loadingArea.hide();
         searchInput.show();
     }
@@ -3698,6 +3705,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 if (!onAssocMediaView) {
                     exploreTab.on('mousedown', function(){
 
+
                         (switchPage(artwork))();
 
                         //TELEMETRY
@@ -4627,10 +4635,36 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 splitopts = 'L',
                 opts = getState(),
                 confirmationBox,
+                slideMode = true,
+                avl,
+                avlArray = [],
                 prevInfo;
+
 
             if (!artwork|| !artworkSelected) {
                 return;
+            }
+
+            /*if (slideMode === true) {
+                avl = sortByYear(currentArtworks, false);
+                if(!avl.isEmpty()){
+                    avlArray.push(avl.remove());
+                    while (!avl.isempty()) {
+                        var cur = avl.remove();
+                        if (cur < avlArray[0]) {
+                            avlArray.unshift(cur)
+                        }
+                        else {
+                            avlArray.push(cur);
+                        }
+                    }
+                }
+            }*/
+            if (slideMode === true) {
+                avl = sortByYear(currentArtworks, true);
+                while (!avl.isEmpty()) {
+                    avlArray.push(avl.remove(avl.min()));
+                }
             }
 
             if (artwork.Type === "Empty" && artwork.Metadata.Type !== "VideoArtwork" && artwork.Metadata.ContentType !== "iframe") { // tour
@@ -4696,6 +4730,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     smallPreview: smallPreview,
                     titleIsName: titleIsName,
                     isNobelWill: false,
+                    isSlideMode: slideMode,
+                    slidesArray : avlArray,
                     twoDeep: twoDeep,
                     hideKeywords: hideKeywords,
                 });

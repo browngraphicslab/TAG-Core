@@ -57,6 +57,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         assocMediaToShow = options.assocMediaToShow,
         wasOnAssocMediaView = options.onAssocMediaView,
         originalOptions = options,
+        isSlideMode = options.isSlideMode,
+        slideModeArray = options.slidesArray,
+        nextSlide= $(document.createElement('img')),
+        prevSlide = $(document.createElement('img')),
 
         //Nobel will customizations
         isNobelWill = options.isNobelWill || false,
@@ -211,6 +215,56 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         sideBar.css('visibility', 'hidden');
 
+        if (!slideModeArray) {
+            isSlideMode = false;
+        }
+        else if(slideModeArray[0]._value && slideModeArray[0]._value.artwork) {
+            var temp = []
+            while (slideModeArray.length > 0) {
+                temp.push(slideModeArray.shift()._value.artwork)
+            }
+            slideModeArray = temp;
+        }
+        if (isSlideMode === true) {
+            prevSlide.attr({
+                src : tagPath + 'images/icons/left_nobel_icon.svg'
+            })
+            nextSlide.attr({
+                src: tagPath + 'images/icons/right_nobel_icon.svg'
+            })
+            prevSlide.css({
+                'width': '50px',
+                'height': '50px',
+                'bottom': '0%',
+                'right': '51%',
+                'position': 'absolute',
+                'z-index': '100'
+            })
+            nextSlide.css({
+                'width': '50px',
+                'height': '50px',
+                'bottom': '0%',
+                'left': '51%',
+                'position': 'absolute',
+                'z-index' : '100'
+            })
+            root.append(nextSlide)
+            root.append(prevSlide);
+            if (afterInSlideArray()) {
+                nextSlide.show();
+            }
+            else {
+                nextSlide.hide();
+            }
+            if (beforeInSlideArray()) {
+                prevSlide.show();
+            }
+            else {
+                prevSlide.hide();
+            }
+            nextSlide.click(nextSlidePage)
+            prevSlide.click(prevSlidePage)
+        }
         annotatedImage = TAG.AnnotatedImage({
             isNobelWill: isNobelWill,
             isImpactMap: isImpactMap,
@@ -286,6 +340,52 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         else {
             return false;
         }
+    }
+
+    function afterInSlideArray(item) {
+        if (isSlideMode === true) {
+            item = item || doq;
+            var index = slideModeArray.indexOf(item);
+            if (index === slideModeArray.length - 1) {
+                return false;
+            }
+            else {
+                return slideModeArray[index +1]
+            }
+        }
+        return false
+    }
+
+    function beforeInSlideArray(item) {
+        if (isSlideMode === true) {
+            item = item || doq;
+            var index = slideModeArray.indexOf(item);
+            if (index === 0) {
+                return false;
+            }
+            else {
+                return slideModeArray[index - 1]
+            }
+        }
+        return false
+    }
+
+    function nextSlidePage() {
+        var nextDoq = afterInSlideArray();
+        $("#annotatedImageAssetCanvas").remove();
+        $("#annotatedImageAssetCanvas").die();
+        annotatedImage.unload();
+        doq = nextDoq;
+        init()
+    }
+
+    function prevSlidePage() {
+        var nextDoq = beforeInSlideArray();
+        $("#annotatedImageAssetCanvas").remove();
+        $("#annotatedImageAssetCanvas").die();
+        annotatedImage.unload();
+        doq = nextDoq;
+        init()
     }
 
     /**

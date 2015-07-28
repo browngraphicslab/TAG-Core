@@ -400,7 +400,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToWinnersButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("loading laureates...");
+                loadingScreen("Loading Laureates...");
                 switchPage(LAUREATE_NAME, false, true, true);
             }
         });
@@ -408,7 +408,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToHistoryButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("loading Alfred Nobel's life...");
+                loadingScreen("Loading Alfred Nobel's Life...");
                 switchPage(HISTORY_NAME, true);
             }
         });
@@ -416,7 +416,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToWillButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("loading history and impact...");
+                loadingScreen("Loading History and Impact...");
                 switchPage(WILL_NAME);
             }
         });
@@ -424,7 +424,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToLifeButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("loading Alfred Nobel's will...");
+                loadingScreen("Loading Alfred Nobel's Will...");
                 switchPage(LIFE_NAME, true);
             }
         });
@@ -478,14 +478,13 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     evt.stopPropagation();
         // });
         function loadingScreen(text) {
-            var initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(1));
+            var initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(2));
             initialOverlay.css('display', 'block').attr({
                 id : 'startPageLoadingOverlay'
-            })
+            }).css('opacity' , '.99')
             var infoDiv = $(document.createElement('div'));
             infoDiv.css({
                 "color": "white",
-                "background-color": "transparent",
                 "text-align": "center",
                 "top": "59%",
                 "display": "block",
@@ -497,7 +496,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             infoDiv.text(text);
             TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
             initialOverlay.append(infoDiv);
-            $(root).append(initialOverlay);
+            initialOverlay.css('opacity', '.99')
+            initialOverlay.css('background-color', 'rgba(0,0,0,.82)')
+            $("#tagContainer").append(initialOverlay);
         }
         //opens the collections page on touch/click
         //@param collectionName     string representing name of collection to start with
