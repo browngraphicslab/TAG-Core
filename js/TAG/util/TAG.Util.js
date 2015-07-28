@@ -8202,6 +8202,7 @@ TAG.Util.Artwork = (function () {
         holder.on("click", handler);
 
         titleDiv.text(title);
+        titleDiv.css('color', 'rgb(254,161,0)')
         holder.append(titleDiv);
         holder.append(thumbHolderDiv);
         thumbHolderDiv.append(holderContainer);

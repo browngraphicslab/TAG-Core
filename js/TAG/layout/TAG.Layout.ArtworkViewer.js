@@ -2241,9 +2241,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             .css({
                 'font-size': '80%',
                 'margin-top': '-13%',
-                'text-align': 'center'
+                'text-align': 'center',
+                'color': NOBEL_ORANGE_COLOR
             })
-            .text('Navigation');
+            .text('Context');
         minimapContainer.append(minimapDescription);
 
         //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
