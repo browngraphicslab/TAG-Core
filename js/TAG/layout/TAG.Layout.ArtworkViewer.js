@@ -381,6 +381,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             isNobelWill: false,
             isSlideMode: isSlideMode,
             slidesArray: slideModeArray,
+
+            prevPreview: prevPreview,
+            prevTag: prevTag,
+            prevScroll: prevScroll,
+            prevPreviewPos: prevPreviewPos,
+            prevCollection: prevCollection,
+            prevPage: prevPage,
+            prevMult: prevMult,
         });
         var newPageRoot = artworkViewer.getRoot();
         newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
@@ -394,6 +402,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             isNobelWill: false,
             isSlideMode: isSlideMode,
             slidesArray: slideModeArray,
+
+            prevPreview: prevPreview,
+            prevTag: prevTag,
+            prevScroll: prevScroll,
+            prevPreviewPos: prevPreviewPos,
+            prevCollection: prevCollection,
+            prevPage: prevPage,
+            prevMult: prevMult,
         });
         var newPageRoot = artworkViewer.getRoot();
         newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');

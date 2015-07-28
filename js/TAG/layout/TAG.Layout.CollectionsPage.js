@@ -2582,30 +2582,32 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 return function () {
                     if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
-                        if (previouslyClicked === main) {
+                        if (previouslyClicked === main || currCollection.Name === "The Life of Alfred Nobel") {
                             //click = "double";
                             switchPage(currentWork, null, getContainerLeft(currentWork, false))();
 
                             //TELEMETRY
 
                             //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
-                            TAG.Telemetry.recordEvent('ArtworkPreviewer', function (tobj) {
-                                tobj.is_assoc_media_view = onAssocMediaView;
-                                tobj.click_type = "double";
-                                tobj.selected_artwork = currentWork.Identifier;
-                                tobj.is_tour = false;
-                                if (currentWork.type === 'Tour') {
-                                    tobj.is_tour = true;
-                                }
-                                tobj.current_collection = currCollection;
-                                tobj.tap_to_explore = false;
-                                tobj.close = false; //it was closed
-                                tobj.assoc_media = false;
-                                tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                //doNothing(tobj.time_spent);
-                                //timer reset in showArtwork
-                                doNothing("DOUBLE CLICKED ON THE TILE");
-                            });
+                            if (currCollection.Name !== "The Life of Alfred Nobel") {
+                                TAG.Telemetry.recordEvent('ArtworkPreviewer', function (tobj) {
+                                    tobj.is_assoc_media_view = onAssocMediaView;
+                                    tobj.click_type = "double";
+                                    tobj.selected_artwork = currentWork.Identifier;
+                                    tobj.is_tour = false;
+                                    if (currentWork.type === 'Tour') {
+                                        tobj.is_tour = true;
+                                    }
+                                    tobj.current_collection = currCollection;
+                                    tobj.tap_to_explore = false;
+                                    tobj.close = false; //it was closed
+                                    tobj.assoc_media = false;
+                                    tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                                    //doNothing(tobj.time_spent);
+                                    //timer reset in showArtwork
+                                    doNothing("DOUBLE CLICKED ON THE TILE");
+                                });
+                            }
 
 
                         } else {
@@ -2656,9 +2658,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }();
             }
             main.on('click', function () {
-                if (currCollection.Name === "The Life of Alfred Nobel") {
-                    previouslyClicked = main;
-                }
                 doubleClickHandler()
 
                 // if the idle timer hasn't started already, start it
@@ -2840,7 +2839,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     artTitle.css('background-color', 'rgba(0,0,0,.5)')
                 }
             )
-            if (currCollection.Name !== "The Life of Alfred Nobel") {
+            if (currCollection.Name !== "The Life of Alfred Nobel" || true) {
                 main.append(tileImage)
                     .append(artTitle)
                     .append(yearTextBox);
