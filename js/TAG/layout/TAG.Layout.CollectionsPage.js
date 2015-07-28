@@ -302,7 +302,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
             'background-size' : 'auto 90%',
             'background-repeat': 'no-repeat',
-            'background-position':'left'
+            'background-position':'right'
         });
 
 
@@ -1243,7 +1243,17 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             searchTxt.text("");
 
             //re-display the magnifying glass icon
-            searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")' });
+            searchInput.css({ 
+                'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
+                'border-radius': '6pt',
+                'border-color': NOBEL_COLOR,
+                'border-width': 'thin',
+                'border-style': 'solid',
+                'background-color': 'transparent',
+                'color': NOBEL_COLOR 
+            });
+
+
 
             // Clear catalog div (with info and artwork tiles)
             catalogDiv.empty();
@@ -2235,7 +2245,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
             'background-size': 'auto 90%',
             'background-repeat': 'no-repeat',
-            'background-position': 'left'
+            'background-position': 'right'
 
         });
 
