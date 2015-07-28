@@ -960,7 +960,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 titleTextHolder = $(document.createElement('div'));
                 titleTextHolder.addClass('annotatedImageMediaTitle');
                 titleTextHolder.css({
-                    'font-family': 'Trajan',
+                    'font-family': 'Cinzel',
                     'font-weight': 'normal',
                     'text-transform': 'uppercase',
                     'font-size': '35%',

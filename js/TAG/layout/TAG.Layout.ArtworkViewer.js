@@ -1659,7 +1659,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         infoArtist.css({
             'color': '#' + PRIMARY_FONT_COLOR,
-            //'font-family': FONT
         });
 
         infoYear.css({
@@ -1840,8 +1839,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         // add more information for the artwork if curator added in the authoring mode
         infoTitle.css({
-            'font-family': 'Trajan',
-            'text-transform': 'uppercase',
+            'font-family': 'Cinzel',
             'font-size': '150%'
         });
         infoYear.css('display','none');
