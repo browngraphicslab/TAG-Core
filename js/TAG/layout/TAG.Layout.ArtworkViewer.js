@@ -1700,7 +1700,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'border-bottom-right-radius': '0px',
                 'border-bottom-left-radius': '3.5px'
             });
-            togglerImage.attr('src', tagPath + 'images/icons/Open.svg')
+            togglerImage.attr('src', tagPath + 'images/icons/Open_nobel.svg')
                         .css('right', '0%');
         } else {
             togglerImage.css('left', '0%');
@@ -1723,7 +1723,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             isBarOpen = !isBarOpen;
 
             sideBar.animate(opts, 1000, function () {
-                togglerImage.attr('src', tagPath + 'images/icons/' + ((!!isBarOpen) ^ (!isLeft) ? 'Close_nobel.svg' : 'Open.svg'));
+                togglerImage.attr('src', tagPath + 'images/icons/' + ((!!isBarOpen) ^ (!isLeft) ? 'Close_nobel.svg' : 'Open_nobel.svg'));
             });
         });
 
@@ -1995,11 +1995,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         src = tagPath + 'images/text_icon.svg';
                         break;
                 }
+                var isHotspotButton = media.isHotspot ? 'hotspotButton' : 'mediaButton';
                 var toAppend = TAG.Util.Artwork.createThumbnailButton({
                     title: TAG.Util.htmlEntityDecode(media.doq.Name),
                     year: TAG.Util.htmlEntityDecode(media.doq.Year || ""),
                     handler: mediaClicked(media),
-                    buttonClass: 'mediaButton',
+                    buttonClass: isHotspotButton,
                     buttonID: 'thumbnailButton-' + media.doq.Identifier,
                     src: src
                 });
