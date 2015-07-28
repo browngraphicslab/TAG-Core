@@ -1118,7 +1118,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'text-overflow': 'ellipsis',
             'overflow' : 'hidden',
             'z-index': '9999999',
-            'font-family' : 'cinzel',
+            'font-family' : 'Cinzel',
         })
         tab.css({
             'position': 'absolute',
