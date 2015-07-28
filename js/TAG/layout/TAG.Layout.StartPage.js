@@ -929,7 +929,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     evt.stopPropagation();
         // });
 
-        $('.goToCollectionsButton').css({ "border": "1px solid #fea100" });
+        $('.goToCollectionsButton').css({ 'border-radius': '6pt'});
 
         goToWinnersButton.on("mousedown", function () {
             goToWinnersButton.css({"color": "white"});
