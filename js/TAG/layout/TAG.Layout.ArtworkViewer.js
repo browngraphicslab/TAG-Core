@@ -445,7 +445,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'text-align': 'center',
             'height': '10%',
             'top': '2%',
-            'left': '0%'
+            'left': '0%',
+            'font-family': 'Cinzel'
         }).text(doq.Name);
         titleDiv.attr({
             id: "titleDiv"
@@ -1305,8 +1306,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'left': '8%',
             'font-size': '1.25em',
             'font-weight': 'bold',
-            'color': 'white'
-        }).text("ALFRED NOBEL'S WILL")
+            'color': 'white',
+            'font-family': 'Cinzel'
+        }).text("Alfred Nobel's Will")
 
         popupLeftBottomBar.css({
             'top': ' 18%',
