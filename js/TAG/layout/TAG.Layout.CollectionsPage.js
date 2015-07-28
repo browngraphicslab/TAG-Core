@@ -2588,11 +2588,13 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     'font-size': '150%',
                     'font-weight': 'bold',
                     'background-color': 'rgb(254, 161, 0.8)',
-                    'height': '10%'
+                    'height': '10%',
+                    'font-family': 'sourcesans'
                 });
                 yearTextBox.css({
                     'height': '10%',
-                    'vertical-align': 'middle'
+                    'vertical-align': 'middle',
+                    'font-family': 'sourcesans'
                 })
             }
 
