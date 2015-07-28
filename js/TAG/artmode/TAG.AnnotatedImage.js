@@ -46,6 +46,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         descscroll = false,
         scrollingMedia = false,
         disableZoomRLH = options.disableZoom,
+        NOBEL_WILL_COLOR = '#fea100',
 
         // misc uninitialized variables
         viewerelt,
@@ -934,7 +935,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     'padding-right': '2%',
                     'padding-bottom': '2%',
                     'border': '6px solid rgb(254,161,0)',
-                    'background-color': 'black'
+                    'background-color': 'black',
+                    'overflow': 'hidden',
+                    'height': 'auto'
                 });
                 //innerContainer.css({
                 //    'backgroundColor': 'rgba(0,0,0,0.65)',
@@ -944,6 +947,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 // .remove is safety check for inertia looping issue
                 titleDiv && titleDiv.remove();
                 titleDiv = $(document.createElement('div'));
+                titleDiv.click(function() {
+                    console.log("titleDiv");
+                });
                 var titleHeight = '20px';
                 if (IS_WINDOWS) {
                     titleHeight = '40px';
@@ -960,7 +966,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 titleTextHolder = $(document.createElement('div'));
                 titleTextHolder.addClass('annotatedImageMediaTitle');
                 titleTextHolder.css({
-                    'font-family': 'Trajan',
+                    'font-family': 'Cinzel',
                     'font-weight': 'normal',
                     'text-transform': 'uppercase',
                     'font-size': '35%',
@@ -996,6 +1002,69 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     });
                 });
                 titleDiv.append(closeButton[0]);
+
+                if (mdoq.Identifier === "5cdae5af-3059-425b-ae44-2a5580d27b73") {
+                    var currName,
+                    collectionsPage,
+                    collectionsPageRoot,
+                    whiteArrow = $(document.createElement('img')),
+                    NEXT_EXHIB = '1986 Nobel Prize in Physics',
+                    exampleDiv = $(document.createElement('div'))
+                            .attr('id', 'exampleDiv')
+                            .css({
+                                'background-color': 'rgb(0,0,0,0.6)',
+                                'width': '100%',
+                                'bottom': '0%',
+                                'height': '100%',
+                                'position': 'relative',
+                                'padding-bottom': '1.5%',
+                                'text-align': 'center',
+                                'font-size': '120%',
+                                'color': NOBEL_WILL_COLOR,
+                                'left': '-5%'
+                            })
+                           .text("See an Example");
+                    whiteArrow.attr({
+                        src: tagPath + 'images/icons/white_arrow.svg'
+                    });
+                    whiteArrow.css({
+                        'height': '45%',
+                        'top': '25%',
+                        'right': '15%',
+                        'width': '10%',
+                        'bottom': '0%',
+                        'position': 'absolute',
+                    });
+                    exampleDiv.append(whiteArrow);
+                    titleDiv.text("");
+                    titleDiv.append(exampleDiv);
+                    exampleDiv.on("mouseenter", function () {
+                        exampleDiv.css("color", "white");
+                    });
+                    exampleDiv.on("mouseleave", function () {
+                        exampleDiv.css("color", NOBEL_WILL_COLOR);
+                    });
+                    exampleDiv.click(function (evt) {
+                        // evt.stopPropogation();
+                        console.log('clicked example div');
+                        //load correct collection
+
+                              TAG.Worktop.Database.getExhibitions(function (collections) {
+                                  for (var i = 0; i < collections.length; i++) {
+                                      currName = collections[i].Name;
+                                      if (currName === NEXT_EXHIB) {
+                                          options.backCollection = collections[i];
+                                      }
+                                  }
+                                  options.twoDeep = true;
+                                  options.backToAssoc = mdoq;
+                                  options.backToGuid = "79bb289b-0e18-4091-8e3b-f21e5d65e793";
+                                  options.hideKeywords = true;
+                                  collectionsPage = TAG.Layout.CollectionsPage(options);
+                                  TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+                              });
+                    });
+                }
 
                 innerContainer.append(titleDiv);
                 innerContainer.append(mediaContainer);
@@ -1604,6 +1673,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         'margin-right': 'auto'
                     });
                     mediaContainer.append(img);
+                    mediaContainer.click(function () { console.log("mediacontainerclicked"); });
+                    
                     outerContainer.css('min-width', '');
                 } else if (CONTENT_TYPE === 'Video') {
                     mediaElt = document.createElement('video');
@@ -1711,7 +1782,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             'margin-left': 'auto',
                             'margin-right': 'auto',
                             'background-color': 'transparent',
+<<<<<<< HEAD
+                            'font-size': '100%',
+                            'max-height': root.height() / 3 + 'px'
+=======
                             'font-size': '100%'
+>>>>>>> 438904b6c65109c195bdda4c4b6bf070f5637aa4
                         });
                         descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
                         if (IS_WINDOWS) {
@@ -1793,7 +1869,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 outerContainer.css('height', 'auto');
             } else {
                 var newH = (neww * h) / w;
-                outerContainer.css('height', newH + 'px');
+                outerContainer.css('height', 'auto');
+                //outerContainer.css('height', newH + 'px');
             }
             outerContainer.find('.annotatedImageMediaTitle').css({
                 'width': (neww - 65) + 'px'
@@ -2013,7 +2090,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 top: newY,
                 left: newX,
                 width: newW,
-                height: newH
+                height: 'auto'
             });
 
             outerContainer.find('.annotatedImageMediaTitle').css({

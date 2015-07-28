@@ -2,6 +2,8 @@
 	<link href='http://fonts.googleapis.com/css?family=Lobster|Shadows+Into+Light|Open+Sans+Condensed:300|Indie+Flower|Pacifico&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 	#innerContainer
 		#overlay
+			#leftLine.orangeLine
+			#rightLine.orangeLine
 		#title
 			span.titleone.primaryFont The Nobel Will
 			span.titletwo.primaryFont   
@@ -23,17 +25,18 @@
 					|By tapping the button below, you'll enter the TAG kiosk mode and will <br />
 					|not be able to return to this splash screen until TAG is restarted.
 		#introDiv
-			#goToIntroWrapper.goToWrapper
-				#goToIntroImage.goToImage
-					
-					img#introImage
-				#goToIntroButton.goToCollectionsButton Introductory Tour
-				
-		#buttonDiv
 			#goToWillWrapper.goToWrapper
 				#goToWillImage.goToImage
 					img#willImage
 				#goToWillButton.goToCollectionsButton Alfred Nobel's Will
+					
+		#buttonDiv
+			#leftWrapper.endWrapper
+			#goToIntroWrapper.goToWrapper
+				#goToIntroImage.goToImage					
+					img#introImage
+				#goToIntroButton.goToCollectionsButton Introductory Tour
+			
 			#goToLifeWrapper.goToWrapper
 				#goToLifeImage.goToImage
 					img#lifeImage
@@ -46,4 +49,7 @@
 				#goToHistoryImage.goToImage
 					img#historyImage
 				#goToHistoryButton.goToCollectionsButton History and Impact
+			#rightWrapper.endWrapper
+
+		
 

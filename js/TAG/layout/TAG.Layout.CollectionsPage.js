@@ -65,6 +65,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         showOtherCollections = options.showOtherCollections,
         twoDeep = options.twoDeep, //show two tiles per column
         backToGuid = options.backToGuid, //for impact map experience
+        backToAssoc = options.backToAssoc, // for impact map experience
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         
 
@@ -168,13 +169,15 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         doq: result,
                         isNobelWill: false,
                         isImpactMap: true,
+                        assocMediaToShow: backToAssoc
                 });
                 var newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
                 TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                 currentPage.obj = artworkViewer;
-            });             
+                });
+            return;
         } 
         TAG.Layout.StartPage(null, function (page) {
             // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
@@ -316,6 +319,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         searchInput.on('focusin', function () { 
             searchInput.css({ 'background-image': 'none' }); 
         });
+
         
         searchInput.on('focusout', function () { 
             if (!searchInput.val()) {
@@ -323,6 +327,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             } 
         });
           
+
         //initSplitscreen();
 
         infoButton.attr('src', tagPath+'images/icons/info.svg')
@@ -769,7 +774,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      */
     function addKeywords() {
 
-        if (hideKeywords){
+        if (hideKeywords) {
+            //hacky way to do styling- better structure would need to happen for extensibility
+            $("#searchInput").css('margin-top', '2.5%');
+            $(".sortButton").css({ 'margin-top': '0%', 'margin-right': '1%' });
+            $("#bottomContainer").css({ 'top': '15%', 'height': '80%' });
             return;
         }
         // Don't repeat this.
@@ -1289,7 +1298,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 "padding-right": $("#tagRoot").width()*0.012+ "px",
                 "height": "100%",
                 "text-overflow": "ellipsis",
-                "white-space": "nowrap"
+                "white-space": "nowrap",
+                "font-family": "Cinzel"
+
             })
             centeredCollectionHeader.css({
                 "text-align": "center",
@@ -2037,7 +2048,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             // If there is no description, hide the infoDiv.
             var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
             if (description === "" + "\n\n   " || onAssocMediaView) {
-                $("#searchButton").attr('disabled', 'disabled').css('background-color', NOBEL_COLOR);
+                $("#searchButton").attr('disabled', 'disabled').css({
+                    'background-color': NOBEL_COLOR,
+                    'color': 'black'
+                
+                });
                 $('#clearSearchButton').attr('disabled', 'disabled')
                     .css({
                         'background-color': NOBEL_COLOR,
@@ -2217,6 +2232,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     function clearSearchResults() {
         // Clear the search text.
         searchTxt.text("");
+        
         searchInput.css({ //redisplay search icon
             'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
             'background-size': 'auto 90%',
@@ -2224,6 +2240,18 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'background-position': 'left'
 
         });
+
+        searchInput.on('focusin', function () {
+            searchInput.css({ 'background-image': 'none' });
+        });
+
+
+        searchInput.on('focusout', function () {
+            if (!searchInput.val()) {
+                searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")' });
+            }
+        });
+
         // Clear the results description.
         root.find('#searchDescription').text('');
         root.find('#clearSearchButton').css({ 'display': 'none' });
@@ -3641,8 +3669,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                          .text(TAG.Util.htmlEntityDecode(artwork.Name))
                     .css({
                         'color': SECONDARY_FONT_COLOR,
-                        'top' : '1%'
-                        //'font-family': FONT,
+                        'top' : '1%',
+                        'font-family': 'Cinzel',
                     });
 
 
