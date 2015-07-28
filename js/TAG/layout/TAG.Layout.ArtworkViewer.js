@@ -241,6 +241,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 if (isNobelWill === true) {
                     nobelWillInit();
                 }
+                $("#startPageLoadingOverlay").remove();
 
                 loadingArea.hide();
             },
@@ -2244,7 +2245,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
         assetContainer.css({
-            'max-height': sideBarInfo.height() - info.height() - infoTitle.height() + 'px',
+            'max-height': sideBarInfo.height() - info.height() - infoTitle.height() - backButton.height() - minimapDescription.height() + 'px',
             'overflow-y': 'auto',
             'margin-top': '4%',
         });
