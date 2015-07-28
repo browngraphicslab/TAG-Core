@@ -2577,7 +2577,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 artTitle.css({
                     'font-size': '150%',
                     'font-weight': 'bold',
-                    'background-color': 'rgb(254, 161, 0.8)'
+                    'background-color': 'rgb(254, 161, 0.8)',
+                    'height': '10%'
                 });
                 yearTextBox.css({
                     'height': '10%',
