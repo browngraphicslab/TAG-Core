@@ -8304,7 +8304,37 @@ TAG.Util.Artwork = (function () {
             });
         }
 
-        holderInnerContainer.append(thumbnailImage);
+        if (buttonClass && buttonClass === 'tourButton') {
+            titleDiv.css({
+                margin: '1% 2% 2% 2%',
+                top: '80%',
+                height: '20%',
+                'white-space': 'nowrap',
+                overflow: 'hidden',
+                'text-overflow': 'ellipsis',
+                'text-align': 'center',
+                'font-size': '75%',
+                padding: '0% 3% 0% 3%'
+            });
+            var thumbnailOverlay = $(document.createElement('img')).addClass('overlayButtonImage')
+            thumbnailOverlay.attr('src', tagPath + 'images/tour_icon.svg');
+            thumbnailOverlay.css({
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                'height': '30px'
+            });
+            thumbnailImage.css({
+                'max-height': '100%',
+                'max-width': '100%',
+                'position': 'relative'
+            });
+            holderInnerContainer.css('position', 'absolute');
+            holderInnerContainer.append(thumbnailImage);
+            holderInnerContainer.append(thumbnailOverlay);
+        } else {
+            holderInnerContainer.append(thumbnailImage);
+        }
 
         yearDiv.text(year);
         holder.append(yearDiv);

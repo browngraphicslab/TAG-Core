@@ -1645,7 +1645,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             backButton.hide();
         }
 
-        togglerImage.attr("src", tagPath + 'images/icons/Close.svg');
+        togglerImage.attr("src", tagPath + 'images/icons/Close_nobel.svg');
         infoTitle.text(doq.Name);
         infoArtist.text(doq.Metadata.Artist);
         infoYear.text(doq.Metadata.Year);
@@ -1720,7 +1720,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             isBarOpen = !isBarOpen;
 
             sideBar.animate(opts, 1000, function () {
-                togglerImage.attr('src', tagPath + 'images/icons/' + ((!!isBarOpen) ^ (!isLeft) ? 'Close.svg' : 'Open.svg'));
+                togglerImage.attr('src', tagPath + 'images/icons/' + ((!!isBarOpen) ^ (!isLeft) ? 'Close_nobel.svg' : 'Open.svg'));
             });
         });
 
@@ -2672,7 +2672,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 "position": "relative"
             });
         var locHistoryToggleImage = $(document.createElement('img'))
-            .attr('src', tagPath + 'images/icons/Close.svg')
+            .attr('src', tagPath + 'images/icons/Close_nobel.svg')
             .attr("id", "locHistoryToggleImage")
             .css({
                 'left': '0%',
