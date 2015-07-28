@@ -2211,6 +2211,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     }
                     $("#annotatedImageAssetCanvas").css("z-index", '50');
                     var loc = getNobelAssociatedMediaLocation(outerContainer[0].innerText);
+                    loc.x = Math.min(loc.x, root.width() - 255-12 - root.width()*.04);
                     outerContainer.css({
                         'top': loc.y + 'px',
                         'left': loc.x + 'px'
