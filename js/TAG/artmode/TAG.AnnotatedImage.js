@@ -960,7 +960,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 titleTextHolder = $(document.createElement('div'));
                 titleTextHolder.addClass('annotatedImageMediaTitle');
                 titleTextHolder.css({
-                    'font-family': 'Trajan',
+                    'font-family': 'Cinzel',
                     'font-weight': 'normal',
                     'text-transform': 'uppercase',
                     'font-size': '35%',
@@ -1014,7 +1014,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         console.log("circlewidth: " + ($('#circle' + mdoq.Identifier).width()));
                         if ($('#circle' + mdoq.Identifier).width()===null){
                             circle = $(document.createElement("img"));
-                            circle.attr('src', tagPath + 'images/icons/hotspot_circle.svg');
+                            circle.attr('src', tagPath + 'images/unlit_info.svg');
                             circle.attr('id', 'circle' + mdoq.Identifier);
                             circle.addClass('annotatedImageHotspotCircle');
                             circle.click(function (evt) {
@@ -2065,6 +2065,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 splitscreenOffset = 0;
             outerContainer && outerContainer.detach();
 
+            if ((IS_HOTSPOT && hotspotMediaHidden) || (IS_HOTSPOT && !isHotspotIcon && !hotspotMediaHidden)) {
+                circle.attr('src', tagPath + 'images/lit_info.svg');
+            } else {
+                circle.attr('src', tagPath + 'images/unlit_info.svg');
+            }
+
             // temporary crashfix for errors where viewport isn't properly initialized
             // need to root-cause this issue ASAP
             if (!viewer.viewport) {
@@ -2179,6 +2185,8 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         function hideMediaObject(isHotspotIcon) {
             //TAG.Util.removeYoutubeVideo();
             outerContainer.stop();
+
+            circle.attr('src', tagPath + 'images/unlit_info.svg');
 
             var toHideID = '#thumbnailButton-' + mdoq.Identifier;
             if (outerContainer.parents('#metascreen-R').length) {

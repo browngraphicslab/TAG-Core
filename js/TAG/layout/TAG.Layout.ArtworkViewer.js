@@ -228,10 +228,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     debugger;
                     doNothing(err); // TODO if we hit a network error, show an error message
                 }
+                //hiding splitscreen for nobel demo
+                /**
                 if (isNobelWill !== true && !isImpactMap) {
                     TAG.Util.Splitscreen.setViewers(root, annotatedImage);
                     initSplitscreen();
                 }
+                **/
                 createSeadragonControls();
                 TAG.Worktop.Database.getMaps(doq.Identifier, function (mps) {
                     customMapsLength = mps.length;
@@ -241,6 +244,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 if (isNobelWill === true) {
                     nobelWillInit();
                 }
+                $("#startPageLoadingOverlay").remove();
 
                 loadingArea.hide();
             },
@@ -1655,7 +1659,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         infoArtist.css({
             'color': '#' + PRIMARY_FONT_COLOR,
-            //'font-family': FONT
         });
 
         infoYear.css({
@@ -1836,8 +1839,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         // add more information for the artwork if curator added in the authoring mode
         infoTitle.css({
-            'font-family': 'Trajan',
-            'text-transform': 'uppercase',
+            'font-family': 'Cinzel',
             'font-size': '150%'
         });
         infoYear.css('display','none');
@@ -2081,6 +2083,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         if (toggleHotspotButton) {
             toggleHotspotButton.text('Show Hotspots');
         }
+
         for (var y = 0; y < hotspots.guids.length; y++) {
             //don't re-click hotspots that are already hidden
                 if (!hotspots[hotspots.guids[y]].isVisible()) {
@@ -2098,7 +2101,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
     function showHotspots(){
         hotspotsShown = true;
-        toggleHotspotButton.text('Hide Hotspots');
+        if (toggleHotspotButton) {
+            toggleHotspotButton.text('Hide Hotspots');
+        }
         for (var y = 0; y < hotspots.guids.length; y++) {
             //don't re-click hotspots that are already visible
             if (hotspots[hotspots.guids[y]].isVisible()){
@@ -2243,7 +2248,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
         assetContainer.css({
-            'max-height': sideBarInfo.height() - info.height() - infoTitle.height() + 'px',
+            'max-height': sideBarInfo.height() - info.height() - infoTitle.height() - backButton.height() - minimapDescription.height() + 'px',
             'overflow-y': 'auto',
             'margin-top': '4%',
         });
