@@ -2098,7 +2098,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
     function showHotspots(){
         hotspotsShown = true;
-        toggleHotspotButton.text('Hide Hotspots');
+        if (toggleHotspotButton) {
+            toggleHotspotButton.text('Hide Hotspots');
+        }
         for (var y = 0; y < hotspots.guids.length; y++) {
             //don't re-click hotspots that are already visible
             if (hotspots[hotspots.guids[y]].isVisible()){
