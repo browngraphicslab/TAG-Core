@@ -23,14 +23,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
         goToWillButton = root.find('#goToWillButton'),
-        goToHistoryButton = root.find('#goToHistoryButton'), 
+        goToHistoryButton = root.find('#goToHistoryButton'),
         goToWinnersButton = root.find('#goToWinnersButton'),
         goToLifeButton = root.find('#goToLifeButton'),
         goToIntroButton = root.find("#goToIntroButton"),
         willImage = root.find('#willImage'),
-        lifeImage= root.find('#lifeImage'),
-        historyImage= root.find('#historyImage'),
-        winnersImage= root.find('#winnersImage'),
+        lifeImage = root.find('#lifeImage'),
+        historyImage = root.find('#historyImage'),
+        winnersImage = root.find('#winnersImage'),
         introImage = root.find("#introImage"),
         serverInput = root.find('#serverInput'),
         authoringInput = root.find('#passwordInput'),
@@ -40,6 +40,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit = root.find('#passwordSubmit'),
         lockedMessage = root.find('#lockedMessage'),
         //tutorialButton = root.find('#tutorialButton'),
+        buttonClicked = false,
         serverURL,
         tagContainer,
         newUser = options.newUser,
@@ -395,21 +396,36 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         lifeImage.on('click', function(){
             switchPage(LIFE_NAME, true);
         });
-
-        goToWinnersButton.on('click', function() {
-            switchPage(LAUREATE_NAME,false,true,true);
+        goToWinnersButton.on('click', function () {
+            if (buttonClicked === false) {
+                buttonClicked = true;
+                loadingScreen("Loading Laureates...");
+                switchPage(LAUREATE_NAME, false, true, true);
+            }
         });
 
-        goToHistoryButton.on('click', function(){
-            switchPage(HISTORY_NAME,true);
+        goToHistoryButton.on('click', function () {
+            if (buttonClicked === false) {
+                buttonClicked = true;
+                loadingScreen("Loading History and Impact...");
+                switchPage(HISTORY_NAME, true);
+            }
         });
 
-        goToWillButton.on('click', function(){
-            switchPage(WILL_NAME);
+        goToWillButton.on('click', function () {
+            if (buttonClicked === false) {
+                buttonClicked = true;
+                loadingScreen("Loading Alfred Nobel's Will...");
+                switchPage(WILL_NAME);
+            }
         });
 
-        goToLifeButton.on('click', function(){
-            switchPage(LIFE_NAME, true);
+        goToLifeButton.on('click', function () {
+            if (buttonClicked === false) {
+                buttonClicked = true;
+                loadingScreen("Loading Alfred Nobel's Life...");
+                switchPage(LIFE_NAME, true);
+            }
         });
         
         /**
@@ -460,7 +476,29 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // authoringButtonBuffer.on('click', function (evt) {
         //     evt.stopPropagation();
         // });
-
+        function loadingScreen(text) {
+            var initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(2));
+            initialOverlay.css('display', 'block').attr({
+                id : 'startPageLoadingOverlay'
+            }).css('opacity' , '.99')
+            var infoDiv = $(document.createElement('div'));
+            infoDiv.css({
+                "color": "white",
+                "text-align": "center",
+                "top": "59%",
+                "display": "block",
+                "position": "absolute",
+                "font-size": "3em",
+                "width": '100%',
+                "height": "100%"
+            })
+            infoDiv.text(text);
+            TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
+            initialOverlay.append(infoDiv);
+            initialOverlay.css('opacity', '.99')
+            initialOverlay.css('background-color', 'rgba(0,0,0,.82)')
+            $("#tagContainer").append(initialOverlay);
+        }
         //opens the collections page on touch/click
         //@param collectionName     string representing name of collection to start with
         function switchPage(collectionName, hideKeywords, smallPreview, titleIsName) {
@@ -929,7 +967,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     evt.stopPropagation();
         // });
 
-        $('.goToCollectionsButton').css({ "border": "1px solid #fea100" });
+        $('.goToCollectionsButton').css({
+            'border-radius': '6pt',
+            'font-size': '90%',
+            'opacity': '0.85'
+        });
 
         goToWinnersButton.on("mousedown", function () {
             goToWinnersButton.css({"color": "white"});

@@ -57,6 +57,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         assocMediaToShow = options.assocMediaToShow,
         wasOnAssocMediaView = options.onAssocMediaView,
         originalOptions = options,
+        isSlideMode = options.isSlideMode,
+        slideModeArray = options.slidesArray,
+        nextSlide= $(document.createElement('img')),
+        prevSlide = $(document.createElement('img')),
 
         //Nobel will customizations
         isNobelWill = options.isNobelWill || false,
@@ -181,6 +185,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'top': '42.5%'
         };
 
+
         TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
         var loadingLabel = $(document.createElement('label'));
         loadingLabel.css({
@@ -211,6 +216,56 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         sideBar.css('visibility', 'hidden');
 
+        if (!slideModeArray) {
+            isSlideMode = false;
+        }
+        else if(slideModeArray[0]._value && slideModeArray[0]._value.artwork) {
+            var temp = []
+            while (slideModeArray.length > 0) {
+                temp.push(slideModeArray.shift()._value.artwork)
+            }
+            slideModeArray = temp;
+        }
+        if (isSlideMode === true) {
+            prevSlide.attr({
+                src : tagPath + 'images/icons/left_nobel_icon.svg'
+            })
+            nextSlide.attr({
+                src: tagPath + 'images/icons/right_nobel_icon.svg'
+            })
+            prevSlide.css({
+                'width': '50px',
+                'height': '50px',
+                'bottom': '0%',
+                'right': '51%',
+                'position': 'absolute',
+                'z-index': '100'
+            })
+            nextSlide.css({
+                'width': '50px',
+                'height': '50px',
+                'bottom': '0%',
+                'left': '51%',
+                'position': 'absolute',
+                'z-index' : '100'
+            })
+            root.append(nextSlide)
+            root.append(prevSlide);
+            if (afterInSlideArray()) {
+                nextSlide.show();
+            }
+            else {
+                nextSlide.hide();
+            }
+            if (beforeInSlideArray()) {
+                prevSlide.show();
+            }
+            else {
+                prevSlide.hide();
+            }
+            nextSlide.click(nextSlidePage)
+            prevSlide.click(prevSlidePage)
+        }
         annotatedImage = TAG.AnnotatedImage({
             isNobelWill: isNobelWill,
             isImpactMap: isImpactMap,
@@ -245,6 +300,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     nobelWillInit();
                 }
                 $("#startPageLoadingOverlay").remove();
+
+                if (isImpactMap) {
+                    $("#backButton").remove();
+                }
 
                 loadingArea.hide();
             },
@@ -286,6 +345,60 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         else {
             return false;
         }
+    }
+
+    function afterInSlideArray(item) {
+        if (isSlideMode === true) {
+            item = item || doq;
+            var index = slideModeArray.indexOf(item);
+            if (index === slideModeArray.length - 1) {
+                return false;
+            }
+            else {
+                return slideModeArray[index +1]
+            }
+        }
+        return false
+    }
+
+    function beforeInSlideArray(item) {
+        if (isSlideMode === true) {
+            item = item || doq;
+            var index = slideModeArray.indexOf(item);
+            if (index === 0) {
+                return false;
+            }
+            else {
+                return slideModeArray[index - 1]
+            }
+        }
+        return false
+    }
+
+    function nextSlidePage() {
+        var artworkViewer = TAG.Layout.ArtworkViewer({
+            doq: afterInSlideArray(),
+            isNobelWill: false,
+            isSlideMode: isSlideMode,
+            slidesArray: slideModeArray,
+        });
+        var newPageRoot = artworkViewer.getRoot();
+        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+        TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+    }
+
+    function prevSlidePage() {
+        var artworkViewer = TAG.Layout.ArtworkViewer({
+            doq: afterInSlideArray(),
+            isNobelWill: false,
+            isSlideMode: isSlideMode,
+            slidesArray: slideModeArray,
+        });
+        var newPageRoot = artworkViewer.getRoot();
+        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+        TAG.Util.UI.slidePageRightSplit(root, newPageRoot);
     }
 
     /**
@@ -1669,20 +1782,30 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'color': '#' + PRIMARY_FONT_COLOR,
             //'font-family': FONT
         });
-        if (isNobelWill === true) {
+        if (isNobelWill === true || isImpactMap === true) {
+            $("#backButton").remove();
             var bb = $(document.createElement('img'));
             bb.attr({
                 src: tagPath + 'images/icons/Back.svg',
                 id: 'nobelBackButton'
             })
-            bb.css({
-                'position': 'absolute',
-                'left': '2.5%',
-                'top': '1.75%',
-                'height': '6.5%',
-                'background-color': 'transparent',
-            }).click(goBack);
-
+            if (isNobelWill === true) {
+                bb.css({
+                    'position': 'absolute',
+                    'left': '2.5%',
+                    'top': '1.75%',
+                    'height': '6.5%',
+                    'background-color': 'transparent',
+                }).click(goBack);
+            } else {
+                bb.css({
+                    'position': 'absolute',
+                    'left': '3%',
+                    'top': '-1%',
+                    'height': '10%',
+                    'background-color': 'transparent',
+                }).click(goBack);
+            }
             var bbheight = bb.height();
             bb.css('width', bbheight + '%');
             sideBar.append(bb);
@@ -1778,7 +1901,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             stopAudio();
             TAG.Util.removeYoutubeVideo();
             $('.annotatedImageHotspotCircle').remove(); //remove hotspots
-            $('.annotatedImageMediaDescription').remove();
+            $('.mediaOuterContainer').remove();
             var collectionsPage,
                 collectionsPageRoot;
             backButton.off('click');
@@ -2532,85 +2655,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
 
         console.log('hotspots: ' + hotspots);
-        //load hotspots
+        //load hotspots then hide them
         for (var y = 0; y < hotspots.guids.length; y++) {
-            //loadQueue.add(mediaClicked(hotspots[hotspots.guids[y]],true,true));
             loadQueue.add(showHotspots());
         }
         loadQueue.add(hideHotspots());
-
-        //hack - trigger two clicks because styling was sometimes messing up for unknown reasons. lucyvk
-        //loadQueue.add(showHotspots());
-        //loadQueue.add(hideHotspots());
-
-        if (isImpactMap) {
-            var secondaryArtPage,
-                secondaryArtPageRoot,
-                currName,
-                collectionsPage,
-                collectionsPageRoot;
-            //show hotspots
-            /**
-            for (var y = 0; y < associatedMedia.guids.length; y++) {
-                loadQueue.add(mediaClicked(associatedMedia[associatedMedia.guids[y]]));
-                console.log("showing hotspots and isImpactMap is true");
-            }
-            **/
-            var buttonDiv = $(document.createElement('div'));
-            buttonDiv.attr('id', 'buttonDiv');
-            buttonDiv.css({
-                'background-color': 'black', //FIX OPACITY??
-                'width': '100%',
-                'height': 'auto',
-                'top': '100%',
-                'position': 'absolute',
-                'padding-bottom': '1.5%',
-                'margin-top': '1%',
-                'z-index': '1000001',
-            });
-            fieldsMapButton.text("See an Example");
-            fieldsMapButton.css({
-                'color': 'white',
-                'border-color': 'white',
-                "background-color": "transparent",
-                'width': '20%',
-                'top': '100%',
-                'left': '40%',
-                'padding-bottom': '1.5%',
-                'position': 'relative'
-            });
-            var NEXT_GUID = '80f7f3fa-2a85-450e-b61c-79d8721080c3'; //hardcoded for now- this would really need to be rethought for extensibility 
-            var NEXT_EXHIB = '1986 Nobel Prize in Physics';
-                fieldsMapButton.on('click', function () {
-                    //load final collection
-                    TAG.Worktop.Database.getExhibitions(function (collections) {
-                        for (i = 0; i < collections.length; i++) {
-                            currName = collections[i].Name;
-                            if (currName === NEXT_EXHIB) {
-                                options.backCollection = collections[i];
-                            }
-                        }
-                        options.twoDeep = true;
-                        options.backToGuid = "79bb289b-0e18-4091-8e3b-f21e5d65e793";
-                        options.hideKeywords = true;
-                        TAG.Util.Splitscreen.setOn(false);
-                        collectionsPage = TAG.Layout.CollectionsPage(options);
-                        TAG.Util.UI.slidePageLeft(collectionsPage.getRoot(), function () {
-                            collectionsPage.getRoot().find("backButtonArea").css('display', 'inline');
-                        });
-                    });
-                });
-            $('.mediaMediaContainer').append(buttonDiv);
-            buttonDiv.append(fieldsMapButton);
-        }
-
-        //PART OF CUSTOM BUILD FOR THE SAM
-        /*for (i = 0; i < associatedMedia.guids.length; i++) {
-            //doNothing("THIS THIS: " + Object.keys(associatedMedia[associatedMedia.guids[i]]));
-            if (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type && (associatedMedia[associatedMedia.guids[i]].linq.Metadata.Type === "Hotspot")) {
-                loadQueue.add(associatedMedia[associatedMedia.guids[i]].showHotspot());
-            }
-        };*/
     }
 
     function initKeywordsSetDrawer(name, fullKeywordSet, artworkKeywords) {
