@@ -390,7 +390,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
     function prevSlidePage() {
         var artworkViewer = TAG.Layout.ArtworkViewer({
-            doq: afterInSlideArray(),
+            doq: beforeInSlideArray(),
             isNobelWill: false,
             isSlideMode: isSlideMode,
             slidesArray: slideModeArray,
