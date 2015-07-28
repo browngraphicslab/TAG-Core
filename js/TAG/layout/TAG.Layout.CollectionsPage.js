@@ -259,9 +259,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         if (!$("#startPageLoadingOverlay").length) {
             loadingArea.append(loadingLabel);
         }
-        else {
-            loadingArea.append($("#startPageLoadingOverlay"));
-        }
 
         //Or else the search bar loses focus immediately when you come back from artwork viewer
         $('#tagContainer').off();
@@ -4671,6 +4668,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
             if (!artwork|| !artworkSelected) {
                 return;
+            }
+            if (currCollection.Name !== "The Life of Alfred Nobel") {
+                slideMode = false;
             }
 
             /*if (slideMode === true) {

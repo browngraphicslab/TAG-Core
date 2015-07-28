@@ -45,22 +45,24 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
        progressIndicator = $(document.createElement("div")),
        volumeLevelContainer = $(document.createElement("div")),
        infoAvailableIcon = $(document.createElement("img")),
+       NOBEL_WILL_COLOR = 'rgb(254,161,0)',
        slidingPane = createSlidingPane(),
        infoTracksVisible = [],
        initialOverlay,
        initialLoading = true,
+       infoPopup,
 
 
    //Other atributes
-        infoPaneOut = false,
-        infoPaneVisible = false,
+       infoPaneOut = false,
+       infoPaneVisible = false,
        timeOffset,
        controlsTimeout,
-        isMuted,
-        isLooped,
-        isFullScreen,
-        isSeeking,
-        isUnloaded = false;
+       isMuted,
+       isLooped,
+       isFullScreen,
+       isSeeking,
+       isUnloaded = false;
 
     //Other miscellaneous variables
     Utils = new ITE.Utils();
@@ -100,6 +102,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             //attachFullScreen();
             attachProgressIndicator();
         };
+        showInfoPopup();
         //set initial tour properties: volume, startTime, endTime, loop, play, hideControls
         // Must be able to dynamically resize and position buttons based on screen size, TAG frame size, and number of buttons
     };
@@ -108,6 +111,51 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         return orchestrator;
     }
 
+
+    /*
+    * I/P:   none
+    * show informative popup
+    * O/P:   none
+    */
+    function hideInfoPopup() {
+        infoPopup && infoPopup.hide();
+    }
+
+
+    /*
+    * I/P:   none
+    * show informative popup
+    * O/P:   none
+    */
+    function showInfoPopup() {
+        if (!infoPopup) {
+            infoPopup = $(document.createElement('div'));
+            infoPopup.css({
+                'position' : 'absolute',
+                'width': '40%',
+                'height': '40%',
+                'top': "30%",
+                'left': '30%',
+                'background-color': 'rgba(0,0,0,.6)',
+                'border': '4px solid ' + NOBEL_WILL_COLOR,
+                'border-radius': '12px',
+                'z-index': '10000000000',
+                'display' : 'block',
+            }).attr({
+                id : 'informationPopup'
+            })
+            ITEHolder.append(infoPopup);
+            infoPopup.click(hideInfoPopup);
+        }
+        pause();
+        infoPopup && infoPopup.show();
+    }
+
+    /*
+    * I/P:   none
+    * show overlay when loading into the tour
+    * O/P:   none
+    */
     function makeInitialOverlay() {
         initialLoading = true;
         initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(1));
@@ -131,11 +179,17 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         initialOverlay.append($("#backButton"));
     }
 
+    /*
+    * I/P:   none
+    * hide the overlay when loading into the tour
+    * O/P:   none
+    */
     function hideInitialOverlay() {
         if (initialLoading === true) {
             initialLoading = false
             TAG.Util.hideLoading(initialOverlay)
             initialOverlay.remove();
+            $("#backButtonContainer").append($("#backButton"));
         }
     }
 
@@ -152,9 +206,11 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'right': '10px',
             'background-color': 'transparent',
             'position': 'absolute',
-            'z-index': '1000000',
-            'opacity' : '.25'
-        })
+            'opacity': '.25',
+            'z-index' : '1000000099879896789',
+        }).attr({
+            id : "infoAvailableIcon"
+        }).on("click", showInfoPopup);
         infoAvailableIcon.attr({
             src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/unlit_info.svg"
         })
@@ -500,6 +556,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function play() {
+        hideInfoPopup()
         if (initialLoading === true) {
             hideInitialOverlay();
         }
@@ -969,8 +1026,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         topRight.css({
             'position' : 'absolute',
             'border-top-right-radius': '12px',
-            'border-right': '2px solid rgb(254,161,0)',
-            'border-top': '2px solid rgb(254,161,0)',
+            'border-right': '2px solid '+NOBEL_WILL_COLOR,
+            'border-top': '2px solid '+NOBEL_WILL_COLOR,
             'width': '2%',
             'height': '2%',
             'right': '-2px',
@@ -978,7 +1035,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         })
         outTop.css({
             'position': 'absolute',
-            'border-left': '2px solid rgb(254,161,0)',
+            'border-left': ('2px solid '+NOBEL_WILL_COLOR),
             'width': '2%',
             'height': '42%',
             'left': '100%',
@@ -987,8 +1044,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         bottomRight.css({
             'position': 'absolute',
             'border-bottom-right-radius': '12px',
-            'border-right': '2px solid rgb(254,161,0)',
-            'border-bottom': '2px solid rgb(254,161,0)',
+            'border-right': '2px solid '+NOBEL_WILL_COLOR,
+            'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
             'width': '2%',
             'height': '2%',
             'right': '-2px',
@@ -996,7 +1053,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         })
         outBottom.css({
             'position': 'absolute',
-            'border-left': '2px solid rgb(254,161,0)',
+            'border-left': '2px solid '+NOBEL_WILL_COLOR,
             'width': '2%',
             'height': '41.9%',
             'left': '100%',
@@ -1014,9 +1071,9 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'font-size': '.9em',
             'overflow': "auto",
             'text-align': 'left',
-            'scrollbar-face-color': 'rgb(254,161,0)',
+            'scrollbar-face-color': NOBEL_WILL_COLOR,
             'scrollbar-arrow-color': 'transparent',
-            'scrollbar-track-color': 'rgb(254,161,0)',
+            'scrollbar-track-color': NOBEL_WILL_COLOR,
         }).attr('id', 'infoBlock');
         tabImg.attr({
             src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg",
@@ -1040,8 +1097,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'z-index': '9999999',
             'border-top-right-radius': '12px',
             'border-bottom-right-radius': '12px',
-            'border-bottom': '2px solid rgb(254,161,0)',
-            'border-top': '2px solid rgb(254,161,0)',
+            'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
+            'border-top': '2px solid '+NOBEL_WILL_COLOR,
             //'border' : '2px solid rgb(254,161,0)',
             'left' : '-26.1%'
         })
@@ -1062,18 +1119,19 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'text-overflow': 'ellipsis',
             'overflow' : 'hidden',
             'z-index': '9999999',
+            'font-family' : 'cinzel',
         })
         tab.css({
             'position': 'absolute',
             'height': '12%',
             'width': '8.5%',
-            'background-color': 'rgb(254,161,0)',
+            'background-color': NOBEL_WILL_COLOR,
             'border-top-right-radius': '12px',
             'border-bottom-right-radius': '12px',
             'left': '100%',
-            'border-bottom': '2px solid rgb(254,161,0)',
-            'border-top': '2px solid rgb(254,161,0)',
-            'border-right': '2px solid rgb(254,161,0)',
+            'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
+            'border-top': '2px solid '+NOBEL_WILL_COLOR,
+            'border-right': '2px solid '+NOBEL_WILL_COLOR,
             'border-left-style': 'none',
             //'border': '2px solid rgb(254,161,0)',
             'z-index': '9999999',
@@ -1167,17 +1225,17 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg")
             $("#infoPaneTab").css({
                 'background-color': 'rgba(0,0,0,.6)',
-                'border-right': '2px solid rgb(254,161,0)',
-                'border-top': '2px solid rgb(254,161,0)',
-                'border-bottom': '2px solid rgb(254,161,0)',
+                'border-right': '2px solid '+NOBEL_WILL_COLOR,
+                'border-top': '2px solid '+NOBEL_WILL_COLOR,
+                'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
             })
         } : function () {
             $("#tabImg").attr('src', itePath + 'ITE%20Core/ITEManual/ITEPlayerImages/Close.svg');
             $("#infoPaneTab").css({
                 'background-color': 'rgba(0,0,0,.6)',
-                'border-right': '2px solid rgb(254,161,0)',
-                'border-top': '2px solid rgb(254,161,0)',
-                'border-bottom': '2px solid rgb(254,161,0)',
+                'border-right': '2px solid '+NOBEL_WILL_COLOR,
+                'border-top': '2px solid '+NOBEL_WILL_COLOR,
+                'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
             })
         })
         
@@ -1188,18 +1246,18 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             callback(),
             $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
             $("#infoPaneTab").css({
-                'background-color': 'rgb(254,161,0)',
-                'border-right': '2px solid rgb(254,161,0)',
-                'border-top': '2px solid rgb(254,161,0)',
-                'border-bottom': '2px solid rgb(254,161,0)',
+                'background-color': NOBEL_WILL_COLOR,
+                'border-right': '2px solid '+NOBEL_WILL_COLOR,
+                'border-top': '2px solid '+NOBEL_WILL_COLOR,
+                'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
             })
         } : function () {
             $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
             $("#infoPaneTab").css({
-                'background-color': 'rgb(254,161,0)',
-                'border-right': '2px solid rgb(254,161,0)',
-                'border-top': '2px solid rgb(254,161,0)',
-                'border-bottom': '2px solid rgb(254,161,0)',
+                'background-color': NOBEL_WILL_COLOR,
+                'border-right': '2px solid '+NOBEL_WILL_COLOR,
+                'border-top': '2px solid '+NOBEL_WILL_COLOR,
+                'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
             })
         })
         

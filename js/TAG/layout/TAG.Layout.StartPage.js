@@ -493,11 +493,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 "height": "100%"
             })
             infoDiv.text(text);
-            TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
+            TAG.Util.showLoading(initialOverlay, '8%', '40%', '46%')//to show the loading screen
             initialOverlay.append(infoDiv);
             initialOverlay.css('opacity', '.99')
-            initialOverlay.css('background-color', 'rgba(0,0,0,.82)')
-            $("#tagContainer").append(initialOverlay);
+            initialOverlay.css('background-color', 'rgba(0,0,0,1)')
+            $(document.body).append(initialOverlay);
         }
         //opens the collections page on touch/click
         //@param collectionName     string representing name of collection to start with
@@ -523,7 +523,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             });
                             var newPageRoot = artworkViewer.getRoot();
                             newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                            TAG.Util.UI.slidePageLeft(newPageRoot,artworkViewer.initializeHotspots);
+                            TAG.Util.UI.slidePageLeftSplit(root,newPageRoot,artworkViewer.initializeHotspots);
                             currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                             currentPage.obj = artworkViewer;
                         }); 
@@ -537,7 +537,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             });
                             var newPageRoot = artworkViewer.getRoot();
                             newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                            TAG.Util.UI.slidePageLeft(newPageRoot, artworkViewer.initializeHotspots);
+                            TAG.Util.UI.slidePageLeftSplit(root,newPageRoot, artworkViewer.initializeHotspots);
                             currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                             currentPage.obj = artworkViewer;
                         });
@@ -562,14 +562,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             }
                         }
                         collectionsPage = TAG.Layout.CollectionsPage(options);
-                        TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+                        TAG.Util.UI.slidePageLeftSplit(root,collectionsPage.getRoot());
                         currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
                         currentPage.obj  = collectionsPage;
                     });
                 }
             } else {
                 collectionsPage = TAG.Layout.CollectionsPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration)); // TODO merging
-                TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+                TAG.Util.UI.slidePageLeftSplit(root,collectionsPage.getRoot());
                 currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
                 currentPage.obj  = collectionsPage;
             }           

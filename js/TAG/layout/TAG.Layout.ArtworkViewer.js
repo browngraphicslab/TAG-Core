@@ -216,7 +216,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         sideBar.css('visibility', 'hidden');
 
-        if (!slideModeArray) {
+        if (!slideModeArray || !slideModeArray.length || slideModeArray.length===0) {
             isSlideMode = false;
         }
         else if(slideModeArray[0]._value && slideModeArray[0]._value.artwork) {
