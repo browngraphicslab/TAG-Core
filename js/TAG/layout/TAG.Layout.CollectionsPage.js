@@ -2573,6 +2573,17 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 'color': SECONDARY_FONT_COLOR,
                 //'font-family': FONT
             });
+            if (currCollection.Name === 'The Life of Alfred Nobel') {
+                artTitle.css({
+                    'font-size': '150%',
+                    'font-weight': 'bold',
+                    'background-color': 'rgb(254, 161, 0.8)'
+                });
+                yearTextBox.css({
+                    'height': '10%',
+                    'vertical-align': 'middle'
+                })
+            }
 
             /* @function doubleClickHandler
                 * Opens artwork directly on double click
