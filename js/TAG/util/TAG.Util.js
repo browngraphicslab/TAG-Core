@@ -8349,7 +8349,7 @@ TAG.Util.Artwork = (function () {
             });
             thumbnailImage.css({
                 'max-width': '80%',
-                'height': '80%',
+                'width': '80%',
                 'position': 'relative',
                 'vertical-align': 'middle'
             });

@@ -2586,7 +2586,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             if (currCollection.Name === 'The Life of Alfred Nobel') {
                 artTitle.css({
                     'font-size': '150%',
-                    'font-weight': 'bold',
                     'background-color': 'rgb(254, 161, 0.8)',
                     'height': '10%',
                     'font-family': 'sourcesans'
