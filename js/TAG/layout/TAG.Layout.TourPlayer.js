@@ -10,10 +10,12 @@
  * @param artmodeOptions      options to pass into TAG.Layout.ArtworkViewer
  * @param tourObj      the tour doq object, so we can return to the proper tour in the collections screen
  * @param idletimer    the idle timer 
+ * @param nobel
  */
-TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj, idletimer) {
+TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj, idletimer, nobel) {
     "use strict";
     var artworkPrev;
+
     var prevScroll = prevInfo.prevScroll;
     var prevPreviewPos = prevInfo.prevPreviewPos;
 	var prevExhib = exhibition;
@@ -21,6 +23,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     var prevMult = prevInfo.prevMult;
     var prevSearch = prevSearch;
     var prevS;
+
     var self = this;
     var rinPath = IS_WINDOWS ? tagPath + 'js/WIN8_RIN/web' : tagPath + 'js/RIN/web';
     var ispagetoload = pageToLoad && (pageToLoad.pagename === 'tour');
@@ -257,6 +260,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                 }
             }
             function donePolling() {
+                
                 $("#startPageLoadingOverlay").remove();
                 player = new ITE.Player(testOptions, self, rinPlayer, idleTimer,nobelDoq);
                 player.load(self.getTourData());

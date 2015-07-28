@@ -40,6 +40,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverSubmit = root.find('#serverSubmit'),
         passwordSubmit = root.find('#passwordSubmit'),
         lockedMessage = root.find('#lockedMessage'),
+        psuedoCollection = {
+            prevScroll: null,
+            prevPreviewPos: null,
+            prevExhib: null,
+            prevTag: null,
+            prevMult: null, 
+            prevSearch: null
+        },
         //tutorialButton = root.find('#tutorialButton'),
         buttonClicked = false,
         serverURL,
@@ -48,6 +56,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         mainDoq,
         PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : null,
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : null,
+        INTRO_TOUR = "Introductory Tour",
         HISTORY_NAME = "Nobel Prize History and Impact", //name of collection about nobel history
         LIFE_NAME = "The Life of Alfred Nobel",
         WILL_NAME = "Nobel Will Page 1",
@@ -393,6 +402,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         
         $(root.find('.goToWrapper')).css('padding-top', '2%');
         
+        introImage.on('click', function () {
+            switchPage(INTRO_TOUR, null, null, null)
+        });
 
         winnersImage.on('click', function() {
             switchPage(LAUREATE_NAME,false,true,true);
@@ -409,6 +421,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         lifeImage.on('click', function(){
             switchPage(LIFE_NAME, true);
         });
+
+        goToIntroButton.on('click', function () {
+            if (buttonClicked === false) {
+                buttonClicked = true;
+                loadingScreen("Loading Introductory Tour...");
+                switchPage(INTRO_TOUR, null, null, null);
+            }
+        });
+
         goToWinnersButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
@@ -526,6 +547,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             if(!isBrowserCompatible()) {
                 handleIncompatibleBrowser();
             }
+
+            
+
             if (collectionName){
                 if (collectionName === WILL_NAME) {
                     TAG.Worktop.Database.getDoq("9f3ed716-af94-4934-8c5e-79d1065a9fa2",
@@ -540,6 +564,17 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                             currentPage.obj = artworkViewer;
                         }); 
+                }
+                else if (collectionName === INTRO_TOUR) {//Hardcode to bring user directly into introductory tour. Not a collection page. Sorry.
+                    TAG.Worktop.Database.getDoq("ec87282f-4327-492a-8807-27eccbb45b8c", function (doq) {
+                        var iteData = TAG.Util.RIN_TO_ITE(doq)
+                        var ITEPlayer = TAG.Layout.TourPlayer(iteData, null, psuedoCollection, null, doq, null, true);
+                        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
+                            setTimeout(function () {
+                                ITEPlayer.startPlayback();
+                            }, 1000);
+                        });
+                    })
                 }
                 else if (collectionName === HISTORY_NAME){
                     TAG.Worktop.Database.getDoq("79bb289b-0e18-4091-8e3b-f21e5d65e793",
