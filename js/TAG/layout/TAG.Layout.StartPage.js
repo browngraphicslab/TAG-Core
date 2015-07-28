@@ -929,7 +929,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     evt.stopPropagation();
         // });
 
-        $('.goToCollectionsButton').css({ "border": "1px solid #fea100" });
+        $('.goToCollectionsButton').css({
+            'border-radius': '6pt',
+            'font-size': '90%',
+            'opacity': '0.85'
+        });
 
         goToWinnersButton.on("mousedown", function () {
             goToWinnersButton.css({"color": "white"});

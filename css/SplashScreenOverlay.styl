@@ -173,42 +173,60 @@ infoBgColor = rgba(0,0,0,1)
     top 12%
     height 70%
 
-#splashScreenRoot #goToIntroWrapper
+#splashScreenRoot #goToWillWrapper
     float none
     margin 0 auto
 
 #splashScreenRoot .goToCollectionsButton
     position relative
     //left 40.5%
-    width 80%
+    width 65%
     margin 10px auto 0px auto
     //height 8%
-    padding-top 0.4%
-    padding-bottom 0.4%
+    padding 1.5%
     background-color rgb(254,161,0);
     font-weight normal
-    font-family "Segoe UI",serif
+    font-family sourceSans
     color black
+	opacity 0.9
     cursor pointer
     border-radius 3.5px
-    font-size 110%
+    font-size 90%
     //margin-top 10%
     //bottom 15%
     display block
 
+#splashScreenRoot .orangeLine
+	height 100%
+	background-color #fea100
+	border 5px solid #fea100
+
+#splashScreenRoot #leftLine
+	margin-left 3%
+	float left
+
+#splashScreenRoot #rightLine
+	margin-right 3%
+	float right
 
 
 #splashScreenRoot .goToWrapper
     position relative
-    width 25%
+    width 20%
     height 100%
     float left
 
+#splashScreenRoot .endWrapper
+	position relative
+	width 10%
+	height 100%
+	float left
+
 #splashScreenRoot .goToImage
-    width 50%
+    width 60%
     border-radius 50%
     height 30%
-    left 25%
+    left 20%
     position relative
     overflow hidden
     box-shadow 3px 5px 5px #000000
@@ -232,7 +250,7 @@ infoBgColor = rgba(0,0,0,1)
 
 #splashScreenRoot span
     &.titleone
-        font-family "Segoe UI", sans-serif
+        font-family Cinzel
         font-size 300%
         font-style normal
         text-decoration none
@@ -243,8 +261,8 @@ infoBgColor = rgba(0,0,0,1)
         font-weight normal
         text-decoration none
     &.bodyDescone
-        font-family "Segoe UI",serif
-        font-size 133%
+        font-family sourceSans
+        font-size 100%
         font-style normal
         font-weight normal
         position relative

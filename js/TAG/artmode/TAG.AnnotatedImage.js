@@ -966,7 +966,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 titleTextHolder = $(document.createElement('div'));
                 titleTextHolder.addClass('annotatedImageMediaTitle');
                 titleTextHolder.css({
-                    'font-family': 'Trajan',
+                    'font-family': 'Cinzel',
                     'font-weight': 'normal',
                     'text-transform': 'uppercase',
                     'font-size': '35%',
@@ -1600,8 +1600,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                     'width': '90%',
                                     'display': 'block',
                                     'margin-left': 'auto',
+<<<<<<< HEAD
                                     'margin-right': 'auto',
                                     'max-height': root.height()/3 + 'px'
+=======
+                                    'margin-right': 'auto'
+>>>>>>> 438904b6c65109c195bdda4c4b6bf070f5637aa4
                                 });
                                 descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
                                 if (IS_WINDOWS) {
@@ -1783,8 +1787,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             'margin-left': 'auto',
                             'margin-right': 'auto',
                             'background-color': 'transparent',
+<<<<<<< HEAD
                             'font-size': '100%',
                             'max-height': root.height() / 3 + 'px'
+=======
+                            'font-size': '100%'
+>>>>>>> 438904b6c65109c195bdda4c4b6bf070f5637aa4
                         });
                         descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
                         if (IS_WINDOWS) {
