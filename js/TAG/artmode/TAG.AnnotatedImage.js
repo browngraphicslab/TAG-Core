@@ -1600,6 +1600,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                     'max-height' : root.height()/3 + 'px',
                                     'width': '90%',
                                     'display': 'block',
+                                    'margin-top': '2%',
                                     'margin-left': 'auto',
                                     'margin-right': 'auto'
                                 });
