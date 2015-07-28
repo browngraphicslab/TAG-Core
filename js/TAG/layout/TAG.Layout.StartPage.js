@@ -40,6 +40,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit = root.find('#passwordSubmit'),
         lockedMessage = root.find('#lockedMessage'),
         //tutorialButton = root.find('#tutorialButton'),
+        buttonClicked = false, //to make sure multiple pages dont ge tloaded by clicking multiple buttons
         serverURL,
         tagContainer,
         newUser = options.newUser,
@@ -396,20 +397,36 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             switchPage(LIFE_NAME, true);
         });
 
-        goToWinnersButton.on('click', function() {
-            switchPage(LAUREATE_NAME,false,true,true);
+        goToWinnersButton.on('click', function () {
+            if (buttonClicked === false) {
+                buttonClicked = true;
+                loadingScreen("loading laureates...");
+                switchPage(LAUREATE_NAME, false, true, true);
+            }
         });
 
-        goToHistoryButton.on('click', function(){
-            switchPage(HISTORY_NAME,true);
+        goToHistoryButton.on('click', function () {
+            if (buttonClicked === false) {
+                buttonClicked = true;
+                loadingScreen("loading Alfred Nobel's life...");
+                switchPage(HISTORY_NAME, true);
+            }
         });
 
-        goToWillButton.on('click', function(){
-            switchPage(WILL_NAME);
+        goToWillButton.on('click', function () {
+            if (buttonClicked === false) {
+                buttonClicked = true;
+                loadingScreen("loading history and impact...");
+                switchPage(WILL_NAME);
+            }
         });
 
-        goToLifeButton.on('click', function(){
-            switchPage(LIFE_NAME, true);
+        goToLifeButton.on('click', function () {
+            if (buttonClicked === false) {
+                buttonClicked = true;
+                loadingScreen("loading Alfred Nobel's will...");
+                switchPage(LIFE_NAME, true);
+            }
         });
         
         /**
@@ -460,7 +477,28 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // authoringButtonBuffer.on('click', function (evt) {
         //     evt.stopPropagation();
         // });
-
+        function loadingScreen(text) {
+            var initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(1));
+            initialOverlay.css('display', 'block').attr({
+                id : 'startPageLoadingOverlay'
+            })
+            var infoDiv = $(document.createElement('div'));
+            infoDiv.css({
+                "color": "white",
+                "background-color": "transparent",
+                "text-align": "center",
+                "top": "59%",
+                "display": "block",
+                "position": "absolute",
+                "font-size": "3em",
+                "width": '100%',
+                "height": "100%"
+            })
+            infoDiv.text(text);
+            TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
+            initialOverlay.append(infoDiv);
+            $(root).append(initialOverlay);
+        }
         //opens the collections page on touch/click
         //@param collectionName     string representing name of collection to start with
         function switchPage(collectionName, hideKeywords, smallPreview, titleIsName) {

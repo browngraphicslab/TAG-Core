@@ -257,6 +257,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                 }
             }
             function donePolling() {
+                $("#startPageLoadingOverlay").remove();
                 player = new ITE.Player(testOptions, self, rinPlayer, idleTimer,nobelDoq);
                 player.load(self.getTourData());
             }

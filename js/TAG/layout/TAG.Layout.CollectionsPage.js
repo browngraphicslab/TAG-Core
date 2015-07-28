@@ -204,6 +204,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @method init
      */
     function init() {
+        $("#startPageLoadingOverlay").remove();
         if (!idleTimer && !previewing) {
             var timerDuration = {
                 duration: idleTimerDuration ? idleTimerDuration : null
@@ -2825,10 +2826,15 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     artTitle.css('background-color', 'rgba(0,0,0,.5)')
                 }
             )
-            main.append(tileImage)
-                .append(artTitle)
-                .append(yearTextBox);
-
+            if (currCollection.Name !== "The Life of Alfred Nobel") {
+                main.append(tileImage)
+                    .append(artTitle)
+                    .append(yearTextBox);
+            }
+            else {
+                main.append(tileImage)
+                    .append(yearTextBox);
+            }
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
                 if (currentWork.Metadata.ContentType == "tour" || currentWork.Metadata.ContentType == undefined) {
                     tourLabel = $(document.createElement('img'))
@@ -3427,7 +3433,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 //doNothing("restarting previewer timer");
                 global_artwork_prev_timer.restart(); //restarts the previewer timer for telemetry
             }
-
             var rootWidth,
                 infoWidth,
                 tileWidth,
