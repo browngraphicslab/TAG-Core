@@ -23,6 +23,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
         goToWillButton = root.find('#goToWillButton'),
+        goToWillImage = root.find('#goToWillImage'),
         goToHistoryButton = root.find('#goToHistoryButton'),
         goToWinnersButton = root.find('#goToWinnersButton'),
         goToLifeButton = root.find('#goToLifeButton'),
@@ -380,6 +381,18 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             goToCollectionsButton.text("Go to Artwork");
         }
         **/
+        goToWillImage.css({
+            'width': '80%',
+            'border-radius': '50%',
+            'height': '40%',
+            'left': '10%',
+            'position': 'relative',
+            'overflow': 'hidden',
+            'box-shadow': '3px 5px 5px #000000'
+        });
+        
+        $(root.find('.goToWrapper')).css('padding-top', '2%');
+        
 
         winnersImage.on('click', function() {
             switchPage(LAUREATE_NAME,false,true,true);
@@ -958,6 +971,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         logoContainer.on('click', function (evt) {
             evt.stopPropagation();
         });
+
+      
+        
 
         // serverSetUpContainer.on('click', function() {
         //     TAG.Util.UI.ChangeServerDialog();

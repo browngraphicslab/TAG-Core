@@ -8318,7 +8318,7 @@ TAG.Util.Artwork = (function () {
                 padding: '0% 3% 0% 3%'
             });
             var thumbnailOverlay = $(document.createElement('img')).addClass('overlayButtonImage')
-            thumbnailOverlay.attr('src', tagPath + 'images/tour_icon.svg');
+            thumbnailOverlay.attr('src', tagPath + 'images/tour_icon_nobel.svg');
             thumbnailOverlay.css({
                 position: 'absolute',
                 top: '50%',
@@ -8333,12 +8333,35 @@ TAG.Util.Artwork = (function () {
             holderInnerContainer.css('position', 'absolute');
             holderInnerContainer.append(thumbnailImage);
             holderInnerContainer.append(thumbnailOverlay);
+        } else if (buttonClass && buttonClass === 'hotspotButton') {
+            holder.css({
+                'max-width': '50%',
+                'margin-left': 'auto',
+                'margin-right': 'auto'
+            })
+            var thumbnailOverlay = $(document.createElement('img')).addClass('overlayButtonImage')
+            thumbnailOverlay.attr('src', tagPath + 'images/hotspot_circle_nobel.svg');
+            thumbnailOverlay.css({
+                position: 'absolute',
+                top: '-2px',
+                left: '5px',
+                'height': '12px'
+            });
+            thumbnailImage.css({
+                'max-width': '80%',
+                'height': '80%',
+                'position': 'relative',
+                'vertical-align': 'middle'
+            });
+            holderInnerContainer.css('position', 'absolute');
+            holderInnerContainer.append(thumbnailImage);
+            holderInnerContainer.append(thumbnailOverlay);
         } else {
             holderInnerContainer.append(thumbnailImage);
         }
 
-        yearDiv.text(year);
-        holder.append(yearDiv);
+        //yearDiv.text(year);
+        //holder.append(yearDiv);
 
         return holder;
     }
