@@ -23,14 +23,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
         goToWillButton = root.find('#goToWillButton'),
-        goToHistoryButton = root.find('#goToHistoryButton'), 
+        goToHistoryButton = root.find('#goToHistoryButton'),
         goToWinnersButton = root.find('#goToWinnersButton'),
         goToLifeButton = root.find('#goToLifeButton'),
         goToIntroButton = root.find("#goToIntroButton"),
         willImage = root.find('#willImage'),
-        lifeImage= root.find('#lifeImage'),
-        historyImage= root.find('#historyImage'),
-        winnersImage= root.find('#winnersImage'),
+        lifeImage = root.find('#lifeImage'),
+        historyImage = root.find('#historyImage'),
+        winnersImage = root.find('#winnersImage'),
         introImage = root.find("#introImage"),
         serverInput = root.find('#serverInput'),
         authoringInput = root.find('#passwordInput'),
@@ -40,6 +40,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         passwordSubmit = root.find('#passwordSubmit'),
         lockedMessage = root.find('#lockedMessage'),
         //tutorialButton = root.find('#tutorialButton'),
+        buttonClicked = false,
         serverURL,
         tagContainer,
         newUser = options.newUser,
@@ -406,7 +407,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToHistoryButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("Loading Alfred Nobel's Life...");
+                loadingScreen("Loading History and Impact...");
                 switchPage(HISTORY_NAME, true);
             }
         });
@@ -414,7 +415,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToWillButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("Loading History and Impact...");
+                loadingScreen("Loading Alfred Nobel's Will...");
                 switchPage(WILL_NAME);
             }
         });
@@ -422,7 +423,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToLifeButton.on('click', function () {
             if (buttonClicked === false) {
                 buttonClicked = true;
-                loadingScreen("Loading Alfred Nobel's Will...");
+                loadingScreen("Loading Alfred Nobel's Life...");
                 switchPage(LIFE_NAME, true);
             }
         });

@@ -376,21 +376,29 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     }
 
     function nextSlidePage() {
-        var nextDoq = afterInSlideArray();
-        $("#annotatedImageAssetCanvas").remove();
-        $("#annotatedImageAssetCanvas").die();
-        annotatedImage.unload();
-        doq = nextDoq;
-        init()
+        var artworkViewer = TAG.Layout.ArtworkViewer({
+            doq: afterInSlideArray(),
+            isNobelWill: false,
+            isSlideMode: isSlideMode,
+            slidesArray: slideModeArray,
+        });
+        var newPageRoot = artworkViewer.getRoot();
+        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+        TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
     }
 
     function prevSlidePage() {
-        var nextDoq = beforeInSlideArray();
-        $("#annotatedImageAssetCanvas").remove();
-        $("#annotatedImageAssetCanvas").die();
-        annotatedImage.unload();
-        doq = nextDoq;
-        init()
+        var artworkViewer = TAG.Layout.ArtworkViewer({
+            doq: afterInSlideArray(),
+            isNobelWill: false,
+            isSlideMode: isSlideMode,
+            slidesArray: slideModeArray,
+        });
+        var newPageRoot = artworkViewer.getRoot();
+        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+        TAG.Util.UI.slidePageRightSplit(root, newPageRoot);
     }
 
     /**
