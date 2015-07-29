@@ -69,6 +69,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         backToGuid = options.backToGuid, //for impact map experience
         backToAssoc = options.backToAssoc, // for impact map experience
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
+        showNobelLifeBox = options.showNobelLifeBox, // customization to indicate whether initial pop up has appeared on Nobel Life collection
+
         
 
         // misc initialized vars
@@ -141,7 +143,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         searchResultsLength,
         tileCircle,                     // loading circle for artwork tiles
         menuCreated,
-
+    
         // KEYWORDS
         keywordSets,
 
@@ -204,6 +206,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
     // get things rolling
     init();
+    createNobelLifePopup();
     /**
      * Sets up the collections page UI
      * @method init
@@ -296,9 +299,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             
         }); */
 
-
-        
-
         searchInput.css({
             'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
             'background-size' : 'auto 90%',
@@ -306,26 +306,20 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'background-position':'right'
         });
 
-
-
         var searchDefault = "search";
         
-        searchInput.attr('placeholder', searchDefault);
-        
+        searchInput.attr('placeholder', searchDefault); 
         searchInput.css({
             'font-style': 'italic'
         })
         searchInput.on('focusin', function () { 
             searchInput.css({ 'background-image': 'none' }); 
         });
-
-        
         searchInput.on('focusout', function () { 
             if (!searchInput.val()) {
                 searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")' });
-            } 
+            };
         });
-          
 
         //initSplitscreen();
 
@@ -398,7 +392,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }, false);
         };
 
-
         var progressCircCSS = {
             'position': 'absolute',
             'float': 'left',
@@ -415,7 +408,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
         TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
         applyCustomization();
-
         menuCreated = false;
     }
 
@@ -477,8 +469,126 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }
             }
         }
-
     }
+
+    /**
+     * Initializes the popup informative window before the nobel will exploration begins
+     * @param function onClose      the function called after the window is closed
+     */
+
+    function createNobelLifePopup() {
+        if (currCollection.Name !== 'The Life of Alfred Nobel' || showNobelLifeBox) {
+            return;
+        }
+        console.log("create nobel life pop up");
+        showNobelLifeBox = false;
+        var popup = $(document.createElement('div'))
+        popup.css({
+            'display': 'block',
+            'position': 'absolute',
+            'opacity': '1',
+            'border-radius': '18px',
+            'border-color': NOBEL_WILL_COLOR,
+            'border': '8px solid ' + NOBEL_WILL_COLOR,
+            'width': '60%',
+            'height': '50%',
+            'top': '25%',
+            'left': '20%',
+            'background-color': 'black',
+            'z-index': '99999999'
+        })
+        var popupTopBar = $(document.createElement('div'));
+        var popupLeftBar = $(document.createElement('div'));
+        var popupRightBar = $(document.createElement('div'));
+        var popupLeftTopBar = $(document.createElement('div'));
+        var popupLeftBottomBar = $(document.createElement('div'));
+        var nobelIcon = $(document.createElement('img'));
+        var closeX = $(document.createElement('img'));
+
+        nobelIcon.attr({
+            src: tagPath + 'images/icons/nobel_icon.png',
+            id: 'nobelIcon'
+        })
+        nobelIcon.css({
+            'position': 'absolute',
+            'width': '90%',
+            'height': '80%',
+            'left': '18%',
+            'top': '5%'
+        })
+        popupRightBar.append(nobelIcon);
+        popupTopBar.append(closeX);
+        closeX.attr({
+            src: tagPath + 'images/icons/x.svg',
+            id: 'closeX'
+        })
+        closeX.css({
+            'left': '94.85%',
+            'position': 'absolute',
+            'top': '15%',
+            'height': '54%'
+        })
+        popupTopBar.css({
+            'height': '15%',
+            'position': 'absolute',
+            'width': '100%',
+        })
+
+        popupLeftBar.css({
+            'height': '85%',
+            'position': 'absolute',
+            'width': '65%',
+            'top': '15%',
+            'color': 'white'
+        })
+
+        popupRightBar.css({
+            'height': '85%',
+            'position': 'absolute',
+            'width': '35%',
+            'top': '15%',
+            'left': '60%',
+        })
+
+        popupLeftTopBar.css({
+            'height': '18%',
+            'position': 'absolute',
+            'width': '92%',
+            'left': '8%',
+            'font-size': '1.25em',
+            'font-weight': 'bold',
+            'color': 'white',
+            'font-family': 'Cinzel'
+        }).text("Alfred Nobel's Will")
+
+        popupLeftBottomBar.css({
+            'top': ' 18%',
+            'height': '82%',
+            'position': 'absolute',
+            'left': '8%',
+            'width': '92%',
+            'font-size': '.82em',
+            'color': 'white'
+        }).text('To be decided.')
+
+        var temp = $(TAG.Util.UI.blockInteractionOverlay(.3));//add blocking div to stop all interaction
+        temp.css({
+            "display": 'block',
+            'z-index': '9999999'
+        })
+        popupLeftBar.append(popupLeftTopBar);
+        popupLeftBar.append(popupLeftBottomBar);
+        popup.append(popupTopBar);
+        popup.append(popupLeftBar);
+        popup.append(popupRightBar);
+        root.append(temp)
+        root.append(popup)
+        closeX.click(function () {
+            temp.remove();
+            popup.remove();
+            showNobelLifeBox = true;
+        });
+    };
 
     /**
      * Create info pop-up for 'i' info icon on collections page
@@ -4845,6 +4955,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     twoDeep: twoDeep,
                     oneDeep: oneDeep,
                     hideKeywords: hideKeywords,
+                    showNobelLifeBox: showNobelLifeBox
                 });
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
