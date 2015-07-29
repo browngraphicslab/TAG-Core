@@ -1224,7 +1224,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         if (doq.Metadata.Description) {
             var d = makeInfoField("Description: " + doq.Metadata.Description).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height() + 35;
+            top += d.height() + 50;
         }
         if (doq.Metadata.Artist) {
             var d = makeInfoField("Artist: " + doq.Metadata.Artist).css('top', top + 'px');
