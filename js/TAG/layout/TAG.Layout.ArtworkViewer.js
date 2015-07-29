@@ -503,13 +503,14 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'bottom': '1.3%',
             'height': '8%',
             'background-color': 'transparent',
-        }).click(toggleNobelMute)
+        }).click(toggleNobelMute);
 
         var muteButtonHeight = muteButton.height();
         muteButton.width(muteButtonHeight + '%');
 
-        //sideBar.append(muteButton);
+
         sideBar.append(nobelPlayPauseButton);
+        sideBar.append(muteButton);
 
         $("#backButton").remove();
 
@@ -618,7 +619,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 'left': '7.5%',
                 'width': '85%',
                 'color': 'black',
-                'height': '25%',
+                'height': leftTextArray[i][1] > 65 ? 65-leftTextArray[i][1]+"%" : '25%',
                 'top': leftTextArray[i][1] + '%',
                 'font-size': '.6em',
             });
