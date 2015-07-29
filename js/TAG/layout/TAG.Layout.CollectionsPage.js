@@ -2462,116 +2462,137 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 paddingDiv,
                 circle,
                 i, h, w, j;
-
-
-            if (!artworks || artworks.length === 0){
-                tileCircle.hide();
-                if (onAssocMediaView) {
-                    $("#assocMediaButton").css({ "color": SECONDARY_FONT_COLOR });
-                    $("#artworksButton").css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
-                } else {
-                    assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
-                    artworksButton.css({ "color": SECONDARY_FONT_COLOR });
+            TAG.Worktop.Database.getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
+            function gotTours(tours) {
+                var tourIDsHash = [];
+                var tourDoqs = [];
+                for (var i = 0; i < tours.length; i++) {
+                    var tour = tours[i]
+                    TAG.Worktop.Database.getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
                 }
-                assocMediaButton.removeAttr('disabled');
-                artworksButton.removeAttr('disabled');
-                return;
-            }
-
-            if (tag){
-                sortedArtworks = sortCatalog(artworks, tag);
-                minOfSort      = sortedArtworks.min();
-                currentWork    = minOfSort ? minOfSort.artwork : null;
-                works = sortedArtworks.getContents();
-            } else {
-                //If no sort options
-                works = artworks;
-                currentWork = artworks[0];
-            }
-            i = start;
-            h = catalogDiv.height() * 0.48;
-            w = h * 1.4;
-                
-            tileDiv.empty();
-            tileDivHeight = tileDiv.height();
-
-            var lastVisibleTileNumber = works.length - 1;
-            for (var reverse = works.length - 1; reverse >= 0; reverse--) {
-                var currWork = works[reverse].artwork ? works[reverse].artwork.Metadata : works[reverse].Metadata
-                if (currWork.ContentType !== 'tour' || currWork.Private !== 'true') {
-                    lastVisibleTileNumber = reverse;
-                    break;
-                }
-            }
-
-            var hiddenTours = 0;
-            
-            for (j = 0; j < works.length; j++) {
-                if (tag) {
-                    if (works[j].artwork.Metadata.ContentType !== 'tour' || works[j].artwork.Metadata.Private !== "true") {
-                        loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i + j - hiddenTours, j === lastVisibleTileNumber));
-                    }
-                    else {
-                        hiddenTours++;
+                function tourBack(doq) {
+                    tourDoqs.push(doq);
+                    if (tourDoqs.length === tours.length) {
+                        gotDoqs();
                     }
                 }
-                else {
-                    if (works[j].Metadata.ContentType !== 'tour' || works[j].Metadata.Private !== "true") {
-                        loadQueue.add(drawArtworkTile(works[j], null, onSearch, i + j - hiddenTours, j === lastVisibleTileNumber));
+                function gotDoqs() {
+                    for (var j = 0; j < tourDoqs.length; j++) {
+                        var a = JSON.parse(tourDoqs[j].Metadata.RelatedArtworks)
+                        for (var k = 0; k < a.length; k++) {
+                            tourIDsHash[a[k]] = true;
+                        }
                     }
-                    else {
-                        hiddenTours++;
+                    if (!artworks || artworks.length === 0) {
+                        tileCircle.hide();
+                        if (onAssocMediaView) {
+                            $("#assocMediaButton").css({ "color": SECONDARY_FONT_COLOR });
+                            $("#artworksButton").css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                        } else {
+                            assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                            artworksButton.css({ "color": SECONDARY_FONT_COLOR });
+                        }
+                        assocMediaButton.removeAttr('disabled');
+                        artworksButton.removeAttr('disabled');
+                        return;
                     }
+
+                    if (tag) {
+                        sortedArtworks = sortCatalog(artworks, tag);
+                        minOfSort = sortedArtworks.min();
+                        currentWork = minOfSort ? minOfSort.artwork : null;
+                        works = sortedArtworks.getContents();
+                    } else {
+                        //If no sort options
+                        works = artworks;
+                        currentWork = artworks[0];
+                    }
+                    i = start;
+                    h = catalogDiv.height() * 0.48;
+                    w = h * 1.4;
+
+                    tileDiv.empty();
+                    tileDivHeight = tileDiv.height();
+
+                    var lastVisibleTileNumber = works.length - 1;
+                    for (var reverse = works.length - 1; reverse >= 0; reverse--) {
+                        var currWork = works[reverse].artwork ? works[reverse].artwork.Metadata : works[reverse].Metadata
+                        if (currWork.ContentType !== 'tour' || currWork.Private !== 'true') {
+                            lastVisibleTileNumber = reverse;
+                            break;
+                        }
+                    }
+
+                    var hiddenTours = 0;
+
+                    for (j = 0; j < works.length; j++) {
+                        if (tag) {
+                            if (works[j].artwork.Metadata.ContentType !== 'tour' || works[j].artwork.Metadata.Private !== "true") {
+                                loadQueue.add(drawArtworkTile(works[j].artwork, tag, onSearch, i + j - hiddenTours, tourIDsHash[works[j].artwork.Identifier]===true,j === lastVisibleTileNumber));
+                            }
+                            else {
+                                hiddenTours++;
+                            }
+                        }
+                        else {
+                            if (works[j].Metadata.ContentType !== 'tour' || works[j].Metadata.Private !== "true") {
+                                loadQueue.add(drawArtworkTile(works[j], null, onSearch, i + j - hiddenTours, tourIDsHash[works[j].artwork.Identifier] === true, j === lastVisibleTileNumber));
+                            }
+                            else {
+                                hiddenTours++;
+                            }
+                        }
+                    }
+                    if (works.length == 0) {
+
+                        if (onAssocMediaView) {
+                            assocMediaButton.css({ "color": SECONDARY_FONT_COLOR });
+                            artworksButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                        } else {
+                            assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
+                            artworksButton.css({ "color": SECONDARY_FONT_COLOR });
+                        }
+
+                        assocMediaButton.removeAttr('disabled');
+                        artworksButton.removeAttr('disabled');
+
+                    }
+                    loadQueue.add(function () {
+                        if (works.length > 0) {
+                            paddingDiv = $(document.createElement("div"))
+                                .css({
+                                    'height': "100%",
+                                    "width": TILE_BUFFER,
+                                    "pointer-events": "none",
+                                    'position': 'absolute',
+                                    "margin": "none",
+                                    'left': tileDiv.children().eq(-1).position().left + tileDiv.children().eq(-1).width() // to get last child position
+                                });
+                            tileDiv.append(paddingDiv);
+                        }
+                    })
+
+                    loadQueue.add(function () {
+                        tileCircle.hide();
+                    })
+                    if (IS_WINDOWS) {
+                        loadQueue.add(function () {
+                            showArtwork(currentArtwork, multipleShown && multipleShown)();
+                        })
+                    }
+
+                    //if (infoDiv.width()===0){
+                    //    tileDiv.css({'margin-left':'2%'});
+                    //} else{
+                    //    tileDiv.css({'margin-left':'0%'});
+                    //}
+                    catalogDiv.append(tileDiv);
+                    if (redrawTimeline) {
+                        clearTimeline(artworks);
+                    }
+
                 }
             }
-            if (works.length == 0) {
-
-                if (onAssocMediaView) {
-                    assocMediaButton.css({ "color": SECONDARY_FONT_COLOR });
-                    artworksButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
-                } else {
-                    assocMediaButton.css({ "color": TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR, DIMMING_FACTOR) });
-                    artworksButton.css({ "color": SECONDARY_FONT_COLOR });
-                }
-
-                assocMediaButton.removeAttr('disabled');
-                artworksButton.removeAttr('disabled');
-                
-            }
-            loadQueue.add(function () {
-                if (works.length > 0) {
-                    paddingDiv = $(document.createElement("div"))
-                        .css({
-                            'height': "100%",
-                            "width": TILE_BUFFER,
-                            "pointer-events": "none",
-                            'position': 'absolute',
-                            "margin": "none",
-                            'left': tileDiv.children().eq(-1).position().left + tileDiv.children().eq(-1).width() // to get last child position
-                        });
-                    tileDiv.append(paddingDiv);
-                }
-            })
-       
-            loadQueue.add(function () {
-                tileCircle.hide();
-            })
-            if (IS_WINDOWS){
-            loadQueue.add(function () {
-                showArtwork(currentArtwork, multipleShown && multipleShown)();
-            })
-            }
-
-            //if (infoDiv.width()===0){
-            //    tileDiv.css({'margin-left':'2%'});
-            //} else{
-            //    tileDiv.css({'margin-left':'0%'});
-            //}
-            catalogDiv.append(tileDiv);
-            if (redrawTimeline) {
-                clearTimeline(artworks);
-            }
-           
         }
     }
         
@@ -2659,11 +2680,12 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @param {doq} currentWork     the artwork/tour for which we're creating a tile
      * @param {String} tag          current sort tag
      * @param {Boolean} onSearch    whether this work is a match after searching
+     * @param {Boolean} needsTourIcon    whether this work needs a small tour icon next to it
      * @param {Number} i            index into list of all works in this collection
      */
     var tileDivDocFrag = document.createDocumentFragment();
     tileDivDocFrag.appendChild(tileDiv[0]);
-    function drawArtworkTile(currentWork, tag, onSearch, i, last) {
+    function drawArtworkTile(currentWork, tag, onSearch, i, needsTourIcon,last) {
         return function () {
             var main = $(document.createElement('div')),
                 artTitle = $(document.createElement('div')),
@@ -2851,6 +2873,21 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             */
 
             // Set tileImage to thumbnail image, if it exists
+            if (needsTourIcon === true) {
+                var icon = $(document.createElement('img'))
+                icon.attr({
+                    src: tagPath + 'images/tour_icon_nobel.svg'
+                })
+                icon.css({
+                    'position': 'absolute',
+                    'bottom': '0%',
+                    'right': '0%',
+                    'width': '24px',
+                    'height' : '24px',
+                    'background-color': 'transparent',
+                })
+                main.append(icon);
+            }
             if (currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio") {
                 main.css('overflow', 'hidden');
 
