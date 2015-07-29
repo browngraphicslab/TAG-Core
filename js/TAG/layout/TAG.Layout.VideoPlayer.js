@@ -277,7 +277,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
                 minutes,
                 seconds;
             
-            currTime = Math.max(0, Math.min(DURATION, origTime));
+            currTime = Math.max(0, Math.min(videoElt.duration, origTime));
             currPx   = currTime / timePxRatio;
             minutes  = Math.floor(currTime / 60);
             seconds  = Math.floor(currTime % 60);
@@ -295,7 +295,7 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
                 var currPoint = evt.pageX,
                     timeDiff = (currPoint - origPoint) * timePxRatio;
 
-                currTime = Math.max(0, Math.min(DURATION, origTime + timeDiff));
+                currTime = Math.max(0, Math.min(videoElt.duration, origTime + timeDiff));
                 currPx   = currTime / timePxRatio;
                 minutes  = Math.floor(currTime / 60);
                 seconds  = Math.floor(currTime % 60);
