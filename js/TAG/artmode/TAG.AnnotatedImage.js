@@ -1090,6 +1090,15 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                   TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
                               });
                     });
+                    innerContainer.append(closeButton);
+                    closeButton.css({
+                        'right': '3%',
+                        'margin-top': '-3%'
+                        });
+                    closeButton.on('click', function (evt) {
+                        outerContainer.hide();
+                        toggleMediaObject(true);g
+                    });
                 }
 
                 innerContainer.append(titleDiv);
