@@ -2058,18 +2058,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             infoAffiliation.text(affiliation ? "Affiliated with " + affiliation : "");
             infoAffiliation.appendTo(info);
 
-            if (doq.Metadata.Description) {
-                var description = doq.Metadata.Description;
-                var descriptionDiv = $(document.createElement('div'));
-                descriptionDiv.css({
-                    'font-size':'75%',
-                    'overflow-y': 'visible'
-                });
-                descriptionDiv.addClass('description');
-                descriptionDiv.text(description);
-                descriptionDiv.appendTo(assetContainer);
-            }
-
             // make sure the info text fits in the div (TODO is this necessary?)
             TAG.Util.fitText(info, 1.1);
 
@@ -2092,7 +2080,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                             'margin-top': '3%',
                             'font-size': '85%',
                             'color': NOBEL_ORANGE_COLOR,
-                            'font-weight': 'bold'
+                            'font-weight': 'bold',
+                            'white-space': 'nowrap',
+                            'display': 'block'
                         });
                     }
                     loadQueue.add(createMediaButton(mediaDrawer, curr));
@@ -2294,7 +2284,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         'margin-top': '3%',
                         'font-size': '85%',
                         'color': NOBEL_ORANGE_COLOR,
-                        'font-weight': 'bold'
+                        'font-weight': 'bold',
+                        'white-space': 'nowrap'
                     });
                 }
                 for (i = 0; i < relatedTours.length; i++) {
@@ -2302,10 +2293,25 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 }
             }
 
+
             if (mediaDrawer) {
                 assetContainer.append(mediaDrawer);
                 currBottom += mediaDrawer.height();
             }
+
+            if (doq.Metadata.Description) {
+                var description = doq.Metadata.Description;
+                var descriptionDiv = $(document.createElement('div'));
+                descriptionDiv.css({
+                    'font-size': '75%',
+                    'display': 'inline-block',
+                    'overflow-y': 'visible',
+                    'margin-top': '-10%'
+                });
+                descriptionDiv.addClass('description');
+                descriptionDiv.text(description);
+                descriptionDiv.appendTo(assetContainer);
+            };
 
             // set max height of drawers to avoid expanding into minimap area
             maxHeight = Math.max(1, assetContainer.height() - currBottom); //to account for the height of the drawerLabel of the current drawer.
