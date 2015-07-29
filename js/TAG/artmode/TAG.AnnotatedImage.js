@@ -1078,10 +1078,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         'top' : '10px',
                         'z-index': '1',
                         'vertical-align' : 'center',
-                        'right': '-5px',
+                        'right': '2%',
                     });
                     closeButton.on('click', function (evt) {
                         evt.stopPropagation();
+                        toggleMediaObject(false);
                         hideMediaObject();
                         TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                             tobj.current_artwork = doq.Identifier;
@@ -1118,14 +1119,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                               });
                     });
                     innerContainer.append(closeButton);
-                    closeButton.css({
-                        'right': '3%',
-                        'margin-top': '-3%'
-                        });
-                    closeButton.on('click', function (evt) {
-                        outerContainer.hide();
-                        toggleMediaObject(true);g
-                    });
                 }
 
                 innerContainer.append(titleDiv);
