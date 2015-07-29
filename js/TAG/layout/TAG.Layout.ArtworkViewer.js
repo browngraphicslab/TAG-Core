@@ -2427,6 +2427,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'margin-top': '4%',
         });
 
+        if (!IS_WINDOWS) {
+            assetContainer.css('max-height', sideBarInfo.height() - info.height() - infoTitle.height() + 'px');
+        };
         sideBarSections.append(minimapContainer);
 
         //A white rectangle for minimap to show the current shown area for artwork
