@@ -140,9 +140,15 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 'border-radius': '12px',
                 'z-index': '10000000000',
                 'display' : 'block',
+                'padding': '3%'
             }).attr({
                 id : 'informationPopup'
             })
+            .text("Welcome to the interactive tour player. Tours can be played, paused, and seeked using \
+                the controls at the bottom of this screen. At any moment, tours can be paused by touch or mouse interaction so that items on \
+                screen can be explored in more detail. When this orange icon lights up, one of the images or videos on screen \
+                has metadata information. Interacting with that element fills an informational sidebar which can be accessed by a handle \
+                on the left side of the screen to provide greater context.");
             ITEHolder.append(infoPopup);
             infoPopup.click(hideInfoPopup);
         }

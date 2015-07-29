@@ -174,7 +174,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 });
                 var newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                TAG.Util.UI.slidePageRight(root, newPageRoot);
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                 currentPage.obj = artworkViewer;
                 });
@@ -1175,7 +1175,13 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             artworkShown = false;
             mainCollection.css({
                 "text-align" : "center"
-            })
+            });
+
+            if (collection.Name === 'The Life of Alfred Nobel'){
+                oneDeep = true;
+                hideKeywords = true;
+            }
+
             // if the idle timer hasn't started already, start it
             if (!idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true) { // loadCollection is called without an event to show the first collection
                 var timerDuration = {
@@ -2583,7 +2589,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 'color': SECONDARY_FONT_COLOR,
                 //'font-family': FONT
             });
-            if (currCollection.Name === 'The Life of Alfred Nobel') {
+            if (oneDeep){
                 artTitle.css({
                     'font-size': '150%',
                     'background-color': 'rgb(254, 161, 0.8)',

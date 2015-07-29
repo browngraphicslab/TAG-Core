@@ -1008,7 +1008,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     collectionsPage,
                     collectionsPageRoot,
                     whiteArrow = $(document.createElement('img')),
-                    NEXT_EXHIB = '1986 Nobel Prize in Physics',
+                    NEXT_EXHIB = '0db2377a-be68-43fb-bc70-12f455c24a82',
                     exampleDiv = $(document.createElement('div'))
                             .attr('id', 'exampleDiv')
                             .css({
@@ -1059,14 +1059,16 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         // evt.stopPropogation();
                         console.log('clicked example div');
                         //load correct collection
-
-                              TAG.Worktop.Database.getExhibitions(function (collections) {
+                              TAG.Worktop.Database.getDoq(NEXT_EXHIB, function (collection) {
+                                /**
                                   for (var i = 0; i < collections.length; i++) {
                                       currName = collections[i].Name;
                                       if (currName === NEXT_EXHIB) {
                                           options.backCollection = collections[i];
                                       }
                                   }
+                                  **/
+                                  options.backCollection = collection;
                                   options.twoDeep = true;
                                   options.backToAssoc = mdoq;
                                   options.backToGuid = "79bb289b-0e18-4091-8e3b-f21e5d65e793";
