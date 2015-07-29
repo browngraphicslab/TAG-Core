@@ -44,6 +44,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         w = $('#tagRoot').width(),
         h = $('#tagRoot').height();
     
+    var cancelLoad = false;
+
     if (w / h > 16 / 9) { // make sure player is 16:9
         root.css({
             'width': h * 16 / 9 + 'px',
@@ -162,10 +164,12 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
         // idleTimer.kill();
         // idleTimer = null;
-        
+        cancelLoad = true;
+        $("#startPageLoadingOverlay").remove();
         if (player) {
             player.pause();
             player.unload();
+            player.cancelLoad();
         }
         backButton.off('click'); // prevent user from clicking twice
         if (artmodeOptions) {
@@ -260,20 +264,30 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             }
 
             function pollForData() {
-                if (returned < needed) {
-                    setTimeout(pollForData, 250);
-                }
-                else {
-                    donePolling();
+                if (!cancelLoad) {
+                    if (returned < needed) {
+                        setTimeout(pollForData, 250);
+                    }
+                    else {
+                        donePolling();
+                    }
                 }
             }
             function donePolling() {
-                
+                if (!cancelLoad) {
+                    $("#startPageLoadingOverlay").remove();
+                    player = new ITE.Player(testOptions, self, rinPlayer, idleTimer, nobelDoq);
+                    player.load(self.getTourData());
+                    return true;
+                }
                 $("#startPageLoadingOverlay").remove();
-                player = new ITE.Player(testOptions, self, rinPlayer, idleTimer,nobelDoq);
-                player.load(self.getTourData());
+                return false;
             }
             pollForData();
+            $("#backButton").click(function () {
+                cancelLoad = true;
+                return false;
+            })
         }
     };
 
