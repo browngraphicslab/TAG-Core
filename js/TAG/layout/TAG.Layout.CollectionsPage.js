@@ -3720,10 +3720,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     });
 
 
-                var yellowTextFields = ['Category', 'Year of Award', 'Citizenship 1', 'Gender']
+                var yellowTextFields = ['Category', 'Year of Award']//, 'Citizenship 1', 'Gender']
                 var needsYellowText = true;
                 var yellowTextTop = $(document.createElement('div'));
-                var yellowTextBottom = $(document.createElement('div'));
+               // var yellowTextBottom = $(document.createElement('div'));
                 var darkDiv = $(document.createElement('div'));;
                 if (artwork.Metadata && artwork.Metadata.InfoFields) {
                     for (var k = 0; k < yellowTextFields.length; k++) {
@@ -3738,7 +3738,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }
                 if (needsYellowText) {
                     yellowTextTop.css({
-                        'bottom': '12%',
+                        //'bottom': '12%',
                         'height': '8%',
                         'width': '100%',
                         'position': 'absolute',
@@ -3748,7 +3748,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         'font-weight' : '900',
                         'font-size': BASE_FONT_SIZE * 1 / 2 + 'em',
                     }).text(artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ')[artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ').length-1] + ', ' + artwork.Metadata.InfoFields[yellowTextFields[1]]);
-                    yellowTextBottom.css({
+                    /*yellowTextBottom.css({
                         'bottom': '2%',
                         'height': '8%',
                         'width': '100%',
@@ -3758,14 +3758,15 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         'text-align': 'center',
                         'font-weight': '900',
                         'font-size': BASE_FONT_SIZE * 1 / 2 + 'em',
-                    }).text(artwork.Metadata.InfoFields[yellowTextFields[2]] + ', ' + artwork.Metadata.InfoFields[yellowTextFields[3]]);
+                    }).text(artwork.Metadata.InfoFields[yellowTextFields[2]] + ', ' + artwork.Metadata.InfoFields[yellowTextFields[3]]);*/
                     darkDiv.css({
                         'bottom': '00%',
-                        'height': '20%',
+                        'height': '10%',
                         'width': '100%',
                         'position': 'absolute',
                         'background-color': 'rgba(0,0,0,.6)',
                     })
+                    darkDiv.attr('id', 'darkDiv');
                 }
                 
 
@@ -3778,7 +3779,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     'top': '10%',
                     'left' : '10%'
                 })
-                imgDiv.append(darkDiv).append(yellowTextTop).append(yellowTextBottom);
+                imgDiv.append(darkDiv)
+                darkDiv.append(yellowTextTop);//.append(yellowTextBottom);
                 //Explore div
                 exploreTab = $(document.createElement('div'))
                 if (!onAssocMediaView) {

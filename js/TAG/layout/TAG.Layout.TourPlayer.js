@@ -85,7 +85,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     if(prevExhib===null){
         prevpagelink = null;
     }else{
-            prevpagelink = prevExhib.Identifier
+        prevpagelink = prevExhib.Identifier
     }
 
     if(IS_WEBAPP) {

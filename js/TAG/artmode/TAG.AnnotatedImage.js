@@ -2179,7 +2179,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             outerContainer && outerContainer.detach();
 
             if ((IS_HOTSPOT && hotspotMediaHidden) || (IS_HOTSPOT && !isHotspotIcon && !hotspotMediaHidden)) {
-                circle.attr('src', tagPath + 'images/lit_info.svg');
+                if (circle) {
+                    circle.attr('src', tagPath + 'images/lit_info.svg');
+                }
             } else {
                 if (circle) {
                     circle.attr('src', tagPath + 'images/unlit_info.svg');
