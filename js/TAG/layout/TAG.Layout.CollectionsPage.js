@@ -2764,7 +2764,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 yearTextBox.css({
                     'height': '10%',
                     'vertical-align': 'middle',
-                    'font-family': 'sourcesans'
                 })
             }
 
