@@ -1012,7 +1012,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     'text-align': 'center',
                     'display': 'block',
                     'margin-left': 'auto',
-                    'margin-right': 'auto'
+                    'margin-right': 'auto',
+                    'scrollbar-face-color': NOBEL_WILL_COLOR,
+                    'scrollbar-arrow-color': 'transparent',
+                    'scrollbar-track-color': 'transparent',
                 })
 
                 titleDiv.append(titleTextHolder);

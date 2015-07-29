@@ -1110,7 +1110,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             'text-align': 'left',
             'scrollbar-face-color': NOBEL_WILL_COLOR,
             'scrollbar-arrow-color': 'transparent',
-            'scrollbar-track-color': NOBEL_WILL_COLOR,
+            'scrollbar-track-color': 'transparent',
         }).attr('id', 'infoBlock');
         tabImg.attr({
             src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg",

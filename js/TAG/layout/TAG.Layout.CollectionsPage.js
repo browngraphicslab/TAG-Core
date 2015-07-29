@@ -284,7 +284,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }
             }
         });
-
+        $("#bottomContainer").css({
+            'scrollbar-face-color': NOBEL_WILL_COLOR,
+            'scrollbar-arrow-color': 'transparent',
+            'scrollbar-track-color': 'transparent',
+        })
         //Search telemetry register
         /*
         TAG.Telemetry.register(searchInput, 'keyup', 'Search', function(tobj, evt){
@@ -478,7 +482,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      */
 
     function createNobelLifePopup() {
-        if (currCollection.Name !== 'The Life of Alfred Nobel' || showNobelLifeBox) {
+        if ((currCollection && currCollection.Name !== 'The Life of Alfred Nobel') || showNobelLifeBox) {
             return;
         }
         console.log("create nobel life pop up");
@@ -889,6 +893,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             $("#searchInput").css('margin-top', '2.5%');
             $(".sortButton").css({ 'margin-top': '0%', 'margin-right': '1%' });
             $("#bottomContainer").css({ 'top': '15%', 'height': '80%' });
+            $("#bottomContainer").css({
+                'scrollbar-face-color': NOBEL_WILL_COLOR,
+                'scrollbar-arrow-color': 'transparent',
+                'scrollbar-track-color': 'transparent',
+            })
             return;
         }
         // Don't repeat this.
@@ -2693,8 +2702,12 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 });
             }
         }
+        $("#bottomContainer").css({
+            'scrollbar-face-color': NOBEL_WILL_COLOR,
+            'scrollbar-arrow-color': 'transparent',
+            'scrollbar-track-color': 'transparent',
+        })
     }
-
     /**
      * Creates an artwork tile in a collection's catalog
      * @method drawArtworkTile
@@ -2718,7 +2731,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 videoLabel,
                 //click,
                 showLabel = true;
-            //console.log(currentWork.Name)
             //var uiDocfrag = document.createDocumentFragment();
             //uiDocfrag.appendChild(main[0]);
 
