@@ -1217,24 +1217,24 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             if (doq.Metadata.InfoFields[special[i]]) {
                 var d = makeInfoField(doq.Metadata.InfoFields[special[i]],true).css('top', top + 'px');
                 $("#infoBlock").append(d);
-                top += d.height() + 10;
+                top += d.height() + 5;
             }
         }
 
         if (doq.Metadata.Description) {
             var d = makeInfoField("Description: " + doq.Metadata.Description).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height() + 10;
+            top += d.height() + 35;
         }
         if (doq.Metadata.Artist) {
             var d = makeInfoField("Artist: " + doq.Metadata.Artist).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height() + 10;
+            top += d.height() + 15;
         }
         if (doq.Metadata.Date) {
             var d = makeInfoField("Date: " + doq.Metadata.Date).css('top', top + 'px');
             $("#infoBlock").append(d);
-            top += d.height() + 10;
+            top += d.height() + 15;
         }
 
         for (var key = 0; key < keys.length; key++) {
@@ -1243,7 +1243,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             if (special.indexOf(keys[key]) === -1) {
                 d = makeInfoField(keys[key] + ": " + val).css('top', top + 'px');
                 $("#infoBlock").append(d);
-                top += d.height() + 10;
+                top += d.height() + 12;
             }
         }
     }

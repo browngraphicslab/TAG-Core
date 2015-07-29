@@ -2523,9 +2523,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             break;
                         }
                     }
-
+                    loadQueue = TAG.Util.createQueue();
                     var hiddenTours = 0;
-                    loadQueue.add(function () { return });
                     for (j = 0; j < works.length; j++) {
                         if (tag) {
                             if (works[j].artwork.Metadata.ContentType !== 'tour' || works[j].artwork.Metadata.Private !== "true") {
@@ -2572,7 +2571,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             tileDiv.append(paddingDiv);
                         }
                     })
-                    loadQueue._queue[1][0]();
                     loadQueue.add(function () {
                         tileCircle.hide();
                     })
@@ -2883,8 +2881,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     'position': 'absolute',
                     'bottom': '0%',
                     'right': '0%',
-                    'width': '24px',
-                    'height' : '24px',
+                    'width': '29px',
+                    'height' : '29px',
                     'background-color': 'transparent',
                     'z-index' : '500000'
                 })
