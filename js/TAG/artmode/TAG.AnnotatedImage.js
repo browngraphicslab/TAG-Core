@@ -931,7 +931,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             outerContainerhidden = true,
             currentlySeeking = false,
             movementTimeouts = [],
-            circleRadius = 60,
+            circleRadius = 15,
             // misc uninitialized variables
             circle,
             position,
