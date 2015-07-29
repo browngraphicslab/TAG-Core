@@ -1779,6 +1779,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         .css({'display':'none', 'height': '10%', 'margin-top': '10%'});
         assetContainer.append(toggleArea);
 
+        if (!IS_WINDOWS){
+            sideBar.on("mousemove", function(evt){
+                console.log("sidebar blocking mousemove")
+                evt.stopPropagation();
+            });
+        }
+
         sideBarInfo.css({
             'height': sideBarSections.height() - 25 + 'px'
         });
@@ -2420,6 +2427,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'margin-top': '4%',
         });
 
+        if (!IS_WINDOWS) {
+            assetContainer.css('max-height', sideBarInfo.height() - info.height() - infoTitle.height() + 'px');
+        };
         sideBarSections.append(minimapContainer);
 
         //A white rectangle for minimap to show the current shown area for artwork
