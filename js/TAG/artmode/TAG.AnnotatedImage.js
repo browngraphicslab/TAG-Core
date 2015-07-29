@@ -1943,7 +1943,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         tobj.assoc_media_interactions = "pan"; //TODO what is this
                         tobj.offscreen = "true";
                     });
-                    console.log('media offscreen');
                     hideMediaObject();
                     pauseResetMediaObject();
                     //for debugging (trying to figure out if we can turn off inertia after the media leaves the screen)
