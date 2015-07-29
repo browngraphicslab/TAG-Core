@@ -2717,7 +2717,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 videoLabel,
                 //click,
                 showLabel = true;
-
+            //console.log(currentWork.Name)
             //var uiDocfrag = document.createDocumentFragment();
             //uiDocfrag.appendChild(main[0]);
 

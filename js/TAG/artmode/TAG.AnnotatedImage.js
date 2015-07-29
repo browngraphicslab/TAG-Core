@@ -1048,6 +1048,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     collectionsPageRoot,
                     whiteArrow = $(document.createElement('img')),
                     NEXT_EXHIB = '0db2377a-be68-43fb-bc70-12f455c24a82',
+
                     exampleDiv = $(document.createElement('div'))
                             .attr('id', 'exampleDiv')
                             .css({
@@ -1064,6 +1065,31 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                 'text-align': 'center'
                             })
                            .text("See an Example");
+
+
+                    closeButton = $(document.createElement('img'));
+                    closeButton.attr('src', tagPath + 'images/icons/x.svg');
+                    closeButton.text('X');
+                    closeButton.css({
+                        'position': 'absolute',
+                        'width': '30px',
+                        'height': '30px',
+                        'min-width': '30px',
+                        'top' : '10px',
+                        'z-index': '1',
+                        'vertical-align' : 'center',
+                        'right': '-5px',
+                    });
+                    closeButton.on('click', function (evt) {
+                        evt.stopPropagation();
+                        hideMediaObject();
+                        TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
+                            tobj.current_artwork = doq.Identifier;
+                            tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
+                            tobj.assoc_media_interactions = "close"; //TODO what is this
+                        });
+                    });
+
                     whiteArrow.attr({
                         src: tagPath + 'images/icons/white_arrow.svg'
                     });
@@ -1072,6 +1098,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     exampleDiv.on("mouseenter", function () {
                         exampleDiv.css("color", "white");
                     });
+                    titleDiv.append(closeButton);
                     exampleDiv.on("mouseleave", function () {
                         exampleDiv.css("color", "black");
                     });
@@ -2148,6 +2175,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 scrollingMedia = false;
             }, 100);
         }
+
 
         /**
          * Create a closeButton for associated media
