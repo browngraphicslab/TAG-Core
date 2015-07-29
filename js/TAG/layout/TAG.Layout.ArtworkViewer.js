@@ -2082,7 +2082,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                             'color': NOBEL_ORANGE_COLOR,
                             'font-weight': 'bold',
                             'white-space': 'nowrap',
-                            'display': 'block'
+                            'display': 'block',
+                            'padding-bottom': '4%'
                         });
                     }
                     loadQueue.add(createMediaButton(mediaDrawer, curr));
@@ -2182,7 +2183,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         function createToggleHotspotButton(){
-        toggleArea.css('display','block');
+            toggleArea.css({
+                'display': 'block',
+                'padding-bottom': '10%'
+            });
+            toggleArea.attr('id', 'toggleArea')
         toggleHotspotButton = $(document.createElement('div'))
         .css({
             'position': 'relative',
@@ -2285,7 +2290,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         'font-size': '85%',
                         'color': NOBEL_ORANGE_COLOR,
                         'font-weight': 'bold',
-                        'white-space': 'nowrap'
+                        'white-space': 'nowrap',
+                        'padding-bottom': '4%'
                     });
                 }
                 for (i = 0; i < relatedTours.length; i++) {
