@@ -1342,6 +1342,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         })
 
     }
+
     /**
      * Initializes splitscreen functionality
      * @method initSplitscreen

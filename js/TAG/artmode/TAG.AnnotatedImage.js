@@ -857,6 +857,31 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
     }
 
 
+    function loadingScreen(text) {
+        var initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(2));
+        initialOverlay.css('display', 'block').attr({
+            id: 'startPageLoadingOverlay'
+        }).css('opacity', '1')
+        var infoDiv = $(document.createElement('div'));
+        infoDiv.css({
+            "color": "white",
+            "text-align": "center",
+            "top": "59%",
+            "display": "block",
+            "position": "absolute",
+            "font-size": "3em",
+            "width": '100%',
+            "height": "100%",
+            "font-family" : "Cinzel"
+        })
+        infoDiv.text(text);
+        TAG.Util.showLoading(initialOverlay, '8%', '40%', '46%')//to show the loading screen
+        initialOverlay.append(infoDiv);
+        initialOverlay.css('opacity', '.99')
+        initialOverlay.css('background-color', 'rgba(0,0,0,1)')
+        $(document.body).append(initialOverlay);
+    }
+
     /**
      * Creates an associated media object to be added to associatedMedia.
      * This object contains methods that could be called in Artmode.js or
@@ -1048,7 +1073,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         // evt.stopPropogation();
                         console.log('clicked example div');
                         //load correct collection
-
+                        loadingScreen('Loading Example...');
                               TAG.Worktop.Database.getExhibitions(function (collections) {
                                   for (var i = 0; i < collections.length; i++) {
                                       currName = collections[i].Name;
