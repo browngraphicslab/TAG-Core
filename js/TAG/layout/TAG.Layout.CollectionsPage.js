@@ -560,7 +560,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'font-weight': 'bold',
             'color': 'white',
             'font-family': 'Cinzel'
-        }).text("Alfred Nobel's Will")
+        }).text("The Life of Alfred Nobel")
 
         popupLeftBottomBar.css({
             'top': ' 18%',
@@ -570,7 +570,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'width': '92%',
             'font-size': '.82em',
             'color': 'white'
-        }).text('To be decided.')
+        }).text("This collection of posters presents highlights of Alfred Nobel's Life that reflect elements seen in his will. Please start your exploration by opening and reading the poster titled \"Introduction.\"");
 
         var temp = $(TAG.Util.UI.blockInteractionOverlay(.3));//add blocking div to stop all interaction
         temp.css({
