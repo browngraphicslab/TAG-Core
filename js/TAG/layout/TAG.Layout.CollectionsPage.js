@@ -564,7 +564,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'font-weight': 'bold',
             'color': 'white',
             'font-family': 'Cinzel'
-        }).text("Alfred Nobel's Will")
+        }).text("The Life of Alfred Nobel")
 
         popupLeftBottomBar.css({
             'top': ' 18%',
@@ -574,7 +574,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'width': '92%',
             'font-size': '.82em',
             'color': 'white'
-        }).text('To be decided.')
+        }).text("This collection of posters presents highlights of Alfred Nobel's Life that reflect elements seen in his will. Please start your exploration by opening and reading the poster titled \"Introduction.\"");
 
         var temp = $(TAG.Util.UI.blockInteractionOverlay(.3));//add blocking div to stop all interaction
         temp.css({
@@ -4031,8 +4031,26 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     'position' : 'absolute',
                 })
                 exploreText = $(document.createElement('div'))
-                    .css("font-size",  BASE_FONT_SIZE*2/3 + 'em')
+                    .css({
+                        //"font-size": BASE_FONT_SIZE * 2 / 3 + 'em',
+                        'border-radius': '6pt',
+                        'font-size': '100%',
+                        'width': '80%',
+                        'float': 'bottom',
+                        'background-color': NOBEL_WILL_COLOR,
+                        'margin-left': '10%',
+                        'color': 'black'
+
+                    })
+                    .attr('id','learnMoreDiv')
                     .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Learn More");
+                exploreText.hover(function () {
+                    $(this).css('color', 'white');
+                }, function () {
+                    $(this).css('color', 'black')
+                })
+
+
                 exploreTab.css({
                     'top': '90%',
                     'height': '8%',
@@ -4040,7 +4058,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     'text-align': 'center',
                     'width' : '100%'
                 });
-                exploreText.append(whiteArrow);
+                //exploreText.append(whiteArrow);
 
                 exploreTab.append(exploreText)
 
@@ -4442,7 +4460,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 tileTop.append(imgDiv)
                     .append(exploreTab)
                     .append(titleSpan)
-                    .append(infoText);
+                    .append(infoText)
+                    //.append(exploreText);
 
                 descSpan.append(descText);
                 tileBottom.append(descSpan);
