@@ -79,6 +79,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         twoDeep = options.twoDeep,
         oneDeep = options.oneDeep,
         hideKeywords = options.hideKeywords,
+        showNobelLifeBox = options.showNobelLifeBox,
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -390,6 +391,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             prevCollection: prevCollection,
             prevPage: prevPage,
             prevMult: prevMult,
+            showNobelLifeBox: showNobelLifeBox
         });
         var newPageRoot = artworkViewer.getRoot();
         newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
@@ -411,6 +413,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             prevCollection: prevCollection,
             prevPage: prevPage,
             prevMult: prevMult,
+            showNobelLifeBox: showNobelLifeBox
         });
         var newPageRoot = artworkViewer.getRoot();
         newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
@@ -1341,7 +1344,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 onClose();
             }
         })
-
     }
 
     /**
@@ -1960,6 +1962,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 twoDeep: twoDeep,
                 oneDeep: oneDeep,
                 hideKeywords: hideKeywords,
+                showNobelLifeBox: showNobelLifeBox
             });
             //if (root.data('split') === 'R') {
 
@@ -2058,18 +2061,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             infoAffiliation.text(affiliation ? "Affiliated with " + affiliation : "");
             infoAffiliation.appendTo(info);
 
-            if (doq.Metadata.Description) {
-                var description = doq.Metadata.Description;
-                var descriptionDiv = $(document.createElement('div'));
-                descriptionDiv.css({
-                    'font-size':'75%',
-                    'overflow-y': 'visible'
-                });
-                descriptionDiv.addClass('description');
-                descriptionDiv.text(description);
-                descriptionDiv.appendTo(assetContainer);
-            }
-
             // make sure the info text fits in the div (TODO is this necessary?)
             TAG.Util.fitText(info, 1.1);
 
@@ -2092,8 +2083,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                             'margin-top': '3%',
                             'font-size': '85%',
                             'color': NOBEL_ORANGE_COLOR,
-                            'font-weight': 'bold'
+                            'font-weight': 'bold',
+                            'white-space': 'nowrap',
+                            'display': 'block'
                         });
+                        if (isImpactMap) mediaHeader.css('padding-bottom', '4%');
                     }
                     loadQueue.add(createMediaButton(mediaDrawer, curr));
                 }
@@ -2192,7 +2186,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         function createToggleHotspotButton(){
-        toggleArea.css('display','block');
+            toggleArea.css({
+                'display': 'block',
+                'padding-bottom': '10%'
+            });
+            toggleArea.attr('id', 'toggleArea')
         toggleHotspotButton = $(document.createElement('div'))
         .css({
             'position': 'relative',
@@ -2294,18 +2292,35 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         'margin-top': '3%',
                         'font-size': '85%',
                         'color': NOBEL_ORANGE_COLOR,
-                        'font-weight': 'bold'
+                        'font-weight': 'bold',
+                        'white-space': 'nowrap',
                     });
+                    if (isImpactMap) mediaHeader.css('padding-bottom', '4%');
                 }
                 for (i = 0; i < relatedTours.length; i++) {
                     loadQueue.add(createTourButton(mediaDrawer, relatedTours[i]));
                 }
             }
 
+
             if (mediaDrawer) {
                 assetContainer.append(mediaDrawer);
                 currBottom += mediaDrawer.height();
             }
+
+            if (doq.Metadata.Description) {
+                var description = doq.Metadata.Description;
+                var descriptionDiv = $(document.createElement('div'));
+                descriptionDiv.css({
+                    'font-size': '75%',
+                    'display': 'inline-block',
+                    'overflow-y': 'visible',
+                    'margin-top': '-10%'
+                });
+                descriptionDiv.addClass('description');
+                descriptionDiv.text(description);
+                descriptionDiv.appendTo(assetContainer);
+            };
 
             // set max height of drawers to avoid expanding into minimap area
             maxHeight = Math.max(1, assetContainer.height() - currBottom); //to account for the height of the drawerLabel of the current drawer.
