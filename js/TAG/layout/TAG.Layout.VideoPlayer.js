@@ -99,7 +99,9 @@ TAG.Layout.VideoPlayer = function (videoSrc, collection, prevInfo) {
             backArtwork: videoSrc,
             backCollection: collection,
             backTag : prevTag,
-            backMult : prevMult,
+            backMult: prevMult,
+            twoDeep: true,
+            hideKeywords : true,
             backPreviewPos: prevPreviewPos,
             backSearch: prevSearch
         });

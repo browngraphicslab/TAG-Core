@@ -423,38 +423,23 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         goToIntroButton.on('click', function () {
-            if (buttonClicked === false) {
-                buttonClicked = true;
-                switchPage(INTRO_TOUR, null, null, null);
-            }
+            switchPage(INTRO_TOUR, null, null, null);
         });
 
         goToWinnersButton.on('click', function () {
-            if (buttonClicked === false) {
-                buttonClicked = true;
-                switchPage(LAUREATE_NAME, false, true, true);
-            }
+            switchPage(LAUREATE_NAME, false, true, true);
         });
 
         goToHistoryButton.on('click', function () {
-            if (buttonClicked === false) {
-                buttonClicked = true;
-                switchPage(HISTORY_NAME, true);
-            }
+            switchPage(HISTORY_NAME, true);
         });
 
         goToWillButton.on('click', function () {
-            if (buttonClicked === false) {
-                buttonClicked = true;
-                switchPage(WILL_NAME);
-            }
+            switchPage(WILL_NAME);
         });
 
         goToLifeButton.on('click', function () {
-            if (buttonClicked === false) {
-                buttonClicked = true;
-                switchPage(LIFE_NAME, true);
-            }
+            switchPage(LIFE_NAME, true);
         });
         
         /**
@@ -532,6 +517,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //opens the collections page on touch/click
         //@param collectionName     string representing name of collection to start with
         function switchPage(collectionName, hideKeywords, smallPreview, titleIsName) {
+            if (buttonClicked == true) {
+                return;
+            }
+            buttonClicked = true;
             var collectionsPage,
                 options = {},
                 i,
