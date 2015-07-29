@@ -2082,9 +2082,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                             'color': NOBEL_ORANGE_COLOR,
                             'font-weight': 'bold',
                             'white-space': 'nowrap',
-                            'display': 'block',
-                            'padding-bottom': '4%'
+                            'display': 'block'
                         });
+                        if (isImpactMap) mediaHeader.css('padding-bottom', '4%');
                     }
                     loadQueue.add(createMediaButton(mediaDrawer, curr));
                 }
@@ -2291,8 +2291,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         'color': NOBEL_ORANGE_COLOR,
                         'font-weight': 'bold',
                         'white-space': 'nowrap',
-                        'padding-bottom': '4%'
                     });
+                    if (isImpactMap) mediaHeader.css('padding-bottom', '4%');
                 }
                 for (i = 0; i < relatedTours.length; i++) {
                     loadQueue.add(createTourButton(mediaDrawer, relatedTours[i]));
