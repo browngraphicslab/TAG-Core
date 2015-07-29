@@ -1202,7 +1202,13 @@ TAG.TourAuthoring.Timeline = function (spec, my) {
             tracks = dataHolder.getTracks();
         for (i = 0; i < tracks.length; i++) {
             var endDisplay = dataHolder.maxDisplay(tracks[i].track.getPos());
-            var endDisplayTime = endDisplay.display.getFadeOut() + endDisplay.display.getOutStart();
+            var endDisplayTime;
+            if (endDisplay) {
+                endDisplayTime = endDisplay.display.getFadeOut() + endDisplay.display.getOutStart();
+            }
+            else {
+                endDisplayTime = 0;
+            }
             if (endDisplayTime > allDisplaysEnd) {
                 allDisplaysEnd = endDisplayTime;
             }
