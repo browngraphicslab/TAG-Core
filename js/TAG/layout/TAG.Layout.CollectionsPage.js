@@ -48,6 +48,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         showKeywords = false,
         overlay = root.find('#overlay'),
         prevCollection = $(document.createElement('div')).attr('id', 'prevCollection'),
+        selectedTile,
 
         // input options
         scrollPos = options.backScroll || null,     // horizontal position within collection's catalog
@@ -3220,19 +3221,22 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     uiDocfrag.appendChild(eventCircle[0]);
                     eventCircle.addClass('timelineEventCircle')
                                 .css('left', correctedPosition + '%')
-                                .on('click', (function(art, eventCircle) {
+                                .on('click', (function (art, eventCircle) {
+                                    
                                     return function() {
-                                    if (artworkShown === true && currentArtwork === art) {
-                                        hideArtwork(art)();
-                                        artworkShown = false;
-                                    } else {
-                                        if (!artworkTiles[art.Identifier]) {
-                                            return;
-                                        }
-                                        zoomTimeline(eventCircle)
-                                        showArtwork(art,true)();
-                                        artworkShown  = true;
-                                        } 
+                                            if (artworkShown === true && currentArtwork === art) {
+                                                hideArtwork(art)();
+                                                artworkShown = false;
+
+                                            } else {
+                                                if (!artworkTiles[art.Identifier]) {
+                                                    return;
+                                                }
+                                                zoomTimeline(eventCircle)
+                                                showArtwork(art,true)();
+                                                artworkShown  = true;
+                                            } 
+                                        
                                     }      
                                 })(art, eventCircle));
                     // timelineCircleArea.append(eventCircle);
@@ -3478,6 +3482,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         return function () {
             var i;
             currentArtwork = null;
+            if (selectedTile) {
+                selectedTile.css('border-width','0px');
+            }
             if (!artwork) {
                 return;
             }
@@ -3594,7 +3601,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @param {doq} artwork     the artwork doq to be shown
      * @param {showAllAtYear}       whether all of the artworks at a specific year should be shown
      */
-    function showArtwork(artwork, showAllAtYear) {
+    function showArtwork(artwork, showAllAtYear, justHighlight) {
         return function () {
             
             if (!artworkShown){ //FOR NOW - switching between artworks in the previewer does not 
@@ -3647,10 +3654,16 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
         function animateCatalogDiv(){
             //scroll catalogDiv to center the current artwork
+            if (selectedTile) {
+                selectedTile.css({ 'border-width': '0px' });
+                console.log("remove border?!");
+                
+            }
             catalogDiv.stop(true,false);
             rootWidth = root.width();
             infoWidth = infoDiv.width();
-            if (comingBack && scrollPos){
+            if (comingBack && scrollPos) {
+                console.log("coming back now!!");
                 newScrollPos = scrollPos;
                 duration = ANIMATION_DURATION/5;
             } else {
@@ -3659,7 +3672,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     tilePos = artworkTiles[artwork.Identifier].position().left; 
                 }
                 duration = ANIMATION_DURATION/3;
-                newScrollPos = tilePos - rootWidth/2 + infoWidth + tileWidth/2 - TILE_BUFFER;
+                newScrollPos = tilePos - rootWidth / 2 + infoWidth + tileWidth / 2 - TILE_BUFFER;
             }   
 
             if (newScrollPos<0){
@@ -3681,6 +3694,18 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     'display': 'inline',
                     'opacity':1
                 });
+                if (oneDeep) {
+                        console.log("hiding selected Artwork Container")
+                        selectedArtworkContainer.css({
+                            'display': 'none'
+                        });
+                    //insert code to highlight orange
+                        selectedTile = artworkTiles[artwork.Identifier];
+                        artworkTiles[artwork.Identifier].css({ 'border': '5px solid #fea100', 'opacity':'1' });
+                   
+                }
+                
+                
                 if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3) {
                     selectedArtworkContainer.css({
                         "overflow-x": "scroll"
@@ -4368,6 +4393,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     'border': '5px solid '+NOBEL_WILL_COLOR,
                     'border-radius': '14px',
                 })
+                
                 selectedArtworkContainer.append(previewTile);
                 root.find('.tile').css('opacity','0.5');
   
