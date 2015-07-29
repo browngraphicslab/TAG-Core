@@ -958,7 +958,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     'display': 'block',
                     'height': titleHeight,
                     'position': 'relative',
-                    'margin-bottom': '5px',
+                    'margin-bottom': '5%',
                     'width': '100%',
                     'margin-left': 'auto',
                     'margin-right': 'auto',
@@ -1027,6 +1027,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     whiteArrow.attr({
                         src: tagPath + 'images/icons/white_arrow.svg'
                     });
+                    if (IS_WINDOWS){
                     whiteArrow.css({
                         'height': '45%',
                         'top': '25%',
@@ -1035,6 +1036,16 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         'bottom': '0%',
                         'position': 'absolute',
                     });
+                    } else {
+                        whiteArrow.css({
+                        'height': '75%',
+                        'top': '37%',
+                        'right': '17%',
+                        'width': '10%',
+                        'bottom': '0%',
+                        'position': 'absolute',
+                    }); 
+                    }
                     exampleDiv.append(whiteArrow);
                     titleDiv.text("");
                     titleDiv.append(exampleDiv);

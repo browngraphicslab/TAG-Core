@@ -524,7 +524,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 "position": "absolute",
                 "font-size": "3em",
                 "width": '100%',
-                "height": "100%"
+                "height": "100%",
+                'font-family': 'Cinzel'
             })
             infoDiv.text(text);
             TAG.Util.showLoading(initialOverlay, '8%', '40%', '46%')//to show the loading screen
