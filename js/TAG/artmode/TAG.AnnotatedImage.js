@@ -2168,6 +2168,12 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'right': '-3%',
                 'margin-top': '-1%'
             });
+            if (!IS_WINDOWS) {
+                closeButton.css({
+                    'height': '30px',
+                    'width': '30px'
+                });
+            };
             return closeButton;
         }
 

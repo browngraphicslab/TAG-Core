@@ -16,6 +16,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.isAuthoring = isAuthoring;
 	self.currentManipulatedObject = null;
 	self.animationFinishHandlerBound = false;
+	self.cancelEntirely = false;
 	trackManager 			= [];	//******* TODO: DETERMINE WHAT EXACTLY self IS GOING TO BE************
 	//self.taskManager 		= new ITE.TaskManager();
 	self.status 			= 3;
@@ -122,6 +123,10 @@ ITE.Orchestrator = function(player, isAuthoring) {
 		}
 	};
 
+	function cancelLoad() {
+	    self.cancelEntirely = true;
+	}
+
 	function setLastMovedObjectByZIndex(z) {
 	    if (z!== self.lastManipZIndex) {
 	        self.player.updateManipObjectZ(z);
@@ -168,23 +173,25 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 
 	function play() {
-	    self.setLastMovedObjectByZIndex(-1);
-	    updateZIndices();
-		var i;
-		for (i=0; i<self.trackManager.length; i++) {
-			if (self.trackManager[i].state === "loading"){
-				setTimeout(self.play, 1000);//TODO not have self be a timeout...
-				return;
-			}
-		}
-		for (i = 0; i < self.trackManager.length; i++) {
-			self.trackManager[i].play();
-		}
-		self.timeManager.startTimer();
-		self.status = 1;
-		if (idleTimer) {
-		    idleTimer.tourPlaying(true);
-		}
+	    if (!self.cancelEntirely) {
+	        self.setLastMovedObjectByZIndex(-1);
+	        updateZIndices();
+	        var i;
+	        for (i = 0; i < self.trackManager.length; i++) {
+	            if (self.trackManager[i].state === "loading") {
+	                setTimeout(self.play, 1000);//TODO not have self be a timeout...
+	                return;
+	            }
+	        }
+	        for (i = 0; i < self.trackManager.length; i++) {
+	            self.trackManager[i].play();
+	        }
+	        self.timeManager.startTimer();
+	        self.status = 1;
+	        if (idleTimer) {
+	            idleTimer.tourPlaying(true);
+	        }
+	    }
 	}
 
 	function pause() {
@@ -442,6 +449,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	self.scrub = scrub;
 	self.seek = seek;
 	self.refresh = refresh;
+	self.cancelLoad = cancelLoad;
 	self.setVolume = setVolume;
 	self.setLastMovedObjectByZIndex = setLastMovedObjectByZIndex;
 	self.toggleMute = toggleMute;

@@ -51,6 +51,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
        initialOverlay,
        initialLoading = true,
        infoPopup,
+       cancelEntirely = false,
 
 
    //Other atributes
@@ -113,6 +114,18 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
     /*
     * I/P:   none
+    * cancels if back button pressed while loading
+    * O/P:   none
+    */
+    function cancelLoad() {
+        cancelEntirely = true;
+        if (orchestrator) {
+            orchestrator.cancelLoad();
+        }
+    }
+
+    /*
+    * I/P:   none
     * show informative popup
     * O/P:   none
     */
@@ -151,6 +164,22 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 on the left side of the screen to provide greater context.");
             ITEHolder.append(infoPopup);
             infoPopup.click(hideInfoPopup);
+
+            var closeX = $(document.createElement('img'));
+            closeX.attr({
+                src: tagPath + 'images/icons/x.svg',
+                id: 'closeX'
+            })
+            closeX.css({
+                'left': '92%',
+                'position': 'absolute',
+                'top': '3%',
+                'height': '9%'
+            })
+            closeX.click(function () {
+                hideInfoPopup();
+            })
+            infoPopup.append(closeX);
         }
         pause();
         infoPopup && infoPopup.show();
@@ -562,13 +591,15 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function play() {
-        hideInfoPopup()
-        if (initialLoading === true) {
-            hideInitialOverlay();
+        if (!cancelEntirely) {
+            hideInfoPopup()
+            if (initialLoading === true) {
+                hideInitialOverlay();
+            }
+            orchestrator.play();
+            playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
+            setControlsFade();
         }
-        orchestrator.play();
-        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
-       setControlsFade();
     };
 
     /*
@@ -1288,7 +1319,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 'font-weight' : 'bold'
             });
         }
-        else{ 
+        else { 
             outer.css({
                 'position': 'absolute',
                 'z-index': '9999999999',
@@ -1334,7 +1365,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     this.toggleMute         = toggleMute;
     this.toggleLoop         = toggleLoop;
     this.toggleFullScreen   = toggleFullScreen;
-    this.timeOffset         = timeOffset;
+    this.timeOffset = timeOffset;
+    this.cancelLoad = cancelLoad;
     this.isMuted            = isMuted;
     this.isLooped           = isLooped;
     this.isFullScreen       = isFullScreen;
