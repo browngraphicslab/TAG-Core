@@ -79,6 +79,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         twoDeep = options.twoDeep,
         oneDeep = options.oneDeep,
         hideKeywords = options.hideKeywords,
+        showNobelLifeBox = options.showNobelLifeBox,
 
         // misc initialized vars  
         locHistoryActive = false,                   // whether location history is open
@@ -390,6 +391,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             prevCollection: prevCollection,
             prevPage: prevPage,
             prevMult: prevMult,
+            showNobelLifeBox: showNobelLifeBox
         });
         var newPageRoot = artworkViewer.getRoot();
         newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
@@ -411,6 +413,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             prevCollection: prevCollection,
             prevPage: prevPage,
             prevMult: prevMult,
+            showNobelLifeBox: showNobelLifeBox
         });
         var newPageRoot = artworkViewer.getRoot();
         newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
@@ -1341,7 +1344,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 onClose();
             }
         })
-
     }
 
     /**
@@ -1960,6 +1962,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 twoDeep: twoDeep,
                 oneDeep: oneDeep,
                 hideKeywords: hideKeywords,
+                showNobelLifeBox: showNobelLifeBox
             });
             //if (root.data('split') === 'R') {
 
