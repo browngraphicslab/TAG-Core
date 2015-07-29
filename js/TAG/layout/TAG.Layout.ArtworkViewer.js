@@ -508,7 +508,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         var muteButtonHeight = muteButton.height();
         muteButton.width(muteButtonHeight + '%');
 
-        sideBar.append(muteButton);
+        //sideBar.append(muteButton);
         sideBar.append(nobelPlayPauseButton);
 
         $("#backButton").remove();
