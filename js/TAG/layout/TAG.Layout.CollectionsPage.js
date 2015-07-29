@@ -412,7 +412,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         menuCreated = false;
     }
 
-    /**
+    /**ui-dropdownchecklist-
      * Fill in the appropriate UI pieces so that they reflect the search as defined by parameters.
      * @method updateSearchInput
      * @param searchText {String}               The text to be entered in the search bar.
@@ -943,7 +943,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
                 // Add each of the keywords in this category.
                 for (var i = 0; i < set.keywords.length; i++) {
-                    var keywordsOption = $('<option>' + set.keywords[i] + '</option>');
+                    var keywordsOption = $('<option>' + set.keywords[i].charAt(0).toUpperCase() + set.keywords[i].slice(1) + '</option>');
+                    console.log(set.keywords[i]);
                     select2.append(keywordsOption.attr('value', i.toString()));
                     keywordsOption.on('change', function () {
                         console.log("selected");
