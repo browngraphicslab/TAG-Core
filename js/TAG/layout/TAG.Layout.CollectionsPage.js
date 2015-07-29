@@ -3656,7 +3656,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             //scroll catalogDiv to center the current artwork
             if (selectedTile) {
                 selectedTile.css({ 'border-width': '0px' });
-                console.log("remove border?!");
                 
             }
             catalogDiv.stop(true,false);
@@ -3672,7 +3671,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     tilePos = artworkTiles[artwork.Identifier].position().left; 
                 }
                 duration = ANIMATION_DURATION/3;
-                newScrollPos = tilePos - rootWidth / 2 + infoWidth + tileWidth / 2 - TILE_BUFFER;
+                newScrollPos = tilePos - rootWidth / 2 + infoWidth - TILE_BUFFER;
             }   
 
             if (newScrollPos<0){
