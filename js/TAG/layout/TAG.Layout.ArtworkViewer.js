@@ -2425,10 +2425,22 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'max-height': sideBarInfo.height() - info.height() - infoTitle.height() - backButton.height() - minimapDescription.height() + 'px',
             'overflow-y': 'auto',
             'margin-top': '4%',
+            'scrollbar-face-color': NOBEL_ORANGE_COLOR,
+            'scrollbar-arrow-color': 'transparent',
+            'scrollbar-track-color': NOBEL_ORANGE_COLOR,
+            'webkit-scrollbar-button': NOBEL_ORANGE_COLOR,
+            'webkit-scrollbar-track': NOBEL_ORANGE_COLOR,
+            'webkit-scrollbar-track-piece': NOBEL_ORANGE_COLOR,
+            'webkit-scrollbar-thumb': NOBEL_ORANGE_COLOR,
+            'webkit-scrollbar-corner': NOBEL_ORANGE_COLOR,
         });
 
         if (!IS_WINDOWS) {
-            assetContainer.css('max-height', sideBarInfo.height() - info.height() - infoTitle.height() + 'px');
+            if (toggleHotspotButton) {
+                assetContainer.css('max-height', sideBarInfo.height() - backButton.height() - info.height() - minimapDescription.height() + 'px');
+            } else {
+                assetContainer.css('max-height', sideBarInfo.height() - info.height() - infoTitle.height() + 'px');
+            }
         };
         sideBarSections.append(minimapContainer);
 
