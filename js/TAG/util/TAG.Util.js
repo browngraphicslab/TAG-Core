@@ -8353,6 +8353,7 @@ TAG.Util.Artwork = (function () {
                 'position': 'relative',
                 'vertical-align': 'middle'
             });
+            titleDiv.css('margin-top', '10%');
             holderInnerContainer.css('position', 'absolute');
             holderInnerContainer.append(thumbnailImage);
             holderInnerContainer.append(thumbnailOverlay);
