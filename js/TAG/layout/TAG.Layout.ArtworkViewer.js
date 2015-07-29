@@ -1816,23 +1816,25 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             if (isNobelWill === true) {
                 bb.css({
                     'position': 'absolute',
-                    'left': '2.5%',
-                    'top': '1.75%',
-                    'height': '6.5%',
+                    'left': '1%',
+                    'top': '2.5%',
+                    'height': '4.5%',
                     'background-color': 'transparent',
+                    'z-index': '99999999'
                 }).click(goBack);
             } else {
                 bb.css({
                     'position': 'absolute',
-                    'left': '3%',
-                    'top': '-1%',
-                    'height': '10%',
+                    'left': '0%',
+                    'top': '1%',
+                    'height': '4.5%',
                     'background-color': 'transparent',
+                    'z-index': '99999999'
                 }).click(goBack);
             }
             var bbheight = bb.height();
             bb.css('width', bbheight + '%');
-            sideBar.append(bb);
+            root.append(bb);
         }
         // splitscreen
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
