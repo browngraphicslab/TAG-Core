@@ -1779,6 +1779,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         .css({'display':'none', 'height': '10%', 'margin-top': '10%'});
         assetContainer.append(toggleArea);
 
+        if (!IS_WINDOWS){
+            sideBar.on("mousemove", function(evt){
+                console.log("sidebar blocking mousemove")
+                evt.stopPropagation();
+            });
+        }
+
         sideBarInfo.css({
             'height': sideBarSections.height() - 25 + 'px'
         });

@@ -1278,7 +1278,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                     event = $.getEvent( event );
                     result.x = event.pageX;
                     result.y = event.pageY;
-
+                    console.log(result.x+ "," + result.y);
                     return result;
                 };
             } else if ( typeof( event.clientX ) == "number" ) {
@@ -1294,7 +1294,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                         event.clientY +
                         document.body.scrollTop +
                         document.documentElement.scrollTop;
-
+                    console.log("client" + result.x + "," + result.y);
                     return result;
                 };
             } else {
