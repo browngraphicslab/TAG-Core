@@ -2088,6 +2088,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                         mediaHeader.text("Associated Media and Tours:");
                         mediaHeader.css({
                             'margin-top': '3%',
+                            'text-align':'center',
                             'font-size': '85%',
                             'color': NOBEL_ORANGE_COLOR,
                             'font-weight': 'bold',
