@@ -2478,6 +2478,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     }
                 }
                 function gotDoqs() {
+                    if (start === 0) {
+                        loadQueue.clear();
+                    }
                     for (var l = 0; l < tourDoqs.length; l++) {
                         var a = JSON.parse(tourDoqs[l].Metadata.RelatedArtworks)
                         for (var k = 0; k < a.length; k++) {
@@ -2523,7 +2526,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             break;
                         }
                     }
-                    loadQueue = TAG.Util.createQueue();
                     var hiddenTours = 0;
                     for (j = 0; j < works.length; j++) {
                         if (tag) {
