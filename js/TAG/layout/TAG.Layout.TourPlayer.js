@@ -81,13 +81,20 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
 
     backButton.on('click', goBack);
 
+    var prevpagelink;
+    if(prevExhib===null){
+        prevpagelink = null;
+    }else{
+            prevpagelink = prevExhib.Identifier
+    }
+
     if(IS_WEBAPP) {
         linkButton.attr('src', tagPath+'images/link.svg');
         linkButton.on('click', function() {
             var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
                 tagpagename: 'tour',
                 tagguid: tourObj.Identifier,
-                prevpage: prevExhib.Identifier,
+                prevpage: prevpagelink,
                 tagonlytour: false
             });
 
