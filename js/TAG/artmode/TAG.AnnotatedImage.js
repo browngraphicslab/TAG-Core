@@ -655,15 +655,19 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 'z-index': '5'
             });
             root.append(interactionOverlayOSD);
+            var dragHappened = false;
             var setMouse = function(mouseDown){
                 if (mouseDown === false){
                     interactionOverlayOSD.css('pointer-events', 'auto');
                     interactionOverlayOSD.on('mousemove',function(evt){
                         evt.stopPropagation();
                     });
-                    //on mousedown, trigger an event on the viewer so interaction can resume
-                    interactionOverlayOSD.on('mousedown', function(){
-                        viewer.raiseEvent('mousedown');
+                    //on mousedown, trigger an event on the viewer so interaction can resume                   
+                    interactionOverlayOSD.on('mousedown', function(evt){
+                        console.log("interactionOverlay forwarding mousedown");
+                        viewer.raiseEvent('mousedown'); //doesn't actually start canvas-drag, just allows sticky mouse again temporarily...
+                        //the best thing would be to enable an actual canvas-drag event here
+                        //should also figure out a way to pass mousewheel scroll to canvas while the overlay is still up
                         setMouse(true);
                     });
                 } else{
@@ -672,13 +676,23 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     interactionOverlayOSD.css('pointer-events', 'none');
                 }
             };
-            viewer.addHandler('canvas-drag', function(){
+
+            viewer.addHandler('canvas-drag', function(evt){
+                dragHappened = true;
                 setMouse(true);
             });
             //when canvas-release fires (rather than 'mouseup', which never fires) then stop allowing mousemove evts on the viewer
-            viewer.addHandler('canvas-release', function(){
-                setMouse(false);
-            })
+            viewer.addHandler('canvas-release', function(evt){
+                if (dragHappened){
+                    setMouse(false);
+                } 
+                dragHappened = false;
+            });
+            viewer.addHandler("canvas-click", function(){
+                if (!dragHappened){
+                    setMouse(false);
+                }
+            });
         }
 
         viewer.clearControls();
@@ -1037,48 +1051,29 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     exampleDiv = $(document.createElement('div'))
                             .attr('id', 'exampleDiv')
                             .css({
-                                'background-color': 'rgb(0,0,0,0.6)',
-                                'width': '100%',
-                                'bottom': '0%',
-                                'height': '100%',
                                 'position': 'relative',
-                                'padding-bottom': '1.5%',
-                                'text-align': 'center',
-                                'font-size': '120%',
-                                'color': NOBEL_WILL_COLOR,
-                                'left': '-5%'
+                                'width': '80%',
+                                'margin': '10px auto 0px auto',
+                                'background-color': NOBEL_WILL_COLOR,
+                                'font-weight': 'normal',
+                                'color' : '#000',
+                                'cursor': 'pointer',
+                                'border-radius': '3.5px',
+                                'font-size': '110%',
+                                'display': 'block', 
+                                'text-align': 'center'
                             })
                            .text("See an Example");
                     whiteArrow.attr({
                         src: tagPath + 'images/icons/white_arrow.svg'
                     });
-                    if (IS_WINDOWS){
-                    whiteArrow.css({
-                        'height': '45%',
-                        'top': '25%',
-                        'right': '15%',
-                        'width': '10%',
-                        'bottom': '0%',
-                        'position': 'absolute',
-                    });
-                    } else {
-                        whiteArrow.css({
-                        'height': '75%',
-                        'top': '37%',
-                        'right': '17%',
-                        'width': '10%',
-                        'bottom': '0%',
-                        'position': 'absolute',
-                    }); 
-                    }
-                    exampleDiv.append(whiteArrow);
                     titleDiv.text("");
                     titleDiv.append(exampleDiv);
                     exampleDiv.on("mouseenter", function () {
                         exampleDiv.css("color", "white");
                     });
                     exampleDiv.on("mouseleave", function () {
-                        exampleDiv.css("color", NOBEL_WILL_COLOR);
+                        exampleDiv.css("color", "black");
                     });
                     exampleDiv.click(function (evt) {
                         // evt.stopPropogation();
@@ -1086,14 +1081,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         //load correct collection
                               loadingScreen('Loading Example...');
                               TAG.Worktop.Database.getDoq(NEXT_EXHIB, function (collection) {
-                                 /**
-                                  for (var i = 0; i < collections.length; i++) {
-                                      currName = collections[i].Name;
-                                      if (currName === NEXT_EXHIB) {
-                                          options.backCollection = collections[i];
-                                      }
-                                  }
-                                  **/
                                   options.backCollection = collection;
                                   options.twoDeep = true;
                                   options.backToAssoc = mdoq;
@@ -1144,11 +1131,13 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
                 // allows asset to be dragged, despite the name
                 TAG.Util.disableDrag(outerContainer);
-
+                var dragging = false;
                 //When the associated media is clicked, set it to active(see mediaManipPreprocessing() above )
                 outerContainer.on('click mousedown', function (event) {
                     event.stopPropagation();            //Prevent the click going through to the main container
                     event.preventDefault();
+                    console.log("outerContainer mousedown or click");
+                    dragging = true;
                     TAG.Util.IdleTimer.restartTimer();
                     mediaManipPreprocessing();
                     TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
@@ -1168,6 +1157,23 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                     };
 
                 });
+                
+                if (!IS_WINDOWS){
+                    outerContainer.on('mousemove', function(evt){
+                        console.log("outerContainer stopping mousemove");
+                        console.log("dragging" + dragging);
+                        if (!dragging){
+                            evt.stopPropagation();
+                        }
+                    });
+                    outerContainer.on('mouseenter', function(evt){
+                        console.log("outerContainer mouseenter")
+                    });
+                    $('body').on('mouseup', function(){
+                        console.log("body mouseup");
+                        dragging = false;
+                    })
+                }
 
                 // register handlers
                 if (IS_WINDOWS) {
