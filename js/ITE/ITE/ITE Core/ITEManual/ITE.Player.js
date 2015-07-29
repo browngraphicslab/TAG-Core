@@ -164,6 +164,22 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 on the left side of the screen to provide greater context.");
             ITEHolder.append(infoPopup);
             infoPopup.click(hideInfoPopup);
+
+            var closeX = $(document.createElement('img'));
+            closeX.attr({
+                src: tagPath + 'images/icons/x.svg',
+                id: 'closeX'
+            })
+            closeX.css({
+                'left': '92%',
+                'position': 'absolute',
+                'top': '3%',
+                'height': '9%'
+            })
+            closeX.click(function () {
+                hideInfoPopup();
+            })
+            infoPopup.append(closeX);
         }
         pause();
         infoPopup && infoPopup.show();
@@ -1303,7 +1319,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 'font-weight' : 'bold'
             });
         }
-        else{ 
+        else { 
             outer.css({
                 'position': 'absolute',
                 'z-index': '9999999999',
