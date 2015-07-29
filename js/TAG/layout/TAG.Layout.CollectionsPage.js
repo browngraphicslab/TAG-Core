@@ -2467,8 +2467,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             function gotTours(tours) {
                 var tourIDsHash = [];
                 var tourDoqs = [];
-                for (var i = 0; i < tours.length; i++) {
-                    var tour = tours[i]
+                for (var g = 0; g < tours.length; g++) {
+                    var tour = tours[g]
                     TAG.Worktop.Database.getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
                 }
                 function tourBack(doq) {
@@ -2478,8 +2478,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     }
                 }
                 function gotDoqs() {
-                    for (var j = 0; j < tourDoqs.length; j++) {
-                        var a = JSON.parse(tourDoqs[j].Metadata.RelatedArtworks)
+                    for (var l = 0; l < tourDoqs.length; l++) {
+                        var a = JSON.parse(tourDoqs[l].Metadata.RelatedArtworks)
                         for (var k = 0; k < a.length; k++) {
                             tourIDsHash[a[k]] = true;
                         }
@@ -2525,7 +2525,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     }
 
                     var hiddenTours = 0;
-
+                    loadQueue.add(function () { return });
                     for (j = 0; j < works.length; j++) {
                         if (tag) {
                             if (works[j].artwork.Metadata.ContentType !== 'tour' || works[j].artwork.Metadata.Private !== "true") {
@@ -2572,7 +2572,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             tileDiv.append(paddingDiv);
                         }
                     })
-
+                    loadQueue._queue[1][0]();
                     loadQueue.add(function () {
                         tileCircle.hide();
                     })
