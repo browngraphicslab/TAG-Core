@@ -49,6 +49,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         overlay = root.find('#overlay'),
         prevCollection = $(document.createElement('div')).attr('id', 'prevCollection'),
         selectedTile,
+        tourIDsHash,
 
         // input options
         scrollPos = options.backScroll || null,     // horizontal position within collection's catalog
@@ -2444,10 +2445,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
         if (start === 0) {
             loadQueue.clear();
-            drawHelper();
+            return drawHelper();
             
         } else {
-            drawHelper();
+            return drawHelper();
         }
 
         /**
@@ -2463,13 +2464,25 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 paddingDiv,
                 circle,
                 i, h, w, j;
-            TAG.Worktop.Database.getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
-            function gotTours(tours) {
-                var tourIDsHash = [];
-                var tourDoqs = [];
-                for (var g = 0; g < tours.length; g++) {
-                    var tour = tours[g]
-                    TAG.Worktop.Database.getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
+            if (!tourIDsHash || tourIDsHash['collection'] !== currCollection) {
+                tourIDsHash = [];
+            }
+            var tourDoqs = [];
+            if (tourIDsHash && tourIDsHash['collection'] === currCollection) {
+                gotTours(null,true)
+            }
+            else {
+                TAG.Worktop.Database.getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
+            }
+            function gotTours(tours, bypass) {
+                if (bypass) {
+                    gotDoqs(true);
+                }
+                else{
+                    for (var g = 0; g < tours.length; g++) {
+                        var tour = tours[g]
+                        TAG.Worktop.Database.getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
+                    }
                 }
                 function tourBack(doq) {
                     tourDoqs.push(doq);
@@ -2477,16 +2490,22 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         gotDoqs();
                     }
                 }
-                function gotDoqs() {
+                function gotDoqs(bypass2) {
+                    if (!currCollection) {
+                        return;
+                    }
                     if (start === 0) {
                         loadQueue.clear();
                     }
-                    for (var l = 0; l < tourDoqs.length; l++) {
-                        var a = JSON.parse(tourDoqs[l].Metadata.RelatedArtworks)
-                        for (var k = 0; k < a.length; k++) {
-                            tourIDsHash[a[k]] = true;
+                    if(!bypass2){
+                        for (var l = 0; l < tourDoqs.length; l++) {
+                            var a = JSON.parse(tourDoqs[l].Metadata.RelatedArtworks)
+                            for (var k = 0; k < a.length; k++) {
+                                tourIDsHash[a[k]] = true;
+                            }
                         }
                     }
+                    tourIDsHash['collection'] = currCollection;
                     if (!artworks || artworks.length === 0) {
                         tileCircle.hide();
                         if (onAssocMediaView) {
