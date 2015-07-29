@@ -171,7 +171,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             "width": '100%',
             "height": "100%"
         })
-        infoDiv.text("loading tour...");
+        infoDiv.text("Loading Tour...");
         TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
         initialOverlay.append(infoDiv);
         $("#ITEContainer").append(initialOverlay);

@@ -508,7 +508,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         var muteButtonHeight = muteButton.height();
         muteButton.width(muteButtonHeight + '%');
 
-        sideBar.append(muteButton);
+        //sideBar.append(muteButton);
         sideBar.append(nobelPlayPauseButton);
 
         $("#backButton").remove();
@@ -1097,6 +1097,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             div.click(function () {
                 associatedMedia[this.id].create();
                 associatedMedia[this.id].toggle();
+                pauseNobel();
                 /*
                 for (var l = 0; l < nobelHotspots.length; l++) {
                     if (nobelHotspots[l].length){
