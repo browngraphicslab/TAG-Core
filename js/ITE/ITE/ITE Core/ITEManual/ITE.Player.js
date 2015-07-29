@@ -942,7 +942,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     function setInfoTrack(z, bool){
         if (z > -1) {
             var doq = getDoqFromZIndex(z);
-            if (doq !== null) {
+            if (doq !== null && doq && doq.Metadata) {
                 if (bool === true) {
                     if (infoTracksVisible.indexOf(z) === -1) {
                         infoTracksVisible.push(z);
@@ -1010,7 +1010,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             return;
         }
         var doq = getDoqFromZIndex(z);
-        if (doq !== null) {
+        if (doq !== null && doq && doq.Metadata) {
             updateInfoPane(doq);
         }
         else {
