@@ -175,7 +175,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             "position": "absolute",
             "font-size": "3em",
             "width": '100%',
-            "height": "100%"
+            "height": "100%",
+            'font-family' : 'Cinzel'
         })
         infoDiv.text("Loading Tour...");
         TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
