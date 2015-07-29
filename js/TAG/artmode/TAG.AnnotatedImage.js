@@ -1033,7 +1033,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 var closeButton = createCloseButton();
                 closeButton.on('click', function (evt) {
                     evt.stopPropagation();
-                    hideMediaObject();
+                    hideMediaObject(true);
                     TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
                         tobj.current_artwork = doq.Identifier;
                         tobj.assoc_media = mdoq.Identifier; //the associated media that was clicked
