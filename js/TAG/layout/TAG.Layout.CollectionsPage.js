@@ -174,7 +174,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 });
                 var newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                TAG.Util.UI.slidePageRight(root, newPageRoot);
+                TAG.Util.UI.slidePageRight(newPageRoot);
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                 currentPage.obj = artworkViewer;
                 });
