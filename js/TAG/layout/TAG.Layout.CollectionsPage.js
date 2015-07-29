@@ -2886,6 +2886,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     'width': '24px',
                     'height' : '24px',
                     'background-color': 'transparent',
+                    'z-index' : '500000'
                 })
                 main.append(icon);
             }
