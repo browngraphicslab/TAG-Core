@@ -2022,7 +2022,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             if (isNobelWill === true) {
                 h.css({
                     'position': 'absolute',
-                    'left': '5%',
+                    'margin-left':'4%',
+                    
                     'top': '2.5%',
                     'height': '4.5%',
                     'background-color': 'transparent',
@@ -2032,16 +2033,22 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             else {
                 h.css({
                     'position': 'absolute',
-                    'left': '4%',
+                    'margin-left': '4%',
                     'top': '1%',
                     'height': '4.5%',
                     'background-color': 'transparent',
                     'z-index': '99999999'
                 }).click(goBack);
             }
-            var hh = h.height();
-            h.css('width', hh + '%');
-            root.append(h);
+            if(isNobelWill===true){
+                var hh = h.height();
+                h.css('width', hh + '%');
+            }else{
+                h.css('width', 'auto');
+                 
+            }
+                
+            root.append(h);  
         }
         // splitscreen
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
