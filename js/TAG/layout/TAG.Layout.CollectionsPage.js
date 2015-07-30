@@ -21,6 +21,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         collectionArea = root.find('#collectionArea'),
         backButtonArea = root.find('#backButtonArea'),
         backButton = root.find('#backButton'),
+        homeButtonArea = root.find('#homeButtonArea'),
+        homeButton = root.find('#homeButton'),
         centeredCollectionHeader = root.find("#centeredCollectionHeader"),
         dropDownArrow = root.find('#dropDownArrow'),
         collectionDotHolder = root.find('#collectionDotHolder'),
@@ -163,6 +165,15 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     root.data('split',options.splitscreen);
     options.backCollection ? comingBack = true : comingBack = false;
     var cancelLoadCollection = null;
+
+    homeButton.attr('src', tagPath + 'images/icons/home.svg');
+    homeButton.click(function () {
+        TAG.Layout.StartPage(null, function (page) {
+            $('#keywords').empty();
+            $("#startPageLoadingOverlay").remove()
+            TAG.Util.UI.slidePageRight(page);
+        });
+    })
 
     backButton.attr('src', tagPath + 'images/icons/Back.svg');
 
@@ -2708,6 +2719,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'scrollbar-track-color': 'transparent',
         })
     }
+
     /**
      * Creates an artwork tile in a collection's catalog
      * @method drawArtworkTile
@@ -2737,7 +2749,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             if (twoDeep){
                 yearTextBox.css('height','15%');
             }
-
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
             tileImage.addClass('tileImage');

@@ -20,6 +20,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         toggler = root.find('#toggler'),
         togglerImage = root.find('#togglerImage'),
         backButton = root.find('#backButton'),
+        homeButton = root.find('#homeButton'),
         linkButton = root.find('#linkButton'),
         linkButtonContainer = root.find('#linkContainer'),
         //locHistoryDiv       = root.find('#locationHistoryDiv'),
@@ -1789,6 +1790,48 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         sideBarInfo.css({
             'height': sideBarSections.height() - 25 + 'px'
         });
+        homeButton.attr({
+            src : tagPath+'images/icons/home.svg'
+        })
+
+        homeButton.click(function(){///going home handler
+            sliderBar && sliderBar.remove();//nobel will stuff starts here
+            stopAudio();
+            willImage && willImage.remove();
+            willImage && willImage.die();
+            $("#upIcon").remove();
+            $("#downIcon").remove();
+            $("#rightPageArrow").remove();
+            $("#leftPageArrow").remove();
+            $(".textChunkDiv").remove();
+            $("#titleDiv").remove();
+            $("#annotatedImageAssetCanvas").remove();
+            $(".nobelHotspot").remove();
+            $("#nobelPlayPauseButton").remove();
+            $("#audioFile").off();
+            $("#audioFile").remove();
+            $("#audioFile").die();
+            sliderBar && sliderBar.die();
+            $("#upIcon").die();
+            $("#downIcon").die();
+            $("#rightPageArrow").die();
+            $("#leftPageArrow").die();
+            $(".textChunkDiv").die();
+            $("#titleDiv").die();
+            $("#annotatedImageAssetCanvas").die();
+            $(".nobelHotspot").die();
+            $("#nobelPlayPauseButton").die();//nobel will stuff ends here
+
+            annotatedImage && annotatedImage.unload();
+            $('.annotatedImageHotspotCircle').remove();
+            $('.mediaOuterContainer').remove();
+            TAG.Layout.StartPage(null, function (page) {
+                $("#startPageLoadingOverlay").remove()
+                TAG.Util.UI.slidePageRight(page);
+            });
+        })
+
+
         if (locked !== doq.Identifier) {
             backButton.attr('src', tagPath + 'images/icons/Back.svg');
         } else {
