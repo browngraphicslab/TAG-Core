@@ -20,6 +20,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         toggler = root.find('#toggler'),
         togglerImage = root.find('#togglerImage'),
         backButton = root.find('#backButton'),
+        homeButton = root.find('#homeButton'),
         linkButton = root.find('#linkButton'),
         linkButtonContainer = root.find('#linkContainer'),
         //locHistoryDiv       = root.find('#locationHistoryDiv'),
@@ -441,6 +442,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         $("#seadragonManipContainer").off('click');
         $("#seadragonManipContainer").hide();
         $("#sideBarSections").hide();
+        $("#homeButton").hide();
         $("#sideBarSections").off('click');
         $("#sideBar").css({
             "width": '40%',
@@ -1913,6 +1915,48 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         sideBarInfo.css({
             'height': sideBarSections.height() - 25 + 'px'
         });
+        homeButton.attr({
+            src : tagPath+'images/icons/home.svg'
+        })
+
+        homeButton.click(function(){///going home handler
+            sliderBar && sliderBar.remove();//nobel will stuff starts here
+            stopAudio();
+            willImage && willImage.remove();
+            willImage && willImage.die();
+            $("#upIcon").remove();
+            $("#downIcon").remove();
+            $("#rightPageArrow").remove();
+            $("#leftPageArrow").remove();
+            $(".textChunkDiv").remove();
+            $("#titleDiv").remove();
+            $("#annotatedImageAssetCanvas").remove();
+            $(".nobelHotspot").remove();
+            $("#nobelPlayPauseButton").remove();
+            $("#audioFile").off();
+            $("#audioFile").remove();
+            $("#audioFile").die();
+            sliderBar && sliderBar.die();
+            $("#upIcon").die();
+            $("#downIcon").die();
+            $("#rightPageArrow").die();
+            $("#leftPageArrow").die();
+            $(".textChunkDiv").die();
+            $("#titleDiv").die();
+            $("#annotatedImageAssetCanvas").die();
+            $(".nobelHotspot").die();
+            $("#nobelPlayPauseButton").die();//nobel will stuff ends here
+
+            annotatedImage && annotatedImage.unload();
+            $('.annotatedImageHotspotCircle').remove();
+            $('.mediaOuterContainer').remove();
+            TAG.Layout.StartPage(null, function (page) {
+                $("#startPageLoadingOverlay").remove()
+                TAG.Util.UI.slidePageRight(page);
+            });
+        })
+
+
         if (locked !== doq.Identifier) {
             backButton.attr('src', tagPath + 'images/icons/Back.svg');
         } else {
@@ -1968,6 +2012,36 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var bbheight = bb.height();
             bb.css('width', bbheight + '%');
             root.append(bb);
+        }
+        if (isNobelWill === true || isImpactMap === true) {
+            $("#homeButton").remove();
+            var h = $(document.createElement('img'));
+            h.attr({
+                src: tagPath + 'images/icons/home.svg',
+            })
+            if (isNobelWill === true) {
+                h.css({
+                    'position': 'absolute',
+                    'left': '5%',
+                    'top': '2.5%',
+                    'height': '4.5%',
+                    'background-color': 'transparent',
+                    'z-index': '99999999'
+                }).click(goBack);
+            }
+            else {
+                h.css({
+                    'position': 'absolute',
+                    'left': '4%',
+                    'top': '1%',
+                    'height': '4.5%',
+                    'background-color': 'transparent',
+                    'z-index': '99999999'
+                }).click(goBack);
+            }
+            var hh = h.height();
+            h.css('width', hh + '%');
+            root.append(h);
         }
         // splitscreen
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
