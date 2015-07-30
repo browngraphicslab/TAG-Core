@@ -1889,20 +1889,32 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             bb.css('width', bbheight + '%');
             root.append(bb);
         }
-        if (isNobelWill === true) {
+        if (isNobelWill === true || isImpactMap === true) {
             $("#homeButton").remove();
             var h = $(document.createElement('img'));
             h.attr({
                 src: tagPath + 'images/icons/home.svg',
             })
-            h.css({
-                'position': 'absolute',
-                'left': '5%',
-                'top': '2.5%',
-                'height': '4.5%',
-                'background-color': 'transparent',
-                'z-index': '99999999'
-            }).click(goBack);
+            if (isNobelWill === true) {
+                h.css({
+                    'position': 'absolute',
+                    'left': '5%',
+                    'top': '2.5%',
+                    'height': '4.5%',
+                    'background-color': 'transparent',
+                    'z-index': '99999999'
+                }).click(goBack);
+            }
+            else {
+                h.css({
+                    'position': 'absolute',
+                    'left': '4%',
+                    'top': '1%',
+                    'height': '4.5%',
+                    'background-color': 'transparent',
+                    'z-index': '99999999'
+                }).click(goBack);
+            }
             var hh = h.height();
             h.css('width', hh + '%');
             root.append(h);
