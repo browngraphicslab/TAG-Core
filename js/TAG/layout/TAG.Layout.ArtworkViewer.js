@@ -433,6 +433,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         $("#seadragonManipContainer").off('click');
         $("#seadragonManipContainer").hide();
         $("#sideBarSections").hide();
+        $("#homeButton").hide();
         $("#sideBarSections").off('click');
         $("#sideBar").css({
             "width": '40%',
@@ -1887,6 +1888,24 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var bbheight = bb.height();
             bb.css('width', bbheight + '%');
             root.append(bb);
+        }
+        if (isNobelWill === true) {
+            $("#homeButton").remove();
+            var h = $(document.createElement('img'));
+            h.attr({
+                src: tagPath + 'images/icons/home.svg',
+            })
+            h.css({
+                'position': 'absolute',
+                'left': '5%',
+                'top': '2.5%',
+                'height': '4.5%',
+                'background-color': 'transparent',
+                'z-index': '99999999'
+            }).click(goBack);
+            var hh = h.height();
+            h.css('width', hh + '%');
+            root.append(h);
         }
         // splitscreen
         if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
