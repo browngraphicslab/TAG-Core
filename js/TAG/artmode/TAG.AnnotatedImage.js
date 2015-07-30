@@ -1679,7 +1679,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                     'display': 'block',
                                     'margin-top': '2%',
                                     'margin-left': 'auto',
-                                    'margin-right': 'auto'
+                                    'margin-right': 'auto',
+                                    'scrollbar-face-color': NOBEL_WILL_COLOR,
+                                    'scrollbar-arrow-color': 'transparent',
+                                    'scrollbar-track-color': 'transparent',
                                 });
                                 descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
                                 if (IS_WINDOWS) {
@@ -1852,6 +1855,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 }
                 if (DESCRIPTION) {
                     if (outerContainer.find('.annotatedImageMediaDescription').length === 0) {
+                        console.log("make scroll bar orange plsssss")
                         descDiv = $(document.createElement('div'));
                         descDiv.addClass('annotatedImageMediaDescription');
                         descDiv.css({
@@ -1862,7 +1866,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                             'max-height': root.height() / 3 + 'px',
                             'margin-right': 'auto',
                             'background-color': 'transparent',
-                            'font-size': '100%'
+                            'font-size': '100%',
+                            'scrollbar-face-color': NOBEL_WILL_COLOR,
+                            'scrollbar-arrow-color': 'transparent',
+                            'scrollbar-track-color': 'transparent',
                         });
                         descDiv.html(Autolinker.link(DESCRIPTION, { email: false, twitter: false }));
                         if (IS_WINDOWS) {
