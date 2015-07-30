@@ -176,6 +176,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     })
 
     backButton.attr('src', tagPath + 'images/icons/Back.svg');
+    root.append(backButtonArea);
+    root.append(homeButtonArea);
+    backButton.css('z-index', '99999999');
+    homeButton.css('z-index', '999999999');
 
     backButton.click(function () {   
         if (backToGuid){
