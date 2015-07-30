@@ -1117,6 +1117,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                                   options.backToAssoc = mdoq;
                                   options.backToGuid = "79bb289b-0e18-4091-8e3b-f21e5d65e793";
                                   options.hideKeywords = true;
+                                  options.showInitialImpactPopUp = true;
                                   collectionsPage = TAG.Layout.CollectionsPage(options);
                                   TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
                               });

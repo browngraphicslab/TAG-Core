@@ -94,6 +94,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         //nobel will variables
         showInitialNobelWillBox = true,
+        showInitialImpactPopUp = options.showInitialImpactPopUp || false,
         sliderBar,//the big yellow div sliding up and down
         chunkNumber,//the current chunk number (0-based) being observed
         leftTextArray,//the array of textDiv-spacingPercent tuples
@@ -268,6 +269,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             nextSlide.click(nextSlidePage)
             prevSlide.click(prevSlidePage)
         }
+
+        if (isImpactMap) sideBar.css
+
         annotatedImage = TAG.AnnotatedImage({
             isNobelWill: isNobelWill,
             isImpactMap: isImpactMap,
@@ -301,6 +305,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 if (isNobelWill === true) {
                     nobelWillInit();
                 }
+
+                if (isImpactMap === true && showInitialImpactPopUp === false) {
+                    createImpactPopUp();
+                }
+
                 $("#startPageLoadingOverlay").remove();
 
                 if (isImpactMap) {
@@ -1346,6 +1355,121 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         })
     }
 
+        /**
+     * Initializes the popup informative window before the nobel will exploration begins
+     * @param function onClose      the function called after the window is closed
+     */
+
+    function createImpactPopUp(onClose) {
+        showInitialImpactPopUp = false;
+        var popup = $(document.createElement('div'))
+        popup.css({
+            'display': 'block',
+            'position': 'absolute',
+            'opacity': '1',
+            'border-radius': '18px',
+            'border-color': NOBEL_WILL_COLOR,
+            'border': '8px solid ' + NOBEL_WILL_COLOR,
+            'width': '60%',
+            'height': '70%',
+            'top': '15%',
+            'left': '20%',
+            'background-color': 'black',
+            'z-index': '99999999'
+        })
+        var popupTopBar = $(document.createElement('div'));
+        var popupLeftBar = $(document.createElement('div'));
+        var popupRightBar = $(document.createElement('div'));
+        var popupLeftTopBar = $(document.createElement('div'));
+        var popupLeftBottomBar = $(document.createElement('div'));
+        var nobelIcon = $(document.createElement('img'));
+        var closeX = $(document.createElement('img'));
+
+        nobelIcon.attr({
+            src: tagPath + 'images/icons/nobel_icon.png',
+            id: 'nobelIcon'
+        })
+        nobelIcon.css({
+            'position': 'absolute',
+            'width': '80%',
+            'height' : '50%',
+            'left': '18%',
+            'top': '18%'
+        })
+        popupRightBar.append(nobelIcon);
+        popupTopBar.append(closeX);
+        closeX.attr({
+            src: tagPath + 'images/icons/x.svg',
+            id: 'closeX'
+        })
+        closeX.css({
+            'left': '93%',
+            'position': 'absolute',
+            'top': '15%',
+            'height': '54%'
+        })
+        popupTopBar.css({
+            'height': '15%',
+            'position': 'absolute',
+            'width': '100%',
+        })
+
+        popupLeftBar.css({
+            'height': '85%',
+            'position': 'absolute',
+            'width': '65%',
+            'top': '15%',
+            'color': 'white'
+        })
+
+        popupRightBar.css({
+            'height': '85%',
+            'position': 'absolute',
+            'width': '35%',
+            'top': '15%',
+            'left': '60%',
+        })
+
+        popupLeftTopBar.css({
+            'height': '18%',
+            'position': 'absolute',
+            'width': '92%',
+            'left': '8%',
+            'font-size': '1.25em',
+            'font-weight': 'bold',
+            'color': 'white',
+            'font-family': 'Cinzel'
+        }).text("Nobel Prize History and Impact")
+
+        popupLeftBottomBar.css({
+            'top': ' 18%',
+            'height': '82%',
+            'position': 'absolute',
+            'left': '8%',
+            'width': '92%',
+            'font-size': '.82em',
+            'color': 'white'
+        }).text('This site will be populated with collections that illustrate the impact that individual Nobel prizes have had on the laureates, their fields, and on society.  We have chosen one particular exemplar: the 1986 Nobel prize in Physics awarded to Ernst Ruska for the electron microscope and to Heinrich Rohrer and Gerd Binnig for the scanning tunneling microscope. The electron microscope enabled researchers to see and more deeply study small-scale phenomena, for example the polio and ebola viruses, while the scanning tunneling microscope led to an entirely new field, that of nanotechnology. In both cases the reputations resulting from the award enhanced their fields through increased funding and attraction of new talent, with resulting societal benefits.')
+
+        var temp = $(TAG.Util.UI.blockInteractionOverlay(.3));//add blocking div to stop all interaction
+        temp.css({
+            "display": 'block',
+            'z-index': '9999999'
+        })
+        popupLeftBar.append(popupLeftTopBar);
+        popupLeftBar.append(popupLeftBottomBar);
+        popup.append(popupTopBar);
+        popup.append(popupLeftBar);
+        popup.append(popupRightBar);
+        root.append(temp)
+        root.append(popup)
+        closeX.click(function () {
+            temp.remove();
+            popup.remove();
+            showInitialImpactPopUp = true;
+        })
+    }
+
     /**
      * Initializes splitscreen functionality
      * @method initSplitscreen
@@ -1898,6 +2022,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             //doNothing(tobj.time_spent);
         });
 
+        if (isImpactMap) toggler.click();
+
         //TAG.Util.UI.setUpBackButton(backButton, goBack);
         backButton.on('click', goBack);
         TAG.Telemetry.register(backButton, 'click', 'BackButton', function (tobj) {
@@ -1969,7 +2095,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 twoDeep: twoDeep,
                 oneDeep: oneDeep,
                 hideKeywords: hideKeywords,
-                showNobelLifeBox: showNobelLifeBox
+                showNobelLifeBox: showNobelLifeBox,
+                showInitialImpactPopUp: showInitialImpactPopUp
             });
             //if (root.data('split') === 'R') {
 

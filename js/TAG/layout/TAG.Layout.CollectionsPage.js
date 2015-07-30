@@ -71,7 +71,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         backToAssoc = options.backToAssoc, // for impact map experience
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         showNobelLifeBox = options.showNobelLifeBox, // customization to indicate whether initial pop up has appeared on Nobel Life collection
-
+        showInitialImpactPopUp = options.showInitialImpactPopUp,
         
 
         // misc initialized vars
@@ -174,6 +174,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         doq: result,
                         isNobelWill: false,
                         isImpactMap: true,
+                        showInitialImpactPopUp: true,
                         assocMediaToShow: backToAssoc
                 });
                 var newPageRoot = artworkViewer.getRoot();
@@ -485,7 +486,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         if ((currCollection && currCollection.Name !== 'The Life of Alfred Nobel') || showNobelLifeBox) {
             return;
         }
-        console.log("create nobel life pop up");
         showNobelLifeBox = false;
         var popup = $(document.createElement('div'))
         popup.css({
