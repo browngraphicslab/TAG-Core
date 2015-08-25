@@ -120,7 +120,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         localStorage.ip = localStorage.ip.split(':')[0];
     }
     
-    serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "browntagserver.com:8080");
+    serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "tagnobel.cloudapp.net:8080");
     tagContainer = options.tagContainer || $('body');
 
     //Comment out this conditional block to disable access to authoring for the web

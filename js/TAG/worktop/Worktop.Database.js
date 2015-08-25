@@ -14,8 +14,8 @@ Worktop.Database = function (mainID) {
     var HTTPS_PORT = LADS.Worktop.Database.HTTPS_PORT;
     var FILE_PORT = LADS.Worktop.Database.FILE_PORT;
 
-    if (localStorage.ip === "137.117.37.220") localStorage.ip = "browntagserver.com"; // Switch to new domain for HTTPS
-    var _baseURL = localStorage.ip ? localStorage.ip : "browntagserver.com";  // url of the server
+    if (localStorage.ip === "137.117.37.220") localStorage.ip = "tagnobel.cloudapp.net"; // Switch to new domain for HTTPS
+    var _baseURL = localStorage.ip ? localStorage.ip : "tagnobel.cloudapp.net";  // url of the server
     localStorage.ip = _baseURL; // keep localStorage.ip current
 
     var useServer = true;
