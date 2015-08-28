@@ -104,6 +104,7 @@ var JSSRC = [
 		'js/TAG/layout/TAG.Layout.StartPage.js',               // TAGCORE
 		'js/TAG/layout/TAG.Layout.ArtworkViewer.js',           // TAGCORE
 		'js/TAG/layout/TAG.Layout.CollectionsPage.js',         // TAGCORE
+        'js/TAG/layout/TAG.Layout.LaureatesPage.js',
 		'js/TAG/layout/TAG.Layout.InternetFailurePage.js',     // TAGCORE
 		'js/TAG/layout/TAG.Layout.MetroSplitscreenMessage.js', // TAGCORE
 		'js/TAG/layout/TAG.Layout.TourPlayer.js',              // TAGCORE
@@ -232,7 +233,8 @@ module.exports = function(grunt) {
 						'css/SettingsView.styl',         // TAGCORE
 						'css/Util.styl',                 // TAGCORE
 						'css/SplashScreenOverlay.styl',   // TAGCORE
-						'css/ITE.Player.styl'
+						'css/ITE.Player.styl',
+					    'css/LaureatesPage.styl'
 						//'css/ComponentControls.styl'	 // TAGCORE
 					]
 				}
@@ -252,7 +254,9 @@ module.exports = function(grunt) {
 					'html/SettingsView.html':        'html/SettingsView.jade',        // TAGCORE
 					'html/TourPlayer.html':          'html/TourPlayer.jade',          // TAGCORE
 					'html/ComponentControls.html':	 'html/ComponentControls.jade',	  // TAGCORE
-					'html/SplashScreenOverlay.html': 'html/SplashScreenOverlay.jade'  // TAGCORE
+					'html/SplashScreenOverlay.html': 'html/SplashScreenOverlay.jade',  // TAGCORE
+                    'html/LaureatesPage.html': 'html/LaureatesPage.jade'
+
 				}
 			}
 		},

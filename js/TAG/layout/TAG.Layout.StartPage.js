@@ -632,6 +632,42 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                                 buttonClicked = false;
                             }
                         });
+                } else if (collectionName == LAUREATE_NAME) {
+                    //var laureatesPage = TAG.Layout.LaureatesPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration));
+                    TAG.Worktop.Database.getExhibitions(function (collections) {
+                        if ($("#startPageLoadingOverlay").length) {
+                            for (i = 0; i < collections.length; i++) {
+                                currName = collections[i].Name;
+                                if (currName === collectionName) {
+                                    options.backCollection = collections[i];
+                                    if (hideKeywords) {
+                                        options.hideKeywords = true;
+                                    }
+                                    if (smallPreview) {
+                                        options.smallPreview = true;
+                                    }
+                                    if (titleIsName) {
+                                        options.titleIsName = true;
+                                    }
+                                    if (currName === LIFE_NAME) {
+                                        options.oneDeep = true;
+                                    }
+                                }
+                            }
+                            collectionsPage = TAG.Layout.LaureatesPage(options, 10);
+                            if ($("#startPageLoadingOverlay").length) {
+                                TAG.Util.UI.slidePageLeftSplit(root, collectionsPage.getRoot());
+                                currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+                                currentPage.obj = collectionsPage;
+                            }
+                            else {
+                                buttonClicked = false;
+                            }
+                        }
+                        else {
+                            buttonClicked = false;
+                        }
+                    });
                 } else {
                     TAG.Worktop.Database.getExhibitions(function (collections) {
                         if ($("#startPageLoadingOverlay").length) {
