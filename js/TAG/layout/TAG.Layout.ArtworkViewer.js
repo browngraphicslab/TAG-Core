@@ -20,7 +20,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         toggler = root.find('#toggler'),
         togglerImage = root.find('#togglerImage'),
         backButton = root.find('#backButton'),
-        homeButton = root.find('#homeButton'),
         linkButton = root.find('#linkButton'),
         linkButtonContainer = root.find('#linkContainer'),
         //locHistoryDiv       = root.find('#locationHistoryDiv'),
@@ -40,7 +39,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locked = TAG.Worktop.Database.getLocked(),     //Check for locked
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,
-        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+        PRIMARY_FONT_COLOR = "D99B3B",
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
         FONT = TAG.Worktop.Database.getMuseumFontFamily(),
 
@@ -230,46 +229,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             }
             slideModeArray = temp;
         }
-        if (isSlideMode === true) {
-            prevSlide.attr({
-                src : tagPath + 'images/icons/left_nobel_icon.svg'
-            })
-            nextSlide.attr({
-                src: tagPath + 'images/icons/right_nobel_icon.svg'
-            })
-            prevSlide.css({
-                'width': '50px',
-                'height': '50px',
-                'bottom': '0%',
-                'right': '51%',
-                'position': 'absolute',
-                'z-index': '100'
-            })
-            nextSlide.css({
-                'width': '50px',
-                'height': '50px',
-                'bottom': '0%',
-                'left': '51%',
-                'position': 'absolute',
-                'z-index' : '100'
-            })
-            root.append(nextSlide)
-            root.append(prevSlide);
-            if (afterInSlideArray()) {
-                nextSlide.show();
-            }
-            else {
-                nextSlide.hide();
-            }
-            if (beforeInSlideArray()) {
-                prevSlide.show();
-            }
-            else {
-                prevSlide.hide();
-            }
-            nextSlide.click(nextSlidePage)
-            prevSlide.click(prevSlidePage)
-        }
 
         if (isImpactMap) sideBar.css
 
@@ -297,7 +256,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     initSplitscreen();
                 }
                 **/
-                createSeadragonControls();
+                //createSeadragonControls();
                 TAG.Worktop.Database.getMaps(doq.Identifier, function (mps) {
                     customMapsLength = mps.length;
                     setTimeout(function(){makeSidebar();},250);  //hack for some async styling stuff - lucyvk
@@ -312,10 +271,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 }
 
                 $("#startPageLoadingOverlay").remove();
-
-                if (isImpactMap) {
-                    $("#backButton").remove();
-                }
 
                 loadingArea.hide();
             },
@@ -1915,47 +1870,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         sideBarInfo.css({
             'height': sideBarSections.height() - 25 + 'px'
         });
-        homeButton.attr({
-            src : tagPath+'images/icons/home.svg'
-        })
-
-        homeButton.click(function(){///going home handler
-            sliderBar && sliderBar.remove();//nobel will stuff starts here
-            stopAudio();
-            willImage && willImage.remove();
-            willImage && willImage.die();
-            $("#upIcon").remove();
-            $("#downIcon").remove();
-            $("#rightPageArrow").remove();
-            $("#leftPageArrow").remove();
-            $(".textChunkDiv").remove();
-            $("#titleDiv").remove();
-            $("#annotatedImageAssetCanvas").remove();
-            $(".nobelHotspot").remove();
-            $("#nobelPlayPauseButton").remove();
-            $("#audioFile").off();
-            $("#audioFile").remove();
-            $("#audioFile").die();
-            sliderBar && sliderBar.die();
-            $("#upIcon").die();
-            $("#downIcon").die();
-            $("#rightPageArrow").die();
-            $("#leftPageArrow").die();
-            $(".textChunkDiv").die();
-            $("#titleDiv").die();
-            $("#annotatedImageAssetCanvas").die();
-            $(".nobelHotspot").die();
-            $("#nobelPlayPauseButton").die();//nobel will stuff ends here
-
-            annotatedImage && annotatedImage.unload();
-            $('.annotatedImageHotspotCircle').remove();
-            $('.mediaOuterContainer').remove();
-            TAG.Layout.StartPage(null, function (page) {
-                $("#startPageLoadingOverlay").remove()
-                TAG.Util.UI.slidePageRight(page);
-            });
-        })
-
 
         if (locked !== doq.Identifier) {
             backButton.attr('src', tagPath + 'images/icons/Back.svg');
@@ -1983,36 +1897,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             'color': '#' + PRIMARY_FONT_COLOR,
             //'font-family': FONT
         });
-        if (isNobelWill === true || isImpactMap === true) {
-            $("#backButton").remove();
-            var bb = $(document.createElement('img'));
-            bb.attr({
-                src: tagPath + 'images/icons/Back.svg',
-                id: 'nobelBackButton'
-            })
-            if (isNobelWill === true) {
-                bb.css({
-                    'position': 'absolute',
-                    'left': '1%',
-                    'top': '2.5%',
-                    'height': '4.5%',
-                    'background-color': 'transparent',
-                    'z-index': '99999999'
-                }).click(goBack);
-            } else {
-                bb.css({
-                    'position': 'absolute',
-                    'left': '0%',
-                    'top': '1%',
-                    'height': '4.5%',
-                    'background-color': 'transparent',
-                    'z-index': '99999999'
-                }).click(goBack);
-            }
-            var bbheight = bb.height();
-            bb.css('width', bbheight + '%');
-            root.append(bb);
-        }
+
         if (isNobelWill === true || isImpactMap === true) {
             $("#homeButton").remove();
             var h = $(document.createElement('img'));
@@ -2050,24 +1935,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 
             root.append(h);  
         }
-        // splitscreen
-        if (root.data('split') === 'R' && TAG.Util.Splitscreen.isOn()) {
-            sideBar.css({
-                'left': 'auto',
-                'right': '0%'
-            });
-            toggler.css({
-                left: '-12%',
-                'border-top-left-radius': '3.5px',
-                'border-top-right-radius': '0px',
-                'border-bottom-right-radius': '0px',
-                'border-bottom-left-radius': '3.5px'
-            });
-            togglerImage.attr('src', tagPath + 'images/icons/Open_nobel.svg')
-                        .css('right', '0%');
-        } else {
-            togglerImage.css('left', '0%');
-        }
+
         if (!previewing) {
             sideBar.css('min-width', 0.22 * screenWidth);
         }
@@ -2103,9 +1971,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             //doNothing(tobj.time_spent);
         });
 
-        if (isImpactMap) toggler.click();
-
-        //TAG.Util.UI.setUpBackButton(backButton, goBack);
         backButton.on('click', goBack);
         TAG.Telemetry.register(backButton, 'click', 'BackButton', function (tobj) {
 
@@ -2179,9 +2044,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 showNobelLifeBox: showNobelLifeBox,
                 showInitialImpactPopUp: showInitialImpactPopUp
             });
-            //if (root.data('split') === 'R') {
 
-            //}
             collectionsPageRoot = collectionsPage.getRoot();
             collectionsPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
 
@@ -2205,109 +2068,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             root.find('#locationHistoryContainer').remove();
         }
 
-        // add more information for the artwork if curator added in the authoring mode
-        infoTitle.css({
-            'font-family': 'Cinzel',
-            'font-size': '150%'
-        });
         infoYear.css('display','none');
-
-        var infoPrize, infoPerson, infoCountry, infoAffiliation, 
-            category, yearAward, yearBorn, affiliation, citizenship, gender, prizeText;
-
-        for (item in doq.Metadata.InfoFields) {
-            if (item === 'Category') {
-                category = doq.Metadata.InfoFields[item].split(',');
-            }
-            if (item === 'Year of Award') {
-                yearAward = doq.Metadata.InfoFields[item].split(',');
-            }
-            if (item === 'Year of Birth') {
-                yearBorn = doq.Metadata.InfoFields[item];
-            }
-            if (item === 'Affilitation') {
-                affiliation = doq.Metadata.InfoFields[item].split(',');
-            }
-            if (item === 'Citizenship 1') citizenship = doq.Metadata.InfoFields[item];
-            if (item === 'Citizenship 2') citizenship = citizenship + ", " + doq.Metadata.InfoFields[item];
-            if (item === 'Gender') gender = doq.Metadata.InfoFields[item];
-            if (item === 'Name') infoTitle.text(doq.Metadata.InfoFields[item]);
-        }
-
-        infoPerson = $(document.createElement('div'));
-        infoPerson.addClass('infoPerson');
-        infoPerson.css({
-            'font-size': '80%',
-            'color': NOBEL_ORANGE_COLOR
-        });
-
-        infoCountry = $(document.createElement('div'));
-        infoCountry.addClass('infoCountry');
-        infoCountry.css({
-            'font-size':'80%',
-            'color': NOBEL_ORANGE_COLOR
-        });
-
-        infoAffiliation = $(document.createElement('div'));
-        infoAffiliation.addClass('infoCountry');
-        infoAffiliation.css({
-            'font-size': '80%',
-            'color': NOBEL_ORANGE_COLOR
-        });
-
-        infoCountry.text((citizenship ? citizenship : ""));
-        infoPerson.text((gender ? gender + ", " : "") + (yearBorn ? "Born in " + yearBorn : ""));
-        infoCountry.appendTo(info);
-        infoPerson.appendTo(info);
-
-            if (category && category.length) {
-                for (i = 0; i < category.length; i++) {
-                    infoPrize = $(document.createElement('div'));
-                    infoPrize.addClass('infoPrize');
-                    infoPrize.text(category[i].trim() + ", " + yearAward[i].trim());
-                    infoPrize.css({
-                        'font-size': '80%',
-                        'color': NOBEL_ORANGE_COLOR
-                    });
-                    infoPrize.appendTo(info);
-                }
-            }
-
-            infoAffiliation.text(affiliation ? "Affiliated with " + affiliation : "");
-            infoAffiliation.appendTo(info);
-
-            // make sure the info text fits in the div (TODO is this necessary?)
-            TAG.Util.fitText(info, 1.1);
-
-            var drawerToggleFn = null;
-            if (associatedMedia.guids.length > 0) {
-                for (i = 0; i < associatedMedia.guids.length; i++) {
-                    curr = associatedMedia[associatedMedia.guids[i]];
-                    if (curr.isHotspot){
-                        if (!toggleHotspotButton){
-                            createToggleHotspotButton();
-                        }
-                    } 
-                    if (!mediaDrawer) {
-                        var mediaHeader = $(document.createElement('div'));
-                        var mediaDrawer = $(document.createElement('div'));
-                        mediaHeader.appendTo(assetContainer);
-                        mediaDrawer.appendTo(assetContainer);
-                        mediaHeader.text("Associated Media and Tours:");
-                        mediaHeader.css({
-                            'margin-top': '3%',
-                            'text-align':'center',
-                            'font-size': '85%',
-                            'color': NOBEL_ORANGE_COLOR,
-                            'font-weight': 'bold',
-                            'white-space': 'nowrap',
-                            'display': 'block'
-                        });
-                        if (isImpactMap) mediaHeader.css('padding-bottom', '4%');
-                    }
-                    loadQueue.add(createMediaButton(mediaDrawer, curr));
-                }
-            }
 
         /**
          * Creates a tour thumbnail button
@@ -2400,39 +2161,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 // toggleLocationPanel();
             };
         }
-
-        function createToggleHotspotButton(){
-            toggleArea.css({
-                'display': 'block',
-                'padding-bottom': '10%'
-            });
-            toggleArea.attr('id', 'toggleArea')
-        toggleHotspotButton = $(document.createElement('div'))
-        .css({
-            'position': 'relative',
-            'width': '80%',
-            'margin': '10px auto 0px auto',
-            'background-color': NOBEL_WILL_COLOR,
-            'font-weight': 'normal',
-            'color' : '#000',
-            'cursor': 'pointer',
-            'border-radius': '3.5px',
-            'font-size': '110%',
-            'display': 'block', 
-            'text-align': 'center'
-        })
-        .text('Show Hotspots')
-        .on('mouseenter', function(){
-            toggleHotspotButton.css('color','white');
-        })
-        .on('mouseleave', function(){
-            toggleHotspotButton.css('color','black');
-        })
-        .on('click', function(){
-            toggleHotspotsShown();
-        });
-        toggleArea.append(toggleHotspotButton);
-    }
 
     //TO-DO
     function toggleHotspotsShown(){
@@ -2603,36 +2331,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             };
         }
 
-        /*************************************************************************
-         * MINIMAP CODE. bleveque: didn't rewrite this; separate issue
-         *                         if some variable names are off now, let me know
-         */
-
-        //Create minimapContainer...
-        var minimapContainer = root.find('#minimapContainer');
-
-        //if the #info div exceeds the half the length of the sidebar, the div's max-height is set to its default with an auto scroll property.
-        info.css({
-            'overflow-y': 'auto'
-            //'max-height': sideBar.height() * 2 / 5 - (info.offset().top - sideBar.offset().top) + 'px',
-
-        });
-
-        var minimapDescription = $(document.createElement('div'))
-            .addClass('minimapDescription')
-            .css({
-                'font-size': '80%',
-                'margin-top': '-13%',
-                'text-align': 'center',
-                'color': NOBEL_ORANGE_COLOR
-            })
-            .text('Context');
-        minimapContainer.append(minimapDescription);
-
-        //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
         assetContainer.css({
-            'max-height': sideBarInfo.height() - info.height() - infoTitle.height() - backButton.height() - minimapDescription.height() + 'px',
-            'overflow-y': 'auto',
+            //'max-height': sideBarInfo.height() - info.height() - infoTitle.height() - backButton.height() + 'px',
+            'overflow-y': 'visible',
             'margin-top': '4%',
             'scrollbar-face-color': NOBEL_ORANGE_COLOR,
             'scrollbar-arrow-color': 'transparent',
@@ -2646,285 +2347,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         if (!IS_WINDOWS) {
             if (toggleHotspotButton) {
-                assetContainer.css('max-height', sideBarInfo.height() - backButton.height() - info.height() - minimapDescription.height() + 'px');
+                assetContainer.css('max-height', sideBarInfo.height() - backButton.height() - info.height() + 'px');
             } else {
                 assetContainer.css('max-height', sideBarInfo.height() - info.height() - infoTitle.height() + 'px');
             }
         };
-        sideBarSections.append(minimapContainer);
 
-        //A white rectangle for minimap to show the current shown area for artwork
-        var minimaprect = root.find('#minimaprect');
-
-        //Load deepzoom thumbnail. 
-        var img = new Image();
-        var loaded = false;
-        var AR = 1;//ratio between width and height.
-        var minimapw = 1;//minimap width
-        var minimaph = 1;//minimap height
-        var minimap;
-
-        /*
-        **Load the image of artwork and initialize the minimap rectangle
-        * @method minimapLoaded
-        */
-        function minimapLoaded() {
-            if (loaded) return;
-            loaded = true;
-            //load the artwork image
-            minimap = root.find('#minimap');
-            minimap.attr('src', TAG.Worktop.Database.fixPath(doq.URL));
-
-            //make the minimap not moveable. 
-            minimap.mousedown(function () {
-                return false;
-            });
-
-            //TAG.Util.disableDrag(minimapContainer);
-
-            AR = img.naturalWidth / img.naturalHeight;
-            var heightR = img.naturalHeight / $(minimapContainer).height();//the ratio between the height of image and the container.
-            var widthR = img.naturalWidth / $(minimapContainer).width();//ratio between the width of image and the container.
-            //make sure the whole image shown inside the container based on the longer one of height and width.
-            if (heightR > widthR) {
-                minimap.removeAttr("height");
-                minimap.removeAttr("width");
-                minimap.css({ "height": "100%" });
-            }
-            else {
-                minimap.removeAttr("height");
-                minimap.removeAttr("width");
-                minimap.css({ "width": "100%" });
-            }
-
-            //make the image manipulatable. 
-            if (IS_WINDOWS && isNobelWill !== true) {
-                var gr = TAG.Util.makeManipulatableWin(minimap[0], {
-                    onManipulate: onMinimapManipWin,
-                    onScroll: onMinimapScrollWin,
-                    onTapped: onMinimapTappedWin
-                }, false);
-            } else if(isNobelWill!==true){
-                var gr = TAG.Util.makeManipulatable(minimap[0], {
-                    onManipulate: onMinimapManip,
-                    onScroll: onMinimapScroll,
-                    onTapped: onMinimapTapped
-                }, true);
-            }
-            /**********************/
-            var minimaph = minimap.height();
-            var minimapw = minimap.width();
-
-            //centers rectangle
-            var minimapt = (minimapContainer.height() / 2) - (minimap.height() / 2);
-            var minimapl = (minimapContainer.width() / 2) - (minimap.width() / 2);
-            minimaprect.css({
-                width: (minimapw - 1) + "px",
-                height: (minimaph - 1) + "px",
-                top: minimapt + "px",
-                left: (minimapl - 1) + "px"
-            });
-            /*********************/
-        }
-        /*
-        **Implement manipulation function from makeManipulatable.
-        * @method onMinimapManip
-        * @param {Object} evt        object containing hammer event info 
-        */
-        function onMinimapManip(evt) {
-            var minimaph = minimap.height();
-            var minimapw = minimap.width();
-            var minimapt = minimap.position().top;
-            var minimapl = parseFloat(minimap.css('marginLeft'));
-
-            //find pivot and translation of manipulation event
-            var px = evt.pivot.x + (minimap.offset().left - minimapContainer.offset().left);
-            var py = evt.pivot.y + (minimap.offset().top - minimapContainer.offset().top);
-            var tx = evt.translation.x;
-            var ty = evt.translation.y;
-
-            var x = px + tx;
-            var y = py + ty;
-            x = (x - minimapl) / minimapw;
-            y = (y - minimapt) / minimaph;
-            y = y / AR;
-            x = Math.max(0, Math.min(x, 1));
-            y = Math.max(0, Math.min(y, 1 / AR));
-            var s = 1 + (1 - evt.scale);
-            if (s) annotatedImage.viewer.viewport.zoomBy(s, false);
-            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
-            annotatedImage.viewer.viewport.applyConstraints();
-        }
-
-        /*
-        **Implement manipulation function from makeManipulatableWin in win8 app.
-        * @method onMinimapManipWin
-        * @param {Object} evt        object containing windows event info 
-        */
-        function onMinimapManipWin(evt) {
-            var minimaph = minimap.height();
-            var minimapw = minimap.width();
-            var minimapt = minimap.position().top;
-            var minimapl = parseFloat(minimap.css('marginLeft'));
-
-            var px = evt.pivot.x;
-            var py = evt.pivot.y;
-            var tx = evt.translation.x;
-            var ty = evt.translation.y;
-
-            var x = px + tx;
-            var y = py + ty;
-            x = (x - minimapl) / minimapw;
-            y = (y - minimapt) / minimaph;
-            y = y / AR;
-            x = Math.max(0, Math.min(x, 1));
-            y = Math.max(0, Math.min(y, 1 / AR));
-
-            var s = 1 + (1 - evt.scale);
-            if (s) {
-                annotatedImage.viewer.viewport.zoomBy(s, false);
-            }
-            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
-            annotatedImage.viewer.viewport.applyConstraints();
-        }
-
-        /**Implement scroll function from makeManipulatable
-         * @method onMinimapScroll
-         * @param {Number} scale     scale factor
-         * @param {Object} pivot     x and y location of event
-         */
-        function onMinimapScroll(scale, pivot) {
-            //create hammer event and pass into onMinimapManip
-            onMinimapManip({
-                scale: scale,
-                translation: {
-                    x: 0,
-                    y: 0
-                },
-                pivot: pivot
-            });
-        }
-
-        /**Implement scroll function in win8app from makeManipulatableWin
-         * @method onMinimapScrollWin
-         * @param {Number} delta     change
-         * @param {Object} pivot     x and y location of event
-         */
-        function onMinimapScrollWin(delta, pivot) {
-            annotatedImage.viewer.viewport.zoomBy(delta, annotatedImage.viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y)));
-            annotatedImage.viewer.viewport.applyConstraints();
-        }
-
-
-        /**Implement tapped function from makeManipulatable
-        * @method onMinimapTapped
-        * @param {Object} evt        object containing hammer event info
-        */
-        function onMinimapTapped(evt) {
-            var minimaph = minimap.height();
-            var minimapw = minimap.width();
-            var minimapt = minimap.position().top;
-            var minimapl = parseFloat(minimap.css('marginLeft'));
-
-            var xPos = evt.position.x; //+ minimap.offset().left;
-            var yPos = evt.position.y; //+ minimap.offset().top;
-            var x = (xPos - minimapl) / minimapw;
-            var y = (yPos - minimapt) / minimaph;
-            y = y / AR;
-            x = Math.max(0, Math.min(x, 1));
-            y = Math.max(0, Math.min(y, 1 / AR));
-            var s = 1;
-            if (s) annotatedImage.viewer.viewport.zoomBy(s, false);
-            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
-            annotatedImage.viewer.viewport.applyConstraints();
-        }
-
-        /**Implement tapped function in win8 from makeManipulatableWin
-        * @method onMinimapTapped
-        * @param {Object} evt        object containing windows event info
-        */
-        function onMinimapTappedWin(evt) {
-            var minimaph = minimap.height();
-            var minimapw = minimap.width();
-            var minimapt = minimap.position().top;
-            var minimapl = parseFloat(minimap.css('marginLeft'));
-
-            var xPos = evt.position.x;
-            var yPos = evt.position.y;
-            var x = (xPos - minimapl) / minimapw;
-            var y = (yPos - minimapt) / minimaph;
-            y = y / AR;
-            x = Math.max(0, Math.min(x, 1));
-            y = Math.max(0, Math.min(y, 1 / AR));
-            var s = 1;
-            if (s) {
-                annotatedImage.viewer.viewport.zoomBy(s, false);
-            }
-            annotatedImage.viewer.viewport.panTo(new Seadragon.Point(x, y), true);
-            annotatedImage.viewer.viewport.applyConstraints();
-        }
-
-        img.onload = minimapLoaded;
-        //should be complete image of artwork NOT thumbnail
-        img.src = TAG.Worktop.Database.fixPath(doq.URL);
-        if (img.complete) {
-            minimapLoaded();
-        }
-        /*
-        **Move the minimap rectangle based on the manipulation of the image
-        * @method dzMoveHandler
-        * @param {event} evt            manipulation event of the image
-        */
-        function dzMoveHandler(evt) {
-
-            //catch race condition when minimap not yet reloaded 
-            if (!minimap) {
-                return;
-            }
-            var minimaph = minimap.height();
-            var minimapw = minimap.width();
-
-            //centers rectangle
-            var minimapt = (minimapContainer.height() / 2) - (minimap.height() / 2);
-            var minimapl = (minimapContainer.width() / 2) - (minimap.width() / 2);
-
-            var viewport = evt.userData.viewport;
-            //OSD hasn't reloaded completely yet
-            if (!viewport) {
-                return;
-            }
-            var rect = viewport.getBounds(true);
-            var tl = rect.getTopLeft();
-            var br = rect.getBottomRight();
-            var x = tl.x;
-            var y = tl.y;
-            var xp = br.x;
-            var yp = br.y;
-            if (x < 0) x = 0;
-            if (y < 0) y = 0;
-            if (xp > 1) xp = 1;
-            if (yp > 1 / AR) yp = 1 / AR;
-            y = y * AR;
-            yp = yp * AR;
-            yp = yp - y;
-            xp = xp - x;
-            x = minimapl + x * minimapw;
-            y = minimapt + y * minimaph;
-            xp = xp * minimapw;
-            yp = yp * minimaph;
-            minimaprect.css({
-                width: (xp - 1) + "px",
-                height: (yp - 1) + "px",
-                top: y + "px",
-                left: (x - 1) + "px"
-            });
-        }
-
-        /*
-         * END MINIMAP CODE
-         ******************/
-
-        annotatedImage.addAnimateHandler(dzMoveHandler);
         assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
 
         console.log('hotspots: ' + hotspots);
@@ -2932,7 +2360,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         for (var y = 0; y < hotspots.guids.length; y++) {
             loadQueue.add(showHotspots());
         }
-        loadQueue.add(hideHotspots());
     }
 
     function initKeywordsSetDrawer(name, fullKeywordSet, artworkKeywords) {

@@ -24,6 +24,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
              setEndTime: NaN //defaults to end of tour if NaN
          },    //dictionary of player configuration options; defaults being set
      //DOM related
+         root = TAG.Util.getHtmlAjax('TourPlayer.html'),
          ITEHolder = $(document.createElement("div"))
              .attr("id", "ITEHolder"),
          bottomContainer = $(document.createElement("div"))
@@ -45,7 +46,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
        progressIndicator = $(document.createElement("div")),
        volumeLevelContainer = $(document.createElement("div")),
        infoAvailableIcon = $(document.createElement("img")),
-       NOBEL_WILL_COLOR = 'rgb(254,161,0)',
+       NOBEL_WILL_COLOR = '#"D99B3B',
        slidingPane = createSlidingPane(),
        infoTracksVisible = [],
        initialOverlay,
@@ -99,7 +100,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             attachPlay();
             attachLoop();
             attachProgressBar();
-            attachInfoIcon()
+            //attachInfoIcon()
             //attachFullScreen();
             attachProgressIndicator();
         };
@@ -122,67 +123,6 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         if (orchestrator) {
             orchestrator.cancelLoad();
         }
-    }
-
-    /*
-    * I/P:   none
-    * show informative popup
-    * O/P:   none
-    */
-    function hideInfoPopup() {
-        infoPopup && infoPopup.hide();
-    }
-
-
-    /*
-    * I/P:   none
-    * show informative popup
-    * O/P:   none
-    */
-    function showInfoPopup() {
-        if (!infoPopup) {
-            infoPopup = $(document.createElement('div'));
-            infoPopup.css({
-                'position' : 'absolute',
-                'width': '40%',
-                'height': '40%',
-                'top': "30%",
-                'left': '30%',
-                'background-color': 'rgba(0,0,0,.6)',
-                'border': '4px solid ' + NOBEL_WILL_COLOR,
-                'border-radius': '12px',
-                'z-index': '10000000000',
-                'display' : 'block',
-                'padding': '3%'
-            }).attr({
-                id : 'informationPopup'
-            })
-            .text("Welcome to the interactive tour player. Tours can be played, paused, and seeked using \
-                the controls at the bottom of this screen. At any moment, tours can be paused by touch or mouse interaction so that items on \
-                screen can be explored in more detail. When this orange icon lights up, one of the images or videos on screen \
-                has metadata information. Interacting with that element fills an informational sidebar which can be accessed by a handle \
-                on the left side of the screen to provide greater context.");
-            ITEHolder.append(infoPopup);
-            infoPopup.click(hideInfoPopup);
-
-            var closeX = $(document.createElement('img'));
-            closeX.attr({
-                src: tagPath + 'images/icons/x.svg',
-                id: 'closeX'
-            })
-            closeX.css({
-                'left': '92%',
-                'position': 'absolute',
-                'top': '3%',
-                'height': '9%'
-            })
-            closeX.click(function () {
-                hideInfoPopup();
-            })
-            infoPopup.append(closeX);
-        }
-        pause();
-        infoPopup && infoPopup.show();
     }
 
     /*
@@ -226,30 +166,6 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             TAG.Util.hideLoading(initialOverlay)
             initialOverlay.remove();
         }
-    }
-
-    /*
-    * I/P:   none
-    * Attach information icon 
-    * O/P:   none
-    */
-    function attachInfoIcon() {
-        infoAvailableIcon.css({
-            'width': '40px',
-            'height': '40px',
-            'top': '10px',
-            'right': '10px',
-            'background-color': 'transparent',
-            'position': 'absolute',
-            'opacity': '.25',
-            'z-index' : '1000000099879896789',
-        }).attr({
-            id : "infoAvailableIcon"
-        }).on("click", showInfoPopup);
-        infoAvailableIcon.attr({
-            src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/unlit_info.svg"
-        })
-        ITEHolder.append(infoAvailableIcon);
     }
 
     /*
@@ -592,7 +508,6 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     */
     function play() {
         if (!cancelEntirely) {
-            hideInfoPopup()
             if (initialLoading === true) {
                 hideInitialOverlay();
             }
@@ -947,8 +862,6 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         orchestrator.updateZIndices();
     }
 
-
-
     /**
     * I/P:    none
     * returns tracks, used for authoring
@@ -1027,10 +940,6 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         }
     }
 
-
-
-
-
     function updateManipObjectZ(z) {
         if (z === -1) {
             if (infoPaneOut === true) {
@@ -1050,147 +959,104 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             makePaneVisible(false);
         }
     }
+
     function createSlidingPane() {
-        var pane = $(document.createElement('div'));
-        var title = $(document.createElement('div'));
-        var tab = $(document.createElement('div'));
-        var tabImg = $(document.createElement('img'));
-        var infoBlock = $(document.createElement('div'));
-        var topRight = $(document.createElement('div'));
-        var bottomRight = $(document.createElement('div'));
-        var outBottom = $(document.createElement('div'));
-        var outTop = $(document.createElement('div'));
-        topRight.css({
-            'position' : 'absolute',
-            'border-top-right-radius': '12px',
-            'border-right': '2px solid '+NOBEL_WILL_COLOR,
-            'border-top': '2px solid '+NOBEL_WILL_COLOR,
-            'width': '2%',
-            'height': '2%',
-            'right': '-2px',
-            'top' : '-2px'
-        })
-        outTop.css({
-            'position': 'absolute',
-            'border-left': ('2px solid '+NOBEL_WILL_COLOR),
-            'width': '2%',
-            'height': '42%',
-            'left': '100%',
-            'top': '2%'
-        })
-        bottomRight.css({
-            'position': 'absolute',
-            'border-bottom-right-radius': '12px',
-            'border-right': '2px solid '+NOBEL_WILL_COLOR,
-            'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
-            'width': '2%',
-            'height': '2%',
-            'right': '-2px',
-            'bottom': '-2px'
-        })
-        outBottom.css({
-            'position': 'absolute',
-            'border-left': '2px solid '+NOBEL_WILL_COLOR,
-            'width': '2%',
-            'height': '41.9%',
-            'left': '100%',
-            'bottom': '2%'
-        })
-        infoBlock.css({
-            'position': 'absolute',
-            'height': '90%',
-            'z-index': '9999999999',
-            'top': '10%',
-            'width': '90%',
-            'left': '5.5%',
-            'background-color': 'transparent',
-            'color': 'white',
-            'font-size': '.9em',
-            'overflow': "auto",
-            'text-align': 'left',
-            'scrollbar-face-color': NOBEL_WILL_COLOR,
-            'scrollbar-arrow-color': 'transparent',
-            'scrollbar-track-color': 'transparent',
-        }).attr('id', 'infoBlock');
-        tabImg.attr({
-            src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg",
-            id : 'tabImg'
-        })
-        //tabImg.click(toggleInfoPane);
-        tabImg.css({
-            'position': 'absolute',
-            'height': '80%',
-            'width': '80%',
-            'left': '10%',
-            'top' : '10%',
-            'z-index': '9999999',
-        })
-        pane.css({
-            'position': 'absolute',
-            'height': '70%',
-            'top' : '12%',
-            'width':'26%',
-            'background-color': 'rgba(0,0,0,.6)',
-            'z-index': '9999999',
-            'border-top-right-radius': '12px',
-            'border-bottom-right-radius': '12px',
-            'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
-            'border-top': '2px solid '+NOBEL_WILL_COLOR,
-            //'border' : '2px solid rgb(254,161,0)',
-            'left' : '-26.1%'
-        })
-        pane.attr({
-            id : 'infoPaneDiv'
-        })
-        title.css({
-            'position': 'absolute',
-            'top' : '1%',
-            'height': '8%',
-            'width': '94%',
-            'left' : '6%',
-            'background-color': 'transparent',
-            'color': 'white',
-            'font-size': '1.25em',
-            'white-space' : 'nowrap',
-            'font-weight': 'bold',
-            'text-overflow': 'ellipsis',
-            'overflow' : 'hidden',
-            'z-index': '9999999',
-            'font-family' : 'Cinzel',
-        })
-        tab.css({
-            'position': 'absolute',
-            'height': '12%',
-            'width': '8.5%',
-            'background-color': NOBEL_WILL_COLOR,
-            'border-top-right-radius': '12px',
-            'border-bottom-right-radius': '12px',
-            'left': '100%',
-            'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
-            'border-top': '2px solid '+NOBEL_WILL_COLOR,
-            'border-right': '2px solid '+NOBEL_WILL_COLOR,
-            'border-left-style': 'none',
-            //'border': '2px solid rgb(254,161,0)',
-            'z-index': '9999999',
-            'top': '44%'
-        }).click(toggleInfoPane)
-        title.attr({
-            id : 'infoPaneTitleDiv'
-        })
-        tab.attr({
+        var pane = $(document.createElement('div')),
+            title = $(document.createElement('div')),
+            tabWrapper = $(document.createElement('div'));
+            tab = $(document.createElement('div')),
+            tabImg = $(document.createElement('img')),
+            infoBlock = $(document.createElement('div'));
+
+        infoBlock
+            .css({
+                'position': 'absolute',
+                'height': '90%',
+                'z-index': '9999999999',
+                'top': '10%',
+                'width': '70%',
+                'margin': '50% 15% 0% 15%',
+                'background-color': 'transparent',
+                'color': 'white',
+                'font-size': '.9em',
+                'overflow': "auto",
+                'text-align': 'left',
+                'scrollbar-face-color': NOBEL_WILL_COLOR,
+                'scrollbar-arrow-color': 'transparent',
+                'scrollbar-track-color': 'transparent',
+            })
+            .attr('id', 'infoBlock');
+        
+        tabImg
+            .attr({
+                src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg",
+                id : 'tabImg'
+            })
+            .css({
+                'top': '30%',
+                'width': '72%',
+                'height': '42%',
+                'margin-top': '85%',
+                'margin-left': '10%'
+            })
+        
+        pane
+            .css({
+                'background-color': '#333333',
+                'border-right': '3px solid #D99B3B',
+                'display': 'block',
+                'height': '100%',
+                'left': '0px',
+                'position': 'absolute',
+                'top': '0px',
+                'width': '22%',
+                'z-index': '9999999'
+            })
+            .attr({
+                id : 'infoPaneDiv'
+            })
+        
+        title
+            .css({
+                'font-size': '100%',
+                'clear': 'both',
+                'overflow': 'visible',
+                'text-overflow': 'ellipsis',
+                'white-space': 'normal',
+                'margin': '40% 15% 0% 15%',
+                'z-index': '9999999'
+            })
+            .attr('id', 'infoPaneTitleDiv')
+        
+        tab
+            .css({
+                'background-color': '#333333',
+                'border-top': '3px solid #D99B3B',
+                'border-right': '3px solid #D99B3B',
+                'border-bottom': '3px solid #D99B3B',
+                'border-bottom-right-radius': '3.5px',
+                'border-top-right-radius': '3.5px',
+                'position': 'absolute',
+                'left': '100%',
+                'top': '40%',
+                'width': '12%',
+                'height': '15%',
+                'z-index': '-1'
+            })
+            .click(toggleInfoPane)
+            .attr({
             id:'infoPaneTab'
-        })
+            })
+        
         tab.append(tabImg);
-        pane.append(tab);
-        pane.append(outTop);
-        pane.append(topRight);
-        pane.append(outBottom);
-        pane.append(bottomRight);
+        tabWrapper.append(tab);
+        pane.append(tabWrapper);
         pane.append(infoBlock);
         pane.append(title);
         $("#ITEContainer").append(pane);
         pane.hide();
     }
+
     function toggleInfoPane() {
         if (infoPaneOut === true) {
             hideInfoPane();
@@ -1199,8 +1065,10 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             showInfoPane();
         }
     }
+
     function updateInfoPane(doq) {
         makePaneVisible(true);
+        showInfoPane();
         $(".infoPaneInfoField").remove();
         if (doq.Metadata.InfoFields && doq.Metadata.InfoFields.Name) {
             $("#infoPaneTitleDiv").text(doq.Metadata.InfoFields.Name);
@@ -1209,32 +1077,12 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             $("#infoPaneTitleDiv").text(doq.Metadata.Name || "");
         }
         var top = 0;
-
-        var special = ['Category', 'Year of Award', 'Gender','Citizenship 1','Citizenship 2'];
         var keys = Object.keys(doq.Metadata.InfoFields);
 
-        for (var i = 0; i < special.length; i++) {
-            if (doq.Metadata.InfoFields[special[i]]) {
-                var d = makeInfoField(doq.Metadata.InfoFields[special[i]],true).css('top', top + 'px');
-                $("#infoBlock").append(d);
-                top += d.height() + 5;
-            }
-        }
-
         if (doq.Metadata.Description) {
-            var d = makeInfoField("Description: " + doq.Metadata.Description).css('top', top + 'px');
+            var d = makeInfoField(doq.Metadata.Description).css('top', top + 'px');
             $("#infoBlock").append(d);
             top += d.height() + 50;
-        }
-        if (doq.Metadata.Artist) {
-            var d = makeInfoField("Artist: " + doq.Metadata.Artist).css('top', top + 'px');
-            $("#infoBlock").append(d);
-            top += d.height() + 15;
-        }
-        if (doq.Metadata.Date) {
-            var d = makeInfoField("Date: " + doq.Metadata.Date).css('top', top + 'px');
-            $("#infoBlock").append(d);
-            top += d.height() + 15;
         }
 
         for (var key = 0; key < keys.length; key++) {
@@ -1247,6 +1095,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             }
         }
     }
+
     function makePaneVisible(b) {
         if (b === true) {
             $("#infoPaneDiv").show();
@@ -1255,50 +1104,49 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             $("#infoPaneDiv").hide();
         }
     }
+
+
     function showInfoPane(callback){
+        console.log("show info pane called");
         infoPaneOut = true;
-        $("#infoPaneDiv").animate({ left: '-1%' }, 1000, 'easeInOutQuart', callback ? function () {
+        $("#infoPaneDiv").animate({ left: '0%' }, 1000, 'easeInOutQuart', callback ? function () {
             callback(),
             $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg")
             $("#infoPaneTab").css({
-                'background-color': 'rgba(0,0,0,.6)',
-                'border-right': '2px solid '+NOBEL_WILL_COLOR,
-                'border-top': '2px solid '+NOBEL_WILL_COLOR,
-                'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
+                'border-right': '3px solid '+ NOBEL_WILL_COLOR,
+                'border-top': '3px solid '+ NOBEL_WILL_COLOR,
+                'border-bottom': '3px solid '+ NOBEL_WILL_COLOR,
             })
         } : function () {
             $("#tabImg").attr('src', itePath + 'ITE%20Core/ITEManual/ITEPlayerImages/Close.svg');
             $("#infoPaneTab").css({
-                'background-color': 'rgba(0,0,0,.6)',
-                'border-right': '2px solid '+NOBEL_WILL_COLOR,
-                'border-top': '2px solid '+NOBEL_WILL_COLOR,
-                'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
+                'border-right': '3px solid '+NOBEL_WILL_COLOR,
+                'border-top': '3px solid '+NOBEL_WILL_COLOR,
+                'border-bottom': '3px solid '+NOBEL_WILL_COLOR,
             })
-        })
-        
+        })    
     }
+
     function hideInfoPane(callback){
         infoPaneOut = false;
-        $("#infoPaneDiv").animate({ left: '-26.1%' }, 500, 'easeInOutQuart', callback ? function () {
+        $("#infoPaneDiv").animate({ left: '-22%' }, 1000, 'easeInOutQuart', callback ? function () {
             callback(),
             $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
             $("#infoPaneTab").css({
                 'background-color': NOBEL_WILL_COLOR,
-                'border-right': '2px solid '+NOBEL_WILL_COLOR,
-                'border-top': '2px solid '+NOBEL_WILL_COLOR,
-                'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
+                'border-right': '3px solid '+ NOBEL_WILL_COLOR,
+                'border-top': '3px solid '+ NOBEL_WILL_COLOR,
+                'border-bottom': '3px solid '+ NOBEL_WILL_COLOR,
             })
         } : function () {
             $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
             $("#infoPaneTab").css({
                 'background-color': NOBEL_WILL_COLOR,
-                'border-right': '2px solid '+NOBEL_WILL_COLOR,
-                'border-top': '2px solid '+NOBEL_WILL_COLOR,
-                'border-bottom': '2px solid '+NOBEL_WILL_COLOR,
+                'border-right': '3px solid '+ NOBEL_WILL_COLOR,
+                'border-top': '3px solid '+ NOBEL_WILL_COLOR,
+                'border-bottom': '3px solid '+ NOBEL_WILL_COLOR,
             })
         })
-        
-
     }
 
     function makeInfoField(text, special) {
@@ -1310,25 +1158,27 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             outer.css({
                 'position': 'absolute',
                 'z-index': '9999999999',
-                'width': '90%',
+                'width': '100%',
                 'left': '0%',
                 'background-color': 'transparent',
                 'color': 'rgb(254,161,0)',
                 'font-size': '1.05em',
                 'text-align': 'left',
-                'font-weight' : 'bold'
+                'font-weight' : 'bold',
+                'overflow-y': 'auto'
             });
         }
         else { 
             outer.css({
                 'position': 'absolute',
                 'z-index': '9999999999',
-                'width': '90%',
+                'width': '100%',
                 'left': '0%',
                 'background-color': 'transparent',
                 'color': 'white',
                 'font-size': '.9em',
-                'text-align': 'left'
+                'text-align': 'left',
+                'overflow-y': 'auto'
             });
         }
         outer.text(text);
