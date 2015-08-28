@@ -112,6 +112,7 @@ var JSSRC = [
 		'js/TAG/layout/TAG.Layout.ArtworkEditor.js',
 		'js/TAG/layout/TAG.Layout.TourAuthoringNew.js',
         'js/TAG/layout/TAG.Layout.WillVideo.js',
+        'js/TAG/layout/TAG.Layout.NobelWill.js',
         
 
 		//ITE DEPENDENCIES

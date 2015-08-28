@@ -553,7 +553,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             
 
             if (collectionName){
-                if (collectionName === WILL_NAME) {
+                if (collectionName === WILL_NAME) {/*
                     TAG.Worktop.Database.getDoq("9f3ed716-af94-4934-8c5e-79d1065a9fa2",
                         function (result) {
                             if($("#startPageLoadingOverlay").length){
@@ -575,7 +575,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             else {
                                 buttonClicked = false;
                             }
-                        }); 
+                        }); */
+                    var will = TAG.Layout.NobelWill(1);
                 }
                    
                 else if (collectionName === INTRO_TOUR) {//Hardcode to bring user directly into introductory tour. Not a collection page. Sorry.
