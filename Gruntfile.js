@@ -111,6 +111,7 @@ var JSSRC = [
 		'js/TAG/layout/TAG.Layout.VideoPlayer.js',             // TAGCORE
 		'js/TAG/layout/TAG.Layout.ArtworkEditor.js',
 		'js/TAG/layout/TAG.Layout.TourAuthoringNew.js',
+        'js/TAG/layout/TAG.Layout.WillVideo.js',
         
 
 		//ITE DEPENDENCIES
@@ -255,8 +256,8 @@ module.exports = function(grunt) {
 					'html/TourPlayer.html':          'html/TourPlayer.jade',          // TAGCORE
 					'html/ComponentControls.html':	 'html/ComponentControls.jade',	  // TAGCORE
 					'html/SplashScreenOverlay.html': 'html/SplashScreenOverlay.jade',  // TAGCORE
-                    'html/LaureatesPage.html': 'html/LaureatesPage.jade'
-
+                    'html/LaureatesPage.html': 'html/LaureatesPage.jade',
+                    'html/WillVideo.html': 'html/WillVideo.jade',
 				}
 			}
 		},
