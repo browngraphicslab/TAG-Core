@@ -21,6 +21,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
          catalogDiv = root.find('#catalogDiv'),
          collectionMenu = root.find('#collectionMenu'),
          searchInput = root.find('#searchInput'),
+         searchBttn = root.find('#searchBttn'),
          keywordsDiv = root.find("#keywords"),
          searchTxt = root.find('#searchTxt'),
          artworksButton = root.find('#artworksButton'),
@@ -322,11 +323,17 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             
         }); */
 
+
         searchInput.css({
-            'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
+            /*'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
             //0'background-size' : 'auto 90%',
             'background-repeat': 'no-repeat',
-            'background-position':'right'
+            'background-position':'right'*/
+        });
+
+        searchBttn.attr('src', tagPath + 'images/icons/search_icon.svg').unbind('click');
+        searchBttn.click(function () {
+            doSearch(true);
         });
 
         var searchDefault = "search";
@@ -334,14 +341,14 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         searchInput.css({
             'font-style': 'italic'
         })
-        searchInput.on('focusin', function () { 
+        /*searchInput.on('focusin', function () { 
             searchInput.css({ 'background-image': 'none' }); 
         });
         searchInput.on('focusout', function () { 
             if (!searchInput.val()) {
                 searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")' });
             };
-        });
+        });*/
 
         //initSplitscreen();
 
@@ -1005,6 +1012,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                         clearKeywordCheckBoxes();
                         clearSearchResults();
                         searchResultText.text('');
+
                         
                     });
 
@@ -1389,16 +1397,18 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
             //re-display the magnifying glass icon
             searchInput.css({ 
-                'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
-                'border-radius': '6pt',
+                //'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
+                /*'border-radius': '6pt',
                 'border-color': NOBEL_COLOR,
                 'border-width': 'thin',
                 'border-style': 'solid',
                 'background-color': 'transparent',
-                'color': NOBEL_COLOR 
+                'color': NOBEL_COLOR */
             });
-
-
+            searchBttn.attr('src', tagPath + 'images/icons/search_icon.svg').unbind('click');
+            searchBttn.click(function () {
+                doSearch(true);
+            });
 
             // Clear catalog div (with info and artwork tiles)
             catalogDiv.empty();
@@ -2185,6 +2195,18 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             unmatchedArts = [],
             i;
 
+        if (content.length === 0 || !content.trim()) {
+            searchBttn.attr('src', tagPath + 'images/icons/search_icon.svg').unbind('click');
+            searchBttn.click(function () { doSearch(true) });
+        } else {
+            searchBttn.attr('src', tagPath + 'images/icons/x_icon.svg').unbind('click');
+            searchBttn.click(function () {
+                clearKeywordCheckBoxes();
+                clearSearchResults();
+                searchResultText.text('');
+            });
+        }
+
         // Clear the results description.
         root.find('#searchDescription').text('');
         root.find('#clearSearchButton').css({ 'display': 'none' });
@@ -2246,8 +2268,18 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             }
         }
 
+
         var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
-        searchResultText.text(searchDescriptionText);
+        if ((content.length === 0 || !content.trim()) && getKeywordSearchOptions().length===0) {
+            searchResultText.text('');
+            searchBttn.attr('src', tagPath + 'images/icons/search_icon.svg').unbind('click');
+            searchBttn.click(function () {
+                doSearch(true);
+            });
+        } else {
+            searchResultText.text(searchDescriptionText); //TO DO: MAKE THIS DESCRIPTION ACCURATE
+        }
+
         console.log("searchDescriptionText = " + searchDescriptionText);
 
         if (!comingBack) {
@@ -2304,6 +2336,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
     }
 
     function getSearchDescription(matchedArts, content, doTextSearch) {
+
+
         var andKeywordsString = '',
             notKeywordsString = '',
             andCount = 0,
@@ -2432,16 +2466,14 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
     function clearSearchResults() {
         // Clear the search text.
         searchTxt.text("");
-        
-        searchInput.css({ //redisplay search icon
-            'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
-            'background-size': 'auto 90%',
-            'background-repeat': 'no-repeat',
-            'background-position': 'right'
-
+        searchBttn.attr('src', tagPath + 'images/icons/search_icon.svg').unbind('click');
+        searchBttn.click(function () {
+            doSearch(true);
         });
+        searchInput.val('');
 
-        searchInput.on('focusin', function () {
+
+       /*searchInput.on('focusin', function () {
             searchInput.css({ 'background-image': 'none' });
         });
 
@@ -2450,8 +2482,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             if (!searchInput.val()) {
                 searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")' });
             }
-        });
-
+        });*/
         // Clear the results description.
         root.find('#searchDescription').text('');
         root.find('#clearSearchButton').css({ 'display': 'none' });
