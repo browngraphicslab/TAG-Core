@@ -525,7 +525,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 options = {},
                 i,
                 currName;
-
+            /**
             switch (collectionName) {
                 case WILL_NAME:
                     loadingScreen("Loading Alfred Nobel's Will...");
@@ -543,6 +543,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     loadingScreen("Loading Laureates...");
                     break;
             }
+            **/
 
             $('.goToWrapper').off('click');
 
@@ -554,6 +555,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
             if (collectionName){
                 if (collectionName === WILL_NAME) {
+                    var willVideo = TAG.Layout.WillVideo();
+                    var willVidRoot = willVideo.getRoot();
+                    willVidRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                    TAG.Util.UI.slidePageLeftSplit(root, willVidRoot, willVideo.playVid);
+    
+                    /**
                     TAG.Worktop.Database.getDoq("9f3ed716-af94-4934-8c5e-79d1065a9fa2",
                         function (result) {
                             if($("#startPageLoadingOverlay").length){
@@ -576,6 +583,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                                 buttonClicked = false;
                             }
                         }); 
+                        **/
                 }
                    
                 else if (collectionName === INTRO_TOUR) {//Hardcode to bring user directly into introductory tour. Not a collection page. Sorry.
