@@ -26,6 +26,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
          artworksButton = root.find('#artworksButton'),
          assocMediaButton = root.find('#assocMediaButton'),
          selectedArtworkContainer = root.find('#selectedArtworkContainer'),
+         popupOverlay = root.find('#popupOverlay'),
          timelineArea = root.find('#timelineArea'),
          topBar = root.find('#topBar'),
          filterTitle = root.find('#filterTitle'),
@@ -1621,6 +1622,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             }
 
             // Hide selected artwork container, as nothing is selected yet
+            popupOverlay.css('display', 'none');
             selectedArtworkContainer.css('display', 'none');
             ;
 
@@ -3655,6 +3657,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             }
             selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
                 selectedArtworkContainer.css('display', 'none')
+                popupOverlay.css('display', 'none');
                 });
             root.find('.tile').each(function (tileIndex, tile) {
                 if (!searchResultsLength || tileIndex < searchResultsLength) { // If searchResultsLength is nul||undefined there was no search done.
@@ -3811,6 +3814,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             animateCatalogDiv();
                         }
                 )
+                popupOverlay.css('display', 'none');
             } 
             else {
                 animateCatalogDiv();
@@ -3852,6 +3856,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 //}, duration, null, function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
+                popupOverlay.css({'display': 'inline'});
                 selectedArtworkContainer.css({
                     'display': 'inline',
                     'opacity':1
