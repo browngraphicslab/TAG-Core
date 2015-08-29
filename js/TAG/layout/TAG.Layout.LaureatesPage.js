@@ -39,6 +39,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         divideDiv = root.find('#divide'),
         keywordSelects = [], // Will be filled in later.
         keywordOperatorSelects = [], // Will be filled in later.
+        selectedPrizes = {},
+        prizeButtonArray = [],
         showKeywords = false,
         overlay = root.find('#overlay'),
         prevCollection = $(document.createElement('div')).attr('id', 'prevCollection'),
@@ -109,7 +111,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         EVENT_CIRCLE_WIDTH = Math.min(30, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
         COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
         LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
-        TILE_BUFFER = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
+        TILE_BUFFER = $("#tagRoot").width() / 55, // number of pixels between artwork tiles
+        TILE_BUFFER2 = $("#tagRoot").width()/35,
         TILE_HEIGHT_RATIO = 200,                                          //ratio between width and height of artwork tiles
         TILE_WIDTH_RATIO = twoDeep ? 255 : 200,
         ANIMATION_DURATION = 800,                                         // duration of timeline zoom animation
@@ -455,6 +458,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             'padding-left':'1%'
         });
 
+        root.find('#catalogDiv').css('height', '83%');
         //root.find('#topDiv').append
     }
 
@@ -901,65 +905,114 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
             var prizeSelectList = $(document.createElement('ul')).addClass('rowLeft');
 
-          //prize filters
+          //prize filter buttons
             for (var i = 0; i < 8; i++) {
                 var listItem3 = $(document.createElement('li')).addClass('prizeFilterRow');
                 if (i <= 5) {
                     var filter = $(document.createElement('div')).addClass('prizeFilterButton');
+
                     var title = $(document.createElement('div')).addClass('prizeFilterTitle');
-                    var image = $(document.createElement('img')).addClass('prizeFilterImage');
+
+                    //TO DO: ACTUAL SELECTED UI. CHANGING RED BORDERS IS TEMPORARY
+                    var image = $(document.createElement('img')).addClass('prizeFilterImage')
+                    image.data("selected", false);
+                     
+                    /*image.click(function () {
+                        if (filter.data("selected") === true) {
+                            $(this).css("border", "0px solid red")
+                            filter.data("selected", false);
+                        } else { //not selected - change to selected
+                            $(this).css("border", "3px solid red")
+                            filter.data("selected", true);
+                        }
+                        
+                    });*/
+                    filter.data("image", image);
+                    filter.data("selected", false);
+
                     if (i == 0) {
-                        filter.attr('id', 'physics');
+
+                        filter.data('category', 'physics').attr('id', 'physics').click(function () {
+                            toggleSelectedPrize($(this))
+                        });
                         title.text('Physics')
                         image.attr('src', tagPath + 'images/temp_physics.png');
                         
                     } else if (i == 1) {
-                        filter.attr('id', 'chemistry');
+
+                        filter.data('category', 'chemistry').attr('id', 'chemistry').click(function () {
+                            toggleSelectedPrize($(this))
+                        });
                         title.text('Chemistry');
                         image.attr('src', tagPath + 'images/temp_chem.png');
+
                     } else if (i == 2) {
-                        filter.attr('id', 'medicine');
+
+                        filter.data('category', 'medicine').attr('id', 'medicine').click(function () {
+                            toggleSelectedPrize($(this))
+                        });
                         title.text('Medicine');
                         image.attr('src', tagPath + 'images/temp_medicine.png');
+
                     } else if (i == 3) {
-                        filter.attr('id', 'literature');
+
+                        filter.data('category', 'literature').attr('id', 'literature').click(function () {
+                            toggleSelectedPrize($(this))
+                        });
                         title.text('Literature');
                         image.attr('src', tagPath + 'images/temp_literature.png');
+
                     } else if (i == 4) {
-                        filter.attr('id', 'peace');
+
+                        filter.data('category', 'peace').attr('id', 'peace').click(function () {
+                            toggleSelectedPrize($(this))
+                        });
                         title.text('Peace');
                         image.attr('src', tagPath + 'images/temp_peace.png');
 
                     } else if (i == 5) {
-                        filter.attr('id', 'economics');
+
+                        filter.data('category', 'economics').attr('id', 'economics').click(function () {
+                            toggleSelectedPrize($(this))
+                        });
                         title.text('Economics');
                         image.attr('src', tagPath + 'images/temp_economics.png');
+
                     }
+                    prizeButtonArray.push(filter);
                     filter.append(title);
                     filter.append(image);
                     listItem3.append(filter);
+
 
                 } else if(i==6){ //search and clear
 
                     var apply = $(document.createElement('div')).addClass('applyOrClear');
                     apply.attr('id','applyButton')
                     apply.text("Apply");
+                    apply.click(function () {
+                        doSearch(true);
+                    });
                     listItem3.append(apply);
                 } else if (i == 7) {
                     var clear = $(document.createElement('div')).addClass('applyOrClear');
                     clear.attr('id', 'clearButton')
                     clear.text("Clear");
                     listItem3.append(clear);
+                    clear.click(function () {
+                        clearKeywordCheckBoxes();
+                        clearSearchResults();
+                        
+                    });
 
                 }
 
-
-                
-
-
                 prizeSelectList.append(listItem3);
-               
+
+
             }
+
+
 
 
             
@@ -1193,6 +1246,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
       }
 
     }
+
+
 
 
     /**
@@ -2025,8 +2080,12 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
      * @return      array of objects (one per set), each with format {"operation": [AND/NOT], "keywords": [array of checked keywords]}
      */
     function getKeywordSearchOptions() {
+
         keywordSearchOptions = [];
-        
+        console.log("keyword sets length = " + keywordSets.length);
+
+        var keywords = [];
+        //Regular drop downs
         for (var i = 0; i < keywordSets.length; i++) {
             var currentSet;
             if (i === 0) {
@@ -2037,13 +2096,14 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 currentSet = keywords2Selected;
             }
             // Check to see if this set is shown.
+
             var setOption = {};
-            if (keywordSets[i].shown !== 'true') {
+            /*if (keywordSets[i].shown !== 'true') {
                 setOption['operation'] = '';
                 setOption['keywords'] = [];
                 keywordSearchOptions.push(setOption);
                 continue;
-            }
+            }*/
 
             // Find out if operation is AND or NOT.
             var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
@@ -2053,16 +2113,26 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             setOption['operation'] = operation.toLowerCase();
 
             // Extract keywords checked off for this set.
-            var keywords = [];
+            
             $(root.find('.keywordsMultiselect')[i]).find(':selected').each(function (i, selected) {
+                console.log("keywords are selected")
                 keywords.push($(selected).text().toLowerCase());
                 currentSet.push($(selected).text().toLowerCase()); //text of option that will be displayed
             });
-            setOption["keywords"] = keywords;
-            
-            keywordSearchOptions.push(setOption);
-            
+
+
+
         }
+
+        //Prize filter keywords
+       for (var i = 0; i < Object.getOwnPropertyNames(selectedPrizes).length; i++) {
+            keywords.push(Object.getOwnPropertyNames(selectedPrizes)[i]);
+        }
+        
+        setOption["keywords"] = keywords;
+        keywordSearchOptions.push(setOption);
+        console.log("keyword search options are = " + setOption["keywords"]);
+
         return keywordSearchOptions;
     }
 
@@ -2086,9 +2156,9 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 continue;
             }
 
-
             // Extract keywords checked off for this set.
             $(root.find('.keywordsMultiselect')[i]).find(':selected').each(function (i, selected) {
+                
                 //if it is not a duplicate!
                 currentSet.push($(selected).text().toLowerCase()); //text of option that will be displayed
             });
@@ -2217,6 +2287,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             tobj.current_collection = currCollection.Identifier;
             tobj.number_of_matches = matchedArts.length;
         });
+
         drawCatalog(matchedArts, currentTag, 0, true, explicitSearch);
         drawCatalog(unmatchedArts, currentTag, searchResultsLength, false, false);
 
@@ -2307,6 +2378,32 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         return matches;
 
     }
+
+
+   /*
+    * Method to toggle the set of selected prizes
+    *
+    */
+    function toggleSelectedPrize(filter) {
+
+        if (selectedPrizes.hasOwnProperty($(filter).data("category"))) { //Currently selected - need to un-select
+
+            delete selectedPrizes[$(filter).data("category")];
+            $(filter).data("image").css("border", "0px solid red");
+            filter.data("selected", false)
+
+        } else { //Currently unselected - need to select
+
+            selectedPrizes[$(filter).data("category")] = true;
+            $(filter).data("image").css("border", "3px solid red");
+            filter.data("selected", true);
+        }
+
+        console.log(filter.data());
+        console.log(Object.getOwnPropertyNames(selectedPrizes));
+    }
+
+
     /*
      * Method to clear all the checked-off keyword boxes.
      * {method} clearSearchResults
@@ -2373,6 +2470,14 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 timelineShown = true; //default to true for backwards compatibility
             }
         }
+
+        //Clear prize filters
+        for (var i = 0; i < prizeButtonArray.length; i++) {
+            if (prizeButtonArray[i].data("selected") === true) {
+                toggleSelectedPrize(prizeButtonArray[i]);
+            }
+        }
+
 
         drawCatalog(currentArtworks, currentTag, 0, false, true);
         
@@ -2634,35 +2739,22 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         */
     function styleBottomContainer(){
         console.log('smallPreview' + smallPreview);
-        if (timelineShown){   
+       /* if (timelineShown){   
                 bottomContainer.css({
                     'height' : '75%',
                     'top' : '18%',
                     'z-index': '',
                 });
-                selectedArtworkContainer.css({
-                    'height' :'110%',
-                    'bottom' : '-5%'
-                });
+
         } else { //DO CHANGES HERE
             bottomContainer.css({
                 'height': '100%',
                 'top': '5%',
                 'z-index': '100005',
-                'margin-left': '5%'
+                'margin-left': '4%'
             });
-            if (!smallPreview){
-                selectedArtworkContainer.css({
-                    'height': '100%',
-                    'bottom':'-5%'
-                });
-            } else {
-                selectedArtworkContainer.css({
-                    'height': '79%',
-                    'bottom':'4%'
-                });
-            }
-        }
+
+        }*/
         $("#bottomContainer").css({
             'scrollbar-face-color': NOBEL_WILL_COLOR,
             'scrollbar-arrow-color': 'transparent',
@@ -3000,33 +3092,32 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             artTitle.css('padding-top', '0%');
 
 
-            
-            
+
 
             //set the icon and color dynamically
             //TO DO: GET REAL METADATA OF ARTWORKS. DON'T SWITCH ON STRINGS. SORRY EVERYONE
-            //ALSO GET REAL COLORS AND REAL ICONS
+            //ALSO GET REAL ICONS
             if (currentWork && currentWork.Metadata && currentWork.Metadata.InfoFields) {
                 var category = currentWork.Metadata.InfoFields[yellowTextFields[0]].split(' ')[currentWork.Metadata.InfoFields[yellowTextFields[0]].split(' ').length - 1];
 
                 if (category === "Physics") {
                     artIcon.attr('src', tagPath + 'images/temp_physics.png');
-                    artTitle.css('background-color', 'rgba(51, 153, 51, 0.8)');
+                    artTitle.css('background-color', 'rgba(163, 168, 73, 0.8)');
                 } else if (category === "Chemistry") {
                     artIcon.attr('src', tagPath + 'images/temp_chem.png');
-                    artTitle.css('background-color', 'rgba(135, 25, 80, 0.8)');
+                    artTitle.css('background-color', 'rgba(153, 0, 53, 0.8)');
                 } else if (category === "Medicine") {
                     artIcon.attr('src', tagPath + 'images/temp_medicine.png');
-                    artTitle.css('background-color', 'rgba(51, 51, 153, 0.8)');
+                    artTitle.css('background-color', 'rgba(60, 62, 111, 0.8)');
                 } else if (category === "Literature") {
                     artIcon.attr('src', tagPath + 'images/temp_literature.png');
-                    artTitle.css('background-color', 'rgba(255, 133, 51, 0.8)');
+                    artTitle.css('background-color', 'rgba(198, 121, 28, 0.8)');
                 } else if (category === "Peace") {
                     artIcon.attr('src', tagPath + 'images/temp_peace.png');
-                    artTitle.css('background-color', 'rgba(46, 138, 230, 0.8)');
+                    artTitle.css('background-color', 'rgba(0, 98, 144, 0.8)');
                 } else if (category === "Economics") {
                     artIcon.attr('src', tagPath + 'images/temp_economics.png');
-                    artTitle.css('background-color', 'rgba(102, 51, 0, 0.8)');
+                    artTitle.css('background-color', 'rgba(91, 75, 34, 0.8)');
                 }
             } else {
                 artIcon.css('background-color', 'black');
@@ -3039,12 +3130,14 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             artTitle.append(artIcon);
             if (!onSearch && (searchInput.val() !== '' || numKeywordsChecked !== 0)) {
                 main.css({
-                    'opacity': '0.3'
+                    //'opacity': '0.3'
+                    'display': 'none'
                 });
                 
             } else if (onSearch) {
                 main.css({
-                    'opacity': '1'
+                    //'opacity': '1'
+                    'display': 'block'
                 });
             }
             main.hover(
@@ -3088,7 +3181,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             tileDiv.append(main);
 
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
-            if (!twoDeep) {
+           /* if (!twoDeep) {
                 if (oneDeep){
                     var tileHeight = (0.9) * tileDivHeight;  
                     main.css({ 'height': (0.9) * tileDivHeight });
@@ -3096,31 +3189,33 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     var tileHeight = (0.3) * tileDivHeight;  
                     main.css({ 'height': (0.3) * tileDivHeight });
                 }
-            } else {
-                var tileHeight = (0.45) * tileDivHeight;
-                main.css({ 'height': (0.45) * tileDivHeight });
-            }
+            } else { */
+                var tileHeight = (0.23) * tileDivHeight;
+                main.css({ 'height': (0.23) * tileDivHeight });
+            //}
             main.css({ 'width': (tileHeight / TILE_HEIGHT_RATIO) * TILE_WIDTH_RATIO });
             // Align tile so that it follows the grid pattern we want
 
-            if (!twoDeep) {
+            /*if (!twoDeep) {
                 if (oneDeep){
                     main.css({
                     'left': i * (main.width() + TILE_BUFFER),
                     'top': 0,
                 });
                 } else {
+                    console.log("make fix here");
                 main.css({
                     'left': Math.floor(i / 3) * (main.width() + TILE_BUFFER),
                     'top': Math.floor(i % 3) * (main.height() + TILE_BUFFER)
                 });
                 }
-            } else {
+            } else { */
+
                 main.css({
-                    'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER),
-                    'top': Math.floor(i % 2) * (main.height() + TILE_BUFFER)
+                    'left': Math.floor(i / 3) * (main.width() + TILE_BUFFER),
+                    'top': Math.floor(i % 3) * (main.height() + TILE_BUFFER2)
                 });
-            }
+        //    }
 
             //Add scrollbar to catalog div if needed
             /**
@@ -3758,8 +3853,6 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
                 selectedArtworkContainer.css({
-                    'width' : getContainerWidth(artwork,showAllAtYear),
-                    'left' : getContainerLeft(artwork,showAllAtYear),
                     'display': 'inline',
                     'opacity':1
                 });
@@ -3832,7 +3925,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
             function fillSelectedArtworkContainer(){
                 //Set up elements of selectedArtworkContainer
-                previewWidth = (0.38) * $("#tagRoot").width();
+                previewWidth = (0.66) * $("#tagRoot").width();
 
                 selectedArtworkContainer.empty();
 
@@ -3842,12 +3935,11 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 closeButton.css({
                     'position': 'absolute',
                     'top': '1.5%',
-                    'width': '8%',
-                    'height': '8%',
+                    'width': '6%',
+                    'height': '6%',
                     'min-height': '15px',
                     'min-width': '15px',
                     'background-color': '',
-                    'left': '1.5%'
                 });
                 closeButton.on('mousedown', function () {
                     hideArtwork(currentArtwork)();
@@ -3856,7 +3948,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 artworksForYear = artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()];
                
                 //If there are multiple artworks that should all be shown, selectedArtworkContainer will contain all of them and be larger
-                if (showAllAtYear && artworksForYear){
+               /* if (showAllAtYear && artworksForYear){
                     for (i = 0; i < artworksForYear.length; i++) {
                         newTile = createOnePreviewTile(artworksForYear[i],i);
                         newTile.css({
@@ -3868,12 +3960,12 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                         }
                     }
                     containerWidth = Math.min(($("#tagRoot").width()*.80), (artworksForYear.length) * previewWidth);
-                } else {
+                } else { */
                     newTile = createOnePreviewTile(artwork,0);
                     newTile.css('left', '0%');
                     newTile.append(closeButton);
                     containerWidth = previewWidth;
-                }
+                //}
             }
 
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
@@ -3884,11 +3976,16 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
              */
             function createOnePreviewTile(artwork, num){
                 var previewTile,
-                    miniTilesLabel,
-                    tileTop,
-                    tileBottom,
+                    infoWrapper,
                     titleSpan,
                     imgDiv,
+                    spaceDiv,
+                    nameDiv,
+                    prizeDiv,
+                    yearOfAwardDiv,
+                    descriptionDiv,
+                    iconDiv,
+                    iconImg,
                     prevArrow,
                     nextArrow,
                     descSpan,
@@ -3903,15 +4000,11 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     miniTilesHolder,
                     miniTile;
                 //Entire tile
-                previewTile = $(document.createElement('div')); 
+                previewTile = $(document.createElement('div')).attr('id', 'previewTile'); 
                 previewTile.css({
                     'height': '100%',
                     'width' : '100%'
                 })
-
-                //Top portion of the tile (with image, title, and subtitle)
-                tileTop = $(document.createElement('div'))
-                    .addClass('tileTop');
 
                 //Tile title
                 titleSpan = $(document.createElement('div'))
@@ -3973,17 +4066,57 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     darkDiv.attr('id', 'darkDiv');
                 }
                 
+                //Main Div that holds information in pop up
+                infoWrapper = $(document.createElement('div')).attr('id', 'infoWrapper');
 
-                //Image div
-                imgDiv = $(document.createElement('div'))
-                    .addClass('imgDiv');
+                //Smaller divs that hold information
+                imgDiv = $(document.createElement('div')).attr('id','imgDiv');
+                spaceDiv = $(document.createElement('div')).attr('id', 'spaceDiv');
+                nameDiv = $(document.createElement('div')).attr('id', 'nameDiv').addClass('popupInfo');
+                prizeDiv = $(document.createElement('div')).attr('id', 'prizeDiv').addClass('popupInfo');
+                yearDiv = $(document.createElement('div')).attr('id', 'yearDiv').addClass('popupInfo');
+                descriptionDiv = $(document.createElement('div')).attr('id', 'descriptionDiv').addClass('popupInfo');
+                iconDiv = $(document.createElement('div')).attr('id', 'iconDiv').addClass('popupInfo');
+                iconImg = $(document.createElement('img')).attr('id', 'iconDivImg');
+
+                //Apply content to smaller divs
                 imgDiv.css({
-                    'width': '80%',
-                    'height': '80%',
-                    'top': '10%',
-                    'left' : '10%'
+                    'background-image': 'url(' + FIX_PATH(artwork.Metadata.Thumbnail) + ")",
+                    'background-repeat': 'no-repeat',
+                    'background-size': 'cover'
                 })
-                imgDiv.append(darkDiv)
+                nameDiv.text(TAG.Util.htmlEntityDecode(artwork.Name));
+
+                if (artwork && artwork.Metadata && artwork.Metadata.InfoFields) {
+                    var category = artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ')[artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ').length - 1];
+                    prizeDiv.text(category);
+                    yearDiv.text(artwork.Metadata.InfoFields[yellowTextFields[1]]);
+
+
+                    if (category === "Physics") {
+                        iconImg.attr('src', tagPath + 'images/temp_physics.png');
+                    } else if (category === "Chemistry") {
+                        iconImg.attr('src', tagPath + 'images/temp_chem.png');
+                    } else if (category === "Medicine") {
+                        iconImg.attr('src', tagPath + 'images/temp_medicine.png');
+                    } else if (category === "Literature") {
+                        iconImg.attr('src', tagPath + 'images/temp_literature.png');
+                    } else if (category === "Peace") {
+                        iconImg.attr('src', tagPath + 'images/temp_peace.png');
+                    } else if (category === "Economics") {
+                        iconImg.attr('src', tagPath + 'images/temp_economics.png');
+                    }
+
+                } else {
+                    prizeDiv.text("PRIZE");
+                    yearDiv.text("YEAR");
+                    iconImg.attr('background-color', 'white');
+                }
+
+                iconDiv.append(iconImg)
+
+
+                //imgDiv.append(darkDiv)
                 darkDiv.append(yellowTextTop);//.append(yellowTextBottom);
                 //Explore div
                 exploreTab = $(document.createElement('div'))
@@ -4066,11 +4199,15 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
                 currentThumbnail = $(document.createElement('img'))
                     .addClass('currentThumbnail');
-                if (artwork.Metadata.Thumbnail && artwork.Metadata.ContentType !== "Audio") {
-//                    currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
-                    currentThumbnail = $(document.createElement('div'));
+                
+
+                currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
+
+                /*if (artwork.Metadata.Thumbnail && artwork.Metadata.ContentType !== "Audio") {
+                    currentThumbnail.attr("src", FIX_PATH(artwork.Metadata.Thumbnail));
+                    //currentThumbnail = $(document.createElement('div'));
                     currentThumbnail.css({
-                        'background': 'url(' + FIX_PATH(artwork.Metadata.Thumbnail + ') no-repeat center'),
+                        'background': 'url(' + FIX_PATH(artwork.Metadata.Thumbnail ),
                         'background-size':'contain',
                         'height':'100%',
                     })
@@ -4098,7 +4235,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     }
                 }else {
                     currentThumbnail.attr("src", tagPath + 'images/no_thumbnail.svg');
-                }
+                }*/
+
                 !onAssocMediaView && currentThumbnail.on('mousedown', function(){
 
 
@@ -4454,14 +4592,17 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 infoText.append(artistInfo)
                         //.append(yearInfo);    depricated!
 
-                imgDiv.append(currentThumbnail)
-                    .append(infoText);
+                //imgDiv.append(currentThumbnail)
+                infoWrapper.append(imgDiv);
+                infoWrapper.append(spaceDiv);
+                infoWrapper.append(nameDiv);
+                infoWrapper.append(prizeDiv);
+                infoWrapper.append(yearDiv);
+                infoWrapper.append(descriptionDiv);
+                infoWrapper.append(iconDiv);
+                previewTile.append(infoWrapper);
 
-                tileTop.append(imgDiv)
-                    .append(exploreTab)
-                    .append(titleSpan)
-                    .append(infoText)
-                    //.append(exploreText);
+
 
                 descSpan.append(descText);
                 tileBottom.append(descSpan);
@@ -4470,16 +4611,13 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                                     .addClass("miniTilesLabel");
                 miniTilesHolder = $(document.createElement('div'))
                                     .addClass('miniTilesHolder');
-                tileBottom.append(miniTilesHolder)
-                           .append(miniTilesLabel);
 
-                previewTile.append(tileTop)
-                           //.append(tileBottom);
+
 
                 //selectedArtworkContainer.append(previewTile);
                 selectedArtworkContainer.css({
-                    'border': '5px solid '+NOBEL_WILL_COLOR,
-                    'border-radius': '14px',
+                    'border': '2px solid '+NOBEL_WILL_COLOR,
+                    'border-radius': '10px',
                 })
                 
                 selectedArtworkContainer.append(previewTile);
@@ -4504,17 +4642,6 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 styleTimelineCircle(artworkCircles[artwork.Identifier], true)
             }; 
                 
-            for (var i = 0; i < timelineEventCircles.length; ++i) {
-
-
-
-                if (timelineEventCircles[i] && artworkCircles[artwork.Identifier] && (Math.floor(timelineEventCircles[i].yearKey) === Math.floor(artworkCircles[artwork.Identifier].yearKey)) && (timelineEventCircles[i] != artworkCircles[artwork.Identifier])) {
-                    doNothing("Artwork circles should hide?!?");
-                    timelineEventCircles[i].css('visibility', 'hidden');
-                    timelineEventCircles[i].timelineDateLabel.css('visibility', 'hidden');
-                }
-
-            }
             progressCircCSS = {
                 'position': 'absolute',
                 'float'   : 'left',
