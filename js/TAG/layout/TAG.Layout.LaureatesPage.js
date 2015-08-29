@@ -27,6 +27,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
          assocMediaButton = root.find('#assocMediaButton'),
          selectedArtworkContainer = root.find('#selectedArtworkContainer'),
          popupOverlay = root.find('#popupOverlay'),
+         searchResultText = root.find('#searchResultText'),
          timelineArea = root.find('#timelineArea'),
          topBar = root.find('#topBar'),
          filterTitle = root.find('#filterTitle'),
@@ -1003,6 +1004,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     clear.click(function () {
                         clearKeywordCheckBoxes();
                         clearSearchResults();
+                        searchResultText.text('');
                         
                     });
 
@@ -1624,7 +1626,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             // Hide selected artwork container, as nothing is selected yet
             popupOverlay.css('display', 'none');
             selectedArtworkContainer.css('display', 'none');
-            ;
+
 
             tileDiv.empty();
             catalogDiv.append(tileDiv);
@@ -2245,6 +2247,9 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         }
 
         var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
+        searchResultText.text(searchDescriptionText);
+        console.log("searchDescriptionText = " + searchDescriptionText);
+
         if (!comingBack) {
             var duration = ANIMATION_DURATION / 5;
             catalogDiv.animate({
@@ -2320,7 +2325,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         $.each(keywordSearchOptions, function (optionIndex, option) {
             var listString = getSetListString(option.operation, option.keywords);
             searchDescriptionText = searchDescriptionText +
-                ((listString !== '') ? (' with' + (option.operation == 'and' ? '' : 'out') + ' the keyword' + (option.keywords.length > 1 ? 's' : '') + listString) : '');
+                ((listString !== '') ? (' for ' + listString) : '');
         });
         searchDescriptionText = searchDescriptionText + '.';
 
@@ -2391,13 +2396,13 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         if (selectedPrizes.hasOwnProperty($(filter).data("category"))) { //Currently selected - need to un-select
 
             delete selectedPrizes[$(filter).data("category")];
-            $(filter).data("image").css("border", "0px solid red");
+            $(filter).data("image").css("border", "0px solid white");
             filter.data("selected", false)
 
         } else { //Currently unselected - need to select
 
             selectedPrizes[$(filter).data("category")] = true;
-            $(filter).data("image").css("border", "3px solid red");
+            $(filter).data("image").css("border", "2px solid white");
             filter.data("selected", true);
         }
 
@@ -3655,9 +3660,11 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             if (!artwork) {
                 return;
             }
+            popupOverlay.css('display', 'none');
             selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
+                
                 selectedArtworkContainer.css('display', 'none')
-                popupOverlay.css('display', 'none');
+                
                 });
             root.find('.tile').each(function (tileIndex, tile) {
                 if (!searchResultsLength || tileIndex < searchResultsLength) { // If searchResultsLength is nul||undefined there was no search done.
@@ -3807,6 +3814,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             selectedArtworkContainer.off();
 
             if (artworkShown) {
+                popupOverlay.css('display', 'none');
                 selectedArtworkContainer.animate(
                         {"opacity": 0}, 
                         0, //JessF: took out animation fade in and out because it causes problems with double clicks
@@ -3814,7 +3822,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             animateCatalogDiv();
                         }
                 )
-                popupOverlay.css('display', 'none');
+                
             } 
             else {
                 animateCatalogDiv();
