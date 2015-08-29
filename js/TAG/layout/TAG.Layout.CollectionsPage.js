@@ -30,12 +30,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         bottomContainer = root.find('#bottomContainer'),
         catalogDiv = root.find('#catalogDiv'),
         collectionMenu = root.find('#collectionMenu'),
-        searchInput = root.find('#searchInput'),
         keywordsDiv = root.find("#keywords"),
         searchTxt = root.find('#searchTxt'),
         artworksButton = root.find('#artworksButton'),
         assocMediaButton = root.find('#assocMediaButton'),
-        selectedArtworkContainer = root.find('#selectedArtworkContainer'),
         timelineArea = root.find('#timelineArea'),
         topBar = root.find('#topBar'),
         loadingArea = root.find('#loadingArea'),
@@ -67,8 +65,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         smallPreview= options.smallPreview,
         titleIsName = options.titleIsName,
         showOtherCollections = options.showOtherCollections,
-        twoDeep = options.twoDeep, //show two tiles per column
-        oneDeep = options.oneDeep, //show one tile per column
+        oneDeep =false,
+        twoDeep = true, //show two tiles per column
         backToGuid = options.backToGuid, //for impact map experience
         backToAssoc = options.backToAssoc, // for impact map experience
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
@@ -109,14 +107,14 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         artworkInCollectionList = [],
         lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
-        NOBEL_COLOR = 'rgb(254,161,0)',
+        NOBEL_COLOR = "#D99B3B",
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
         FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
         MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
         EVENT_CIRCLE_WIDTH = Math.min(30, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
         COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
         LEFT_SHIFT = 9,                                                    // pixel shift of timeline event circles to center on ticks 
-        TILE_BUFFER = $("#tagRoot").width() / 100,                  // number of pixels between artwork tiles
+        TILE_BUFFER = $("#tagRoot").width() / 15,                  // number of pixels between artwork tiles
         TILE_HEIGHT_RATIO = 200,                                          //ratio between width and height of artwork tiles
         TILE_WIDTH_RATIO = twoDeep ? 255 : 200,
         ANIMATION_DURATION = 800,                                         // duration of timeline zoom animation
@@ -223,7 +221,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
     // get things rolling
     init();
-    createNobelLifePopup();
     /**
      * Sets up the collections page UI
      * @method init
@@ -285,21 +282,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         //Or else the search bar loses focus immediately when you come back from artwork viewer
         $('#tagContainer').off();
         
-        // search on keyup
-        searchInput.on('keyup', function (e) {
-            if (!infoDiv.is(':animated')) {
-                var keywordsInputEmpty = true;
-                for (var i = 0; i < keywordSearchOptions.length; i++) {
-                    keywordsInputEmpty = keywordsInputEmpty && (keywordSearchOptions[i].keywords.length == 0);
-                }
-                if (!searchInput.val() && keywordsInputEmpty && e.which !== 13) {
-                    clearSearchResults();
-                }
-                else if (e.which === 13) {
-                    doSearch(true);
-                }
-            }
-        });
         $("#bottomContainer").css({
             'scrollbar-face-color': NOBEL_WILL_COLOR,
             'scrollbar-arrow-color': 'transparent',
@@ -320,35 +302,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             
         }); */
 
-        searchInput.css({
-            'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
-            'background-size' : 'auto 90%',
-            'background-repeat': 'no-repeat',
-            'background-position':'right'
-        });
-
-        var searchDefault = "search";
-        
-        searchInput.attr('placeholder', searchDefault); 
-        searchInput.css({
-            'font-style': 'italic'
-        })
-        searchInput.on('focusin', function () { 
-            searchInput.css({ 'background-image': 'none' }); 
-        });
-        searchInput.on('focusout', function () { 
-            if (!searchInput.val()) {
-                searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")' });
-            };
-        });
-
         //initSplitscreen();
 
-        infoButton.attr('src', tagPath+'images/icons/info.svg')
-            .addClass('bottomButton')
-        infoButton.on('mousedown', function () {
-            createInfoPopUp();
-        });
         //Info register
         /*TAG.Telemetry.register(infoButton, 'mousedown', 'Overlay', function(tobj){
             tobj.overlay_type = "info"; //info or tutorial page
@@ -356,40 +311,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             tobj.time_spent = null;
         });*/
 
-        tutorialButton.attr('src', tagPath + 'images/icons/question_mark.svg')
-            .addClass('bottomButton')
-            .on('mousedown', function () {
-                TAG.Util.createTutorialPopup(currCollection);
-            });
         /*TAG.Telemetry.register(tutorialButton, 'mousedown', 'Overlay', function(tobj){
             tobj.overlay_type = "tutorial"; //info or tutorial page
             tobj.current_collection = currCollection.Identifier;
             tobj.time_spent = null;
         });*/
-        if (IS_WEBAPP) {
-            linkButton.attr('src', tagPath + 'images/link.svg')
-                        .addClass('bottomButton')
-                        .on('mousedown', function () {
-                            var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
-                                tagpagename: 'collections',
-                                tagcollectionid: currCollection.Identifier,
-                                tagartworkid: currentArtwork ? currentArtwork.Identifier : ''
-                            });
-                root.append(linkOverlay);
-                linkOverlay.fadeIn(500, function () {
-                    linkOverlay.find('.linkDialogInput').select();
-                });
-            });
-            
-        } else {
-            linkButton.remove();
-        }
-
-        if (root.data('split') === 'L' && TAG.Util.Splitscreen.isOn()) {
-            infoButton.hide();
-            tutorialButton.hide();
-            linkButton.css("float", "left");
-        }
 
         catalogDiv.css('bottom', -(0.01 * $("#tagRoot").height()) + 'px');
 
@@ -432,355 +358,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         menuCreated = false;
     }
 
-    /**ui-dropdownchecklist-
-     * Fill in the appropriate UI pieces so that they reflect the search as defined by parameters.
-     * @method updateSearchInput
-     * @param searchText {String}               The text to be entered in the search bar.
-     * @param keywordSearchOptions {Object}     Object containing info on keywords search (see getKeywordSearchOptions())
-     */
-    function updateSearchInput(searchText, keywordSearchOptions) {
-        // Search bar.
-        if (searchText) {
-            searchInput.val(searchText);
-        }
-
-        // Keywords search.
-        if (keywordSearchOptions) {
-            for (var i = 0; i < keywordSearchOptions.length; i++) {
-                var options = keywordSearchOptions[i];
-                // Set the operation.
-                if (options.operation && options.operation !== '') {
-                    // Update hidden select element.
-                    var selOptions = $(root.find('.operationSelect')[i]).find('option');
-                    $.each(selOptions, function (selOptionIndex, selOption) {
-                        if ($(selOption).text().toLowerCase() === options.operation) {
-                            $(selOption).attr('selected', 'selected');
-                        } else {
-                            $(selOption).removeAttr('selected');
-                        }
-                    });
-
-                    // Update selector text.
-                    $(root.find('.operationSelect').parent().find('span.ui-dropdownchecklist-text')[i])
-                        .attr('title', options.operation.toUpperCase())
-                        .text(options.operation.toUpperCase());
-                }
-
-                // Set the selected keywords.
-                if (options.keywords) {
-                    for (var j = 0; j < options.keywords.length; j++) {
-                        var keyword = options.keywords[j];
-
-                        // Update hidden select element.
-                        var selOptions = $(root.find('.keywordsMultiselect')[i]).find('option')
-                        $.each(selOptions, function (selOptionIndex, selOption) {
-                            if ($(selOption).text().toLowerCase() === keyword) {
-                                $(selOption).attr('selected', 'selected');
-                            }
-                        });
-
-                        // Update checkbox.
-                        var labels = $(root.find('.keywordsMultiselect')[i]).parent().find('.ui-dropdownchecklist-dropcontainer label');
-                        $.each(labels, function (labelIndex, label) {
-                            if ($(label).text().toLowerCase() === keyword) {
-                                $(label).parent().find(':checkbox').attr('checked', 'checked');
-                            }
-                        });
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Initializes the popup informative window before the nobel will exploration begins
-     * @param function onClose      the function called after the window is closed
-     */
-
-    function createNobelLifePopup() {
-        if ((currCollection && currCollection.Name !== 'The Life of Alfred Nobel') || showNobelLifeBox) {
-            return;
-        }
-        showNobelLifeBox = false;
-        var popup = $(document.createElement('div'))
-        popup.css({
-            'display': 'block',
-            'position': 'absolute',
-            'opacity': '1',
-            'border-radius': '18px',
-            'border-color': NOBEL_WILL_COLOR,
-            'border': '8px solid ' + NOBEL_WILL_COLOR,
-            'width': '60%',
-            'height': '50%',
-            'top': '25%',
-            'left': '20%',
-            'background-color': 'black',
-            'z-index': '99999999'
-        })
-        var popupTopBar = $(document.createElement('div'));
-        var popupLeftBar = $(document.createElement('div'));
-        var popupRightBar = $(document.createElement('div'));
-        var popupLeftTopBar = $(document.createElement('div'));
-        var popupLeftBottomBar = $(document.createElement('div'));
-        var nobelIcon = $(document.createElement('img'));
-        var closeX = $(document.createElement('img'));
-
-        nobelIcon.attr({
-            src: tagPath + 'images/icons/nobel_icon.png',
-            id: 'nobelIcon'
-        })
-        nobelIcon.css({
-            'position': 'absolute',
-            'width': '90%',
-            'height': '80%',
-            'left': '18%',
-            'top': '5%'
-        })
-        popupRightBar.append(nobelIcon);
-        popupTopBar.append(closeX);
-        closeX.attr({
-            src: tagPath + 'images/icons/x.svg',
-            id: 'closeX'
-        })
-        closeX.css({
-            'left': '94.85%',
-            'position': 'absolute',
-            'top': '15%',
-            'height': '54%'
-        })
-        popupTopBar.css({
-            'height': '15%',
-            'position': 'absolute',
-            'width': '100%',
-        })
-
-        popupLeftBar.css({
-            'height': '85%',
-            'position': 'absolute',
-            'width': '65%',
-            'top': '15%',
-            'color': 'white'
-        })
-
-        popupRightBar.css({
-            'height': '85%',
-            'position': 'absolute',
-            'width': '35%',
-            'top': '15%',
-            'left': '60%',
-        })
-
-        popupLeftTopBar.css({
-            'height': '18%',
-            'position': 'absolute',
-            'width': '92%',
-            'left': '8%',
-            'font-size': '1.25em',
-            'font-weight': 'bold',
-            'color': 'white',
-            'font-family': 'Cinzel'
-        }).text("The Life of Alfred Nobel")
-
-        popupLeftBottomBar.css({
-            'top': ' 18%',
-            'height': '82%',
-            'position': 'absolute',
-            'left': '8%',
-            'width': '92%',
-            'font-size': '.82em',
-            'color': 'white'
-        }).text("This collection of posters presents highlights of Alfred Nobel's Life that reflect elements seen in his will. Please start your exploration by opening and reading the poster titled \"Introduction.\"");
-
-        var temp = $(TAG.Util.UI.blockInteractionOverlay(.3));//add blocking div to stop all interaction
-        temp.css({
-            "display": 'block',
-            'z-index': '9999999'
-        })
-        popupLeftBar.append(popupLeftTopBar);
-        popupLeftBar.append(popupLeftBottomBar);
-        popup.append(popupTopBar);
-        popup.append(popupLeftBar);
-        popup.append(popupRightBar);
-        root.append(temp)
-        root.append(popup)
-        closeX.click(function () {
-            temp.remove();
-            popup.remove();
-            showNobelLifeBox = true;
-        });
-    };
-
-    /**
-     * Create info pop-up for 'i' info icon on collections page
-     * @method createInfoPopUp
-     */
-    function createInfoPopUp() {
-        var infoOverlay = $(TAG.Util.UI.blockInteractionOverlay());
-        var infoBox = $(document.createElement('div'));
-        var infoTitle = $(document.createElement('div'));
-        var infoMain = $(document.createElement('div'));
-        var infoLogo = $(document.createElement('div'));
-        var infoTitleLeft = $(document.createElement('div'));
-        var infoTitleRight = $(document.createElement('div'));
-        var infoMainTop = $(document.createElement('div'));
-        var infoMainBottom = $(document.createElement('div'));
-        var microsoftLogoDiv = $(document.createElement('div'));
-        var brownLogoDiv = $(document.createElement('div'));
-        var microsoftLogo = $(document.createElement('img'));
-        var brownLogo = $(document.createElement('img'));
-        var closeButton = createCloseButton();
-        var string = 'cs.brown.edu/research/ptc/tag';
-        microsoftLogo.attr('src', tagPath + 'images/microsoft_logo_transparent.png');
-        brownLogo.attr('src', tagPath + 'images/brown_logo_transparent.png');
-        microsoftLogoDiv.css({
-            'background': 'transparent',
-            'width': '25%',
-            'min-width':'120px',
-            'height': '100%',
-            'float': 'right',
-            'display':'inline-block'
-        });
-        brownLogoDiv.css({
-            'background': 'transparent',
-            'width': '10%',
-            'min-width': '40px',
-            'height': '100%',
-            'float': 'right',
-            'display': 'inline-block'
-        });
-        microsoftLogo.css({
-            'height': 'auto',
-            'width': '100%',
-            'min-width':'120px',
-            'margin-top': '4%'
-        });
-        brownLogo.css({
-            'height': 'auto',
-            'width': '80%',
-            'min-width': '40px',
-            'margin-top': '-16%'
-        });
-       
-        infoOverlay.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex);
-        infoOverlay.append(infoBox);
-        infoBox.css({
-            'background-color': 'black',
-            'color': 'white',
-            'height': '50%',
-            'width': '50%',
-            'margin-top': '15%',
-            'margin-left': '25%',
-        });
-        infoTitle.css({
-            'background-color': 'black',
-            'margin': '0%',
-            'display': 'block',
-            'color': 'white',
-            'border-top-left-radius':'3.5px',
-            'border-top-right-radius':'3.5px'
-        });
-        infoTitle.append(infoTitleLeft);
-        infoTitle.append(infoTitleRight);
-
-        closeButton.css({
-            'height': '4%',
-            'width': '4%',
-            'min-height': '20px',
-            'min-width':'20px',
-            'margin-left': '0%',
-            'margin-bottom': '0%',
-            'margin-top': '1%',
-            'margin-right':'1%',
-            'top':'0%',
-            'display': 'block',
-            'float':'right'
-        });
-
-        infoBox.append(closeButton);
-        infoTitleLeft.css({
-            'color': 'white',
-            'background-color': 'black',
-            'display': 'inline-block',
-            'font-weight': 'bold',
-            'font-size': '2em',
-            'margin-left': '5%',
-            'margin-top': '2%'
-        });
-        infoTitleLeft.text('TAG');
-
-        infoTitleRight.css({
-            'color': 'white',
-            'background-color': 'black',
-            'display': 'inline-block',
-            'font-size': '1.5em',
-            'margin-left': '3%'
-        });
-        infoTitleRight.text('Touch Art Gallery');
-
-        infoMain.css({
-            'background-color': 'black',
-            'display': 'block',
-            'color': 'white'
-        });
-        infoMainTop.css({
-            'color': 'white',
-            'background': 'black',
-            'display': 'block',
-            'font-size': '0.75em',
-            'margin-left': '5%',
-            'margin-top': '3%',
-            'margin-right': '6%'
-        });
-        infoMainBottom.css({
-            'color': 'white',
-            'background': 'black',
-            'display': 'block',
-            'font-size': '0.65em',
-            'margin-left': '5%',
-            'margin-top': '3%',
-            'margin-right': '6%'
-        });
-        infoMainTop.text('Touch Art Gallery is a free webapp and Win8 application, funded by Microsoft Reasearch and created by the Graphics Lab at Brown University. You can learn more about this project at http://cs.brown.edu/research/ptc/tag.');
-        infoMainBottom.text('Andy van Dam, Karthik Battula, Karishma Bhatia, Nate Bowditch, Gregory Chatzinoff, Tiffany Citra, John Connuck, David Correa, Mohsan Elahi, Aisha Ferrazares, Jessica Fu, Yudi Fu, Kaijan Gao, Trent Green, Jessica Herron, Alex Hills, Ardra Hren, Hak Rim Kim, Inna Komarovsky, Ryan Lester, Benjamin LeVeque, Josh Lewis, Jinqing Li, Jeffery Lu, Surbhi Madan, Xiaoyi Mao, Ria Mirchandani, Julie Mond, Ben Most, Carlene Niguidula, Tanay Padhi, Jonathan Poon, Dhruv Rawat, Emily Reif, Jacob Rosenfeld, Lucy van Kleunen, Qingyun Wan, Jing Wang, David Weinberger, Anqi Wen, Natasha Wollkind, Dan Zhang, Libby Zorn');
-        infoMain.append(infoMainTop);
-        infoMain.append(infoMainBottom);
-
-        infoLogo.css({
-            'background-color': 'black',
-            'display': 'block',
-            'color': 'white',
-            'height': '17%',
-            'padding':'5%',
-            'border-bottom-right-radius':'3.5px',
-            'border-bottom-left-radius':'3.5px'
-        });
-        infoLogo.append(brownLogoDiv);
-        infoLogo.append(microsoftLogoDiv);
-
-        brownLogoDiv.append(brownLogo);
-        microsoftLogoDiv.append(microsoftLogo);
-
-        infoBox.append(infoTitle);
-        infoBox.append(infoMain);
-        infoBox.append(infoLogo);
-        root.append(infoOverlay);
-        infoOverlay.fadeIn();
-
-        closeButton.on('mousedown', function () {
-            infoOverlay.fadeOut();
-        });
-
-        //telemetry registering
-        var telemetry_timer = new TelemetryTimer();
-        TAG.Telemetry.register(closeButton, 'mousedown', 'Overlay', function(tobj){
-            tobj.overlay_type = "info"; //info or tutorial page
-            if (currCollection) {
-                tobj.current_collection = currCollection.Identifier;
-            }
-            tobj.time_spent = telemetry_timer.get_elapsed();
-        });
-    }
-
     function prepareNextView() {
         onAssocMediaView = false;
         currentTag = null;
@@ -791,7 +368,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         tileDiv.empty();
         tileCircle.show();
         clearKeywordCheckBoxes();
-        clearSearchResults();
         infoSource = [];
         keywordDictionary = [];
         if (cancelLoadCollection) cancelLoadCollection();
@@ -894,362 +470,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         }
         $("#startPageLoadingOverlay").remove();
         loadingArea.hide();
-        searchInput.show();
     }
-
-    /**
-     * Adds keyword dropdowns to the search area.
-     * @method addKeywords
-     */
-    function addKeywords() {
-
-        if (hideKeywords) {
-            //hacky way to do styling- better structure would need to happen for extensibility
-            $("#searchInput").css('margin-top', '2.5%');
-            $(".sortButton").css({ 'margin-top': '0%', 'margin-right': '1%' });
-            $("#bottomContainer").css({ 'top': '15%', 'height': '80%' });
-            $("#bottomContainer").css({
-                'scrollbar-face-color': NOBEL_WILL_COLOR,
-                'scrollbar-arrow-color': 'transparent',
-                'scrollbar-track-color': 'transparent',
-            })
-            return;
-        }
-        // Don't repeat this.
-        if (root.find('.ui-dropdownchecklist').length > 0) {
-            return;
-        }
-        $('#keywords').empty();
-
-        // Get keywords from the server!
-        keywordSets = TAG.Worktop.Database.getKeywordSets();
-        for (var x = 0; x < keywordSets.length; x++) {
-            if ((keywordSets[x].shown) === "true") {
-                showKeywords = true;
-            }
-        }
-
-        // Start off by creating basic 'select' inputs. We will use jQuery library 'dropdownchecklist' to make them look nicer. 
-      if (keywordSets && showKeywords) {
-            // Create unordered list of select elements.
-            var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
-
-            // Loop through the categories of keywords. 
-            keywordSets.forEach(function(set, setIndex) {
-
-                // Create operator select element. 
-                var listItem1 = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
-                var select1 = $(document.createElement('select')).addClass('keywordsSelect') // Class stylizes select element.
-                                                                 .addClass('operationSelect'); // Class to distinguish this as AND/NOT.
-                var andOptn = $('<option>AND</option>').attr('value', '0'); // AND option.
-                var notOptn = $('<option>NOT</option>').attr('value', '1'); // NOT option.
-                select1.append(andOptn); // Add AND option.
-                //select1.css({'display': 'none'});
-                andOptn.css({'display': 'none'});
-                //select1.append(notOptn); // Add NOT option.
-                listItem1.append(select1); // Wrap the select element in a list item.
-                if (setIndex === 0){
-                    listItem1.css('display','none');
-                }
-                // Hide if not shown.
-                if (set.shown !== 'true') {
-                    listItem1.css('display', 'none');
-                }
-                //selectList.append(listItem1); // Then add the list item to our list of selects.
-                keywordOperatorSelects.push(select1); // Also add select element to stored list of operator selects. 
-
-                // Create keywords select element.
-                var listItem2 = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
-                var select2 = $(document.createElement('select')).addClass('keywordsSelect') // Class stylizes select element.
-                                                                 .addClass('keywordsMultiselect') // Class to help distinguish keyword selection from operation select.
-                                                                 .attr('multiple', 'multiple'); // Make this a multi-select element. jQuery lib will turn into dropdown.
-                
-
-                // Add each of the keywords in this category.
-                for (var i = 0; i < set.keywords.length; i++) {
-                    var keywordsOption = $('<option>' + set.keywords[i].charAt(0).toUpperCase() + set.keywords[i].slice(1) + '</option>');
-                    console.log(set.keywords[i]);
-                    select2.append(keywordsOption.attr('value', i.toString()));
-                    keywordsOption.on('change', function () {
-                        console.log("selected");
-                    });
-
-                    
-                }
-                listItem2.append(select2); // Wrap the select element in a list item.
-                // Hide if not shown.
-                if (set.shown !== 'true') {
-                    listItem2.css('display', 'none');
-                }
-                selectList.append(listItem2); // Then add the list item to our list of selects.
-                keywordSelects.push(select2); // Also add select element to stored list of keyword selects.
-
-
-            }); 
-
-            // Finally, add the list of select elements to the keywords div.
-            keywordsDiv.append(selectList);
-
-            // Now run the dropdowncheclist jQuery library to turn the select elements into basic dropdown lists.
-            if (IS_WINDOWS) {
-                MSApp.execUnsafeLocalFunction(function () { // You got a deathwish, Truant?
-                    root.find('select.keywordsSelect').dropdownchecklist({
-                        maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
-                        closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
-                    });
-                });
-            } else {
-                root.find('select.keywordsSelect').dropdownchecklist({
-                    maxDropHeight: $('#tagRootContainer').height() / 2, // Max height of dropdown box is half of TAG's height
-                    closeRadioOnClick: true // After selecting AND/NOT, the dropdown should close automatically.
-                });
-            }
-
-            root.find('select.keywordsSelect').hide().css({
-                'display': 'none',
-                'opacity': '0'
-            });
-            
-            // Unfortunately, the dropdownchecklists are minimally stylized, so we need to do some cleaning up. 
-
-            // Format the dropdown selector box (what you click on to make dropdown appear).
-            var elementHeight = searchInput.innerHeight(); // Get the height of the search bar. We want the dropdowns to match it.
-            if (!IS_WINDOWS){
-                //make them a bit taller on the web
-                elementHeight = elementHeight * 1.4;
-            }
-            var selector;
-            root.find('.ui-dropdownchecklist-selector').each(function (index, element) {
-                selector = $(element);
-                var maxW;
-                if (previewing) {                    
-                    selector.css({ 'max-width': $("#setViewViewer").width() * 0.095 + 'px' });
-                } else {
-                    //if (index % 2 === 0) {
-                        //maxW = $("#tagRoot").width()*0.04 + 'px';
-                    //} else {
-                        maxW = $("#tagRoot").width()*0.12 + 'px';
-                    //}
-                    selector.css({ 'max-width': maxW });
-                }
-                // Set the text inside the selector box.
-                //if (index % 2 == 0) {
-                    // Even numbered dropdowns are operator dropdowns. //NOPE NOT ANYMORE
-                    /*selector.find('.ui-dropdownchecklist-text') // Get the text span element.
-                        .css('display', 'inline') // Make it inline so the div with our dropdown arrow will be inline.
-                        .css('color', '#000') // Make the text black. TAG defaults spans to light gray.
-                        .css('width','auto');
-                    selector.parent().parent().find('input').hide();//.css('opacity', '0'); // TODO: hiding the radio button creates bug where clicking item twice allows empty selection.
-                    */
-                //} else {
-                    // Odd numbered dropdowns are for keywords.
-                   // var setIndex = (index - 1) / 2; // 1 --> 0, 3 --> 1, 5 --> 2, etc.
-                    var setName = (keywordSets[index].name !== '') ? keywordSets[index].name : 'untitled set';
-                    selector.text(setName); // Change the inner text of this selector element to category title.
-                    // Note: here we do not change the '.ui-dropdownchecklist-text' element (as we do above) to eliminate the functionality of updating
-                    // the selector with selected text. I.e., when a user selects a keyword, the selector box text will not change to that keyword, 
-                    // it will stay as the category title. 
-
-                    // Set the width of keywords dropdowns and make overflowing text have an ellipsis.
-                    selector.css('width','auto') 
-                              .css('overflow', 'hidden')
-                              .css('text-overflow', 'ellipsis');
-                //}
-
-                // Further stylization of selector box.
-                selector.parent().css('height', elementHeight + 'px'); // This element uses padding, so we actually change the height of its parent, a wrapper span. 
-                selector.css('color', '#000'); // Make the text black.
-
-                // Create a dropdown arrow.
-                var downArrow = $(document.createElement('img')).attr('src', tagPath + 'images/icons/blackclose.svg').addClass('selector-dropdown').addClass('arrow')
-                    .css({ 'width': ($("#tagRoot").width() * 0.01015) + 'px' });
-                //adjust styling for web
-                if (!IS_WINDOWS){
-                    downArrow.css({'min-width': '5px'});
-                }
-                //adjust hard-coded size of drop down arrows if in previewer
-                if (previewing) {
-                    downArrow.css({ 'min-width': '0px', 'width': $("#setViewViewer").width() * 0.01015 + 'px', 'height': '35%','top': '0%'});
-                }
-                selector.parent().append(downArrow); // Add the arrow the selector box.
-  
-                if (TAG.Util.Splitscreen.isOn()) { //experimenting for splitscreen
-                    if (index % 2 != 0) {
-                        //set width of text element appropriately
-                        var minKeywordWidth = $("#tagRoot").width()*0.058565;
-                        var maxKeywordWidth = $("#tagRoot").width()*0.0732;
-                        var elWidth = parseInt(selector.width());
-                        if (elWidth > minKeywordWidth) {
-                            if (elWidth > maxKeywordWidth) {
-                               selector.css('width', maxKeywordWidth + 'px')
-                            }
-                        } else {
-                            selector.css('width', minKeywordWidth + 'px');
-                        }
-                    } else {
-                        //set widths of boolean drop downs
-                        var booleanWidth = $("#tagRoot").width()*0.0366;
-                        selector.parent().css('width', booleanWidth + 'px');
-                    }
-                                       
-                    //add drop down arrow underneath text of keyword dropdown instead of on side
-                    selector.parent().css('width', $(element).width());
-                    selector.parent().css('height', $(element).parent().height()+ downArrow.height() + 'px'); //experimenting with splitscreen
-                    downArrow.css({ 'float': 'none', 'top': '-25%' });
-                } else {
-                    var mult = 1.1
-                    //if (index % 2 != 0) {
-                        selector.parent().css({ 'width': $(element).parent().outerWidth() * mult + 'px' });
-                    //}
-                }
-
-                //tool tip on mouseenter when ellipsis
-                selector.bind('mouseenter', function () {
-                    var $this = $(this);
-                    if (this.offsetWidth < this.scrollWidth && !$this.attr('title')) {
-                        $this.attr('title', $this.text());
-                    }
-                });
-
-               selector.parent().parent().find('.ui-dropdownchecklist-dropcontainer-wrapper') // Once the width of the selector box is set...
-                         .css({'width': selector.parent().outerWidth() + 'px'}); // Change the width of the actual dropdownchecklist to be the same.
-
-            });
-            
-            //adjust styling for windows
-            if (!IS_WINDOWS){              
-                if (previewing) {
-                    $(".selector-dropdown").css('top', '-4px');
-                } else {
-                    //$(".selector-dropdown").css('top', '-1px');
-                }
-            }
-
-            // The last thing we do is add a search button. 
-            var searchButtonListItem = $(document.createElement('li')).addClass('rowItem'); // Class keeps list inline and spaces items.
-            var searchButton = $(document.createElement('div')).text('Search')
-                .attr('id', 'searchButton')
-                .css('height', elementHeight + 'px')
-                .hover(
-                    function () {
-                        if ($(this).attr('disabled') !== 'disabled') {
-                            $(this).css('background-color', NOBEL_COLOR);
-                            $(this).css('color', 'white');
-                        }
-                    }, function () {
-                        $(this).css('background-color', NOBEL_COLOR);
-                        $(this).css('color', 'black');
-                    })
-                .click(
-                    function () {
-                        if (TAG.Util.Splitscreen.isOn()) {
-                            root.find("#filterByKeywords").click();
-                        }
-                        doSearch(true);
-                    });
-            searchButtonListItem.append(searchButton);
-            selectList.append(searchButtonListItem);
-            
-            //ui fixes for when in previewer
-            if (previewing) {
-                $('li.rowItem').css('margin-left', '5px');
-                $('.ui-dropdownchecklist-group').css('padding', '0.2px');
-                $('#searchInput').css('height', '15px');
-            }
-            
-
-            //other styling if in splitscreen
-            if (TAG.Util.Splitscreen.isOn()) {
-                root.find('#keywords').css({
-                    'display': 'none',
-                    'z-index': '50',
-                    'padding-top': '3%',
-                    'padding-bottom': '3%',
-                    'width': '99%',
-                    'background-color': 'rgba(0,0,0,.85)',
-                    'border-radius': '3.5px',
-                    'text-align': 'center'
-                });
-                root.find("#searchButton").css({
-                    'font-size': '80%',
-                    'padding-bottom': '0%',
-                    'padding-top': '0.5%',
-                    'margin-top': '1%'
-                });
-                root.find("#searchInput").css({
-                    'width': $("#searchInput").width() / 2
-                });
-                root.find(".sortButton").css({
-                    'max-width': $("#tagRoot").width()*0.075 + 'px',
-                });
-                root.find("#divide").css({ 'margin-top': '2%' });
-                root.find("#artworksButton").css({ 'margin-top': '2%' });
-                root.find("#assocMediaButton").css({ 'margin-top': '2%' });
-                root.find("#filterWrapper").css({'float':'left'});
-
-                var filterText = $(document.createElement('div')).text('Filter By Keywords')
-                    .css({
-                        'display': 'inline-block',
-                        'margin-left': '2%',
-                        'margin-right': '2%'
-                    });
-                var filterArrow = $(document.createElement('img')).attr('src', tagPath + 'images/icons/Close.svg').attr('id','filterArrow')
-                    .css({
-                        'transform' : 'rotate(270deg)',
-                        '-webkit-transform': 'rotate(270deg)',
-                        'width' : '4%',
-                        'height': 'auto'
-                    });
-                root.find('#filterByKeywords').css({ 'display': 'inline', 'height': elementHeight + 'px', 'cursor' : 'pointer' })
-                    .append(filterText)
-                    .append(filterArrow)
-                    .toggle(function () {
-                        root.find('#keywords').css('display', 'inline');
-                        root.find("#filterArrow").css({
-                            'transform': 'rotate(90deg)',
-                            '-webkit-transform': 'rotate(90deg)'
-                        });
-                    }, function () {
-                        root.find('#keywords').css('display', 'none');
-                        root.find("#filterArrow").css({
-                            'transform': 'rotate(270deg)',
-                            '-webkit-transform': 'rotate(270deg)'
-                        });
-                    });
-
-                //fix for web app styling  
-                if (!IS_WINDOWS){
-                    root.find("#filterByKeywords").css({'width':'30%'});
-                    root.find("#filterArrow").css({'margin-left':'2%'});
-                }                
-            }
-
-            // If we are coming back and there was a previous search, execute that search.
-            if (backSearch) {
-                updateSearchInput(backSearch.searchText, backSearch.keywordSearchOptions);
-                var emptySearch = backSearch.searchText === '';
-                $.each(backSearch.keywordSearchOptions, function (setIndex, options) {
-                    emptySearch = emptySearch && options.keywords.length === 0;
-                });
-                if (!emptySearch) {
-                    var artworkToShow = {};
-                    for (var prop in currentArtwork) {
-                        if (currentArtwork.hasOwnProperty(prop)) {
-                            artworkToShow[prop] = currentArtwork[prop];
-                        }
-                    }
-                    doSearch(true, function () { showArtwork(artworkToShow);});
-                }
-            }
-            
-        } else {
-            var divHeight = $('#leftContainer').height()/2;
-            $('#leftContainer').css('margin-top', divHeight + 'px');
-            $('#leftContainer').css('margin-bottom', divHeight + 'px');
-      }
-
-    }
-
 
     /**
      * Applies customization changes to main divs
@@ -1295,7 +516,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 counter = 0,
                 collectionLength,
                 collectionDescription = $(document.createElement('div')),
-                searchDescription = $(document.createElement('div')),
                 dummyDot,
                 dimmedColor = TAG.Util.UI.dimColor(SECONDARY_FONT_COLOR,DIMMING_FACTOR),
                 str,
@@ -1315,7 +535,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             });
 
             if (collection.Name === 'The Life of Alfred Nobel'){
-                oneDeep = true;
+                twoDeep = true;
                 hideKeywords = true;
             }
 
@@ -1381,22 +601,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     }
                 })   
             }
-
-            // Clear search box
-            searchTxt.text("");
-
-            //re-display the magnifying glass icon
-            searchInput.css({ 
-                'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
-                'border-radius': '6pt',
-                'border-color': NOBEL_COLOR,
-                'border-width': 'thin',
-                'border-style': 'solid',
-                'background-color': 'transparent',
-                'color': NOBEL_COLOR 
-            });
-
-
 
             // Clear catalog div (with info and artwork tiles)
             catalogDiv.empty();
@@ -1569,49 +773,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     }); 
                 }
             }
-            searchDescription.attr('id', 'searchDescription');
-            searchDescription.addClass('secondaryFont');
-            searchDescription.css({
-                "color": SECONDARY_FONT_COLOR,
-                'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
-                'max-height': '88%'
-            });
-
-            var clearSearchButton = $(document.createElement('div'))
-                .addClass('secondaryFont')
-                .attr('id', 'clearSearchButton')
-                .css({
-                    'color': 'black',
-                    'background-color': NOBEL_COLOR,
-                    'border-radius': '6pt',
-                    
-                    'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
-                })
-                .text('Clear search results')
-                .hover(
-                    function () {
-                        if ($(this).attr('disabled') !== 'disabled') {
-                            $(this).css({
-                                'background-color': NOBEL_COLOR,
-                                'color': 'white'
-                            });
-                        }
-                    },
-                    function () {
-                        $(this).css({
-                            'background-color': NOBEL_COLOR,
-                            'color': 'black'
-                        })
-                    }
-
-                )
-                .click(function () {
-                    searchInput.val('');
-                    
-                    searchTxt.text('');
-                    clearKeywordCheckBoxes();
-                    clearSearchResults();
-                });
 
             //If there's no description, change UI so that artwork tiles take up entire bottom area
             infoDiv.css('width', '25%');
@@ -1621,15 +782,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 infoDiv.css('margin-left', '-25%');
             }
 
-            // Hide selected artwork container, as nothing is selected yet
-            selectedArtworkContainer.css('display', 'none');
-            ;
-
             tileDiv.empty();
             catalogDiv.append(tileDiv);
             infoDiv.empty();
-            infoDiv.append(searchDescription);
-            infoDiv.append(clearSearchButton);
             infoDiv.append(collectionDescription);
             catalogDiv.append(infoDiv);
             timelineArea.empty();
@@ -1650,7 +805,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                   if (onAssocMediaView && !infoDiv.is(':animated')) {
                                       onAssocMediaView = false;
                                       artworkShown = false;
-                                      clearSearchResults();
                                       clearKeywordCheckBoxes();
                                      // $('#keywords').show();
                                       loadCollection(currCollection)();
@@ -1663,7 +817,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                     //assocMediaButton.css('color', SECONDARY_FONT_COLOR);  
                                     if (!onAssocMediaView && !infoDiv.is(':animated')) {
                                         onAssocMediaView = true;
-                                        clearSearchResults();
                                         clearKeywordCheckBoxes();
                                         currentArtwork && hideArtwork(currentArtwork)()
                                       //  $('#keywords').hide();
@@ -1691,14 +844,12 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             for (var i = 0; i < contents.length; i++) {
                                 artworkInCollectionList.push(contents[i].Identifier);
                             }
-                            loadSortTags(currCollection, currCollection.collectionMedia)
-                            initSearch(currCollection.collectionMedia);
+                            loadSortTags(currCollection, currCollection.collectionMedia);
                             createArtTiles(currCollection.collectionMedia);
                             addKeywords();
                         }, null, null);
                 } else {
                     loadSortTags(currCollection, currCollection.collectionMedia)
-                    initSearch(currCollection.collectionMedia);
                     createArtTiles(currCollection.collectionMedia);
                     addKeywords();
                 }
@@ -1764,9 +915,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         var menu,
             arrow;
 
-        if (!showOtherCollections){
-            return;
-        }
         menu = $(root).find('#collectionMenu');
         arrow = $(root).find('#dropDownArrow');
 
@@ -1977,101 +1125,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             }
             if (cancel && cancel()) return;
             loadSortTags(collection, contents);
-            initSearch(contents);
             createArtTiles(contents, cancel);
             callback && callback();
         }
 
         
-    }
-
-    /**
-         * Store the search strings for each artwork/tour
-         * @method initSearch
-         * @param {Array} contents    the contents of this collection (array of doqs)
-         */
-    function initSearch(contents) {
-        var info,
-            i,
-            cts;
-
-        searchInput[0].value = "";
-        infoSource = [];
-        keywordDictionary = [];
-
-        // Normal metadata
-        $.each(contents, function (i, cts) {
-            if (!cts) {
-                return false;
-            }
-            info = ((cts.Name) ? cts.Name : "") + " " + ((cts.Metadata.Artist) ? cts.Metadata.Artist : "") + " " + ((cts.Metadata.Year) ? cts.Metadata.Year : "") + " " + ((cts.Metadata.Description) ? cts.Metadata.Description : "") + " " + ((cts.Metadata.Type) ? cts.Metadata.Type : "");
-            if (cts.Metadata.InfoFields) {
-                $.each(cts.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
-                    info += " " + field;
-                    info += " " + fieldText;
-                });
-            }
-            infoSource.push({
-                "id": i,
-                "keys": info.toLowerCase()
-            });
-        });
-
-        // Keywords.
-        // Get keywords from the server!
-        keywordSets = TAG.Worktop.Database.getKeywordSets();
-        if (keywordSets) {
-            // Build hash for keywords to artworks. Each set has dictionaries for AND and NOT.
-            // keywordDictionary[setIndex].and["keyword"] --> [artworks with "keyword"] in set
-            // keywordDictionary[setIndex].not["keyword"] --> [artworks without "keyword"] in set
-            $.each(keywordSets, function (setIndex, set) {
-                // Create dictionaries.
-                keywordDictionary.push({ "and": {}, "not": {} });
-                $.each(keywordSets[setIndex].keywords, function (keywordIndex, keyword) {
-                    keywordDictionary[setIndex].and[keyword] = []; // Empty dictionary for and.
-                    keywordDictionary[setIndex].not[keyword] = []; // Empty dictionary for not.
-                });
-            });
-
-            //  Fill the dictionaries.
-            $.each(contents, function (i, cts) {
-                if (!cts) {
-                    return false;
-                }
-                // Get the info.
-                info = ((cts.Name) ? cts.Name : "") + " " + ((cts.Metadata.Artist) ? cts.Metadata.Artist : "") + " " + ((cts.Metadata.Year) ? cts.Metadata.Year : "") + " " + ((cts.Metadata.Description) ? cts.Metadata.Description : "") + " " + ((cts.Metadata.Type) ? cts.Metadata.Type : "");
-                if (cts.Metadata.InfoFields) {
-                    $.each(cts.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
-                        info += " " + field;
-                        info += " " + fieldText;
-                    });
-                }
-
-                // Create a dictionary of each set for this artwork. Just an object that has a field for every keyword the artwork has, arbitrarily set to 'true'
-                var set1 = (cts.Metadata.KeywordsSet1) ? cts.Metadata.KeywordsSet1.split(',') : [''], set1Lookup = {};
-                $.each(set1, function (i, word) { set1Lookup[word] = 'true'; });
-                var set2 = (cts.Metadata.KeywordsSet2) ? cts.Metadata.KeywordsSet2.split(',') : [''], set2Lookup = {};
-                $.each(set2, function (i, word) { set2Lookup[word] = 'true'; });
-                var set3 = (cts.Metadata.KeywordsSet3) ? cts.Metadata.KeywordsSet3.split(',') : [''], set3Lookup = {};
-                $.each(set3, function (i, word) { set3Lookup[word] = 'true'; });
-
-                // Fill the AND and NOT dictionaries for set 1. Each artwork appears in one of the two dictionaries for each keyword: AND if an artwork has a keyword, NOT if, well, not. 
-                $.each(keywordSets[0].keywords, function (keywordIndex, keyword) {
-                    var op = (set1Lookup[keyword] === 'true') ? 'and' : 'not';
-                    keywordDictionary[0][op][keyword].push({ "id": i, "keys": info.toLowerCase() });
-                });
-                // Fill the AND and NOT dictionaries for set 2.
-                $.each(keywordSets[1].keywords, function (keywordIndex, keyword) {
-                    var op = (set2Lookup[keyword] === 'true') ? 'and' : 'not';
-                    keywordDictionary[1][op][keyword].push({ "id": i, "keys": info.toLowerCase() });
-                });
-                // Fill the AND and NOT dictionaries for set 3.
-                $.each(keywordSets[2].keywords, function (keywordIndex, keyword) {
-                    var op = (set3Lookup[keyword] === 'true') ? 'and' : 'not';
-                    keywordDictionary[2][op][keyword].push({ "id": i, "keys": info.toLowerCase() });
-                });
-            });
-        }
     }
 
     /*
@@ -2153,162 +1211,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
     }
 
-
-    /**
-     * Search collection using string in search input box
-     * @method doSearch
-     * @param {Boolean}         explicitSearch - true if the search is explicit, and we need to display results, even if no input was provided.
-     */
-    function doSearch(explicitSearch, callback) {
-
-        var content = searchInput.val().toLowerCase(),
-            matchedArts = [],
-            unmatchedArts = [],
-            i;
-
-        // Clear the results description.
-        root.find('#searchDescription').text('');
-        root.find('#clearSearchButton').css({ 'display': 'none' });
-
-        var keywordMatches = {}; // Object with fields keywordMatches['id'] === 'true' for matching artworks with that "id"
-        if (keywordSets) {
-            // Get the details of our keyword search. 
-            keywordSearchOptions = getKeywordSearchOptions();
-
-            // If no keywords are checked, don't do the keywords search.
-            var doKeywordSearch = false;
-            for (i = 0; i < keywordSearchOptions.length; i++) {
-                doKeywordSearch = doKeywordSearch || (keywordSearchOptions[i]['keywords'].length > 0); // This cancels search if all categories are hidden, or if no keywords are checked
-            }
-            if (doKeywordSearch) {
-                keywordMatches = keywordSearch(keywordSearchOptions);
-            }
-        }
-
-        var doTextSearch = true;
-        if (!content) {
-            doTextSearch = false;
-        }
-        var keywordsInputEmpty = true;
-        for (var i = 0; i < keywordSearchOptions.length; i++) {
-            keywordsInputEmpty = keywordsInputEmpty && (keywordSearchOptions[i].keywords.length == 0);
-        }
-        var emptyExplicitSearch = !doTextSearch && keywordsInputEmpty && explicitSearch;
-        if (!doTextSearch && keywordsInputEmpty && !explicitSearch) {
-            searchTxt.text("");
-            // If there is no description, hide the infoDiv.
-            var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
-            if (description === "" + "\n\n   " || onAssocMediaView) {
-                $("#searchButton").attr('disabled', 'disabled').css({
-                    'background-color': NOBEL_COLOR,
-                    'color': 'black'
-                
-                });
-                $('#clearSearchButton').attr('disabled', 'disabled')
-                    .css({
-                        'background-color': NOBEL_COLOR,
-                        'color': 'black'
-                    });
-                tileDiv.stop().animate({ 'left': '0%' }, 1000, function () { });
-                infoDiv.stop().animate({ 'margin-left': '-25%' }, 1000, function () {
-                    $("#searchButton").removeAttr('disabled');
-                    $('#clearSearchButton').removeAttr('disabled');
-                });
-            }
-            drawCatalog(currentArtworks, currentTag, 0, false, false);
-            return;
-        }
-
-        for (i = 0; i < infoSource.length; i++) {
-            if (((keywordsInputEmpty || keywordMatches[infoSource[i].id] === 'true') && (!doTextSearch || (doTextSearch && infoSource[i].keys.indexOf(content) > -1))) || emptyExplicitSearch) {
-                matchedArts.push(currentArtworks[i]);
-            } else {
-                unmatchedArts.push(currentArtworks[i]);
-            }
-        }
-
-        var searchDescriptionText = getSearchDescription(matchedArts, content, doTextSearch);
-        if (!comingBack) {
-            var duration = ANIMATION_DURATION / 5;
-            catalogDiv.animate({
-                scrollLeft: 0
-            }, duration, "easeInOutQuint", function () {
-                if (currentArtwork) {
-                    showArtwork(currentArtwork, multipleShown && multipleShown)();
-                }
-            });
-        } else {
-            if (currentArtwork) {
-                showArtwork(currentArtwork, multipleShown && multipleShown)();
-            }
-        }
-        root.find('#searchDescription').text(searchDescriptionText);
-        root.find('#clearSearchButton').css({ 'display': 'block' });
-        root.find('#collectionDescription').hide();
-        var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
-        var animating = false;
-        if (description === "" + "\n\n   " && tileDiv.css('left') !== infoDiv.width() + 'px') {
-            animating = true;
-            $('#searchButton').attr('disabled', 'disabled').css('background-color', NOBEL_COLOR);
-            $('#clearSearchButton').attr('disabled', 'disabled')
-                .css({
-                    'background-color': NOBEL_COLOR,
-                    'color': 'black'
-                });
-            tileDiv.stop().animate({ 'left': infoDiv.width() + 'px' }, comingBack ? 0 : 1000, function () { });
-            infoDiv.stop().animate({ 'margin-left': '0%' }, comingBack ? 0 : 1000, function () {
-                $('#searchButton').removeAttr('disabled');
-                $('#clearSearchButton').removeAttr('disabled');
-                if (callback) {
-                    callback();
-                }
-            });
-        }
-
-        //searchTxt.text(matchedArts.length > 0 ? "Results Found" : "No Matching Results");
-        searchResultsLength = matchedArts.length;
-        TAG.Telemetry.recordEvent('Search', function (tobj) {
-            tobj.search_text = searchTxt.text();
-            tobj.current_collection = currCollection.Identifier;
-            tobj.number_of_matches = matchedArts.length;
-        });
-        drawCatalog(matchedArts, currentTag, 0, true, explicitSearch);
-        drawCatalog(unmatchedArts, currentTag, searchResultsLength, false, false);
-
-        if (!animating && callback) {
-            callback();
-        }
-    }
-
-    function getSearchDescription(matchedArts, content, doTextSearch) {
-        var andKeywordsString = '',
-            notKeywordsString = '',
-            andCount = 0,
-            notCount = 0;
-
-        var searchDescriptionText = 'Found ' + matchedArts.length +
-            ' result' + ((matchedArts.length == 1) ? '' : 's') +
-            ((doTextSearch) ? (' for \'' + content + '\'') : '');
-
-        var getSetListString = function (op, keywords) {
-            if (op === '') return '';
-            var listString = '';
-            for (var i = 0; i < keywords.length; i++) {
-                listString = listString + (((i == keywords.length - 1) && keywords.length != 1 ? ' or ' : ' ') + '\'' + keywords[i] + '\'' +
-                    (((i == 0 && keywords.length == 2) || i == keywords.length-1) ? '' : ','));
-            }
-            return listString;
-        };
-        $.each(keywordSearchOptions, function (optionIndex, option) {
-            var listString = getSetListString(option.operation, option.keywords);
-            searchDescriptionText = searchDescriptionText +
-                ((listString !== '') ? (' with' + (option.operation == 'and' ? '' : 'out') + ' the keyword' + (option.keywords.length > 1 ? 's' : '') + listString) : '');
-        });
-        searchDescriptionText = searchDescriptionText + '.';
-
-        return searchDescriptionText;
-    }
-
     /*
      * Method to get artworks that fit the quiery defined in keywordSearchOptions. 
      * @param   keywordSearchOptions  (see return value of getKeywordSearchOptions)
@@ -2377,65 +1279,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     }
 
     /**
-     * Method to clear the results of a search.
-     * {method} clearSearchResults
-     */
-    function clearSearchResults() {
-        // Clear the search text.
-        searchTxt.text("");
-        
-        searchInput.css({ //redisplay search icon
-            'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")',
-            'background-size': 'auto 90%',
-            'background-repeat': 'no-repeat',
-            'background-position': 'right'
-
-        });
-
-        searchInput.on('focusin', function () {
-            searchInput.css({ 'background-image': 'none' });
-        });
-
-
-        searchInput.on('focusout', function () {
-            if (!searchInput.val()) {
-                searchInput.css({ 'background-image': 'url("' + tagPath + '/images/icons/search icon.svg")' });
-            }
-        });
-
-        // Clear the results description.
-        root.find('#searchDescription').text('');
-        root.find('#clearSearchButton').css({ 'display': 'none' });
-        root.find('#collectionDescription').show();
-
-        if (currCollection) {
-            // If there is no description, hide the infoDiv.
-            var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
-            if (description === "" + "\n\n   ") {
-                $('#searchButton').attr('disabled', 'disabled').css('background-color', NOBEL_COLOR);
-                $('#clearSearchButton').attr('disabled', 'disabled');
-                tileDiv.stop().animate({ 'left': '0%' }, 1000, function () { });
-                infoDiv.stop().animate({ 'margin-left': '-25%' }, 1000, function () {
-                    $('#searchButton').removeAttr('disabled');
-                    $('#clearSearchButton').removeAttr('disabled');
-                });
-            }
-
-            // See if we will need to redraw the timeline
-            if (currCollection.Metadata.Timeline === "true" || currCollection.Metadata.Timeline === "false") {
-                currCollection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
-            } else {
-                timelineShown = true; //default to true for backwards compatibility
-            }
-        }
-
-        drawCatalog(currentArtworks, currentTag, 0, false, true);
-        
-        keywordSearchOptions = [];
-        searchResultsLength = null;
-    }
-
-    /**
      * Create tiles for each artwork/tour in a collection
      * @method createArtTiles
      * @param {Array} artworks     an array of doq objects
@@ -2446,12 +1289,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         drawCatalog(currentArtworks, currentTag, 0, null, true);
 
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
-        if (description === "" + "\n\n   ") {
-            tileDiv.css({ 'left': '0%' });
-        } else {
-            tileDiv.css({ 'left': '25%' });
-        }
-        //drawCatalog(artworks, currentTag, 0);
+        tileDiv.css
+        ({ 
+            'left': '0%',
+        });
     }
 
     /**
@@ -2691,13 +1532,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         console.log('smallPreview' + smallPreview);
         if (timelineShown){   
                 bottomContainer.css({
-                    'height' : '75%',
-                    'top' : '18%',
+                    'height' : '85%',
+                    'top' : '10%',
                     'z-index': '',
-                });
-                selectedArtworkContainer.css({
-                    'height' :'110%',
-                    'bottom' : '-5%'
                 });
         } else {
             bottomContainer.css({
@@ -2705,17 +1542,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 'top':'13%',
                 'z-index':'100005',
             });
-            if (!smallPreview){
-                selectedArtworkContainer.css({
-                    'height': '100%',
-                    'bottom':'-5%'
-                });
-            } else {
-                selectedArtworkContainer.css({
-                    'height': '79%',
-                    'bottom':'4%'
-                });
-            }
         }
         $("#bottomContainer").css({
             'scrollbar-face-color': NOBEL_WILL_COLOR,
@@ -2769,18 +1595,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 'color': SECONDARY_FONT_COLOR,
                 //'font-family': FONT
             });
-            if (oneDeep){
-                artTitle.css({
-                    'font-size': '150%',
-                    'background-color': 'rgb(254, 161, 0.8)',
-                    'height': '10%',
-                    'font-family': 'sourcesans'
-                });
-                yearTextBox.css({
-                    'height': '10%',
-                    'vertical-align': 'middle',
-                })
-            }
 
             /* @function doubleClickHandler
                 * Opens artwork directly on double click
@@ -2791,6 +1605,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 return function () {
                     if (currentWork.Metadata.Type === "Artwork" || currentWork.Metadata.ContentType === "tour" || currentWork.Metadata.Type === "VideoArtwork") {
 
+                        previouslyClicked = main;
                         if (previouslyClicked === main) {
                             //click = "double";
                             switchPage(currentWork, null, getContainerLeft(currentWork, false))();
@@ -2867,13 +1682,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }();
             }
             main.on('click', function () {
-                if (currCollection.Name === "The Life of Alfred Nobel") {
-                    artworkSelected = true;
-                    switchPage(currentWork, null, getContainerLeft(currentWork, false))();
-                    return;
-                }
-                doubleClickHandler()
-
+                 console.log("clicked");
+                 switchPage(currentWork, null, getContainerLeft(currentWork, false))();
                 // if the idle timer hasn't started already, start it
                 if (!idleTimer && !previewing && !lockKioskMode) {
                     var timerDuration = {
@@ -2919,23 +1729,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             });
             */
 
-            // Set tileImage to thumbnail image, if it exists
-            if (needsTourIcon === true) {
-                var icon = $(document.createElement('img'))
-                icon.attr({
-                    src: tagPath + 'images/tour_icon_nobel.svg'
-                })
-                icon.css({
-                    'position': 'absolute',
-                    'bottom': '0%',
-                    'right': '0%',
-                    'width': '29px',
-                    'height' : '29px',
-                    'background-color': 'transparent',
-                    'z-index' : '500000'
-                })
-                main.append(icon);
-            }
             if (currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio") {
                 main.css('overflow', 'hidden');
 
@@ -2953,15 +1746,15 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             mainh = tileImage.height();
                             var neww = w / h * mainh;
                             tileImage.css({
-                                'height': mainh,
-                                'width': neww,
+                                'height': 0.85*mainh,
+                                'width': 0.85*neww,
                             });
                         } else {
                             mainw = tileImage.width();
                             var newh = h / w * mainw;
                             tileImage.css({
-                                'width': mainw,
-                                'height': newh,
+                                'width': 0.85*mainw,
+                                'height': 0.85*newh,
                             });
                         }
                     });
@@ -2996,7 +1789,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             } else {
                 tileImage.attr("src", tagPath + 'images/no_thumbnail.svg');
             }
-
 
             // Add title
             if (tag === 'Title') {
@@ -3047,18 +1839,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 numKeywordsChecked += keywordSearchOptions[setIndex].keywords.length;
             });
             artText.css('font-size', '.8em');
-            artText.css('color', 'rgb(254,161,0)');
-            artTitle.css('background-color', 'rgba(0,0,0,.8)');
-            if (!onSearch && (searchInput.val() !== '' || numKeywordsChecked !== 0)) {
-                main.css({
-                    'opacity': '0.3'
-                });
-                
-            } else if (onSearch) {
-                main.css({
-                    'opacity': '1'
-                });
-            }
+            artText.css('color', 'white');
+            artTitle.css('background-color', 'rgba(0,0,0,.9)');
             main.hover(
                 function () {
                     artText.css('color', 'white');
@@ -3069,15 +1851,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     artTitle.css('background-color', 'rgba(0,0,0,.5)')
                 }
             )
-            if (currCollection.Name !== "The Life of Alfred Nobel" || true) {
-                main.append(tileImage)
-                    .append(artTitle)
-                    .append(yearTextBox);
-            }
-            else {
-                main.append(tileImage)
-                    .append(yearTextBox);
-            }
+
+            main.append(tileImage)
+                .append(artTitle);
+ 
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
                 if (currentWork.Metadata.ContentType == "tour" || currentWork.Metadata.ContentType == undefined) {
                     tourLabel = $(document.createElement('img'))
@@ -3111,10 +1888,16 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     main.css({ 'height': (0.3) * tileDivHeight });
                 }
             } else {
-                var tileHeight = (0.45) * tileDivHeight;
-                main.css({ 'height': (0.45) * tileDivHeight });
+                var tileHeight = (0.4) * tileDivHeight;
+                main.css({ 'height': (0.4) * tileDivHeight });
             }
-            main.css({ 'width': (tileHeight / TILE_HEIGHT_RATIO) * TILE_WIDTH_RATIO });
+            main.css({ 
+                'width': 1.25*tileHeight,
+                'box-shadow': '5px 5px 5px black',
+                'border': '3px solid',
+                'border-color': NOBEL_COLOR,
+                'border-radius': '3%'
+            });
             // Align tile so that it follows the grid pattern we want
 
             if (!twoDeep) {
@@ -3131,7 +1914,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }
             } else {
                 main.css({
-                    'left': Math.floor(i / 2) * (main.width() + TILE_BUFFER),
+                    'left': Math.floor( i / 2) * (main.width() + TILE_BUFFER),
                     'top': Math.floor(i % 2) * (main.height() + TILE_BUFFER)
                 });
             }
@@ -3572,9 +2355,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             if (!artwork) {
                 return;
             }
-            selectedArtworkContainer.animate({'opacity': 0}, ANIMATION_DURATION/5, function(){
-                selectedArtworkContainer.css('display', 'none')
-                });
             root.find('.tile').each(function (tileIndex, tile) {
                 if (!searchResultsLength || tileIndex < searchResultsLength) { // If searchResultsLength is nul||undefined there was no search done.
                     $(this).css({
@@ -3666,7 +2446,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }
                 //if there are more than 3 artworks associated with the date year
                 if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3){
-                    selectedArtworkContainer.css("overflow-x", "scroll")
                     leftOffset = bottomContainer.width()/10
                     shift = 0;
                 }
@@ -3692,6 +2471,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                                 //reset the timer, and the total time spent with the previewer
                                 //open is recorded (this is only one event)
                 //doNothing("restarting previewer timer");
+                switchPage(artwork);
                 global_artwork_prev_timer.restart(); //restarts the previewer timer for telemetry
             }
             var rootWidth,
@@ -3718,21 +2498,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
             if (!artwork) {
                 return;
-            }
-
-            selectedArtworkContainer.off();
-
-            if (artworkShown) {
-                selectedArtworkContainer.animate(
-                        {"opacity": 0}, 
-                        0, //JessF: took out animation fade in and out because it causes problems with double clicks
-                        function () {
-                            animateCatalogDiv();
-                        }
-                )
-            } 
-            else {
-                animateCatalogDiv();
             }
                 
 
@@ -3771,48 +2536,14 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 //}, duration, null, function(){
                 //center selectedArtworkContainer over current artwork thumbnail
                 fillSelectedArtworkContainer();
-                selectedArtworkContainer.css({
-                    'width' : getContainerWidth(artwork,showAllAtYear),
-                    'left' : getContainerLeft(artwork,showAllAtYear),
-                    'display': 'inline',
-                    'opacity':1
-                });
                 if (oneDeep) {
                         console.log("hiding selected Artwork Container")
-                        selectedArtworkContainer.css({
-                            'display': 'none'
-                        });
                     //insert code to highlight orange
                         selectedTile = artworkTiles[artwork.Identifier];
                         artworkTiles[artwork.Identifier].css({ 'border': '5px solid #fea100', 'opacity':'1' });
                    
                 }
                 
-                
-                if (showAllAtYear && artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()].length >= 3) {
-                    selectedArtworkContainer.css({
-                        "overflow-x": "scroll"
-                    });
-                }
-                //add back handlers
-                if (selectedArtworkContainer[0].addEventListener) {
-                    // IE9, Chrome, Safari, Opera
-                    selectedArtworkContainer[0].addEventListener("mousewheel", 
-                        function(e){
-                            e.stopPropagation();
-                        }, false);
-                    // Firefox
-                    selectedArtworkContainer[0].addEventListener("DOMMouseScroll",
-                        function(e){
-                            e.stopPropagation();
-                        }, false);
-                } else { 
-                    // IE 6/7/8
-                    selectedArtworkContainer[0].attachEvent("onmousewheel",
-                        function(e){
-                            e.stopPropagation();
-                        }, false);
-                }
                 //selectedArtworkContainer.children().animate({"opacity": 1},ANIMATION_DURATION/5);
                 scrollPos = tilePos;
                 comingBack = false;
@@ -3835,20 +2566,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     doNothing("closed previewer; target has no id");
                 }
                 */
-
-                var subject = selectedArtworkContainer;
-                if (e.target.id != subject.attr('id') && !$(e.target).hasClass('tileImage') &&!$(e.target).hasClass('timelineEventCircle') && !subject.has(e.target).length){    
-                    if (artworkShown){
-                        hideArtwork(currentArtwork)();
-                    }
-                }
             });
 
             function fillSelectedArtworkContainer(){
                 //Set up elements of selectedArtworkContainer
                 previewWidth = (0.38) * $("#tagRoot").width();
-
-                selectedArtworkContainer.empty();
 
                 closeButton = $(document.createElement('img'));
                 closeButton.attr('src', tagPath + 'images/icons/x.svg');
@@ -3868,26 +2590,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 });
                 
                 artworksForYear = artworkCircles[artwork.Identifier] && artworkYears[artworkCircles[artwork.Identifier].timelineDateLabel.text()];
-               
-                //If there are multiple artworks that should all be shown, selectedArtworkContainer will contain all of them and be larger
-                if (showAllAtYear && artworksForYear){
-                    for (i = 0; i < artworksForYear.length; i++) {
-                        newTile = createOnePreviewTile(artworksForYear[i],i);
-                        newTile.css({
-                            'left': (i * previewWidth) + 'px',
-                            'width': previewWidth
-                        });
-                        if (i===0){
-                            newTile.append(closeButton);
-                        }
-                    }
-                    containerWidth = Math.min(($("#tagRoot").width()*.80), (artworksForYear.length) * previewWidth);
-                } else {
-                    newTile = createOnePreviewTile(artwork,0);
-                    newTile.css('left', '0%');
-                    newTile.append(closeButton);
-                    containerWidth = previewWidth;
-                }
             }
 
             /* Helper method to create a preview tile for an artwork and append to selectedArtworkContainer
@@ -4072,7 +2774,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     'text-align': 'center',
                     'width' : '100%'
                 });
-                //exploreText.append(whiteArrow);
 
                 exploreTab.append(exploreText)
 
@@ -4355,7 +3056,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         });
 
 
-                        miniTile.css('left', j * (miniTile.width() + miniTilesHolder.height() / 10));
+                        miniTile.css('left', j * (miniTile.width() + miniTilesHolder.height() / 2));
 
                         switch (metadata.ContentType) {
                             case 'Audio':
@@ -4479,24 +3180,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
                 descSpan.append(descText);
                 tileBottom.append(descSpan);
-
-                miniTilesLabel = $(document.createElement('div'))
-                                    .addClass("miniTilesLabel");
-                miniTilesHolder = $(document.createElement('div'))
-                                    .addClass('miniTilesHolder');
-                tileBottom.append(miniTilesHolder)
-                           .append(miniTilesLabel);
-
-                previewTile.append(tileTop)
-                           //.append(tileBottom);
-
-                //selectedArtworkContainer.append(previewTile);
-                selectedArtworkContainer.css({
-                    'border': '5px solid '+NOBEL_WILL_COLOR,
-                    'border-radius': '14px',
-                })
                 
-                selectedArtworkContainer.append(previewTile);
                 root.find('.tile').css('opacity','0.5');
   
                 var numberAssociatedDoqs = 0;
@@ -4871,7 +3555,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         currentTag = tag;
         colorSortTags(currentTag);
         drawCatalog(artworks, currentTag, 0, false, false);
-        doSearch(false); // search with new tag
+        //doSearch(false); // search with new tag
     }
 
     /**
@@ -4894,7 +3578,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
             backCollection: currCollection,
-            prevSearch: {'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions},
             prevTag : currentTag,
             backArtwork: tour,
             prevMult : multipleShown
@@ -4932,7 +3615,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             prevScroll: catalogDiv.scrollLeft(),
             prevPreviewPos : containerLeft || selectedArtworkContainer.position().left,
             prevTag: currentTag,
-            prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions },
             prevMult: multipleShown
         };
         videoPlayer = TAG.Layout.VideoPlayer(video, currCollection, prevInfo);
@@ -4954,7 +3636,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 splitopts = 'L',
                 opts = getState(),
                 confirmationBox,
-                slideMode = true,
+                slideMode = false,
                 avl,
                 avlArray = [],
                 prevInfo;
@@ -4965,28 +3647,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             }
             if (currCollection.Name !== "The Life of Alfred Nobel") {
                 slideMode = false;
-            }
-
-            /*if (slideMode === true) {
-                avl = sortByYear(currentArtworks, false);
-                if(!avl.isEmpty()){
-                    avlArray.push(avl.remove());
-                    while (!avl.isempty()) {
-                        var cur = avl.remove();
-                        if (cur < avlArray[0]) {
-                            avlArray.unshift(cur)
-                        }
-                        else {
-                            avlArray.push(cur);
-                        }
-                    }
-                }
-            }*/
-            if (slideMode === true) {
-                avl = sortByYear(currentArtworks, true);
-                while (!avl.isEmpty()) {
-                    avlArray.push(avl.remove(avl.min()));
-                }
             }
 
             if (artwork.Type === "Empty" && artwork.Metadata.Type !== "VideoArtwork" && artwork.Metadata.ContentType !== "iframe") { // tour
@@ -5042,11 +3702,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     prevPreview: currCollection.Name === "The Life of Alfred Nobel" ? null : currentArtwork,
                     prevTag: currCollection.Name === "The Life of Alfred Nobel" ? null : currentTag,
                     prevScroll: catalogDiv.scrollLeft(),
-                    prevPreviewPos: containerLeft || selectedArtworkContainer.position().left,
+                    prevPreviewPos: containerLeft,
                     prevCollection: currCollection,
                     prevPage: 'catalog',
                     prevMult: multipleShown,
-                    prevSearch: { 'searchText': searchInput.val(), 'keywordSearchOptions': keywordSearchOptions },
                     assocMediaToShow: associatedMedia,
                     onAssocMediaView : onAssocMediaView,
                     smallPreview: smallPreview,
@@ -5071,45 +3730,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         }
     }
     this.switchPage = switchPage;
-    //UNCOMMENT IF WE EVER WANT SPLITSCREEN ACCESS FROM CATALOG
-    //     /**
-    //  * Initializes splitscreen functionality
-    //  * @method initSplitscreen
-    //  */
-    // function initSplitscreen() {
-    //     splitscreenIcon.attr({
-    //             src: tagPath+'images/SplitWhite_dotted.svg'
-    //         })
-    //         .addClass('bottomButton')
-    //     if (TAG.Util.Splitscreen.isOn()) {
-    //         splitscreenIcon.css('display', 'none');
-    //     }
-    //     splitscreenIcon.on('click', function () {
-    //         var collectionsPage,
-    //             collectionsPageRoot,
-    //             newCollectionsPage,
-    //             newCollectionsPageRoot;
 
-    //         if (!TAG.Util.Splitscreen.isOn()) {
-    //             TAG.Util.Splitscreen.setOn(true);
-    //             collectionsPage = TAG.Layout.CollectionsPage();
-    //             collectionsPageRoot = collectionsPage.getRoot();
-    //             collectionsPageRoot.data('split', 'R');
-
-    //             newCollectionsPage = TAG.Layout.CollectionsPage();
-    //             newCollectionsPageRoot = newCollectionsPage.getRoot();
-    //             newCollectionsPageRoot.data('split', 'L');
-    //             setTimeout(function(){
-    //                 root.detach();
-    //                 root = newCollectionsPageRoot;
-    //                 newCollectionsPage.loadCollection(currCollection, scrollPos, currentArtwork)
-    //                 infoButton.css("float", "left");
-    //                 linkButton.css("float", "left");
-    //             }, 1000);
-    //             TAG.Util.Splitscreen.init(newCollectionsPageRoot, collectionsPageRoot);
-    //         }
-    //     });
-    // }
 
     /**
      * Gets the current state of the collections page

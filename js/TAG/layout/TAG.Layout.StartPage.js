@@ -22,6 +22,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options.tagContainer = $("#tagRoot");
 
     var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
+        goToCollectionsButton = root.find('#goToCollectionsButton'),
         goToWillButton = root.find('#goToWillButton'),
         goToWillImage = root.find('#goToWillImage'),
         goToHistoryButton = root.find('#goToHistoryButton'),
@@ -385,11 +386,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     $('#authoringButtonBuffer').remove();
         // }
         
-        /**
+
         if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
             goToCollectionsButton.text("Go to Artwork");
         }
-        **/
+
         goToWillImage.css({
             'width': '80%',
             'border-radius': '50%',
@@ -442,7 +443,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             switchPage(LIFE_NAME, true);
         });
         
-        /**
         goToCollectionsButton.on('click', function () {
             jQuery.data(document.body, "isKiosk", true);
             if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
@@ -478,7 +478,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 switchPage();
             }
         });
-        **/
         
         setImagePaths(main);
         setUpCredits();
@@ -554,6 +553,13 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
             if (collectionName){
                 if (collectionName === WILL_NAME) {
+                    var will = TAG.Layout.NobelWill(1);/*
+                    var newPageRoot = will.getRoot();
+                    currentPage.obj = will;
+                    console.log(newPageRoot)
+                    newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                    TAG.Util.UI.slidePageLeftSplit(root, newPageRoot, function () { console.log("done")});
+                    /*
                     TAG.Worktop.Database.getDoq("9f3ed716-af94-4934-8c5e-79d1065a9fa2",
                         function (result) {
                             if($("#startPageLoadingOverlay").length){
@@ -575,7 +581,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             else {
                                 buttonClicked = false;
                             }
-                        }); 
+                        });
+                    var will = TAG.Layout.NobelWill(1);*/
                 }
                    
                 else if (collectionName === INTRO_TOUR) {//Hardcode to bring user directly into introductory tour. Not a collection page. Sorry.
@@ -705,14 +712,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     });
                 }
             } else {
+                console.log('reached');
                 collectionsPage = TAG.Layout.CollectionsPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration)); // TODO merging
-                if ($("#startPageLoadingOverlay").length) {
+                //if ($("#startPageLoadingOverlay").length) {
                     TAG.Util.UI.slidePageLeftSplit(root, collectionsPage.getRoot());
                     currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
                     currentPage.obj = collectionsPage;
-                } else {
-                    buttonClicked = false;
-                }
+                //} else {
+                //    buttonClicked = false;
+                //}
             }           
         }
 
@@ -1130,7 +1138,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             goToLifeButton.css({"color": "white"});
         });
 
-        /**
         goToCollectionsButton.on('click', 'a', function (evt) {
             // this === the link that was clicked
             var href = $(this).attr("href");
@@ -1139,7 +1146,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToCollectionsButton.on("mousedown", function () {
             goToCollectionsButton.css({"background-color": "transparent", "color": "white"});
         });
-        **/
+
     }
 
 

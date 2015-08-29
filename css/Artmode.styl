@@ -28,26 +28,15 @@ headerTitle(size)
 	max-height 100%
 
 #artmodeRoot #backBttnContainer
-	width 13%
-	height 5%
-	margin 4% 4% 1% 4%
+	width 7.5%
+	height auto
+	margin 2% 0% 0% 2%
+	position absolute
+	z-index 1000000
 
 #artmodeRoot #backButton
 	cursor pointer
 	wh 100%
-
-#artmodeRoot #homeButton
-	cursor pointer
-	wh 100%
-
-#artmodeRoot #homeButtonArea
-	width 13%
-	height 5%
-	margin 4% 4% 1% 8%
-	position absolute
-	left 13%
-	top 0%
-	margin-left 
 
 #artmodeRoot .thumbnailButtonContainer
 	display table
@@ -79,11 +68,15 @@ headerTitle(size)
 	white-space normal
 
 #artmodeRoot #infoTitle
-	font-size 150%
+	font-size 100%
 	clear both
-	overflow hidden
+	overflow visible
 	text-overflow ellipsis
 	white-space normal
+	font-weight bold
+	text-transform uppercase
+	word-break break-word
+	margin 20% 20% 0% 10%
 	
 #artmodeRoot #infoYear
 	headerTitle(90%)
@@ -130,7 +123,6 @@ headerTitle(size)
 	width: 77%
 	position absolute
 	overflow-x hidden
-
 	
 #artmodeRoot #locationHistoryPanel
 	width 87.5%
@@ -187,32 +179,6 @@ headerTitle(size)
 	text-align center
 	font-size 50%
 	margin-top: -4%
-
-#artmodeRoot #minimap
-	position absolute
-	top 0%
-	left 0
-	right 0
-	margin auto
-	bottom 0%
-	z-index 10
-
-#artmodeRoot #minimapContainer
-	width 80%
-	height 14%
-	background-color rgba(0,0,0,.9)
-	bottom -17%
-	left 10%
-	position absolute
-	vertical-align middle
-	border 1px solid white
-
-#artmodeRoot #minimaprect
-	position absolute
-	border solid white 1px
-	width 100%
-	z-index 50
-	pointer-events none
 
 #artmodeRoot .seadragonManipButtoninout 
 	cursor pointer
@@ -296,7 +262,8 @@ headerTitle(size)
 	width 140px
 
 #artmodeRoot #sideBar
-	background-color rgba(0,0,0,0.7)
+	background-color rgba(0,0,0,1)
+	border-right 3px solid #D99B3B
 	display block
 	height 100%
 	left 0px
@@ -318,14 +285,18 @@ headerTitle(size)
 	position relative
 
 #artmodeRoot #toggler
-	background-color rgba(0,0,0,0.7)
+	background-color rgba(0,0,0,1)
+	border-top 3px solid #D99B3B
+	border-right 3px solid #D99B3B
+	border-bottom 3px solid #D99B3B
 	border-bottom-right-radius 3.5px
 	border-top-right-radius 3.5px
-	position absolute
-	right -12%
-	top 45%
-	wh 12%
-	z-index 100
+	position relative
+	left 100%
+	top 40%
+	width 12.5%
+	height 15%
+	z-index -1
 	
 #artmodeRoot #togglerImage
 	position absolute
