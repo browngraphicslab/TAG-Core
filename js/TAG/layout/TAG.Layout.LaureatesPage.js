@@ -936,7 +936,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             toggleSelectedPrize($(this))
                         });
                         title.text('Physics')
-                        image.attr('src', tagPath + 'images/temp_physics.png');
+                        image.attr('src', tagPath + 'images/prize_icons/physics.svg');
                         
                     } else if (i == 1) {
 
@@ -944,7 +944,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             toggleSelectedPrize($(this))
                         });
                         title.text('Chemistry');
-                        image.attr('src', tagPath + 'images/temp_chem.png');
+                        image.attr('src', tagPath + 'images/prize_icons/chemistry.svg');
 
                     } else if (i == 2) {
 
@@ -952,7 +952,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             toggleSelectedPrize($(this))
                         });
                         title.text('Medicine');
-                        image.attr('src', tagPath + 'images/temp_medicine.png');
+                        image.attr('src', tagPath + 'images/prize_icons/medicine.svg');
 
                     } else if (i == 3) {
 
@@ -960,7 +960,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             toggleSelectedPrize($(this))
                         });
                         title.text('Literature');
-                        image.attr('src', tagPath + 'images/temp_literature.png');
+                        image.attr('src', tagPath + 'images/prize_icons/literature.svg');
 
                     } else if (i == 4) {
 
@@ -968,7 +968,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             toggleSelectedPrize($(this))
                         });
                         title.text('Peace');
-                        image.attr('src', tagPath + 'images/temp_peace.png');
+                        image.attr('src', tagPath + 'images/prize_icons/peace.svg');
 
                     } else if (i == 5) {
 
@@ -976,7 +976,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             toggleSelectedPrize($(this))
                         });
                         title.text('Economics');
-                        image.attr('src', tagPath + 'images/temp_economics.png');
+                        image.attr('src', tagPath + 'images/prize_icons/economics.svg');
 
                     }
                     prizeButtonArray.push(filter);
@@ -3101,22 +3101,22 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 var category = currentWork.Metadata.InfoFields[yellowTextFields[0]].split(' ')[currentWork.Metadata.InfoFields[yellowTextFields[0]].split(' ').length - 1];
 
                 if (category === "Physics") {
-                    artIcon.attr('src', tagPath + 'images/temp_physics.png');
+                    artIcon.attr('src', tagPath + 'images/prize_icons/physics.svg');
                     artTitle.css('background-color', 'rgba(163, 168, 73, 0.8)');
                 } else if (category === "Chemistry") {
-                    artIcon.attr('src', tagPath + 'images/temp_chem.png');
+                    artIcon.attr('src', tagPath + 'images/prize_icons/chemistry.svg');
                     artTitle.css('background-color', 'rgba(153, 0, 53, 0.8)');
                 } else if (category === "Medicine") {
-                    artIcon.attr('src', tagPath + 'images/temp_medicine.png');
+                    artIcon.attr('src', tagPath + 'images/prize_icons/medicine.svg');
                     artTitle.css('background-color', 'rgba(60, 62, 111, 0.8)');
                 } else if (category === "Literature") {
-                    artIcon.attr('src', tagPath + 'images/temp_literature.png');
+                    artIcon.attr('src', tagPath + 'images/prize_icons/literature.svg');
                     artTitle.css('background-color', 'rgba(198, 121, 28, 0.8)');
                 } else if (category === "Peace") {
-                    artIcon.attr('src', tagPath + 'images/temp_peace.png');
+                    artIcon.attr('src', tagPath + 'images/prize_icons/peace.svg');
                     artTitle.css('background-color', 'rgba(0, 98, 144, 0.8)');
                 } else if (category === "Economics") {
-                    artIcon.attr('src', tagPath + 'images/temp_economics.png');
+                    artIcon.attr('src', tagPath + 'images/prize_icons/economics.svg');
                     artTitle.css('background-color', 'rgba(91, 75, 34, 0.8)');
                 }
             } else {
@@ -4094,17 +4094,17 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
 
                     if (category === "Physics") {
-                        iconImg.attr('src', tagPath + 'images/temp_physics.png');
+                        iconImg.attr('src', tagPath + 'images/prize_icons/physics.svg');
                     } else if (category === "Chemistry") {
-                        iconImg.attr('src', tagPath + 'images/temp_chem.png');
+                        iconImg.attr('src', tagPath + 'images/prize_icons/chemistry.svg');
                     } else if (category === "Medicine") {
-                        iconImg.attr('src', tagPath + 'images/temp_medicine.png');
+                        iconImg.attr('src', tagPath + 'images/prize_icons/medicine.svg');
                     } else if (category === "Literature") {
-                        iconImg.attr('src', tagPath + 'images/temp_literature.png');
+                        iconImg.attr('src', tagPath + 'images/prize_icons/literature.svg');
                     } else if (category === "Peace") {
-                        iconImg.attr('src', tagPath + 'images/temp_peace.png');
+                        iconImg.attr('src', tagPath + 'images/prize_icons/peace.svg');
                     } else if (category === "Economics") {
-                        iconImg.attr('src', tagPath + 'images/temp_economics.png');
+                        iconImg.attr('src', tagPath + 'images/prize_icons/economics.svg');
                     }
 
                 } else {
