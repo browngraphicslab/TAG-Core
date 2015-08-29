@@ -60,8 +60,8 @@ TAG.Layout.WillVideo = function () {
     }
 
     function loadWill() {
-        //TO DO WHEN WILL PAGE UP
-
+        root.remove();
+        var will = TAG.Layout.NobelWill(1);
     }
 
     /**

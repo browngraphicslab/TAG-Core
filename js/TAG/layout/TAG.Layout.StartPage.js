@@ -555,37 +555,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
             if (collectionName){
                 if (collectionName === WILL_NAME) {
-                    var willVideo = TAG.Layout.WillVideo();
-                    var willVidRoot = willVideo.getRoot();
-                    willVidRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                    TAG.Util.UI.slidePageLeftSplit(root, willVidRoot, willVideo.playVid);
-    
-                    /**
-                    TAG.Worktop.Database.getDoq("9f3ed716-af94-4934-8c5e-79d1065a9fa2",
-                        function (result) {
-                            if($("#startPageLoadingOverlay").length){
-                                var artworkViewer = TAG.Layout.ArtworkViewer({
-                                    doq: result,
-                                    isNobelWill: true
-                                });
-                                var newPageRoot = artworkViewer.getRoot();
-                                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                                if ($("#startPageLoadingOverlay").length) {
-                                    TAG.Util.UI.slidePageLeftSplit(root, newPageRoot, artworkViewer.initializeHotspots);
-                                    currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                                    currentPage.obj = artworkViewer;
-                                }
-                                else {
-                                    buttonClicked = false;
-                                }
-                            }
-                            else {
-                                buttonClicked = false;
-                            }
-                        }); 
-                        **/
-                }
-                   
+                    var will = TAG.Layout.NobelWill(1);
+                }                
                 else if (collectionName === INTRO_TOUR) {//Hardcode to bring user directly into introductory tour. Not a collection page. Sorry.
                     TAG.Worktop.Database.getDoq("ec87282f-4327-492a-8807-27eccbb45b8c", function (doq) {
                         if ($("#startPageLoadingOverlay").length) {
