@@ -39,7 +39,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locked = TAG.Worktop.Database.getLocked(),     //Check for locked
         // constants
         FIX_PATH = TAG.Worktop.Database.fixPath,
-        PRIMARY_FONT_COLOR = "D99B3B",
+        PRIMARY_FONT_COLOR = "#D99B3B",
         SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
         FONT = TAG.Worktop.Database.getMuseumFontFamily(),
 
@@ -2259,7 +2259,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     'font-size': '75%',
                     'display': 'inline-block',
                     'overflow-y': 'visible',
-                    'margin-top': '-10%'
+                    'margin-top': '0%',
+                    'margin-left': '10%',
+                    'margin-right': '10%'
                 });
                 descriptionDiv.addClass('description');
                 descriptionDiv.text(description);
