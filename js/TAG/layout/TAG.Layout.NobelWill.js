@@ -25,13 +25,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         sideBar,
         nobelIsPlaying = false,
         nobelPlayPauseButton,
+		canvas = $(document.createElement("canvas")),
         currentAudio,
         muteButton,
         nobelMuted = false,
+		background,
         rightStack = getRightTable(),
         toggleHotspotButton,
         associatedMediaScroller,
         hotspotsShown,
+		bezierVisible = false,
         willImage,
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         //NOBEL_WILL_COLOR = 'rgb(189,125,13)',
@@ -60,7 +63,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function nobelWillInit() {
         $("#splashScreenRoot").remove();
         SetWillImage(pageNumber);
-        var background = $(document.createElement('div'));
+        background = $(document.createElement('div'));
         background.css({
             "height": '100%',
             "width": "100%",
@@ -164,6 +167,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         $("#backButton").remove();
 
+        canvas[0].height = 1080;
+        canvas[0].width = 1920;
+        canvas.css("position", "absolute");
+
+        root.append(canvas);
+
+
         switch (pageNumber) {
             case 1:
                 associatedMediaNobelKeywords = [['Alfred Bernhard', 0], ['Robert Nobel', 1], ['Emanuel Nobel', 2], ['Sofie Kapy von Kapivar', 5], ['Alarik Liedbeck', 6]]
@@ -252,6 +262,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
         }
+
+
         var placeInChunk = 0;
         var currentChunkNumberIteratingOver = 0;
         for (var i = 0; i < associatedMediaNobelKeywords.length; i++) {
@@ -264,7 +276,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             {
                 placeInChunk++;
             }
-            associatedMedia[i] = makeAsocciatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk);
+            associatedMedia[i] = makeAsocciatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk,i);
         }
         var currentHeight = 0;
         for (var i = 0; i < leftTextArray.length; i++) {
@@ -553,7 +565,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                 makeNobelHotspots(associatedMediaNobelKeywords, hardcodedHotspotSpecs)
 
-
                 setChunkNumber(0, null, 1);
 
                 var j = 1
@@ -570,17 +581,54 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         )
     }
     function checkForHotspots() {
+    	var ctx = canvas[0].getContext("2d");
+    	ctx.clearRect(0, 0, 1080, 1920);
+    	var w = canvas[0].width;
+    	canvas[0].width = 1;
+    	canvas[0].width = w;
+
     	for (var i = 0; i < nobelHotspots.length; i++) {
     		nobelHotspots[i][1].stop(true, true);
     		if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top && nobelHotspots[i][0].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
     			nobelHotspots[i][1].fadeIn();
+
+    			var div = nobelHotspots[i][0];
+    			function percentToPxLeft(percent) {
+    				return (percent / 100) * sideBar.height();
+    			}
+
+    			function percentToPxTop(percent) {
+    				return (percent / 100) * background.width();
+    			}
+
+    			ctx.beginPath();
+    			ctx.moveTo(div.offset().left + div.width() + 4, div.offset().top + (div.height() / 2));
+    			var finalx = nobelHotspots[i][1].offset().left;
+    			var finaly = nobelHotspots[i][1].offset().top + (nobelHotspots[i][1].height() / 2);
+    			ctx.bezierCurveTo(finalx, div.offset().top + (div.height() / 2), div.offset().left + div.width() + 4, finaly, finalx, finaly)
+    			ctx.lineWidth = 3;
+    			ctx.strokeStyle = "rgba(200,20,20,120)";
+    			ctx.stroke();
     		}
     		else {
     			nobelHotspots[i][1].fadeOut()
     		}
     	}
+    	bezierVisible = true;
     }
-    function makeAsocciatedMediaDiv(string, imageurl, chunkN, numberInChunk) {
+
+    function hideBezier() {
+    	if (bezierVisible) {
+    		var ctx = canvas[0].getContext("2d");
+    		ctx.clearRect(0, 0, 1080, 1920);
+    		var w = canvas[0].width;
+    		canvas[0].width = 1;
+    		canvas[0].width = w;
+    		bezierVisible = false;
+    	}
+    }
+
+    function makeAsocciatedMediaDiv(string, imageurl, chunkN, numberInChunk, number) {
         var middlespace = 25;
         var numberOfMedia = 0;
         for (var i = 0; i < associatedMediaNobelKeywords.length; i++) {
@@ -621,6 +669,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.chunkNumber = chunkN;
         div.numberInChunk = numberInChunk;
         div.Identifier = chunkN + "#" + numberInChunk;
+
         return div;
     }
 
@@ -700,7 +749,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
     }
     function hideNobelAssociatedMedia() {
-        $("#annotatedImageAssetCanvas").css("z-index", '50');
+    	$("#annotatedImageAssetCanvas").css("z-index", '50');
+    	var ctx = canvas[0].getContext("2d");
+    	ctx.clearRect(0, 0, 1080, 1920);
+    	var w = canvas[0].width;
+    	canvas[0].width = 1;
+    	canvas[0].width = w;
         for (var j = 0; j < associatedMedia.length; j++) {
         	associatedMedia[j].fadeOut();
         }
@@ -837,6 +891,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 class: 'nobelHotspot'
             });
 
+            function percentToPxLeft(percent) {
+            	return (percent / 100) * sideBar.height();
+            }
+
+            function percentToPxTop(percent) {
+            	return (percent / 100) * background.width();
+            }
+
             div.click(function () {
                 pauseNobel();
             })
@@ -844,6 +906,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             root.append(div);
             div.MiddleY = div.offset().top + (div.height() / 2);
             nobelHotspots.push([div, associatedMedia[i]]);
+			
         }
     }
     /**
@@ -1101,7 +1164,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         		}*/
         		list.push(media);
         		media.show()
-        		//list.update();
+        		list.hideBez();
         	}
         }
         list.removeMedia = function (media) {
@@ -1115,8 +1178,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         		}*/
         		list.remove(media);
         		media.hide();
-        		//list.update();
+        		list.hideBez();
         	}
+        }
+        list.hideBez = function () {
+        	hideBezier();
         }
         return list;
     }
