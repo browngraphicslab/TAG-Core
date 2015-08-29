@@ -423,27 +423,71 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '1%',
                     'width': '75.5%',
                     'height': '10%',
-                    'z-index': '99'
+                    'z-index': '100'
                 }).click(pauseNobel)
-
+                sideBar.mouseup(function (e) {
+                	mouseUp(e)
+                })
+                willImage.mouseup(function (e) {
+                	mouseUp(e)
+                })
                 sliderBar.mousedown(function (e) {
                     dragging = true;
                     lastDragY = e.clientY;
                 })
                 sliderBar.mouseup(function (e) {
-                	dragging = false;
-
+                	mouseUp(e)
                 })
+                function percentToPx(percent) {
+                	return (percent / 100) * sideBar.height();
+                }
+                function mouseUp(e) {
+                	if (dragging) {
+                		if (e.clientX > 100) {
+                			var lineMiddle = sliderBar.offset().top + (sliderBar.height() / 2);
+                			var closest = 0;
+                			var closestDist = 5000000;
+                			for (var i = 0; i < sliderPositions.length ; i++) {
+                				var middle = percentToPx(sliderPositions[i][0]) + (percentToPx(sliderPositions[i][1]) / 2);
+                				if (Math.abs(lineMiddle - middle) < closestDist) {
+                					closestDist = Math.abs(lineMiddle - middle);
+                					closest = i;
+                				}
+                			}
+                			setChunkNumber(closest, checkForHotspots, 250);
+                		}
+                		dragging = false;
+                	}
+                }
                 sliderBar.mousemove(function (e) {
-                    if (dragging) {
-                        var diff = e.clientY - lastDragY;
-                        lastDragY = e.clientY;
-                        sliderBar.css({
-                            "top" : sliderBar.offset().top + diff + "px"
-                        })
-                    }
+                	mouseMove(e)
                 })
-
+                sideBar.mousemove(function (e) {
+                	mouseMove(e)
+                })
+                willImage.mousemove(function (e) {
+                	mouseMove(e)
+                })
+                function mouseMove(e) {
+                	if (dragging) {
+                		var diff = e.clientY - lastDragY;
+                		if ((diff > 0 && rightStack.direction() === "bottom") || ( diff<0 && rightStack.direction() == "top")) {
+                			//rightStack.switchHead();
+                		}
+                		lastDragY = e.clientY;
+                		sliderBar.css({
+                			"top": sliderBar.offset().top + diff + "px"
+                		})
+                		for (var i = 0; i < nobelHotspots.length; i++) {
+                			if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top && nobelHotspots[i][0].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
+                				rightStack.addMedia(nobelHotspots[i][1]);
+                			}
+                			else {
+                				rightStack.removeMedia(nobelHotspots[i][1]);
+                			}
+                		}
+                	}
+                }
 
                 sideBar.css('z-index', '10');
                 var up = $(document.createElement('img'))
@@ -468,10 +512,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     function () {
                         if (nobelIsPlaying === true) {
                             pauseNobel()
-                            prevChunk();
+                            prevChunk(checkForHotspots);
                         }
                         else {
-                            prevChunk();
+                        	prevChunk(checkForHotspots);
                         }
                     }
                 )
@@ -495,10 +539,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     function () {
                         if (nobelIsPlaying === true) {
                             pauseNobel();
-                            nextChunk();
+                            nextChunk(checkForHotspots);
                         }
                         else {
-                            nextChunk();
+                        	nextChunk(checkForHotspots);
                         }
                     }
                 )
@@ -525,7 +569,17 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             }
         )
     }
-
+    function checkForHotspots() {
+    	for (var i = 0; i < nobelHotspots.length; i++) {
+    		nobelHotspots[i][1].stop(true, true);
+    		if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top && nobelHotspots[i][0].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
+    			nobelHotspots[i][1].fadeIn();
+    		}
+    		else {
+    			nobelHotspots[i][1].fadeOut()
+    		}
+    	}
+    }
     function makeAsocciatedMediaDiv(string, imageurl, chunkN, numberInChunk) {
         var middlespace = 25;
         var numberOfMedia = 0;
@@ -551,12 +605,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }).text(string);
         div.attr({ attr: string });
         associatedMediaScroller.append(div);
+        div.hide();/*
         div.fadeIn = function () {
             div.animate({ opacity : 1 }, 400, 'easeInOutQuart');
         }
         div.fadeOut = function () {
             div.animate({ opacity: 0 }, 400, 'easeInOutQuart');
-        }
+        }*/
         div.getTop = function () {
             return div.css("top");
         }
@@ -566,7 +621,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.chunkNumber = chunkN;
         div.numberInChunk = numberInChunk;
         div.Identifier = chunkN + "#" + numberInChunk;
-        div.show();
         return div;
     }
 
@@ -610,9 +664,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         nobelPlayPauseButton.attr({
             src: tagPath + '/images/icons/nobel_play.svg'
         })
-        if ($("#annotatedImageAssetCanvas").css('z-index') !== '50') {
-            hideNobelAssociatedMedia();
-        }
     }
     function stopAudio() {
         if (currentAudio) {
@@ -631,7 +682,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         else {
             makeAndPlaySound(incrNext);
         }
-        hideNobelAssociatedMedia();
         nobelIsPlaying = true;
         nobelPlayPauseButton.attr({
             src: tagPath + '/images/icons/nobel_pause.svg'
@@ -652,7 +702,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function hideNobelAssociatedMedia() {
         $("#annotatedImageAssetCanvas").css("z-index", '50');
         for (var j = 0; j < associatedMedia.length; j++) {
-            //associatedMedia[j].hide();
+        	associatedMedia[j].fadeOut();
         }
     }
     /*
@@ -766,10 +816,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function makeNobelHotspots(names, hotSpotInfo) {
         nobelHotspots = [];
-        for (var i = 0; i < textDivArray.length; i++) {
-            nobelHotspots.push([]);
-        }
         for (var i = 0; i < associatedMedia.length; i++) {
+			console.log("making nobel hotspot")
             var div = $(document.createElement('img'));
             div.css({
                 'position': 'absolute',
@@ -792,9 +840,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             div.click(function () {
                 pauseNobel();
             })
-
+            div.assocMedia = associatedMedia[i];
             root.append(div);
-            nobelHotspots[names[i][1]].push([div, associatedMedia[i]]);
+            div.MiddleY = div.offset().top + (div.height() / 2);
+            nobelHotspots.push([div, associatedMedia[i]]);
         }
     }
     /**
@@ -849,7 +898,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             else {
                 $("#downIcon").fadeIn(duration || 1000, 'easeInOutQuart');
             }
-            moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { if (nobelIsPlaying) { makeAndPlaySound(callback) }; } : function () { if (nobelIsPlaying) { makeAndPlaySound() } }, duration || 1000);
+            moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { if (nobelIsPlaying) { makeAndPlaySound(callback) }; checkForHotspots() } : function () { if (nobelIsPlaying) { makeAndPlaySound() }; checkForHotspots() }, duration || 1000);
 
             //TODO :  add enabling associated media
             if (associatedMediaNobelLocations) {
@@ -1009,8 +1058,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function getRightTable() {
         var list = [];
         var head = "top";
-
-        function switchHead() {
+        list.direction = function () {
+        	return head;
+        }
+        list.switchHead = function() {
             if (head === "top") {
                 head = "bottom"
             }
@@ -1021,42 +1072,53 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 list[i].setTop(100 - list[i].getTop() - list[i].height());
             }
         }
-        function update() {
-            if (head === "top") {
-                var currHeight = 0;
-                for (var i = 0; i < list.length; i++) {
-                    list[i].setTop(currHeight);
-                    currHeight += list[i].height();
-                }
-            }
-            else {
-                var currHeight = 100;
-                for (var i = list.length; i > -1; i--) {
-                    list[i].setTop(currHeight - list[i].height());
-                    currHeight -= list[i].height();
-                }
-            }
+        list.update = function () {
+        	if (list.length > 0) {
+        		if (head === "top") {
+        			var currHeight = 0;
+        			for (var i = 0; i < list.length; i++) {
+        				list[i].setTop(currHeight);
+        				currHeight += list[i].height();
+        			}
+        		}
+        		else {
+        			var currHeight = 100;
+        			for (var i = list.length-1; i > -1; i--) {
+        				list[i].setTop(currHeight - list[i].height());
+        				currHeight -= list[i].height();
+        			}
+        		}
+        	}
         }
-        function addMedia(media) {
-            if (head == "top") {
-                list.push(media)
-            }
-            else {
-                list.unshift(media);
-            }
-            media.fadeIn();
-            update();
+        list.addMedia = function (media) {
+        	if (list.indexOf(media === -1)) {
+				/*
+        		if (head == "top") {
+        			list.push(media)
+        		}
+        		else {
+        			list.unshift(media);
+        		}*/
+        		list.push(media);
+        		media.show()
+        		//list.update();
+        	}
         }
-        function removeMedia() {
-            if (head == "top") {
-                list.shift();
-            }
-            else {
-                list.pop();
-            }
-            media.fadeOut();
-            update();
+        list.removeMedia = function (media) {
+        	if (list.indexOf(media !== -1)) {
+				/*
+        		if (head == "top") {
+        			list.shift();
+        		}
+        		else {
+        			list.pop();
+        		}*/
+        		list.remove(media);
+        		media.hide();
+        		//list.update();
+        	}
         }
+        return list;
     }
 };
 
