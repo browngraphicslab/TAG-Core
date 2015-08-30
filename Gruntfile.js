@@ -237,6 +237,7 @@ module.exports = function(grunt) {
 						'css/SplashScreenOverlay.styl',   // TAGCORE
 						'css/ITE.Player.styl',
 					    'css/LaureatesPage.styl',
+                        'css/WillVideo.styl',
                         'css/NobelWillImage.styl',
 						//'css/ComponentControls.styl'	 // TAGCORE
 					]

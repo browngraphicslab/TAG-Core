@@ -524,7 +524,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 options = {},
                 i,
                 currName;
-
+            /**
             switch (collectionName) {
                 case WILL_NAME:
                     loadingScreen("Loading Alfred Nobel's Will...");
@@ -542,6 +542,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     loadingScreen("Loading Laureates...");
                     break;
             }
+            **/
 
             $('.goToWrapper').off('click');
 
