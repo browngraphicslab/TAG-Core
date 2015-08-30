@@ -34,6 +34,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         associatedMediaScroller,
         hotspotsShown,
         willImage,
+        videoContainer,
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         //NOBEL_WILL_COLOR = 'rgb(189,125,13)',
         NOBEL_ORANGE_COLOR = 'rgb(254,161,0)',
@@ -41,14 +42,25 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         dragging = false,
         lastDragY = 0,
 
+        timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
+        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair),
+
         FIX_PATH = TAG.Worktop.Database.fixPath;
 
     nobelWillInit();
     videoOverlay();
 
+    /** function videoOverlay
+    *   creates "screensaver" overlay to be displayed after idle timer expires
+    */
     function videoOverlay() {
-        var videoContainer = $(document.createElement('div')).attr('id', 'videoContainer');
-            touchToExplore = $(document.createElement('div')).attr('id', 'touchToExplore');
+
+        //stop timer and unbind mousedown
+       // idleTimer.kill();
+        $(document).unbind('mousedown', TAG.Util.IdleTimer.restartTimer);
+
+        videoContainer = $(document.createElement('div')).attr('id', 'videoContainer');
+        var touchToExplore = $(document.createElement('div')).attr('id', 'touchToExplore'),
             video = $(document.createElement('video')).attr('id', 'nobelVideo');
         videoContainer.css({
             'background-color' : 'black',
@@ -76,8 +88,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'max-width': '100%',
             'max-height': '100%'
         });
-        idleTimer && idleTimer.kill();
-        idleTimer = null;
         video.attr({
             controls: false,
             preload: 'none',
@@ -87,6 +97,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         videoContainer.append(video).append(touchToExplore);
         root.append(videoContainer);
         videoElt.play();
+        //click leads back to Will
         video.click(function () {
             removeVideo();
         });
@@ -97,6 +108,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function removeVideo() {
         videoContainer.remove();
+        idleTimer.start();
+        //add handler to document to restart timer on mousedown
+        /**
+        $(document).on('mousedown', function (event) {
+            console.log("targetid: " + $(event.target).attr('id'));
+            TAG.Util.IdleTimer.restartTimer();
+        });
+        **/
+        //add mousedown handler to document to restart timer
+        $(document).mousedown(TAG.Util.IdleTimer.restartTimer);
     }
 
     function SetWillImage(page) {
@@ -114,6 +135,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function nobelWillInit() {
         $("#splashScreenRoot").remove();
+
         SetWillImage(pageNumber);
         var background = $(document.createElement('div'));
         background.css({
@@ -736,6 +758,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function goPrevPage() {
         if (pageNumber > 0) {
+
+            idleTimer.kill();
+
             associatedMedia = []
             pageNumber-=1
             sliderBar.remove();
@@ -776,6 +801,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function nextPage(isPlaying) {
         if (pageNumber < 4) {
+
+            idleTimer.kill();
+
             pageNumber += 1
             associatedMedia = []
             //annotatedImage && annotatedImage.unload();
