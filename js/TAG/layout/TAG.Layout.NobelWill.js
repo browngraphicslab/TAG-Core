@@ -43,7 +43,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         IDLE_TIMER_DURATION = 300000, //5 minutes
 
         dragging = false,
+        touching = false,
         lastDragY = 0,
+
+        LIGHTBULB_ICON = tagPath + 'images/icons/Play.svg',
+        timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
+        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair),
 
         FIX_PATH = TAG.Worktop.Database.fixPath;
 
@@ -253,10 +258,22 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         root.append(canvas);
 
+        canvas.mouseenter(function () {
+            touching = true;
+        })
+        canvas.mouseleave(function () {
+            touching = false;
+        })
+
+        setInterval(function () {
+            if (touching===false && dragging===true) {
+                mouseUp();
+            }
+        },500)
 
         switch (pageNumber) {
             case 1:
-                associatedMediaNobelKeywords = [['Alfred Bernhard', 0], ['Robert Nobel', 1], ['Emanuel Nobel', 2], ['Sofie Kapy von Kapivar', 5], ['Alarik Liedbeck', 6]]
+                associatedMediaNobelKeywords = [['Alfred Bernhard'], ['Robert Nobel'], ['Emanuel Nobel'], ['Sofie Kapy von Kapivar'], ['Alarik Liedbeck']]
                 hardcodedHotspotSpecs = [[63.5, 15, 17, 3.5], [66.5, 30, 11, 3], [61, 34.5, 12.5, 2.5], [47, 54, 23.5, 3], [47.5, 65.4, 18.5, 3]]
 
                 leftTextArray = [
@@ -527,6 +544,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 	mouseUp(e)
                 })
                 sliderBar.mousedown(function (e) {
+                    touching = true;
                     dragging = true;
                     lastDragY = e.clientY;
                 })
@@ -540,15 +558,19 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 	mouseMove(e)
                 })
                 sliderBar.mousemove(function (e) {
+                    touching = true;
                 	mouseMove(e)
                 })
                 sideBar.mousemove(function (e) {
+                    touching = true;
                 	mouseMove(e)
                 })
                 willImage.mousemove(function (e) {
+                    touching = true;
                 	mouseMove(e)
                 })
                 background.mousemove(function (e) {
+                    touching = true;
                 	mouseMove(e)
                 })
 
@@ -641,7 +663,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
     function mouseUp(e) {
     	if (dragging) {
-    		if (e.clientX > 100) {
+    		if (e===undefined || e.clientX > 100) {
     			var lineMiddle = sliderBar.offset().top + (sliderBar.height() / 2);
     			var closest = 0;
     			var closestDist = 5000000;
@@ -681,6 +703,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var w = canvas[0].width;
     	canvas[0].width = 1;
     	canvas[0].width = w;
+        canvas.css({"opacity" : "0"})
 
     	for (var i = 0; i < nobelHotspots.length; i++) {
     		nobelHotspots[i][1].stop(true, true);
@@ -701,14 +724,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			var finalx = nobelHotspots[i][1].offset().left;
     			var finaly = nobelHotspots[i][1].offset().top + (nobelHotspots[i][1].height() / 2);
     			ctx.bezierCurveTo(finalx, div.offset().top + (div.height() / 2), div.offset().left + div.width() + 4, finaly, finalx, finaly)
-    			ctx.lineWidth = 3;
-    			ctx.strokeStyle = "rgba(200,20,20,120)";
+    			ctx.lineWidth = 3.5;
+    			ctx.strokeStyle = NOBEL_WILL_COLOR;
     			ctx.stroke();
     		}
     		else {
-    			nobelHotspots[i][1].fadeOut()
+    		     nobelHotspots[i][1].hide();
     		}
     	}
+    	canvas.animate({ opacity: 1 }, 400, 'easeInOutQuart')
     	bezierVisible = true;
     }
 
@@ -814,7 +838,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var img = $(document.createElement("img"));
         img.attr({
-        	src: tagPath + 'images/icons/Play.svg'
+        	src: LIGHTBULB_ICON
         })
         img.css({
         	"right": "8px",
@@ -1129,7 +1153,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             root.append(div);
             div.MiddleY = div.offset().top + (div.height() / 2);
             nobelHotspots.push([div, associatedMedia[i]]);
-			
+            div.mouseenter(function () {
+                touching = true;
+            })
         }
     }
     /**
@@ -1557,13 +1583,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 		//START HARDCODING INFO AREA
 
     	var titles = [
-			["Alfred Nobel", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
+			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
 			[],
 			[],
 			[]
     	]
     	var images = [
-			['a_michael_spence.jpg', 'a_michael_spence.jpg', 'a_michael_spence.jpg', 'a_michael_spence.jpg', 'a_michael_spence.jpg'],
+			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png'],
 			[],
 			[],
 			[]
@@ -1581,7 +1607,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			[]
     	]
     	var collections = [
-			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], []],
+			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], []],
 			[[], [], []],
 			[[], [], []],
 			[[], [], []]
