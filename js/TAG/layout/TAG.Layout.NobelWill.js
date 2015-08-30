@@ -725,7 +725,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			var finaly = nobelHotspots[i][1].offset().top + (nobelHotspots[i][1].height() / 2);
     			ctx.bezierCurveTo(finalx, div.offset().top + (div.height() / 2), div.offset().left + div.width() + 4, finaly, finalx, finaly)
     			ctx.lineWidth = 3.5;
-    			ctx.strokeStyle = NOBEL_WILL_COLOR;
+    			ctx.strokeStyle = NOBEL_ORANGE_COLOR;
     			ctx.stroke();
     		}
     		else {
