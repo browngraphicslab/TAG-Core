@@ -22,6 +22,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options.tagContainer = $("#tagRoot");
 
     var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
+        goToCollectionsButton = root.find('#goToCollectionsButton'),
         goToWillButton = root.find('#goToWillButton'),
         goToWillImage = root.find('#goToWillImage'),
         goToHistoryButton = root.find('#goToHistoryButton'),
@@ -385,11 +386,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     $('#authoringButtonBuffer').remove();
         // }
         
-        /**
+
         if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
             goToCollectionsButton.text("Go to Artwork");
         }
-        **/
+
         goToWillImage.css({
             'width': '80%',
             'border-radius': '50%',
@@ -442,7 +443,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             switchPage(LIFE_NAME, true);
         });
         
-        /**
         goToCollectionsButton.on('click', function () {
             jQuery.data(document.body, "isKiosk", true);
             if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
@@ -478,7 +478,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 switchPage();
             }
         });
-        **/
         
         setImagePaths(main);
         setUpCredits();
@@ -713,14 +712,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     });
                 }
             } else {
+                console.log('reached');
                 collectionsPage = TAG.Layout.CollectionsPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration)); // TODO merging
-                if ($("#startPageLoadingOverlay").length) {
+                //if ($("#startPageLoadingOverlay").length) {
                     TAG.Util.UI.slidePageLeftSplit(root, collectionsPage.getRoot());
                     currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
                     currentPage.obj = collectionsPage;
-                } else {
-                    buttonClicked = false;
-                }
+                //} else {
+                //    buttonClicked = false;
+                //}
             }           
         }
 
@@ -1138,7 +1138,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             goToLifeButton.css({"color": "white"});
         });
 
-        /**
         goToCollectionsButton.on('click', 'a', function (evt) {
             // this === the link that was clicked
             var href = $(this).attr("href");
@@ -1147,7 +1146,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToCollectionsButton.on("mousedown", function () {
             goToCollectionsButton.css({"background-color": "transparent", "color": "white"});
         });
-        **/
+
     }
 
 
