@@ -443,6 +443,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 willImage.mouseup(function (e) {
                 	mouseUp(e)
                 })
+                background.mouseup(function (e) {
+                	mouseUp(e)
+                })
                 sliderBar.mousedown(function (e) {
                     dragging = true;
                     lastDragY = e.clientY;
@@ -450,27 +453,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 sliderBar.mouseup(function (e) {
                 	mouseUp(e)
                 })
-                function percentToPx(percent) {
-                	return (percent / 100) * sideBar.height();
-                }
-                function mouseUp(e) {
-                	if (dragging) {
-                		if (e.clientX > 100) {
-                			var lineMiddle = sliderBar.offset().top + (sliderBar.height() / 2);
-                			var closest = 0;
-                			var closestDist = 5000000;
-                			for (var i = 0; i < sliderPositions.length ; i++) {
-                				var middle = percentToPx(sliderPositions[i][0]) + (percentToPx(sliderPositions[i][1]) / 2);
-                				if (Math.abs(lineMiddle - middle) < closestDist) {
-                					closestDist = Math.abs(lineMiddle - middle);
-                					closest = i;
-                				}
-                			}
-                			setChunkNumber(closest, checkForHotspots, 250);
-                		}
-                		dragging = false;
-                	}
-                }
+                $("#associatedMediaScroller").mouseup(function (e) {
+                	mouseUp(e)
+                })
+                $("#associatedMediaScroller").mousemove(function (e) {
+                	mouseMove(e)
+                })
                 sliderBar.mousemove(function (e) {
                 	mouseMove(e)
                 })
@@ -480,26 +468,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 willImage.mousemove(function (e) {
                 	mouseMove(e)
                 })
-                function mouseMove(e) {
-                	if (dragging) {
-                		var diff = e.clientY - lastDragY;
-                		if ((diff > 0 && rightStack.direction() === "bottom") || ( diff<0 && rightStack.direction() == "top")) {
-                			//rightStack.switchHead();
-                		}
-                		lastDragY = e.clientY;
-                		sliderBar.css({
-                			"top": sliderBar.offset().top + diff + "px"
-                		})
-                		for (var i = 0; i < nobelHotspots.length; i++) {
-                			if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top && nobelHotspots[i][0].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
-                				rightStack.addMedia(nobelHotspots[i][1]);
-                			}
-                			else {
-                				rightStack.removeMedia(nobelHotspots[i][1]);
-                			}
-                		}
-                	}
-                }
+                background.mousemove(function (e) {
+                	mouseMove(e)
+                })
+
 
                 sideBar.css('z-index', '10');
                 var up = $(document.createElement('img'))
@@ -567,6 +539,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                 setChunkNumber(0, null, 1);
 
+                for (var i = 0; i < associatedMedia.length; i++) {
+                	associatedMedia[i].checkHeight();
+                }
+
                 var j = 1
                 /*
                 var test = function () {
@@ -580,7 +556,46 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             }
         )
     }
+    function percentToPx(percent) {
+    	return (percent / 100) * sideBar.height();
+    }
+    function mouseUp(e) {
+    	if (dragging) {
+    		if (e.clientX > 100) {
+    			var lineMiddle = sliderBar.offset().top + (sliderBar.height() / 2);
+    			var closest = 0;
+    			var closestDist = 5000000;
+    			for (var i = 0; i < sliderPositions.length ; i++) {
+    				var middle = percentToPx(sliderPositions[i][0]) + (percentToPx(sliderPositions[i][1]) / 2);
+    				if (Math.abs(lineMiddle - middle) < closestDist) {
+    					closestDist = Math.abs(lineMiddle - middle);
+    					closest = i;
+    				}
+    			}
+    			setChunkNumber(closest, checkForHotspots, 400);
+    		}
+    		dragging = false;
+    	}
+    }
+    function mouseMove(e) {
+    	if (dragging) {
+    		var diff = e.clientY - lastDragY;
+    		lastDragY = e.clientY;
+    		sliderBar.css({
+    			"top": sliderBar.offset().top + diff + "px"
+    		})
+    		for (var i = 0; i < nobelHotspots.length; i++) {
+    			if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top && nobelHotspots[i][0].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
+    				rightStack.addMedia(nobelHotspots[i][1]);
+    			}
+    			else {
+    				rightStack.removeMedia(nobelHotspots[i][1]);
+    			}
+    		}
+    	}
+    }
     function checkForHotspots() {
+    	dragging = false;
     	var ctx = canvas[0].getContext("2d");
     	ctx.clearRect(0, 0, 1080, 1920);
     	var w = canvas[0].width;
@@ -649,11 +664,117 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "top": numberInChunk * height + "%",
             "position" : "static",
             "border-color": NOBEL_ORANGE_COLOR,
-            "display" : "flex"
+            "display": "flex",
+            "height": "auto",
+			"margin-bottom" : "12px"
+        })
+
+        root.append(div);
+
+        var info = getPopupInfo(number);
+
+        var picWrapper = $(document.createElement("div"));
+        picWrapper.css({
+        	"position": " relative",
+        	"height": "30%",
+			"width" : "30%"
+        })
+
+		div.append(picWrapper)
+
+        var pic = $(document.createElement("img"));
+        pic.attr({ src: info.image })
+
+		var ratio = pic.height() / pic.width()
+
+        pic.css({
+        	"width": "100%",
+			"height" : "auto",
+        	"left": "12px",
+        	"top": "12px",
+			"position" : "relative"
+        })
+        picWrapper.append(pic);
+
+        div.picWrapper = picWrapper;
+
+        //div.css({"min-height" : pic.width()*ratio*.3+ 24+"px"})
+
+        var rightDiv = $(document.createElement('div'));
+        rightDiv.css({
+        	"position": "relative",
+        	"width": "65%",
+        	"height": "auto",
+			"left" : "24px"
+        })
+
+        var title = $(document.createElement('div'));
+        title.css({
+        	"width": "100%",
+        	"top": "12px",
+        	"position": "relative",
+			"height" : "auto"
         }).text(string);
+
+        rightDiv.append(title);
+
+		div.title = title
+
+        div.append(rightDiv);
+
+        var descWhole = $(document.createElement('div'));
+        descWhole.css({
+        	"width": "100%",
+        	"position": "relative",
+        	"height": "auto"
+        })
+        rightDiv.append(descWhole);
+
+		div.descWhole = descWhole
+
+        var img = $(document.createElement("img"));
+        img.attr({
+        	src: tagPath + 'images/icons/Play.svg'
+        })
+        img.css({
+        	"right": "8px",
+        	"height": "45px",
+        	"width": "45px",
+        	"position": 'absolute',
+        	"bottom": "0px",
+        	"z-index": "550",
+        	"float": "right"
+        }).click(function () {
+        	showLargePopup(div.medianumber)
+        })
+        descWhole.append(img);
+        var desc = $(document.createElement('div'));
+        desc.css({
+        	"width": "77.5%",
+        	"position": "relative",
+        	"font-size": ".45em",
+        	"height": "auto",
+        	"top": '12px',
+			'bottom' : "50px"
+        }).text(info.shortText);
+        descWhole.append(desc);
+        var spacer = $(document.createElement('div'));
+        spacer.css({
+        	"height": "12px",
+			"width" : "100%",
+			"position": "relative",
+        })
+        descWhole.append(spacer);
         div.attr({ attr: string });
         associatedMediaScroller.append(div);
-        div.hide();/*
+        div.hide();
+
+        div.medianumber = number;
+    	//div.height(titleHeight + 40 + desc.height());
+
+		div.css({"height":"auto"})
+
+    	/*
         div.fadeIn = function () {
             div.animate({ opacity : 1 }, 400, 'easeInOutQuart');
         }
@@ -670,6 +791,20 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.numberInChunk = numberInChunk;
         div.Identifier = chunkN + "#" + numberInChunk;
 
+        div.checkHeight = function () {
+        	div.descWhole.css({
+				"min-height" : div.picWrapper.height() + 12 - div.title.height() +'px'
+        	})
+        }
+
+
+        div.mouseup(function (e) {
+        	mouseUp(e)
+        })
+
+        div.mousemove(function (e) {
+        	mouseMove(e)
+        })
         return div;
     }
 
@@ -755,8 +890,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var w = canvas[0].width;
     	canvas[0].width = 1;
     	canvas[0].width = w;
-        for (var j = 0; j < associatedMedia.length; j++) {
-        	associatedMedia[j].fadeOut();
+    	for (var j = 0; j < associatedMedia.length; j++) {
+    		if (rightStack.indexOf(associatedMedia[j]) === -1) {
+    			associatedMedia[j].fadeOut();
+    		}
         }
     }
     /*
@@ -1119,7 +1256,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         $("#startPageLoadingOverlay").remove();
     }
     function getRightTable() {
-        var list = [];
+        var list = [];/*
         var head = "top";
         list.direction = function () {
         	return head;
@@ -1152,7 +1289,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         			}
         		}
         	}
-        }
+        }*/
         list.addMedia = function (media) {
         	if (list.indexOf(media === -1)) {
 				/*
@@ -1164,6 +1301,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         		}*/
         		list.push(media);
         		media.show()
+        		media.checkHeight();
         		list.hideBez();
         	}
         }
@@ -1185,6 +1323,214 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	hideBezier();
         }
         return list;
+    }
+    function showLargePopup(mediaNumber) {
+    	var blocker = $(document.createElement('div'));
+    	blocker.show();
+    	blocker.css({
+    		"width": "100%",
+    		"height": "100%",
+    		"background-color": "rgba(250,250,250,.55)",
+    		"position": "absolute",
+			"z-index" : "1000",
+    	}).attr({
+			id : "blocker"
+    	})
+    	root.append(blocker);
+    	var info = getPopupInfo(mediaNumber);
+    	var text = $(document.createElement('div'));
+    	var title = $(document.createElement('div'));
+    	var popup = $(document.createElement('div'));
+
+    	popup.css({
+    		"width": "78%",
+    		'height': "66%",
+    		"left": "11%",
+			"top" : "17%",
+    		"border": "3px solid " + NOBEL_ORANGE_COLOR,
+    		"border-radius": "10px",
+    		"background-color": "black",
+			"position" : "absolute"
+    	})
+
+    	blocker.append(popup);
+    	var pixWidth = popup.width()/2
+
+    	text.css({
+    		"width": "35%",
+    		'height': "85%",
+    		"left": "50%",
+    		"top": "10%",
+    		"position": "absolute",
+    		'font-size': ".625em",
+			'overflow' : 'hidden'
+    	}).text(info.text);
+    	title.css({
+    		"width": "40%",
+    		'height': "8%",
+    		"left": "50%",
+    		"top": "2.5%",
+    		"position": "absolute",
+    		"font-weight": "bold",
+			'font-size' : "1.25em"
+    	}).text(info.title)
+
+		var closeX = $(document.createElement("img"))
+    	closeX.attr({
+    		src: tagPath + 'images/icons/x.svg',
+    		id: 'closeX'
+    	})
+    	closeX.css({
+    		'left': '10px',
+    		'position': 'absolute',
+    		'top': '10px',
+    		'height': '45px'
+    	}).click(function () {
+    		$("#blocker").remove()
+    	})
+
+    	popup.append(closeX);
+
+    	img = $(document.createElement('img'));
+    	img.css({
+    		"height": "90%",
+    		"width": "auto",
+    		"left": "5%",
+    		"top": "5%",
+			"position" : 'absolute'
+    	})
+    	console.log(info.image);
+    	img.attr({
+    		src : info.image
+    	})
+    	popup.append(img);
+    	popup.append(title);
+    	popup.append(text);
+    	var imgwidth = img.width();
+    	img.css({
+			"left" : (pixWidth-imgwidth)/2 + "px"
+    	})
+
+    	function createExtra(extra) {
+    		var d = $(document.createElement('img'));
+    		d.css({
+    			"position": 'relative',
+    			'width': "100%",
+    			"border": "3px solid " + NOBEL_ORANGE_COLOR,
+    			"border-radius": "10px",
+    			"padding-bottom": "5%",
+				'color' : 'white'
+    		}).text(extra[1])
+    		d.attr({
+				src : extra[0]
+    		})
+			return d
+    	}
+
+    	var extras = $(document.createElement('div')); //Tours and galleries
+    	extras.css({
+    		"width": "10%",
+    		"height": "95%",
+    		"top": "2.5%",
+    		"right": "2.5%",
+			"position" : "absolute"
+    	})
+    	popup.append(extras);
+    	if (info.collections.length > 0) {
+    		var gallery = $(document.createElement('div'));
+    		gallery.css({
+    			"width": "100%",
+    			"height": "5%",
+    			"color": "white",
+				"font-size" : ".8em"
+    		}).text("GALLERY")
+			extras.append(gallery)
+    		for (var i = 0; i < info.collections.length; i++) {
+    			extras.append(createExtra(info.collections[i]));
+    		}
+    	}
+    	if (info.tours.length > 0) {
+    		var tour = $(document.createElement('div'));
+    		tour.css({
+    			"width": "100%",
+    			"height": "5%",
+    			"color": "white",
+    			"font-size": ".8em"
+    		}).text("TOUR")
+    		extras.append(tour)
+    		for (var i = 0; i < info.tours.length; i++) {
+    			extras.append(createExtra(info.tours[i]));
+    		}
+    	}
+    }
+
+    function getPopupInfo(number) {
+    	var info = [];
+
+
+		//START HARDCODING INFO AREA
+
+    	var titles = [
+			["Alfred Nobel", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
+			[],
+			[],
+			[]
+    	]
+    	var images = [
+			['a_michael_spence.jpg', 'a_michael_spence.jpg', 'a_michael_spence.jpg', 'a_michael_spence.jpg', 'a_michael_spence.jpg'],
+			[],
+			[],
+			[]
+    	]
+    	var texts = [
+			[
+				"Over the course of his life, Alfred Nobel (1833–1896) experienced many different places. He grew up in rather simple circumstances in 1830’s Stockholm. He spent his youth in St. Petersburg, Russia, after his father had established himself as an inventor there. From St. Petersburg, he set off on study trips to Europe and North America. When his parents returned to Stockholm, Nobel joined them there, and together with his father, he attempted to develop new explosives. In the 1860’s, his efforts to put his inventions into profitable production carried him on lengthy business trips and visits to factories in many locations, such as Krümmel, outside Hamburg, Germany, where in 1865, he took up residence. In 1873, Nobel moved to Paris to make his home in what was perhaps the most vibrant metropolis of the day. In Paris, he continued his work as an inventor and increased his wealth, yet he was also plagued by risky business ventures and legal disputes. Toward the end of his life, he settled in San Remo, Italy, where he died on December 10, 1896.",
+				"Robert Nobel (1829–96) was Alfred Nobel’s oldest brother. Robert Nobel was involved in the early establishment of the explosives industry. He started a dynamite factory outside Helsinki, and for a few years up to 1870, he was the head of the dynamite factory at Vinterviken outside Stockholm. After a trip to the Caucasus in 1873, Robert Nobel became a pioneer in the oil industry in Baku. In 1881 he ended his active participation in the company, and returned to Sweden.",
+				"Emanuel Nobel (1859–1932) was a nephew to Alfred Nobel. After the death of his father, Ludvig Nobel, Emanuel Nobel took over leadership of the Nobel brothers’ oil company. At first, Alfred Nobel seems to have doubted Emanuel’s ability to run the large company, but Emanuel proved that he was equal to the task.",
+				"Alfred Nobel, never married. However he had a long relationship with an Austrian woman, Sofie Hess (1851–1919). Alfred Nobel met Sofie Hess during a visit to Baden bei Wien in 1876. This relationship was everything but harmonious. For a while, Alfred seems to have been happy and in love, despite all of his business worries. Soon, however, he became dissatisfied in his relationship with Sofie, yet he did not seem to want to break up with her. He scolded her for being irresponsible and childish. Alfred and Sofie’s drawn-out and uneasy relationship finally came to an end. In 1890, Sofie became pregnant. The father was another man, Nicolaus Kapy von Kapivar, whom she eventually married.",
+				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death."
+			],
+			[],
+			[],
+			[]
+    	]
+    	var collections = [
+			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], []],
+			[[], [], []],
+			[[], [], []],
+			[[], [], []]
+    	]
+    	var tours = [
+			[[], [], [],[],[]],
+			[[], [], []],
+			[[], [], []],
+			[[], [], []]
+    	]
+    	var shortTexts = [
+			[
+				"short sentence or two about a person 1.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
+				"short sentence or two about a person 2.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
+				"short sentence",
+				"short sentence or two about a person 4.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
+				"short sentence or two about a person 5.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
+			],
+			[],
+			[],
+			[]
+    	]
+
+
+    	//END HARDCODING INFO AREA
+
+
+    	info.image = tagPath + 'images/nobelwillimages/NobelWillPopupImages/'+images[pageNumber-1][number];
+    	info.text = texts[pageNumber - 1][number];
+    	info.shortText = shortTexts[pageNumber - 1][number];
+    	info.collections = collections[pageNumber-1][number];
+    	info.tours = tours[pageNumber - 1][number];
+    	info.title = titles[pageNumber - 1][number];
+
+    	return info;
     }
 };
 
