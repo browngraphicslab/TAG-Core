@@ -238,6 +238,7 @@ module.exports = function(grunt) {
 						'css/ITE.Player.styl',
 					    'css/LaureatesPage.styl',
                         'css/WillVideo.styl',
+                        'css/NobelWillImage.styl',
 						//'css/ComponentControls.styl'	 // TAGCORE
 					]
 				}
@@ -251,7 +252,8 @@ module.exports = function(grunt) {
 				files: {
 					'html/StartPage.html':           'html/StartPage.jade',           // TAGCORE
 					'html/InternetFailurePage.html': 'html/InternetFailurePage.jade', // TAGCORE
-					'html/Artmode.html':             'html/Artmode.jade',             // TAGCORE
+					'html/Artmode.html': 'html/Artmode.jade',                           /// TAGCORE
+					'html/NobelWill.html': 'html/NobelWill.jade',                       /// TAGCORE
 					'html/NewCatalog.html':          'html/NewCatalog.jade',          // TAGCORE
 					'html/VideoPlayer.html':         'html/VideoPlayer.jade',         // TAGCORE
 					'html/SettingsView.html':        'html/SettingsView.jade',        // TAGCORE
@@ -260,6 +262,7 @@ module.exports = function(grunt) {
 					'html/SplashScreenOverlay.html': 'html/SplashScreenOverlay.jade',  // TAGCORE
                     'html/LaureatesPage.html': 'html/LaureatesPage.jade',
                     'html/WillVideo.html': 'html/WillVideo.jade',
+
 				}
 			}
 		},
