@@ -303,20 +303,20 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.25, 70.5, 9.25, 2.5], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5]]
 
                 leftTextArray = [
-                    ['Potsdamerstrasse, 51, Berlin, will receive Fifty Thousand Marks each;', 8.5],
-                    ['Mrs Gaucher, 2 bis Boulevard du Viaduc, Nimes, France will receive One Hundred Thousand Francs;', 13],
-                    ['My servants, Auguste Oswald and his wife Alphonse Tournand, employed in my laboratory at San Remo, will each receive an annuity of One Thousand Francs;', 19.5],
-                    ['My former servant, Joseph Girardot, 5, Place St. Laurent, Châlons sur Saône, is entitled to an annuity of Five Hundred Francs, and my former gardener, Jean Lecof, at present with Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour Ecouen, S.& O., France, will receive an annuity of Three Hundred Francs;', 27],
-                    ['Mr Georges Fehrenbach, 2, Rue Compiègne, Paris, is entitled to an annual pension of Five Thousand Francs from January 1, 1896 to January 1, 1899, when the said pension shall discontinue;', 40.5],
-                    ['A sum of Twenty Thousand Crowns each, which has been placed in my custody, is the property of my brother’s children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be repaid to them.', 50],
-                    ['The whole of my remaining realizable estate shall be dealt with in the following way: the capital, invested in safe securities by my executors, shall constitute a fund, the interest on which shall be annually distributed in the form of prizes to those who, during the preceding year, shall have conferred the greatest benefit to mankind. The said interest shall be divided into five equal parts, which shall be apportioned as follows: one part to the person who shall have made the most important discovery or invention within the field of physics; one part to the person who shall have made the most important chemical discovery or improvement; one part to the person who shall have made the most important discovery within the domain of physiology or medicine; one part to the person who shall have produced in the field of literature', 59]
+                    5, 'Potsdamerstrasse, 51, Berlin, will', 'receive Fifty Thousand Marks each;', 
+                    'Mrs Gaucher, 2 bis Boulevard du Viaduc, Nimes' , 'France will receive One Hundred Thousand Francs;',
+                    'My servants, Auguste Oswald and his wife', 'Alphonse Tournand, employed in my laboratory', 'at San Remo, will each receive an annuity of One','Thousand Francs;',
+                    'My former servant, Joseph Girardot, 5, Place', 'St. Laurent, Châlons sur Saône, France, is', 'entitled to an annuity of Five Hundred Francs,', 'and my former gardener, Jean Lecof, at present with','Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour', 'Ecouen, S.& O., France, will receive an annuity of Three Hundred', 'Francs;',
+                    'Mr Georges Fehrenbach, 2, Rue Compiègne,','Paris, is entitled to an annual pension of Five Thousand', 'Francs from January 1, 1896 to January 1, 1899,', 'when the said pension shall discontinue;',
+                    'A sum of Twenty Thousand Crowns each, which', 'has been placed in my custody, is the property of my brother’s', 'children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be', 'repaid to them.',
+                    'The whole of my remaining realizable estate shall be', 'dealt with in the following way: the capital, invested in safe', 'securities by my executors, shall constitute a', 'fund, the interest on which shall be annually distributed in the form of prizes', 'to those who, during the preceding year, shall have conferred the greatest', 'benefit to mankind. The said interest shall be divided into five equal', 'parts, which shall be apportioned as follows: one part to the person who shall', 'have made the most important discovery or invention within the field of physics;', 'one part to the person who shall have made the most important chemical', 'discovery or improvement; one part to the person who shall have made the most', 'important discovery within the domain of physiology or medicine; one part to', 'the person who shall have produced in the field of literature',
                 ]
                 sliderPositions = [
-                    [7.75, 5.75],
-                    [12, 5.5],
-                    [18.5, 8],
-                    [24.5, 16],
-                    [39, 10.75],
+                    [7.75, 12.5],
+                    [18.5, 12],
+                    [28.75, 12.75],
+                    [39.5, 12.75], //got to here
+                    [52.25, 10.75], 
                     [48.5, 10.75],
                     [58.25, 28.5]
                 ]
@@ -1042,7 +1042,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#leftPageArrow").remove();
             $(".textChunkDiv").remove();
             $("#titleDiv").remove();
-            $('lightbulb').remove();
+            $('.lightbulb').remove();
             $("#annotatedImageAssetCanvas").remove();
             $(".nobelHotspot").remove();
             $("#nobelPlayPauseButton").remove();
