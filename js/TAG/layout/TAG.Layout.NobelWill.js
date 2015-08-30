@@ -38,15 +38,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 		bezierVisible = false,
         willImage,
         videoContainer,
-        NOBEL_WILL_COLOR = 'rgb(254,161,0)',
-        //NOBEL_WILL_COLOR = 'rgb(189,125,13)',
-        NOBEL_ORANGE_COLOR = 'rgb(254,161,0)',
+        idleTimer,
+        NOBEL_ORANGE_COLOR = '#d99b3b',
+        IDLE_TIMER_DURATION = 300000, //5 minutes
 
         dragging = false,
         lastDragY = 0,
-
-        timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
-        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair),
 
         FIX_PATH = TAG.Worktop.Database.fixPath;
 
@@ -58,9 +55,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function videoOverlay() {
 
-        //stop timer and unbind mousedown
-       // idleTimer.kill();
-        $(document).unbind('mousedown', TAG.Util.IdleTimer.restartTimer);
+        //stop timer and unbind mousedown and mousemove
+        idleTimer && idleTimer.kill();
+        $(document).unbind('mousedown', restartTimer);
+        $(document).unbind('mousemove', restartTimer);
 
         videoContainer = $(document.createElement('div')).attr('id', 'videoContainer');
         var touchToExplore = $(document.createElement('div')).attr('id', 'touchToExplore'),
@@ -75,12 +73,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'z-index':'1000',
         });
         touchToExplore.css({
-            'position': 'relative',
+            'position': 'absolute',
             'top': '10%',
             'width' : '100%',
             'height' : '20%',
-            'z-index': '1001',
-            'color': '#d99b3b',
+            'z-index': '1002',
+            'color': NOBEL_ORANGE_COLOR,
             'font-weight': '900',
             'text-align': 'center',
             'font-size': '36pt',
@@ -89,17 +87,20 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'position': 'relative',
             'width': '100%',
             'max-width': '100%',
-            'max-height': '100%'
+            'max-height': '100%',
+            'z-index': '1001'
         });
         video.attr({
             controls: false,
             preload: 'none',
+            loop: true
         });
         videoElt = video[0],
         videoElt.innerHTML = '<source src="' + tagPath + 'images/testvid.mp4' + '" type="video/mp4">';
         videoContainer.append(video).append(touchToExplore);
         root.append(videoContainer);
         videoElt.play();
+
         //click leads back to Will
         video.click(function () {
             removeVideo();
@@ -111,16 +112,18 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function removeVideo() {
         videoContainer.remove();
+        //start new idle timer
+        var timerPair1 = TAG.Util.IdleTimer.timerPair(IDLE_TIMER_DURATION, videoOverlay),
+            timerPair2 = TAG.Util.IdleTimer.timerPair(0, function () {return;});
+        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair1,timerPair2);
         idleTimer.start();
-        //add handler to document to restart timer on mousedown
-        /**
-        $(document).on('mousedown', function (event) {
-            console.log("targetid: " + $(event.target).attr('id'));
-            TAG.Util.IdleTimer.restartTimer();
-        });
-        **/
-        //add mousedown handler to document to restart timer
-        $(document).mousedown(TAG.Util.IdleTimer.restartTimer);
+        //add handler to document to restart timer on mousedown and mousemove (in this case, touch drag on slider)
+        $(document).mousedown(restartTimer);
+        $(document).mousemove(restartTimer);
+    }
+
+    function restartTimer() {
+        idleTimer && idleTimer.restart();
     }
 
     function SetWillImage(page) {
@@ -1234,8 +1237,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'position': 'absolute',
             'opacity': '1',
             'border-radius': '18px',
-            'border-color': NOBEL_WILL_COLOR,
-            'border': '8px solid ' + NOBEL_WILL_COLOR,
+            'border-color': NOBEL_ORANGE_COLOR,
+            'border': '8px solid ' + NOBEL_ORANGE_COLOR,
             'width': '60%',
             'height': '50%',
             'top': '25%',
