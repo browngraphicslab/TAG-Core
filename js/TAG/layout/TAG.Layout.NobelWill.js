@@ -838,8 +838,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var img = $(document.createElement("img"));
         img.attr({
-        	src: LIGHTBULB_ICON
-        })
+            src: LIGHTBULB_ICON,
+        });
+        img.addClass('lightbulb');
         img.css({
         	"right": "8px",
         	"height": "45px",
@@ -1041,6 +1042,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#leftPageArrow").remove();
             $(".textChunkDiv").remove();
             $("#titleDiv").remove();
+            $('lightbulb').remove();
             $("#annotatedImageAssetCanvas").remove();
             $(".nobelHotspot").remove();
             $("#nobelPlayPauseButton").remove();
@@ -1057,6 +1059,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
             $("#nobelPlayPauseButton").die();
+            $('.lightbulb').die();
             textDivArray = [];
             nobelWillInit();
         }
@@ -1090,6 +1093,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $(".nobelHotspot").remove();
             $("#audioFile").off();
             $("#audioFile").remove();
+            $('.lightbulb').remove();
             $("#audioFile").die();
             sliderBar.die();
             $("#upIcon").die();
@@ -1101,6 +1105,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
             $("#nobelPlayPauseButton").die();
+            $('.lightbulb').die();
             textDivArray = [];
             nobelWillInit();
             if (isPlaying === true) {
