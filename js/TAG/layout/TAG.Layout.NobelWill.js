@@ -527,7 +527,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'width': '6%',
                     'bottom': '20px',
                     'left': "31.75%",
-                    'z-index': '99'
+                    'z-index': '599'
                 });
                 leftArrow.click(function () {
                     pauseNobel();
@@ -539,7 +539,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'background-color': 'transparent',
                     'bottom': '20px',
                     'left': "69.75%",
-                    'z-index': '99'
+                    'z-index': '599'
                 });
                 rightArrow.click(
                     function () {
