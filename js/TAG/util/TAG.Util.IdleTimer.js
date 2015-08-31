@@ -43,7 +43,8 @@ TAG.Util.IdleTimer = (function() {
          * @method start
          */
         function start() {
-            if (jQuery.data(document.body, "isKiosk") == true && $.find("video").length==0 && tourIsPlaying==false) {
+            //if (jQuery.data(document.body, "isKiosk") == true && $.find("video").length == 0 && tourIsPlaying == false) {
+            if (!tourIsPlaying) {
                 doNothing("timer start")
                 if(idleDuration !== 0) { // default is no idle timer
                     s1TimeoutID = setTimeout(fireS1, s1d);
