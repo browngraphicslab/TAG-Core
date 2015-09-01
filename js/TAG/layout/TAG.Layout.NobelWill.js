@@ -149,7 +149,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         SetWillImage(pageNumber);
         
-        TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
+        //TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
 
         background = $(document.createElement('div'));
         background.css({
@@ -385,14 +385,76 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [61, 64, 4, 2.5], [68.5, 64, 8, 2.5], [51.25, 70.25, 6.25, 2.5], [66.5, 81.75, 7.25, 2.5], [76.75, 84.5, 5.75, 2.5]]
 
                 leftTextArray = [
-                    ['the most outstanding work in an ideal direction; and one part to the person who shall have done the most or the best work for fraternity between nations, for the abolition or reduction of standing armies and for the holding and promotion of peace congresses. The prizes for physics and chemistry shall be awarded by the Swedish Academy of Sciences; that for physiological or medical work by the Caroline Institute in Stockholm; that for literature by the Academy in Stockholm, and that for champions of peace by a committee of five persons to be elected by the Norwegian Storting. It is my express wish that in awarding the prizes no consideration whatever shall be given to the nationality of the candidates, but that the most worthy shall receive the prize, whether he be a Scandinavian or not.', 11.5],
-                    ['As Executors of my testamentary dispositions, I hereby appoint Mr Ragnar Sohlman, resident at Bofors, Värmland, and Mr Rudolf Lilljequist, 31 Malmskillnadsgatan, Stockholm, and at Bengtsfors near Uddevalla. To compensate for their pains and attention, I grant to Mr Ragnar Sohlman, who will presumably have to devote most time to this matter, One Hundred Thousand Crowns, and to Mr Rudolf Lilljequist, Fifty Thousand Crowns;', 45],
-                    ['At the present time, my property consists in part of real estate in Paris and San Remo, and in part of securities deposited as follows: with The Union Bank of Scotland Ltd in Glasgow and London, Le Crédit Lyonnais, Comptoir National d’Escompte, and with Alphen Messin & Co. in Paris; with the stockbroker M.V. Peter of Banque Transatlantique, also in Paris; with Direction der Disconto Gesellschaft and Joseph Goldschmidt & Cie, Berlin; with the Russian Central Bank, and with Mr Emanuel Nobel in Petersburg; with Skandinaviska Kredit Aktiebolaget in Gothenburg and Stockholm,', 66],
+                    9, 'the most outstanding work in an ideal direction; and one part to the',
+                    11.25, 'person who shall have done the most or the best work for fraternity',
+                    13.5, 'between nations, for the abolition or reduction of standing armies',
+                    15.75, 'and for the holding and promotion of peace congresses.',
+                    18, 'The prizes for physics and chemistry shall be awarded by the Swedish',
+                    20.25, 'Academy of Sciences; that for physiological or medical',
+                    22.5, 'work by the Caroline Institute in Stockholm; that for literature',
+                    24.75, 'by the Academy in Stockholm, and that for champions of peace',
+                    27, 'by a committee of five persons to be elected',
+                    29.25, 'by the Norwegian Storting. It is my express',
+                    31.5, 'wish that in awarding the prizes no consideration whatever',
+                    34, 'shall be given to the nationality of the candidates,',
+                    36.5, 'but that the most worthy shall receive the prize,',
+                    38.75, 'whether he be a Scandinavian or not.',
+                    42, 'As Executors of my testamentary dispositions,', 
+                    44.25, 'I hereby appoint Mr Ragnar Sohlman,',
+                    46.75, 'resident at Bofors, Värmland, and Mr',
+                    49.25, 'Rudolf Lilljequist, 31 Malmskillnadsgatan, Stockholm,',
+                    51.5, 'and at Bengtsfors near Uddevalla. To compensate',
+                    53.75, 'for their pains and attention, I grant to Mr,',
+                    56, 'Ragnar Sohlman, who will presumably have to',
+                    58.25, 'devote most time to this matter, One Hundred Thousand Crowns,',
+                    60.25, 'and to Mr Rudolf Lilljequist, Fifty Thousand Crowns;',
+                    63, 'At the present time, my property consists',
+                    65.25, 'in part of real estate in Paris and San Remo, and',
+                    67.75, 'in part of securities deposited as follows: with The Union Bank of Scotland',
+                    69.75, 'Ltd in Glasgow and London, Le Crédit Lyonnais,',
+                    72, 'Comptoir National d’Escompte, and with Alphen Messin',
+                    74.5, '& Co. in Paris; with the stockbroker M.V. Peter of Banque',
+                    76.75, 'Transatlantique, also in Paris; with Direction',
+                    79, 'der Disconto Gesellschaft and Joseph Goldschmidt',
+                    81.25, '& Cie, Berlin; with the Russian Central Bank, and with',
+                    83.5, 'Mr Emanuel Nobel in Petersburg; with',
+                    85.75, 'Skandinaviska Kredit Aktiebolaget in Gothenburg and Stockholm,'
                 ]
                 sliderPositions = [
-                    [7.75, 33.75],
-                    [41.5, 21],
-                    [62.25, 25.75]
+                    [7.75, 12.5],
+                    [11, 11.5],
+                    [13.25, 11.5],
+                    [15.5, 11.5],
+                    [17.75, 11.5],
+                    [20, 11.5],
+                    [22.25, 11.5],
+                    [24.5, 11.5],
+                    [26.75, 11.5],
+                    [29, 11.5],
+                    [31.25, 12],
+                    [33.75, 12],
+                    [36.25, 12],
+                    [38.5, 12.5],
+                    [41.75, 12],
+                    [44, 11.5],
+                    [46.5, 12],
+                    [49, 11.5],
+                    [51.25, 11.5],
+                    [53.5, 11.5],
+                    [55.75, 11.5],
+                    [58, 11.5],
+                    [60, 11.25],
+                    [62.75, 12],
+                    [65, 11.5],
+                    [67.5, 11.5],
+                    [69.5, 11.5],
+                    [71.75, 11.5],
+                    [74.25, 11.25],
+                    [76.5, 11.5],
+                    [78.75, 11.5],
+                    [81, 11.5],
+                    [83.25, 11.5],
+                    [85.5, 11.5]
                 ]
                 break;
             case 4:
@@ -1664,13 +1726,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var titles = [
 			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
 			[],
-			[],
+			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
 			[]
     	]
     	var images = [
 			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png'],
 			[],
-			[],
+			['Popup_3_1.png', 'Popup_3_2.png', 'Popup_3_3.png', 'Popup_3_4.png', 'Popup_3_5.png', 'Popup_3_6.png', 'Popup_3_7.png', 'Popup_3_8.png', '', 'Popup_3_10.png', 'Popup_3_11.png'],
 			[]
     	]
     	var texts = [
@@ -1682,7 +1744,30 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death."
 			],
 			[],
-			[],
+			[
+                "Alfred Nobel was interested in social issues, and had a special interest in the peace movement. Nobel’s engagement in the cause for world peace was in part inspired by his acquaintance with Bertha von Suttner, and in part by the use of his inventions in war and terrorist attacks. Peace was the fifth and final prize area that Nobel mentioned in his will.",
+                "The Royal Swedish Academy of Sciences was formed in 1739 by Carl Linnaeus and a number of other Swedsih scientists. It is an independent organisation whose overall objective is to promote the sciences and strengthen their influence in society. Alfred Nobel blev 1884 utländsk ledamot i akademien.",
+                "Karolinska Institutet  is a medical university in Stockholm, Sweden. It was founded in 1810 on Kungsholmen on the west side of Stockholm; the main campus was relocated decades later to Solna, just outside Stockholm. The donation made in the will was not the first that Alfred Nobel made to Karolinska Institutet. In 1890 he donated 50,000 Swedish to the institute in order to create a fund in the memory of his mother Andriette Nobel.",
+                "When Alfred Nobel wrote “the Academy in Stockholm,” it was not entirely clear whether he meant the Swedish Academy or the Royal Academy of Sciences. However the interpretation was that he meant the Swedish Academy. The Swedish Academy was founded in 1786 by King Gustav III. The primary purpose of the Academy is to further the 'purity, strength, and sublimity of the Swedish language'.",
+                "At the time when Alfred Nobel wrote his will, Sweden and Norway were joined in a union with a common foreign policy. However, Norway had a parliament, the Storting, and Alfred Nobel tasked the Storting with electing a committee, which was to award a peace prize. Despite its members being appointed by a parliament, the committee is a private body.",
+                "Over the course of his life, Alfred Nobel experienced many different places. This is an important background to his express wish that no consideration be given to the nationality of the Nobel Prize candidates.",
+                "Ragnar Sohlman (1870–1948) was Alfred Nobel’s assistant during the years 1893–96. He began his career with Nobel in Paris, and later also worked with Nobel in San Remo, as well as at Nobel’s experimental laboratory in Bofors, Sweden in 1896–97. In Alfred Nobel’s will, Sohlman, along with Rudolph Lilljequist, was appointed an executor of Nobel’s estate. It was largely due to Sohlman’s work that the Nobel Foundation could be established in 1900. Sohlman was the acting director of the Nobel Foundation during the period 1929–1946.",
+                "During his later years Nobel took an interest in ammunition and weapons technology. In 1893 he bought the weapons factory at Bofors, outside the town of Karlskoga in western Sweden. There, Björkborn mansion became Nobel's last home in Sweden. His assistant Ragnar Sohlman worked at the laboratory of the factory.",
+                "Alfred Nobel's inventions and companies made him a very rich man. In today's money the estate would be worth approximately 200 million US dollars. According to an estate inventory made after his death his assets in different countries were as follows: \n" +
+                    "Country		Amount in Swedish Kronor \n" +
+                    "Sweden		5,796,140.00 \n" +
+                    "Norway		94,472.28 \n" +
+                    "Germany		6,152,250.95 \n" +
+                    "Austria		228,754.20 \n" +
+                    "France		7,280,817.23 \n" +
+                    "Scotland	3,913,938.67 \n" +
+                    "England		3,904,235.32 \n" +
+                    "Italy		630,410.10 \n" +
+                    "Russia		5,232,773.45 \n" + 
+                    "Total		33,233,792.20", 
+                "Alfred Nobel had spent time in Paris in his youth, and at the age of 40, he bought a house there. In the years before this, he had lived in Hamburg, but he had spent most of that time traveling, and his “home” there seems to have been more of a provisory nature. He continued to travel extensively even after he had moved to Paris, but he had definitely found a more permanent residence. He had also gained a home that reflected his financial, social and cultural status.",
+                "Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy."
+			],
 			[]
     	]
     	var collections = [

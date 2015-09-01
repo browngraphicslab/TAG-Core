@@ -826,7 +826,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             //scrollPos = sPos || 0;
             applyCustomization();
             if (!onAssocMediaView || !currCollection.collectionMedia) {
-                getCollectionContents(currCollection, function () { addKeywords(); }, function () { return cancelLoad;});
+                getCollectionContents(currCollection, function () {  }, function () { return cancelLoad;});
             } else {
                 if (onAssocMediaView && artworkInCollectionList.length == 0) {
                     TAG.Worktop.Database.getArtworksIn(collection.Identifier,
@@ -837,12 +837,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             }
                             loadSortTags(currCollection, currCollection.collectionMedia);
                             createArtTiles(currCollection.collectionMedia);
-                            addKeywords();
                         }, null, null);
                 } else {
                     loadSortTags(currCollection, currCollection.collectionMedia)
                     createArtTiles(currCollection.collectionMedia);
-                    addKeywords();
                 }
             }
             cancelLoadCollection = function () { cancelLoad = true; };

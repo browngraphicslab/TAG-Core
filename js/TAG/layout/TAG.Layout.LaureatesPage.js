@@ -2179,7 +2179,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
       //  console.log("keywordSearchOptions = " + keywordSearchOptions);
 
-        return keywordSearchOptions; */
+        return keywordSearchOptions;
 
         keywordSearchOptions = [];
 
