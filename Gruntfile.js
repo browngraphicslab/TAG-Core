@@ -105,6 +105,7 @@ var JSSRC = [
 		'js/TAG/layout/TAG.Layout.ArtworkViewer.js',           // TAGCORE
 		'js/TAG/layout/TAG.Layout.CollectionsPage.js',         // TAGCORE
         'js/TAG/layout/TAG.Layout.LaureatesPage.js',
+        'js/TAG/layout/TAG.Layout.Spoof.js',
 		'js/TAG/layout/TAG.Layout.InternetFailurePage.js',     // TAGCORE
 		'js/TAG/layout/TAG.Layout.MetroSplitscreenMessage.js', // TAGCORE
 		'js/TAG/layout/TAG.Layout.TourPlayer.js',              // TAGCORE
