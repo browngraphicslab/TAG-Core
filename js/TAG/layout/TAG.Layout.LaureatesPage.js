@@ -233,12 +233,12 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
      */
     function init() {
         
-        if (!idleTimer && !previewing) {
+        /*if (!idleTimer && !previewing) {
             var timerDuration = {
                 duration: idleTimerDuration ? idleTimerDuration : null
             }
             idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-            idleTimer.start();
+            //idleTimer.start();
         }
         else if (idleTimer && !previewing && idleTimerDuration) {
             var timerDuration = {
@@ -247,12 +247,12 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             var timerStopped = idleTimer.isStopped();
             idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
             if (!timerStopped) {
-                idleTimer.start();
+               // idleTimer.start();
             }
         }
         if ((previewing || lockKioskMode) && idleTimer) {
             idleTimer.kill();
-        }
+        } */
         var progressCircCSS,
             circle,
             oldSearchTerm;
@@ -1334,17 +1334,17 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 var timerDuration = {
                     duration: idleTimerDuration ? idleTimerDuration : null
                 }
-                idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                idleTimer.start();
+                //idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
+                //idleTimer.start();
             }
             else if (idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true && idleTimerDuration) {
                 var timerDuration = {
                     duration: idleTimerDuration
                 }
                 var timerStopped = idleTimer.isStopped();
-                idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
+                //idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
                 if (!timerStopped) {
-                    idleTimer.start();
+                    //idleTimer.start();
                 }
             }
             //Set background image
@@ -2098,7 +2098,6 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
      * @return      array of objects (one per set), each with format {"operation": [AND/NOT], "keywords": [array of checked keywords]}
      */
     function getKeywordSearchOptions() {
-        /*
         keywordSearchOptions = [];
 
         for (var i = 0; i < keywordSets.length; i++) {
@@ -2120,7 +2119,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             }*/
 
             // Find out if operation is AND or NOT.
-            /*var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
+            var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
             if (operation === '') {
                 operation = 'AND';
             }
@@ -2128,7 +2127,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
             // Extract keywords checked off for this set.
 
-            
+
             var keywords = [];
 
             if (i < 2) {
@@ -2136,8 +2135,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     keywords.push($(selected).text().toLowerCase());
                     currentSet.push($(selected).text().toLowerCase()); //text of option that will be displayed
                 });
-            
-             }else{ // if (i === 2) //TO DO: Hardcode prize icons to correspond to 
+
+            } else { // if (i === 2) //TO DO: Hardcode prize icons to correspond to 
                 var keywords3 = TAG.Worktop.Database.getKeywordSets()[2];
                 var prizeKeywords = Object.getOwnPropertyNames(selectedPrizes);
 
@@ -2150,11 +2149,11 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     } else if (prizeKeywords[j] === "medicine") {
                         x = 2;
 
-                    }else if (prizeKeywords[j] === "literature") {
+                    } else if (prizeKeywords[j] === "literature") {
                         x = 3;
-                    }else if (prizeKeywords[j] === "peace") {
+                    } else if (prizeKeywords[j] === "peace") {
                         x = 4;
-                    }else{
+                    } else {
                         x = 5;
                     }
 
@@ -2177,59 +2176,10 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         prizeOptions["keywords"] = prizekeywords;
         keywordSearchOptions.push(prizeOptions);*/
 
-      //  console.log("keywordSearchOptions = " + keywordSearchOptions);
+        //  console.log("keywordSearchOptions = " + keywordSearchOptions);
 
         return keywordSearchOptions;
 
-        keywordSearchOptions = [];
-
-        for (var i = 0; i < keywordSets.length; i++) {
-            var currentSet;
-            if (i === 0) {
-                currentSet = keywords0Selected;
-            } else if (i === 1) {
-                currentSet = keywords1Selected;
-            } else { //i===2
-                currentSet = keywords2Selected;
-            }
-            // Check to see if this set is shown.
-            var setOption = {};
-            if (keywordSets[i].shown !== 'true') {
-                setOption['operation'] = '';
-                setOption['keywords'] = [];
-                keywordSearchOptions.push(setOption);
-                continue;
-            }
-
-            // Find out if operation is AND or NOT.
-            var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
-            if (operation === '') {
-                operation = 'AND';
-            }
-            setOption['operation'] = operation.toLowerCase();
-
-            // Extract keywords checked off for this set.
-            var keywords = [];
-            $(root.find('.keywordsMultiselect')[i]).find(':selected').each(function (i, selected) {
-                keywords.push($(selected).text().toLowerCase());
-                currentSet.push($(selected).text().toLowerCase()); //text of option that will be displayed
-            });
-            setOption["keywords"] = keywords;
-
-            keywordSearchOptions.push(setOption);
-
-        }
-
-
-        var prizeOptions = {};
-        var prizekeywords = [];
-        for (var i = 0; i < Object.getOwnPropertyNames(selectedPrizes).length; i++) {
-            prizekeywords.push(Object.getOwnPropertyNames(selectedPrizes)[i]);
-        }
-        prizeOptions["keywords"] = prizekeywords;
-        keywordSearchOptions.push(prizeOptions);
-
-        return keywordSearchOptions;
 
     }
 
@@ -3038,12 +2988,12 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 doubleClickHandler()
 
                 // if the idle timer hasn't started already, start it
-                if (!idleTimer && !previewing && !lockKioskMode) {
+                /*if (!idleTimer && !previewing && !lockKioskMode) {
                     var timerDuration = {
                         duration: idleTimerDuration ? idleTimerDuration : null
                     }
                     idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                    idleTimer.start();
+                    //idleTimer.start();
                 }
                 else if (idleTimer && !previewing && !lockKioskMode && idleTimerDuration) {
                     var timerDuration = {
@@ -3052,9 +3002,9 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     var timerStopped = idleTimer.isStopped();
                     idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
                     if (!timerStopped) {
-                        idleTimer.start();
+                        //idleTimer.start();
                     }
-                }
+                } */
                 //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
                 setTimeout(function () { showArtwork(currentWork, false)() }, 10)
                 zoomTimeline(artworkCircles[currentWork.Identifier])
