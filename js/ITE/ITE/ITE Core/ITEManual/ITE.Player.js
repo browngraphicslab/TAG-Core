@@ -1120,11 +1120,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         for (var key = 0; key < keys.length; key++) {
             var val = doq.Metadata.InfoFields[keys[key]];
             var d;
-            if (special.indexOf(keys[key]) === -1) {
-                d = makeInfoField(keys[key] + ": " + val).css('top', top + 'px');
-                $("#infoBlock").append(d);
-                top += d.height() + 12;
-            }
+            d = makeInfoField(keys[key] + ": " + val).css('top', top + 'px');
+            $("#infoBlock").append(d);
         }
     }
 
