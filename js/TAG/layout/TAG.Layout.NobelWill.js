@@ -148,6 +148,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         $("#splashScreenRoot").remove();
 
         SetWillImage(pageNumber);
+        
+        //TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
+
         background = $(document.createElement('div'));
         background.css({
             "height": '100%',
@@ -170,7 +173,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'font-family': 'Cinzel'
         })
         background.append(sideBar);
-
+        $("#associatedMediaScroller").remove()
+        $("#associatedMediaScroller").die()
         associatedMediaScroller = $(document.createElement('div'));
         associatedMediaScroller.attr({id : "associatedMediaScroller"})
         associatedMediaScroller.css({
@@ -255,6 +259,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         canvas[0].height = 1080;
         canvas[0].width = 1920;
         canvas.css("position", "absolute");
+        canvas.css({
+            "z-index" : "300"
+        })
 
         root.append(canvas);
 
@@ -277,17 +284,69 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 hardcodedHotspotSpecs = [[63.5, 15, 17, 3.5], [66.5, 30, 11, 3], [61, 34.5, 12.5, 2.5], [47, 54, 23.5, 3], [47.5, 65.4, 18.5, 3]]
 
                 leftTextArray = [
-                    17,'I, the undersigned, Alfred Bernhard', ' Nobel, do hereby, after mature', ' deliberation, declare the following to be my last Will and Testament', ' with respect to such property as may be', ' left by me at the time of my death:',
-                    28.5,'To my nephews, Hjalmar and Ludvig', ' Nobel, the sons of my brother Robert Nobel, I bequeath', ' the sum of Two Hundred Thousand Crowns each;',
-                    35.5,'To my nephew Emanuel Nobel, the sum of Three', ' Hundred Thousand, and to my niece Mina Nobel,', 40, ' One Hundred Thousand Crowns;',
-                    42.5, 'To my brother Robert Nobel’s daughters, Ingeborg', ' and Tyra, the sum of One Hundred Thousand Crowns each;',
-                    48.5, 'Miss Olga Boettger, at present staying', ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive', ' One Hundred Thousand Francs;',
-                    55, 'Mrs Sofie Kapy von Kapivar, whose address', ' is known to the Anglo-Oesterreichische Bank in Vienna,', ' is hereby entitled to an annuity of 6000 Florins Ö.W.', ' which is paid to her by the said Bank, and to this end I have',63.5, ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
-                    65.5, 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,', ' Stockholm, will receive One Hundred Thousand Crowns;',
-                    71.5, 'Miss Elise Antun, presently living at 32 Rue de Lubeck,', ' Paris, is entitled to an annuity of Two Thousand', ' Five Hundred Francs. In addition,', ' Forty Eight Thousand Francs owned', ' by her are at present in my custody, and shall be refunded;',
-                    81.5, 'Mr Alfred Hammond, Waterford, Texas,', ' U.S.A. will receive Ten Thousand Dollars;',
-                    87,'The Misses Emy and Marie Winkelmann,' 
+                    15, 'I, the undersigned, Alfred Bernhard',
+                    17.5,' Nobel, do hereby, after mature',
+                    20.25,' deliberation, declare the following to be my last Will and Testament',
+                    22.75,' with respect to such property as may be',
+                    25.5,' left by me at the time of my death:',
+                    28, 'To my nephews, Hjalmar and Ludvig',
+                    30,' Nobel, the sons of my brother Robert Nobel, I bequeath',
+                    32.5,' the sum of Two Hundred Thousand Crowns each;',
+                    34.75, 'To my nephew Emanuel Nobel, the sum of Three',
+                    37,' Hundred Thousand, and to my niece Mina Nobel,',
+                    40, ' One Hundred Thousand Crowns;',
+                    42, 'To my brother Robert Nobel’s daughters, Ingeborg',
+                    44.25,' and Tyra, the sum of One Hundred Thousand Crowns each;',
+                    47.25, 'Miss Olga Boettger, at present staying',
+                    49.5,' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
+                    51.75,' One Hundred Thousand Francs;',
+                    54, 'Mrs Sofie Kapy von Kapivar, whose address',
+                    56.25,' is known to the Anglo-Oesterreichische Bank in Vienna,',
+                    58.75,' is hereby entitled to an annuity of 6000 Florins Ö.W.',
+                    61, ' which is paid to her by the said Bank, and to this end I have',
+                    63.5, ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
+                    65.5, 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
+                    67.5,' Stockholm, will receive One Hundred Thousand Crowns;',
+                    70.25, 'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
+                    72.25,' Paris, is entitled to an annuity of Two Thousand',
+                    74.75,' Five Hundred Francs. In addition,',
+                    77.5,' Forty Eight Thousand Francs owned',
+                    79.75,' by her are at present in my custody, and shall be refunded;',
+                    82.5, 'Mr Alfred Hammond, Waterford, Texas,',
+                    84.75, ' U.S.A. will receive Ten Thousand Dollars;',
+                    86.5,'The Misses Emy and Marie Winkelmann,' 
                 ]
+                sliderPositions = [
+                    [14.5, 13],
+                    [17.5, 13],
+                    [20.25, 12.75],
+                    [22.75, 12.5],
+                    [25.5, 12],
+                    [28, 12.25],
+                    [30, 12.5],
+                    [32.5, 12.5],
+                    [34.5, 12.75],
+                    [37, 12.75],
+                    [40, 12.25],
+                    [42, 12.25],
+                    [44.25, 12.5],
+                    [47.25, 12],
+                    [49, 12.5],
+                    [51.5, 12],
+                    [53.5, 12.25],
+                    [56, 12.25],
+                    [58.25, 12.25],
+                    [61, 11.75],
+                    [63, 12.5],
+                    [65.5, 12.25],
+                    [67.25, 12.5],
+                    [69.75, 12.25],
+                    [71.75, 12.5],
+                    [74.5, 12],
+                    [76.5, 11.75]
+                ]
+
+                /*
                 sliderPositions = [
                     [14, 13.5],
                     [27.5, 12.25],
@@ -296,7 +355,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     [63.2, 11.8],
                     [74.75, 11],
                     [85.5, 6],
-                ]
+                ]*/
                 break;
             case 2:
                 associatedMediaNobelKeywords = [['Georges Fehrenbach', 4], ['estate', 6], ['fund', 6], ['greatest benefit to mankind', 6], ['physics', 6], ['chemical', 6], ['physiology or medicine', 6], ['Literature', 6]];
@@ -326,14 +385,76 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [61, 64, 4, 2.5], [68.5, 64, 8, 2.5], [51.25, 70.25, 6.25, 2.5], [66.5, 81.75, 7.25, 2.5], [76.75, 84.5, 5.75, 2.5]]
 
                 leftTextArray = [
-                    ['the most outstanding work in an ideal direction; and one part to the person who shall have done the most or the best work for fraternity between nations, for the abolition or reduction of standing armies and for the holding and promotion of peace congresses. The prizes for physics and chemistry shall be awarded by the Swedish Academy of Sciences; that for physiological or medical work by the Caroline Institute in Stockholm; that for literature by the Academy in Stockholm, and that for champions of peace by a committee of five persons to be elected by the Norwegian Storting. It is my express wish that in awarding the prizes no consideration whatever shall be given to the nationality of the candidates, but that the most worthy shall receive the prize, whether he be a Scandinavian or not.', 11.5],
-                    ['As Executors of my testamentary dispositions, I hereby appoint Mr Ragnar Sohlman, resident at Bofors, Värmland, and Mr Rudolf Lilljequist, 31 Malmskillnadsgatan, Stockholm, and at Bengtsfors near Uddevalla. To compensate for their pains and attention, I grant to Mr Ragnar Sohlman, who will presumably have to devote most time to this matter, One Hundred Thousand Crowns, and to Mr Rudolf Lilljequist, Fifty Thousand Crowns;', 45],
-                    ['At the present time, my property consists in part of real estate in Paris and San Remo, and in part of securities deposited as follows: with The Union Bank of Scotland Ltd in Glasgow and London, Le Crédit Lyonnais, Comptoir National d’Escompte, and with Alphen Messin & Co. in Paris; with the stockbroker M.V. Peter of Banque Transatlantique, also in Paris; with Direction der Disconto Gesellschaft and Joseph Goldschmidt & Cie, Berlin; with the Russian Central Bank, and with Mr Emanuel Nobel in Petersburg; with Skandinaviska Kredit Aktiebolaget in Gothenburg and Stockholm,', 66],
+                    9, 'the most outstanding work in an ideal direction; and one part to the',
+                    11.25, 'person who shall have done the most or the best work for fraternity',
+                    13.5, 'between nations, for the abolition or reduction of standing armies',
+                    15.75, 'and for the holding and promotion of peace congresses.',
+                    18, 'The prizes for physics and chemistry shall be awarded by the Swedish',
+                    20.25, 'Academy of Sciences; that for physiological or medical',
+                    22.5, 'work by the Caroline Institute in Stockholm; that for literature',
+                    24.75, 'by the Academy in Stockholm, and that for champions of peace',
+                    27, 'by a committee of five persons to be elected',
+                    29.25, 'by the Norwegian Storting. It is my express',
+                    31.5, 'wish that in awarding the prizes no consideration whatever',
+                    34, 'shall be given to the nationality of the candidates,',
+                    36.5, 'but that the most worthy shall receive the prize,',
+                    38.75, 'whether he be a Scandinavian or not.',
+                    42, 'As Executors of my testamentary dispositions,', 
+                    44.25, 'I hereby appoint Mr Ragnar Sohlman,',
+                    46.75, 'resident at Bofors, Värmland, and Mr',
+                    49.25, 'Rudolf Lilljequist, 31 Malmskillnadsgatan, Stockholm,',
+                    51.5, 'and at Bengtsfors near Uddevalla. To compensate',
+                    53.75, 'for their pains and attention, I grant to Mr,',
+                    56, 'Ragnar Sohlman, who will presumably have to',
+                    58.25, 'devote most time to this matter, One Hundred Thousand Crowns,',
+                    60.25, 'and to Mr Rudolf Lilljequist, Fifty Thousand Crowns;',
+                    63, 'At the present time, my property consists',
+                    65.25, 'in part of real estate in Paris and San Remo, and',
+                    67.75, 'in part of securities deposited as follows: with The Union Bank of Scotland',
+                    69.75, 'Ltd in Glasgow and London, Le Crédit Lyonnais,',
+                    72, 'Comptoir National d’Escompte, and with Alphen Messin',
+                    74.5, '& Co. in Paris; with the stockbroker M.V. Peter of Banque',
+                    76.75, 'Transatlantique, also in Paris; with Direction',
+                    79, 'der Disconto Gesellschaft and Joseph Goldschmidt',
+                    81.25, '& Cie, Berlin; with the Russian Central Bank, and with',
+                    83.5, 'Mr Emanuel Nobel in Petersburg; with',
+                    85.75, 'Skandinaviska Kredit Aktiebolaget in Gothenburg and Stockholm,'
                 ]
                 sliderPositions = [
-                    [7.75, 33.75],
-                    [41.5, 21],
-                    [62.25, 25.75]
+                    [7.75, 12.5],
+                    [11, 11.5],
+                    [13.25, 11.5],
+                    [15.5, 11.5],
+                    [17.75, 11.5],
+                    [20, 11.5],
+                    [22.25, 11.5],
+                    [24.5, 11.5],
+                    [26.75, 11.5],
+                    [29, 11.5],
+                    [31.25, 12],
+                    [33.75, 12],
+                    [36.25, 12],
+                    [38.5, 12.5],
+                    [41.75, 12],
+                    [44, 11.5],
+                    [46.5, 12],
+                    [49, 11.5],
+                    [51.25, 11.5],
+                    [53.5, 11.5],
+                    [55.75, 11.5],
+                    [58, 11.5],
+                    [60, 11.25],
+                    [62.75, 12],
+                    [65, 11.5],
+                    [67.5, 11.5],
+                    [69.5, 11.5],
+                    [71.75, 11.5],
+                    [74.25, 11.25],
+                    [76.5, 11.5],
+                    [78.75, 11.5],
+                    [81, 11.5],
+                    [83.25, 11.5],
+                    [85.5, 11.5]
                 ]
                 break;
             case 4:
@@ -461,7 +582,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'width': '6%',
                     'bottom': '20px',
                     'left': "31.75%",
-                    'z-index': '99'
+                    'z-index': '599'
                 });
                 leftArrow.click(function () {
                     pauseNobel();
@@ -473,7 +594,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'background-color': 'transparent',
                     'bottom': '20px',
                     'left': "69.75%",
-                    'z-index': '99'
+                    'z-index': '599'
                 });
                 rightArrow.click(
                     function () {
@@ -499,7 +620,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 var sliderBarInnerds = $(document.createElement('div'));
                 sliderBarInnerds.css({
                     'position': 'absolute',
-                    'background-color': "rgb(254,161,0)",
+                    'background-color': NOBEL_ORANGE_COLOR,
                     'opacity': '.4',
                     'left': '40.75%',
                     'width': '59.25%',
@@ -527,12 +648,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 sliderBar.css({
                     'position': 'absolute',
                     'background-color': 'transparent',
-                    'border': '3px solid rgb(254,161,0)',
+                    'border': '3px solid '+NOBEL_ORANGE_COLOR,
                     'border-radius': '12px',
                     'left': '1%',
                     'width': '75.5%',
                     'height': '10%',
-                    'z-index': '100'
+                    'z-index': '500'
                 }).click(pauseNobel)
                 sideBar.mouseup(function (e) {
                 	mouseUp(e)
@@ -550,6 +671,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 })
                 sliderBar.mouseup(function (e) {
                 	mouseUp(e)
+                })
+                canvas.mouseup(function (e) {
+                    mouseUp(e)
                 })
                 $("#associatedMediaScroller").mouseup(function (e) {
                 	mouseUp(e)
@@ -572,6 +696,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 background.mousemove(function (e) {
                     touching = true;
                 	mouseMove(e)
+                })
+
+                canvas.mousemove(function (e) {
+                    touching = true;
+                    mouseMove(e)
                 })
 
 
@@ -1136,7 +1265,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'top': hotSpotInfo[i][1] + '%',
                 'width': hotSpotInfo[i][2] + '%',
                 'height': hotSpotInfo[i][3] + '%',
-                'z-index': '99'
             })
             div.attr({
                 id: associatedMedia[i].Identifier,
@@ -1191,16 +1319,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             nextPage(true);
             return;
         }
-        if (chunk >= 0 && chunk < (textDivArray.length / 5)) {
+        if (chunk >= 0 && chunk < (textDivArray.length - 4)) {
             hideNobelAssociatedMedia();
             stopAudio();
 
             for (var i = 0; i < textDivArray.length; i++) {
-                if (chunk*5>i || i-(chunk*5)>4) {
-                    fadeText(textDivArray[i], 'black', null, duration || 1000)
+                if (i>=chunk && i<chunk+5) {
+                    fadeText(textDivArray[i], 'white', null, duration || 1000)
                 }
                 else {
-                    fadeText(textDivArray[i], 'white', null, duration || 1000)
+                    fadeText(textDivArray[i], 'black', null, duration || 1000)
                 }
             }
             if (chunk === 0) {
@@ -1217,12 +1345,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             }
             moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { if (nobelIsPlaying) { makeAndPlaySound(callback) }; checkForHotspots() } : function () { if (nobelIsPlaying) { makeAndPlaySound() }; checkForHotspots() }, duration || 1000);
 
+            /*
             //TODO :  add enabling associated media
             if (associatedMediaNobelLocations) {
                 for (var i = 0; i < associatedMediaNobelLocations.length; i++) {
                     associatedMediaNobelLocations[i] = false;
                 }
-            }
+            }*/
             chunkNumber = chunk;
         }
 
@@ -1536,11 +1665,18 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			"border": "3px solid " + NOBEL_ORANGE_COLOR,
     			"border-radius": "10px",
     			"padding-bottom": "5%",
-				'color' : 'white'
+				'color' : 'red'
     		}).text(extra[1])
     		d.attr({
 				src : extra[0]
     		})
+    		var t = $(document.createElement('div'));
+    		t.css({
+    		    "position": 'relative',
+    		    'width': "100%",
+    		    'color': 'red'
+    		}).text(extra[1])
+            d.append(t)
 			return d
     	}
 
@@ -1590,13 +1726,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var titles = [
 			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
 			[],
-			[],
+			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
 			[]
     	]
     	var images = [
 			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png'],
 			[],
-			[],
+			['Popup_3_1.png', 'Popup_3_2.png', 'Popup_3_3.png', 'Popup_3_4.png', 'Popup_3_5.png', 'Popup_3_6.png', 'Popup_3_7.png', 'Popup_3_8.png', '', 'Popup_3_10.png', 'Popup_3_11.png'],
 			[]
     	]
     	var texts = [
@@ -1608,7 +1744,30 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death."
 			],
 			[],
-			[],
+			[
+                "Alfred Nobel was interested in social issues, and had a special interest in the peace movement. Nobel’s engagement in the cause for world peace was in part inspired by his acquaintance with Bertha von Suttner, and in part by the use of his inventions in war and terrorist attacks. Peace was the fifth and final prize area that Nobel mentioned in his will.",
+                "The Royal Swedish Academy of Sciences was formed in 1739 by Carl Linnaeus and a number of other Swedsih scientists. It is an independent organisation whose overall objective is to promote the sciences and strengthen their influence in society. Alfred Nobel blev 1884 utländsk ledamot i akademien.",
+                "Karolinska Institutet  is a medical university in Stockholm, Sweden. It was founded in 1810 on Kungsholmen on the west side of Stockholm; the main campus was relocated decades later to Solna, just outside Stockholm. The donation made in the will was not the first that Alfred Nobel made to Karolinska Institutet. In 1890 he donated 50,000 Swedish to the institute in order to create a fund in the memory of his mother Andriette Nobel.",
+                "When Alfred Nobel wrote “the Academy in Stockholm,” it was not entirely clear whether he meant the Swedish Academy or the Royal Academy of Sciences. However the interpretation was that he meant the Swedish Academy. The Swedish Academy was founded in 1786 by King Gustav III. The primary purpose of the Academy is to further the 'purity, strength, and sublimity of the Swedish language'.",
+                "At the time when Alfred Nobel wrote his will, Sweden and Norway were joined in a union with a common foreign policy. However, Norway had a parliament, the Storting, and Alfred Nobel tasked the Storting with electing a committee, which was to award a peace prize. Despite its members being appointed by a parliament, the committee is a private body.",
+                "Over the course of his life, Alfred Nobel experienced many different places. This is an important background to his express wish that no consideration be given to the nationality of the Nobel Prize candidates.",
+                "Ragnar Sohlman (1870–1948) was Alfred Nobel’s assistant during the years 1893–96. He began his career with Nobel in Paris, and later also worked with Nobel in San Remo, as well as at Nobel’s experimental laboratory in Bofors, Sweden in 1896–97. In Alfred Nobel’s will, Sohlman, along with Rudolph Lilljequist, was appointed an executor of Nobel’s estate. It was largely due to Sohlman’s work that the Nobel Foundation could be established in 1900. Sohlman was the acting director of the Nobel Foundation during the period 1929–1946.",
+                "During his later years Nobel took an interest in ammunition and weapons technology. In 1893 he bought the weapons factory at Bofors, outside the town of Karlskoga in western Sweden. There, Björkborn mansion became Nobel's last home in Sweden. His assistant Ragnar Sohlman worked at the laboratory of the factory.",
+                "Alfred Nobel's inventions and companies made him a very rich man. In today's money the estate would be worth approximately 200 million US dollars. According to an estate inventory made after his death his assets in different countries were as follows: \n" +
+                    "Country		Amount in Swedish Kronor \n" +
+                    "Sweden		5,796,140.00 \n" +
+                    "Norway		94,472.28 \n" +
+                    "Germany		6,152,250.95 \n" +
+                    "Austria		228,754.20 \n" +
+                    "France		7,280,817.23 \n" +
+                    "Scotland	3,913,938.67 \n" +
+                    "England		3,904,235.32 \n" +
+                    "Italy		630,410.10 \n" +
+                    "Russia		5,232,773.45 \n" + 
+                    "Total		33,233,792.20", 
+                "Alfred Nobel had spent time in Paris in his youth, and at the age of 40, he bought a house there. In the years before this, he had lived in Hamburg, but he had spent most of that time traveling, and his “home” there seems to have been more of a provisory nature. He continued to travel extensively even after he had moved to Paris, but he had definitely found a more permanent residence. He had also gained a home that reflected his financial, social and cultural status.",
+                "Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy."
+			],
 			[]
     	]
     	var collections = [

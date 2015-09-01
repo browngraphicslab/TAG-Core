@@ -71,7 +71,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     // idleTimer.start();
     //idleTimer && idleTimer.kill();
     //idleTimer = null;
-    backButton.attr('src', tagPath+'images/Back_wshadow.svg');
+    backButton.attr('src', tagPath+'images/Back.svg');
+    backButton.css('width', '7.5%');
 
     //clicked effect for back button
     backButton.on('mousedown', function(){
@@ -90,24 +91,24 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         prevpagelink = prevExhib.Identifier
     }
 
-    if(IS_WEBAPP) {
-        linkButton.attr('src', tagPath+'images/link.svg');
-        linkButton.on('click', function() {
-            var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
-                tagpagename: 'tour',
-                tagguid: tourObj.Identifier,
-                prevpage: prevpagelink,
-                tagonlytour: false
-            });
+    // if(IS_WEBAPP) {
+    //     linkButton.attr('src', tagPath+'images/link.svg');
+    //     linkButton.on('click', function() {
+    //         var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
+    //             tagpagename: 'tour',
+    //             tagguid: tourObj.Identifier,
+    //             prevpage: prevpagelink,
+    //             tagonlytour: false
+    //         });
 
-            root.append(linkOverlay);
-            linkOverlay.fadeIn(500, function() {
-                linkOverlay.find('.linkDialogInput').select();
-            });
-        });
-    } else {
+    //         root.append(linkOverlay);
+    //         linkOverlay.fadeIn(500, function() {
+    //             linkOverlay.find('.linkDialogInput').select();
+    //         });
+    //     });
+    // } else {
         linkButtonContainer.remove();
-    }
+    // }
 
     if(ispagetoload) {
         pageToLoad.pagename = '';

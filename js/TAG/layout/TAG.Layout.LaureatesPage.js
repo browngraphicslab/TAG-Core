@@ -2031,6 +2031,10 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             });
         });
 
+        //make a dictionary that stores all the artworks that have this metadata
+
+
+
         // Keywords.
         // Get keywords from the server!
         keywordSets = TAG.Worktop.Database.getKeywordSets();
@@ -2094,12 +2098,9 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
      * @return      array of objects (one per set), each with format {"operation": [AND/NOT], "keywords": [array of checked keywords]}
      */
     function getKeywordSearchOptions() {
-
+        /*
         keywordSearchOptions = [];
-        console.log("keyword sets length = " + keywordSets.length);
 
-        var keywords = [];
-        //Regular drop downs
         for (var i = 0; i < keywordSets.length; i++) {
             var currentSet;
             if (i === 0) {
@@ -2110,7 +2111,6 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 currentSet = keywords2Selected;
             }
             // Check to see if this set is shown.
-
             var setOption = {};
             /*if (keywordSets[i].shown !== 'true') {
                 setOption['operation'] = '';
@@ -2120,6 +2120,88 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             }*/
 
             // Find out if operation is AND or NOT.
+            /*var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
+            if (operation === '') {
+                operation = 'AND';
+            }
+            setOption['operation'] = operation.toLowerCase();
+
+            // Extract keywords checked off for this set.
+
+            
+            var keywords = [];
+
+            if (i < 2) {
+                $(root.find('.keywordsMultiselect')[i]).find(':selected').each(function (i, selected) {
+                    keywords.push($(selected).text().toLowerCase());
+                    currentSet.push($(selected).text().toLowerCase()); //text of option that will be displayed
+                });
+            
+             }else{ // if (i === 2) //TO DO: Hardcode prize icons to correspond to 
+                var keywords3 = TAG.Worktop.Database.getKeywordSets()[2];
+                var prizeKeywords = Object.getOwnPropertyNames(selectedPrizes);
+
+                for (var j = 0; j < prizeKeywords.length; j++) {
+                    var x;
+                    if (prizeKeywords[j] === "physics") {
+                        x = 0;
+                    } else if (prizeKeywords[j] === "chemistry") {
+                        x = 1;
+                    } else if (prizeKeywords[j] === "medicine") {
+                        x = 2;
+
+                    }else if (prizeKeywords[j] === "literature") {
+                        x = 3;
+                    }else if (prizeKeywords[j] === "peace") {
+                        x = 4;
+                    }else{
+                        x = 5;
+                    }
+
+                    keywords.push(keywords3.keywords[x]);
+
+                }
+            }
+
+            setOption["keywords"] = keywords;
+            keywordSearchOptions.push(setOption);
+
+        }
+
+        /*
+        var prizeOptions = {};
+        var prizekeywords = [];
+        for (var i = 0; i < Object.getOwnPropertyNames(selectedPrizes).length; i++) {
+            prizekeywords.push(Object.getOwnPropertyNames(selectedPrizes)[i]);
+        }
+        prizeOptions["keywords"] = prizekeywords;
+        keywordSearchOptions.push(prizeOptions);*/
+
+      //  console.log("keywordSearchOptions = " + keywordSearchOptions);
+
+        return keywordSearchOptions;
+
+        keywordSearchOptions = [];
+
+        for (var i = 0; i < keywordSets.length; i++) {
+            var currentSet;
+            if (i === 0) {
+                currentSet = keywords0Selected;
+            } else if (i === 1) {
+                currentSet = keywords1Selected;
+            } else { //i===2
+                currentSet = keywords2Selected;
+            }
+            // Check to see if this set is shown.
+            var setOption = {};
+            if (keywordSets[i].shown !== 'true') {
+                setOption['operation'] = '';
+                setOption['keywords'] = [];
+                keywordSearchOptions.push(setOption);
+                continue;
+            }
+
+            // Find out if operation is AND or NOT.
             var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
             if (operation === '') {
                 operation = 'AND';
@@ -2127,27 +2209,28 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             setOption['operation'] = operation.toLowerCase();
 
             // Extract keywords checked off for this set.
-            
+            var keywords = [];
             $(root.find('.keywordsMultiselect')[i]).find(':selected').each(function (i, selected) {
-                console.log("keywords are selected")
                 keywords.push($(selected).text().toLowerCase());
                 currentSet.push($(selected).text().toLowerCase()); //text of option that will be displayed
             });
+            setOption["keywords"] = keywords;
 
-
+            keywordSearchOptions.push(setOption);
 
         }
 
-        //Prize filter keywords
-       for (var i = 0; i < Object.getOwnPropertyNames(selectedPrizes).length; i++) {
-            keywords.push(Object.getOwnPropertyNames(selectedPrizes)[i]);
+
+        var prizeOptions = {};
+        var prizekeywords = [];
+        for (var i = 0; i < Object.getOwnPropertyNames(selectedPrizes).length; i++) {
+            prizekeywords.push(Object.getOwnPropertyNames(selectedPrizes)[i]);
         }
-        
-        setOption["keywords"] = keywords;
-        keywordSearchOptions.push(setOption);
-        console.log("keyword search options are = " + setOption["keywords"]);
+        prizeOptions["keywords"] = prizekeywords;
+        keywordSearchOptions.push(prizeOptions);
 
         return keywordSearchOptions;
+
     }
 
     function displaySelectedKeywords() {
@@ -2163,12 +2246,12 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
             // Check to see if this set is shown.
             var setOption = {};
-            if (keywordSets[i].shown !== 'true') {
+            /*if (keywordSets[i].shown !== 'true') {
                 setOption['operation'] = '';
                 setOption['keywords'] = [];
                 keywordSearchOptions.push(setOption);
                 continue;
-            }
+            }*/
 
             // Extract keywords checked off for this set.
             $(root.find('.keywordsMultiselect')[i]).find(':selected').each(function (i, selected) {
