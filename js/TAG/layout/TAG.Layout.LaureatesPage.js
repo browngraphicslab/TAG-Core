@@ -855,7 +855,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
       if (keywordSets && showKeywords) {
             // Create unordered list of select elements.
             var selectList = $(document.createElement('ul')).addClass('rowLeft'); // Class keeps stuff inline and hides bullets.
-
+            
             // Loop through the categories of keywords. 
             keywordSets.forEach(function(set, setIndex) {
 

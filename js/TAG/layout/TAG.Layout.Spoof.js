@@ -4,10 +4,28 @@
     Spoof server
 */
 TAG.Layout.Spoof = (function () {
-    return { getLaureates: getLaureates };
-
+    return {
+        getLaureates: getLaureates,
+        getKeywordSets : getKeywordSets
+    };
+    function getKeywordSets() {
+        var kw = 
+            [
+                {
+                    "shown" : true
+                },
+                {
+                    "shown": true
+                },
+                {
+                    "shown": true
+                }
+            ]
+        return kw
+    }
     function getLaureates(callback){
         var db = getDB().laureates;
+        var waitingDoqs = {}
         var map = getMap();
         var doqs = []
         for (var i = 0; i < db.length; i++) {
@@ -15,7 +33,7 @@ TAG.Layout.Spoof = (function () {
             for (var k = 0; k < ids.length; k++) {
                 var id = ids[k]
                 if (map[id]) {
-                    var doq = db[i]
+                    var doq = jQuery.extend({},db[i])
                     doq.Private = true
                     doq.ContentType = "Image"
                     doq.Type = "Artwork"
@@ -36,29 +54,27 @@ TAG.Layout.Spoof = (function () {
                     doq.KeywordsSet1 = doq.Year.substring(0, 3) + "0s"
                     doq.KeywordsSet2 = doq.gender
                     doq.KeywordsSet3 = "none"
+                    waitingDoqs[map[id]] = doq
                     Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + map[id]).done(function (file) {
                         var url = URL.createObjectURL(file, { oneTimeOnly: true });
-                        doq.Thumbnail = { "FilePath": url }
-                        doqs.push(doq)
+                        var d = waitingDoqs[file.name]
+                        d.Thumbnail = { "FilePath": url }
+                        doqs.push(d)
                     })
+                    }
+                }
+            }
+
+            function poll() {
+                if (doqs.length === Object.keys(map).length) {
+                    callback(doqs);
                 }
                 else {
-                    console.log(id)
+                    setTimeout(poll, 500);
                 }
             }
+            poll()
         }
-
-        function poll() {
-            if (doqs.length === Object.keys(map).length) {
-                callback(doqs);
-            }
-            else {
-                console.log("polling: " + doqs.length + "    goal: " + Object.keys(map).length);
-                setTimeout(poll, 500);
-            }
-        }
-        poll()
-    }
 
 
 
