@@ -6,6 +6,7 @@
 TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exhibition) {
     $("#startPageLoadingOverlay").remove();
     "use strict";
+
     var root = $("#tagRoot"),
         showInitialNobelWillBox = true,
         sliderBar,//the big yellow div sliding up and down
@@ -36,16 +37,99 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         hotspotsShown,
 		bezierVisible = false,
         willImage,
-        NOBEL_WILL_COLOR = 'rgb(254,161,0)',
-        //NOBEL_WILL_COLOR = 'rgb(189,125,13)',
-        NOBEL_ORANGE_COLOR = 'rgb(254,161,0)',
+        videoContainer,
+        idleTimer,
+        NOBEL_ORANGE_COLOR = '#d99b3b',
+        IDLE_TIMER_DURATION = 300000, //5 minutes
 
         dragging = false,
+        touching = false,
         lastDragY = 0,
+
+        LIGHTBULB_ICON = tagPath + 'images/icons/Play.svg',
+        timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
+        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair),
 
         FIX_PATH = TAG.Worktop.Database.fixPath;
 
     nobelWillInit();
+    videoOverlay();
+
+    /** function videoOverlay
+    *   creates "screensaver" overlay to be displayed after idle timer expires
+    */
+    function videoOverlay() {
+
+        //stop timer and unbind mousedown and mousemove
+        idleTimer && idleTimer.kill();
+        $(document).unbind('mousedown', restartTimer);
+        $(document).unbind('mousemove', restartTimer);
+
+        videoContainer = $(document.createElement('div')).attr('id', 'videoContainer');
+        var touchToExplore = $(document.createElement('div')).attr('id', 'touchToExplore'),
+            video = $(document.createElement('video')).attr('id', 'nobelVideo');
+        videoContainer.css({
+            'background-color' : 'black',
+            'position': 'absolute',
+            'width': '100%',
+            'height': '100%',
+            'top': '0%',
+            'text-align':'center',
+            'z-index':'1000',
+        });
+        touchToExplore.css({
+            'position': 'absolute',
+            'top': '10%',
+            'width' : '100%',
+            'height' : '20%',
+            'z-index': '1002',
+            'color': NOBEL_ORANGE_COLOR,
+            'font-weight': '900',
+            'text-align': 'center',
+            'font-size': '36pt',
+        }).text("TOUCH TO EXPLORE");
+        video.css({
+            'position': 'relative',
+            'width': '100%',
+            'max-width': '100%',
+            'max-height': '100%',
+            'z-index': '1001'
+        });
+        video.attr({
+            controls: false,
+            preload: 'none',
+            loop: true
+        });
+        videoElt = video[0],
+        videoElt.innerHTML = '<source src="' + tagPath + 'images/testvid.mp4' + '" type="video/mp4">';
+        videoContainer.append(video).append(touchToExplore);
+        root.append(videoContainer);
+        videoElt.play();
+
+        //click leads back to Will
+        video.click(function () {
+            removeVideo();
+        });
+        touchToExplore.click(function () {
+            removeVideo();
+        });
+    }
+
+    function removeVideo() {
+        videoContainer.remove();
+        //start new idle timer
+        var timerPair1 = TAG.Util.IdleTimer.timerPair(IDLE_TIMER_DURATION, videoOverlay),
+            timerPair2 = TAG.Util.IdleTimer.timerPair(0, function () {return;});
+        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair1,timerPair2);
+        idleTimer.start();
+        //add handler to document to restart timer on mousedown and mousemove (in this case, touch drag on slider)
+        $(document).mousedown(restartTimer);
+        $(document).mousemove(restartTimer);
+    }
+
+    function restartTimer() {
+        idleTimer && idleTimer.restart();
+    }
 
     function SetWillImage(page) {
         willImage = $(document.createElement('img'));
@@ -62,7 +146,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function nobelWillInit() {
         $("#splashScreenRoot").remove();
+
         SetWillImage(pageNumber);
+        
+        TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
+
         background = $(document.createElement('div'));
         background.css({
             "height": '100%',
@@ -85,7 +173,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'font-family': 'Cinzel'
         })
         background.append(sideBar);
-
+        $("#associatedMediaScroller").remove()
+        $("#associatedMediaScroller").die()
         associatedMediaScroller = $(document.createElement('div'));
         associatedMediaScroller.attr({id : "associatedMediaScroller"})
         associatedMediaScroller.css({
@@ -170,27 +259,94 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         canvas[0].height = 1080;
         canvas[0].width = 1920;
         canvas.css("position", "absolute");
+        canvas.css({
+            "z-index" : "300"
+        })
 
         root.append(canvas);
 
+        canvas.mouseenter(function () {
+            touching = true;
+        })
+        canvas.mouseleave(function () {
+            touching = false;
+        })
+
+        setInterval(function () {
+            if (touching===false && dragging===true) {
+                mouseUp();
+            }
+        },500)
 
         switch (pageNumber) {
             case 1:
-                associatedMediaNobelKeywords = [['Alfred Bernhard', 0], ['Robert Nobel', 1], ['Emanuel Nobel', 2], ['Sofie Kapy von Kapivar', 5], ['Alarik Liedbeck', 6]]
+                associatedMediaNobelKeywords = [['Alfred Bernhard'], ['Robert Nobel'], ['Emanuel Nobel'], ['Sofie Kapy von Kapivar'], ['Alarik Liedbeck']]
                 hardcodedHotspotSpecs = [[63.5, 15, 17, 3.5], [66.5, 30, 11, 3], [61, 34.5, 12.5, 2.5], [47, 54, 23.5, 3], [47.5, 65.4, 18.5, 3]]
 
                 leftTextArray = [
-                    17,'I, the undersigned, Alfred Bernhard', ' Nobel, do hereby, after mature', ' deliberation, declare the following to be my last Will and Testament', ' with respect to such property as may be', ' left by me at the time of my death:',
-                    28.5,'To my nephews, Hjalmar and Ludvig', ' Nobel, the sons of my brother Robert Nobel, I bequeath', ' the sum of Two Hundred Thousand Crowns each;',
-                    35.5,'To my nephew Emanuel Nobel, the sum of Three', ' Hundred Thousand, and to my niece Mina Nobel,', 40, ' One Hundred Thousand Crowns;',
-                    42.5, 'To my brother Robert Nobel’s daughters, Ingeborg', ' and Tyra, the sum of One Hundred Thousand Crowns each;',
-                    48.5, 'Miss Olga Boettger, at present staying', ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive', ' One Hundred Thousand Francs;',
-                    55, 'Mrs Sofie Kapy von Kapivar, whose address', ' is known to the Anglo-Oesterreichische Bank in Vienna,', ' is hereby entitled to an annuity of 6000 Florins Ö.W.', ' which is paid to her by the said Bank, and to this end I have',63.5, ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
-                    65.5, 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,', ' Stockholm, will receive One Hundred Thousand Crowns;',
-                    71.5, 'Miss Elise Antun, presently living at 32 Rue de Lubeck,', ' Paris, is entitled to an annuity of Two Thousand', ' Five Hundred Francs. In addition,', ' Forty Eight Thousand Francs owned', ' by her are at present in my custody, and shall be refunded;',
-                    81.5, 'Mr Alfred Hammond, Waterford, Texas,', ' U.S.A. will receive Ten Thousand Dollars;',
-                    87,'The Misses Emy and Marie Winkelmann,' 
+                    15, 'I, the undersigned, Alfred Bernhard',
+                    17.5,' Nobel, do hereby, after mature',
+                    20.25,' deliberation, declare the following to be my last Will and Testament',
+                    22.75,' with respect to such property as may be',
+                    25.5,' left by me at the time of my death:',
+                    28, 'To my nephews, Hjalmar and Ludvig',
+                    30,' Nobel, the sons of my brother Robert Nobel, I bequeath',
+                    32.5,' the sum of Two Hundred Thousand Crowns each;',
+                    34.75, 'To my nephew Emanuel Nobel, the sum of Three',
+                    37,' Hundred Thousand, and to my niece Mina Nobel,',
+                    40, ' One Hundred Thousand Crowns;',
+                    42, 'To my brother Robert Nobel’s daughters, Ingeborg',
+                    44.25,' and Tyra, the sum of One Hundred Thousand Crowns each;',
+                    47.25, 'Miss Olga Boettger, at present staying',
+                    49.5,' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
+                    51.75,' One Hundred Thousand Francs;',
+                    54, 'Mrs Sofie Kapy von Kapivar, whose address',
+                    56.25,' is known to the Anglo-Oesterreichische Bank in Vienna,',
+                    58.75,' is hereby entitled to an annuity of 6000 Florins Ö.W.',
+                    61, ' which is paid to her by the said Bank, and to this end I have',
+                    63.5, ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
+                    65.5, 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
+                    67.5,' Stockholm, will receive One Hundred Thousand Crowns;',
+                    70.25, 'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
+                    72.25,' Paris, is entitled to an annuity of Two Thousand',
+                    74.75,' Five Hundred Francs. In addition,',
+                    77.5,' Forty Eight Thousand Francs owned',
+                    79.75,' by her are at present in my custody, and shall be refunded;',
+                    82.5, 'Mr Alfred Hammond, Waterford, Texas,',
+                    84.75, ' U.S.A. will receive Ten Thousand Dollars;',
+                    86.5,'The Misses Emy and Marie Winkelmann,' 
                 ]
+                sliderPositions = [
+                    [14.5, 13],
+                    [17.5, 13],
+                    [20.25, 12.75],
+                    [22.75, 12.5],
+                    [25.5, 12],
+                    [28, 12.25],
+                    [30, 12.5],
+                    [32.5, 12.5],
+                    [34.5, 12.75],
+                    [37, 12.75],
+                    [40, 12.25],
+                    [42, 12.25],
+                    [44.25, 12.5],
+                    [47.25, 12],
+                    [49, 12.5],
+                    [51.5, 12],
+                    [53.5, 12.25],
+                    [56, 12.25],
+                    [58.25, 12.25],
+                    [61, 11.75],
+                    [63, 12.5],
+                    [65.5, 12.25],
+                    [67.25, 12.5],
+                    [69.75, 12.25],
+                    [71.75, 12.5],
+                    [74.5, 12],
+                    [76.5, 11.75]
+                ]
+
+                /*
                 sliderPositions = [
                     [14, 13.5],
                     [27.5, 12.25],
@@ -199,7 +355,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     [63.2, 11.8],
                     [74.75, 11],
                     [85.5, 6],
-                ]
+                ]*/
                 break;
             case 2:
                 associatedMediaNobelKeywords = [['Georges Fehrenbach', 4], ['estate', 6], ['fund', 6], ['greatest benefit to mankind', 6], ['physics', 6], ['chemical', 6], ['physiology or medicine', 6], ['Literature', 6]];
@@ -364,7 +520,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'width': '6%',
                     'bottom': '20px',
                     'left': "31.75%",
-                    'z-index': '99'
+                    'z-index': '599'
                 });
                 leftArrow.click(function () {
                     pauseNobel();
@@ -376,7 +532,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'background-color': 'transparent',
                     'bottom': '20px',
                     'left': "69.75%",
-                    'z-index': '99'
+                    'z-index': '599'
                 });
                 rightArrow.click(
                     function () {
@@ -402,7 +558,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 var sliderBarInnerds = $(document.createElement('div'));
                 sliderBarInnerds.css({
                     'position': 'absolute',
-                    'background-color': "rgb(254,161,0)",
+                    'background-color': NOBEL_ORANGE_COLOR,
                     'opacity': '.4',
                     'left': '40.75%',
                     'width': '59.25%',
@@ -430,12 +586,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 sliderBar.css({
                     'position': 'absolute',
                     'background-color': 'transparent',
-                    'border': '3px solid rgb(254,161,0)',
+                    'border': '3px solid '+NOBEL_ORANGE_COLOR,
                     'border-radius': '12px',
                     'left': '1%',
                     'width': '75.5%',
                     'height': '10%',
-                    'z-index': '100'
+                    'z-index': '500'
                 }).click(pauseNobel)
                 sideBar.mouseup(function (e) {
                 	mouseUp(e)
@@ -443,63 +599,48 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 willImage.mouseup(function (e) {
                 	mouseUp(e)
                 })
+                background.mouseup(function (e) {
+                	mouseUp(e)
+                })
                 sliderBar.mousedown(function (e) {
+                    touching = true;
                     dragging = true;
                     lastDragY = e.clientY;
                 })
                 sliderBar.mouseup(function (e) {
                 	mouseUp(e)
                 })
-                function percentToPx(percent) {
-                	return (percent / 100) * sideBar.height();
-                }
-                function mouseUp(e) {
-                	if (dragging) {
-                		if (e.clientX > 100) {
-                			var lineMiddle = sliderBar.offset().top + (sliderBar.height() / 2);
-                			var closest = 0;
-                			var closestDist = 5000000;
-                			for (var i = 0; i < sliderPositions.length ; i++) {
-                				var middle = percentToPx(sliderPositions[i][0]) + (percentToPx(sliderPositions[i][1]) / 2);
-                				if (Math.abs(lineMiddle - middle) < closestDist) {
-                					closestDist = Math.abs(lineMiddle - middle);
-                					closest = i;
-                				}
-                			}
-                			setChunkNumber(closest, checkForHotspots, 250);
-                		}
-                		dragging = false;
-                	}
-                }
+                canvas.mouseup(function (e) {
+                    mouseUp(e)
+                })
+                $("#associatedMediaScroller").mouseup(function (e) {
+                	mouseUp(e)
+                })
+                $("#associatedMediaScroller").mousemove(function (e) {
+                	mouseMove(e)
+                })
                 sliderBar.mousemove(function (e) {
+                    touching = true;
                 	mouseMove(e)
                 })
                 sideBar.mousemove(function (e) {
+                    touching = true;
                 	mouseMove(e)
                 })
                 willImage.mousemove(function (e) {
+                    touching = true;
                 	mouseMove(e)
                 })
-                function mouseMove(e) {
-                	if (dragging) {
-                		var diff = e.clientY - lastDragY;
-                		if ((diff > 0 && rightStack.direction() === "bottom") || ( diff<0 && rightStack.direction() == "top")) {
-                			//rightStack.switchHead();
-                		}
-                		lastDragY = e.clientY;
-                		sliderBar.css({
-                			"top": sliderBar.offset().top + diff + "px"
-                		})
-                		for (var i = 0; i < nobelHotspots.length; i++) {
-                			if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top && nobelHotspots[i][0].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
-                				rightStack.addMedia(nobelHotspots[i][1]);
-                			}
-                			else {
-                				rightStack.removeMedia(nobelHotspots[i][1]);
-                			}
-                		}
-                	}
-                }
+                background.mousemove(function (e) {
+                    touching = true;
+                	mouseMove(e)
+                })
+
+                canvas.mousemove(function (e) {
+                    touching = true;
+                    mouseMove(e)
+                })
+
 
                 sideBar.css('z-index', '10');
                 var up = $(document.createElement('img'))
@@ -567,6 +708,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                 setChunkNumber(0, null, 1);
 
+                for (var i = 0; i < associatedMedia.length; i++) {
+                	associatedMedia[i].checkHeight();
+                }
+
                 var j = 1
                 /*
                 var test = function () {
@@ -580,12 +725,52 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             }
         )
     }
+    function percentToPx(percent) {
+    	return (percent / 100) * sideBar.height();
+    }
+    function mouseUp(e) {
+    	if (dragging) {
+    		if (e===undefined || e.clientX > 100) {
+    			var lineMiddle = sliderBar.offset().top + (sliderBar.height() / 2);
+    			var closest = 0;
+    			var closestDist = 5000000;
+    			for (var i = 0; i < sliderPositions.length ; i++) {
+    				var middle = percentToPx(sliderPositions[i][0]) + (percentToPx(sliderPositions[i][1]) / 2);
+    				if (Math.abs(lineMiddle - middle) < closestDist) {
+    					closestDist = Math.abs(lineMiddle - middle);
+    					closest = i;
+    				}
+    			}
+    			setChunkNumber(closest, checkForHotspots, 400);
+    		}
+    		dragging = false;
+    	}
+    }
+    function mouseMove(e) {
+    	if (dragging) {
+    		var diff = e.clientY - lastDragY;
+    		lastDragY = e.clientY;
+    		sliderBar.css({
+    			"top": sliderBar.offset().top + diff + "px"
+    		})
+    		for (var i = 0; i < nobelHotspots.length; i++) {
+    			if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top && nobelHotspots[i][0].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
+    				rightStack.addMedia(nobelHotspots[i][1]);
+    			}
+    			else {
+    				rightStack.removeMedia(nobelHotspots[i][1]);
+    			}
+    		}
+    	}
+    }
     function checkForHotspots() {
+    	dragging = false;
     	var ctx = canvas[0].getContext("2d");
     	ctx.clearRect(0, 0, 1080, 1920);
     	var w = canvas[0].width;
     	canvas[0].width = 1;
     	canvas[0].width = w;
+        canvas.css({"opacity" : "0"})
 
     	for (var i = 0; i < nobelHotspots.length; i++) {
     		nobelHotspots[i][1].stop(true, true);
@@ -606,14 +791,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			var finalx = nobelHotspots[i][1].offset().left;
     			var finaly = nobelHotspots[i][1].offset().top + (nobelHotspots[i][1].height() / 2);
     			ctx.bezierCurveTo(finalx, div.offset().top + (div.height() / 2), div.offset().left + div.width() + 4, finaly, finalx, finaly)
-    			ctx.lineWidth = 3;
-    			ctx.strokeStyle = "rgba(200,20,20,120)";
+    			ctx.lineWidth = 3.5;
+    			ctx.strokeStyle = NOBEL_ORANGE_COLOR;
     			ctx.stroke();
     		}
     		else {
-    			nobelHotspots[i][1].fadeOut()
+    		     nobelHotspots[i][1].hide();
     		}
     	}
+    	canvas.animate({ opacity: 1 }, 400, 'easeInOutQuart')
     	bezierVisible = true;
     }
 
@@ -649,11 +835,118 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "top": numberInChunk * height + "%",
             "position" : "static",
             "border-color": NOBEL_ORANGE_COLOR,
-            "display" : "flex"
+            "display": "flex",
+            "height": "auto",
+			"margin-bottom" : "12px"
+        })
+
+        root.append(div);
+
+        var info = getPopupInfo(number);
+
+        var picWrapper = $(document.createElement("div"));
+        picWrapper.css({
+        	"position": " relative",
+        	"height": "30%",
+			"width" : "30%"
+        })
+
+		div.append(picWrapper)
+
+        var pic = $(document.createElement("img"));
+        pic.attr({ src: info.image })
+
+		var ratio = pic.height() / pic.width()
+
+        pic.css({
+        	"width": "100%",
+			"height" : "auto",
+        	"left": "12px",
+        	"top": "12px",
+			"position" : "relative"
+        })
+        picWrapper.append(pic);
+
+        div.picWrapper = picWrapper;
+
+        //div.css({"min-height" : pic.width()*ratio*.3+ 24+"px"})
+
+        var rightDiv = $(document.createElement('div'));
+        rightDiv.css({
+        	"position": "relative",
+        	"width": "65%",
+        	"height": "auto",
+			"left" : "24px"
+        })
+
+        var title = $(document.createElement('div'));
+        title.css({
+        	"width": "100%",
+        	"top": "12px",
+        	"position": "relative",
+			"height" : "auto"
         }).text(string);
+
+        rightDiv.append(title);
+
+		div.title = title
+
+        div.append(rightDiv);
+
+        var descWhole = $(document.createElement('div'));
+        descWhole.css({
+        	"width": "100%",
+        	"position": "relative",
+        	"height": "auto"
+        })
+        rightDiv.append(descWhole);
+
+		div.descWhole = descWhole
+
+        var img = $(document.createElement("img"));
+        img.attr({
+            src: LIGHTBULB_ICON,
+        });
+        img.addClass('lightbulb');
+        img.css({
+        	"right": "8px",
+        	"height": "45px",
+        	"width": "45px",
+        	"position": 'absolute',
+        	"bottom": "0px",
+        	"z-index": "550",
+        	"float": "right"
+        }).click(function () {
+        	showLargePopup(div.medianumber)
+        })
+        descWhole.append(img);
+        var desc = $(document.createElement('div'));
+        desc.css({
+        	"width": "77.5%",
+        	"position": "relative",
+        	"font-size": ".45em",
+        	"height": "auto",
+        	"top": '12px',
+			'bottom' : "50px"
+        }).text(info.shortText);
+        descWhole.append(desc);
+        var spacer = $(document.createElement('div'));
+        spacer.css({
+        	"height": "12px",
+			"width" : "100%",
+			"position": "relative",
+        })
+        descWhole.append(spacer);
         div.attr({ attr: string });
         associatedMediaScroller.append(div);
-        div.hide();/*
+        div.hide();
+
+        div.medianumber = number;
+    	//div.height(titleHeight + 40 + desc.height());
+
+		div.css({"height":"auto"})
+
+    	/*
         div.fadeIn = function () {
             div.animate({ opacity : 1 }, 400, 'easeInOutQuart');
         }
@@ -670,6 +963,20 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.numberInChunk = numberInChunk;
         div.Identifier = chunkN + "#" + numberInChunk;
 
+        div.checkHeight = function () {
+        	div.descWhole.css({
+				"min-height" : div.picWrapper.height() + 12 - div.title.height() +'px'
+        	})
+        }
+
+
+        div.mouseup(function (e) {
+        	mouseUp(e)
+        })
+
+        div.mousemove(function (e) {
+        	mouseMove(e)
+        })
         return div;
     }
 
@@ -755,8 +1062,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var w = canvas[0].width;
     	canvas[0].width = 1;
     	canvas[0].width = w;
-        for (var j = 0; j < associatedMedia.length; j++) {
-        	associatedMedia[j].fadeOut();
+    	for (var j = 0; j < associatedMedia.length; j++) {
+    		if (rightStack.indexOf(associatedMedia[j]) === -1) {
+    			associatedMedia[j].fadeOut();
+    		}
         }
     }
     /*
@@ -785,6 +1094,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function goPrevPage() {
         if (pageNumber > 0) {
+
+            idleTimer.kill();
+
             associatedMedia = []
             pageNumber-=1
             sliderBar.remove();
@@ -797,6 +1109,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#leftPageArrow").remove();
             $(".textChunkDiv").remove();
             $("#titleDiv").remove();
+            $('lightbulb').remove();
             $("#annotatedImageAssetCanvas").remove();
             $(".nobelHotspot").remove();
             $("#nobelPlayPauseButton").remove();
@@ -813,6 +1126,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
             $("#nobelPlayPauseButton").die();
+            $('.lightbulb').die();
             textDivArray = [];
             nobelWillInit();
         }
@@ -825,6 +1139,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function nextPage(isPlaying) {
         if (pageNumber < 4) {
+
+            idleTimer.kill();
+
             pageNumber += 1
             associatedMedia = []
             //annotatedImage && annotatedImage.unload();
@@ -843,6 +1160,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $(".nobelHotspot").remove();
             $("#audioFile").off();
             $("#audioFile").remove();
+            $('.lightbulb').remove();
             $("#audioFile").die();
             sliderBar.die();
             $("#upIcon").die();
@@ -854,6 +1172,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
             $("#nobelPlayPauseButton").die();
+            $('.lightbulb').die();
             textDivArray = [];
             nobelWillInit();
             if (isPlaying === true) {
@@ -884,7 +1203,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'top': hotSpotInfo[i][1] + '%',
                 'width': hotSpotInfo[i][2] + '%',
                 'height': hotSpotInfo[i][3] + '%',
-                'z-index': '99'
             })
             div.attr({
                 id: associatedMedia[i].Identifier,
@@ -906,7 +1224,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             root.append(div);
             div.MiddleY = div.offset().top + (div.height() / 2);
             nobelHotspots.push([div, associatedMedia[i]]);
-			
+            div.mouseenter(function () {
+                touching = true;
+            })
         }
     }
     /**
@@ -937,16 +1257,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             nextPage(true);
             return;
         }
-        if (chunk >= 0 && chunk < (textDivArray.length / 5)) {
+        if (chunk >= 0 && chunk < (textDivArray.length - 4)) {
             hideNobelAssociatedMedia();
             stopAudio();
 
             for (var i = 0; i < textDivArray.length; i++) {
-                if (chunk*5>i || i-(chunk*5)>4) {
-                    fadeText(textDivArray[i], 'black', null, duration || 1000)
+                if (i>=chunk && i<chunk+5) {
+                    fadeText(textDivArray[i], 'white', null, duration || 1000)
                 }
                 else {
-                    fadeText(textDivArray[i], 'white', null, duration || 1000)
+                    fadeText(textDivArray[i], 'black', null, duration || 1000)
                 }
             }
             if (chunk === 0) {
@@ -963,12 +1283,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             }
             moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { if (nobelIsPlaying) { makeAndPlaySound(callback) }; checkForHotspots() } : function () { if (nobelIsPlaying) { makeAndPlaySound() }; checkForHotspots() }, duration || 1000);
 
+            /*
             //TODO :  add enabling associated media
             if (associatedMediaNobelLocations) {
                 for (var i = 0; i < associatedMediaNobelLocations.length; i++) {
                     associatedMediaNobelLocations[i] = false;
                 }
-            }
+            }*/
             chunkNumber = chunk;
         }
 
@@ -1014,8 +1335,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'position': 'absolute',
             'opacity': '1',
             'border-radius': '18px',
-            'border-color': NOBEL_WILL_COLOR,
-            'border': '8px solid ' + NOBEL_WILL_COLOR,
+            'border-color': NOBEL_ORANGE_COLOR,
+            'border': '8px solid ' + NOBEL_ORANGE_COLOR,
             'width': '60%',
             'height': '50%',
             'top': '25%',
@@ -1119,7 +1440,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         $("#startPageLoadingOverlay").remove();
     }
     function getRightTable() {
-        var list = [];
+        var list = [];/*
         var head = "top";
         list.direction = function () {
         	return head;
@@ -1152,7 +1473,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         			}
         		}
         	}
-        }
+        }*/
         list.addMedia = function (media) {
         	if (list.indexOf(media === -1)) {
 				/*
@@ -1164,6 +1485,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         		}*/
         		list.push(media);
         		media.show()
+        		media.checkHeight();
         		list.hideBez();
         	}
         }
@@ -1186,5 +1508,221 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         return list;
     }
+    function showLargePopup(mediaNumber) {
+    	var blocker = $(document.createElement('div'));
+    	blocker.show();
+    	blocker.css({
+    		"width": "100%",
+    		"height": "100%",
+    		"background-color": "rgba(250,250,250,.55)",
+    		"position": "absolute",
+			"z-index" : "1000",
+    	}).attr({
+			id : "blocker"
+    	})
+    	root.append(blocker);
+    	var info = getPopupInfo(mediaNumber);
+    	var text = $(document.createElement('div'));
+    	var title = $(document.createElement('div'));
+    	var popup = $(document.createElement('div'));
+
+    	popup.css({
+    		"width": "78%",
+    		'height': "66%",
+    		"left": "11%",
+			"top" : "17%",
+    		"border": "3px solid " + NOBEL_ORANGE_COLOR,
+    		"border-radius": "10px",
+    		"background-color": "black",
+			"position" : "absolute"
+    	})
+
+    	blocker.append(popup);
+    	var pixWidth = popup.width()/2
+
+    	text.css({
+    		"width": "35%",
+    		'height': "85%",
+    		"left": "50%",
+    		"top": "10%",
+    		"position": "absolute",
+    		'font-size': ".625em",
+			'overflow' : 'hidden'
+    	}).text(info.text);
+    	title.css({
+    		"width": "40%",
+    		'height': "8%",
+    		"left": "50%",
+    		"top": "2.5%",
+    		"position": "absolute",
+    		"font-weight": "bold",
+			'font-size' : "1.25em"
+    	}).text(info.title)
+
+		var closeX = $(document.createElement("img"))
+    	closeX.attr({
+    		src: tagPath + 'images/icons/x.svg',
+    		id: 'closeX'
+    	})
+    	closeX.css({
+    		'left': '10px',
+    		'position': 'absolute',
+    		'top': '10px',
+    		'height': '45px'
+    	}).click(function () {
+    		$("#blocker").remove()
+    	})
+
+    	popup.append(closeX);
+
+    	img = $(document.createElement('img'));
+    	img.css({
+    		"height": "90%",
+    		"width": "auto",
+    		"left": "5%",
+    		"top": "5%",
+			"position" : 'absolute'
+    	})
+    	console.log(info.image);
+    	img.attr({
+    		src : info.image
+    	})
+    	popup.append(img);
+    	popup.append(title);
+    	popup.append(text);
+    	var imgwidth = img.width();
+    	img.css({
+			"left" : (pixWidth-imgwidth)/2 + "px"
+    	})
+
+    	function createExtra(extra) {
+    		var d = $(document.createElement('img'));
+    		d.css({
+    			"position": 'relative',
+    			'width': "100%",
+    			"border": "3px solid " + NOBEL_ORANGE_COLOR,
+    			"border-radius": "10px",
+    			"padding-bottom": "5%",
+				'color' : 'red'
+    		}).text(extra[1])
+    		d.attr({
+				src : extra[0]
+    		})
+    		var t = $(document.createElement('div'));
+    		t.css({
+    		    "position": 'relative',
+    		    'width': "100%",
+    		    'color': 'red'
+    		}).text(extra[1])
+            d.append(t)
+			return d
+    	}
+
+    	var extras = $(document.createElement('div')); //Tours and galleries
+    	extras.css({
+    		"width": "10%",
+    		"height": "95%",
+    		"top": "2.5%",
+    		"right": "2.5%",
+			"position" : "absolute"
+    	})
+    	popup.append(extras);
+    	if (info.collections.length > 0) {
+    		var gallery = $(document.createElement('div'));
+    		gallery.css({
+    			"width": "100%",
+    			"height": "5%",
+    			"color": "white",
+				"font-size" : ".8em"
+    		}).text("GALLERY")
+			extras.append(gallery)
+    		for (var i = 0; i < info.collections.length; i++) {
+    			extras.append(createExtra(info.collections[i]));
+    		}
+    	}
+    	if (info.tours.length > 0) {
+    		var tour = $(document.createElement('div'));
+    		tour.css({
+    			"width": "100%",
+    			"height": "5%",
+    			"color": "white",
+    			"font-size": ".8em"
+    		}).text("TOUR")
+    		extras.append(tour)
+    		for (var i = 0; i < info.tours.length; i++) {
+    			extras.append(createExtra(info.tours[i]));
+    		}
+    	}
+    }
+
+    function getPopupInfo(number) {
+    	var info = [];
+
+
+		//START HARDCODING INFO AREA
+
+    	var titles = [
+			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
+			[],
+			[],
+			[]
+    	]
+    	var images = [
+			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png'],
+			[],
+			[],
+			[]
+    	]
+    	var texts = [
+			[
+				"Over the course of his life, Alfred Nobel (1833–1896) experienced many different places. He grew up in rather simple circumstances in 1830’s Stockholm. He spent his youth in St. Petersburg, Russia, after his father had established himself as an inventor there. From St. Petersburg, he set off on study trips to Europe and North America. When his parents returned to Stockholm, Nobel joined them there, and together with his father, he attempted to develop new explosives. In the 1860’s, his efforts to put his inventions into profitable production carried him on lengthy business trips and visits to factories in many locations, such as Krümmel, outside Hamburg, Germany, where in 1865, he took up residence. In 1873, Nobel moved to Paris to make his home in what was perhaps the most vibrant metropolis of the day. In Paris, he continued his work as an inventor and increased his wealth, yet he was also plagued by risky business ventures and legal disputes. Toward the end of his life, he settled in San Remo, Italy, where he died on December 10, 1896.",
+				"Robert Nobel (1829–96) was Alfred Nobel’s oldest brother. Robert Nobel was involved in the early establishment of the explosives industry. He started a dynamite factory outside Helsinki, and for a few years up to 1870, he was the head of the dynamite factory at Vinterviken outside Stockholm. After a trip to the Caucasus in 1873, Robert Nobel became a pioneer in the oil industry in Baku. In 1881 he ended his active participation in the company, and returned to Sweden.",
+				"Emanuel Nobel (1859–1932) was a nephew to Alfred Nobel. After the death of his father, Ludvig Nobel, Emanuel Nobel took over leadership of the Nobel brothers’ oil company. At first, Alfred Nobel seems to have doubted Emanuel’s ability to run the large company, but Emanuel proved that he was equal to the task.",
+				"Alfred Nobel, never married. However he had a long relationship with an Austrian woman, Sofie Hess (1851–1919). Alfred Nobel met Sofie Hess during a visit to Baden bei Wien in 1876. This relationship was everything but harmonious. For a while, Alfred seems to have been happy and in love, despite all of his business worries. Soon, however, he became dissatisfied in his relationship with Sofie, yet he did not seem to want to break up with her. He scolded her for being irresponsible and childish. Alfred and Sofie’s drawn-out and uneasy relationship finally came to an end. In 1890, Sofie became pregnant. The father was another man, Nicolaus Kapy von Kapivar, whom she eventually married.",
+				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death."
+			],
+			[],
+			[],
+			[]
+    	]
+    	var collections = [
+			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], []],
+			[[], [], []],
+			[[], [], []],
+			[[], [], []]
+    	]
+    	var tours = [
+			[[], [], [],[],[]],
+			[[], [], []],
+			[[], [], []],
+			[[], [], []]
+    	]
+    	var shortTexts = [
+			[
+				"short sentence or two about a person 1.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
+				"short sentence or two about a person 2.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
+				"short sentence",
+				"short sentence or two about a person 4.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
+				"short sentence or two about a person 5.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
+			],
+			[],
+			[],
+			[]
+    	]
+
+
+    	//END HARDCODING INFO AREA
+
+
+    	info.image = tagPath + 'images/nobelwillimages/NobelWillPopupImages/'+images[pageNumber-1][number];
+    	info.text = texts[pageNumber - 1][number];
+    	info.shortText = shortTexts[pageNumber - 1][number];
+    	info.collections = collections[pageNumber-1][number];
+    	info.tours = tours[pageNumber - 1][number];
+    	info.title = titles[pageNumber - 1][number];
+
+    	return info;
+    }
+    
 };
 

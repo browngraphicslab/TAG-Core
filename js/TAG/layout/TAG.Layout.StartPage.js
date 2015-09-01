@@ -524,7 +524,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 options = {},
                 i,
                 currName;
-
+            /**
             switch (collectionName) {
                 case WILL_NAME:
                     loadingScreen("Loading Alfred Nobel's Will...");
@@ -542,6 +542,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     loadingScreen("Loading Laureates...");
                     break;
             }
+            **/
 
             $('.goToWrapper').off('click');
 
@@ -585,7 +586,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     var will = TAG.Layout.NobelWill(1);*/
                 }
                    
-                else if (collectionName === INTRO_TOUR) {//Hardcode to bring user directly into introductory tour. Not a collection page. Sorry.
+                else if (collectionName === INTRO_TOUR) {//Hardcode to bring user directly into introductory tour. Not a collection page. Sorry./
+                    /*
                     TAG.Worktop.Database.getDoq("ec87282f-4327-492a-8807-27eccbb45b8c", function (doq) {
                         if ($("#startPageLoadingOverlay").length) {
                             var iteData = TAG.Util.RIN_TO_ITE(doq)
@@ -614,7 +616,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                         else {
                             buttonClicked = false;
                         }
-                    })
+                    })*/
+                    var will = TAG.Layout.NobelWill(1);
                 }
                 else if (collectionName === HISTORY_NAME){
                     TAG.Worktop.Database.getDoq("79bb289b-0e18-4091-8e3b-f21e5d65e793",

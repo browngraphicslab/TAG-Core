@@ -105,6 +105,7 @@ var JSSRC = [
 		'js/TAG/layout/TAG.Layout.ArtworkViewer.js',           // TAGCORE
 		'js/TAG/layout/TAG.Layout.CollectionsPage.js',         // TAGCORE
         'js/TAG/layout/TAG.Layout.LaureatesPage.js',
+        'js/TAG/layout/TAG.Layout.Spoof.js',
 		'js/TAG/layout/TAG.Layout.InternetFailurePage.js',     // TAGCORE
 		'js/TAG/layout/TAG.Layout.MetroSplitscreenMessage.js', // TAGCORE
 		'js/TAG/layout/TAG.Layout.TourPlayer.js',              // TAGCORE
@@ -237,6 +238,7 @@ module.exports = function(grunt) {
 						'css/SplashScreenOverlay.styl',   // TAGCORE
 						'css/ITE.Player.styl',
 					    'css/LaureatesPage.styl',
+                        'css/WillVideo.styl',
                         'css/NobelWillImage.styl',
 						//'css/ComponentControls.styl'	 // TAGCORE
 					]

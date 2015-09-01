@@ -2098,7 +2098,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
      * @return      array of objects (one per set), each with format {"operation": [AND/NOT], "keywords": [array of checked keywords]}
      */
     function getKeywordSearchOptions() {
-
+        /*
         keywordSearchOptions = [];
 
         for (var i = 0; i < keywordSets.length; i++) {
@@ -2120,7 +2120,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             }*/
 
             // Find out if operation is AND or NOT.
-            var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
+            /*var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
             if (operation === '') {
                 operation = 'AND';
             }
@@ -2178,6 +2178,56 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         keywordSearchOptions.push(prizeOptions);*/
 
       //  console.log("keywordSearchOptions = " + keywordSearchOptions);
+
+        return keywordSearchOptions; */
+
+        keywordSearchOptions = [];
+
+        for (var i = 0; i < keywordSets.length; i++) {
+            var currentSet;
+            if (i === 0) {
+                currentSet = keywords0Selected;
+            } else if (i === 1) {
+                currentSet = keywords1Selected;
+            } else { //i===2
+                currentSet = keywords2Selected;
+            }
+            // Check to see if this set is shown.
+            var setOption = {};
+            if (keywordSets[i].shown !== 'true') {
+                setOption['operation'] = '';
+                setOption['keywords'] = [];
+                keywordSearchOptions.push(setOption);
+                continue;
+            }
+
+            // Find out if operation is AND or NOT.
+            var operation = $(root.find('.operationSelect')[i]).find(':selected').text();
+            if (operation === '') {
+                operation = 'AND';
+            }
+            setOption['operation'] = operation.toLowerCase();
+
+            // Extract keywords checked off for this set.
+            var keywords = [];
+            $(root.find('.keywordsMultiselect')[i]).find(':selected').each(function (i, selected) {
+                keywords.push($(selected).text().toLowerCase());
+                currentSet.push($(selected).text().toLowerCase()); //text of option that will be displayed
+            });
+            setOption["keywords"] = keywords;
+
+            keywordSearchOptions.push(setOption);
+
+        }
+
+
+        var prizeOptions = {};
+        var prizekeywords = [];
+        for (var i = 0; i < Object.getOwnPropertyNames(selectedPrizes).length; i++) {
+            prizekeywords.push(Object.getOwnPropertyNames(selectedPrizes)[i]);
+        }
+        prizeOptions["keywords"] = prizekeywords;
+        keywordSearchOptions.push(prizeOptions);
 
         return keywordSearchOptions;
 
