@@ -149,15 +149,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         SetWillImage(pageNumber);
         
-        TAG.Layout.Spoof()
-
-        Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\1.png").done(function (file)
-        {
-            var url = URL.createObjectURL(file, { oneTimeOnly: true });
-            willImage.attr({
-                //src: url
-            })
-        })
+        TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
 
         background = $(document.createElement('div'));
         background.css({
@@ -565,7 +557,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 var sliderBarInnerds = $(document.createElement('div'));
                 sliderBarInnerds.css({
                     'position': 'absolute',
-                    'background-color': "rgb(254,161,0)",
+                    'background-color': NOBEL_ORANGE_COLOR,
                     'opacity': '.4',
                     'left': '40.75%',
                     'width': '59.25%',
@@ -593,7 +585,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 sliderBar.css({
                     'position': 'absolute',
                     'background-color': 'transparent',
-                    'border': '3px solid rgb(254,161,0)',
+                    'border': '3px solid '+NOBEL_ORANGE_COLOR,
                     'border-radius': '12px',
                     'left': '1%',
                     'width': '75.5%',
