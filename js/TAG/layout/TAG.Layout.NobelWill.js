@@ -46,7 +46,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         touching = false,
         lastDragY = 0,
 
-        LIGHTBULB_ICON = tagPath + 'images/icons/Play.svg',
+        LIGHTBULB_ICON = tagPath + 'images/icons/nobel_lightbulb.svg',
         timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
         idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair),
 
@@ -157,7 +157,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": '100%',
             "width": "100%",
             'position': 'absolute',
-            'background-color' : "rgb(80,80,80)",
+            'background-color' : "#404040",
             'top': '0%',
             'left': '0%',
         })
@@ -231,7 +231,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'bottom': '1.3%',
             'height': '8%',
             'background-color': 'transparent',
-        }).click(toggleNobelPlaying)
+        }).click(toggleNobelPlaying).hide()
 
         var playPauseButtonHeight = nobelPlayPauseButton.height();
         nobelPlayPauseButton.width(playPauseButtonHeight + '%');
@@ -246,7 +246,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'bottom': '1.3%',
             'height': '8%',
             'background-color': 'transparent',
-        }).click(toggleNobelMute);
+        }).click(toggleNobelMute).hide()
 
         var muteButtonHeight = muteButton.height();
         muteButton.width(muteButtonHeight + '%');
@@ -604,7 +604,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 leftArrow.css({
                     'position': 'absolute',
                     'background-color': 'transparent',
-                    'width': '6%',
+                    'width': '50px',
                     'bottom': '20px',
                     'left': "31.75%",
                     'z-index': '599'
@@ -615,7 +615,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 })
                 rightArrow.css({
                     'position': 'absolute',
-                    'width': '6%',
+                    'width': '50px',
                     'background-color': 'transparent',
                     'bottom': '20px',
                     'left': "69.75%",
@@ -628,9 +628,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     }
                 )
 
-                var arrowWidth = rightArrow.width();
-                rightArrow.css('height', arrowWidth + '%');
-                leftArrow.css('height', arrowWidth + '%');
+                //var arrowWidth = rightArrow.width();
+                //rightArrow.css('height', arrowWidth + '%');
+                //leftArrow.css('height', arrowWidth + '%');
 
                 root.append(rightArrow);
                 root.append(leftArrow);
@@ -747,6 +747,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 })
                 up.css({
                     'bottom': 'calc(50% + 15px)'
+                }).mousedown(function (e) {
+                    touching = true;
+                    dragging = true;
+                    lastDragY = e.clientY;
                 })
                 up.click(
                     function () {
@@ -771,7 +775,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'min-height': '25px',
                     'min-width': '25px',
                     'left': '2.5%'
-                });
+                }).mousedown(function (e) {
+                    touching = true;
+                    dragging = true;
+                    lastDragY = e.clientY;
+                })
                 down.css({
                     'top': 'calc(50% + 15px)'
                 })
@@ -914,7 +922,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var div = $(document.createElement('div'));
         div.css({
-            "background-color": "transparent",
+            "background-color": "#dfdcdd",
             "border": "2px solid " + NOBEL_ORANGE_COLOR,
             "border-radius" : "3.5px",
             "left": "2.5%",
@@ -963,6 +971,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"position": "relative",
         	"width": "65%",
         	"height": "auto",
+            "color" : "black",
 			"left" : "24px"
         })
 
@@ -971,6 +980,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"width": "100%",
         	"top": "12px",
         	"position": "relative",
+        	"color": "black",
 			"height" : "auto"
         }).text(string);
 
@@ -1014,6 +1024,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"font-size": ".45em",
         	"height": "auto",
         	"top": '12px',
+        	"color": "black",
 			'bottom' : "50px"
         }).text(info.shortText);
         descWhole.append(desc);
