@@ -644,8 +644,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                         });
                 } else if (collectionName == LAUREATE_NAME) {
                     //var laureatesPage = TAG.Layout.LaureatesPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration));
+
                     TAG.Worktop.Database.getExhibitions(function (collections) {
-                        if ($("#startPageLoadingOverlay").length) {
+                        console.log($("startPageLoadingOverlay") === null);
+
+                        if ($("#startPageLoadingOverlay").length !== null) {
                             for (i = 0; i < collections.length; i++) {
                                 currName = collections[i].Name;
                                 if (currName === collectionName) {
@@ -665,7 +668,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                                 }
                             }
                             collectionsPage = TAG.Layout.LaureatesPage(options, 10);
-                            if ($("#startPageLoadingOverlay").length) {
+                            console.log("collectionsPage = new LaureatePage")
+                            if ($("#startPageLoadingOverlay").length !== null) {
                                 TAG.Util.UI.slidePageLeftSplit(root, collectionsPage.getRoot());
                                 currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
                                 currentPage.obj = collectionsPage;

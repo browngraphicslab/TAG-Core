@@ -4400,7 +4400,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                         return true; // abort
                     }
                     tobj.custom_1 = CryptoJS.SHA1(artwork.Name).toString(CryptoJS.enc.Base64);
-                    tobj.ttype     = 'collection_to_' + getWorkType(artwork);
+                    tobj.ttype     = 'to_' + getWorkType(artwork);
                     tobj.mode = 'Kiosk'; 
                 });
                 */
