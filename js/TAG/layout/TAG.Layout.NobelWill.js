@@ -149,8 +149,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         SetWillImage(pageNumber);
         
-        TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
-
+        //TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
+        TAG.Layout.Spoof().getLaureates(function (laurs) { laurs.forEach(function (laur) { if (laur.ID.indexOf("1867-11-07") > -1) { console.log(laur) } }) })
         background = $(document.createElement('div'));
         background.css({
             "height": '100%',
