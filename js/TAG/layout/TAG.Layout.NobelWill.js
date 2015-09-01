@@ -173,7 +173,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'font-family': 'Cinzel'
         })
         background.append(sideBar);
-
+        $("#associatedMediaScroller").remove()
+        $("#associatedMediaScroller").die()
         associatedMediaScroller = $(document.createElement('div'));
         associatedMediaScroller.attr({id : "associatedMediaScroller"})
         associatedMediaScroller.css({
@@ -1602,11 +1603,18 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			"border": "3px solid " + NOBEL_ORANGE_COLOR,
     			"border-radius": "10px",
     			"padding-bottom": "5%",
-				'color' : 'white'
+				'color' : 'red'
     		}).text(extra[1])
     		d.attr({
 				src : extra[0]
     		})
+    		var t = $(document.createElement('div'));
+    		t.css({
+    		    "position": 'relative',
+    		    'width': "100%",
+    		    'color': 'red'
+    		}).text(extra[1])
+            d.append(t)
 			return d
     	}
 

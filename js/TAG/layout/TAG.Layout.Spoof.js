@@ -38,7 +38,7 @@ TAG.Layout.Spoof = (function () {
                     doq.KeywordsSet3 = "none"
                     Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + map[id]).done(function (file) {
                         var url = URL.createObjectURL(file, { oneTimeOnly: true });
-                        doq.Thumbnail.FilePath = url
+                        doq.Thumbnail = { "FilePath": url }
                         doqs.push(doq)
                     })
                 }

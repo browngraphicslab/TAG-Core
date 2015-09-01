@@ -1141,7 +1141,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 descriptionDiv.css({
                     'font-size': '75%',
                     'display': 'inline-block',
-                    'margin-top': '0%',
                     'margin-left': '10%',
                     'margin-right': '10%',
                     'margin-top': '5%',
