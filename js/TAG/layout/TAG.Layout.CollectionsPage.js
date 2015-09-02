@@ -270,7 +270,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         $('#tagContainer').off();
         
         $("#bottomContainer").css({
-            'scrollbar-face-color': NOBEL_WILL_COLOR,
+            'scrollbar-face-color': 'transparent',
             'scrollbar-arrow-color': 'transparent',
             'scrollbar-track-color': 'transparent',
         })
@@ -304,7 +304,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             tobj.time_spent = null;
         });*/
 
-        catalogDiv.css('bottom', -(0.01 * $("#tagRoot").height()) + 'px');
+        //catalogDiv.css('bottom', -(0.01 * $("#tagRoot").height()) + 'px');
 
         //Scrolling closes popup
         if (bottomContainer[0].addEventListener) {
@@ -641,8 +641,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 "height": "100%",
                 "text-overflow": "ellipsis",
                 "white-space": "nowrap",
-                "font-family": "Cinzel",
-                "top": '5%'
+                "font-size": "80%",
+                "text-transform": "uppercase",
+                "top": '7.5%'
 
             })
             centeredCollectionHeader.css({
@@ -1528,7 +1529,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             });
         }
         $("#bottomContainer").css({
-            'scrollbar-face-color': NOBEL_WILL_COLOR,
+            'scrollbar-face-color': 'transparent',
             'scrollbar-arrow-color': 'transparent',
             'scrollbar-track-color': 'transparent',
         })
@@ -1871,8 +1872,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                     main.css({ 'height': (0.3) * tileDivHeight });
                 }
             } else {
-                var tileHeight = (0.4) * tileDivHeight;
-                main.css({ 'height': (0.4) * tileDivHeight });
+                var tileHeight = (0.35) * tileDivHeight;
+                main.css({ 'height': (0.35) * tileDivHeight });
             }
             main.css({ 
                 'width': 1.25*tileHeight,

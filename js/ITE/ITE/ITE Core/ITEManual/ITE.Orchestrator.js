@@ -340,7 +340,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    self.loadedTracks++
 	    if (self.loadedTracks == trackManager.length) {
 	        if (!self.isAuthoring) {
-	            self.player.play()
+	            window.setTimeout(self.player.play(), 5000);
 	        } else {
 	            if (reloadCallback) {
 	                reloadCallback();
