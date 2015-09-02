@@ -2091,7 +2091,6 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 });
             });
 
-            console.log()
         }
     }
 
