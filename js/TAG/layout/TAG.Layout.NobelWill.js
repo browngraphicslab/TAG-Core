@@ -150,7 +150,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         SetWillImage(pageNumber);
         
         //TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
-        TAG.Layout.Spoof().getLaureates(function (laurs) { laurs.forEach(function (laur) { if (laur.ID.indexOf("1867-11-07") > -1) { console.log(laur) } }) })
+        //TAG.Layout.Spoof().getLaureates(function (laurs) { laurs.forEach(function (laur) { if (laur.ID.indexOf("1867-11-07") > -1) { console.log(laur) } }) })
 
         background = $(document.createElement('div'));
         background.css({
@@ -486,22 +486,56 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 associatedMediaNobelKeywords = [['strong box', 0], ['crematorium', 2]];
                 hardcodedHotspotSpecs = [[48, 10.75, 7.3, 2.75], [66.75, 36.75, 10, 2.75]]
                 leftTextArray = [
-                    ['and in my strong-box at 59, Avenue Malakoff, Paris; further to this are accounts receivable, patents, patent fees or so-called royalties etc. in connection with which my Executors will find full information in my papers and books.', 11.25],
-                    ['This Will and Testament is up to now the only one valid, and revokes all my previous testamentary dispositions, should any such exist after my death.', 22.75],
-                    ['Finally, it is my express wish that following my death my veins shall be opened,and when this has been done and competent Doctors have confirmed clear signs of death, my remains shall be cremated in a so-called crematorium.', 30.5],
-                    ['Paris, 27 November, 1895', 40.25],
-                    ['Alfred Bernhard Nobel', 45],
-                    ['That Mr Alfred Bernhard Nobel, being of sound mind, has of his own free will declared the above to be his last Will and Testament, and that he has signed the same, we have, in his presence and the presence of each other, hereunto subscribed our names as witnesses:', 50.75],
-                    [[['Sigurd Ehrenborg', 'R. W. Strehlenert'], ['former Lieutenant', 'Civil Engineer'], ['84 Boulevard', '4, Passage Caroline'], ['Haussmann'], ['Thos Nordenfelt', 'Leonard Hwass'], ['Constructor', 'Civil Engineer'], ['8, Rue Auber, Paris', '4, Passage Caroline']], 49.5],
+                    8.5, 'in Enskilda Banden in Stockholm and in',
+                    10.75, 'and in my strong-box at 59, Avenue Malakoff, Paris; further',
+                    13, 'to this are accounts receivable, patents, patent fees',
+                    15.5, 'or so-called royalties etc. in connection with which my',
+                    17.75, 'Executors will find full information in my papers',
+                    19.75, 'and books.',
+                    22, 'This Will and Testament is up to now the only one valid,',
+                    24, 'and revokes all my previous testamentary',
+                    26.5, 'dispositions, should any such exist after my death.',
+                    29, 'Finally, it is my express wish that following my death',
+                    31, 'my veins shall be opened,and when this has been done and',
+                    33, 'competent Doctors have confirmed clear signs of death,',
+                    35, 'my remains shall be',
+                    37.5, 'cremated in a so-called crematorium.',
+                    39.5, 'Paris, 27 November, 1895', 
+                    45, 'Alfred Bernhard Nobel',
+                    50, 'That Mr Alfred Bernhard Nobel, being of sound mind,',
+                    53, 'has of his own free will declared the above',
+                    55.5, 'to be his last Will and Testament, and that he has signed the same, we have, in his presence and the presence of each other,',
+                    59, 'hereunto subscribed our names as witnesses:',
+                    62, 'Sigurd Ehrenborg        R. W. Strehlenert',
+                    64.5, 'former Lieutenant        Civil Engineer', 
+                    67, '86 Boulevard Haussmann        8, Rue Auber, Paris', 
+                    71, 'Thos Nordenfelt        Leonard Hwass', 
+                    74, 'Constructor        Civil Engineer', 
+                    76.5, '4, Passage Caroline        4, Passage Caroline'
                 ]
                 sliderPositions = [
-                    [7.75, 14],
-                    [21.5, 6.75],
-                    [28.5, 11],
-                    [39, 5],
-                    [43.5, 5],
-                    [50, 10.75],
-                    [60.6, 19.5]
+                    [7.75, 12],
+                    [10.5, 11.5],
+                    [12.75, 11.5],
+                    [15.25, 11.5],
+                    [17.5, 11],
+                    [19.5, 11.5],
+                    [21.75, 11],
+                    [23.75, 11.25],
+                    [26.25,11],
+                    [28.75, 10.75],
+                    [30.75, 12],
+                    [32.75, 15],
+                    [34.75, 17],
+                    [37.25, 17.5],
+                    [39.25, 20],
+                    [44.75, 16],
+                    [49.75, 14.5],
+                    [52.75, 13.5],
+                    [55.25, 14],
+                    [58.75, 14.5],
+                    [60.75, 15],
+                    [64.25, 16],
                 ]
                 break;
         }
@@ -1763,13 +1797,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
 			[],
 			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
-			[]
+			["patents", "crematorium"]
     	]
     	var images = [
 			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png'],
 			[],
 			['Popup_3_1.png', 'Popup_3_2.png', 'Popup_3_3.png', 'Popup_3_4.png', 'Popup_3_5.png', 'Popup_3_6.png', 'Popup_3_7.png', 'Popup_3_8.png', '', 'Popup_3_10.png', 'Popup_3_11.png'],
-			[]
+			['Popup_4_1.png', 'Popup_4_2.png']
     	]
     	var texts = [
 			[
@@ -1804,7 +1838,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "Alfred Nobel had spent time in Paris in his youth, and at the age of 40, he bought a house there. In the years before this, he had lived in Hamburg, but he had spent most of that time traveling, and his “home” there seems to have been more of a provisory nature. He continued to travel extensively even after he had moved to Paris, but he had definitely found a more permanent residence. He had also gained a home that reflected his financial, social and cultural status.",
                 "Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy."
 			],
-			[]
+			[
+                "Alfred Nobel's incomes came from different sources. The companies he had established with various business partners generated profits, which Nobel received a share of. The patents he held also generated incomes. He held approximately 355 patents in different countries.",
+                "Alfred Nobel was a member of the French Cremation Society. In the version of his will that he wrote in 1893, Nobel left money to societies that promoted cremation. Nobel’s fear of 'premature burial' (being buried before one was dead) may have prompted his involvement in the cremation movement. He expressed this fear in the description he wrote about himself when his brother Ludvig asked for an autobiographical article: 'Greatest and only request: to not be buried alive.'" 
+			]
     	]
     	var collections = [
 			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], []],
