@@ -829,7 +829,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
 
         if (locked !== doq.Identifier) {
-            backButton.attr('src', tagPath + 'images/icons/Back.svg');
+            backButton.attr('src', tagPath + 'images/icons/Back.png');
         } else {
             backButton.hide();
         }

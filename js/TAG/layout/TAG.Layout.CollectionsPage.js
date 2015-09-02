@@ -162,7 +162,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     options.backCollection ? comingBack = true : comingBack = false;
     var cancelLoadCollection = null;
 
-    backButton.attr('src', tagPath + 'images/icons/Back.svg');
+    backButton.attr('src', tagPath + 'images/icons/Back.png');
     root.append(backButtonArea);
     backButton.css('z-index', '99999999');
 
