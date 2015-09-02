@@ -109,7 +109,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         // constants
         NOBEL_COLOR = 'rgb(254,161,0)',
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
-        FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
+        FIX_PATH = TAG.Layout.Spoof().fixPath,              // prepend server address to given path                     //TODO CHANGE THIS BACK TO WORKTOP'S
         MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
         EVENT_CIRCLE_WIDTH = Math.min(30, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
         COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
@@ -1698,7 +1698,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 getCollectionContents(currCollection, function () { addKeywords(); }, function () { return cancelLoad;});
             } else {
                 if (onAssocMediaView && artworkInCollectionList.length == 0) {
-                    TAG.Worktop.Database.getArtworksIn(collection.Identifier,
+                    TAG.Layout.Spoof().getLaureates(
                         function (contents) {
                             artworkInCollectionList = [];
                             for (var i = 0; i < contents.length; i++) {
@@ -1708,7 +1708,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             initSearch(currCollection.collectionMedia);
                             createArtTiles(currCollection.collectionMedia);
                             addKeywords();
-                        }, null, null);
+                        });
                 } else {
                     loadSortTags(currCollection, currCollection.collectionMedia)
                     initSearch(currCollection.collectionMedia);
@@ -1970,7 +1970,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
      * @param {Function} callback     a function to call when the contents have been retrieved
      */
     function getCollectionContents(collection, callback, cancel) {
-        TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+        TAG.Layout.Spoof().getLaureates(contentsHelper);
+        //TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
 
         /**
          * Helper function to process collection contents
@@ -2019,8 +2020,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 return false;
             }
             info = ((cts.Name) ? cts.Name : "") + " " + ((cts.Metadata.Artist) ? cts.Metadata.Artist : "") + " " + ((cts.Metadata.Year) ? cts.Metadata.Year : "") + " " + ((cts.Metadata.Description) ? cts.Metadata.Description : "") + " " + ((cts.Metadata.Type) ? cts.Metadata.Type : "");
-            if (cts.Metadata.InfoFields) {
-                $.each(cts.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
+            if (cts.Metadata) {
+                $.each(cts.Metadata, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
                     info += " " + field;
                     info += " " + fieldText;
                 });
@@ -2058,8 +2059,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 }
                 // Get the info.
                 info = ((cts.Name) ? cts.Name : "") + " " + ((cts.Metadata.Artist) ? cts.Metadata.Artist : "") + " " + ((cts.Metadata.Year) ? cts.Metadata.Year : "") + " " + ((cts.Metadata.Description) ? cts.Metadata.Description : "") + " " + ((cts.Metadata.Type) ? cts.Metadata.Type : "");
-                if (cts.Metadata.InfoFields) {
-                    $.each(cts.Metadata.InfoFields, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
+                if (cts.Metadata) {
+                    $.each(cts.Metadata, function (field, fieldText) {           //Adding custom metadata fields: both keys and values
                         info += " " + field;
                         info += " " + fieldText;
                     });
@@ -2089,6 +2090,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     keywordDictionary[2][op][keyword].push({ "id": i, "keys": info.toLowerCase() });
                 });
             });
+
+            console.log()
         }
     }
 
@@ -2421,6 +2424,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             if (searchOptions['operation'] === 'and') {
                 var newMatches = {};
                 var dict = keywordDictionary[setIndex].and;
+                //console.log("length of dict is " + Object.keys(dict).length);
                 // Go through each keyword that is checked in the set, provided by keywordSearchOptions.
                 $.each(keywordSearchOptions[setIndex].keywords, function (checkedKeywordIndex, checkedKeyword) {
                     // Get all the artworks that have the checked keyword.
@@ -3031,7 +3035,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             if (currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio") {
                 main.css('overflow', 'hidden');
 
-                tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
+                tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail.FilePath));
 
                 var w, h;
                 $("<img/>") // preload the image to "crop" it
@@ -3092,15 +3096,17 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             var yellowTextFields = ['Category', 'Year of Award'];
 
             //TODO: DETERMINE TEXT, COLOR AND IMAGE BASED ON METADATA OF ACTUAL EXHIBIT IMAGES
-
-            var firstDiv = $(document.createElement("div")).text(TAG.Util.htmlEntityDecode(currentWork.Name));
-            var secondDiv = $(document.createElement("div")).text("Other Div");
+            
+            //var firstDiv = $(document.createElement("div")).text(TAG.Util.htmlEntityDecode(currentWork.Name));  TODO SPOOF CHANGE
+            var firstDiv = $(document.createElement("div")).text(currentWork.Metadata.FirstName);
+            var secondDiv = $(document.createElement("div")).text(currentWork.Metadata.LastName ? currentWork.Metadata.LastName : "");
             var prizeAndYearDiv = $(document.createElement("div"))
 
-            if (currentWork && currentWork.Metadata && currentWork.Metadata.InfoFields) {
-                var uppercasePrize = currentWork.Metadata.InfoFields[yellowTextFields[0]].split(' ')[currentWork.Metadata.InfoFields[yellowTextFields[0]].split(' ').length - 1] + " ".toUpperCase();
-                prizeAndYearDiv.text(uppercasePrize + currentWork.Metadata.InfoFields[yellowTextFields[1]]);
-            } else {
+            if (currentWork && currentWork.Metadata) {
+                var uppercasePrize = currentWork.Metadata.PrizeCategory.toUpperCase();
+                prizeAndYearDiv.text(uppercasePrize + " " + currentWork.Metadata.Year);
+            }
+            else {
                 prizeAndYearDiv.text("CATEGORY 9999")
             }
 
@@ -3129,8 +3135,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 } else {
                     yearTextBox.text(yearText);
                 }
-                var nameText = laureateInfo;
-                artText.text(laureateInfo);
+                //var nameText = laureateInfo;
+                //artText.text(laureateInfo);
             } else if (tag === 'Tours') {
             } else if (tag) {
                 //If using custom tag
@@ -3168,25 +3174,25 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             //set the icon and color dynamically
             //TO DO: GET REAL METADATA OF ARTWORKS. DON'T SWITCH ON STRINGS. SORRY EVERYONE
             //ALSO GET REAL ICONS
-            if (currentWork && currentWork.Metadata && currentWork.Metadata.InfoFields) {
-                var category = currentWork.Metadata.InfoFields[yellowTextFields[0]].split(' ')[currentWork.Metadata.InfoFields[yellowTextFields[0]].split(' ').length - 1];
+            if (currentWork && currentWork.Metadata && currentWork.Metadata) {
+                var category = currentWork.Metadata.PrizeCategory;
 
-                if (category === "Physics") {
+                if (category === "Physics" || category === "physics") {
                     artIcon.attr('src', tagPath + 'images/prize_icons/physics.svg');
                     artTitle.css('background-color', 'rgba(163, 168, 73, 0.8)');
-                } else if (category === "Chemistry") {
+                } else if (category === "Chemistry" || category === "chemistry") {
                     artIcon.attr('src', tagPath + 'images/prize_icons/chemistry.svg');
                     artTitle.css('background-color', 'rgba(153, 0, 53, 0.8)');
-                } else if (category === "Medicine") {
+                } else if (category === "Medicine" || category === "medicine") {
                     artIcon.attr('src', tagPath + 'images/prize_icons/medicine.svg');
                     artTitle.css('background-color', 'rgba(60, 62, 111, 0.8)');
-                } else if (category === "Literature") {
+                } else if (category === "Literature" || category === "literature") {
                     artIcon.attr('src', tagPath + 'images/prize_icons/literature.svg');
                     artTitle.css('background-color', 'rgba(198, 121, 28, 0.8)');
-                } else if (category === "Peace") {
+                } else if (category === "Peace" || category === "peace") {
                     artIcon.attr('src', tagPath + 'images/prize_icons/peace.svg');
                     artTitle.css('background-color', 'rgba(0, 98, 144, 0.8)');
-                } else if (category === "Economics") {
+                } else if (category === "Economics" || category=== "economics") {
                     artIcon.attr('src', tagPath + 'images/prize_icons/economics.svg');
                     artTitle.css('background-color', 'rgba(91, 75, 34, 0.8)');
                 }
@@ -4110,7 +4116,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 else {
                     needsYellowText = false;
                 }
-                if (needsYellowText) {
+               /* if (needsYellowText) {
                     yellowTextTop.css({
                         //'bottom': '12%',
                         'height': '8%',
@@ -4122,7 +4128,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                         'font-weight' : '900',
                         'font-size': BASE_FONT_SIZE * 1 / 2 + 'em',
                     }).text(artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ')[artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ').length-1] + ', ' + artwork.Metadata.InfoFields[yellowTextFields[1]]);
-                    /*yellowTextBottom.css({
+                    yellowTextBottom.css({
                         'bottom': '2%',
                         'height': '8%',
                         'width': '100%',
@@ -4131,9 +4137,9 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                         'background-color': 'transparent',
                         'text-align': 'center',
                         'font-weight': '900',
-                        'font-size': BASE_FONT_SIZE * 1 / 2 + 'em',
-                    }).text(artwork.Metadata.InfoFields[yellowTextFields[2]] + ', ' + artwork.Metadata.InfoFields[yellowTextFields[3]]);*/
-                    darkDiv.css({
+                        'font-size': BASE_FONT_SIZE * 1 / 2 + 'em'
+                    }).text(artwork.Metadata.InfoFields[yellowTextFields[2]] + ', ' + artwork.Metadata.InfoFields[yellowTextFields[3]]);
+                    darkDiv.css(
                         'bottom': '00%',
                         'height': '10%',
                         'width': '100%',
@@ -4141,7 +4147,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                         'background-color': 'rgba(0,0,0,.6)',
                     })
                     darkDiv.attr('id', 'darkDiv');
-                }
+                }*/
                 
                 //Main Div that holds information in pop up
                 infoWrapper = $(document.createElement('div')).attr('id', 'infoWrapper');
@@ -4158,31 +4164,34 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
                 //Apply content to smaller divs
                 imgDiv.css({
-                    'background-image': 'url(' + FIX_PATH(artwork.Metadata.Thumbnail) + ")",
+                    'background-image': 'url(' + FIX_PATH(artwork.Metadata.Thumbnail.FilePath) + ")",
                     'background-repeat': 'no-repeat',
                     'background-size': 'cover'
                 })
-                nameDiv.text(TAG.Util.htmlEntityDecode(artwork.Name));
+                nameDiv.text(artwork.Metadata.FirstName + " " + artwork.Metadata.LastName);
 
-                if (artwork && artwork.Metadata && artwork.Metadata.InfoFields) {
-                    var category = artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ')[artwork.Metadata.InfoFields[yellowTextFields[0]].split(' ').length - 1];
+                if (artwork && artwork.Metadata) {
+                    var category = artwork.Metadata.PrizeCategory;
                     prizeDiv.text(category);
-                    yearDiv.text(artwork.Metadata.InfoFields[yellowTextFields[1]]);
+                    yearDiv.text(artwork.Metadata.Year);
 
 
-                    if (category === "Physics") {
+                    if (category === "Physics" || category==="physics") {
                         iconImg.attr('src', tagPath + 'images/prize_icons/physics.svg');
-                    } else if (category === "Chemistry") {
+                    } else if (category === "Chemistry" || category=== "chemistry") {
                         iconImg.attr('src', tagPath + 'images/prize_icons/chemistry.svg');
-                    } else if (category === "Medicine") {
+                    } else if (category === "Medicine" || category === "medicine") {
                         iconImg.attr('src', tagPath + 'images/prize_icons/medicine.svg');
-                    } else if (category === "Literature") {
+                    } else if (category === "Literature" || category === "literature") {
                         iconImg.attr('src', tagPath + 'images/prize_icons/literature.svg');
-                    } else if (category === "Peace") {
+                    } else if (category === "Peace" || category === "peace") {
                         iconImg.attr('src', tagPath + 'images/prize_icons/peace.svg');
-                    } else if (category === "Economics") {
+                    } else if (category === "Economics" ||category === "economics") {
                         iconImg.attr('src', tagPath + 'images/prize_icons/economics.svg');
                     }
+
+                    descriptionDiv.text(artwork.Metadata.prizes[0].motivation);
+
 
                 } else {
                     prizeDiv.text("PRIZE");
@@ -4870,7 +4879,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             avlTree = new AVLTree(comparator,valuation);
             avlTree.clear();
             for (i = 0; i < artworks.length; i++) {
-                if (artworks[i].Metadata.InfoFields && artworks[i].Metadata.InfoFields[tag]) {
+                if (artworks[i].Metadata && artworks[i].Metadata.InfoFields[tag]) {
                     sortKey = artworks[i].Metadata.InfoFields[tag].toLowerCase();
                 } else {
                     sortKey = null;
