@@ -462,10 +462,9 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
         searchTitle.append(searchTextDiv);
 
-        root.find('#keywords').css({
-            'margin-top': '3%',
-            'padding-left':'1%'
-        });
+        /*root.find('#keywords').css({
+
+        });*/
 
         root.find('#catalogDiv').css('height', '83%');
         //root.find('#topDiv').append
@@ -1057,7 +1056,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             keywordsDiv.append(selectList);
             root.find('#prizes').append(prizeSelectList);
             
-            keywordsDiv.css('width', '15%');
+            keywordsDiv.css('width', '20%');
 
 
 
