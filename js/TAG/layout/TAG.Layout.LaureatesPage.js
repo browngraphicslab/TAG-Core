@@ -4157,7 +4157,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 prizeDiv = $(document.createElement('div')).attr('id', 'prizeDiv').addClass('popupInfo');
                 yearDiv = $(document.createElement('div')).attr('id', 'yearDiv').addClass('popupInfo');
                 descriptionDiv = $(document.createElement('div')).attr('id', 'descriptionDiv').addClass('popupInfo');
-                iconDiv = $(document.createElement('div')).attr('id', 'iconDiv').addClass('popupInfo');
+                iconDiv = $(document.createElement('div')).attr('id', 'iconDiv');
                 iconImg = $(document.createElement('img')).attr('id', 'iconDivImg');
 
                 //Apply content to smaller divs
@@ -4166,7 +4166,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     'background-repeat': 'no-repeat',
                     'background-size': 'cover'
                 })
-                nameDiv.text(artwork.Metadata.FirstName + " " + artwork.Metadata.LastName);
+                nameDiv.text((artwork.Metadata.FirstName + " " + (artwork.Metadata.LastName ? artwork.Metadata.LastName : "")).toUpperCase());
 
                 if (artwork && artwork.Metadata) {
                     var category = artwork.Metadata.PrizeCategory;
@@ -4198,7 +4198,6 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 }
 
                 iconDiv.append(iconImg)
-
 
                 //imgDiv.append(darkDiv)
                 darkDiv.append(yellowTextTop);//.append(yellowTextBottom);
@@ -4686,7 +4685,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 infoWrapper.append(iconDiv);
                 previewTile.append(infoWrapper);
 
-
+                
 
                 descSpan.append(descText);
                 tileBottom.append(descSpan);
