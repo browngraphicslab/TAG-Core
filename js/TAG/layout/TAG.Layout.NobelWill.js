@@ -542,24 +542,32 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 break;
         }
         for (var i = 0; i < infoBulbs.length; i++) {
-            var img = $(document.createElement("img"));
-            img.attr({
-                src: LIGHTBULB_ICON,
-            });
-            img.addClass('lightbulb');
-            img.popupNumber = i + associatedMediaNobelKeywords.length
-            img.css({
-                "left": infoBulbs[i][0]+"%",
+            var div = $(document.createElement("div"));
+            div.css({
+                "left": infoBulbs[i][0] + "%",
                 "height": "45px",
                 "width": "45px",
                 "position": 'absolute',
                 "top": infoBulbs[i][1]+"%",
                 "z-index": "550",
-                "float": "right"
-            }).click(function () {
-                showLargePopup(img.popupNumber);
+                "float": "right",
+                "top": infoBulbs[i][1] + "%",
             })
-            root.append(img);
+            var img = $(document.createElement("img"));
+            img.attr({
+                src: LIGHTBULB_ICON,
+            });
+            img.addClass('lightbulb');
+            img.attr({ id: i + associatedMediaNobelKeywords.length })
+            div.popupNumber = i + associatedMediaNobelKeywords.length
+            img.css({
+                "height" : "100%",
+                "width" : "100%"
+            }).click(function () {
+                showLargePopup(this.id);
+            })
+            div.append(img);
+            root.append(div);
         }
 
         var placeInChunk = 0;
@@ -1808,26 +1816,38 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	})
 
     	function createExtra(extra) {
+    	    var bd = $(document.createElement('div'));
+    	    bd.css({
+    	        "position": 'relative',
+    	        'width': "140px",
+                'height' : "140px",
+    	        "border": "3px solid " + NOBEL_ORANGE_COLOR,
+    	        "border-radius": "10px",
+    	        "margin-bottom": "5%",
+    	        'color': 'red'
+    	    })
     		var d = $(document.createElement('img'));
     		d.css({
-    			"position": 'relative',
-    			'width': "100%",
-    			"border": "3px solid " + NOBEL_ORANGE_COLOR,
-    			"border-radius": "10px",
-    			"padding-bottom": "5%",
-				'color' : 'red'
-    		}).text(extra[1])
+    			"position": 'absolute',
+    			'width': "140px",
+    			"border-radius": "5px",
+    			'height': "140px",
+    		})
     		d.attr({
 				src : extra[0]
     		})
     		var t = $(document.createElement('div'));
     		t.css({
-    		    "position": 'relative',
-    		    'width': "100%",
-    		    'color': 'red'
+    		    "position": 'absolute',
+                "left" : "5px",
+    		    'width': "130px",
+    		    'color': "black",
+                "background-color" : "transparent",
+                "font-size" : ".5em"
     		}).text(extra[1])
-            d.append(t)
-			return d
+    		bd.append(d)
+            bd.append(t)
+			return bd
     	}
 
     	var extras = $(document.createElement('div')); //Tours and galleries

@@ -52,12 +52,12 @@ TAG.Layout.Spoof = (function () {
                     }
                     for (var d = 0; d < doq.prizes.length; d++) {
                         if (id.indexOf(doq.prizes[d].category) > -1) {
-                            doq.PrizeCategory = doq.prizes[d].category
+                            doq.PrizeCategory = doq.prizes[d].category.charAt(0).toUpperCase() + doq.prizes[d].category.slice(1);
                         }
                     }
                     doq.KeywordsSet1 = doq.Year.substring(0, 3) + "0s"
                     doq.KeywordsSet2 = doq.gender
-                    doq.KeywordsSet3 = doq.PrizeCategory
+                    doq.KeywordsSet3 = doq.PrizeCategory.toLowerCase();
                     waitingDoqs[map[id]] = { "Metadata": doq }
                     Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\"+"Thumbnails\\"+"thumb_" + map[id]).done(function (file) {
                         var url = URL.createObjectURL(file, { oneTimeOnly: false });
