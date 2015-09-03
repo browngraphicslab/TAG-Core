@@ -39,6 +39,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         willImage,
         videoContainer,
         idleTimer,
+        infoBulbs,
         NOBEL_ORANGE_COLOR = '#d99b3b',
         IDLE_TIMER_DURATION = 300000, //5 minutes
 
@@ -283,7 +284,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             case 1:
                 associatedMediaNobelKeywords = [['Alfred Bernhard'], ['Robert Nobel'], ['Emanuel Nobel'], ['Sofie Kapy von Kapivar'], ['Alarik Liedbeck']]
                 hardcodedHotspotSpecs = [[63.5, 15, 17, 3.5], [66.5, 30, 11, 3], [61, 34.5, 12.5, 2.5], [47, 54, 23.5, 3], [47.5, 65.4, 18.5, 3]]
-
+                infoBulbs = [[61.5,7], [33.25,59]];
                 leftTextArray = [
                     15, 'I, the undersigned, Alfred Bernhard',
                     17.5,' Nobel, do hereby, after mature',
@@ -359,7 +360,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]*/
                 break;
             case 2:
-                associatedMediaNobelKeywords = [['Georges Fehrenbach', 4], ['estate', 6], ['fund', 6], ['greatest benefit to mankind', 6], ['physics', 6], ['chemical', 6], ['physiology or medicine', 6], ['Literature', 6]];
+                associatedMediaNobelKeywords = [['Georges Fehrenbach'], ['estate'], ['fund'], ['greatest benefit to mankind'], ['physics'], ['chemical'], ['physiology or medicine'], ['Literature']];
                 hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.25, 70.5, 9.25, 2.5], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5]]
 
                 leftTextArray = [
@@ -406,7 +407,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
             case 3:
-                associatedMediaNobelKeywords = [['peace', 0], ['Swedish Academy of Sciences', 0], ['Caroline Institute', 0], ['Academy', 0], ['a committee of five persons to be elected by the Norwegian Storting', 0], ['Scandinavian or not', 0], ['Ragnar Sohlman', 1], ['Paris', 2], ['San Remo', 2], ['Glasgow', 2], ['Petersburg', 2], ['Stockholm', 2]];
+                associatedMediaNobelKeywords = [['peace'], ['Swedish Academy of Sciences'], ['Caroline Institute'], ['Academy'], ['a committee of five persons to be elected by the Norwegian Storting'], ['Scandinavian or not'], ['Ragnar Sohlman'], ['Paris'], ['San Remo'], ['Glasgow'], ['Petersburg'], ['Stockholm']];
                 hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [61, 64, 4, 2.5], [68.5, 64, 8, 2.5], [51.25, 70.25, 6.25, 2.5], [66.5, 81.75, 7.25, 2.5], [76.75, 84.5, 5.75, 2.5]]
 
                 leftTextArray = [
@@ -483,7 +484,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
             case 4:
-                associatedMediaNobelKeywords = [['strong box', 0], ['crematorium', 2]];
+                associatedMediaNobelKeywords = [['strong box'], ['crematorium']];
                 hardcodedHotspotSpecs = [[48, 10.75, 7.3, 2.75], [66.75, 36.75, 10, 2.75]]
                 leftTextArray = [
                     8.5, 'in Enskilda Banden in Stockholm and in',
@@ -539,7 +540,26 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
         }
-
+        for (var i = 0; i < infoBulbs.length; i++) {
+            var img = $(document.createElement("img"));
+            img.attr({
+                src: LIGHTBULB_ICON,
+            });
+            img.addClass('lightbulb');
+            img.popupNumber = i + associatedMediaNobelKeywords.length
+            img.css({
+                "left": infoBulbs[i][0]+"%",
+                "height": "45px",
+                "width": "45px",
+                "position": 'absolute',
+                "top": infoBulbs[i][1]+"%",
+                "z-index": "550",
+                "float": "right"
+            }).click(function () {
+                showLargePopup(img.popupNumber);
+            })
+            root.append(img);
+        }
 
         var placeInChunk = 0;
         var currentChunkNumberIteratingOver = 0;
@@ -562,8 +582,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 tempText.css({
                     'position': 'absolute',
                     'background-color': "transparent",
-                    'left': '22.5%',
-                    'width': '90%',
+                    'left': '15.5%',
+                    'width': '100%',
                     'color': 'black',
                     'height': '5%',
                     'top': currentHeight + '%',
@@ -662,6 +682,23 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     }
                 )
 
+                switch (pageNumber) {
+                    case 1:
+                        leftArrow.css({
+                            "left" : "31.75%"
+                        })
+                        rightArrow.css({
+                            "left" : "69.75%"
+                        })
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                }
+
                 //var arrowWidth = rightArrow.width();
                 //rightArrow.css('height', arrowWidth + '%');
                 //leftArrow.css('height', arrowWidth + '%');
@@ -675,6 +712,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 if (pageNumber === 1) {
                     leftArrow.hide();
                 }
+                var hiddenInnerds = $(document.createElement('div'));
+                hiddenInnerds.css({
+                    'position': 'absolute',
+                    'background-color': NOBEL_ORANGE_COLOR,
+                    'opacity': '0',
+                    'left': '0%',
+                    'width': '100%',
+                    'height': '100%',
+                }).click(pauseNobel)
 
                 var sliderBarInnerds = $(document.createElement('div'));
                 sliderBarInnerds.css({
@@ -703,6 +749,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                 sliderBar = $(document.createElement('div'));
                 sliderBar.attr('id', 'sliderBar');
+                sliderBar.append(hiddenInnerds);
                 sliderBar.append(sliderBarInnerds);
                 sliderBar.css({
                     'position': 'absolute',
@@ -777,7 +824,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'max-width': '25px',
                     'min-height': '25px',
                     'min-width': '25px',
-                    'left': '2.5%',
+                    'left': '1.5%',
                 })
                 up.css({
                     'bottom': 'calc(50% + 15px)'
@@ -785,6 +832,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     touching = true;
                     dragging = true;
                     lastDragY = e.clientY;
+                }).mouseup(function (e) {
+                    mouseUp(e)
+                }).mousemove(function (e) {
+                    touching = true;
+                    mouseMove(e)
                 })
                 up.click(
                     function () {
@@ -808,14 +860,19 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'max-width': '25px',
                     'min-height': '25px',
                     'min-width': '25px',
-                    'left': '2.5%'
+                    'left': '1.5%'
                 }).mousedown(function (e) {
                     touching = true;
                     dragging = true;
                     lastDragY = e.clientY;
+                }).mousemove(function (e) {
+                    touching = true;
+                    mouseMove(e)
                 })
                 down.css({
                     'top': 'calc(50% + 15px)'
+                }).mouseup(function (e) {
+                    mouseUp(e)
                 })
                 down.click(
                     function () {
@@ -1700,7 +1757,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		'left': '10px',
     		'position': 'absolute',
     		'top': '10px',
-    		'height': '45px'
+    		'height': '45px',
+    		'width': '45px',
+            "z-index" : "1000",
     	}).click(function () {
     		$("#blocker").remove()
     	})
@@ -1788,19 +1847,19 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function getPopupInfo(number) {
-    	var info = [];
+        var info = {};
 
 
 		//START HARDCODING INFO AREA
 
     	var titles = [
-			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
+			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck","PLACEHOLDER", "PLACEHOLDER 2"],
 			[],
 			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
 			["patents", "crematorium"]
     	]
     	var images = [
-			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png'],
+			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'],
 			[],
 			['Popup_3_1.png', 'Popup_3_2.png', 'Popup_3_3.png', 'Popup_3_4.png', 'Popup_3_5.png', 'Popup_3_6.png', 'Popup_3_7.png', 'Popup_3_8.png', '', 'Popup_3_10.png', 'Popup_3_11.png'],
 			['Popup_4_1.png', 'Popup_4_2.png']
@@ -1811,7 +1870,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 				"Robert Nobel (1829–96) was Alfred Nobel’s oldest brother. Robert Nobel was involved in the early establishment of the explosives industry. He started a dynamite factory outside Helsinki, and for a few years up to 1870, he was the head of the dynamite factory at Vinterviken outside Stockholm. After a trip to the Caucasus in 1873, Robert Nobel became a pioneer in the oil industry in Baku. In 1881 he ended his active participation in the company, and returned to Sweden.",
 				"Emanuel Nobel (1859–1932) was a nephew to Alfred Nobel. After the death of his father, Ludvig Nobel, Emanuel Nobel took over leadership of the Nobel brothers’ oil company. At first, Alfred Nobel seems to have doubted Emanuel’s ability to run the large company, but Emanuel proved that he was equal to the task.",
 				"Alfred Nobel, never married. However he had a long relationship with an Austrian woman, Sofie Hess (1851–1919). Alfred Nobel met Sofie Hess during a visit to Baden bei Wien in 1876. This relationship was everything but harmonious. For a while, Alfred seems to have been happy and in love, despite all of his business worries. Soon, however, he became dissatisfied in his relationship with Sofie, yet he did not seem to want to break up with her. He scolded her for being irresponsible and childish. Alfred and Sofie’s drawn-out and uneasy relationship finally came to an end. In 1890, Sofie became pregnant. The father was another man, Nicolaus Kapy von Kapivar, whom she eventually married.",
-				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death."
+				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death.",
+                "PLACEHOLDER TEXT",
+                "PLACEHOLDER TEXT 2"
 			],
 			[],
 			[
@@ -1844,13 +1905,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			]
     	]
     	var collections = [
-			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], []],
+			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], [],[], []],
 			[[], [], []],
 			[[], [], []],
 			[[], [], []]
     	]
     	var tours = [
-			[[], [], [],[],[]],
+			[[], [], [],[],[],[], []],
 			[[], [], []],
 			[[], [], []],
 			[[], [], []]
