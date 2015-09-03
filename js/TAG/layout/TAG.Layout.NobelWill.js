@@ -685,18 +685,36 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                 switch (pageNumber) {
                     case 1:
-                        leftArrow.css({
-                            "left" : "31.75%"
-                        })
                         rightArrow.css({
-                            "left" : "69.75%"
+                            "left": "69.75%",
+                            "bottom": "50px"
                         })
                         break;
                     case 2:
+                        leftArrow.css({
+                            "left": "37.75%",
+                            "bottom": "22px"
+                        })
+                        rightArrow.css({
+                            "left": "69.5%",
+                            "bottom": "22px"
+                        })
                         break;
                     case 3:
+                        leftArrow.css({
+                            "left": "34.25%",
+                            "bottom": "22px"
+                        })
+                        rightArrow.css({
+                            "left": "69.75%",
+                            "bottom": "22px"
+                        })
                         break;
                     case 4:
+                        leftArrow.css({
+                            "left": "36.75%",
+                            "bottom": "30px"
+                        })
                         break;
                 }
 
@@ -1286,7 +1304,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         if (pageNumber > 0) {
 
             idleTimer.kill();
-
+            infoBulbs = []
             associatedMedia = []
             pageNumber-=1
             sliderBar.remove();
@@ -1331,6 +1349,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         if (pageNumber < 4) {
 
             idleTimer.kill();
+
+            infoBulbs = []
 
             pageNumber += 1
             associatedMedia = []
