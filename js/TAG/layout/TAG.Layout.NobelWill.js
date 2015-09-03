@@ -406,8 +406,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
             case 3:
-                associatedMediaNobelKeywords = [['peace', 0], ['Swedish Academy of Sciences', 0], ['Caroline Institute', 0], ['Academy', 0], ['a committee of five persons to be elected by the Norwegian Storting', 0], ['Scandinavian or not', 0], ['Ragnar Sohlman', 1], ['Paris', 2], ['San Remo', 2], ['Glasgow', 2], ['Petersburg', 2], ['Stockholm', 2]];
-                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [61, 64, 4, 2.5], [68.5, 64, 8, 2.5], [51.25, 70.25, 6.25, 2.5], [66.5, 81.75, 7.25, 2.5], [76.75, 84.5, 5.75, 2.5]]
+                associatedMediaNobelKeywords = [['peace', 0], ['Swedish Academy of Sciences', 0], ['Caroline Institute', 0], ['Academy', 0], ['a committee of five persons to be elected by the Norwegian Storting', 0], ['Scandinavian or not', 0], ['Ragnar Sohlman', 1], ['Bofors', 1], ['my property', 1], ['Paris', 2], ['San Remo', 2]];
+                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [60.5, 46, 6.25, 2.5], [50.25, 63, 13.5, 2.5], [61, 64.5, 4, 2.25], [68.5, 64, 8, 2.5]];
 
                 leftTextArray = [
                     9, 'the most outstanding work in an ideal direction; and one part to the',
@@ -483,8 +483,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
             case 4:
-                associatedMediaNobelKeywords = [['strong box', 0], ['crematorium', 2]];
-                hardcodedHotspotSpecs = [[48, 10.75, 7.3, 2.75], [66.75, 36.75, 10, 2.75]]
+                associatedMediaNobelKeywords = [['patents', 0], ['crematorium', 2]];
+                hardcodedHotspotSpecs = [[63.25, 13, 5.75, 2.5], [66.75, 36.75, 10, 2.75]]
                 leftTextArray = [
                     8.5, 'in Enskilda Banden in Stockholm and in',
                     10.75, 'and in my strong-box at 59, Avenue Malakoff, Paris; further',
@@ -1796,7 +1796,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var titles = [
 			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
 			[],
-			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
+			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "my property", "Bofors", "Paris", "San Remo"],
 			["patents", "crematorium"]
     	]
     	var images = [
@@ -1833,7 +1833,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     "Scotland	3,913,938.67 \n" +
                     "England		3,904,235.32 \n" +
                     "Italy		630,410.10 \n" +
-                    "Russia		5,232,773.45 \n" + 
+                    "Russia		5,232,773.45 \n" +
                     "Total		33,233,792.20", 
                 "Alfred Nobel had spent time in Paris in his youth, and at the age of 40, he bought a house there. In the years before this, he had lived in Hamburg, but he had spent most of that time traveling, and his “home” there seems to have been more of a provisory nature. He continued to travel extensively even after he had moved to Paris, but he had definitely found a more permanent residence. He had also gained a home that reflected his financial, social and cultural status.",
                 "Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy."
@@ -1846,7 +1846,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var collections = [
 			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], []],
 			[[], [], []],
-			[[], [], []],
+			[[], [], [], []],
 			[[], [], []]
     	]
     	var tours = [
