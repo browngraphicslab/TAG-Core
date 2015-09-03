@@ -150,7 +150,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         SetWillImage(pageNumber);
         
         //TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
-        TAG.Layout.Spoof().getLaureates(function (laurs) { laurs.forEach(function (laur) { if (laur.ID.indexOf("1867-11-07") > -1) { console.log(laur) } }) })
+        //TAG.Layout.Spoof().getLaureates(function (laurs) { laurs.forEach(function (laur) { if (laur.ID.indexOf("1867-11-07") > -1) { console.log(laur) } }) })
 
         background = $(document.createElement('div'));
         background.css({
@@ -362,14 +362,42 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 associatedMediaNobelKeywords = [['Georges Fehrenbach', 4], ['estate', 6], ['fund', 6], ['greatest benefit to mankind', 6], ['physics', 6], ['chemical', 6], ['physiology or medicine', 6], ['Literature', 6]];
                 hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.25, 70.5, 9.25, 2.5], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5]]
 
-                leftTextArray = [
-                    5, 'Potsdamerstrasse, 51, Berlin, will', 'receive Fifty Thousand Marks each;', 
-                    'Mrs Gaucher, 2 bis Boulevard du Viaduc, Nimes' , 'France will receive One Hundred Thousand Francs;',
-                    'My servants, Auguste Oswald and his wife', 'Alphonse Tournand, employed in my laboratory', 'at San Remo, will each receive an annuity of One','Thousand Francs;',
-                    'My former servant, Joseph Girardot, 5, Place', 'St. Laurent, Châlons sur Saône, France, is', 'entitled to an annuity of Five Hundred Francs,', 'and my former gardener, Jean Lecof, at present with','Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour', 'Ecouen, S.& O., France, will receive an annuity of Three Hundred', 'Francs;',
-                    'Mr Georges Fehrenbach, 2, Rue Compiègne,','Paris, is entitled to an annual pension of Five Thousand', 'Francs from January 1, 1896 to January 1, 1899,', 'when the said pension shall discontinue;',
-                    'A sum of Twenty Thousand Crowns each, which', 'has been placed in my custody, is the property of my brother’s', 'children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be', 'repaid to them.',
-                    'The whole of my remaining realizable estate shall be', 'dealt with in the following way: the capital, invested in safe', 'securities by my executors, shall constitute a', 'fund, the interest on which shall be annually distributed in the form of prizes', 'to those who, during the preceding year, shall have conferred the greatest', 'benefit to mankind. The said interest shall be divided into five equal', 'parts, which shall be apportioned as follows: one part to the person who shall', 'have made the most important discovery or invention within the field of physics;', 'one part to the person who shall have made the most important chemical', 'discovery or improvement; one part to the person who shall have made the most', 'important discovery within the domain of physiology or medicine; one part to', 'the person who shall have produced in the field of literature',
+                leftTextArray = [ //aim for 1.75 space
+                    9.75, 'Potsdamerstrasse, 51, Berlin, will',
+                    11.75 , 'receive Fifty Thousand Marks each;',
+                    13.75, 'Mrs Gaucher, 2 bis Boulevard du Viaduc, Nimes',
+                    15.75, 'France will receive One Hundred Thousand Francs;',
+                    17.75, 'My servants, Auguste Oswald and his wife',
+                    19.75, 'Alphonse Tournand, employed in my laboratory',
+                    21.75, 'at San Remo, will each receive an annuity of One',
+                    24.25, 'Thousand Francs;',
+                    26.5, 'My former servant, Joseph Girardot, 5, Place',
+                    28.75, 'St. Laurent, Châlons sur Saône, France, is',
+                    31, 'entitled to an annuity of Five Hundred Francs,',
+                    33, 'and my former gardener, Jean Lecof, at present with',
+                    35, 'Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour',
+                    37, 'Ecouen, S.& O., France, will receive an annuity of Three Hundred',
+                    39, 'Francs;',
+                    40.25, 'Mr Georges Fehrenbach, 2, Rue Compiègne,',
+                    42.5, 'Paris, is entitled to an annual pension of Five Thousand',
+                    45, 'Francs from January 1, 1896 to January 1, 1899,',
+                    48, 'when the said pension shall discontinue;',
+                    49.5, 'A sum of Twenty Thousand Crowns each, which',
+                    52, 'has been placed in my custody, is the property of my brother’s',
+                    54.25, 'children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be',
+                    55.75, 'repaid to them.',
+                    57.75, 'The whole of my remaining realizable estate shall be',
+                    58.25, 'dealt with in the following way: the capital, invested in safe',
+                    61.5, 'securities by my executors, shall constitute a',
+                    63.75, 'fund, the interest on which shall be annually distributed in the form of prizes',
+                    66, 'to those who, during the preceding year, shall have conferred the greatest',
+                    68.25, 'benefit to mankind. The said interest shall be divided into five equal',
+                    70.5, 'parts, which shall be apportioned as follows: one part to the person who shall',
+                    68.25, 'have made the most important discovery or invention within the field of physics;',
+                    70.5, 'one part to the person who shall have made the most important chemical',
+                    72.5, 'discovery or improvement; one part to the person who shall have made the most',
+                    74.75, 'important discovery within the domain of physiology or medicine; one part to',
+                    76, 'the person who shall have produced in the field of literature',
                 ]
                 sliderPositions = [
                     [7.75, 12.5],
@@ -389,7 +417,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     [38.75, 12.25],
                     [39, 13.5], 
                     [41.5, 14.25],
-                    [44, 13.5], //18
+                    [44, 13.5], 
                     [47.5, 12.5],
                     [48.5, 13.5],
                     [51.5, 13.25],
@@ -1750,7 +1778,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     	var titles = [
 			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
-			[],
+			["Georges Fehrenbach", "fund", "Prizes","Physics", "Chemical", "Physiology or Medicine", "Literature"],
 			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
 			[]
     	]
@@ -1768,7 +1796,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 				"Alfred Nobel, never married. However he had a long relationship with an Austrian woman, Sofie Hess (1851–1919). Alfred Nobel met Sofie Hess during a visit to Baden bei Wien in 1876. This relationship was everything but harmonious. For a while, Alfred seems to have been happy and in love, despite all of his business worries. Soon, however, he became dissatisfied in his relationship with Sofie, yet he did not seem to want to break up with her. He scolded her for being irresponsible and childish. Alfred and Sofie’s drawn-out and uneasy relationship finally came to an end. In 1890, Sofie became pregnant. The father was another man, Nicolaus Kapy von Kapivar, whom she eventually married.",
 				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death."
 			],
-			[],
+			[   "Georges Fehrenbach was Alfred Nobel's assistant in the laboratory that was connected to Nobel's residence in Paris. Fehrenbach collaborated on the development of blasting gelatin and ballistite. When Nobel purchased a laboratory in Sèvran outside Paris, Fehrenbach also worked there, and he also worked for Nobel in the laboratories at the dynamite factory in Ardeer, Scotland. When Nobel moved to San Remo in the beginning of the 1890’s, Fehrenbach chose not to follow him, and remained in Paris.",
+			    "One of the tasks of the executors of the will was to create the fund in which Alfred Nobel fortune would be collected, once his shares, obligations and other valuable papers had been transferred into cash. In 1900, the Nobel Foundation was established and given the responsibility of administering Nobel’s fortune, as well as organizing the distribution of the prizes.",
+			    "The Nobel Prizes were established in Alfred Nobel’s will. However, the will provides no directions for how the Prizes are to be presented. It was decided that December 10, the date of Alfred Nobel’s death would be the day on which Nobel laureates would receive their awards. The prizes are manifested with a medal and a diploma. The presentation of the Peace Prize takes place in Oslo, and all other Prizes are awarded in Stockholm.",
+			    "The prize area Nobel mentioned first in his will was physics. Many regarded physics as the foremost of the sciences, and Nobel probably held this opinion, too. Physics was also closely related to his own area of research.",
+			    "In the era in which Alfred Nobel lived, belief in the potential of science and technology was very strong. Nobel was interested in many areas of science, including some which lay outside his own expertise. However, certain fields were especially important for his own work as an inventor, in particular chemistry. Chemistry was the second prize area Nobel mentioned in his will.",
+			    "Alfred Nobel had a strong interest in medicine. Partly, this was a result of his obsession with his own illnesses and complaints.  Nobel was also actively interested in medical research. Around 1890, through Karolinska Institutet in Stockholm, Nobel made contact with the physiologist, Jöns Johansson, who came to work at Nobel’s laboratory in Sevran. Physiology or medicine was the third prize area which Nobel mentioned in his will.",
+			    "Alfred Nobel had broad cultural interests. The literary interests which began early in Nobel’s youth lasted throughout his life. His library contains a rich spectrum of literary works in different languages. Further evidence of Nobel’s literary interests was that in the final years of his life, he returned to writing fiction.  The fourth prize area Nobel mentioned in his will was literature."
+			],
 			[
                 "Alfred Nobel was interested in social issues, and had a special interest in the peace movement. Nobel’s engagement in the cause for world peace was in part inspired by his acquaintance with Bertha von Suttner, and in part by the use of his inventions in war and terrorist attacks. Peace was the fifth and final prize area that Nobel mentioned in his will.",
                 "The Royal Swedish Academy of Sciences was formed in 1739 by Carl Linnaeus and a number of other Swedsih scientists. It is an independent organisation whose overall objective is to promote the sciences and strengthen their influence in society. Alfred Nobel blev 1884 utländsk ledamot i akademien.",
@@ -1805,8 +1840,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			[[], [], [],[],[]],
 			[[], [], []],
 			[[], [], []],
-			[[], [], []]
-    	]
+			[[], [], []]    	]
     	var shortTexts = [
 			[
 				"short sentence or two about a person 1.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
