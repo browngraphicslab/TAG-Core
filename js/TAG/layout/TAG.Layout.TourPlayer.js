@@ -71,7 +71,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     // idleTimer.start();
     //idleTimer && idleTimer.kill();
     //idleTimer = null;
-    backButton.attr('src', tagPath+'images/Back.svg');
+    backButton.attr('src', tagPath+'images/Back.png');
     backButton.css('width', '7.5%');
 
     //clicked effect for back button

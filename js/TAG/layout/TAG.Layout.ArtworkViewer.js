@@ -829,7 +829,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
 
         if (locked !== doq.Identifier) {
-            backButton.attr('src', tagPath + 'images/icons/Back.svg');
+            backButton.attr('src', tagPath + 'images/icons/Back.png');
         } else {
             backButton.hide();
         }
@@ -1141,10 +1141,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 descriptionDiv.css({
                     'font-size': '75%',
                     'display': 'inline-block',
-                    'margin-left': '10%',
-                    'margin-right': '10%',
-                    'margin-top': '5%',
-                    'max-height': .85*(sideBar.height() - $('#infoTitle').offset().top - infoTitle.height()) + 'px',
+                    'margin-left': '15%',
+                    'margin-right': '15%',
+                    'margin-top': '10%',
+                    'max-height': .85*(sideBar.height() - infoTitle.offset().top - infoTitle.height()) + 'px',
                     'overflow-y': 'auto'
                 });
                 descriptionDiv.addClass('description');
