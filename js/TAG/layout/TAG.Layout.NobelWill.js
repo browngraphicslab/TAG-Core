@@ -439,9 +439,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
             case 3:
-                associatedMediaNobelKeywords = [['peace'], ['Swedish Academy of Sciences'], ['Caroline Institute'], ['Academy'], ['a committee of five persons to be elected by the Norwegian Storting'], ['Scandinavian or not'], ['Ragnar Sohlman'], ['Paris'], ['San Remo'], ['Glasgow'], ['Petersburg'], ['Stockholm']];
-                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [61, 64, 4, 2.5], [68.5, 64, 8, 2.5], [51.25, 70.25, 6.25, 2.5], [66.5, 81.75, 7.25, 2.5], [76.75, 84.5, 5.75, 2.5]]
-
+                associatedMediaNobelKeywords = [['peace'], ['Swedish Academy of Sciences'], ['Caroline Institute'], ['Academy'], ['a committee of five persons to be elected by the Norwegian Storting'], ['Scandinavian or not'], ['Ragnar Sohlman'], ['Bofors'], ['my property'], ['Paris'], ['San Remo']];
+                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [60.5, 46, 6.25, 2.5], [50.25, 63, 13.5, 2.5], [61, 64.5, 4, 2.25], [68.5, 64, 8, 2.5]];
+ 
 
                 leftTextArray = [
                     9, 'the most outstanding work in an ideal direction; and one part to the',
@@ -517,8 +517,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
             case 4:
-                associatedMediaNobelKeywords = [['strong box'], ['crematorium']];
-                hardcodedHotspotSpecs = [[48, 10.75, 7.3, 2.75], [66.75, 36.75, 10, 2.75]]
+                associatedMediaNobelKeywords = [['patents'], ['crematorium']];
+                hardcodedHotspotSpecs = [[63.25, 13, 5.75, 2.5], [66.75, 36.75, 10, 2.75]]
                 leftTextArray = [
                     8.5, 'in Enskilda Banden in Stockholm and in',
                     10.75, 'and in my strong-box at 59, Avenue Malakoff, Paris; further',
