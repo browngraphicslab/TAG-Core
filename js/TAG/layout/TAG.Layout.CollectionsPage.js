@@ -545,9 +545,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 }
             }
             //Set background image
-            if (collection.Metadata.BackgroundImage) {
-                bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
-            }
+            //if (collection.Metadata.BackgroundImage) {
+            //    bgimage.css('background-image', "url(" + FIX_PATH(collection.Metadata.BackgroundImage) + ")");
+            //}
             //Change timeline shown based on saved metadata
             if (collection.Metadata.Timeline === "true" || collection.Metadata.Timeline === "false") {
                 collection.Metadata.Timeline === "true" ? timelineShown = true : timelineShown = false;
