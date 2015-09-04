@@ -2371,7 +2371,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
     function getSearchDescription(matchedArts, content, doTextSearch) {
 
-
+        var optionTextDict = {};
         var andKeywordsString = '',
             notKeywordsString = '',
             andCount = 0,
@@ -2387,13 +2387,34 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             for (var i = 0; i < keywords.length; i++) {
                 listString = listString + (((i == keywords.length - 1) && keywords.length != 1 ? ' or ' : ' ') + '\'' + keywords[i] + '\'' +
                     (((i == 0 && keywords.length == 2) || i == keywords.length-1) ? '' : ','));
+                
             }
+            //optionTextDict[op] = listString;
+           
+
             return listString;
         };
+
+        
+        
+
         $.each(keywordSearchOptions, function (optionIndex, option) {
             var listString = getSetListString(option.operation, option.keywords);
-            searchDescriptionText = searchDescriptionText +
-                ((listString !== '') ? (' for ' + listString) : '');
+            optionTextDict[option] = listString;
+            keywordSearchOptions[0]["listString"] = listString;
+
+            var resultsString = searchDescriptionText.trim().substr(searchDescriptionText.length - 7);
+            var resultString = searchDescriptionText.trim().substr(searchDescriptionText.length - 6);
+            console.log("resultsstring = " + resultsString);
+            if (resultsString === "results" || resultString === "result") {
+                searchDescriptionText = searchDescriptionText +
+                    ((listString !== '') ? (' for ' + listString) : '');
+            } else {
+                searchDescriptionText = searchDescriptionText +
+                    ((listString !== '') ? (' and' + listString) : '');
+            }
+
+
         });
         searchDescriptionText = searchDescriptionText + '.';
 
@@ -3944,7 +3965,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                         });
                     //insert code to highlight orange
                         selectedTile = artworkTiles[artwork.Identifier];
-                        artworkTiles[artwork.Identifier].css({ 'border': '5px solid #fea100', 'opacity':'1' });
+                        artworkTiles[artwork.Identifier].css({ 'border': '5px solid #', 'opacity':'1' });
                    
                 }
                 
@@ -4157,7 +4178,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 prizeDiv = $(document.createElement('div')).attr('id', 'prizeDiv').addClass('popupInfo');
                 yearDiv = $(document.createElement('div')).attr('id', 'yearDiv').addClass('popupInfo');
                 descriptionDiv = $(document.createElement('div')).attr('id', 'descriptionDiv').addClass('popupInfo');
-                iconDiv = $(document.createElement('div')).attr('id', 'iconDiv').addClass('popupInfo');
+                iconDiv = $(document.createElement('div')).attr('id', 'iconDiv');
                 iconImg = $(document.createElement('img')).attr('id', 'iconDivImg');
 
                 //Apply content to smaller divs
@@ -4166,7 +4187,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     'background-repeat': 'no-repeat',
                     'background-size': 'cover'
                 })
-                nameDiv.text(artwork.Metadata.FirstName + " " + artwork.Metadata.LastName);
+                nameDiv.text((artwork.Metadata.FirstName + " " + (artwork.Metadata.LastName ? artwork.Metadata.LastName : "")).toUpperCase());
 
                 if (artwork && artwork.Metadata) {
                     var category = artwork.Metadata.PrizeCategory;
@@ -4198,7 +4219,6 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 }
 
                 iconDiv.append(iconImg)
-
 
                 //imgDiv.append(darkDiv)
                 darkDiv.append(yellowTextTop);//.append(yellowTextBottom);
@@ -4686,7 +4706,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 infoWrapper.append(iconDiv);
                 previewTile.append(infoWrapper);
 
-
+                
 
                 descSpan.append(descText);
                 tileBottom.append(descSpan);

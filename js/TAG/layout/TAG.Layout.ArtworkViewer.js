@@ -855,6 +855,23 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             //'font-family': FONT
         });
 
+        if (doq.Metadata.Description) {
+            var description = doq.Metadata.Description;
+            var descriptionDiv = $(document.createElement('div'));
+            descriptionDiv.css({
+                'font-size': '75%',
+                'display': 'inline-block',
+                'margin-left': '15%',
+                'margin-right': '15%',
+                'margin-top': '10%',
+                'max-height': .85 * (sideBar.height() - infoTitle.offset().top - infoTitle.height()) + 'px',
+                'overflow-y': 'auto'
+            });
+            descriptionDiv.addClass('description');
+            descriptionDiv.text(description);
+            descriptionDiv.appendTo(info);
+        };
+
         if (!previewing) {
             sideBar.css('min-width', 0.22 * screenWidth);
         }
@@ -1118,49 +1135,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }        
     }
 
-        // Load tours and filter for tours associated with this artwork
-        TAG.Worktop.Database.getTours(function (tours) {
-            var relatedTours,
-                maxHeight;
-
-            relatedTours = tours.filter(function (tour) {
-                var relatedArtworks;
-                if (!tour.Metadata || !tour.Metadata.RelatedArtworks || tour.Metadata.Private === "true") {
-                    return false;
-                }
-                relatedArtworks = JSON.parse(tour.Metadata.RelatedArtworks);
-                if (!relatedArtworks || !relatedArtworks.length) {
-                    return false;
-                }
-                return relatedArtworks.indexOf(doq.Identifier) >= 0;
-            });
-
-            if (doq.Metadata.Description) {
-                var description = doq.Metadata.Description;
-                var descriptionDiv = $(document.createElement('div'));
-                descriptionDiv.css({
-                    'font-size': '75%',
-                    'display': 'inline-block',
-                    'margin-left': '15%',
-                    'margin-right': '15%',
-                    'margin-top': '10%',
-                    'max-height': .85*(sideBar.height() - infoTitle.offset().top - infoTitle.height()) + 'px',
-                    'overflow-y': 'auto'
-                });
-                descriptionDiv.addClass('description');
-                descriptionDiv.text(description);
-                descriptionDiv.appendTo(info);
-            };
-
-            // set max height of drawers to avoid expanding into minimap area
-            maxHeight = Math.max(1, assetContainer.height() - currBottom); //to account for the height of the drawerLabel of the current drawer.
-
-            root.find(".drawerContents").css({
-                "max-height": maxHeight * .75 + "px", //TODO this
-                //'max-height':2*0.19 * $('#tagRoot').height() + 'px', //height of two thumbnails
-            });
-        });
-
         /**
          * Generates a click handler for a specific tour
          * @method tour
@@ -1246,216 +1220,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         for (var y = 0; y < hotspots.guids.length; y++) {
             loadQueue.add(showHotspots());
         }
-    }
-
-    function initKeywordsSetDrawer(name, fullKeywordSet, artworkKeywords) {
-        var drawer = createDrawer((name && name !== '') ? name : 'Untitled Set');
-        var keywordsArray = artworkKeywords.split(',');
-        var listString = '';
-        for (var i = 0; i < keywordsArray.length; i++) {
-            if (fullKeywordSet.indexOf(keywordsArray[i]) > -1) {
-                listString = listString + ' ' + keywordsArray[i] + ',';
-            }
-        }
-        if (listString !== '') {
-            listString = listString.substring(1, listString.length - 1);
-            drawer.contents.html(listString);
-            drawer.css({ 'word-wrap': 'break-word' });
-
-        } else {
-            drawer = null;
-        }
-        return drawer;
-    }
-
-
-    /**
-     * Create a drawer with a disclosure button used to display
-     * hotspots, assets, tours. The returned jQuery object has
-     * a property called "contents" which should be used to add
-     * buttons or messages to the contents of the drawer.
-     *
-     * @param title, the display title for the drawer
-     * @author jastern
-     */
-    function initlocationHistory() {
-        var RLH,
-            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer');
-        //toggle          = $(document.createElement('img')).addClass("drawerPlusToggle")
-        //    .attr("src", tagPath+'images/icons/plus.svg');      
-        isOpen = false;
-
-        locHistoryToggleSign = $(document.createElement('img')).addClass("drawerPlusToggle")
-                .attr("src", tagPath + 'images/icons/plus.svg');
-        locHistoryContainer.on('click', function () { toggleLocationOpen(); });
-
-        toggleContainer.append(locHistoryToggleSign);
-        locHistoryContainer.append(toggleContainer);
-
-        //panel that slides out when location history is clicked
-        RLH = TAG.Util.RLH({
-            artwork: doq,
-            root: root,
-            authoring: false
-        });
-        locationPanelDiv = RLH.init();
-        locationPanelDiv.css({ "width": "0%" });
-        locHistoryToggle = $(document.createElement('div'))
-            .attr("id", "locHistoryToggle")
-            .css({
-                "left": '100%',
-                'border-top-right-radius': '10px',
-                'border-bottom-right-radius': '10px',
-                "background-color": "rgba(0,0,0,0.7)",
-                "top": "43%",
-                "width": "4%",
-                "height": "14%",
-                "z-index": "100",
-                "position": "relative"
-            });
-        var locHistoryToggleImage = $(document.createElement('img'))
-            .attr('src', tagPath + 'images/icons/Close_nobel.svg')
-            .attr("id", "locHistoryToggleImage")
-            .css({
-                'left': '0%',
-                "position": "absolute",
-                "top": "30%",
-                "width": "72%",
-                "height": "42%"
-            });
-        locationPanelDiv.append(locHistoryToggle);
-        locHistoryToggle.append(locHistoryToggleImage);
-
-        var maps_timer = new TelemetryTimer();
-
-        locHistoryToggle.on('click', function () { toggleLocationOpen(); });
-        function toggleLocationOpen() {
-            isOpen ? locationClose() : locationOpen();
-        }
-
-        TAG.Telemetry.register(locHistoryContainer, 'click', 'Drawer', function (tobj, evt) {
-            if (!isOpen) {
-                maps_timer.restart();
-                return true;
-            }
-            tobj.current_artwork = doq.Identifier;
-            tobj.toggle = isOpen; //expanded or collapsed
-            tobj.drawer_header = "Maps";
-            tobj.time_spent = maps_timer.get_elapsed();
-        });
-
-        if (TAG.Util.Splitscreen.isOn()) {
-            locHistory.css({ "color": TAG.Util.UI.dimColor(PRIMARY_FONT_COLOR, 1.7) });
-        }
-        function locationOpen() {
-            if (!isOpen) {
-                if (!TAG.Util.Splitscreen.isOn()) {
-
-                    //close other drawers if any are open
-                    root.find(".drawerPlusToggle").attr({
-                        src: tagPath + 'images/icons/plus.svg',
-                        expanded: false
-                    });
-                    root.find(".drawerContents").slideUp();
-
-                    //and open RLH
-                    locationPanelDiv.css({ display: 'inline' });
-                    locHistoryToggleSign.attr("src", tagPath + 'images/icons/minus.svg');
-                    isOpen = true;
-                    toggler.hide();
-                    locationPanelDiv.show();
-                    locationPanelDiv.animate({ width: '65%' }, 350, function () { locHistoryToggle.show(); });
-                }
-            }
-        }
-
-        function locationClose() {
-            if (isOpen) {
-                locHistoryToggleSign.attr("src", tagPath + 'images/icons/plus.svg');
-                locHistory.text("Maps");
-                locHistoryContainer.css({ "background-color": "transparent" });
-                isOpen = false;
-                locationPanelDiv.animate({ width: '0%' }, 350, function () { locationPanelDiv.hide(); locHistoryToggle.hide(); toggler.show(); });
-            }
-        }
-
-        that.locationClose = locationClose
-
-        return locHistoryContainer;
-    }
-
-    /**
-     * Create a drawer (e.g., for list of related tours or the artwork's description) 
-     * @param {String} title            title of the drawer
-     * @param {jQuery obj} topContents  an element to be included before the main contents of the drawer
-     * @return {jQuery obj}             the drawer
-     */
-    function createDrawer(title, topContents, assocMediaToShow) {
-        var drawer = $(document.createElement('div')).addClass('drawer'),
-            drawerHeader = $(document.createElement('div')).addClass('drawerHeader'),
-            label = $(document.createElement('div')).addClass('drawerLabel'),
-            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer'),
-            toggle = $(document.createElement('img')).addClass("drawerPlusToggle"),
-            drawerContents = $(document.createElement('div')).addClass("drawerContents"),
-            i;
-
-        label.addClass('primaryFont');
-        label.text(title);
-        label.css({
-            'color': '#' + PRIMARY_FONT_COLOR,
-            //'font-family': FONT
-        });
-        toggle.attr({
-            src: tagPath + 'images/icons/plus.svg',
-            expanded: true
-        });
-
-        drawer.append(drawerHeader);
-        drawerHeader.append(label);
-        //drawerHeader.append(toggleContainer);
-        //toggleContainer.append(toggle);
-
-        drawer.append(drawerContents);
-        topContents && drawerContents.append(topContents);
-
-        //var drawerToggle = function (evt) {
-        //    if (toggle.attr('expanded') !== 'true') {
-        //        root.find(".drawerPlusToggle").attr({
-        //            src: tagPath + 'images/icons/plus.svg',
-        //            expanded: false
-        //        });
-
-        //        root.find(".drawerContents").slideUp();
-
-        //        toggle.attr({
-        //            src: tagPath + 'images/icons/minus.svg',
-        //            expanded: true
-        //        });
-        //    } else {
-        //        toggle.attr({
-        //            src: tagPath + 'images/icons/plus.svg',
-        //            expanded: false
-        //        });
-
-        //    }
-
-        //    drawerContents.slideToggle();
-        //    isOpen && that.locationClose()
-        //}
-
-        //have the toggler icon minus when is is expanded, plus otherwise.
-        //drawerHeader.on('click', drawerToggle);
-        TAG.Telemetry.register(drawerHeader, 'click', 'Drawer', function (tobj) {
-            tobj.current_artwork = doq.Identifier;
-            tobj.toggle = toggle.attr("expanded"); //expanded or collapsed
-            tobj.drawer_header = drawerHeader.text();
-        });
-        drawer.contents = drawerContents;
-        //if (assocMediaToShow && title === 'Associated Media') {
-            drawerHeader.click();
-            //drawer.drawerToggle = drawerToggle;
-        //}
-        return drawer;
     }
 
     /**
