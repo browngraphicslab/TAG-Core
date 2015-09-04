@@ -35,6 +35,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         toggleHotspotButton,
         associatedMediaScroller,
         hotspotsShown,
+        leftArrow,
+        rightArrow,
 		bezierVisible = false,
         willImage,
         videoContainer,
@@ -180,12 +182,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         associatedMediaScroller = $(document.createElement('div'));
         associatedMediaScroller.attr({id : "associatedMediaScroller"})
         associatedMediaScroller.css({
-            "width": "20%",
+            "width": "21.5%",
             "height" : "94%",
             "position": "absolute",
             'background-color': "transparent",
             'top': '3%',
-            'right': '3%',
+            'right': '1.5%',
             "display" : "block"
         })
 
@@ -308,7 +310,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     61, ' which is paid to her by the said Bank, and to this end I have',
                     63.5, ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
                     65.5, 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
-                    67.5,' Stockholm, will receive One Hundred Thousand Crowns;',
+                    67.75,' Stockholm, will receive One Hundred Thousand Crowns;',
                     70.25, 'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
                     72.25,' Paris, is entitled to an annuity of Two Thousand',
                     74.75,' Five Hundred Francs. In addition,',
@@ -363,14 +365,42 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 associatedMediaNobelKeywords = [['Georges Fehrenbach'], ['estate'], ['fund'], ['greatest benefit to mankind'], ['physics'], ['chemical'], ['physiology or medicine'], ['Literature']];
                 hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.25, 70.5, 9.25, 2.5], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5]]
 
-                leftTextArray = [
-                    5, 'Potsdamerstrasse, 51, Berlin, will', 'receive Fifty Thousand Marks each;', 
-                    'Mrs Gaucher, 2 bis Boulevard du Viaduc, Nimes' , 'France will receive One Hundred Thousand Francs;',
-                    'My servants, Auguste Oswald and his wife', 'Alphonse Tournand, employed in my laboratory', 'at San Remo, will each receive an annuity of One','Thousand Francs;',
-                    'My former servant, Joseph Girardot, 5, Place', 'St. Laurent, Châlons sur Saône, France, is', 'entitled to an annuity of Five Hundred Francs,', 'and my former gardener, Jean Lecof, at present with','Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour', 'Ecouen, S.& O., France, will receive an annuity of Three Hundred', 'Francs;',
-                    'Mr Georges Fehrenbach, 2, Rue Compiègne,','Paris, is entitled to an annual pension of Five Thousand', 'Francs from January 1, 1896 to January 1, 1899,', 'when the said pension shall discontinue;',
-                    'A sum of Twenty Thousand Crowns each, which', 'has been placed in my custody, is the property of my brother’s', 'children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be', 'repaid to them.',
-                    'The whole of my remaining realizable estate shall be', 'dealt with in the following way: the capital, invested in safe', 'securities by my executors, shall constitute a', 'fund, the interest on which shall be annually distributed in the form of prizes', 'to those who, during the preceding year, shall have conferred the greatest', 'benefit to mankind. The said interest shall be divided into five equal', 'parts, which shall be apportioned as follows: one part to the person who shall', 'have made the most important discovery or invention within the field of physics;', 'one part to the person who shall have made the most important chemical', 'discovery or improvement; one part to the person who shall have made the most', 'important discovery within the domain of physiology or medicine; one part to', 'the person who shall have produced in the field of literature',
+                leftTextArray = [ //aim for 1.75 space
+                    9.75, 'Potsdamerstrasse, 51, Berlin, will',
+                    11.75 , 'receive Fifty Thousand Marks each;',
+                    13.75, 'Mrs Gaucher, 2 bis Boulevard du Viaduc, Nimes',
+                    15.75, 'France will receive One Hundred Thousand Francs;',
+                    17.75, 'My servants, Auguste Oswald and his wife',
+                    19.75, 'Alphonse Tournand, employed in my laboratory',
+                    21.75, 'at San Remo, will each receive an annuity of One',
+                    24.25, 'Thousand Francs;',
+                    26.5, 'My former servant, Joseph Girardot, 5, Place',
+                    28.75, 'St. Laurent, Châlons sur Saône, France, is',
+                    31, 'entitled to an annuity of Five Hundred Francs,',
+                    33, 'and my former gardener, Jean Lecof, at present with',
+                    35, 'Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour',
+                    37, 'Ecouen, S.& O., France, will receive an annuity of Three Hundred',
+                    39, 'Francs;',
+                    40.5, 'Mr Georges Fehrenbach, 2, Rue Compiègne,',
+                    42.5, 'Paris, is entitled to an annual pension of Five Thousand',
+                    45, 'Francs from January 1, 1896 to January 1, 1899,',
+                    48, 'when the said pension shall discontinue;',
+                    49.5, 'A sum of Twenty Thousand Crowns each, which',
+                    52, 'has been placed in my custody, is the property of my brother’s',
+                    54.25, 'children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be',
+                    55.75, 'repaid to them.',
+                    57.75, 'The whole of my remaining realizable estate shall be',
+                    59.75, 'dealt with in the following way: the capital, invested in safe',
+                    61.5, 'securities by my executors, shall constitute a',
+                    63.75, 'fund, the interest on which shall be annually distributed in the form of prizes',
+                    66, 'to those who, during the preceding year, shall have conferred the greatest',
+                    68.25, 'benefit to mankind. The said interest shall be divided into five equal',
+                    70.5, 'parts, which shall be apportioned as follows: one part to the person who shall',
+                    72.5, 'have made the most important discovery or invention within the field of physics;',
+                    76.5, 'one part to the person who shall have made the most important chemical',
+                    78.5, 'discovery or improvement; one part to the person who shall have made the most',
+                    82.5, 'important discovery within the domain of physiology or medicine; one part to',
+                    84.5, 'the person who shall have produced in the field of literature',
                 ]
                 sliderPositions = [
                     [7.75, 12.5],
@@ -390,7 +420,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     [38.75, 12.25],
                     [39, 13.5], 
                     [41.5, 14.25],
-                    [44, 13.5], //18
+                    [44, 13.5], 
                     [47.5, 12.5],
                     [48.5, 13.5],
                     [51.5, 13.25],
@@ -545,8 +575,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             var div = $(document.createElement("div"));
             div.css({
                 "left": infoBulbs[i][0] + "%",
-                "height": "45px",
-                "width": "45px",
+                "height": "30px",
+                "width": "30px",
                 "position": 'absolute',
                 "top": infoBulbs[i][1]+"%",
                 "z-index": "550",
@@ -591,12 +621,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 tempText.css({
                     'position': 'absolute',
                     'background-color': "transparent",
-                    'left': '15.5%',
-                    'width': '100%',
+                    'left': '11.25%',
+                    'width': '105.5%',
                     'color': 'black',
                     'height': '5%',
                     'top': currentHeight + '%',
-                    'font-size': '.475em',
+                    'font-size': '.479em',
                 }).text(leftTextArray[i]);
                 currentHeight += 1.75;
                 tempText.attr('class', 'textChunkDiv');
@@ -654,37 +684,43 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         showNobelInitialPopup(
             function () {
-                var leftArrow = $(document.createElement('img'));
-                var rightArrow = $(document.createElement('img'));
-                leftArrow.attr({
+                leftArrow = $(document.createElement('div'));
+                rightArrow = $(document.createElement('div'));
+                var left = $(document.createElement('img'));
+                var right = $(document.createElement('img'));
+                rightArrow.append(right)
+                leftArrow.append(left)
+                left.attr({
                     id: 'leftPageArrow',
                     src: tagPath + 'images/icons/left_nobel_icon.svg'
                 })
-                rightArrow.attr({
+                right.attr({
                     id: 'rightPageArrow',
                     src: tagPath + 'images/icons/right_nobel_icon.svg'
                 })
                 leftArrow.css({
                     'position': 'absolute',
                     'background-color': 'transparent',
-                    'width': '50px',
+                    'width': '30px',
+                    'height' : "30px",
                     'bottom': '20px',
                     'left': "31.75%",
                     'z-index': '599'
                 });
-                leftArrow.click(function () {
+                left.click(function () {
                     pauseNobel();
                     goPrevPage();
                 })
                 rightArrow.css({
                     'position': 'absolute',
-                    'width': '50px',
+                    'width': '30px',
+                    'height': "30px",
                     'background-color': 'transparent',
                     'bottom': '20px',
                     'left': "69.75%",
                     'z-index': '599'
                 });
-                rightArrow.click(
+                right.click(
                     function () {
                         pauseNobel();
                         nextPage()
@@ -695,33 +731,33 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     case 1:
                         rightArrow.css({
                             "left": "69.75%",
-                            "bottom": "50px"
+                            "bottom": "40px"
                         })
                         break;
                     case 2:
                         leftArrow.css({
                             "left": "37.75%",
-                            "bottom": "22px"
+                            "bottom": "40px"
                         })
                         rightArrow.css({
                             "left": "69.5%",
-                            "bottom": "22px"
+                            "bottom": "40px"
                         })
                         break;
                     case 3:
                         leftArrow.css({
                             "left": "34.25%",
-                            "bottom": "22px"
+                            "bottom": "40px"
                         })
                         rightArrow.css({
                             "left": "69.75%",
-                            "bottom": "22px"
+                            "bottom": "40px"
                         })
                         break;
                     case 4:
                         leftArrow.css({
                             "left": "36.75%",
-                            "bottom": "30px"
+                            "bottom": "40px"
                         })
                         break;
                 }
@@ -761,16 +797,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                 switch (pageNumber) {
                     case 1:
-                        sliderBarInnerds.css({ "left": "42.5%", "width": "57.5%" })
+                        sliderBarInnerds.css({ "left": "43.1%", "width": "56.9%" })
                         break;
                     case 2:
-                        sliderBarInnerds.css({ "left": "43.6%", "width": "56.4%" })
+                        sliderBarInnerds.css({ "left": "44.25%", "width": "55.75%" })
                         break;
                     case 3:
-                        sliderBarInnerds.css({ "left": "42.5%", "width": "57.5%" })
+                        sliderBarInnerds.css({ "left": "41.35%", "width": "58.65%" })
                         break;
                     case 4:
-                        sliderBarInnerds.css({ "left": "43.5%", "width": "56.5%" })
+                        sliderBarInnerds.css({ "left": "44.25%", "width": "55.75%" })
                         break;
                 }
 
@@ -783,7 +819,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'background-color': 'transparent',
                     'border': '3px solid '+NOBEL_ORANGE_COLOR,
                     'border-radius': '12px',
-                    'left': '1%',
+                    'left': '.5%',
                     'width': '75.5%',
                     'height': '10%',
                     'z-index': '500'
@@ -847,11 +883,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 up.css({
                     'position': 'absolute',
                     'background-color': "transparent",
-                    'max-height': '25px',
-                    'max-width': '25px',
-                    'min-height': '25px',
-                    'min-width': '25px',
-                    'left': '1.5%',
+                    'max-height': '20px',
+                    'max-width': '20px',
+                    'min-height': '20px',
+                    'min-width': '20px',
+                    'left': '.75%',
                 })
                 up.css({
                     'bottom': 'calc(50% + 15px)'
@@ -883,11 +919,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 down.css({
                     'position': 'absolute',
                     'background-color': "transparent",
-                    'max-height': '25px',
-                    'max-width': '25px',
-                    'min-height': '25px',
-                    'min-width': '25px',
-                    'left': '1.5%'
+                    'max-height': '20px',
+                    'max-width': '20px',
+                    'min-height': '20px',
+                    'min-width': '20px',
+                    'left': '.75%'
                 }).mousedown(function (e) {
                     touching = true;
                     dragging = true;
@@ -1095,7 +1131,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var title = $(document.createElement('div'));
         title.css({
-        	"width": "100%",
+        	"width": "95%",
         	"top": "12px",
         	"position": "relative",
         	"color": "black",
@@ -1125,8 +1161,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         img.addClass('lightbulb');
         img.css({
         	"right": "8px",
-        	"height": "45px",
-        	"width": "45px",
+        	"height": "30px",
+        	"width": "30px",
         	"position": 'absolute',
         	"bottom": "0px",
         	"z-index": "550",
@@ -1408,7 +1444,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function makeNobelHotspots(names, hotSpotInfo) {
         nobelHotspots = [];
         for (var i = 0; i < associatedMedia.length; i++) {
-			console.log("making nobel hotspot")
+			//console.log("making nobel hotspot")
             var div = $(document.createElement('img'));
             div.css({
                 'position': 'absolute',
@@ -1783,11 +1819,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		id: 'closeX'
     	})
     	closeX.css({
-    		'left': '10px',
+    		'left': '5px',
     		'position': 'absolute',
-    		'top': '10px',
-    		'height': '45px',
-    		'width': '45px',
+    		'top': '5px',
+    		'height': '30px',
+    		'width': '30px',
             "z-index" : "1000",
     	}).click(function () {
     		$("#blocker").remove()
@@ -1812,15 +1848,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	popup.append(text);
     	var imgwidth = img.width();
     	img.css({
-			"left" : (pixWidth-imgwidth)/2 + "px"
+			"left" : Math.max((pixWidth-imgwidth)/2,35) + "px"
     	})
 
     	function createExtra(extra) {
     	    var bd = $(document.createElement('div'));
     	    bd.css({
     	        "position": 'relative',
-    	        'width': "140px",
-                'height' : "140px",
+    	        'width': "80",
+                'height' : "80px",
     	        "border": "3px solid " + NOBEL_ORANGE_COLOR,
     	        "border-radius": "10px",
     	        "margin-bottom": "5%",
@@ -1829,9 +1865,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		var d = $(document.createElement('img'));
     		d.css({
     			"position": 'absolute',
-    			'width': "140px",
+    			'width': "80px",
     			"border-radius": "5px",
-    			'height': "140px",
+    			'height': "80px",
     		})
     		d.attr({
 				src : extra[0]
@@ -1840,7 +1876,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		t.css({
     		    "position": 'absolute',
                 "left" : "5px",
-    		    'width': "130px",
+    		    'width': "70px",
     		    'color': "black",
                 "background-color" : "transparent",
                 "font-size" : ".5em"
@@ -1894,14 +1930,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 		//START HARDCODING INFO AREA
 
     	var titles = [
-			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck","PLACEHOLDER", "PLACEHOLDER 2"],
-			[],
-			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "my property", "Bofors", "Paris", "San Remo"],
-			["patents", "crematorium"]
+			["Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
+			["Georges Fehrenbach", "fund", "Prizes","Physics", "Chemical", "Physiology or Medicine", "Literature"],
+			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
+			["patents","crematorium"]
     	]
     	var images = [
 			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'],
-			[],
+			['Popup_2_1.png', 'Popup_2_2.png', 'Popup_2_3.png', 'Popup_2_4.png', 'Popup_2_5.png', 'Popup_2_6.png', 'Popup_2_7.png', 'Popup_2_8.png'],
 			['Popup_3_1.png', 'Popup_3_2.png', 'Popup_3_3.png', 'Popup_3_4.png', 'Popup_3_5.png', 'Popup_3_6.png', 'Popup_3_7.png', 'Popup_3_8.png', '', 'Popup_3_10.png', 'Popup_3_11.png'],
 			['Popup_4_1.png', 'Popup_4_2.png']
     	]
@@ -1915,7 +1951,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "PLACEHOLDER TEXT",
                 "PLACEHOLDER TEXT 2"
 			],
-			[],
+			[   "Georges Fehrenbach was Alfred Nobel's assistant in the laboratory that was connected to Nobel's residence in Paris. Fehrenbach collaborated on the development of blasting gelatin and ballistite. When Nobel purchased a laboratory in Sèvran outside Paris, Fehrenbach also worked there, and he also worked for Nobel in the laboratories at the dynamite factory in Ardeer, Scotland. When Nobel moved to San Remo in the beginning of the 1890’s, Fehrenbach chose not to follow him, and remained in Paris.",
+			    "One of the tasks of the executors of the will was to create the fund in which Alfred Nobel fortune would be collected, once his shares, obligations and other valuable papers had been transferred into cash. In 1900, the Nobel Foundation was established and given the responsibility of administering Nobel’s fortune, as well as organizing the distribution of the prizes.",
+			    "The Nobel Prizes were established in Alfred Nobel’s will. However, the will provides no directions for how the Prizes are to be presented. It was decided that December 10, the date of Alfred Nobel’s death would be the day on which Nobel laureates would receive their awards. The prizes are manifested with a medal and a diploma. The presentation of the Peace Prize takes place in Oslo, and all other Prizes are awarded in Stockholm.",
+			    "The prize area Nobel mentioned first in his will was physics. Many regarded physics as the foremost of the sciences, and Nobel probably held this opinion, too. Physics was also closely related to his own area of research.",
+			    "In the era in which Alfred Nobel lived, belief in the potential of science and technology was very strong. Nobel was interested in many areas of science, including some which lay outside his own expertise. However, certain fields were especially important for his own work as an inventor, in particular chemistry. Chemistry was the second prize area Nobel mentioned in his will.",
+			    "Alfred Nobel had a strong interest in medicine. Partly, this was a result of his obsession with his own illnesses and complaints.  Nobel was also actively interested in medical research. Around 1890, through Karolinska Institutet in Stockholm, Nobel made contact with the physiologist, Jöns Johansson, who came to work at Nobel’s laboratory in Sevran. Physiology or medicine was the third prize area which Nobel mentioned in his will.",
+			    "Alfred Nobel had broad cultural interests. The literary interests which began early in Nobel’s youth lasted throughout his life. His library contains a rich spectrum of literary works in different languages. Further evidence of Nobel’s literary interests was that in the final years of his life, he returned to writing fiction.  The fourth prize area Nobel mentioned in his will was literature."
+			],
 			[
                 "Alfred Nobel was interested in social issues, and had a special interest in the peace movement. Nobel’s engagement in the cause for world peace was in part inspired by his acquaintance with Bertha von Suttner, and in part by the use of his inventions in war and terrorist attacks. Peace was the fifth and final prize area that Nobel mentioned in his will.",
                 "The Royal Swedish Academy of Sciences was formed in 1739 by Carl Linnaeus and a number of other Swedsih scientists. It is an independent organisation whose overall objective is to promote the sciences and strengthen their influence in society. Alfred Nobel blev 1884 utländsk ledamot i akademien.",
@@ -1947,16 +1990,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	]
     	var collections = [
 			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], [],[], []],
-			[[], [], []],
+			[[], [], [], [], [], [], [], []],
 			[[], [], [], []],
 			[[], [], []]
     	]
     	var tours = [
 			[[], [], [],[],[],[], []],
+			[[], [], [], [], [], [], [], []],
 			[[], [], []],
-			[[], [], []],
-			[[], [], []]
-    	]
+			[[], [], []]    	]
     	var shortTexts = [
 			[
 				"short sentence or two about a person 1.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
