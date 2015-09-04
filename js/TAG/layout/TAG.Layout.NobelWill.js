@@ -1937,7 +1937,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	]
     	var images = [
 			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'],
-			[],
+			['Popup_2_1.png', 'Popup_2_2.png', 'Popup_2_3.png', 'Popup_2_4.png', 'Popup_2_5.png', 'Popup_2_6.png', 'Popup_2_7.png', 'Popup_2_8.png'],
 			['Popup_3_1.png', 'Popup_3_2.png', 'Popup_3_3.png', 'Popup_3_4.png', 'Popup_3_5.png', 'Popup_3_6.png', 'Popup_3_7.png', 'Popup_3_8.png', '', 'Popup_3_10.png', 'Popup_3_11.png'],
 			['Popup_4_1.png', 'Popup_4_2.png']
     	]
@@ -1990,13 +1990,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	]
     	var collections = [
 			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], [],[], []],
-			[[], [], []],
+			[[], [], [], [], [], [], [], []],
 			[[], [], [], []],
 			[[], [], []]
     	]
     	var tours = [
 			[[], [], [],[],[],[], []],
-			[[], [], []],
+			[[], [], [], [], [], [], [], []],
 			[[], [], []],
 			[[], [], []]    	]
     	var shortTexts = [
