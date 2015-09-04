@@ -1135,7 +1135,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"top": "12px",
         	"position": "relative",
         	"color": "black",
-			"height" : "auto"
+        	"height": "auto",
+            "font-size" : ".85em"
         }).text(string);
 
         rightDiv.append(title);
@@ -1808,8 +1809,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			'overflow' : 'hidden'
     	}).text(info.text);
     	title.css({
-    		"width": "40%",
-    		'height': "8%",
+    		"width": "35%",
+    		'height': "auto",
     		"left": "50%",
     		"top": "2.5%",
     		"position": "absolute",
@@ -1911,7 +1912,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			"position" : "absolute"
     	})
     	popup.append(extras);
-    	if (info.collections.length > 0) {
+    	if (info.collections && info.collections.length > 0) {
     		var gallery = $(document.createElement('div'));
     		gallery.css({
     			"width": "100%",
@@ -1924,7 +1925,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			extras.append(createExtra(info.collections[i]));
     		}
     	}
-    	if (info.tours.length > 0) {
+    	if (info.tours && info.tours.length > 0) {
     		var tour = $(document.createElement('div'));
     		tour.css({
     			"width": "100%",
@@ -1937,6 +1938,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			extras.append(createExtra(info.tours[i]));
     		}
     	}
+
+    	text.css({ "top": title.height() + 15 +"px" })
     }
 
     function getPopupInfo(number) {
