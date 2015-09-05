@@ -3137,36 +3137,10 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             // Add title
             if (tag === 'Title') {
             } else if (tag === 'Artist') {
-                yearTextBox.css('visibility', 'visible');
-                yearText = currentWork.Metadata.Artist;
-                if (!yearText) {
-                    yearTextBox.text('')
-                        .css('visibility', 'hidden');
-                } else {
-                    yearTextBox.text(yearText);
-                }
-            } else if (tag === 'Date') {
-                yearTextBox.css('visibility', 'visible');
-                yearText = getDateText(getArtworkDate(currentWork, true));
-                if (currentWork.Type === 'Empty' || !yearText) {
-                    yearTextBox.text('')
-                        .css('visibility', 'hidden');
-                } else {
-                    yearTextBox.text(yearText);
-                }
                 //var nameText = laureateInfo;
                 //artText.text(laureateInfo);
             } else if (tag === 'Tours') {
             } else if (tag) {
-                //If using custom tag
-                yearTextBox.css('visibility', 'visible');
-                yearText = currentWork.Metadata.InfoFields[tag];
-                if (!yearText) {
-                    yearTextBox.text('')
-                        .css('visibility', 'hidden');
-                } else {
-                    yearTextBox.text(yearText);
-                }
             } else {
                 //no sort tag
             }
@@ -3251,7 +3225,6 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             }
             else {
                 main.append(tileImage)
-                    .append(yearTextBox);
             }
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
                 if (currentWork.Metadata.ContentType == "tour" || currentWork.Metadata.ContentType == undefined) {
