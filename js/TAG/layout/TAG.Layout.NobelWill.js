@@ -992,7 +992,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     					closest = i;
     				}
     			}
-    			setChunkNumber(closest, checkForHotspots, 200);
+    			setChunkNumber(closest, checkForHotspots, 300);
     		}
     		dragging = false;
     	}
@@ -1521,6 +1521,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             stopAudio();
             nextPage(true);
             return;
+        }
+        if (chunk === 0 && pageNumber === 1) {
+            $("#downIcon").css({
+                'top': '25%'
+            })
+        }
+        else {
+            $("#downIcon").css({
+                'top': 'calc(50% + 15px)'
+            })
         }
         if (chunk >= 0 && chunk < (textDivArray.length - 4)) {
             hideNobelAssociatedMedia();
