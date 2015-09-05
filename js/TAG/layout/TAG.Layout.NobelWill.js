@@ -284,10 +284,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         switch (pageNumber) {
             case 1:
-                associatedMediaNobelKeywords = [['Alfred Bernhard'], ['Robert Nobel'], ['Emanuel Nobel'], ['Sofie Kapy von Kapivar'], ['Alarik Liedbeck']]
-                hardcodedHotspotSpecs = [[63.5, 15, 17, 3.5], [66.5, 30, 11, 3], [61, 34.5, 12.5, 2.5], [47, 54, 23.5, 3], [47.5, 65.4, 18.5, 3]]
+                associatedMediaNobelKeywords = [['Will and Testament'],['Alfred Bernhard'], ['Robert Nobel'], ['Emanuel Nobel'], ['Sofie Kapy von Kapivar'], ['Alarik Liedbeck']]
+                hardcodedHotspotSpecs = [[47.95+8.25,9,11.75,5],[63.5, 15, 17, 3.5], [66.5, 30, 11, 3], [61, 34.5, 12.5, 2.5], [47, 54, 23.5, 3], [47.5, 65.4, 18.5, 3]]
                 infoBulbs = [[61.5,7], [33.25,59]];
                 leftTextArray = [
+                    -50,' test',
                     15, 'I, the undersigned, Alfred Bernhard',
                     17.5,' Nobel, do hereby, after mature',
                     20.25,' deliberation, declare the following to be my last Will and Testament',
@@ -321,6 +322,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     86.5,'The Misses Emy and Marie Winkelmann,' 
                 ]
                 sliderPositions = [
+                    [8.5,6],
                     [14.5, 13],
                     [17.5, 13],
                     [20.25, 12.75],
@@ -437,9 +439,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
             case 3:
-                associatedMediaNobelKeywords = [['peace'], ['Swedish Academy of Sciences'], ['Caroline Institute'], ['Academy'], ['a committee of five persons to be elected by the Norwegian Storting'], ['Scandinavian or not'], ['Ragnar Sohlman'], ['Paris'], ['San Remo'], ['Glasgow'], ['Petersburg'], ['Stockholm']];
-                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [61, 64, 4, 2.5], [68.5, 64, 8, 2.5], [51.25, 70.25, 6.25, 2.5], [66.5, 81.75, 7.25, 2.5], [76.75, 84.5, 5.75, 2.5]]
-
+                associatedMediaNobelKeywords = [['peace'], ['Swedish Academy of Sciences'], ['Caroline Institute'], ['Academy'], ['a committee of five persons to be elected by the Norwegian Storting'], ['Scandinavian or not'], ['Ragnar Sohlman'], ['Bofors'], ['my property'], ['Paris'], ['San Remo']];
+                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [60.5, 46, 6.25, 2.5], [50.25, 63, 13.5, 2.5], [61, 64.5, 4, 2.25], [68.5, 64, 8, 2.5]];
+ 
 
                 leftTextArray = [
                     9, 'the most outstanding work in an ideal direction; and one part to the',
@@ -515,8 +517,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
             case 4:
-                associatedMediaNobelKeywords = [['strong box'], ['crematorium']];
-                hardcodedHotspotSpecs = [[48, 10.75, 7.3, 2.75], [66.75, 36.75, 10, 2.75]]
+                associatedMediaNobelKeywords = [['patents'], ['crematorium']];
+                hardcodedHotspotSpecs = [[63.25, 13, 5.75, 2.5], [66.75, 36.75, 10, 2.75]]
                 leftTextArray = [
                     8.5, 'in Enskilda Banden in Stockholm and in',
                     10.75, 'and in my strong-box at 59, Avenue Malakoff, Paris; further',
@@ -955,7 +957,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                 makeNobelHotspots(associatedMediaNobelKeywords, hardcodedHotspotSpecs)
 
-                setChunkNumber(0, null, 1);
+                setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
 
                 for (var i = 0; i < associatedMedia.length; i++) {
                 	associatedMedia[i].checkHeight();
@@ -1086,7 +1088,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "border-color": NOBEL_ORANGE_COLOR,
             "display": "flex",
             "height": "auto",
+            "z-index" : "550",
 			"margin-bottom" : "12px"
+        }).click(function () {
+        	showLargePopup(div.medianumber)
         })
 
         root.append(div);
@@ -1097,7 +1102,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         picWrapper.css({
         	"position": " relative",
         	"height": "30%",
-			"width" : "30%"
+        	"width": "30%",
+        	"z-index": "550",
         })
 
 		div.append(picWrapper)
@@ -1112,7 +1118,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			"height" : "auto",
         	"left": "12px",
         	"top": "12px",
-			"position" : "relative"
+        	"position": "relative",
+        	"z-index": "550",
         })
         picWrapper.append(pic);
 
@@ -1126,7 +1133,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"width": "65%",
         	"height": "auto",
             "color" : "black",
-			"left" : "24px"
+            "left": "24px",
+            "z-index": "550",
         })
 
         var title = $(document.createElement('div'));
@@ -1136,7 +1144,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"position": "relative",
         	"color": "black",
         	"height": "auto",
-            "font-size" : ".85em"
+        	"font-size": ".85em",
+        	"z-index": "550",
         }).text(string);
 
         rightDiv.append(title);
@@ -1149,7 +1158,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         descWhole.css({
         	"width": "100%",
         	"position": "relative",
-        	"height": "auto"
+        	"height": "auto",
+        	"z-index": "550",
         })
         rightDiv.append(descWhole);
 
@@ -1168,8 +1178,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"bottom": "0px",
         	"z-index": "550",
         	"float": "right"
-        }).click(function () {
-        	showLargePopup(div.medianumber)
         })
         descWhole.append(img);
         var desc = $(document.createElement('div'));
@@ -1180,7 +1188,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"height": "auto",
         	"top": '12px',
         	"color": "black",
-			'bottom' : "50px"
+        	'bottom': "50px",
+        	"z-index": "550",
         }).text(info.shortText);
         descWhole.append(desc);
         var spacer = $(document.createElement('div'));
@@ -1188,6 +1197,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"height": "12px",
 			"width" : "100%",
 			"position": "relative",
+			"z-index": "550",
         })
         descWhole.append(spacer);
         div.attr({ attr: string });
@@ -1517,7 +1527,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             stopAudio();
 
             for (var i = 0; i < textDivArray.length; i++) {
-                if (i>=chunk && i<chunk+5) {
+                if (i>=chunk && i<chunk+5 && !(chunk === 0 && pageNumber === 1)) {
                     fadeText(textDivArray[i], 'white', null, duration || 1000)
                 }
                 else {
@@ -1949,21 +1959,29 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 		//START HARDCODING INFO AREA
 
     	var titles = [
+<<<<<<< HEAD
 			["ALFRED BERNHARD", "ROBERT NOBEL","EMANUEL NOBEL", "SOFIE KAPY VON KAPIVAR","ALARIK LIEDBECK"],
 			["GEORGES FEHRENBACH", "FUND", "PRIZES","PHYSICS", "CHEMICAL", "PHYSIOLOGY OR MEDICINE", "LITERATURE"],
 			["PEACE", "SWEDISH ACADEMY OF SCIENCES", "THE CAROLINE INSTITUTE", "THE ACADEMY IN STOCKHOLM", "A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING", "WHETHER HE BE A SCANDINAVIAN OR NOT", "RAGNAR SOHLMAN", "BOFORS", "MY PROPERTY", "PARIS", "SAN REMO"],
 			["PATENTS","CREMATORIUM"]
+=======
+			["Alfred Nobel's last will", "Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
+			["Georges Fehrenbach", "fund", "Prizes","Physics", "Chemical", "Physiology or Medicine", "Literature"],
+			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
+			["patents","crematorium"]
+>>>>>>> a81a975797f8517a30966ef70defe2b2ab1902e9
     	]
     	var images = [
-			['Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'],
+			['','Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'],
 			['Popup_2_1.png', 'Popup_2_2.png', 'Popup_2_3.png', 'Popup_2_4.png', 'Popup_2_5.png', 'Popup_2_6.png', 'Popup_2_7.png', 'Popup_2_8.png'],
 			['Popup_3_1.png', 'Popup_3_2.png', 'Popup_3_3.png', 'Popup_3_4.png', 'Popup_3_5.png', 'Popup_3_6.png', 'Popup_3_7.png', 'Popup_3_8.png', '', 'Popup_3_10.png', 'Popup_3_11.png'],
 			['Popup_4_1.png', 'Popup_4_2.png']
     	]
     	var texts = [
 			[
-				"Over the course of his life, Alfred Nobel (1833–1896) experienced many different places. He grew up in rather simple circumstances in 1830’s Stockholm. He spent his youth in St. Petersburg, Russia, after his father had established himself as an inventor there. From St. Petersburg, he set off on study trips to Europe and North America. When his parents returned to Stockholm, Nobel joined them there, and together with his father, he attempted to develop new explosives. In the 1860’s, his efforts to put his inventions into profitable production carried him on lengthy business trips and visits to factories in many locations, such as Krümmel, outside Hamburg, Germany, where in 1865, he took up residence. In 1873, Nobel moved to Paris to make his home in what was perhaps the most vibrant metropolis of the day. In Paris, he continued his work as an inventor and increased his wealth, yet he was also plagued by risky business ventures and legal disputes. Toward the end of his life, he settled in San Remo, Italy, where he died on December 10, 1896.",
-				"Robert Nobel (1829–96) was Alfred Nobel’s oldest brother. Robert Nobel was involved in the early establishment of the explosives industry. He started a dynamite factory outside Helsinki, and for a few years up to 1870, he was the head of the dynamite factory at Vinterviken outside Stockholm. After a trip to the Caucasus in 1873, Robert Nobel became a pioneer in the oil industry in Baku. In 1881 he ended his active participation in the company, and returned to Sweden.",
+                "Alfred Nobel was a wealthy inventor and industrialist. His handwritten will is four pages long and written in Swedish; in it he expresses a wish to let the majority of his realizable estate form the foundation for prizes to those who ”shall have conferred the greatest benefit to mankind” in the fields of physics, chemistry, physiology or medicine, literature and peace. ",
+				"Alfred Nobel was born in Stockholm in 1833, grew up in St. Petersburg, Russia, and later lived in Hamburg, Paris, and San Remo. He spent a large part of his life traveling. Nobel’s inventions related to explosives, including dynamite, laid the groundwork for an extensive industrial enterprise and, at his death in 1896, Nobel left behind a huge fortune. In his will, Nobel left the bulk of his wealth to be used to fund prizes in five fields: physics, chemistry, physiology or medicine, literature, and peace.",
+				"Robert Nobel (1829–1896) was Alfred Nobel’s oldest brother. Robert Nobel was involved in the early establishment of the explosives industry. He started a dynamite factory outside Helsinki, and for a few years up to 1870, he was the head of the dynamite factory at Vinterviken outside Stockholm. After a trip to the Caucasus in 1873, Robert Nobel became a pioneer in the oil industry in Baku. In 1881 he ended his active participation in the company, and returned to Sweden.",
 				"Emanuel Nobel (1859–1932) was a nephew to Alfred Nobel. After the death of his father, Ludvig Nobel, Emanuel Nobel took over leadership of the Nobel brothers’ oil company. At first, Alfred Nobel seems to have doubted Emanuel’s ability to run the large company, but Emanuel proved that he was equal to the task.",
 				"Alfred Nobel, never married. However he had a long relationship with an Austrian woman, Sofie Hess (1851–1919). Alfred Nobel met Sofie Hess during a visit to Baden bei Wien in 1876. This relationship was everything but harmonious. For a while, Alfred seems to have been happy and in love, despite all of his business worries. Soon, however, he became dissatisfied in his relationship with Sofie, yet he did not seem to want to break up with her. He scolded her for being irresponsible and childish. Alfred and Sofie’s drawn-out and uneasy relationship finally came to an end. In 1890, Sofie became pregnant. The father was another man, Nicolaus Kapy von Kapivar, whom she eventually married.",
 				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death.",
@@ -2008,18 +2026,19 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			]
     	]
     	var collections = [
-			[[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], [],[], []],
+			[[],[[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"],[tagPath + 'images/nobelwillimages/ToursAndCollections/aage_n_bohr.jpg',"collection title with a few words in the title!","link"]], [], [], [], [],[], []],
 			[[], [], [], [], [], [], [], []],
 			[[], [], [], []],
 			[[], [], []]
     	]
     	var tours = [
-			[[], [], [],[],[],[], []],
+			[[],[], [], [],[],[],[], []],
 			[[], [], [], [], [], [], [], []],
 			[[], [], []],
 			[[], [], []]    	]
     	var shortTexts = [
 			[
+                "short sentence or two about the will",
 				"short sentence or two about a person 1.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
 				"short sentence or two about a person 2.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
 				"short sentence",
