@@ -992,7 +992,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     					closest = i;
     				}
     			}
-    			setChunkNumber(closest, checkForHotspots, 400);
+    			setChunkNumber(closest, checkForHotspots, 200);
     		}
     		dragging = false;
     	}
@@ -1959,17 +1959,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 		//START HARDCODING INFO AREA
 
     	var titles = [
-<<<<<<< HEAD
 			["ALFRED BERNHARD", "ROBERT NOBEL","EMANUEL NOBEL", "SOFIE KAPY VON KAPIVAR","ALARIK LIEDBECK"],
 			["GEORGES FEHRENBACH", "FUND", "PRIZES","PHYSICS", "CHEMICAL", "PHYSIOLOGY OR MEDICINE", "LITERATURE"],
 			["PEACE", "SWEDISH ACADEMY OF SCIENCES", "THE CAROLINE INSTITUTE", "THE ACADEMY IN STOCKHOLM", "A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING", "WHETHER HE BE A SCANDINAVIAN OR NOT", "RAGNAR SOHLMAN", "BOFORS", "MY PROPERTY", "PARIS", "SAN REMO"],
 			["PATENTS","CREMATORIUM"]
-=======
-			["Alfred Nobel's last will", "Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
-			["Georges Fehrenbach", "fund", "Prizes","Physics", "Chemical", "Physiology or Medicine", "Literature"],
-			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
-			["patents","crematorium"]
->>>>>>> a81a975797f8517a30966ef70defe2b2ab1902e9
     	]
     	var images = [
 			['','Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'],
