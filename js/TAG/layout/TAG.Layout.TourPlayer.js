@@ -30,6 +30,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     this.iteTour = tour;
     var tagContainer = $('#tagRoot');
 
+    
+
     var player,
         root = TAG.Util.getHtmlAjax('TourPlayer.html'),
         rinPlayer = root.find('#ITEContainer'),
@@ -69,7 +71,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
     // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
     // idleTimer.start();
-    //idleTimer && idleTimer.kill();
+    idleTimer && idleTimer.kill();
     //idleTimer = null;
     backButton.attr('src', tagPath+'images/Back.png');
     backButton.css('width', '7.5%');
