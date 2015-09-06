@@ -4503,7 +4503,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 * @method addMediaMiniTiles
                 * @param {Array} doqs    array of media or artworks doqs to with which the mini tiles are created
                 */
-                function addMiniTiles(doqs){
+               /* function addMiniTiles(doqs){
                     var src,
                         metadata,
                         thumb;
@@ -4534,7 +4534,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                                     /*function(){
                                         var func = onAssocMediaView ? (switchPage(doqs[i], artwork)) : (switchPage(artwork, doqs[i]));
                                         func();
-                                    }*/
+                                    }
                                 );
 
                         TAG.Telemetry.register(miniTile, "mousedown", "ArtworkPreviewer", function(tobj){
@@ -4663,7 +4663,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
                         });
                     }
-                }
+                }*/
 
                 //Append everything
                 infoText.append(artistInfo)
