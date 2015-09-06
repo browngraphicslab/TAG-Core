@@ -645,13 +645,40 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 } else if (collectionName == LAUREATE_NAME) {
                     //var laureatesPage = TAG.Layout.LaureatesPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration));
 
+                       /* console.log("HERE COLLECTIONNAME = LAUREATESPAGE")
+                       // options.backCollection = collections[i];
+                        if (hideKeywords) {
+                            options.hideKeywords = true;
+                        }
+                        if (smallPreview) {
+                            options.smallPreview = true;
+                        }
+                        if (titleIsName) {
+                            options.titleIsName = true;
+                        }
+                        if (currName === LIFE_NAME) {
+                            options.oneDeep = true;
+                        }
+                        
+                    collectionsPage = TAG.Layout.LaureatesPage(options, 10);
+
+                   if ($("#startPageLoadingOverlay").length !== null) {
+                        TAG.Util.UI.slidePageLeftSplit(root, collectionsPage.getRoot());
+                        currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
+                        currentPage.obj = collectionsPage;
+                    }*/
+
+                    //STILL MAKES THIS SERVER CALL TO GET COLLECTIONS
                     TAG.Worktop.Database.getExhibitions(function (collections) {
                         console.log($("startPageLoadingOverlay") === null);
 
                         if ($("#startPageLoadingOverlay").length !== null) {
                             for (i = 0; i < collections.length; i++) {
                                 currName = collections[i].Name;
+                                console.log(collections[i]);
+                                console.log("currName = " + currName);
                                 if (currName === collectionName) {
+                                    console.log("HERE CURRNAME = COLLECTIONNAME")
                                     options.backCollection = collections[i];
                                     if (hideKeywords) {
                                         options.hideKeywords = true;
@@ -681,7 +708,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                         else {
                             buttonClicked = false;
                         }
-                    });
+                    }); 
                 } else {
                     TAG.Worktop.Database.getExhibitions(function (collections) {
                         if ($("#startPageLoadingOverlay").length) {

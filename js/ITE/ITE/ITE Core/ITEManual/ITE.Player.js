@@ -1233,7 +1233,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
 
     function getDoqFromZIndex(z) {
-        if (data[z-1]!==false) {
+        if (data && data[z-1]!==false) {
             return data[z-1];
         }
         return null;

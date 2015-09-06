@@ -407,53 +407,53 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     17.75, 'My servants, Auguste Oswald and his wife',
                     19.75, 'Alphonse Tournand, employed in my laboratory',
                     21.75, 'at San Remo, will each receive an annuity of One',
-                    24.25, 'Thousand Francs;',
-                    26.5, 'My former servant, Joseph Girardot, 5, Place',
-                    28.75, 'St. Laurent, Châlons sur Saône, France, is',
-                    31, 'entitled to an annuity of Five Hundred Francs,',
-                    33, 'and my former gardener, Jean Lecof, at present with',
-                    35, 'Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour',
+                    24, 'Thousand Francs;',
+                    26, 'My former servant, Joseph Girardot, 5, Place',
+                    28.25, 'St. Laurent, Châlons sur Saône, France, is',
+                    30.5, 'entitled to an annuity of Five Hundred Francs,',
+                    32.75, 'and my former gardener, Jean Lecof, at present with',
+                    34.75, 'Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour',
                     37, 'Ecouen, S.& O., France, will receive an annuity of Three Hundred',
                     39, 'Francs;',
-                    40.5, 'Mr Georges Fehrenbach, 2, Rue Compiègne,',
-                    42.5, 'Paris, is entitled to an annual pension of Five Thousand',
-                    45, 'Francs from January 1, 1896 to January 1, 1899,',
+                    41.5, 'Mr Georges Fehrenbach, 2, Rue Compiègne,',
+                    43.5, 'Paris, is entitled to an annual pension of Five Thousand',
+                    46, 'Francs from January 1, 1896 to January 1, 1899,',
                     48, 'when the said pension shall discontinue;',
-                    49.5, 'A sum of Twenty Thousand Crowns each, which',
-                    52, 'has been placed in my custody, is the property of my brother’s',
-                    54.25, 'children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be',
-                    55.75, 'repaid to them.',
-                    57.75, 'The whole of my remaining realizable estate shall be',
-                    59.75, 'dealt with in the following way: the capital, invested in safe',
-                    61.5, 'securities by my executors, shall constitute a',
-                    63.75, 'fund, the interest on which shall be annually distributed in the form of prizes',
-                    66, 'to those who, during the preceding year, shall have conferred the greatest',
-                    68.25, 'benefit to mankind. The said interest shall be divided into five equal',
-                    70.5, 'parts, which shall be apportioned as follows: one part to the person who shall',
-                    72.5, 'have made the most important discovery or invention within the field of physics;',
-                    76.5, 'one part to the person who shall have made the most important chemical',
-                    78.5, 'discovery or improvement; one part to the person who shall have made the most',
-                    82.5, 'important discovery within the domain of physiology or medicine; one part to',
-                    84.5, 'the person who shall have produced in the field of literature',
+                    50.5, 'A sum of Twenty Thousand Crowns each, which',
+                    52.5, 'has been placed in my custody, is the property of my brother’s',
+                    55.25, 'children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be',
+                    57.25, 'repaid to them.',
+                    59.75, 'The whole of my remaining realizable estate shall be',
+                    62.25, 'dealt with in the following way: the capital, invested in safe',
+                    64.5, 'securities by my executors, shall constitute a',
+                    66.75, 'fund, the interest on which shall be annually distributed in the form of prizes',
+                    69, 'to those who, during the preceding year, shall have conferred the greatest',
+                    71.25, 'benefit to mankind. The said interest shall be divided into five equal',
+                    73.5, 'parts, which shall be apportioned as follows: one part to the person who shall',
+                    75.5, 'have made the most important discovery or invention within the field of physics;',
+                    78, 'one part to the person who shall have made the most important chemical',
+                    80, 'discovery or improvement; one part to the person who shall have made the most',
+                    82, 'important discovery within the domain of physiology or medicine; one part to',
+                    84, 'the person who shall have produced in the field of literature',
                 ]
                 sliderPositions = [
                     [7.75, 12.5],
                     [11, 11.5],
                     [12.25, 12.25],
                     [14, 12.5],
-                    [16.5, 13.25],
+                    [16.5, 12.25],
                     [18.5, 12],
                     [20.5, 13.25],
-                    [24, 12],
+                    [24, 11.25],//8
                     [24.75, 12.25],
-                    [26.5, 12.75],
+                    [27, 12.],
                     [28.75, 12.75],
                     [31.25, 12.75],
                     [33.5, 12],
                     [35, 13.25],
-                    [38.75, 12.25],
-                    [39, 13.5], 
-                    [41.5, 14.25],
+                    [38.75, 11.75],
+                    [39.25, 13.5], 
+                    [41.75, 14.25],
                     [44, 13.5], 
                     [47.5, 12.5],
                     [48.5, 13.5],
@@ -1554,6 +1554,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             nextPage(true);
             return;
         }
+        if (chunk === 0 && pageNumber === 1) {
+            $("#downIcon").css({
+                'top': '25%'
+            })
+        }
+        else {
+            $("#downIcon").css({
+                'top': 'calc(50% + 15px)'
+            })
+        }
         if (chunk >= 0 && chunk < (textDivArray.length - 4)) {
             hideNobelAssociatedMedia();
             stopAudio();
@@ -1991,10 +2001,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 		//START HARDCODING INFO AREA
 
     	var titles = [
-			["Alfred Nobel's last will", "Alfred Bernhard", "Robert Nobel","Emanuel Nobel", "Sofie Kapy von Kapivar","Alarik Liedbeck"],
-			["Georges Fehrenbach", "fund", "Prizes","Physics", "Chemical", "Physiology or Medicine", "Literature"],
-			["peace", "Swedish Academy of Sciences", "the Caroline Institute", "the Academy in Stockholm", "a committee of five persons to be elected by the Norwegian Storting", "whether he be a Scandinavian or not", "Ragnar Sohlman", "Bofors", "my property", "Paris", "San Remo"],
-			["patents","crematorium"]
+			["ALFRED BERNHARD", "ROBERT NOBEL","EMANUEL NOBEL", "SOFIE KAPY VON KAPIVAR","ALARIK LIEDBECK"],
+			["GEORGES FEHRENBACH", "FUND", "PRIZES","PHYSICS", "CHEMICAL", "PHYSIOLOGY OR MEDICINE", "LITERATURE"],
+			["PEACE", "SWEDISH ACADEMY OF SCIENCES", "THE CAROLINE INSTITUTE", "THE ACADEMY IN STOCKHOLM", "A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING", "WHETHER HE BE A SCANDINAVIAN OR NOT", "RAGNAR SOHLMAN", "BOFORS", "MY PROPERTY", "PARIS", "SAN REMO"],
+			["PATENTS","CREMATORIUM"]
     	]
     	var images = [
 			['','Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'],

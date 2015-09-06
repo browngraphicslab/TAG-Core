@@ -105,10 +105,10 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-        lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
+        lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden //TO DO: GET KIOSKLOCKED FROM SPOOF
         // constants
         NOBEL_COLOR = 'rgb(254,161,0)',
-        BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
+        BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font //TO DO: GET FONT SIZE FROM SPOOF
         FIX_PATH = TAG.Layout.Spoof().fixPath,              // prepend server address to given path                     //TODO CHANGE THIS BACK TO WORKTOP'S
         MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
         EVENT_CIRCLE_WIDTH = Math.min(30, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
@@ -184,7 +184,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
     
     backButton.css('z-index', '99999999');
     homeButton.css('z-index', '999999999');
-    backButton.click(function () {   
+    /*backButton.click(function () {   
         if (backToGuid){
             TAG.Worktop.Database.getDoq(backToGuid,
                 function (result) {
@@ -210,7 +210,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             $('#keywords').empty();
             TAG.Util.UI.slidePageRight(page);
         });
-    });
+    }); */
 
     if (lockKioskMode == "true") {
         doNothing("kiosk mode locked, back button disabled")
@@ -435,7 +435,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             'max-width': $("#tagRoot").width() * 0.15 + 'px',
         });
 
-        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper); //TO DO: FIGURE OUT WHAT THIS DOES?!
         applyCustomization();
         menuCreated = false;
 
@@ -2961,7 +2961,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             setTimeout(function () { previouslyClicked = null }, 1000)
                         }
                     } else {
-                        TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                        /*TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
                             if (previouslyClicked === main) {
                                 //click = "double";
                                 switchPage(doqs[0], currentWork, getContainerLeft(currentWork, false))();
@@ -2997,7 +2997,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
                         }, function () {
 
-                        });
+                        }); */
                     }
 
                 }();
@@ -3137,36 +3137,10 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             // Add title
             if (tag === 'Title') {
             } else if (tag === 'Artist') {
-                yearTextBox.css('visibility', 'visible');
-                yearText = currentWork.Metadata.Artist;
-                if (!yearText) {
-                    yearTextBox.text('')
-                        .css('visibility', 'hidden');
-                } else {
-                    yearTextBox.text(yearText);
-                }
-            } else if (tag === 'Date') {
-                yearTextBox.css('visibility', 'visible');
-                yearText = getDateText(getArtworkDate(currentWork, true));
-                if (currentWork.Type === 'Empty' || !yearText) {
-                    yearTextBox.text('')
-                        .css('visibility', 'hidden');
-                } else {
-                    yearTextBox.text(yearText);
-                }
                 //var nameText = laureateInfo;
                 //artText.text(laureateInfo);
             } else if (tag === 'Tours') {
             } else if (tag) {
-                //If using custom tag
-                yearTextBox.css('visibility', 'visible');
-                yearText = currentWork.Metadata.InfoFields[tag];
-                if (!yearText) {
-                    yearTextBox.text('')
-                        .css('visibility', 'hidden');
-                } else {
-                    yearTextBox.text(yearText);
-                }
             } else {
                 //no sort tag
             }
@@ -3251,7 +3225,6 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             }
             else {
                 main.append(tileImage)
-                    .append(yearTextBox);
             }
             if (currentWork.Type === "Empty" && currentWork.Metadata.ContentType !== "iframe" && currentWork.Metadata.Type !== "VideoArtwork") {
                 if (currentWork.Metadata.ContentType == "tour" || currentWork.Metadata.ContentType == undefined) {
@@ -4530,7 +4503,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 * @method addMediaMiniTiles
                 * @param {Array} doqs    array of media or artworks doqs to with which the mini tiles are created
                 */
-                function addMiniTiles(doqs){
+               /* function addMiniTiles(doqs){
                     var src,
                         metadata,
                         thumb;
@@ -4561,7 +4534,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                                     /*function(){
                                         var func = onAssocMediaView ? (switchPage(doqs[i], artwork)) : (switchPage(artwork, doqs[i]));
                                         func();
-                                    }*/
+                                    }
                                 );
 
                         TAG.Telemetry.register(miniTile, "mousedown", "ArtworkPreviewer", function(tobj){
@@ -4690,7 +4663,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
                         });
                     }
-                }
+                }*/
 
                 //Append everything
                 infoText.append(artistInfo)
@@ -4729,10 +4702,10 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
   
                 var numberAssociatedDoqs = 0;
                 var tileLoadQueue = TAG.Util.createQueue();
-                tileLoadQueue.add(function(){
+                /*tileLoadQueue.add(function(){
                     onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
                     !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
-                });
+                });*/
 
                 return previewTile;         
             }
