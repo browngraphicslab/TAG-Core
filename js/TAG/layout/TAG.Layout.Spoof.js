@@ -16,13 +16,19 @@ TAG.Layout.Spoof = (function () {
         var kw = 
             [
                 {
-                    "shown" : true
+                    "name" : "Decade",
+                    "shown": true,
+                    'keywords': ["1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"]
                 },
                 {
-                    "shown": true
+                    "name": "Gender",
+                    "shown": true,
+                    'keywords': ["male", "female", "institution"]
                 },
                 {
-                    "shown": true
+                    "name": "Prize",
+                    "shown": true,
+                    'keywords': ["chemistry", "peace", "economics", "literature" , "physics", "medicine"]
                 }
             ]
         return kw

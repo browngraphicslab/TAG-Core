@@ -843,7 +843,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         $('#keywords').empty();
 
         // Get keywords from the server!
-        keywordSets = TAG.Worktop.Database.getKeywordSets();
+        keywordSets = TAG.Layout.Spoof().getKeywordSets();
         for (var x = 0; x < keywordSets.length; x++) {
             if ((keywordSets[x].shown) === "true") {
                 showKeywords = true;
@@ -2037,7 +2037,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
         // Keywords.
         // Get keywords from the server!
-        keywordSets = TAG.Worktop.Database.getKeywordSets();
+        keywordSets = TAG.Layout.Spoof().getKeywordSets();
         if (keywordSets) {
             // Build hash for keywords to artworks. Each set has dictionaries for AND and NOT.
             // keywordDictionary[setIndex].and["keyword"] --> [artworks with "keyword"] in set
@@ -2138,7 +2138,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 });
 
             } else { // if (i === 2) //TO DO: Hardcode prize icons to correspond to 
-                var keywords3 = TAG.Worktop.Database.getKeywordSets()[2];
+                var keywords3 = TAG.Layout.Spoof().getKeywordSets()[2];
                 var prizeKeywords = Object.getOwnPropertyNames(selectedPrizes);
 
                 for (var j = 0; j < prizeKeywords.length; j++) {
