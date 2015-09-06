@@ -105,10 +105,10 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-        lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
+        lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden //TO DO: GET KIOSKLOCKED FROM SPOOF
         // constants
         NOBEL_COLOR = 'rgb(254,161,0)',
-        BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
+        BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font //TO DO: GET FONT SIZE FROM SPOOF
         FIX_PATH = TAG.Layout.Spoof().fixPath,              // prepend server address to given path                     //TODO CHANGE THIS BACK TO WORKTOP'S
         MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
         EVENT_CIRCLE_WIDTH = Math.min(30, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
@@ -184,7 +184,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
     
     backButton.css('z-index', '99999999');
     homeButton.css('z-index', '999999999');
-    backButton.click(function () {   
+    /*backButton.click(function () {   
         if (backToGuid){
             TAG.Worktop.Database.getDoq(backToGuid,
                 function (result) {
@@ -210,7 +210,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             $('#keywords').empty();
             TAG.Util.UI.slidePageRight(page);
         });
-    });
+    }); */
 
     if (lockKioskMode == "true") {
         doNothing("kiosk mode locked, back button disabled")
@@ -435,7 +435,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             'max-width': $("#tagRoot").width() * 0.15 + 'px',
         });
 
-        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper); //TO DO: FIGURE OUT WHAT THIS DOES?!
         applyCustomization();
         menuCreated = false;
 
@@ -843,7 +843,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         $('#keywords').empty();
 
         // Get keywords from the server!
-        keywordSets = TAG.Worktop.Database.getKeywordSets();
+        keywordSets = TAG.Layout.Spoof().getKeywordSets();
         for (var x = 0; x < keywordSets.length; x++) {
             if ((keywordSets[x].shown) === "true") {
                 showKeywords = true;
@@ -2037,7 +2037,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
         // Keywords.
         // Get keywords from the server!
-        keywordSets = TAG.Worktop.Database.getKeywordSets();
+        keywordSets = TAG.Layout.Spoof().getKeywordSets(); //TO DO: GET KEYWORDS FROM SPOOF
         if (keywordSets) {
             // Build hash for keywords to artworks. Each set has dictionaries for AND and NOT.
             // keywordDictionary[setIndex].and["keyword"] --> [artworks with "keyword"] in set
@@ -2138,7 +2138,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 });
 
             } else { // if (i === 2) //TO DO: Hardcode prize icons to correspond to 
-                var keywords3 = TAG.Worktop.Database.getKeywordSets()[2];
+                var keywords3 = TAG.Layout.Spoof().getKeywordSets()[2]; //TO DO: GET KEYWORDS FROM SPOOF
                 var prizeKeywords = Object.getOwnPropertyNames(selectedPrizes);
 
                 for (var j = 0; j < prizeKeywords.length; j++) {
@@ -2961,7 +2961,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             setTimeout(function () { previouslyClicked = null }, 1000)
                         }
                     } else {
-                        TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                        /*TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
                             if (previouslyClicked === main) {
                                 //click = "double";
                                 switchPage(doqs[0], currentWork, getContainerLeft(currentWork, false))();
@@ -2997,7 +2997,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
                         }, function () {
 
-                        });
+                        }); */
                     }
 
                 }();
@@ -4702,10 +4702,10 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
   
                 var numberAssociatedDoqs = 0;
                 var tileLoadQueue = TAG.Util.createQueue();
-                tileLoadQueue.add(function(){
+                /*tileLoadQueue.add(function(){
                     onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
                     !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
-                });
+                });*/
 
                 return previewTile;         
             }

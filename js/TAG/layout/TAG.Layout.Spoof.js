@@ -13,7 +13,7 @@ TAG.Layout.Spoof = (function () {
         return path
     }
     function getKeywordSets() {
-        var kw = 
+        /*var kw = 
             [
                 {
                     "shown" : true
@@ -25,7 +25,20 @@ TAG.Layout.Spoof = (function () {
                     "shown": true
                 }
             ]
-        return kw
+        return kw*/
+        return [{
+            "name": "Decade" || "",
+            "keywords": ["1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"],
+            "shown": "true"
+        }, {
+            "name": "Gender",
+            "keywords": ['male', 'female', 'institution'],
+            "shown": "true"
+        }, {
+            "name": "Prize",
+            "keywords": ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics'],
+            "shown": "false"
+        }];
     }
     function getLaureates(callback){
         var db = getDB().laureates;
