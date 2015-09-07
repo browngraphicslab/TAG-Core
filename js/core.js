@@ -215,9 +215,11 @@
         $("body").css("-ms-touch-action","none");
 
         // set up idle timer restarting
+        /**
         $('body').on('click.idleTimer', function() {
             TAG.Util.IdleTimer.restartTimer();
         });
+        **/
 
         
         // // if the user specified the tourData API parameter, load into the corresponding tour

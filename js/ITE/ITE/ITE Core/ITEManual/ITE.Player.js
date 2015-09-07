@@ -218,21 +218,12 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                     },
                     "mousemove": function(e){
                         volumeLevelContainer.dragging ? setVolume(volumeLevelContainer.getVolumeFromMouse(e)) : null
-                    },
-                    "mouseover": function(e){
-                        volumeLevelContainer.css('display', 'block');
-                    },
-                    "mouseleave": function(e){
-                        volumeLevelContainer.css('display', 'none');
                     }
                 });
 
             volumeButton.on({
                 "click": function(e){
                     toggleMute();
-                },
-                "mouseover": function(e){
-                    volumeLevelContainer.css('display', 'block');
                 }
             });
 
@@ -477,17 +468,17 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             $("#backButton").stop();
             $("#linkButton").stop();
         });
-        bottomContainer.mouseleave(function () {
-            setControlsFade();
+        volumeButton.mouseleave(function () {
+            volumeLevel.fadeTo(500, 0, null);
         })
-        bottomContainer.mouseenter(function () {
+        volumeButton.mouseenter(function () {
             makeControlsVisible();
         })
         $("#backButton").mouseenter(function () {
             makeControlsVisible();
         })
         $("#backButton").mouseleave(function () {
-            setControlsFade();
+            //setControlsFade();
         })
         
         orchestrator.refresh();
@@ -554,14 +545,19 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                     orchestrator.play();
                     playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
                     hideInfoPane();
-                    setControlsFade();
+                    setTimeout(function () {
+                        volumeLevel.fadeTo(500,0,null);
+                    }, 2000);
                 }, 5000);
+ 
                 return;
             }
             orchestrator.play();
             playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
-            setControlsFade();
             hideInfoPane();
+            setTimeout(function () {
+                volumeLevel.fadeTo(500,0,null);
+            }, 2000);
         }
     };
 
@@ -644,6 +640,11 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         isMuted ? mute()   : unMute()
         isFullScreen ? enableFullScreen() : disableFullScreen()
         isLooped ? loop() : unLoop()
+        if (orchestrator.status !== 1) {
+            window.setTimeout(function() {
+                volumeLevel.fadeTo(500, 0, null);
+            }, 2000);
+        }
     }
 
     /*
