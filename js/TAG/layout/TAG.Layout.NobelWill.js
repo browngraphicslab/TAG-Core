@@ -159,7 +159,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         background = $(document.createElement('div'));
         background.css({
-            "height": '95%',
+            "height": '92.5%',
             "width": "100%",
             'position': 'absolute',
             'background-color' : "#404040",
@@ -169,17 +169,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         background.attr('id','background');
         root.append(background);
 
-        taskBar = $(document.createElement('div'));
-        taskBar.addClass('taskBar');
-        taskBar.css({
-            'height': '5%',
-            'width': '100%',
-            'background-color': 'red',
-            'position': 'absolute',
-            'bottom': '0px'
-        })
-        taskBar.attr('id', 'taskBar');
-        root.append(taskBar);
+        makeTaskBar();
 
         sideBar = $(document.createElement('div'));
         sideBar.css({
@@ -244,6 +234,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         nobelPlayPauseButton.attr({
             src: tagPath + 'images/icons/nobel_play.svg'
         })
+
         nobelPlayPauseButton.css({
             'position': 'absolute',
             'left': '2.5%',
@@ -269,7 +260,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var muteButtonHeight = muteButton.height();
         muteButton.width(muteButtonHeight + '%');
-
 
         sideBar.append(nobelPlayPauseButton);
         sideBar.append(muteButton);
@@ -1934,9 +1924,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "background-color" : "transparent",
                 "font-size" : ".5em"
     		}).text(extra[1])
-    		bd.append(d)
-            bd.append(t)
-			return bd
+    		bd.append(d);
+            bd.append(t);
+			return bd;
     	}
 
     	var extras = $(document.createElement('div')); //Tours and galleries
@@ -1976,6 +1966,74 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	}
 
     	text.css({ "top": title.height() + 15 +"px" })
+    }
+
+    function makeTaskBar() {
+        taskBarArea = $(document.createElement('div'));
+        taskBarArea.addClass('taskBarArea');
+        taskBarArea.css({
+            'height': '7.5%',
+            'width': '100%',
+            'position': 'absolute',
+            'bottom': '0px'
+        })
+        taskBarArea.attr('id', 'taskBarArea');
+
+        var taskBar = $(document.createElement('div'));
+        taskBar.css({
+            "width": "40%",
+            "height": "90%",
+            "border": "2px solid " + NOBEL_ORANGE_COLOR,
+            "border-radius": "12px",
+            "bottom": "20%",
+            "position": "absolute",
+            "left": "2%"
+        });
+        taskBar.attr('id', 'taskBar');
+
+        var collectionDiv = $(document.createElement ('div'));
+        collectionDiv.css({
+            "height": "35%",
+            "position": "absolute",
+            "left": "3%",
+            "top": "-25%",
+        });
+        collectionDiv.attr('id', 'collectionDiv');
+
+        var collectionTextImg = $(document.createElement ('img'));
+        collectionTextImg.css({
+            "height": "100%",
+            "width": "auto"
+        })
+        collectionTextImg.attr({
+            src: tagPath + 'images/collections.svg'
+        })
+        collectionDiv.append(collectionTextImg);
+
+        var tourDiv = $(document.createElement ('div'));
+        tourDiv.css({
+            "height": "35%",
+            "position": "absolute",
+            "left": "25%",
+            "top": "-25%",
+        });
+        tourDiv.attr('id', 'tourDiv');
+
+        var tourTextImg = $(document.createElement ('img'));
+        tourTextImg.css({
+            "height": "100%",
+            "width": "auto"
+        })
+        tourTextImg.attr({
+            src: tagPath + 'images/tours.svg'
+        })
+        tourDiv.append(tourTextImg);
+
+        taskBarArea.append(taskBar);
+        taskBarArea.append(collectionDiv);
+        taskBarArea.append(tourDiv);
+        root.append(taskBarArea);
+
     }
 
     function getPopupInfo(number) {
