@@ -1408,7 +1408,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var idleTimerDurationSetting = createSetting('Idle Timer Duration (in minutes)', idleTimerDurationInput);
 
         // Kiosk locked setting.
-        var kioskIsLocked = TAG.Worktop.Database.getKioskLocked(); //need server request
+        var kioskIsLocked = TAG.Layout.Spoof().getKioskLocked(); //need server request
         var unlockedKioskInput = createButton('Unlocked', function () {
             kioskIsLocked = false;
             unlockedKioskInput.css('background-color', 'white');
