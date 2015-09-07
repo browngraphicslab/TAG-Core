@@ -159,14 +159,27 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         background = $(document.createElement('div'));
         background.css({
-            "height": '100%',
+            "height": '95%',
             "width": "100%",
             'position': 'absolute',
             'background-color' : "#404040",
             'top': '0%',
             'left': '0%',
         })
+        background.attr('id','background');
         root.append(background);
+
+        taskBar = $(document.createElement('div'));
+        taskBar.addClass('taskBar');
+        taskBar.css({
+            'height': '5%',
+            'width': '100%',
+            'background-color': 'red',
+            'position': 'absolute',
+            'bottom': '0px'
+        })
+        taskBar.attr('id', 'taskBar');
+        root.append(taskBar);
 
         sideBar = $(document.createElement('div'));
         sideBar.css({
@@ -176,9 +189,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'top': '0%',
             'left': '0%',
             'background-color': "transparent",
-            'font-family': 'Cinzel'
         })
+        sideBar.addClass('sideBar');
         background.append(sideBar);
+
         $("#associatedMediaScroller").remove()
         $("#associatedMediaScroller").die()
         associatedMediaScroller = $(document.createElement('div'));
@@ -193,7 +207,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "display" : "block"
         })
 
-        root.append(associatedMediaScroller);
+        background.append(associatedMediaScroller);
 
         $("#toggler").hide();
         $("#toggler").off('click');
@@ -224,7 +238,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             id: "titleDiv"
         })
         sideBar.append(titleDiv);
-        root.append(willImage)
+        background.append(willImage)
 
         nobelPlayPauseButton = $(document.createElement('img'));
         nobelPlayPauseButton.attr({
@@ -269,7 +283,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "z-index" : "300"
         })
 
-        root.append(canvas);
+        background.append(canvas);
 
         canvas.mouseenter(function () {
             touching = true;
@@ -601,7 +615,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 showLargePopup(this.id);
             })
             div.append(img);
-            root.append(div);
+            background.append(div);
         }
 
         var placeInChunk = 0;
@@ -770,8 +784,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 //rightArrow.css('height', arrowWidth + '%');
                 //leftArrow.css('height', arrowWidth + '%');
 
-                root.append(rightArrow);
-                root.append(leftArrow);
+                background.append(rightArrow);
+                background.append(leftArrow);
 
                 if (pageNumber === 4) {
                     rightArrow.hide();
@@ -955,7 +969,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                 sliderBar.append(down)
                 sliderBar.append(up)
-                root.append(sliderBar);
+                background.append(sliderBar);
 
                 makeNobelHotspots(associatedMediaNobelKeywords, hardcodedHotspotSpecs)
 
@@ -1096,7 +1110,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	showLargePopup(div.medianumber)
         })
 
-        root.append(div);
+        background.append(div);
 
         var info = getPopupInfo(number);
 
@@ -1488,7 +1502,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 pauseNobel();
             })
             div.assocMedia = associatedMedia[i];
-            root.append(div);
+            background.append(div);
             div.MiddleY = div.offset().top + (div.height() / 2);
             nobelHotspots.push([div, associatedMedia[i]]);
             div.mouseenter(function () {
