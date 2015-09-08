@@ -96,8 +96,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         video.css({
             'position': 'relative',
             'width': '100%',
-            'max-width': '100%',
-            'max-height': '100%',
+            'height': '100%',
             'z-index': '1001'
         });
         video.attr({
@@ -106,7 +105,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             loop: true
         });
         videoElt = video[0],
-        videoElt.innerHTML = '<source src="' + tagPath + 'images/testvid.mp4' + '" type="video/mp4">';
+        videoElt.innerHTML = '<source src="' + tagPath + 'images/nobels_will.mp4' + '" type="video/mp4">';
         videoContainer.append(video).append(touchToExplore);
         root.append(videoContainer);
         videoElt.play();
@@ -159,7 +158,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         background = $(document.createElement('div'));
         background.css({
-            "height": '92.5%',
+            "height": '90%',
             "width": "100%",
             'position': 'absolute',
             'background-color' : "#404040",
@@ -289,6 +288,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         },500)
 
         switch (pageNumber) {
+            //hardcodedHotspotSpecs- left, top, width, height
             case 1:
                 associatedMediaNobelKeywords = [['WILL AND TESTAMENT'],['ALFRED BERNHARD'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
                 hardcodedHotspotSpecs = [[47.95+8.25,9,11.75,5],[63.5, 15, 17, 3.5], [66.5, 30, 11, 3], [61, 34.5, 12.5, 2.5], [47, 54, 23.5, 3], [47.5, 65.4, 18.5, 3]]
@@ -402,8 +402,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]*/
                 break;
             case 2:
-                associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['ESTATE'], ['FUND'], ['GREATEST BENEFIT TO MANKIND'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
-                hardcodedHotspotSpecs = [[53, 39.75, 14, 3.75], [75.5, 58, 5, 3.5], [46.5, 66, 4.5, 3.5], [64.25, 70.5, 9.25, 2.5], [75.25, 72, 6, 3], [69, 76.75, 13, 2.5], [62.5, 81, 20, 2.5], [65.5, 83.5, 16.25, 2.5]]
+                associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['FUND'], ['SHALL BE ANNUALLY DISTRIBUTED IN THE FORM OF PRIZES'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
+                hardcodedHotspotSpecs = [[[53, 39.75, 14, 3.75]], [[46.5, 66, 4.5, 3.5]], [[55, 65.5, 27, 3.5]], [[75.25, 72, 6, 3]], [[69, 76.75, 13, 2.5]], [[62.5, 81, 20, 2.5]], [[65.5, 83.5, 7.5, 2.5]]]
 
                 leftTextArray = [ //aim for 1.75 space
                     9.75, 'Potsdamerstrasse, 51, Berlin, will',
@@ -477,8 +477,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 ]
                 break;
             case 3:
-                associatedMediaNobelKeywords = [['PEACE'], ['SWEDISH ACADEMY OF SCIENCES'], ['CAROLINE INSTITUTE'], ['ACADEMY'], ['A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING'], ['SCANDINAVIAN OR NOT'], ['RAGNAR SOHLMAN'], ['BOFORS'], ['MY PROPERTY'], ['PARIS'], ['SAN REMO']];
-                hardcodedHotspotSpecs = [[69.75, 14.25, 3, 2.5], [71.5, 16.75, 5, 2.25], [54.5, 21.75, 12.5, 2.5], [53.5, 24.5, 8, 1.75], [53, 26.5, 7.25, 2.25], [58, 38.5, 13.75, 2.5], [71.25, 43, 5.5, 2.5], [60.5, 46, 6.25, 2.5], [50.25, 63, 13.5, 2.5], [61, 64.5, 4, 2.25], [68.5, 64, 8, 2.5]];
+                associatedMediaNobelKeywords = [['PEACE'], ['THE SWEDISH ACADEMY OF SCIENCES'], ['THE CAROLINE INSTITUTE'], ['THE ACADEMY IN STOCKHOLM'], ['A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING'], ['WHETHER HE BE SCANDINAVIAN OR NOT'], ['RAGNAR SOHLMAN'], ['BOFORS'], ['MY PROPERTY'], ['PARIS'], ['SAN REMO']];
+                hardcodedHotspotSpecs = [[[69.75, 14.25, 3, 2.5]], [[71.5, 16.75, 10, 2.25],[47.5,20,10,2.5]], [[54.5, 21.75, 12.5, 2.5]], [[53.5, 24.5, 15, 1.75]], [[55, 26.5, 25, 2.25],[47.5,29,16,3]], [[47.5, 38.5, 26, 2.5]], [[71.25, 43, 10, 2.5],[47.5, 47.5, 5, 2.5]], [[60.5, 46, 6.25, 2.5]], [[50.25, 63, 13.5, 2.5]], [[61, 64.5, 4, 2.25]], [[68.5, 64, 8, 2.5]]];
  
 
                 leftTextArray = [
@@ -556,7 +556,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 break;
             case 4:
                 associatedMediaNobelKeywords = [['PATENTS'], ['CREMATORIUM']];
-                hardcodedHotspotSpecs = [[63.25, 13, 5.75, 2.5], [66.75, 36.75, 10, 2.75]]
+                hardcodedHotspotSpecs = [[[63.25, 13, 5.75, 2.5]], [[66.75, 36.75, 10, 2.75]]]
                 leftTextArray = [
                     8.5, 'in Enskilda Banden in Stockholm and in',
                     10.75, 'and in my strong-box at 59, Avenue Malakoff, Paris; further',
@@ -1495,43 +1495,47 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function makeNobelHotspots(names, hotSpotInfo) {
         nobelHotspots = [];
         for (var i = 0; i < associatedMedia.length; i++) {
-			//console.log("making nobel hotspot")
-            var div = $(document.createElement('img'));
-            div.css({
-                'position': 'absolute',
-                'background-color': 'rgb(200,20,20)',
-                'opacity': '.3',
-                'border': '2px solid red',
-                'font-size': '.6em',
-                'border-radius': '5px',
-                'left': hotSpotInfo[i][0]-8.25 + '%',
-                'top': hotSpotInfo[i][1] + '%',
-                'width': hotSpotInfo[i][2] + '%',
-                'height': hotSpotInfo[i][3] + '%',
-            })
-            div.attr({
-                id: associatedMedia[i].Identifier,
-                class: 'nobelHotspot'
-            });
+            //console.log("making nobel hotspot")
+            for (var x = 0; x < hotSpotInfo[i].length; x++) {
+                var div = $(document.createElement('img'));
+                div.css({
+                    'position': 'absolute',
+                    'background-color': 'rgb(200,20,20)',
+                    'opacity': '.3',
+                    'border': '2px solid red',
+                    'font-size': '.6em',
+                    'border-radius': '5px',
+                    'left': hotSpotInfo[i][x][0] - 8.25 + '%',
+                    'top': hotSpotInfo[i][x][1] + '%',
+                    'width': hotSpotInfo[i][x][2] + '%',
+                    'height': hotSpotInfo[i][x][3] + '%',
+                })
+                div.attr({
+                    id: associatedMedia[i].Identifier,
+                    class: 'nobelHotspot'
+                });
 
-            function percentToPxLeft(percent) {
-            	return (percent / 100) * sideBar.height();
+                function percentToPxLeft(percent) {
+                    return (percent / 100) * sideBar.height();
+                }
+
+                function percentToPxTop(percent) {
+                    return (percent / 100) * background.width();
+                }
+
+                div.click(function () {
+                    pauseNobel();
+                })
+                div.assocMedia = associatedMedia[i];
+                background.append(div);
+                div.MiddleY = div.offset().top + (div.height() / 2);
+                if (x === 0) { //only add first div
+                    nobelHotspots.push([div, associatedMedia[i]]);
+                }
+                div.mouseenter(function () {
+                    touching = true;
+                })
             }
-
-            function percentToPxTop(percent) {
-            	return (percent / 100) * background.width();
-            }
-
-            div.click(function () {
-                pauseNobel();
-            })
-            div.assocMedia = associatedMedia[i];
-            background.append(div);
-            div.MiddleY = div.offset().top + (div.height() / 2);
-            nobelHotspots.push([div, associatedMedia[i]]);
-            div.mouseenter(function () {
-                touching = true;
-            })
         }
     }
     /**
@@ -2006,10 +2010,48 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function makeTaskBar() {
+
+        function createTaskbarExtra(extra) {
+            var bd = $(document.createElement('div'));
+            bd.css({
+                "position": 'relative',
+                'height': "30px",
+                'width' : '30px',
+                "border": "1px solid " + NOBEL_ORANGE_COLOR,
+                "border-radius": "3px",
+                'top': '30%',
+                'margin-right': '8px',
+                'color': 'red',
+                'float': 'left'
+            })
+            var d = $(document.createElement('img'));
+            d.css({
+                "position": 'absolute',
+                'width': '30px',
+                "border-radius": "5px",
+                'height': '30px'
+            })
+            d.attr({
+                src : extra[0]
+            })
+            var t = $(document.createElement('div'));
+            t.css({
+                "position": 'absolute',
+                "left" : "5px",
+                'width': "70px",
+                'color': "black",
+                "background-color" : "transparent",
+                "font-size" : ".5em"
+            }).text(extra[1])
+            bd.append(d);
+            bd.append(t);
+            return bd;
+        }
+
         taskBarArea = $(document.createElement('div'));
         taskBarArea.addClass('taskBarArea');
         taskBarArea.css({
-            'height': '7.5%',
+            'height': '10%',
             'width': '100%',
             'position': 'absolute',
             'bottom': '0px'
@@ -2018,7 +2060,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var taskBar = $(document.createElement('div'));
         taskBar.css({
-            "width": "40%",
+            "width": "50%",
             "height": "90%",
             "border": "2px solid " + NOBEL_ORANGE_COLOR,
             "border-radius": "12px",
@@ -2030,12 +2072,22 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var collectionDiv = $(document.createElement ('div'));
         collectionDiv.css({
-            "height": "35%",
+            "height": "100%",
+            "width": "60%",
             "position": "absolute",
-            "left": "3%",
-            "top": "-25%",
+            "left": "4%",
+            "top": "0px",
         });
         collectionDiv.attr('id', 'collectionDiv');
+
+        var collectionTitleDiv = $(document.createElement ('div'));
+        collectionTitleDiv.css({
+            "height": "40%",
+            "position": "absolute",
+            "left": "-4%",
+            "top": "-20%",
+        });
+        collectionTitleDiv.attr('id', 'collectionTitleDiv');
 
         var collectionTextImg = $(document.createElement ('img'));
         collectionTextImg.css({
@@ -2045,16 +2097,32 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         collectionTextImg.attr({
             src: tagPath + 'images/collections.svg'
         })
-        collectionDiv.append(collectionTextImg);
+        collectionTitleDiv.append(collectionTextImg);
+        collectionDiv.append(collectionTitleDiv);
 
+        for (var i = 0; i<9; i++) {
+            collectionDiv.append(createTaskbarExtra('test'));
+        }
+
+        // GENERATE TOUR TILES
         var tourDiv = $(document.createElement ('div'));
         tourDiv.css({
-            "height": "35%",
+            "height": "100%",
+            "width": "40%",
             "position": "absolute",
-            "left": "25%",
-            "top": "-25%",
+            "left": "65%",
+            "top": "0%"
         });
         tourDiv.attr('id', 'tourDiv');
+
+        var tourTitleDiv = $(document.createElement ('div'));
+        tourTitleDiv.css({
+            "height": "40%",
+            "position": "absolute",
+            "left": "-7%",
+            "top": "-20%",
+        });
+        tourTitleDiv.attr('id', 'tourTitleDiv');
 
         var tourTextImg = $(document.createElement ('img'));
         tourTextImg.css({
@@ -2064,13 +2132,17 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourTextImg.attr({
             src: tagPath + 'images/tours.svg'
         })
-        tourDiv.append(tourTextImg);
 
+        tourTitleDiv.append(tourTextImg);
+        tourDiv.append(tourTitleDiv);
+        for (var i = 0; i<5; i++) {
+            tourDiv.append(createTaskbarExtra('test'));
+        }
+
+        taskBar.append(collectionDiv);
+        taskBar.append(tourDiv);
         taskBarArea.append(taskBar);
-        taskBarArea.append(collectionDiv);
-        taskBarArea.append(tourDiv);
         root.append(taskBarArea);
-
     }
 
     function getPopupInfo(number) {
