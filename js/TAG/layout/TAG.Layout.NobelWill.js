@@ -290,7 +290,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         switch (pageNumber) {
             //hardcodedHotspotSpecs- left, top, width, height
             case 1:
-                associatedMediaNobelKeywords = [['WILL AND TESTAMENT'],['ALFRED BERNHARD'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
+                associatedMediaNobelKeywords = [['TESTAMENT'],['ALFRED BERNHARD'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
                 hardcodedHotspotSpecs = [[[47.95+8.25,9,11.75,5],[45,17,8,4]],[[63.5, 15, 17, 3.5]], [[66.5, 30, 11, 3]], [[61, 34.5, 12.5, 2.5]], [[51.5, 54, 19, 3]], [[52.5, 65.4, 13.5, 3]]]
                 infoBulbs = [[61.5,7], [33.25,59]];
                 leftTextArray = [
