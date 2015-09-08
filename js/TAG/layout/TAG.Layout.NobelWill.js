@@ -96,8 +96,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         video.css({
             'position': 'relative',
             'width': '100%',
-            'max-width': '100%',
-            'max-height': '100%',
+            'height': '100%',
             'z-index': '1001'
         });
         video.attr({
@@ -106,7 +105,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             loop: true
         });
         videoElt = video[0],
-        videoElt.innerHTML = '<source src="' + tagPath + 'images/testvid.mp4' + '" type="video/mp4">';
+        videoElt.innerHTML = '<source src="' + tagPath + 'images/nobels_will.mp4' + '" type="video/mp4">';
         videoContainer.append(video).append(touchToExplore);
         root.append(videoContainer);
         videoElt.play();
