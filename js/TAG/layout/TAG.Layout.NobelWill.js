@@ -159,7 +159,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         background = $(document.createElement('div'));
         background.css({
-            "height": '92.5%',
+            "height": '90%',
             "width": "100%",
             'position': 'absolute',
             'background-color' : "#404040",
@@ -1969,10 +1969,48 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function makeTaskBar() {
+
+        function createTaskbarExtra(extra) {
+            var bd = $(document.createElement('div'));
+            bd.css({
+                "position": 'relative',
+                'height': "30px",
+                'width' : '30px',
+                "border": "1px solid " + NOBEL_ORANGE_COLOR,
+                "border-radius": "3px",
+                'top': '30%',
+                'margin-right': '8px',
+                'color': 'red',
+                'float': 'left'
+            })
+            var d = $(document.createElement('img'));
+            d.css({
+                "position": 'absolute',
+                'width': '30px',
+                "border-radius": "5px",
+                'height': '30px'
+            })
+            d.attr({
+                src : extra[0]
+            })
+            var t = $(document.createElement('div'));
+            t.css({
+                "position": 'absolute',
+                "left" : "5px",
+                'width': "70px",
+                'color': "black",
+                "background-color" : "transparent",
+                "font-size" : ".5em"
+            }).text(extra[1])
+            bd.append(d);
+            bd.append(t);
+            return bd;
+        }
+
         taskBarArea = $(document.createElement('div'));
         taskBarArea.addClass('taskBarArea');
         taskBarArea.css({
-            'height': '7.5%',
+            'height': '10%',
             'width': '100%',
             'position': 'absolute',
             'bottom': '0px'
@@ -1981,7 +2019,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var taskBar = $(document.createElement('div'));
         taskBar.css({
-            "width": "40%",
+            "width": "50%",
             "height": "90%",
             "border": "2px solid " + NOBEL_ORANGE_COLOR,
             "border-radius": "12px",
@@ -1993,12 +2031,22 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var collectionDiv = $(document.createElement ('div'));
         collectionDiv.css({
-            "height": "35%",
+            "height": "100%",
+            "width": "60%",
             "position": "absolute",
-            "left": "3%",
-            "top": "-25%",
+            "left": "4%",
+            "top": "0px",
         });
         collectionDiv.attr('id', 'collectionDiv');
+
+        var collectionTitleDiv = $(document.createElement ('div'));
+        collectionTitleDiv.css({
+            "height": "40%",
+            "position": "absolute",
+            "left": "-4%",
+            "top": "-20%",
+        });
+        collectionTitleDiv.attr('id', 'collectionTitleDiv');
 
         var collectionTextImg = $(document.createElement ('img'));
         collectionTextImg.css({
@@ -2008,16 +2056,32 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         collectionTextImg.attr({
             src: tagPath + 'images/collections.svg'
         })
-        collectionDiv.append(collectionTextImg);
+        collectionTitleDiv.append(collectionTextImg);
+        collectionDiv.append(collectionTitleDiv);
 
+        for (var i = 0; i<9; i++) {
+            collectionDiv.append(createTaskbarExtra('test'));
+        }
+
+        // GENERATE TOUR TILES
         var tourDiv = $(document.createElement ('div'));
         tourDiv.css({
-            "height": "35%",
+            "height": "100%",
+            "width": "40%",
             "position": "absolute",
-            "left": "25%",
-            "top": "-25%",
+            "left": "65%",
+            "top": "0%"
         });
         tourDiv.attr('id', 'tourDiv');
+
+        var tourTitleDiv = $(document.createElement ('div'));
+        tourTitleDiv.css({
+            "height": "40%",
+            "position": "absolute",
+            "left": "-7%",
+            "top": "-20%",
+        });
+        tourTitleDiv.attr('id', 'tourTitleDiv');
 
         var tourTextImg = $(document.createElement ('img'));
         tourTextImg.css({
@@ -2027,13 +2091,17 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourTextImg.attr({
             src: tagPath + 'images/tours.svg'
         })
-        tourDiv.append(tourTextImg);
 
+        tourTitleDiv.append(tourTextImg);
+        tourDiv.append(tourTitleDiv);
+        for (var i = 0; i<5; i++) {
+            tourDiv.append(createTaskbarExtra('test'));
+        }
+
+        taskBar.append(collectionDiv);
+        taskBar.append(tourDiv);
         taskBarArea.append(taskBar);
-        taskBarArea.append(collectionDiv);
-        taskBarArea.append(tourDiv);
         root.append(taskBarArea);
-
     }
 
     function getPopupInfo(number) {
