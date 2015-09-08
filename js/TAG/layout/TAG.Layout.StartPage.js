@@ -606,6 +606,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     }*/
 
                     //STILL MAKES THIS SERVER CALL TO GET COLLECTIONS
+
+
+
+                    
                     TAG.Layout.Spoof().getExhibitions(function (collections) {
                         console.log($("startPageLoadingOverlay") === null);
 
@@ -646,6 +650,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             buttonClicked = false;
                         }
                     }); 
+
+                    //TAG.Layout.SpoofTest();
+
+
                 } else {
                     TAG.Worktop.Database.getExhibitions(function (collections) {
                         if ($("#startPageLoadingOverlay").length) {

@@ -62,7 +62,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
         previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
         hideKeywords = options.hideKeywords, //true if should be hidden for a particular collection
-        smallPreview= options.smallPreview,
+        smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
         showOtherCollections = options.showOtherCollections,
         twoDeep = options.twoDeep, //show two tiles per column
@@ -72,7 +72,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         showNobelLifeBox = options.showNobelLifeBox, // customization to indicate whether initial pop up has appeared on Nobel Life collection
         showInitialImpactPopUp = options.showInitialImpactPopUp,
-        
+
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -99,13 +99,13 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         scaleTicks = [],                               // timeline scale ticks
         artworkYears = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
         scaleTicksAppended = false,                            // if scale ticks have been appended
-        tileDivHeight = 0,                                // Height of tile div (before scroll bar added, should equal height of catalogDiv)
+        tileDivHeight,                                // Height of tile div (before scroll bar added, should equal height of catalogDiv)
         artworkShown = false,                            // whether an artwork pop-up is currently displayed
         timelineShown = true,                             // whether current collection has a timeline
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-        lockKioskMode = TAG.Layout.Spoof().getKioskLocked(),                           // true if back button is hidden //TO DO: GET KIOSKLOCKED FROM SPOOF
+        lockKioskMode = true, //TAG.Layout.Spoof().getKioskLocked(),                           // true if back button is hidden //TO DO: GET KIOSKLOCKED FROM SPOOF
         // constants
         NOBEL_COLOR = 'rgb(254,161,0)',
         BASE_FONT_SIZE = TAG.Layout.Spoof().getBaseFontSize(),       // base font size for current font //TO DO: GET FONT SIZE FROM SPOOF
@@ -2590,11 +2590,14 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         drawCatalog(currentArtworks, currentTag, 0, null, true);
 
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+        tileDiv.css({ 'left': '0%' });
+        /**
         if (description === "" + "\n\n   ") {
             tileDiv.css({ 'left': '0%' });
         } else {
             tileDiv.css({ 'left': '25%' });
         }
+        **/
         //drawCatalog(artworks, currentTag, 0);
     }
 
@@ -2935,6 +2938,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             //TELEMETRY
 
                             //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                            /**
                             if (currCollection.Name !== "The Life of Alfred Nobel") {
                                 TAG.Telemetry.recordEvent('ArtworkPreviewer', function (tobj) {
                                     tobj.is_assoc_media_view = onAssocMediaView;
@@ -2953,7 +2957,9 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                                     //timer reset in showArtwork
                                     doNothing("DOUBLE CLICKED ON THE TILE");
                                 });
+                               
                             }
+                            **/
 
 
                         } else {

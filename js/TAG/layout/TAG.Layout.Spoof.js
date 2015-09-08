@@ -243,9 +243,9 @@ TAG.Layout.Spoof = (function () {
                     doq.KeywordsSet3 = doq.PrizeCategory.toLowerCase();
                     waitingDoqs[map[id]] = { "Metadata": doq }
 
-                    //Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + "Thumbnails\\" + "thumb_" + map[id]).done(function (file) {
-                    var file = {"name" : "666666"+map[id]}
-                    function yo(file){
+                    Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + "Thumbnails\\" + "thumb_" + map[id]).done(function (file) {
+                    //var file = {"name" : "666666"+map[id]}
+                    //function yo(file){
                         /*
                         var reader = new FileReader()
                         reader.onload = function (event) {
@@ -261,20 +261,20 @@ TAG.Layout.Spoof = (function () {
 
 
 
-                        //var url = URL.createObjectURL(file, { oneTimeOnly: true });
-                        var url = "../tagcore/" + 'images/NobelwillImages/NobelPopupImages/Popup_1_1.png'
+                        var url = URL.createObjectURL(file, { oneTimeOnly: true });
+                        //var url = "../tagcore/" + 'images/NobelwillImages/NobelPopupImages/Popup_1_1.png'
                         var d = waitingDoqs[file.name.substring(6)]
                         d.Metadata.Thumbnail = { "FilePath": url }
                         d.Identifier = d.Metadata.ID
                         doqs.push(d)
-                    }
-                    yo(file)
-                    /*
+                    })
+                    //yo(file)
+                    
                     Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + "Mediums\\" + "medium_" + map[id]).done(function (file) {
-                        var url = URL.createObjectURL(file, { oneTimeOnly: true });
+                        var url = URL.createObjectURL(file, { oneTimeOnly: false });
                         var d = waitingDoqs[file.name.substring(7)]
                         d.Metadata.FullImage = { "FilePath": url }
-                    })*/
+                    })
                 }
                 }
             }
