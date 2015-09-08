@@ -292,7 +292,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             case 1:
                 associatedMediaNobelKeywords = [['WILL AND TESTAMENT'],['ALFRED BERNHARD'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
                 hardcodedHotspotSpecs = [[47.95+8.25,9,11.75,5],[63.5, 15, 17, 3.5], [66.5, 30, 11, 3], [61, 34.5, 12.5, 2.5], [47, 54, 23.5, 3], [47.5, 65.4, 18.5, 3]]
-                infoBulbs = [[61.5,7], [33.25,59]];
+                infoBulbs = [[61.5, 7], [33.25, 59]];
                 leftTextArray = [
                     8.25,
                     'TESTAMENT',
@@ -664,7 +664,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '11.25%',
                     'width': '105.5%',
                     'color': 'black',
-                    'height': '5%',
+                    'height': '2.1%',
                     'top': currentHeight + '%',
                     'font-size': '.479em',
                 }).text(leftTextArray[i]);
@@ -862,6 +862,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '.5%',
                     'width': '75.5%',
                     'height': '10%',
+                    "overflow" : "hidden",
                     'z-index': '500'
                 }).click(pauseNobel)
                 sideBar.mouseup(function (e) {
@@ -1118,7 +1119,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.css({
             "background-color": "#dfdcdd",
             "border": "2px solid " + NOBEL_ORANGE_COLOR,
-            "border-radius" : "3.5px",
+            "border-radius" : "12px",
             "left": "2.5%",
             "display" : "block",
             "top": numberInChunk * height + "%",
@@ -1126,7 +1127,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "border-color": NOBEL_ORANGE_COLOR,
             "display": "flex",
             "height": "auto",
-            "z-index" : "550",
+            "z-index": "550",
+            "overflow" : "hidden",
 			"margin-bottom" : "12px"
         }).click(function () {
         	showLargePopup(div.medianumber)
@@ -1570,12 +1572,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'top': 'calc(50% + 15px)'
             })
         }
+        function percentToPx(percent) {
+            return (percent / 100) * sideBar.height();
+        }
         if (chunk >= 0 && chunk < (textDivArray.length - 4)) {
             hideNobelAssociatedMedia();
             stopAudio();
-
             for (var i = 0; i < textDivArray.length; i++) {
-                if (i>=chunk && i<chunk+1) {
+                var mid = textDivArray[i].offset().top + textDivArray[i].height()/2
+                if (mid > percentToPx(sliderPositions[chunk][0]) && mid < percentToPx(sliderPositions[chunk][0] + sliderPositions[chunk][1])) {
                     fadeText(textDivArray[i], 'white', null, duration || 1000)
                 }
                 else {

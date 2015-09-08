@@ -3266,6 +3266,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     main.css({ 'height': (0.3) * tileDivHeight });
                 }
             } else { */
+            tileDivHeight = tileDiv.height()
                 var tileHeight = (0.23) * tileDivHeight;
                 main.css({ 'height': (0.23) * tileDivHeight });
             //}
