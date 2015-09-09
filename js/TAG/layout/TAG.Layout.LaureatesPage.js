@@ -3010,12 +3010,12 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 }();
             }
             main.on('click', function () {
-                if (currCollection.Name === "The Life of Alfred Nobel") {
-                    artworkSelected = true;
-                    switchPage(currentWork, null, getContainerLeft(currentWork, false))();
-                    return;
-                }
-                doubleClickHandler()
+               // if (currCollection.Name === "The Life of Alfred Nobel") {
+                  //  artworkSelected = true;
+                   // switchPage(currentWork, null, getContainerLeft(currentWork, false))();
+                  //  return;
+               // }
+              // doubleClickHandler()
 
                 // if the idle timer hasn't started already, start it
                 /*if (!idleTimer && !previewing && !lockKioskMode) {
@@ -3036,7 +3036,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     }
                 } */
                 //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
-                setTimeout(function () { showArtwork(currentWork, false)() }, 10)
+               // setTimeout(function () { showArtwork(currentWork, false)() }, 10);
+                showArtwork(currentWork, false)();
                 zoomTimeline(artworkCircles[currentWork.Identifier])
                 justShowedArtwork = true;
             })
@@ -3849,12 +3850,14 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
     function showArtwork(artwork, showAllAtYear, justHighlight) {
         return function () {
             
+            /**
             if (!artworkShown){ //FOR NOW - switching between artworks in the previewer does not 
                                 //reset the timer, and the total time spent with the previewer
                                 //open is recorded (this is only one event)
                 //doNothing("restarting previewer timer");
                 global_artwork_prev_timer.restart(); //restarts the previewer timer for telemetry
             }
+            **/
             var rootWidth,
                 infoWidth,
                 tileWidth,

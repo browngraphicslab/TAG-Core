@@ -231,6 +231,7 @@ TAG.Layout.Spoof = (function () {
                     for (var d = 0; d < doq.prizes.length; d++) {
                         if (id.indexOf(doq.prizes[d].year) > -1) {
                             doq.Year = doq.prizes[d].year
+                            doq.Motivation = doq.prizes[d].motivation
                         }
                     }
                     for (var d = 0; d < doq.prizes.length; d++) {
