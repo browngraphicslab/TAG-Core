@@ -609,7 +609,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
 
 
-                    
+                    /*
                     TAG.Layout.Spoof().getExhibitions(function (collections) {
                         console.log($("startPageLoadingOverlay") === null);
 
@@ -649,9 +649,9 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                         else {
                             buttonClicked = false;
                         }
-                    }); 
+                    }); */
 
-                    //TAG.Layout.SpoofTest();
+                    TAG.Layout.SpoofTest();
 
 
                 } else {
