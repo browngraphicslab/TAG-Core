@@ -217,13 +217,10 @@ TAG.Layout.SpoofTest = (function () {
 
 		var searchString = ""
 
-		var keys = Object.keys(laur.Metadata)
-		for (var k = 0; k < keys.length; k++) {
-		    if ($.type(laur.Metadata[keys[k]]) === "string") {
-		        block.addClass(laur.Metadata[keys[k]].toLowerCase())
-		    }
-		}
-
+		block.addClass(laur.Metadata.KeywordsSet1.toLowerCase())
+		block.addClass(laur.Metadata.KeywordsSet2.toLowerCase())
+		block.addClass(laur.Metadata.KeywordsSet3.toLowerCase())
+		var keys = {}
 		function addToString(obj) {
 			var type = $.type(obj)
 			if (type === "string") {
@@ -275,6 +272,7 @@ TAG.Layout.SpoofTest = (function () {
 		arrangeTiles(blocks)
 		searchText.text("you have " + blocks.length + " results for '"+s+"'");
 		searchText.show();
+        searchBox.text('')
 	}
 	function sort(tags) {
         $("#scroller").scrollLeft(0)
@@ -375,6 +373,7 @@ TAG.Layout.SpoofTest = (function () {
 	    })
 		$(".block").show()
 		arrangeTiles($(".block").toArray())
+		searchBox.text('')
 	}
 	function makeBigPopup(laur) {
 		var overlay = $(document.createElement("div")).attr({ id: "overlay" });
@@ -578,6 +577,7 @@ TAG.Layout.SpoofTest = (function () {
 	        sortTags.push(div)
             return div
 	    }
+	    var filterDiv = $(document.createElement('div'))
 	    var decades = $(document.createElement('div'))
 	    var decadeList = $(document.createElement('div'))
 	    decades.css({
@@ -599,8 +599,15 @@ TAG.Layout.SpoofTest = (function () {
 	        else {
 	            decadeList.hide();
 	        }
-        })
+	    })
+	    filterDiv.css({
+	        "position": "absolute",
+	        "left": "45px",
+	        "top": "60px",
+            "color" : "white"
+	    }).text("Filters")
 	    sortDiv.append(decades)
+        sortDiv.append(filterDiv)
         addBlackCloseIcon(decades)
 	    base.append(decadeList)
 	    decadeList.css({
