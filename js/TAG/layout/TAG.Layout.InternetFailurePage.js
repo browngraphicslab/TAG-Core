@@ -17,10 +17,10 @@ TAG.Layout.InternetFailure.lastOverlay = {};
  */
 TAG.Layout.InternetFailurePage = function (errorType, detach) {
     "use strict";
-
     this.getRoot = function () {
         return root;
     };
+
 
     var root,
         mainPanel,

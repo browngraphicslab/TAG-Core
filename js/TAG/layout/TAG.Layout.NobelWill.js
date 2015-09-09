@@ -158,7 +158,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         background = $(document.createElement('div'));
         background.css({
-            "height": '92.5%',
+            "height": '90%',
             "width": "100%",
             'position': 'absolute',
             'background-color' : "#404040",
@@ -294,62 +294,94 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 hardcodedHotspotSpecs = [[[47.95+8.25,9,11.75,5],[45,17,8,4]],[[63.5, 15, 17, 3.5]], [[66.5, 30, 11, 3]], [[61, 34.5, 12.5, 2.5]], [[51.5, 54, 19, 3]], [[52.5, 65.4, 13.5, 3]]]
                 infoBulbs = [[61.5,7], [33.25,59]];
                 leftTextArray = [
-                    -50,' test',
-                    15, 'I, the undersigned, Alfred Bernhard',
-                    17.5,' Nobel, do hereby, after mature',
-                    20.25,' deliberation, declare the following to be my last Will and Testament',
-                    22.75,' with respect to such property as may be',
-                    25.5,' left by me at the time of my death:',
-                    28, 'To my nephews, Hjalmar and Ludvig',
-                    30,' Nobel, the sons of my brother Robert Nobel, I bequeath',
-                    32.5,' the sum of Two Hundred Thousand Crowns each;',
-                    34.75, 'To my nephew Emanuel Nobel, the sum of Three',
-                    37,' Hundred Thousand, and to my niece Mina Nobel,',
-                    40, ' One Hundred Thousand Crowns;',
-                    42, 'To my brother Robert Nobel’s daughters, Ingeborg',
-                    44.25,' and Tyra, the sum of One Hundred Thousand Crowns each;',
-                    47.25, 'Miss Olga Boettger, at present staying',
-                    49.5,' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
-                    51.75,' One Hundred Thousand Francs;',
-                    54, 'Mrs Sofie Kapy von Kapivar, whose address',
-                    56.25,' is known to the Anglo-Oesterreichische Bank in Vienna,',
-                    58.75,' is hereby entitled to an annuity of 6000 Florins Ö.W.',
-                    61, ' which is paid to her by the said Bank, and to this end I have',
-                    63.5, ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
-                    65.5, 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
-                    67.75,' Stockholm, will receive One Hundred Thousand Crowns;',
-                    70.25, 'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
-                    72.25,' Paris, is entitled to an annuity of Two Thousand',
-                    74.75,' Five Hundred Francs. In addition,',
-                    77.5,' Forty Eight Thousand Francs owned',
-                    79.75,' by her are at present in my custody, and shall be refunded;',
-                    82.5, 'Mr Alfred Hammond, Waterford, Texas,',
-                    84.75, ' U.S.A. will receive Ten Thousand Dollars;',
-                    86.5,'The Misses Emy and Marie Winkelmann,' 
+                    8.25,
+                    'TESTAMENT',
+                    15,
+                    '\tI, the undersigned, Alfred Bernhard',
+                    //17.5,
+                    ' Nobel, do hereby, after mature',
+                    //20.25,
+                    ' deliberation, declare the following to be my last Will and Testament',
+                    //22.75,
+                    ' with respect to such property as may be',
+                    //25.5,
+                    ' left by me at the time of my death:',
+                    28,
+                    'To my nephews, Hjalmar and Ludvig',
+                    //30,
+                    ' Nobel, the sons of my brother Robert Nobel, I bequeath',
+                    //32.5,
+                    ' the sum of Two Hundred Thousand Crowns each;',
+                    //34.75,
+                    'To my nephew Emanuel Nobel, the sum of Three',
+                    //37,
+                    ' Hundred Thousand, and to my niece Mina Nobel,',
+                    //40,
+                    ' One Hundred Thousand Crowns;',
+                    42,
+                    'To my brother Robert Nobel’s daughters, Ingeborg',
+                    //44.25,
+                    ' and Tyra, the sum of One Hundred Thousand Crowns each;',
+                    //47.25,
+                    'Miss Olga Boettger, at present staying',
+                    //49.5,
+                    ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
+                    //51.75,
+                    ' One Hundred Thousand Francs;',
+                    54,
+                    'Mrs Sofie Kapy von Kapivar, whose address',
+                    //56.25,
+                    ' is known to the Anglo-Oesterreichische Bank in Vienna,',
+                    //58.75,
+                    ' is hereby entitled to an annuity of 6000 Florins Ö.W.',
+                    //61,
+                    ' which is paid to her by the said Bank, and to this end I have',
+                    //63.5,
+                    ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
+                    65.5,
+                    'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
+                    //67.75,
+                    ' Stockholm, will receive One Hundred Thousand Crowns;',
+                    //70.25,
+                    'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
+                    //72.25,
+                    ' Paris, is entitled to an annuity of Two Thousand',
+                    74.75,
+                    ' Five Hundred Francs. In addition,',
+                    //77.5,
+                    ' Forty Eight Thousand Francs owned',
+                    79.75,
+                    ' by her are at present in my custody, and shall be refunded;',
+                    //82.5,
+                    'Mr Alfred Hammond, Waterford, Texas,',
+                    84.75,
+                    ' U.S.A. will receive Ten Thousand Dollars;',
+                    //86.5,
+                    'The Misses Emy and Marie Winkelmann,'
                 ]
                 sliderPositions = [
                     [8.5,6],
                     [14.5, 13],
-                    [17.5, 13],
-                    [20.25, 12.75],
-                    [22.75, 12.5],
-                    [25.5, 12],
-                    [28, 12.25],
-                    [30, 12.5],
-                    [32.5, 12.5],
-                    [34.5, 12.75],
-                    [37, 12.75],
-                    [40, 12.25],
+                    //[17.5, 13],
+                    //[20.25, 12.75],
+                    //[22.75, 12.5],
+                    //[25.5, 12],
+                    [28, 14],
+                    //[30, 12.5],
+                    //[32.5, 12.5],
+                    //[34.5, 12.75],
+                    //[37, 12.75],
+                    //[40, 12.25],
                     [42, 12.25],
-                    [44.25, 12.5],
-                    [47.25, 12],
-                    [49, 12.5],
-                    [51.5, 12],
+                    //[44.25, 12.5],
+                    //[47.25, 12],
+                    //[49, 12.5],
+                    //[51.5, 12],
                     [53.5, 12.25],
-                    [56, 12.25],
-                    [58.25, 12.25],
-                    [61, 11.75],
-                    [63, 12.5],
+                    //[56, 12.25],
+                    //[58.25, 12.25],
+                    //[61, 11.75],
+                    //[63, 12.5],
                     [65.5, 12.25],
                     [67.25, 12.5],
                     [69.75, 12.25],
@@ -632,11 +664,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '11.25%',
                     'width': '105.5%',
                     'color': 'black',
-                    'height': '5%',
+                    'height': '2.1%',
                     'top': currentHeight + '%',
                     'font-size': '.479em',
                 }).text(leftTextArray[i]);
-                currentHeight += 1.75;
+                currentHeight += 2.15;
                 tempText.attr('class', 'textChunkDiv');
                 sideBar.append(tempText);
                 textDivArray.push(tempText);
@@ -830,6 +862,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '.5%',
                     'width': '75.5%',
                     'height': '10%',
+                    "overflow" : "hidden",
                     'z-index': '500'
                 }).click(pauseNobel)
                 sideBar.mouseup(function (e) {
@@ -998,7 +1031,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     					closest = i;
     				}
     			}
-    			setChunkNumber(closest, checkForHotspots, 300);
+    			setChunkNumber(closest, checkForHotspots, 450);
     		}
     		dragging = false;
     	}
@@ -1086,7 +1119,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.css({
             "background-color": "#dfdcdd",
             "border": "2px solid " + NOBEL_ORANGE_COLOR,
-            "border-radius" : "3.5px",
+            "border-radius" : "12px",
             "left": "2.5%",
             "display" : "block",
             "top": numberInChunk * height + "%",
@@ -1094,7 +1127,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "border-color": NOBEL_ORANGE_COLOR,
             "display": "flex",
             "height": "auto",
-            "z-index" : "550",
+            "z-index": "550",
+            "overflow" : "hidden",
 			"margin-bottom" : "12px"
         }).click(function () {
         	showLargePopup(div.medianumber)
@@ -1542,12 +1576,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'top': 'calc(50% + 15px)'
             })
         }
+        function percentToPx(percent) {
+            return (percent / 100) * sideBar.height();
+        }
         if (chunk >= 0 && chunk < (textDivArray.length - 4)) {
             hideNobelAssociatedMedia();
             stopAudio();
-
             for (var i = 0; i < textDivArray.length; i++) {
-                if (i>=chunk && i<chunk+5 && !(chunk === 0 && pageNumber === 1)) {
+                var mid = textDivArray[i].offset().top + textDivArray[i].height()/2
+                if (mid > percentToPx(sliderPositions[chunk][0]) && mid < percentToPx(sliderPositions[chunk][0] + sliderPositions[chunk][1])) {
                     fadeText(textDivArray[i], 'white', null, duration || 1000)
                 }
                 else {
@@ -1973,10 +2010,48 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function makeTaskBar() {
+
+        function createTaskbarExtra(extra) {
+            var bd = $(document.createElement('div'));
+            bd.css({
+                "position": 'relative',
+                'height': "30px",
+                'width' : '30px',
+                "border": "1px solid " + NOBEL_ORANGE_COLOR,
+                "border-radius": "3px",
+                'top': '30%',
+                'margin-right': '8px',
+                'color': 'red',
+                'float': 'left'
+            })
+            var d = $(document.createElement('img'));
+            d.css({
+                "position": 'absolute',
+                'width': '30px',
+                "border-radius": "5px",
+                'height': '30px'
+            })
+            d.attr({
+                src : extra[0]
+            })
+            var t = $(document.createElement('div'));
+            t.css({
+                "position": 'absolute',
+                "left" : "5px",
+                'width': "70px",
+                'color': "black",
+                "background-color" : "transparent",
+                "font-size" : ".5em"
+            }).text(extra[1])
+            bd.append(d);
+            bd.append(t);
+            return bd;
+        }
+
         taskBarArea = $(document.createElement('div'));
         taskBarArea.addClass('taskBarArea');
         taskBarArea.css({
-            'height': '7.5%',
+            'height': '10%',
             'width': '100%',
             'position': 'absolute',
             'bottom': '0px'
@@ -1985,7 +2060,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var taskBar = $(document.createElement('div'));
         taskBar.css({
-            "width": "40%",
+            "width": "50%",
             "height": "90%",
             "border": "2px solid " + NOBEL_ORANGE_COLOR,
             "border-radius": "12px",
@@ -1997,12 +2072,22 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var collectionDiv = $(document.createElement ('div'));
         collectionDiv.css({
-            "height": "35%",
+            "height": "100%",
+            "width": "60%",
             "position": "absolute",
-            "left": "3%",
-            "top": "-25%",
+            "left": "4%",
+            "top": "0px",
         });
         collectionDiv.attr('id', 'collectionDiv');
+
+        var collectionTitleDiv = $(document.createElement ('div'));
+        collectionTitleDiv.css({
+            "height": "40%",
+            "position": "absolute",
+            "left": "-4%",
+            "top": "-20%",
+        });
+        collectionTitleDiv.attr('id', 'collectionTitleDiv');
 
         var collectionTextImg = $(document.createElement ('img'));
         collectionTextImg.css({
@@ -2012,16 +2097,32 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         collectionTextImg.attr({
             src: tagPath + 'images/collections.svg'
         })
-        collectionDiv.append(collectionTextImg);
+        collectionTitleDiv.append(collectionTextImg);
+        collectionDiv.append(collectionTitleDiv);
 
+        for (var i = 0; i<9; i++) {
+            collectionDiv.append(createTaskbarExtra('test'));
+        }
+
+        // GENERATE TOUR TILES
         var tourDiv = $(document.createElement ('div'));
         tourDiv.css({
-            "height": "35%",
+            "height": "100%",
+            "width": "40%",
             "position": "absolute",
-            "left": "25%",
-            "top": "-25%",
+            "left": "65%",
+            "top": "0%"
         });
         tourDiv.attr('id', 'tourDiv');
+
+        var tourTitleDiv = $(document.createElement ('div'));
+        tourTitleDiv.css({
+            "height": "40%",
+            "position": "absolute",
+            "left": "-7%",
+            "top": "-20%",
+        });
+        tourTitleDiv.attr('id', 'tourTitleDiv');
 
         var tourTextImg = $(document.createElement ('img'));
         tourTextImg.css({
@@ -2031,13 +2132,17 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourTextImg.attr({
             src: tagPath + 'images/tours.svg'
         })
-        tourDiv.append(tourTextImg);
 
+        tourTitleDiv.append(tourTextImg);
+        tourDiv.append(tourTitleDiv);
+        for (var i = 0; i<5; i++) {
+            tourDiv.append(createTaskbarExtra('test'));
+        }
+
+        taskBar.append(collectionDiv);
+        taskBar.append(tourDiv);
         taskBarArea.append(taskBar);
-        taskBarArea.append(collectionDiv);
-        taskBarArea.append(tourDiv);
         root.append(taskBarArea);
-
     }
 
     function getPopupInfo(number) {

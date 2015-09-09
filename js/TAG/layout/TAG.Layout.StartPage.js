@@ -278,71 +278,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      *            internetURL     url of alternate site against which we'll test connectivity
      */
     function testConnection(options) {
-        var internetURL = (options && options.internetURL) || "http://www.google.com/",
-            connectionTimeout,
-            timedOut;
-
-        //doNothing("checking server url: " + serverURL);
-        $.ajax({
-            url: serverURL,
-            dataType: "text",
-            async: true,
-            cache: false,
-            success: function () {
-                if (!timedOut) {
-                    clearTimeout(connectionTimeout);
-                    successConnecting();
-                }
-            },
-            error: function (err) {
-                if(!timedOut) {
-                    clearTimeout(connectionTimeout);
-                    $.ajax({  // TODO: not a solid way to do this
-                        url: internetURL,
-                        dataType: "text",
-                        async: false,
-                        cache: false,
-                        success: function () {
-                            if (!timedOut) {
-                                clearTimeout(connectionTimeout);
-                                tagContainer.empty();
-                                tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
-                            }
-                        },
-                        error: function (err) {
-                            if(!timedOut) {
-                                clearTimeout(connectionTimeout);
-                                tagContainer.empty();
-                                tagContainer.append((new TAG.Layout.InternetFailurePage("No Internet")).getRoot());
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
-        connectionTimeout = setTimeout(function() {
-            timedOut = true;
-            tagContainer.empty();
-            tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
-        }, 10000); // 10 second timeout to show internet failure page
+        successConnecting();
     }
 
     function successConnecting() {
-        TAG.Worktop.Database.getVersion(function (ver) {
-            if (parseFloat(ver) < 1.5) {
-                tagContainer.empty();
-                tagContainer.append((new TAG.Layout.InternetFailurePage("Old Server")).getRoot());
-            } else {
-                TAG.Worktop.Database.getMain(loadHelper, function () {
-                    tagContainer.empty();
-                    tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
-                });
-            }
-        }, function () {
-            tagContainer.empty();
-            tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
-        });
+        loadHelper(TAG.Layout.Spoof().getMain())
     }
 
     var that = {};    
@@ -387,7 +327,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // }
         
 
-        if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
+        if (TAG.Layout.Spoof().getLocked() != undefined && TAG.Layout.Spoof().getLocked() != "undefined") {
             goToCollectionsButton.text("Go to Artwork");
         }
 
@@ -445,10 +385,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         
         goToCollectionsButton.on('click', function () {
             jQuery.data(document.body, "isKiosk", true);
-            if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
+            if (TAG.Layout.Spoof().getLocked() != undefined && TAG.Layout.Spoof().getLocked() != "undefined") {
                 TAG.Worktop.Database.getArtworks(function (result) {
                     $.each(result, function (index, artwork) {
-                        if (artwork.Identifier === TAG.Worktop.Database.getLocked()) {
+                        if (artwork.Identifier === TAG.Layout.Spoof().getLocked()) {
                             if (artwork.Metadata.Type === "VideoArtwork") { // video                  
                                 var videoPlayer = TAG.Layout.VideoPlayer(artwork);
                                 TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
@@ -516,9 +456,6 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //opens the collections page on touch/click
         //@param collectionName     string representing name of collection to start with
         function switchPage(collectionName, hideKeywords, smallPreview, titleIsName) {
-            if (buttonClicked == true) {
-                return;
-            }
             buttonClicked = true;
             var collectionsPage,
                 options = {},
@@ -669,7 +606,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     }*/
 
                     //STILL MAKES THIS SERVER CALL TO GET COLLECTIONS
-                    TAG.Worktop.Database.getExhibitions(function (collections) {
+
+
+
+                    
+                    TAG.Layout.Spoof().getExhibitions(function (collections) {
                         console.log($("startPageLoadingOverlay") === null);
 
                         if ($("#startPageLoadingOverlay").length !== null) {
@@ -709,6 +650,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             buttonClicked = false;
                         }
                     }); 
+
+                    //TAG.Layout.SpoofTest();
+
+
                 } else {
                     TAG.Worktop.Database.getExhibitions(function (collections) {
                         if ($("#startPageLoadingOverlay").length) {
@@ -1202,7 +1147,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // root.find('#handGif').attr('src', tagPath+'images/RippleNewSmall.gif');
 
         fullScreen = root.find('#innerContainer');
-        fullScreen.css('background-image', "url(" + TAG.Worktop.Database.fixPath(main.Metadata["BackgroundImage"]) + ")");
+        fullScreen.css('background-image', "url(" + TAG.Layout.Spoof().fixPath(main.Metadata["BackgroundImage"]) + ")");
         //fullScreen.css({'opacity':'0.9'});
 
         overlayColor = main.Metadata["OverlayColor"];
@@ -1215,7 +1160,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         logoContainer.css({ 'background-color': 'transparent' });
 
         // logo = root.find('#logo');
-        // logo.attr('src', TAG.Worktop.Database.fixPath(main.Metadata["Icon"]));
+        // logo.attr('src', TAG.Layout.Spoof().fixPath(main.Metadata["Icon"]));
     }
 
     

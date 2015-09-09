@@ -62,7 +62,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
         previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
         hideKeywords = options.hideKeywords, //true if should be hidden for a particular collection
-        smallPreview= options.smallPreview,
+        smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
         showOtherCollections = options.showOtherCollections,
         twoDeep = options.twoDeep, //show two tiles per column
@@ -72,7 +72,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         showNobelLifeBox = options.showNobelLifeBox, // customization to indicate whether initial pop up has appeared on Nobel Life collection
         showInitialImpactPopUp = options.showInitialImpactPopUp,
-        
+
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -99,16 +99,16 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         scaleTicks = [],                               // timeline scale ticks
         artworkYears = {},                               // dict of artworks keyed by yearKey for detecting multiple artworks at one year    
         scaleTicksAppended = false,                            // if scale ticks have been appended
-        tileDivHeight = 0,                                // Height of tile div (before scroll bar added, should equal height of catalogDiv)
+        tileDivHeight,                                // Height of tile div (before scroll bar added, should equal height of catalogDiv)
         artworkShown = false,                            // whether an artwork pop-up is currently displayed
         timelineShown = true,                             // whether current collection has a timeline
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-        lockKioskMode = TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden //TO DO: GET KIOSKLOCKED FROM SPOOF
+        lockKioskMode = true, //TAG.Layout.Spoof().getKioskLocked(),                           // true if back button is hidden //TO DO: GET KIOSKLOCKED FROM SPOOF
         // constants
         NOBEL_COLOR = 'rgb(254,161,0)',
-        BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font //TO DO: GET FONT SIZE FROM SPOOF
+        BASE_FONT_SIZE = TAG.Layout.Spoof().getBaseFontSize(),       // base font size for current font //TO DO: GET FONT SIZE FROM SPOOF
         FIX_PATH = TAG.Layout.Spoof().fixPath,              // prepend server address to given path                     //TODO CHANGE THIS BACK TO WORKTOP'S
         MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
         EVENT_CIRCLE_WIDTH = Math.min(30, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
@@ -120,9 +120,9 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         TILE_WIDTH_RATIO = twoDeep ? 255 : 200,
         ANIMATION_DURATION = 800,                                         // duration of timeline zoom animation
         DIMMING_FACTOR = 1.7,                                          //dimming of unhighlighted text
-        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
-        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
-        FONT = TAG.Worktop.Database.getMuseumFontFamily(),
+        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Layout.Spoof().getMuseumPrimaryFontColor(),
+        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Layout.Spoof().getMuseumSecondaryFontColor(),
+        FONT = TAG.Layout.Spoof().getMuseumFontFamily(),
 
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
@@ -186,7 +186,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
     homeButton.css('z-index', '999999999');
     /*backButton.click(function () {   
         if (backToGuid){
-            TAG.Worktop.Database.getDoq(backToGuid,
+            TAG.Layout.Spoof().getDoq(backToGuid,
                 function (result) {
                     var artworkViewer = TAG.Layout.ArtworkViewer({
                         doq: result,
@@ -434,8 +434,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         root.find(".sortButton").css({
             'max-width': $("#tagRoot").width() * 0.15 + 'px',
         });
-
-        TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper); //TO DO: FIGURE OUT WHAT THIS DOES?!
+        TAG.Layout.Spoof().getExhibitions(getCollectionsHelper)
+        //TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper); //TO DO: FIGURE OUT WHAT THIS DOES?!
         applyCustomization();
         menuCreated = false;
 
@@ -1379,7 +1379,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             sortsDiv.empty();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
-                TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
+                TAG.Layout.Spoof().getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
                     if (cancelLoad) return;
                     for (i=0;i<mediaDoqs.length;i++){
                         collectionMedia.push(mediaDoqs[i]);
@@ -1847,7 +1847,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
             sortButtonTags = {}; 
         if (!onAssocMediaView && collection.Metadata.SortOptions) {
             var sortOptionsObj = JSON.parse(collection.Metadata.SortOptions || "{}");
-            /*TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
+            /*TAG.Layout.Spoof().getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
             var sortObjects = sortOptionsDoq.Metadata,
                 sortText,
                 sortObjArray;
@@ -1970,7 +1970,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
      */
     function getCollectionContents(collection, callback, cancel) {
         TAG.Layout.Spoof().getLaureates(contentsHelper);
-        //TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+        //TAG.Layout.Spoof().getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
 
         /**
          * Helper function to process collection contents
@@ -2037,7 +2037,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
 
         // Keywords.
         // Get keywords from the server!
-        keywordSets = TAG.Layout.Spoof().getKeywordSets(); //TO DO: GET KEYWORDS FROM SPOOF
+        keywordSets = TAG.Layout.Spoof().getKeywordSets();
         if (keywordSets) {
             // Build hash for keywords to artworks. Each set has dictionaries for AND and NOT.
             // keywordDictionary[setIndex].and["keyword"] --> [artworks with "keyword"] in set
@@ -2138,7 +2138,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 });
 
             } else { // if (i === 2) //TO DO: Hardcode prize icons to correspond to 
-                var keywords3 = TAG.Layout.Spoof().getKeywordSets()[2]; //TO DO: GET KEYWORDS FROM SPOOF
+                var keywords3 = TAG.Layout.Spoof().getKeywordSets()[2];
                 var prizeKeywords = Object.getOwnPropertyNames(selectedPrizes);
 
                 for (var j = 0; j < prizeKeywords.length; j++) {
@@ -2590,11 +2590,14 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
         drawCatalog(currentArtworks, currentTag, 0, null, true);
 
         var description = currCollection.Metadata && currCollection.Metadata.Description ? TAG.Util.htmlEntityDecode(currCollection.Metadata.Description) : "" + "\n\n   ";
+        tileDiv.css({ 'left': '0%' });
+        /**
         if (description === "" + "\n\n   ") {
             tileDiv.css({ 'left': '0%' });
         } else {
             tileDiv.css({ 'left': '25%' });
         }
+        **/
         //drawCatalog(artworks, currentTag, 0);
     }
 
@@ -2641,7 +2644,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 gotTours(null,true)
             }
             else {
-                TAG.Worktop.Database.getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
+                gotTours(null,true)
+                //TAG.Layout.Spoof().getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
             }
             function gotTours(tours, bypass) {
                 if (bypass) {
@@ -2650,7 +2654,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 else{
                     for (var g = 0; g < tours.length; g++) {
                         var tour = tours[g]
-                        TAG.Worktop.Database.getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
+                        TAG.Layout.Spoof().getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
                     }
                 }
                 function tourBack(doq) {
@@ -2934,6 +2938,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             //TELEMETRY
 
                             //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                            /**
                             if (currCollection.Name !== "The Life of Alfred Nobel") {
                                 TAG.Telemetry.recordEvent('ArtworkPreviewer', function (tobj) {
                                     tobj.is_assoc_media_view = onAssocMediaView;
@@ -2952,7 +2957,9 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                                     //timer reset in showArtwork
                                     doNothing("DOUBLE CLICKED ON THE TILE");
                                 });
+                               
                             }
+                            **/
 
 
                         } else {
@@ -2961,7 +2968,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                             setTimeout(function () { previouslyClicked = null }, 1000)
                         }
                     } else {
-                        /*TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                        /*TAG.Layout.Spoof().getArtworksAssocTo(currentWork.Identifier, function (doqs) {
                             if (previouslyClicked === main) {
                                 //click = "double";
                                 switchPage(doqs[0], currentWork, getContainerLeft(currentWork, false))();
@@ -3003,12 +3010,12 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 }();
             }
             main.on('click', function () {
-                if (currCollection.Name === "The Life of Alfred Nobel") {
-                    artworkSelected = true;
-                    switchPage(currentWork, null, getContainerLeft(currentWork, false))();
-                    return;
-                }
-                doubleClickHandler()
+               // if (currCollection.Name === "The Life of Alfred Nobel") {
+                  //  artworkSelected = true;
+                   // switchPage(currentWork, null, getContainerLeft(currentWork, false))();
+                  //  return;
+               // }
+              // doubleClickHandler()
 
                 // if the idle timer hasn't started already, start it
                 /*if (!idleTimer && !previewing && !lockKioskMode) {
@@ -3029,7 +3036,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     }
                 } */
                 //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
-                setTimeout(function () { showArtwork(currentWork, false)() }, 10)
+               // setTimeout(function () { showArtwork(currentWork, false)() }, 10);
+                showArtwork(currentWork, false)();
                 zoomTimeline(artworkCircles[currentWork.Identifier])
                 justShowedArtwork = true;
             })
@@ -3259,6 +3267,7 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                     main.css({ 'height': (0.3) * tileDivHeight });
                 }
             } else { */
+            tileDivHeight = tileDiv.height()
                 var tileHeight = (0.23) * tileDivHeight;
                 main.css({ 'height': (0.23) * tileDivHeight });
             //}
@@ -3841,12 +3850,14 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
     function showArtwork(artwork, showAllAtYear, justHighlight) {
         return function () {
             
+            /**
             if (!artworkShown){ //FOR NOW - switching between artworks in the previewer does not 
                                 //reset the timer, and the total time spent with the previewer
                                 //open is recorded (this is only one event)
                 //doNothing("restarting previewer timer");
                 global_artwork_prev_timer.restart(); //restarts the previewer timer for telemetry
             }
+            **/
             var rootWidth,
                 infoWidth,
                 tileWidth,
@@ -4703,8 +4714,8 @@ TAG.Layout.LaureatesPage = function (options, idletimerDuration) {
                 var numberAssociatedDoqs = 0;
                 var tileLoadQueue = TAG.Util.createQueue();
                 /*tileLoadQueue.add(function(){
-                    onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
-                    !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
+                    onAssocMediaView && TAG.Layout.Spoof().getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
+                    !onAssocMediaView && TAG.Layout.Spoof().getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
                 });*/
 
                 return previewTile;         

@@ -4,11 +4,175 @@
     Spoof server
 */
 TAG.Layout.Spoof = (function () {
+    var _main = getMain();
     return {
         getLaureates: getLaureates,
         getKeywordSets: getKeywordSets,
-        fixPath : fixPath
+        fixPath: fixPath,
+        getMain: getMain,
+        getLocked: getLocked,
+        getKioskLocked: getKioskLocked,
+        getMuseumBackgroundOpacity: getMuseumBackgroundOpacity,
+        getMuseumPrimaryFontColor: getMuseumPrimaryFontColor,
+        getMuseumSecondaryFontColor: getMuseumSecondaryFontColor,
+        getMuseumFontFamily: getMuseumFontFamily,
+        getCustomFont: getCustomFont,
+        getOptionalFeatures: getOptionalFeatures,
+        getBaseFontSize: getBaseFontSize,
+        getStartPageBackground: getStartPageBackground,
+        getMuseumLogo: getMuseumLogo,
+        getLogoBackgroundColor: getLogoBackgroundColor,
+        getOverlayColor: getOverlayColor,
+        getOverlayTransparency: getOverlayTransparency,
+        getIdleTimerDuration: getIdleTimerDuration,
+        getExhibitions: getExhibitions,
     };
+    function getLocked() {
+        return "undefined"
+    }
+    function getExhibitions(callback, a, b, c) {
+        callback ? callback([
+            {
+                "Name": "Laureates",
+                "Metadata": {
+                    "Description": "Description",
+                    "AssocMediaView": "false",
+                    "Private": "false",
+                    "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                    "Timeline": "true",
+                    "Type": "eExhibit"
+                }
+            },
+            {
+                "Name": "Laureates",
+                "Metadata": {
+                    "Description": "Description",
+                    "AssocMediaView": "false",
+                    "Private": "false",
+                    "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                    "Timeline": "true",
+                    "Type": "eExhibit"
+                }
+            },
+            {
+                "Name": "Laureates",
+                "Metadata": {
+                    "Description": "Description",
+                    "AssocMediaView": "false",
+                    "Private": "false",
+                    "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                    "Timeline": "true",
+                    "Type": "eExhibit"
+                }
+            },
+            {
+                "Name": "Laureates",
+                "Metadata": {
+                    "Description": "Description",
+                    "AssocMediaView": "false",
+                    "Private": "false",
+                    "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                    "Timeline": "true",
+                    "Type": "eExhibit"
+                }
+            }
+        ]) : null;
+    }
+    function getKioskLocked() {
+        return false
+    }
+    function getMuseumBackgroundOpacity() {
+        return _main.Metadata["BackgroundOpacity"] || '70'; // '0' is true
+    }
+
+    function getMuseumPrimaryFontColor() {
+        return _main.Metadata["PrimaryFontColor"] || '#FFFFFF';
+    }
+
+    function getMuseumSecondaryFontColor() {
+        return _main.Metadata["SecondaryFontColor"] || '#FFFFFF';
+    }
+
+    function getMuseumFontFamily() {
+        return _main.Metadata["FontFamily"] || 'Segoe UI Light';
+    }
+    //////////
+    function getCustomFont() {
+        return TAG.Worktop.Database.fixFontFilePath(_main.Metadata["Font"]);
+    }
+
+    function getOptionalFeatures() {
+        return _main.Metadata["OptionalFeatures"];
+    }
+
+    function getBaseFontSize() {
+        return _main.Metadata["BaseFontSize"] || "1.77";
+    }
+
+    function getStartPageBackground() {
+        return TAG.Worktop.Database.fixPath(_main.Metadata["BackgroundImage"]);
+    }
+
+    function getMuseumLogo() {
+        return TAG.Worktop.Database.fixPath(_main.Metadata["Icon"]);
+    }
+
+    function getLogoBackgroundColor() {
+        return _main.Metadata["IconColor"];
+    }
+
+    function getOverlayColor() {
+        return _main.Metadata["OverlayColor"];
+    }
+    function getOverlayTransparency() {
+        return _main.Metadata["OverlayTransparency"];
+    }
+
+    function getIdleTimerDuration() {
+        return _main.Metadata["IdleTimerDuration"] || '2';
+    }
+    function getMain() {
+        return {
+            "Name": "Main",
+            "Type": "Folder",
+            "Extension": ".dqg",
+            "Metadata": {
+                "BackgroundColor": "#000000",
+                "BackgroundImage": "/Images/Will1201507290903295962.jpg",
+                "BackgroundOpacity": "50",
+                "BaseFontSize": "2",
+                "convertReady": "true",
+                "Count": "2226",
+                "Font": "Times New Roman",
+                "FontFamily": "Segoe UI Light",
+                "Icon": "/Images/default.jpg",
+                "IconColor": "#000000",
+                "IdleTimerDuration": "120000",
+                "isKioskLocked": "false",
+                "KeywordSet1": "1900s,1910s,1920s,1930s,1940s,1950s,1960s,1970s,1980s,1990s,2000s,2010s",
+                "KeyworkSet1Shown": "true",
+                "KeywordSet2": "male,female,institution",
+                "KeyworkSet2Shown": "true",
+                "KeywordSet3": "physics,chemistry,medicine,literature,peace,economics",
+                "KeyworkSet3Shown": "true",
+                "KeyworkSet1Title": "Decade",
+                "KeyworkSet2Title": "Gender",
+                "KeyworkSet3Title": "Prize",
+                "Locked": "undefined",
+                "MainCount": "1475",
+                "MuseumInfo": "Museum Info",
+                "MuseumLoc": "Museum Location",
+                "MuseumName": "Museum Name",
+                "OverlayColor": "#0000000",
+                "OverlayTransparency": ".5",
+                "PrimaryFontColor": "FFFFFF",
+                "SecondaryFontColor" : "FFFFFF",
+                "Setting_AllowChangePassword" : "True",
+                "Setting_UseHTTPS": "false",
+                "User" : "TAG"
+            }
+        }
+    }
     function fixPath(path) {
         return path
     }
@@ -16,13 +180,19 @@ TAG.Layout.Spoof = (function () {
         /*var kw = 
             [
                 {
-                    "shown" : true
+                    "name" : "Decade",
+                    "shown": true,
+                    'keywords': ["1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"]
                 },
                 {
-                    "shown": true
+                    "name": "Gender",
+                    "shown": true,
+                    'keywords': ["male", "female", "institution"]
                 },
                 {
-                    "shown": true
+                    "name": "Prize",
+                    "shown": true,
+                    'keywords': ["chemistry", "peace", "economics", "literature" , "physics", "medicine"]
                 }
             ]
         return kw*/
@@ -72,24 +242,45 @@ TAG.Layout.Spoof = (function () {
                     doq.KeywordsSet2 = doq.gender
                     doq.KeywordsSet3 = doq.PrizeCategory.toLowerCase();
                     waitingDoqs[map[id]] = { "Metadata": doq }
-                    Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\"+"Thumbnails\\"+"thumb_" + map[id]).done(function (file) {
-                        var url = URL.createObjectURL(file, { oneTimeOnly: false });
+
+                    Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + "Thumbnails\\" + "thumb_" + map[id]).done(function (file) {
+                    //var file = {"name" : "666666"+map[id]}
+                    //function yo(file){
+                        /*
+                        var reader = new FileReader()
+                        reader.onload = function (event) {
+                            var u = event.target.result
+                            var d = waitingDoqs[file.name.substring(6)]
+                            d.Metadata.Thumbnail = { "FilePath": u }
+                            d.Identifier = d.Metadata.ID
+                            doqs.push(d)
+                        }
+                        reader.readAsDataURL(file);*/
+                        
+
+
+
+
+                        var url = URL.createObjectURL(file, { oneTimeOnly: true });
+                        //var url = "../tagcore/" + 'images/NobelwillImages/NobelPopupImages/Popup_1_1.png'
                         var d = waitingDoqs[file.name.substring(6)]
                         d.Metadata.Thumbnail = { "FilePath": url }
                         d.Identifier = d.Metadata.ID
                         doqs.push(d)
                     })
+                    //yo(file)
+                    
                     Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + "Mediums\\" + "medium_" + map[id]).done(function (file) {
                         var url = URL.createObjectURL(file, { oneTimeOnly: false });
                         var d = waitingDoqs[file.name.substring(7)]
                         d.Metadata.FullImage = { "FilePath": url }
                     })
-                    }
+                }
                 }
             }
 
             function poll() {
-                if (doqs.length === Object.keys(map).length) {
+                if (doqs.length >= Object.keys(map).length) {
                     callback(doqs);
                 }
                 else {
