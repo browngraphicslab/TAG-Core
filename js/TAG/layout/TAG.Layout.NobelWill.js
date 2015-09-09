@@ -7,6 +7,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     $("#startPageLoadingOverlay").remove();
     "use strict";
 
+    //OPTIONS
+
+
+    var BezierOn = false
+
+
+
     var root = $("#tagRoot"),
         showInitialNobelWillBox = true,
         sliderBar,//the big yellow div sliding up and down
@@ -161,7 +168,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": '90%',
             "width": "100%",
             'position': 'absolute',
-            'background-color' : "#404040",
+            'background-color' : "#666666",
             'top': '0%',
             'left': '0%',
         })
@@ -273,8 +280,18 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         })
 
         background.append(canvas);
-
-        canvas.mouseenter(function () {
+        canvas.mousedown(function(e){
+            if (e.buttons > 0) {
+                nobelHotspots.forEach(function (h) {
+                    var hotspot = h[0]
+                    var offset = hotspot.offset()
+                    if (e.clientY > offset.top && e.clientY<offset.top + hotspot.height() && e.clientX > offset.left && e.clientX<offset.left + hotspot.width()) {
+                        mouseUp({"clientY":offset.top + hotspot.height()/2,"clientX":e.clientX},true);
+                    }
+                })
+            }
+        })
+        canvas.mouseenter(function (e) {
             touching = true;
         })
         canvas.mouseleave(function () {
@@ -290,7 +307,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         switch (pageNumber) {
             //hardcodedHotspotSpecs- left, top, width, height
             case 1:
-                associatedMediaNobelKeywords = [['TESTAMENT'],['ALFRED BERNHARD'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
+                associatedMediaNobelKeywords = [['WILL AND TESTAMENT'],['ALFRED BERNHARD'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
                 hardcodedHotspotSpecs = [[[47.95+8.25,9,11.75,5],[45,17,8,4]],[[63.5, 15, 17, 3.5]], [[66.5, 30, 11, 3]], [[61, 34.5, 12.5, 2.5]], [[51.5, 54, 19, 3]], [[52.5, 65.4, 13.5, 3]]]
                 infoBulbs = [[61.5,7], [33.25,59]];
                 leftTextArray = [
@@ -312,7 +329,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     ' Nobel, the sons of my brother Robert Nobel, I bequeath',
                     //32.5,
                     ' the sum of Two Hundred Thousand Crowns each;',
-                    //34.75,
+                    34.75,
                     'To my nephew Emanuel Nobel, the sum of Three',
                     //37,
                     ' Hundred Thousand, and to my niece Mina Nobel,',
@@ -322,7 +339,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'To my brother Robert Nobel’s daughters, Ingeborg',
                     //44.25,
                     ' and Tyra, the sum of One Hundred Thousand Crowns each;',
-                    //47.25,
+                    47.25,
                     'Miss Olga Boettger, at present staying',
                     //49.5,
                     ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
@@ -366,15 +383,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     //[20.25, 12.75],
                     //[22.75, 12.5],
                     //[25.5, 12],
-                    [28, 14],
+                    [28, 7],
                     //[30, 12.5],
                     //[32.5, 12.5],
-                    //[34.5, 12.75],
+                    [34.5, 7.25],
                     //[37, 12.75],
                     //[40, 12.25],
-                    [42, 12.25],
+                    [42, 5.75],
                     //[44.25, 12.5],
-                    //[47.25, 12],
+                    [47.25, 7.25],
                     //[49, 12.5],
                     //[51.5, 12],
                     [53.5, 12.25],
@@ -668,7 +685,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'top': currentHeight + '%',
                     'font-size': '.479em',
                 }).text(leftTextArray[i]);
-                currentHeight += 2.15;
+                currentHeight += 2.05;
                 tempText.attr('class', 'textChunkDiv');
                 sideBar.append(tempText);
                 textDivArray.push(tempText);
@@ -829,7 +846,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 sliderBarInnerds.css({
                     'position': 'absolute',
                     'background-color': NOBEL_ORANGE_COLOR,
-                    'opacity': '.4',
+                    'opacity': '.2',
                     'left': '40.75%',
                     'width': '59.25%',
                     'height': '100%',
@@ -931,7 +948,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '.75%',
                 })
                 up.css({
-                    'bottom': 'calc(50% + 15px)'
+                    'bottom': 'calc(50% + 5px)'
                 }).mousedown(function (e) {
                     touching = true;
                     dragging = true;
@@ -974,7 +991,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     mouseMove(e)
                 })
                 down.css({
-                    'top': 'calc(50% + 15px)'
+                    'top': 'calc(50% + 5px)'
                 }).mouseup(function (e) {
                     mouseUp(e)
                 })
@@ -1018,10 +1035,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function percentToPx(percent) {
     	return (percent / 100) * sideBar.height();
     }
-    function mouseUp(e) {
-    	if (dragging) {
+    function mouseUp(e, force) {
+    	if (dragging || force === true) {
     		if (e===undefined || e.clientX > 100) {
-    			var lineMiddle = sliderBar.offset().top + (sliderBar.height() / 2);
+    		    var lineMiddle = sliderBar.offset().top + (sliderBar.height() / 2);
+    		    if (force === true) {
+    		        lineMiddle = e.clientY
+    		    }
     			var closest = 0;
     			var closestDist = 5000000;
     			for (var i = 0; i < sliderPositions.length ; i++) {
@@ -1089,7 +1109,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		     nobelHotspots[i][1].hide();
     		}
     	}
-    	canvas.animate({ opacity: 1 }, 400, 'easeInOutQuart')
+    	if (BezierOn) { canvas.animate({ opacity: 1 }, 400, 'easeInOutQuart') }
     	bezierVisible = true;
     }
 
@@ -1573,7 +1593,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         else {
             $("#downIcon").css({
-                'top': 'calc(50% + 15px)'
+                'top': 'calc(50% + 5px)'
             })
         }
         function percentToPx(percent) {
@@ -1762,49 +1782,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         $("#startPageLoadingOverlay").remove();
     }
     function getRightTable() {
-        var list = [];/*
-        var head = "top";
-        list.direction = function () {
-        	return head;
-        }
-        list.switchHead = function() {
-            if (head === "top") {
-                head = "bottom"
-            }
-            else {
-                head = "top";
-            }
-            for (var i = 0; i < list.length; i++) {
-                list[i].setTop(100 - list[i].getTop() - list[i].height());
-            }
-        }
-        list.update = function () {
-        	if (list.length > 0) {
-        		if (head === "top") {
-        			var currHeight = 0;
-        			for (var i = 0; i < list.length; i++) {
-        				list[i].setTop(currHeight);
-        				currHeight += list[i].height();
-        			}
-        		}
-        		else {
-        			var currHeight = 100;
-        			for (var i = list.length-1; i > -1; i--) {
-        				list[i].setTop(currHeight - list[i].height());
-        				currHeight -= list[i].height();
-        			}
-        		}
-        	}
-        }*/
+        var list = [];
         list.addMedia = function (media) {
         	if (list.indexOf(media === -1)) {
-				/*
-        		if (head == "top") {
-        			list.push(media)
-        		}
-        		else {
-        			list.unshift(media);
-        		}*/
         		list.push(media);
         		media.show()
         		media.checkHeight();
@@ -1813,13 +1793,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         list.removeMedia = function (media) {
         	if (list.indexOf(media !== -1)) {
-				/*
-        		if (head == "top") {
-        			list.shift();
-        		}
-        		else {
-        			list.pop();
-        		}*/
         		list.remove(media);
         		media.hide();
         		list.hideBez();
