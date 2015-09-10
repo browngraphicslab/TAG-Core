@@ -20,7 +20,8 @@ TAG.Layout.SpoofTest = (function () {
         pageWidth,
 		scroller = $(document.createElement("div")),
         sortTags = [],
-        searchText = $(document.createElement("div"))
+        searchText = $(document.createElement("div")),
+        timer
 
 	root.append(base)
 	base.append(sortDiv)
@@ -38,7 +39,37 @@ TAG.Layout.SpoofTest = (function () {
 	}).append(scroller)
 
 	TAG.Layout.Spoof().getLaureates(init)
-
+	function makeTimer() {
+	    var ret = {}
+	    ret.time = 60000
+        ret.scrollTime = 30000
+        ret.start = function () {
+            var width = Math.floor(laurs.length / 3) * ((pageHeight / 5) + 25) + 15
+            var finalX = width - pageWidth
+            if (scroller.scrollLeft() > width / 2) {
+                finalX = 0
+            }
+            var duration = 1000
+            if (finalX === 0) {
+                duration = ret.scrollTime * ((scroller.scrollLeft() - finalX) / width)
+            }
+            else {
+                duration = ret.scrollTime * ((finalX - scroller.scrollLeft()) / width)
+            }
+	        scroller.animate({ scrollLeft: finalX }, duration, "linear", function () { ret.start() })
+	    }
+	    ret.timer = setTimeout(function () { ret.start() }, ret.time);
+	    ret.restart = function () {
+	        clearTimeout(ret.timer)
+	        ret.timer = setTimeout(function () { ret.start() }, ret.time);
+	    }
+	    ret.stop = function () {
+	        scroller.stop()
+	        ret.restart();
+	    }
+	    ret.restart()
+        return ret
+	}
 	function init(db) {
 		$(document).unbind();
 		$("#splashScreenRoot").die()
@@ -155,6 +186,9 @@ TAG.Layout.SpoofTest = (function () {
 		    sortTags.push(keyword)
             l+=70
 		})
+
+        timer = makeTimer()
+
         makeDropDowns()
         $("#decadeList").hide();
         $("#genderList").hide();
@@ -163,6 +197,14 @@ TAG.Layout.SpoofTest = (function () {
 		$("#tagContainer").unbind()
 		$("#tagRoot").unbind()
 		root.unbind()
+
+		var ontouch = function () {
+		    timer.stop()
+		    timer.restart()
+		}
+		scroller.click(ontouch).mousedown(ontouch)
+        $(".block").click(ontouch).mousedown(ontouch)
+		$(document).click(ontouch).mousedown(ontouch)
 	}
 	function makeBlock(laur, i) {
 		var block = $(document.createElement("div"))
@@ -241,6 +283,7 @@ TAG.Layout.SpoofTest = (function () {
 		block.addClass(laur.Metadata.KeywordsSet1.toLowerCase())
 		block.addClass(laur.Metadata.KeywordsSet2.toLowerCase())
 		block.addClass(laur.Metadata.KeywordsSet3.toLowerCase())
+
 		var keys = {}
 		function addToString(obj) {
 			var type = $.type(obj)
