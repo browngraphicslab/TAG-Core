@@ -1972,7 +1972,91 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function makeTaskBar() {
 
-        function createTaskbarExtra(extra) {
+
+        function createTaskbarExtra(type, assetNumber) {
+
+            var img, title, link;
+      
+            if (type == 'collection') {
+                switch (assetNumber) {
+                    case 1:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Will.svg';
+                        title = "Will";
+                        link = "";
+                        break;
+                    case 2:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Patents.svg';
+                        title = "Patents";
+                        link = "";
+                        break;
+                    case 3:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg';
+                        title = "Ceremonies";
+                        link = "";
+                        break;
+                    case 4:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg';
+                        title = "Family";
+                        link = "";
+                        break;
+                    case 5:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg';
+                        title = "Medals";
+                        link = "";
+                        break;
+                    case 6:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg';
+                        title = "Diplomas";
+                        link = "";
+                        break;
+                    case 7:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg';
+                        title = "Factories";
+                        link = "";
+                        break;
+                    case 8:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg';
+                        title = "Björkborn";
+                        link = "";
+                        break;
+                    case 9:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_SanRemo.svg';
+                        title = "San Remo";
+                        link = "";
+                        break;
+                }
+            } 
+            else {
+                switch (assetNumber) {
+                    case 1:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg';
+                        title = "Will";
+                        link = "";
+                        break;
+                    case 2:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg';
+                        title = "Will to Prize";
+                        link = "";
+                        break;
+                    case 3:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg';
+                        title = "Family";
+                        link = "";
+                        break;
+                    case 4:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg';
+                        title = "Factories";
+                        link = "";
+                        break;
+                    case 5:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Homes.svg';
+                        title = "Homes";
+                        link = "";
+                        break;
+                }  
+            }
+
+
             var bd = $(document.createElement('div'));
             bd.css({
                 "position": 'relative',
@@ -1993,7 +2077,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'height': '30px'
             })
             d.attr({
-                src : extra[0]
+                src : img
             })
             var t = $(document.createElement('div'));
             t.css({
@@ -2003,7 +2087,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'color': "black",
                 "background-color" : "transparent",
                 "font-size" : ".5em"
-            }).text(extra[1])
+            }).text(title)
             bd.append(d);
             bd.append(t);
             return bd;
@@ -2063,7 +2147,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         collectionDiv.append(collectionTitleDiv);
 
         for (var i = 0; i<9; i++) {
-            collectionDiv.append(createTaskbarExtra('test'));
+            collectionDiv.append(createTaskbarExtra('collection', i+1));
         }
 
         // GENERATE TOUR TILES
@@ -2098,7 +2182,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourTitleDiv.append(tourTextImg);
         tourDiv.append(tourTitleDiv);
         for (var i = 0; i<5; i++) {
-            tourDiv.append(createTaskbarExtra('test'));
+            tourDiv.append(createTaskbarExtra('tour', i+1));
         }
 
         taskBar.append(collectionDiv);
