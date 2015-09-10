@@ -42,7 +42,7 @@ TAG.Layout.SpoofTest = (function () {
 	function makeTimer() {
 	    var ret = {}
 	    ret.time = 60000
-        ret.scrollTime = 30000
+        ret.scrollTime = 300000
         ret.start = function () {
             var width = Math.floor(laurs.length / 3) * ((pageHeight / 5) + 25) + 15
             var finalX = width - pageWidth
