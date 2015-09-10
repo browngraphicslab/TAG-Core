@@ -2035,7 +2035,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         break;
                     case 2:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg';
-                        title = "Will to Prize";
+                        title = "Prize";
                         link = "";
                         break;
                     case 3:
@@ -2062,10 +2062,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "position": 'relative',
                 'height': "30px",
                 'width' : '30px',
-                "border": "1px solid " + NOBEL_ORANGE_COLOR,
+                //"border": "1px solid " + NOBEL_ORANGE_COLOR,
                 "border-radius": "3px",
                 'top': '30%',
-                'margin-right': '8px',
+                'margin-right': '10px',
                 'color': 'red',
                 'float': 'left'
             })
@@ -2082,11 +2082,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             var t = $(document.createElement('div'));
             t.css({
                 "position": 'absolute',
-                "left" : "5px",
-                'width': "70px",
-                'color': "black",
+                "left" : "-2.5px",
+                'width': "35px",
+                'color': "white",
                 "background-color" : "transparent",
-                "font-size" : ".5em"
+                "font-size" : ".3em",
+                'top': '31px',
+                'text-align': 'center'
             }).text(title)
             bd.append(d);
             bd.append(t);
@@ -2106,11 +2108,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var taskBar = $(document.createElement('div'));
         taskBar.css({
-            "width": "50%",
-            "height": "90%",
+            "width": "47%",
+            "height": "87.5%",
             "border": "2px solid " + NOBEL_ORANGE_COLOR,
             "border-radius": "12px",
-            "bottom": "20%",
+            "bottom": "10%",
             "position": "absolute",
             "left": "2%"
         });
@@ -2163,7 +2165,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         var tourTitleDiv = $(document.createElement ('div'));
         tourTitleDiv.css({
-            "height": "40%",
+            "height": "30%",
             "position": "absolute",
             "left": "-7%",
             "top": "-20%",
