@@ -2265,7 +2265,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "position": 'relative',
                 'height': "40px",
                 'width' : '40px',
-                //"border": "1px solid " + NOBEL_ORANGE_COLOR,
                 "border-radius": "3px",
                 'top': '30%',
                 'margin-right': '10px',
@@ -2289,10 +2288,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'width': "45px",
                 'color': "white",
                 "background-color" : "transparent",
-                "font-size" : ".3em",
+                "font-size" : ".4em",
                 'top': '41px',
                 'text-align': 'center'
             }).text(title)
+
+            if (assetNumber == 3)
+            {
+                t.css("left", "-7px");
+            }
             bd.append(d);
             bd.append(t);
             return bd;
@@ -2312,7 +2316,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         var taskBar = $(document.createElement('div'));
         taskBar.css({
             "width": "57.5%",
-            "height": "87.5%",
+            "height": "75%",
             "border": "2px solid " + NOBEL_ORANGE_COLOR,
             "border-radius": "12px",
             "bottom": "5%",
@@ -2327,7 +2331,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "width": "60%",
             "position": "absolute",
             "left": "4%",
-            "top": "-10%",
+            "top": "-22.5%",
         });
         collectionDiv.attr('id', 'collectionDiv');
 
@@ -2336,7 +2340,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": "37.5%",
             "position": "absolute",
             "left": "-4%",
-            "top": "-7.5%",
+            "top": "-22.5%",
         });
         collectionTitleDiv.attr('id', 'collectionTitleDiv');
 
@@ -2362,7 +2366,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "width": "40%",
             "position": "absolute",
             "left": "65%",
-            "top": "-10%"
+            "top": "-22.5%"
         });
         tourDiv.attr('id', 'tourDiv');
 
@@ -2371,7 +2375,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": "27.5%",
             "position": "absolute",
             "left": "-7%",
-            "top": "-10%",
+            "top": "-25%",
         });
         tourTitleDiv.attr('id', 'tourTitleDiv');
 
