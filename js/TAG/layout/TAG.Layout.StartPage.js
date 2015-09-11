@@ -527,13 +527,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                         });
                     });
 
-                return false;
-            } else {
-                //switchPage("ExhibitionTest");
-                var artwork1;
-                TAG.Layout.Spoof().getDoq("artwork1", function (doq) { artwork1 = doq});
-                var artworkViewer = TAG.Layout.CollectionsPage().switchPage(artwork1);
-                artworkViewer()
+                    return false;
+                } else {
+                    //switchPage("ExhibitionTest");
+                    var artwork1;
+                    TAG.Layout.Spoof().getDoq("artwork1", function (doq) { artwork1 = doq});
+                    var artworkViewer = TAG.Layout.CollectionsPage().switchPage(artwork1);
+                    artworkViewer()
+                }
             }
         });
         
