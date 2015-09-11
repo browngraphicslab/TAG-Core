@@ -15,7 +15,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         paragraphed = false,
         showRedHighlights = false,
         showRedTracings = true,
-        showOnlyHighlightedHotspots = false,
+        showOnlyHighlightedHotspots = true,
         agedWill = false  //For the whiter or yellower will
 
 
@@ -1611,7 +1611,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function nextPage(isPlaying) {
         if (pageNumber < 4) {
-            m
             idleTimer.kill();
 
             infoBulbs = []

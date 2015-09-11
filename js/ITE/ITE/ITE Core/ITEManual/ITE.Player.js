@@ -545,19 +545,14 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                     orchestrator.play();
                     playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
                     hideInfoPane();
-                    setTimeout(function () {
-                        volumeLevel.fadeTo(500,0,null);
-                    }, 2000);
+                    setControlsFade();
                 }, 5000);
- 
                 return;
             }
             orchestrator.play();
             playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
             hideInfoPane();
-            setTimeout(function () {
-                volumeLevel.fadeTo(500,0,null);
-            }, 2000);
+            setControlsFade();
         }
     };
 
@@ -582,20 +577,20 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     */
     function setControlsFade() {
         doNothing("set controls fade called")
-        if (playerConfiguration.fadeControls) {
+        //if (playerConfiguration.fadeControls) {
             controlsTimeout = window.setTimeout(function () {
                 time = 500
-                volumeButton.fadeTo(time,0,null);
+                volumeButton.fadeTo(time,0.5,null);
                 volumeLevel.fadeTo(time,0,null);
-                playPauseButton.fadeTo(time,0,null);
-                loopButton.fadeTo(time,0,null);
-                progressBar.fadeTo(time,0,null);
-                fullScreenButton.fadeTo(time,0,null);
-                progressIndicator.fadeTo(time,0,null);
-                $("#linkButton").fadeTo(time,0,null);
-                $('.progressBarContainer').fadeTo(time,0,null);
+                playPauseButton.fadeTo(time,0.5,null);
+                loopButton.fadeTo(time,0.5,null);
+                progressBar.fadeTo(time,0.5,null);
+                fullScreenButton.fadeTo(time,0.5,null);
+                progressIndicator.fadeTo(time,0.5,null);
+                $("#linkButton").fadeTo(time,0.5,null);
+                $('.progressBarContainer').fadeTo(time,0.5,null);
             },2000)
-       }
+       //}
     }
 
     function hideControls()
