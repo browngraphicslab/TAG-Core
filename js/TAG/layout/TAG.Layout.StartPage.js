@@ -41,6 +41,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverSubmit = root.find('#serverSubmit'),
         passwordSubmit = root.find('#passwordSubmit'),
         lockedMessage = root.find('#lockedMessage'),
+        OFFLINE = false,
         psuedoCollection = {
             prevScroll: null,
             prevPreviewPos: null,
@@ -278,11 +279,81 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      *            internetURL     url of alternate site against which we'll test connectivity
      */
     function testConnection(options) {
-        successConnecting();
+        if (OFFLINE === true) {
+            successConnecting();
+        }
+        else {
+            var internetURL = (options && options.internetURL) || "http://www.google.com/",
+            connectionTimeout,
+            timedOut;
+
+            //doNothing("checking server url: " + serverURL);
+            $.ajax({
+                url: serverURL,
+                dataType: "text",
+                async: true,
+                cache: false,
+                success: function () {
+                    if (!timedOut) {
+                        clearTimeout(connectionTimeout);
+                        successConnecting();
+                    }
+                },
+                error: function (err) {
+                    if (!timedOut) {
+                        clearTimeout(connectionTimeout);
+                        $.ajax({  // TODO: not a solid way to do this
+                            url: internetURL,
+                            dataType: "text",
+                            async: false,
+                            cache: false,
+                            success: function () {
+                                if (!timedOut) {
+                                    clearTimeout(connectionTimeout);
+                                    tagContainer.empty();
+                                    tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+                                }
+                            },
+                            error: function (err) {
+                                if (!timedOut) {
+                                    clearTimeout(connectionTimeout);
+                                    tagContainer.empty();
+                                    tagContainer.append((new TAG.Layout.InternetFailurePage("No Internet")).getRoot());
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+            connectionTimeout = setTimeout(function () {
+                timedOut = true;
+                tagContainer.empty();
+                tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+            }, 10000); // 10 second timeout to show internet failure page
+        }
     }
 
     function successConnecting() {
-        loadHelper(TAG.Layout.Spoof().getMain())
+        if (OFFLINE === true) {
+            loadHelper(TAG.Layout.Spoof().getMain())
+        }
+        else {
+            TAG.Worktop.Database.getVersion(function (ver) {
+                if (parseFloat(ver) < 1.5) {
+                    tagContainer.empty();
+                    tagContainer.append((new TAG.Layout.InternetFailurePage("Old Server")).getRoot());
+                } else {
+                    TAG.Worktop.Database.getMain(loadHelper, function () {
+                        tagContainer.empty();
+                        tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+                    });
+                }
+            }, function () {
+                tagContainer.empty();
+                tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
+            });
+        }
     }
 
     var that = {};    
@@ -326,9 +397,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     $('#authoringButtonBuffer').remove();
         // }
         
-
-        if (TAG.Layout.Spoof().getLocked() != undefined && TAG.Layout.Spoof().getLocked() != "undefined") {
-            goToCollectionsButton.text("Go to Artwork");
+        if (OFFLINE === true) {
+            if (TAG.Layout.Spoof().getLocked() != undefined && TAG.Layout.Spoof().getLocked() != "undefined") {
+                goToCollectionsButton.text("Go to Artwork");
+            }
+        }
+        else {
+            if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
+                goToCollectionsButton.text("Go to Artwork");
+            }
         }
 
         goToWillImage.css({
@@ -385,37 +462,73 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         
         goToCollectionsButton.on('click', function () {
             jQuery.data(document.body, "isKiosk", true);
-            if (TAG.Layout.Spoof().getLocked() != undefined && TAG.Layout.Spoof().getLocked() != "undefined") {
-                TAG.Worktop.Database.getArtworks(function (result) {
-                    $.each(result, function (index, artwork) {
-                        if (artwork.Identifier === TAG.Layout.Spoof().getLocked()) {
-                            if (artwork.Metadata.Type === "VideoArtwork") { // video                  
-                                var videoPlayer = TAG.Layout.VideoPlayer(artwork);
-                                TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
+            if (OFFLINE === true) {
+                if (TAG.Layout.Spoof().getLocked() != undefined && TAG.Layout.Spoof().getLocked() != "undefined") {
+                    TAG.Worktop.Database.getArtworks(function (result) {
+                        $.each(result, function (index, artwork) {
+                            if (artwork.Identifier === TAG.Layout.Spoof().getLocked()) {
+                                if (artwork.Metadata.Type === "VideoArtwork") { // video                  
+                                    var videoPlayer = TAG.Layout.VideoPlayer(artwork);
+                                    TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
 
-                                currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
-                                currentPage.obj = videoPlayer;
+                                    currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+                                    currentPage.obj = videoPlayer;
 
-                            } else {
-                                var artworkViewer = TAG.Layout.ArtworkViewer({
-                                    doq: artwork,
-                                });
-                                var newPageRoot = artworkViewer.getRoot();
-                                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                                } else {
+                                    var artworkViewer = TAG.Layout.ArtworkViewer({
+                                        doq: artwork,
+                                    });
+                                    var newPageRoot = artworkViewer.getRoot();
+                                    newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
 
-                                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                                    TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
 
-                                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                                currentPage.obj = artworkViewer;
+                                    currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                                    currentPage.obj = artworkViewer;
+                                }
+
                             }
-                               
-                        }
+                        });
                     });
-                });
 
-                return false;
-            } else {
-                switchPage();
+                    return false;
+                } else {
+                    switchPage();
+                }
+            }
+            else {
+                if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
+                    TAG.Worktop.Database.getArtworks(function (result) {
+                        $.each(result, function (index, artwork) {
+                            if (artwork.Identifier === TAG.Worktop.Database.getLocked()) {
+                                if (artwork.Metadata.Type === "VideoArtwork") { // video                  
+                                    var videoPlayer = TAG.Layout.VideoPlayer(artwork);
+                                    TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
+
+                                    currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+                                    currentPage.obj = videoPlayer;
+
+                                } else {
+                                    var artworkViewer = TAG.Layout.ArtworkViewer({
+                                        doq: artwork,
+                                    });
+                                    var newPageRoot = artworkViewer.getRoot();
+                                    newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+                                    TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+
+                                    currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                                    currentPage.obj = artworkViewer;
+                                }
+
+                            }
+                        });
+                    });
+
+                    return false;
+                } else {
+                    switchPage();
+                }
             }
         });
         
@@ -1147,7 +1260,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // root.find('#handGif').attr('src', tagPath+'images/RippleNewSmall.gif');
 
         fullScreen = root.find('#innerContainer');
-        fullScreen.css('background-image', "url(" + TAG.Layout.Spoof().fixPath(main.Metadata["BackgroundImage"]) + ")");
+        if (OFFLINE === true) {
+            fullScreen.css('background-image', "url(" + TAG.Layout.Spoof().fixPath(main.Metadata["BackgroundImage"]) + ")");
+        }
+        else {
+            fullScreen.css('background-image', "url(" + TAG.Worktop.Database.fixPath(main.Metadata["BackgroundImage"]) + ")");
+        }
         //fullScreen.css({'opacity':'0.9'});
 
         overlayColor = main.Metadata["OverlayColor"];
