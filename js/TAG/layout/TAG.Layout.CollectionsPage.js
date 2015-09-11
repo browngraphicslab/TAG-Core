@@ -103,7 +103,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-        lockKioskMode = TAG.Layout.Spoof().getKioskLocked(),                           // true if back button is hidden
+        OFFLINE = false,
+        lockKioskMode = OFFLINE ? TAG.Layout.Spoof().getKioskLocked() : TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
         NOBEL_COLOR = "#D99B3B",
         BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
@@ -339,8 +340,13 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         root.find(".sortButton").css({
             'max-width': $("#tagRoot").width() * 0.15 + 'px',
         });
+        if (OFFLINE === true) {
+            TAG.Layout.Spoof().getExhibitions(getCollectionsHelper);
+        }
+        else {
+            TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
+        }
 
-        TAG.Layout.Spoof().getExhibitions(getCollectionsHelper);
         applyCustomization();
         menuCreated = false;
     }
