@@ -41,9 +41,16 @@ TAG.Layout.SpoofTest = (function () {
 	TAG.Layout.Spoof().getLaureates(init)
 	function makeTimer() {
 	    var ret = {}
-	    ret.time = 60000
-        ret.scrollTime = 300000
+	    ret.time = 6000
+        ret.scrollTime = 1750000
         ret.start = function () {
+            reset();
+            $("#popup").hide()
+            $("#overlay").hide()
+            $("#popup").die()
+            $("#overlay").die()
+            $("#popup").remove()
+            $("#overlay").remove()
             var width = Math.floor(laurs.length / 3) * ((pageHeight / 5) + 25) + 15
             var finalX = width - pageWidth
             if (scroller.scrollLeft() > width / 2) {
@@ -94,9 +101,9 @@ TAG.Layout.SpoofTest = (function () {
             "color" : "white",
 			"right": "50px",
 			"border": "2.5px solid " + NOBEL_ORANGE_COLOR,
-			"border-radius" : "12px",
+			"border-radius": "12px",
 			"position" : "absolute"
-		})
+		}).attr({id : "searchBox"})
 		searchIconButton.css({
 		    "right": "50px",
 		    "width": "auto",
@@ -148,7 +155,7 @@ TAG.Layout.SpoofTest = (function () {
 		searchText.css({
 		    "height": "30px",
 		    "top": "150px",
-		    "left": "80px",
+		    "left": "45px",
 		    "font-size": ".85em",
 		    "color": "white",
 		    "position": "absolute"
@@ -204,7 +211,7 @@ TAG.Layout.SpoofTest = (function () {
 		}
 		scroller.click(ontouch).mousedown(ontouch)
         $(".block").click(ontouch).mousedown(ontouch)
-		$(document).click(ontouch).mousedown(ontouch)
+        $(document).click(ontouch).mousedown(ontouch)
 	}
 	function makeBlock(laur, i) {
 		var block = $(document.createElement("div"))
@@ -339,7 +346,7 @@ TAG.Layout.SpoofTest = (function () {
 			}
 		})
 		arrangeTiles(blocks)
-		searchText.text("you have " + blocks.length + " results for '"+s+"'");
+		searchText.text("You have " + blocks.length + " results for '"+s+"'");
 		searchText.show();
         searchBox.text('')
 	}
@@ -689,6 +696,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
 	        "top": "100px",
+	        "padding-left": "3px",
 	        "font-size": ".75em",
 	        "height": "27.5px",
 	        "left": "45px",
@@ -743,7 +751,8 @@ TAG.Layout.SpoofTest = (function () {
 	        "color": "black",
 	        "top": "100px",
             "height" : "27.5px",
-	        "font-size": ".75em",
+            "font-size": ".75em",
+            "padding-left" : "3px",
 	        "left": "150px",
 	        "box-shadow": "3px 8px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
