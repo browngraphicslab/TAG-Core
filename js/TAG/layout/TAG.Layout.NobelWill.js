@@ -10,12 +10,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     //OPTIONS
 
 
-    var BezierOn = true,//WONT WORK WITHOUT RED HIGHLIGHTS at least for now
-        iconColor = "red", //options are:   red, orange, blue
+    var BezierOn = true,
+        iconColor = "orig", //options are:   red, orange, blue, orig
         paragraphed = false,
-        showRedHighlights = true,
+        showRedHighlights = false,
         showRedTracings = true,
-        showOnlyHighlightedHotspots = true,
+        showOnlyHighlightedHotspots = false,
         agedWill = false  //For the whiter or yellower will
 
 
@@ -162,6 +162,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function nobelWillInit() {
+
+        if (iconColor === "orig") {
+            LIGHTBULB_ICON = tagPath + 'images/icons/nobel_lightbulb.svg'
+        }
         $("#splashScreenRoot").remove();
 
         SetWillImage(pageNumber);
@@ -289,6 +293,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         canvas.mousedown(function(e){
             if (e.buttons > 0) {
                 nobelHotspots.forEach(function (h) {
+                    var hidden = h[0][0].style.display === "none"
+                    h[0].show()
                     var hotspot = h[0]
                     var offset = hotspot.offset()
                     if (e.clientY > offset.top && e.clientY<offset.top + hotspot.height() && e.clientX > offset.left && e.clientX<offset.left + hotspot.width()) {
@@ -301,6 +307,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                                 mouseUp({ "clientY": offset.top + hotspot.height() / 2, "clientX": e.clientX }, true);
                             }
                         }
+                    }
+                    if (hidden === true) {
+                        h[0].hide();
                     }
                 })
             }
@@ -1223,6 +1232,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			nobelHotspots[i][1].fadeIn();
 
     			var div = nobelHotspots[i][0];
+    			var hidden = div[0].style.display === "none"
+    			div.show();
     			function percentToPxLeft(percent) {
     				return (percent / 100) * sideBar.height();
     			}
@@ -1239,6 +1250,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			ctx.lineWidth = 3.5;
     			ctx.strokeStyle = NOBEL_ORANGE_COLOR;
     			ctx.stroke();
+    			if (hidden == true) {
+    			    div.hide();
+    			}
     		}
     		else {
     		     nobelHotspots[i][1].hide();
