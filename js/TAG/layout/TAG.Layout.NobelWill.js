@@ -16,7 +16,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         showRedHighlights = true,
         showRedTracings = true,
         showOnlyHighlightedHotspots = true,
-        agedWill = true//For the whiter or yellower will
+        agedWill = false  //For the whiter or yellower will
 
 
     var root = $("#tagRoot"),
