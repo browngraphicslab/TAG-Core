@@ -107,8 +107,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         lockKioskMode = OFFLINE ? TAG.Layout.Spoof().getKioskLocked() : TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
         NOBEL_COLOR = "#D99B3B",
-        BASE_FONT_SIZE = TAG.Worktop.Database.getBaseFontSize(),       // base font size for current font
-        FIX_PATH = TAG.Worktop.Database.fixPath,                 // prepend server address to given path
+        BASE_FONT_SIZE = TAG.Layout.Spoof().getBaseFontSize(),       // base font size for current font
+        FIX_PATH = TAG.Layout.Spoof().fixPath,                 // prepend server address to given path
         MAX_YEAR = (new Date()).getFullYear(),                   // Maximum display year for the timeline is current year
         EVENT_CIRCLE_WIDTH = Math.min(30, Math.max(20, $("#tagRoot").width() / 50)),  // width of the circles for the timeline                                
         COLLECTION_DOT_WIDTH = Math.max(7, $("#tagRoot").width() / 120),  // width of the circles for the timeline                      
@@ -118,9 +118,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         TILE_WIDTH_RATIO = twoDeep ? 255 : 200,
         ANIMATION_DURATION = 800,                                         // duration of timeline zoom animation
         DIMMING_FACTOR = 1.7,                                          //dimming of unhighlighted text
-        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Worktop.Database.getMuseumPrimaryFontColor(),
-        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
-        FONT = TAG.Worktop.Database.getMuseumFontFamily(),
+        PRIMARY_FONT_COLOR = options.primaryFontColor ? options.primaryFontColor : TAG.Layout.Spoof().getMuseumPrimaryFontColor(),
+        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Layout.Spoof().getMuseumSecondaryFontColor(),
+        FONT = TAG.Layout.Spoof().getMuseumFontFamily(),
 
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
@@ -169,7 +169,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
     backButton.click(function () {   
         if (backToGuid){
-            TAG.Worktop.Database.getDoq(backToGuid,
+            TAG.Layout.Spoof().getDoq(backToGuid,
                 function (result) {
                     var artworkViewer = TAG.Layout.ArtworkViewer({
                         doq: result,
@@ -583,7 +583,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             sortsDiv.empty();
 
             if (collection.Metadata.AssocMediaView && collection.Metadata.AssocMediaView === "true"){ 
-                TAG.Worktop.Database.getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
+                TAG.Layout.Spoof().getAssocMediaIn(collection.Identifier, function (mediaDoqs) {
                     if (cancelLoad) return;
                     for (i=0;i<mediaDoqs.length;i++){
                         collectionMedia.push(mediaDoqs[i]);
@@ -836,7 +836,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 getCollectionContents(currCollection, function () {  }, function () { return cancelLoad;});
             } else {
                 if (onAssocMediaView && artworkInCollectionList.length == 0) {
-                    TAG.Worktop.Database.getArtworksIn(collection.Identifier,
+                    TAG.Layout.Spoof().getArtworksIn(collection.Identifier,
                         function (contents) {
                             artworkInCollectionList = [];
                             for (var i = 0; i < contents.length; i++) {
@@ -979,7 +979,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             sortButtonTags = {}; 
         if (!onAssocMediaView && collection.Metadata.SortOptions) {
             var sortOptionsObj = JSON.parse(collection.Metadata.SortOptions || "{}");
-            /*TAG.Worktop.Database.getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
+            /*TAG.Layout.Spoof().getDoq(collection.Metadata.SortOptionsGuid, function getSortOptions(sortOptionsDoq){
             var sortObjects = sortOptionsDoq.Metadata,
                 sortText,
                 sortObjArray;
@@ -1100,7 +1100,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @param {Function} callback     a function to call when the contents have been retrieved
      */
     function getCollectionContents(collection, callback, cancel) {
-        TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+        TAG.Layout.Spoof().getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
 
         /**
          * Helper function to process collection contents
@@ -1334,7 +1334,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 gotTours(null,true)
             }
             else {
-                TAG.Worktop.Database.getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
+                TAG.Layout.Spoof().getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
             }
             function gotTours(tours, bypass) {
                 if (bypass) {
@@ -1343,7 +1343,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 else{
                     for (var g = 0; g < tours.length; g++) {
                         var tour = tours[g]
-                        TAG.Worktop.Database.getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
+                        TAG.Layout.Spoof().getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
                     }
                 }
                 function tourBack(doq) {
@@ -1630,7 +1630,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             setTimeout(function () { previouslyClicked = null }, 1000)
                         }
                     } else {
-                        TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                        TAG.Layout.Spoof().getArtworksAssocTo(currentWork.Identifier, function (doqs) {
                             if (previouslyClicked === main) {
                                 //click = "double";
                                 switchPage(doqs[0], currentWork, getContainerLeft(currentWork, false))();
@@ -1722,7 +1722,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             if (currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio") {
                 main.css('overflow', 'hidden');
 
-                tileImage.attr("src", FIX_PATH(currentWork.Metadata.Thumbnail));
+                tileImage.attr("src", tagPath + 'images/image_icon.svg'); //, FIX_PATH(currentWork.Metadata.Thumbnail));
 
                 var w, h;
                 $("<img/>") // preload the image to "crop" it
@@ -3174,8 +3174,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 var numberAssociatedDoqs = 0;
                 var tileLoadQueue = TAG.Util.createQueue();
                 tileLoadQueue.add(function(){
-                    onAssocMediaView && TAG.Worktop.Database.getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
-                    !onAssocMediaView && TAG.Worktop.Database.getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
+                    onAssocMediaView && TAG.Layout.Spoof().getArtworksAssocTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
+                    !onAssocMediaView && TAG.Layout.Spoof().getAssocMediaTo(artwork.Identifier, addMiniTiles, null, addMiniTiles);
                 });
 
                 return previewTile;         
