@@ -384,6 +384,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
         
         goToCollectionsButton.on('click', function () {
+
+
             jQuery.data(document.body, "isKiosk", true);
             if (TAG.Layout.Spoof().getLocked() != undefined && TAG.Layout.Spoof().getLocked() != "undefined") {
                 TAG.Worktop.Database.getArtworks(function (result) {
@@ -415,7 +417,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
                 return false;
             } else {
-                switchPage();
+                //switchPage("ExhibitionTest");
+                var artwork1;
+                TAG.Layout.Spoof().getDoq("artwork1", function (doq) { artwork1 = doq});
+                var artworkViewer = TAG.Layout.CollectionsPage().switchPage(artwork1);
+                artworkViewer()
             }
         });
         
@@ -655,8 +661,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
 
                 } else {
-                    TAG.Worktop.Database.getExhibitions(function (collections) {
-                        if ($("#startPageLoadingOverlay").length) {
+                    TAG.Layout.Spoof().getExhibitions(function (collections) {
+                        //if ($("#startPageLoadingOverlay").length) {
                             for (i = 0; i < collections.length; i++) {
                                 currName = collections[i].Name;
                                 if (currName === collectionName) {
@@ -676,18 +682,18 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                                 }
                             }
                             collectionsPage = TAG.Layout.CollectionsPage(options);
-                            if ($("#startPageLoadingOverlay").length) {
+                            //if ($("#startPageLoadingOverlay").length) {
                                 TAG.Util.UI.slidePageLeftSplit(root, collectionsPage.getRoot());
                                 currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
                                 currentPage.obj = collectionsPage;
-                            }
+                            /*}
                             else {
                                 buttonClicked = false;
                             }
                         }
                         else {
                             buttonClicked = false;
-                        }
+                        }*/
                     });
                 }
             } else {

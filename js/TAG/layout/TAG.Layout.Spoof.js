@@ -5,6 +5,41 @@
 */
 TAG.Layout.Spoof = (function () {
     var _main = getMain();
+    
+    var doqsInCollection =
+    {
+        "collection1": ["artwork1"]
+    };
+
+    var doqs = {
+        "artwork1": {
+            "Identifier": "artwork1",
+            "Name": "Laureates",
+            "Metadata": {
+                "Description": "Description",
+                "DeepZoom": "/Images/artwork1/dz.xml",
+                "Thumbnail": "/Images/artwork1.png",
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork"
+            }
+        },
+        "collection1": {
+            "Identifier": "collection1",
+            "Name": "Laureates",
+            "Metadata": {
+                "Description": "Description",
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "eExhibit"
+            }
+        }
+    };
+
     return {
         getLaureates: getLaureates,
         getKeywordSets: getKeywordSets,
@@ -26,13 +61,49 @@ TAG.Layout.Spoof = (function () {
         getOverlayTransparency: getOverlayTransparency,
         getIdleTimerDuration: getIdleTimerDuration,
         getExhibitions: getExhibitions,
+        getArtworksIn: getArtworksIn,
+        getTours: getTours,
+        getArtworksAssocTo: getArtworksAssocTo,
+        getAssocMediaTo: getAssocMediaTo,
+        getDoq: getDoq,
+        doqs: doqs,
+        doqsInCollection: doqsInCollection
     };
+
     function getLocked() {
         return "undefined"
     }
+
+    function getDoq(guid, callback) {
+        callback ? callback(doqs[guid]) : null;
+    }
+
+    function getArtworksAssocTo(guid, callback) {
+        callback ? callback([]) : null;
+    }
+
+    function getAssocMediaTo(guid, callback) {
+        callback ? callback([]) : null;
+    }
+
+    function getTours(callback) {
+        callback ? callback([], true) : null;
+    }
+
+    function getArtworksIn(guid, callback) {
+        var artworksGuid = doqsInCollection[guid];
+        var artworks = [];
+        for (var i = 0; i < artworksGuid.length; i++) {
+            artworks.push(doqs[artworksGuid[i]]);
+        }
+
+        callback ? callback(artworks) : null;
+    }
+
     function getExhibitions(callback, a, b, c) {
         callback ? callback([
             {
+                "Identifier": "collection1",
                 "Name": "Laureates",
                 "Metadata": {
                     "Description": "Description",
