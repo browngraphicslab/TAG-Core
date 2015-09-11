@@ -15,7 +15,7 @@
 	<stop  offset="0.9512" style="stop-color:#700303;stop-opacity:0.9621"/>
 	<stop  offset="1" style="stop-color:#6B0000;stop-opacity:0.95"/>
 </radialGradient>
-<circle class="st0" cx="25.9" cy="25.6" r="25.1"/>
+<circle class="st0" cx="25.9" cy="25.6" r="24.1"/>
 <g>
 	<path class="st1" d="M29.3,12.4l-3-2.2c-0.3-0.2-0.8,0-0.8,0.4L25.4,14c0,0.2,0.1,0.3,0.2,0.4l1.5,1.2c0.2,0.2,0.6,0.1,0.8-0.1
 		l1.6-2.4C29.6,12.9,29.6,12.5,29.3,12.4z"/>
