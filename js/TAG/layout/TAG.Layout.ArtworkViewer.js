@@ -23,7 +23,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         linkButton = root.find('#linkButton'),
         linkButtonContainer = root.find('#linkContainer'),
         //locHistoryDiv       = root.find('#locationHistoryDiv'),
-        FIX_PATH = TAG.Worktop.Database.fixPath,
+        FIX_PATH = TAG.Layout.Spoof().fixPath,
         info = root.find('#info'),
         loadingArea = root.find('#loadingArea'),
         locHistory = root.find('#locationHistory'),
@@ -36,12 +36,12 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         fieldsMapButton = $(document.createElement("BUTTON")),
         isOpen = false,
         that = this,
-        locked = TAG.Worktop.Database.getLocked(),     //Check for locked
+        locked = TAG.Layout.Spoof().getLocked(),     //Check for locked
         // constants
-        FIX_PATH = TAG.Worktop.Database.fixPath,
+        FIX_PATH = TAG.Layout.Spoof().fixPath,
         PRIMARY_FONT_COLOR = "#D99B3B",
-        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Worktop.Database.getMuseumSecondaryFontColor(),
-        FONT = TAG.Worktop.Database.getMuseumFontFamily(),
+        SECONDARY_FONT_COLOR = options.secondaryFontColor ? options.secondaryFontColor : TAG.Layout.Spoof().getMuseumSecondaryFontColor(),
+        FONT = TAG.Layout.Spoof().getMuseumFontFamily(),
 
         // input options
         doq = options.doq,              // the artwork doq
@@ -257,7 +257,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 }
                 **/
                 //createSeadragonControls();
-                TAG.Worktop.Database.getMaps(doq.Identifier, function (mps) {
+                TAG.Layout.Spoof().getMaps(doq.Identifier, function (mps) {
                     customMapsLength = mps.length;
                     setTimeout(function(){makeSidebar();},250);  //hack for some async styling stuff - lucyvk
                 });
@@ -279,7 +279,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
 
         // Keyword sets
-        keywordSets = TAG.Worktop.Database.getKeywordSets();
+        keywordSets = TAG.Layout.Spoof().getKeywordSets();
     }
 
     /*
