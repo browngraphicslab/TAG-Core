@@ -16,7 +16,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         showRedHighlights = false,
         showRedTracings = true,
         showOnlyHighlightedHotspots = true,
-        agedWill = false  //For the whiter or yellower will
+        agedWill = false,  //For the whiter or yellower will
+        singleArrowUpDownIcons = true
 
 
     var root = $("#tagRoot"),
