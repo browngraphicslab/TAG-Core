@@ -103,7 +103,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-        OFFLINE = false,
+        OFFLINE = options.OFFLINE,
         lockKioskMode = OFFLINE ? TAG.Layout.Spoof().getKioskLocked() : TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
         NOBEL_COLOR = "#D99B3B",
