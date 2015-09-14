@@ -794,6 +794,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                                     }
                                 }
                             }
+                        console.log("reached with options")
                             collectionsPage = TAG.Layout.CollectionsPage(options);
                             //if ($("#startPageLoadingOverlay").length) {
                                 TAG.Util.UI.slidePageLeftSplit(root, collectionsPage.getRoot());
@@ -810,7 +811,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     });
                 }
             } else {
-                console.log('reached');
+                console.log('reached without options');
                 collectionsPage = TAG.Layout.CollectionsPage(null, parseInt(mainDoq.Metadata.IdleTimerDuration)); // TODO merging
                 //if ($("#startPageLoadingOverlay").length) {
                     TAG.Util.UI.slidePageLeftSplit(root, collectionsPage.getRoot());

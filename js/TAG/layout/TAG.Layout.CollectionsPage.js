@@ -228,13 +228,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     }
 
     // get things rolling
-    loadPaths();
-
-    function loadPaths() {
-        if (OFFLINE) {
-            TAG.Layout.Spoof().getData(function (s) { spoof=s});
-        }
-    }
+    init()
     /**
      * Sets up the collections page UI
      * @method init

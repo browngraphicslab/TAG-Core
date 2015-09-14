@@ -41,7 +41,7 @@ TAG.Layout.SpoofTest = (function () {
 	TAG.Layout.Spoof().getLaureates(init)
 	function makeTimer() {
 	    var ret = {}
-	    ret.time = 6000
+	    ret.time = 60*5*1000
         ret.scrollTime = 1750000
         ret.start = function () {
             reset();
@@ -154,9 +154,9 @@ TAG.Layout.SpoofTest = (function () {
         sortDiv.append(subSearchText)
 		searchText.css({
 		    "height": "30px",
-		    "top": "150px",
+		    "top": "152.5px",
 		    "left": "45px",
-		    "font-size": ".85em",
+		    "font-size": ".8em",
 		    "color": "white",
 		    "position": "absolute"
 		}).hide();
@@ -357,7 +357,7 @@ TAG.Layout.SpoofTest = (function () {
 
 	    var p = ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics']
 	    var d = ['1900s', '1910s', '1920s', '1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s']
-	    var g = ['male', 'female', 'institution']
+	    var g = ['male', 'female']
 	    var prizes = []
 	    var genders = []
         var decades = []
@@ -457,7 +457,13 @@ TAG.Layout.SpoofTest = (function () {
 		    })
 		    s = s.substring(0, s.length - 4)
 		}
-		searchText.text("There were " + tiles.length + " results found for "+s);
+		else {
+			s = s.substring(0, s.length - 5)
+		}
+		searchText.text("There were " + tiles.length + " results found for " + s);
+		if (tiles.length === 0) {
+			searchText.text("There were no results found" );
+		}
 		searchText.show();
 		$("#scroller").scrollLeft(0)
 	}
@@ -728,6 +734,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
 	        "top": "122.5px",
+	        "padding-left": "3px",
             "overflow" : "hidden",
 	        "left": "45px",
 	        "box-shadow": "3px 8px 17px 4px #000",
@@ -776,11 +783,12 @@ TAG.Layout.SpoofTest = (function () {
 	        "color": "black",
 	        "top": "122.5px",
 	        "overflow": "hidden",
+	        "padding-left": "3px",
 	        "left": "150px",
 	        "box-shadow": "3px 8px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
 	    }).attr({ id: "genderList" })
-	    var ds = ["male","female" ,'institution']
+	    var ds = ["male","female"]
 	    ds.forEach(function (d) {
 	        var t = makeCheckDiv(d)
 	        genderList.append(t);

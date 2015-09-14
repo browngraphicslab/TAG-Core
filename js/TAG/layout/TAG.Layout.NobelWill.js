@@ -16,7 +16,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         showRedHighlights = false,
         showRedTracings = true,
         showOnlyHighlightedHotspots = true,
-        agedWill = false  //For the whiter or yellower will
+        agedWill = false,  //For the whiter or yellower will
+        singleArrowUpDownIcons = true//non-functional thus far
 
 
     var root = $("#tagRoot"),
@@ -61,13 +62,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         touching = false,
         lastDragY = 0,
 
+        spoof,
+
         LIGHTBULB_ICON = tagPath + 'images/icons/'+iconColor+' i.svg',
         timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
-        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair),
+        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair)
 
-        FIX_PATH = TAG.Worktop.Database.fixPath;
 
-    nobelWillInit();
+    TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
     videoOverlay();
 
     /** function videoOverlay
@@ -1993,6 +1995,24 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         return list;
     }
+    function switchTo(objName) {
+        switch (objName) {
+            case "Will_Collection":
+
+                var collectionsPage = TAG.Layout.CollectionsPage({"doqToUse" : doq});
+                var slideDiv = $(document.createElement("div"))
+                slideDiv.css({
+                    "width": "100%",
+                    "height": "100%",
+                    "position": "absolute",
+                    "top": "0%",
+                    "left" : "0%"
+                })
+                root.append(slideDiv)
+                TAG.Util.UI.slidePageLeftSplit(slideDiv, collectionsPage.getRoot());
+                break;
+        }
+    }
     function showLargePopup(mediaNumber) {
     	var blocker = $(document.createElement('div'));
     	blocker.show();
@@ -2108,7 +2128,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	        "border-radius": "10px",
     	        "margin-bottom": "5%",
     	        'color': 'red'
-    	    })
+    	    }).click(function () { switchTo(extra[2]) })
     		var d = $(document.createElement('img'));
     		d.css({
     			"position": 'absolute',
@@ -2466,7 +2486,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			]
     	]
     	var collections = [
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Will.svg', "The Will", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Alfred Nobel and His Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Alfred Nobel and His Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Alfred Nobel and His Family", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg', "Factories", "link"]]],
+			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Will.svg', "The Will", "Will_Collection"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Alfred Nobel and His Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Alfred Nobel and His Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Alfred Nobel and His Family", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg', "Factories", "link"]]],
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Patents.svg', "Patents", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]]],
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "link"]], [], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_San Remo.svg', "San Remo", "link"]]],
 			[[], []]
