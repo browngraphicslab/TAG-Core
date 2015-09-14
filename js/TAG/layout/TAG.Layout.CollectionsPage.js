@@ -103,7 +103,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-        OFFLINE = options.OFFLINE,
+        OFFLINE = false,
         lockKioskMode = OFFLINE ? TAG.Layout.Spoof().getKioskLocked() : TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
         NOBEL_COLOR = "#D99B3B",
@@ -1100,7 +1100,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @param {Function} callback     a function to call when the contents have been retrieved
      */
     function getCollectionContents(collection, callback, cancel) {
-        TAG.Layout.Spoof().getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+        if (OFFLINE) {
+            TAG.Layout.Spoof().getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+        } else {
+            TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+        }
 
         /**
          * Helper function to process collection contents
