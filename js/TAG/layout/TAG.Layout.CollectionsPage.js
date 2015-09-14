@@ -60,17 +60,17 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         //wasOnAssocMediaView     = options.wasOnAssocMediaView || false,   //whether we were on associated media view       
         previewing = options.previewing || false,   // whether we are loading for a preview in authoring (for dot styling)
         hideKeywords = options.hideKeywords, //true if should be hidden for a particular collection
-        smallPreview= options.smallPreview,
+        smallPreview = options.smallPreview,
         titleIsName = options.titleIsName,
         showOtherCollections = options.showOtherCollections,
-        oneDeep =false,
+        oneDeep = false,
         twoDeep = true, //show two tiles per column
         backToGuid = options.backToGuid, //for impact map experience
         backToAssoc = options.backToAssoc, // for impact map experience
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         showNobelLifeBox = options.showNobelLifeBox, // customization to indicate whether initial pop up has appeared on Nobel Life collection
         showInitialImpactPopUp = options.showInitialImpactPopUp,
-        
+
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -103,8 +103,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         onAssocMediaView = options.wasOnAssocMediaView || false,                            // whether current collection is on assoc media view
         previouslyClicked = null,
         artworkInCollectionList = [],
-        OFFLINE = false,
-        lockKioskMode = OFFLINE ? TAG.Layout.Spoof().getKioskLocked() : TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
+        OFFLINE = true,
+        spoof,
+        lockKioskMode = false, //TAG.Layout.Spoof().getKioskLocked() : TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
         NOBEL_COLOR = "#D99B3B",
         BASE_FONT_SIZE = TAG.Layout.Spoof().getBaseFontSize(),       // base font size for current font
@@ -168,23 +169,42 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     backButton.css('z-index', '99999999');
 
     backButton.click(function () {   
-        if (backToGuid){
-            TAG.Layout.Spoof().getDoq(backToGuid,
-                function (result) {
-                    var artworkViewer = TAG.Layout.ArtworkViewer({
-                        doq: result,
-                        isNobelWill: false,
-                        isImpactMap: true,
-                        showInitialImpactPopUp: true,
-                        assocMediaToShow: backToAssoc
-                });
-                var newPageRoot = artworkViewer.getRoot();
-                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                TAG.Util.UI.slidePageRight(newPageRoot);
-                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                currentPage.obj = artworkViewer;
-                });
-            return;
+        if (backToGuid) {
+            if (OFFLINE) {
+                TAG.Layout.Spoof().getDoq(backToGuid,
+                    function (result) {
+                        var artworkViewer = TAG.Layout.ArtworkViewer({
+                            doq: result,
+                            isNobelWill: false,
+                            isImpactMap: true,
+                            showInitialImpactPopUp: true,
+                            assocMediaToShow: backToAssoc
+                        });
+                        var newPageRoot = artworkViewer.getRoot();
+                        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                        TAG.Util.UI.slidePageRight(newPageRoot);
+                        currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                        currentPage.obj = artworkViewer;
+                    });
+                return;
+            } else {
+                TAG.Worktop.Database.getDoq(backToGuid,
+                    function (result) {
+                        var artworkViewer = TAG.Layout.ArtworkViewer({
+                            doq: result,
+                            isNobelWill: false,
+                            isImpactMap: true,
+                            showInitialImpactPopUp: true,
+                            assocMediaToShow: backToAssoc
+                        });
+                        var newPageRoot = artworkViewer.getRoot();
+                        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+                        TAG.Util.UI.slidePageRight(newPageRoot);
+                        currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                        currentPage.obj = artworkViewer;
+                    });
+                return;
+            }
         } 
         TAG.Layout.StartPage(null, function (page) {
             // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
@@ -208,7 +228,13 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     }
 
     // get things rolling
-    init();
+    loadPaths();
+
+    function loadPaths() {
+        if (OFFLINE) {
+            TAG.Layout.Spoof().getData(function (s) { spoof=s});
+        }
+    }
     /**
      * Sets up the collections page UI
      * @method init
@@ -1100,7 +1126,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @param {Function} callback     a function to call when the contents have been retrieved
      */
     function getCollectionContents(collection, callback, cancel) {
-        TAG.Layout.Spoof().getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+        if (OFFLINE) {
+            TAG.Layout.Spoof().getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+        } else {
+            TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+        }
 
         /**
          * Helper function to process collection contents
@@ -1334,7 +1364,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 gotTours(null,true)
             }
             else {
-                TAG.Layout.Spoof().getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
+                if (OFFLINE) {
+                    TAG.Layout.Spoof().getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
+                } else {
+                    TAG.Worktop.Database.getTours(gotTours, function (error) { console.log(error) }, function (error) { console.log(error) });
+                }
             }
             function gotTours(tours, bypass) {
                 if (bypass) {
@@ -1343,7 +1377,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 else{
                     for (var g = 0; g < tours.length; g++) {
                         var tour = tours[g]
-                        TAG.Layout.Spoof().getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
+                        if (OFFLINE) {
+                            TAG.Layout.Spoof().getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
+                        } else {
+                            TAG.Worktop.Database.getDoq(tour.Identifier, tourBack, function (error) { console.log(error) }, function (error) { console.log(error) });
+                        }
                     }
                 }
                 function tourBack(doq) {
@@ -1630,43 +1668,84 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             setTimeout(function () { previouslyClicked = null }, 1000)
                         }
                     } else {
-                        TAG.Layout.Spoof().getArtworksAssocTo(currentWork.Identifier, function (doqs) {
-                            if (previouslyClicked === main) {
-                                //click = "double";
-                                switchPage(doqs[0], currentWork, getContainerLeft(currentWork, false))();
 
-                                //TELEMETRY
+                        if (OFFLINE) {
+                            TAG.Layout.Spoof().getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                                if (previouslyClicked === main) {
+                                    //click = "double";
+                                    switchPage(doqs[0], currentWork, getContainerLeft(currentWork, false))();
 
-                                //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
-                                TAG.Telemetry.recordEvent('ArtworkPreviewer', function (tobj) {
-                                    tobj.is_assoc_media_view = onAssocMediaView;
-                                    tobj.click_type = "double";
-                                    tobj.selected_artwork = currentWork.Identifier;
-                                    tobj.is_tour = false;
-                                    if (currentWork.type === 'Tour') {
-                                        tobj.is_tour = true;
-                                    }
-                                    tobj.current_collection = currCollection;
-                                    tobj.tap_to_explore = false;
-                                    tobj.close = false; //it was closed
-                                    tobj.assoc_media = false;
-                                    tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
-                                    //doNothing(tobj.time_spent);
-                                    //timer reset in showArtwork
-                                    doNothing("DOUBLE CLICKED ON THE ASSOC MEDIA TILE");
-                                });
+                                    //TELEMETRY
+
+                                    //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                                    TAG.Telemetry.recordEvent('ArtworkPreviewer', function (tobj) {
+                                        tobj.is_assoc_media_view = onAssocMediaView;
+                                        tobj.click_type = "double";
+                                        tobj.selected_artwork = currentWork.Identifier;
+                                        tobj.is_tour = false;
+                                        if (currentWork.type === 'Tour') {
+                                            tobj.is_tour = true;
+                                        }
+                                        tobj.current_collection = currCollection;
+                                        tobj.tap_to_explore = false;
+                                        tobj.close = false; //it was closed
+                                        tobj.assoc_media = false;
+                                        tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                                        //doNothing(tobj.time_spent);
+                                        //timer reset in showArtwork
+                                        doNothing("DOUBLE CLICKED ON THE ASSOC MEDIA TILE");
+                                    });
 
 
-                            } else {
-                                previouslyClicked = main;
-                                //click = "single";
-                                setTimeout(function () { previouslyClicked = null }, 1000);
-                            }
-                        }, function () {
+                                } else {
+                                    previouslyClicked = main;
+                                    //click = "single";
+                                    setTimeout(function () { previouslyClicked = null }, 1000);
+                                }
+                            }, function () {
 
-                        }, function () {
+                            }, function () {
 
-                        });
+                            });
+                        } else {
+                            TAG.Worktop.Database.getArtworksAssocTo(currentWork.Identifier, function (doqs) {
+                                if (previouslyClicked === main) {
+                                    //click = "double";
+                                    switchPage(doqs[0], currentWork, getContainerLeft(currentWork, false))();
+
+                                    //TELEMETRY
+
+                                    //RECORD ARTWORK PREVIEWER CLOSE FOR TELEMETRY
+                                    TAG.Telemetry.recordEvent('ArtworkPreviewer', function (tobj) {
+                                        tobj.is_assoc_media_view = onAssocMediaView;
+                                        tobj.click_type = "double";
+                                        tobj.selected_artwork = currentWork.Identifier;
+                                        tobj.is_tour = false;
+                                        if (currentWork.type === 'Tour') {
+                                            tobj.is_tour = true;
+                                        }
+                                        tobj.current_collection = currCollection;
+                                        tobj.tap_to_explore = false;
+                                        tobj.close = false; //it was closed
+                                        tobj.assoc_media = false;
+                                        tobj.time_spent = global_artwork_prev_timer.get_elapsed(); //time spent in the previewer
+                                        //doNothing(tobj.time_spent);
+                                        //timer reset in showArtwork
+                                        doNothing("DOUBLE CLICKED ON THE ASSOC MEDIA TILE");
+                                    });
+
+
+                                } else {
+                                    previouslyClicked = main;
+                                    //click = "single";
+                                    setTimeout(function () { previouslyClicked = null }, 1000);
+                                }
+                            }, function () {
+
+                            }, function () {
+
+                            });
+                        }
                     }
 
                 }();
@@ -1718,11 +1797,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 
             });
             */
-
+            /**
             if (currentWork.Metadata.Thumbnail && currentWork.Metadata.ContentType !== "Audio") {
                 main.css('overflow', 'hidden');
 
-                tileImage.attr("src", tagPath + 'images/image_icon.svg'); //, FIX_PATH(currentWork.Metadata.Thumbnail));
+                tileImage.attr("src", tagPath + currentWork.Metadata.Thumbnail);
 
                 var w, h;
                 $("<img/>") // preload the image to "crop" it
@@ -1748,6 +1827,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             });
                         }
                     });
+
             } else if (currentWork.Metadata.ContentType === "Audio") {
                 tileImage.css('background-color', 'black');
                 tileImage.attr('src', tagPath + 'images/audio_thumbnail.svg');
@@ -1779,6 +1859,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             } else {
                 tileImage.attr("src", tagPath + 'images/no_thumbnail.svg');
             }
+            **/
+
+            main.css('overflow', 'hidden');
+            tileImage.attr("src", currentWork.Metadata.Thumbnail.FilePath);
 
             // Add title
             if (tag === 'Title') {
@@ -1867,6 +1951,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             }
 
             tileDiv.append(main);
+            tileDivHeight = catalogDiv.height();
 
             //base height off original tileDivHeight (or else changes when scroll bar added on 6th tile)
             if (!twoDeep) {

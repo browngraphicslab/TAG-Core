@@ -41,7 +41,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverSubmit = root.find('#serverSubmit'),
         passwordSubmit = root.find('#passwordSubmit'),
         lockedMessage = root.find('#lockedMessage'),
-        OFFLINE = false,
+        OFFLINE = true,
         psuedoCollection = {
             prevScroll: null,
             prevPreviewPos: null,
