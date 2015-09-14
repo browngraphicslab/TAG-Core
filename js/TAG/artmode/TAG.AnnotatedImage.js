@@ -137,7 +137,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             doNothing("ERROR IN openDZI");
             return false;
         }
-        viewer.openDzi(FIX_PATH(doq.Metadata.DeepZoom));
+        viewer.openDzi(FIX_PATH(doq.Metadata.DeepZoom.Path));
         return true;
     }
 
@@ -574,6 +574,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
  *Inits the OpenSeadragon viewer
  */
     function initOSD() {
+        
+        setTimeout(function () { callback && callback() }, 1);
+        return;
 
         //Creates element that the OSD viewer will be appended to
         viewerelt = document.createElement("div");
@@ -827,8 +830,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         associatedMedia = {
             guids: []
         };
-
-        TAG.Worktop.Database.getAssocMediaTo(doq.Identifier, mediaSuccess, null, mediaSuccess);
+        //TAG.Worktop.Database.getAssocMediaTo(doq.Identifier, mediaSuccess, null, mediaSuccess);
 
         /**
          * Success callback function for .getAssocMediaTo call above. If the list of media is
@@ -847,6 +849,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 callback && callback(associatedMedia);
             }
         }
+        mediaSuccess([]);
 
         /**
          * Helper function for the calls to .getLinq above. It accepts an assoc media doc and returns

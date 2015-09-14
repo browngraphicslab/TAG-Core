@@ -71,6 +71,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         showNobelLifeBox = options.showNobelLifeBox, // customization to indicate whether initial pop up has appeared on Nobel Life collection
         showInitialImpactPopUp = options.showInitialImpactPopUp,
         spoofDoq = options.doqToUse,
+        spoofArtworkDoqs = options.artworkDoqs,
         willRoot = options.willRoot,
 
         // misc initialized vars
@@ -169,7 +170,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     root.append(backButtonArea);
     backButton.css('z-index', '99999999');
 
-    backButton.click(function () {   
+    backButton.click(function () {
+        willRoot.css({"background-color":"transparent"})
         willRoot.animate({ left: "100%" }, 1000, "easeInOutQuart", function () {
             willRoot.die()
             willRoot.remove()
@@ -465,6 +467,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'color' : dimmedColor
         })
     }
+
 
     /**
      * Shows collection and title
@@ -818,15 +821,15 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 getCollectionContents(currCollection, function () {  }, function () { return cancelLoad;});
             } else {
                 if (onAssocMediaView && artworkInCollectionList.length == 0) {
-                    TAG.Layout.Spoof().getArtworksIn(collection.Identifier,
-                        function (contents) {
-                            artworkInCollectionList = [];
-                            for (var i = 0; i < contents.length; i++) {
-                                artworkInCollectionList.push(contents[i].Identifier);
-                            }
-                            loadSortTags(currCollection, currCollection.collectionMedia);
-                            createArtTiles(currCollection.collectionMedia);
-                        }, null, null);
+                    var f = function (contents) {
+                        artworkInCollectionList = [];
+                        for (var i = 0; i < contents.length; i++) {
+                            artworkInCollectionList.push(contents[i].Identifier);
+                        }
+                        loadSortTags(currCollection, currCollection.collectionMedia);
+                        createArtTiles(currCollection.collectionMedia);
+                    }
+                    f(spoofArtworksDoqs)
                 } else {
                     loadSortTags(currCollection, currCollection.collectionMedia)
                     createArtTiles(currCollection.collectionMedia);
@@ -1073,7 +1076,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      */
     function getCollectionContents(collection, callback, cancel) {
         if (OFFLINE) {
-            TAG.Layout.Spoof().getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
+            contentsHelper(spoofArtworkDoqs)
+            //TAG.Layout.Spoof().getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
         } else {
             TAG.Worktop.Database.getArtworksIn(collection.Identifier, contentsHelper, null, contentsHelper);
         }
@@ -1524,6 +1528,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'scrollbar-track-color': 'transparent',
         })
     }
+
 
     /**
      * Creates an artwork tile in a collection's catalog
@@ -3643,6 +3648,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
         currentPage.obj = videoPlayer;
     }
+
 
     /**
      * Switch to the artwork viewer or tour player

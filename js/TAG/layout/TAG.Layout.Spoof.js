@@ -20,7 +20,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "L",
             "Metadata": {
                 "Description": "Description",
-                "DeepZoom": {"Path": "/Images/artwork1/dz.xml" },
+                "DeepZoom": {"Path": "Images\\artwork1\\dz.xml" },
                 "Thumbnail": {"Path":"Collections\\" + "Patents\\" + "artwork1.jpg"},
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -97,7 +97,7 @@ TAG.Layout.Spoof = (function () {
         var count = 0
         var poll = function () {
             count++
-            if (count === artworkGuids.length) {
+            if (count === artworkGuids.length * 2) {
                 callback();
             }
         }
@@ -105,6 +105,7 @@ TAG.Layout.Spoof = (function () {
             var artworkGuids = doqsInCollection[collectionGuids[i]];
             for (var j = 0; j < artworkGuids.length; j++) {
                 setImageFromPath(artDoqs[artworkGuids[j]].Metadata.Thumbnail, artDoqs[artworkGuids[j]].Metadata.Thumbnail.Path, function () { poll() });
+                setImageFromPath(artDoqs[artworkGuids[j]].Metadata.DeepZoom, artDoqs[artworkGuids[j]].Metadata.DeepZoom.Path, function () { poll() });
             }
         }
     }
@@ -340,7 +341,18 @@ TAG.Layout.Spoof = (function () {
             "shown": "false"
         }];
     }
-    function getLaureates(callback){
+    function getLaureates(callback) {
+        var doqarray = []
+        for (var a = 0; a < 115; a++) {
+            doqarray.push({
+                "physics": [],
+                "chemistry": [],
+                "medicine": [],
+                "literature": [],
+                "peace": [],
+                "economics": []
+            })
+        }
         var db = getDB().laureates;
         var waitingDoqs = {}
         var map = getMap();
@@ -373,33 +385,15 @@ TAG.Layout.Spoof = (function () {
                     doq.KeywordsSet2 = doq.gender
                     doq.KeywordsSet3 = doq.PrizeCategory.toLowerCase();
                     waitingDoqs[map[id]] = { "Metadata": doq }
-
+                    
                     Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + "Thumbnails\\" + "thumb_" + map[id]).done(function (file) {
-                    //var file = {"name" : "666666"+map[id]}
-                    //function yo(file){
-                        /*
-                        var reader = new FileReader()
-                        reader.onload = function (event) {
-                            var u = event.target.result
-                            var d = waitingDoqs[file.name.substring(6)]
-                            d.Metadata.Thumbnail = { "FilePath": u }
-                            d.Identifier = d.Metadata.ID
-                            doqs.push(d)
-                        }
-                        reader.readAsDataURL(file);*/
-                        
-
-
-
-
                         var url = URL.createObjectURL(file, { oneTimeOnly: true });
-                        //var url = "../tagcore/" + 'images/NobelwillImages/NobelPopupImages/Popup_1_1.png'
                         var d = waitingDoqs[file.name.substring(6)]
+                        doqarray[parseInt(d.Metadata.Year)-1901][d.Metadata.PrizeCategory.toLowerCase()].push(d);
                         d.Metadata.Thumbnail = { "FilePath": url }
                         d.Identifier = d.Metadata.ID
                         doqs.push(d)
                     })
-                    //yo(file)
                     
                     Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + "Mediums\\" + "medium_" + map[id]).done(function (file) {
                         var url = URL.createObjectURL(file, { oneTimeOnly: false });
@@ -412,7 +406,17 @@ TAG.Layout.Spoof = (function () {
 
             function poll() {
                 if (doqs.length >= Object.keys(map).length) {
-                    callback(doqs);
+                    var ds = []
+                    var hash = {}
+                    for (var i = 0; i < doqarray.length; i++) {
+                        doqarray[i].physics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
+                        doqarray[i].chemistry.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                        doqarray[i].medicine.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                        doqarray[i].literature.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                        doqarray[i].peace.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                        doqarray[i].economics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
+                    }
+                    callback(ds);
                 }
                 else {
                     setTimeout(poll, 500);

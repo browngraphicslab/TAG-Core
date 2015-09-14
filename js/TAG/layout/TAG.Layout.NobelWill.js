@@ -2008,7 +2008,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "z-index" : "50000"
         })
         root.append(slideDiv)
-        var doq
+        var doq,
+            artworks = []
         switch (objName) {
             case "Will_Collection":
                 doq = spoof.collectionDoqs.Patents
@@ -2018,10 +2019,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         switch (doqType) {
             case "collection":
-                var collectionsPage = TAG.Layout.CollectionsPage({ "doqToUse": doq, "willRoot": slideDiv });
+                for (var i = 0; i < spoof.doqsInCollection[doq.Name].length; i++) {
+                    artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Name][i]]);
+                }
+                var collectionsPage = TAG.Layout.CollectionsPage({ "doqToUse": doq, "willRoot": slideDiv,"artworkDoqs":artworks });
                 slideDiv.append(collectionsPage.getRoot())
-                slideDiv.animate({left : "0%"},1000)
-                //TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+                slideDiv.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { slideDiv.css({"background-color":"black"})})
                 break
         }
     }
