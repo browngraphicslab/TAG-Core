@@ -1996,21 +1996,33 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         return list;
     }
     function switchTo(objName) {
+        var doqType;
+
+        var slideDiv = $(document.createElement("div"))
+        slideDiv.css({
+            "width": "100%",
+            "height": "100%",
+            "position": "absolute",
+            "top": "0%",
+            "left": "100%",
+            "z-index" : "50000"
+        })
+        root.append(slideDiv)
+        var doq
         switch (objName) {
             case "Will_Collection":
-
-                var collectionsPage = TAG.Layout.CollectionsPage({"doqToUse" : doq});
-                var slideDiv = $(document.createElement("div"))
-                slideDiv.css({
-                    "width": "100%",
-                    "height": "100%",
-                    "position": "absolute",
-                    "top": "0%",
-                    "left" : "0%"
-                })
-                root.append(slideDiv)
-                TAG.Util.UI.slidePageLeftSplit(slideDiv, collectionsPage.getRoot());
+                doq = spoof.collectionDoqs.Patents
+                doqType = "collection"
                 break;
+        }
+
+        switch (doqType) {
+            case "collection":
+                var collectionsPage = TAG.Layout.CollectionsPage({ "doqToUse": doq, "willRoot": slideDiv });
+                slideDiv.append(collectionsPage.getRoot())
+                slideDiv.animate({left : "0%"},1000)
+                //TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
+                break
         }
     }
     function showLargePopup(mediaNumber) {

@@ -34,9 +34,9 @@ TAG.Layout.Spoof = (function () {
 
    var doqs = {
         //Collection Doqs
-        "collection1": {
-            "Identifier": "collection1",
-            "Name": "Laureates",
+        "Patents": {
+            "Identifier": "Patents",
+            "Name": "Patents",
             "Metadata": {
                 "Description": "Description",
                 "AssocMediaView": "false",

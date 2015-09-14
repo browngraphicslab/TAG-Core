@@ -70,7 +70,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         showNobelLifeBox = options.showNobelLifeBox, // customization to indicate whether initial pop up has appeared on Nobel Life collection
         showInitialImpactPopUp = options.showInitialImpactPopUp,
-
+        spoofDoq = options.doqToUse,
+        willRoot = options.willRoot,
 
         // misc initialized vars
         idleTimerDuration = idletimerDuration,
@@ -169,50 +170,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
     backButton.css('z-index', '99999999');
 
     backButton.click(function () {   
-        if (backToGuid) {
-            if (OFFLINE) {
-                TAG.Layout.Spoof().getDoq(backToGuid,
-                    function (result) {
-                        var artworkViewer = TAG.Layout.ArtworkViewer({
-                            doq: result,
-                            isNobelWill: false,
-                            isImpactMap: true,
-                            showInitialImpactPopUp: true,
-                            assocMediaToShow: backToAssoc
-                        });
-                        var newPageRoot = artworkViewer.getRoot();
-                        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                        TAG.Util.UI.slidePageRight(newPageRoot);
-                        currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                        currentPage.obj = artworkViewer;
-                    });
-                return;
-            } else {
-                TAG.Worktop.Database.getDoq(backToGuid,
-                    function (result) {
-                        var artworkViewer = TAG.Layout.ArtworkViewer({
-                            doq: result,
-                            isNobelWill: false,
-                            isImpactMap: true,
-                            showInitialImpactPopUp: true,
-                            assocMediaToShow: backToAssoc
-                        });
-                        var newPageRoot = artworkViewer.getRoot();
-                        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-                        TAG.Util.UI.slidePageRight(newPageRoot);
-                        currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                        currentPage.obj = artworkViewer;
-                    });
-                return;
-            }
-        } 
-        TAG.Layout.StartPage(null, function (page) {
-            // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
-            // For now, we'll just hide the whole keywords div.
-           // $('#keywords').hide();
-            $('#keywords').empty();
-            TAG.Util.UI.slidePageRight(page);
-        });
+        willRoot.animate({ left: "100%" }, 1000, "easeInOutQuart", function () {
+            willRoot.die()
+            willRoot.remove()
+        })
     });
 
     if (lockKioskMode == "true") {
@@ -361,7 +322,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             'max-width': $("#tagRoot").width() * 0.15 + 'px',
         });
         if (OFFLINE === true) {
-            TAG.Layout.Spoof().getExhibitions(getCollectionsHelper);
+            //TAG.Layout.Spoof().getExhibitions(getCollectionsHelper);
+            getCollectionsHelper([spoofDoq])
         }
         else {
             TAG.Worktop.Database.getExhibitions(getCollectionsHelper, null, getCollectionsHelper);
@@ -968,16 +930,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             arrow;
         menu = document.getElementById('collectionMenu');
         arrow = document.getElementById('dropDownArrow');
-        $(root).click(function(event) {
-            if (event.target.id != 'dropDownArrow' && event.target.id !='collection-title' && event.target.id != 'centeredCollectionHeader' && !$(event.target).parents().andSelf().is("#collectionMenu")) {
-                if (menu.style.display == 'block') {
-                    doNothing("here " + event.target.id)
-                    menu.style.display = 'none';
-                    arrow.style.transform = 'rotate(270deg)';
-                    arrow.style.webkitTransform = 'rotate(270deg)';
-                }
-            }
-        });
     }
 
     /**
