@@ -157,6 +157,11 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     this.getTourData = getTourData;
 
     function goBack() {
+        if (player) {
+            player.pause();
+            player.unload();
+            player.cancelLoad();
+        }
         var willRoot = $("#willOverlayRoot")
         willRoot.css({ "background-color": "transparent" })
         willRoot.animate({ left: "100%" }, 1000, "easeInOutQuart", function () {
@@ -196,7 +201,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             function doqReturn(doq) {
                 returned++;
                 for (var i = 0 ; i < nobelDoq.length; i++) {
-                    if (doq.Identifier === nobelDoq[i]) {
+                    if (doq && doq.Identifier === nobelDoq[i]) {
                         nobelDoq[i] = doq;
                         break;
                     }

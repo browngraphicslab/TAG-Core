@@ -16,9 +16,11 @@ TAG.Layout.Spoof = (function () {
         "Will": {
             "tracks": [
                 {
-                    "assetUrl": "\\DeepZooms\\artwork1\\dz.xml",
+                    "assetUrl": "Images\\artwork1\\dz.xml",
                     "guid": "artwork1",
                     "providerId": "deepZoom",
+                    "name": "Image1",
+                    "zIndex": 1,
                     "keyframes": [
                         {
                             "SpecialKeyframeType": "INITIAL",
@@ -32,7 +34,7 @@ TAG.Layout.Spoof = (function () {
                         {
                             "time": 1,
                             "zIndex": 1,
-                            "opacity": 0,
+                            "opacity": 1,
                             "scale": 1,
                             "dispNum": 1,
                             "pos": { "x": .1, "y": .1 }
@@ -40,7 +42,7 @@ TAG.Layout.Spoof = (function () {
                         {
                             "time": 4,
                             "zIndex": 1,
-                            "opacity": 0,
+                            "opacity": 1,
                             "scale": 2,
                             "dispNum": 1,
                             "pos": { "x": .18, "y": .18 }
@@ -48,7 +50,7 @@ TAG.Layout.Spoof = (function () {
                         {
                             "time": 7,
                             "zIndex": 1,
-                            "opacity": 0,
+                            "opacity": 1,
                             "scale": 2,
                             "dispNum": 1,
                             "pos": { "x": .19, "y": .6 }
@@ -56,7 +58,7 @@ TAG.Layout.Spoof = (function () {
                         {
                             "time": 17,
                             "zIndex": 1,
-                            "opacity": 0,
+                            "opacity": 1,
                             "scale": 1,
                             "dispNum": 1,
                             "pos": { "x": .1, "y": .1 }
@@ -71,12 +73,40 @@ TAG.Layout.Spoof = (function () {
                             "pos": { "x": .1, "y": .1 }
                         },
                     ],
-                    "name": "Image1",
-                    "zIndex": 1,
 
+                },
+                {
+                    "assetUrl": "Audio\\audio1.mp3",
+                    "guid": "audio1",
+                    "providerId": "audio",
+                    "name": "audio1",
+                    "zIndex": 2,
+                    "mediaLength" : 182,
+                    "keyframes": [
+                        {
+                            "SpecialKeyframeType": "INITIAL",
+                            "time": 0,
+                            "dispNum": 0,
+                            "data": {},
+                            "volume" : 1
+                        },
+                        {
+                            "SpecialKeyframeType": "FINAL",
+                            "time": 90,
+                            "dispNum": 0,
+                            "data": {},
+                            "volume": 1
+                        }
+                    ]
+                    
                 }
             ],
-            "other": {}
+            "totalDuration" : "182"
+        }
+    }
+    var audioDoqs = {
+        "audio1": {
+
         }
     }
     var artDoqs = {
@@ -130,6 +160,9 @@ TAG.Layout.Spoof = (function () {
    function getDoq(name, callback, error,erro2,error3) {
        if (artDoqs[name] !== null && artDoqs[name] !== undefined) {
            callback(artDoqs[name])
+       }
+       else if (audioDoqs[name] !== null && audioDoqs[name] !== undefined) {
+           callback(audioDoqs[name])
        }
        else {
            error()
