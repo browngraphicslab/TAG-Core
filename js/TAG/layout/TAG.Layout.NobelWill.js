@@ -64,13 +64,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         touching = false,
         lastDragY = 0,
 
+        spoof,
+
         LIGHTBULB_ICON = tagPath + 'images/icons/'+iconColor+' i.svg',
         timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
-        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair),
+        idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair)
 
-        FIX_PATH = TAG.Worktop.Database.fixPath;
 
-    nobelWillInit();
+    TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
     videoOverlay();
 
     /** function videoOverlay
@@ -2022,20 +2023,36 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         return list;
     }
     function switchTo(objName) {
+        var doqType;
+
+        var slideDiv = $(document.createElement("div"))
+        slideDiv.css({
+            "width": "100%",
+            "height": "100%",
+            "position": "absolute",
+            "top": "0%",
+            "left": "100%",
+            "z-index" : "50000"
+        })
+        root.append(slideDiv)
+        var doq,
+            artworks = []
         switch (objName) {
             case "Will_Collection":
-                var collectionsPage = TAG.Layout.CollectionsPage({"OFFLINE":true});
-                var slideDiv = $(document.createElement("div"))
-                slideDiv.css({
-                    "width": "100%",
-                    "height": "100%",
-                    "position": "absolute",
-                    "top": "0%",
-                    "left" : "0%"
-                })
-                root.append(slideDiv)
-                TAG.Util.UI.slidePageLeftSplit(slideDiv, collectionsPage.getRoot());
+                doq = spoof.collectionDoqs.Patents
+                doqType = "collection"
                 break;
+        }
+
+        switch (doqType) {
+            case "collection":
+                for (var i = 0; i < spoof.doqsInCollection[doq.Name].length; i++) {
+                    artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Name][i]]);
+                }
+                var collectionsPage = TAG.Layout.CollectionsPage({ "doqToUse": doq, "willRoot": slideDiv,"artworkDoqs":artworks });
+                slideDiv.append(collectionsPage.getRoot())
+                slideDiv.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { slideDiv.css({"background-color":"black"})})
+                break
         }
     }
     function showLargePopup(mediaNumber) {

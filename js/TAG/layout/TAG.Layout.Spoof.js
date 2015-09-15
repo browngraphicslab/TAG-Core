@@ -5,30 +5,38 @@
 */
 TAG.Layout.Spoof = (function () {
     var _main = getMain();
-    
+
+    var collectionGuids = ["Patents"]; //, "Factories", "Family", "Bjorkborn", "Ceremonies", "SanRemo", "Diplomas", "Medals", "Will"];
+
     var doqsInCollection =
     {
-        "collection1": ["artwork1"]
+        "Patents": ["artwork1"]
     };
 
-    var doqs = {
+    var artDoqs = {
+        //Artwork Doqs
         "artwork1": {
             "Identifier": "artwork1",
-            "Name": "Laureates",
+            "Name": "L",
             "Metadata": {
                 "Description": "Description",
-                "DeepZoom": "/Images/artwork1/dz.xml",
-                "Thumbnail": "/Images/artwork1.png",
+                "DeepZoom": {"Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": {"Path":"Collections\\" + "Patents\\" + "artwork1.jpg"},
                 "AssocMediaView": "false",
                 "Private": "false",
                 "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
                 "Timeline": "true",
-                "Type": "Artwork"
+                "Type": "Artwork",
+                "ContentType": "Image"
             }
-        },
-        "collection1": {
-            "Identifier": "collection1",
-            "Name": "Laureates",
+        }
+    };
+
+   var doqs = {
+        //Collection Doqs
+        "Patents": {
+            "Identifier": "Patents",
+            "Name": "Patents",
             "Metadata": {
                 "Description": "Description",
                 "AssocMediaView": "false",
@@ -39,6 +47,19 @@ TAG.Layout.Spoof = (function () {
             }
         }
     };
+
+   function getData(callback) {
+       var count = 0
+       setCollectionPaths(function () {
+           callback( {
+           "collectionGuids": collectionGuids,
+           "doqsInCollection": doqsInCollection,
+           "artDoqs": artDoqs,
+           "collectionDoqs": doqs,
+           })
+       }
+       );
+    }
 
     return {
         getLaureates: getLaureates,
@@ -67,8 +88,35 @@ TAG.Layout.Spoof = (function () {
         getAssocMediaTo: getAssocMediaTo,
         getDoq: getDoq,
         doqs: doqs,
-        doqsInCollection: doqsInCollection
+        doqsInCollection: doqsInCollection,
+        setCollectionPaths: setCollectionPaths,
+        getData: getData
     };
+
+    function setCollectionPaths(callback) {
+        var count = 0
+        var poll = function () {
+            count++
+            if (count === artworkGuids.length * 2) {
+                callback();
+            }
+        }
+        for (var i = 0; i < collectionGuids.length; i++) {
+            var artworkGuids = doqsInCollection[collectionGuids[i]];
+            for (var j = 0; j < artworkGuids.length; j++) {
+                setImageFromPath(artDoqs[artworkGuids[j]].Metadata.Thumbnail, artDoqs[artworkGuids[j]].Metadata.Thumbnail.Path, function () { poll() });
+                setImageFromPath(artDoqs[artworkGuids[j]].Metadata.DeepZoom, artDoqs[artworkGuids[j]].Metadata.DeepZoom.Path, function () { poll() });
+            }
+        }
+    }
+
+    function setImageFromPath(obj, filePath, onComplete) {
+        Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + filePath).done(function (file) {
+            var url = URL.createObjectURL(file, { oneTimeOnly: false });
+            obj["FilePath"] = url;
+            onComplete && onComplete();
+        });
+    }
 
     function getLocked() {
         return "undefined"
@@ -94,7 +142,7 @@ TAG.Layout.Spoof = (function () {
         var artworksGuid = doqsInCollection[guid];
         var artworks = [];
         for (var i = 0; i < artworksGuid.length; i++) {
-            artworks.push(doqs[artworksGuid[i]]);
+            artworks.push(artDoqs[artworksGuid[i]]);
         }
 
         callback ? callback(artworks) : null;
@@ -102,6 +150,18 @@ TAG.Layout.Spoof = (function () {
 
     function getExhibitions(callback, a, b, c) {
         callback ? callback([
+            {
+                "Identifier": "Patents",
+                "Name": "Patents",
+                "Metadata": {
+                    "Description": "Description",
+                    "AssocMediaView": "false",
+                    "Private": "false",
+                    "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                    "Timeline": "true",
+                    "Type": "eExhibit"
+                }
+            },
             {
                 "Identifier": "collection1",
                 "Name": "Laureates",
@@ -245,7 +305,7 @@ TAG.Layout.Spoof = (function () {
         }
     }
     function fixPath(path) {
-        return path
+        return path;
     }
     function getKeywordSets() {
         /*var kw = 
@@ -281,7 +341,18 @@ TAG.Layout.Spoof = (function () {
             "shown": "false"
         }];
     }
-    function getLaureates(callback){
+    function getLaureates(callback) {
+        var doqarray = []
+        for (var a = 0; a < 115; a++) {
+            doqarray.push({
+                "physics": [],
+                "chemistry": [],
+                "medicine": [],
+                "literature": [],
+                "peace": [],
+                "economics": []
+            })
+        }
         var db = getDB().laureates;
         var waitingDoqs = {}
         var map = getMap();
@@ -314,33 +385,15 @@ TAG.Layout.Spoof = (function () {
                     doq.KeywordsSet2 = doq.gender
                     doq.KeywordsSet3 = doq.PrizeCategory.toLowerCase();
                     waitingDoqs[map[id]] = { "Metadata": doq }
-
+                    
                     Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + "Thumbnails\\" + "thumb_" + map[id]).done(function (file) {
-                    //var file = {"name" : "666666"+map[id]}
-                    //function yo(file){
-                        /*
-                        var reader = new FileReader()
-                        reader.onload = function (event) {
-                            var u = event.target.result
-                            var d = waitingDoqs[file.name.substring(6)]
-                            d.Metadata.Thumbnail = { "FilePath": u }
-                            d.Identifier = d.Metadata.ID
-                            doqs.push(d)
-                        }
-                        reader.readAsDataURL(file);*/
-                        
-
-
-
-
                         var url = URL.createObjectURL(file, { oneTimeOnly: true });
-                        //var url = "../tagcore/" + 'images/NobelwillImages/NobelPopupImages/Popup_1_1.png'
                         var d = waitingDoqs[file.name.substring(6)]
+                        doqarray[parseInt(d.Metadata.Year)-1901][d.Metadata.PrizeCategory.toLowerCase()].push(d);
                         d.Metadata.Thumbnail = { "FilePath": url }
                         d.Identifier = d.Metadata.ID
                         doqs.push(d)
                     })
-                    //yo(file)
                     
                     Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + "Mediums\\" + "medium_" + map[id]).done(function (file) {
                         var url = URL.createObjectURL(file, { oneTimeOnly: false });
@@ -353,7 +406,17 @@ TAG.Layout.Spoof = (function () {
 
             function poll() {
                 if (doqs.length >= Object.keys(map).length) {
-                    callback(doqs);
+                    var ds = []
+                    var hash = {}
+                    for (var i = 0; i < doqarray.length; i++) {
+                        doqarray[i].physics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
+                        doqarray[i].chemistry.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                        doqarray[i].medicine.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                        doqarray[i].literature.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                        doqarray[i].peace.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                        doqarray[i].economics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
+                    }
+                    callback(ds);
                 }
                 else {
                     setTimeout(poll, 500);
@@ -18089,7 +18152,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1962",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his realistic and imaginative writings, combining as they do sympathetic humour and keen social perception\"",
+                        "motivation": "\"for his realistic and imaginative writings, combining as they do symetic humour and keen social perception\"",
                         "affiliations": [
                             []
                         ]

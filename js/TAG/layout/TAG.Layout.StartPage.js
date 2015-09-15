@@ -41,7 +41,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         serverSubmit = root.find('#serverSubmit'),
         passwordSubmit = root.find('#passwordSubmit'),
         lockedMessage = root.find('#lockedMessage'),
-        OFFLINE = false,
+        OFFLINE = true,
         psuedoCollection = {
             prevScroll: null,
             prevPreviewPos: null,
@@ -529,11 +529,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
                     return false;
                 } else {
+                    switchPage();
+                    /**
                     //switchPage("ExhibitionTest");
                     var artwork1;
                     TAG.Layout.Spoof().getDoq("artwork1", function (doq) { artwork1 = doq});
                     var artworkViewer = TAG.Layout.CollectionsPage().switchPage(artwork1);
                     artworkViewer()
+                    **/
                 }
             }
         });
