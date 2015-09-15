@@ -12,7 +12,73 @@ TAG.Layout.Spoof = (function () {
     {
         "Patents": ["artwork1"]
     };
+    var tourDoqs = {
+        "Will": {
+            "tracks": [
+                {
+                    "assetUrl": "\\DeepZooms\\artwork1\\dz.xml",
+                    "guid": "artwork1",
+                    "providerId": "deepZoom",
+                    "keyframes": [
+                        {
+                            "SpecialKeyframeType": "INITIAL",
+                            "time": 0,
+                            "zIndex": 1,
+                            "opacity": 0,
+                            "scale": 1,
+                            "dispNum": 1,
+                            "pos": {"x":.1,"y":.1}
+                        },
+                        {
+                            "time": 1,
+                            "zIndex": 1,
+                            "opacity": 0,
+                            "scale": 1,
+                            "dispNum": 1,
+                            "pos": { "x": .1, "y": .1 }
+                        },
+                        {
+                            "time": 4,
+                            "zIndex": 1,
+                            "opacity": 0,
+                            "scale": 2,
+                            "dispNum": 1,
+                            "pos": { "x": .18, "y": .18 }
+                        },
+                        {
+                            "time": 7,
+                            "zIndex": 1,
+                            "opacity": 0,
+                            "scale": 2,
+                            "dispNum": 1,
+                            "pos": { "x": .19, "y": .6 }
+                        },
+                        {
+                            "time": 17,
+                            "zIndex": 1,
+                            "opacity": 0,
+                            "scale": 1,
+                            "dispNum": 1,
+                            "pos": { "x": .1, "y": .1 }
+                        },
+                        {
+                            "SpecialKeyframeType": "FINAL",
+                            "time": 20,
+                            "zIndex": 1,
+                            "opacity": 0,
+                            "scale": 1,
+                            "dispNum": 1,
+                            "pos": { "x": .1, "y": .1 }
+                        },
+                    ],
+                    "name": "Image1",
+                    "zIndex": 1,
 
+                }
+            ],
+            "other": {}
+        }
+    }
     var artDoqs = {
         //Artwork Doqs
         "artwork1": {
@@ -20,7 +86,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "L",
             "Metadata": {
                 "Description": "Description",
-                "DeepZoom": {"Path": "TAG\\DeepZooms\\artwork1\\dz.xml" },
+                "DeepZoom": {"Path": "Images\\artwork1\\dz.xml" },
                 "Thumbnail": {"Path":"Collections\\" + "Patents\\" + "artwork1.jpg"},
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -56,10 +122,19 @@ TAG.Layout.Spoof = (function () {
            "doqsInCollection": doqsInCollection,
            "artDoqs": artDoqs,
            "collectionDoqs": doqs,
+           "tourDoqs" : tourDoqs
            })
        }
        );
-    }
+   }
+   function getDoq(name, callback, error,erro2,error3) {
+       if (artDoqs[name] !== null && artDoqs[name] !== undefined) {
+           callback(artDoqs[name])
+       }
+       else {
+           error()
+       }
+   }
 
     return {
         getLaureates: getLaureates,
@@ -111,7 +186,7 @@ TAG.Layout.Spoof = (function () {
             var artworkGuids = doqsInCollection[collectionGuids[i]];
             for (var j = 0; j < artworkGuids.length; j++) {
                 setImageFromPath(artDoqs[artworkGuids[j]].Metadata.Thumbnail, artDoqs[artworkGuids[j]].Metadata.Thumbnail.Path, function () { poll() });
-                setImageFromPath(artDoqs[artworkGuids[j]].Metadata.DeepZoom, artDoqs[artworkGuids[j]].Metadata.DeepZoom.Path, function () { poll() },true);
+                setImageFromPath(artDoqs[artworkGuids[j]].Metadata.DeepZoom, artDoqs[artworkGuids[j]].Metadata.DeepZoom.Path, function () { poll() });
             }
         }
     }

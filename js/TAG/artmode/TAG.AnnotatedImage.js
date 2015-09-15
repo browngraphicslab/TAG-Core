@@ -137,7 +137,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             doNothing("ERROR IN openDZI");
             return false;
         }
-        viewer.openDzi(doq.Metadata.DeepZoom.Path.substring(4));
+        viewer.openDzi(doq.Metadata.DeepZoom.Path);
         return true;
     }
 

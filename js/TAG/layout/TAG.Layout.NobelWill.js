@@ -2040,35 +2040,47 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
     function switchTo(objName) {
         var doqType;
-
-        var slideDiv = $(document.createElement("div"))
-        slideDiv.css({
-            "width": "100%",
-            "height": "100%",
-            "position": "absolute",
-            "top": "0%",
-            "left": "100%",
-            "z-index" : "50000"
-        })
-        root.append(slideDiv)
         var doq,
             artworks = []
+
         switch (objName) {
             case "Will_Collection":
                 doq = spoof.collectionDoqs.Patents
                 doqType = "collection"
                 break;
+            case "Will_Tour":
+                doq = spoof.tourDoqs.Will
+                doqType = "tour"
+                break;
         }
+        if (doqType) {
 
-        switch (doqType) {
-            case "collection":
-                for (var i = 0; i < spoof.doqsInCollection[doq.Name].length; i++) {
-                    artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Name][i]]);
-                }
-                var collectionsPage = TAG.Layout.CollectionsPage({ "doqToUse": doq, "willRoot": slideDiv,"artworkDoqs":artworks });
-                slideDiv.append(collectionsPage.getRoot())
-                slideDiv.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { slideDiv.css({"background-color":"black"})})
-                break
+            var slideDiv = $(document.createElement("div"))
+            slideDiv.css({
+                "width": "100%",
+                "height": "100%",
+                "position": "absolute",
+                "top": "0%",
+                "left": "100%",
+                "z-index": "50000"
+            }).attr({id:"willOverlayRoot"})
+            root.append(slideDiv)
+            switch (doqType) {
+                case "collection":
+                    for (var i = 0; i < spoof.doqsInCollection[doq.Name].length; i++) {
+                        artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Name][i]]);
+                    }
+                    var collectionsPage = TAG.Layout.CollectionsPage({ "doqToUse": doq, "willRoot": slideDiv, "artworkDoqs": artworks });
+                    slideDiv.append(collectionsPage.getRoot())
+                    break
+                case "tour":
+                    var tourDoq = spoof.tourDoqs[doq.Name]
+                    var tourPlayer = TAG.Layout.TourPlayer(doq, null,null, null,spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail,null)
+                    slideDiv.append(tourPlayer.getRoot());
+                    tourPlayer.startPlayback()
+                    break;
+            }
+            slideDiv.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { slideDiv.css({ "background-color": "black" }) })
         }
     }
     function showLargePopup(mediaNumber) {
@@ -2609,7 +2621,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			[[], []]
     	]
     	var tours = [
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "The Nobel Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "The Nobel Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "The Nobel Family", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Colleagues, Inventions, and Factories", "link"]]],
+			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "Will_Tour"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "The Nobel Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "The Nobel Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "The Nobel Family", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Colleagues, Inventions, and Factories", "link"]]],
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Colleagues, Inventions, and Factories", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]]],
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Colleagues, Inventions, and Factories", "link"]], [], [], [], []],
 			[[], []]

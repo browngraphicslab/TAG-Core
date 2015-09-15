@@ -13772,7 +13772,7 @@ ImageJob.prototype = {
             _this.finish( false );
         }, this.timeout);
 
-        var s = "Images" + this.src.substring(9)
+        var s = this.src
         while (s.indexOf("/") !== -1) {
             s=s.replace("/","\\")
         }
