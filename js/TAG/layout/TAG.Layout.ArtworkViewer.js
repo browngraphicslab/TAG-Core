@@ -217,8 +217,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         locationList = TAG.Util.UI.getLocationList(doq.Metadata);
 
-        sideBar.css('visibility', 'hidden');
-
+        ///sideBar.css('visibility', 'hidden');
         if (!slideModeArray || !slideModeArray.length || slideModeArray.length===0) {
             isSlideMode = false;
         }
@@ -281,6 +280,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         // Keyword sets
         keywordSets = TAG.Layout.Spoof().getKeywordSets();
+
+        makeSidebar(0)
     }
 
     /*
@@ -834,6 +835,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         } else {
             backButton.hide();
         }
+        backButton.css({"z-index":"10000000","height":"auto"})
 
         togglerImage.attr("src", tagPath + 'images/icons/Close_nobel.svg');
         infoTitle.text(doq.Name);
@@ -951,41 +953,16 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
             //idleTimer && idleTimer.kill();
             //idleTimer = null;
-
-            annotatedImage && annotatedImage.unload();
-
-            collectionsPage = TAG.Layout.CollectionsPage({
-                backScroll: prevScroll,
-                backPreviewPos: prevPreviewPos,
-                backArtwork: prevPreview,
-                backCollection: prevCollection,
-                backTag: prevTag,
-                backMult: prevMult,
-                backSearch: prevSearch,
-                wasOnAssocMediaView: wasOnAssocMediaView,
-                splitscreen: root.data('split'),
-                smallPreview: smallPreview,
-                titleIsName: titleIsName,
-                twoDeep: twoDeep,
-                oneDeep: oneDeep,
-                hideKeywords: hideKeywords,
-                showNobelLifeBox: showNobelLifeBox,
-                showInitialImpactPopUp: showInitialImpactPopUp
-            });
-
-            collectionsPageRoot = collectionsPage.getRoot();
-            collectionsPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-
-            TAG.Util.UI.slidePageRightSplit(root, collectionsPageRoot, function () {
-                if (!IS_WINDOWS) {
-                    if (collectionsPage.getState().exhibition === prevCollection) {
-                        collectionsPage.showArtwork(prevPreview, prevMult && prevMult)();
-                    }
-                }
-            });
-
-            currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
-            currentPage.obj = collectionsPage;
+            if (isBarOpen === false) {
+                toggler.click();
+            }
+            $("#artworkViewerSwitchRoot").css({ "background-color": "transparent" })
+            root.css("background-color","black")
+            var cb = function () {
+                annotatedImage && annotatedImage.unload();
+                $("#artworkViewerSwitchRoot").remove(); $("#artworkViewerSwitchRoot").die()
+            }
+            $("#artworkViewerSwitchRoot").animate({ left: "100%" }, 1000, "easeInOutQuart", cb)
         }
 
         if (customMapsLength > 0 || locationList.length > 0) {
@@ -1215,12 +1192,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         };
 
         assocMediaToShow && loadQueue.add(mediaClicked(associatedMedia[assocMediaToShow.Identifier]));
-
-        console.log('hotspots: ' + hotspots);
-        //load hotspots then hide them
-        for (var y = 0; y < hotspots.guids.length; y++) {
-            loadQueue.add(showHotspots());
-        }
     }
 
     /**

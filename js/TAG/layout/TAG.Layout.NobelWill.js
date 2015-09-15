@@ -22,7 +22,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         testamentHeader = true // Use the orange script-y Testament image instead of plain text saying "The Will Page ..."
 
 
-    var OFFLINE = false
+    var OFFLINE = true
 
     var root = $("#tagRoot"),
         showInitialNobelWillBox = true,

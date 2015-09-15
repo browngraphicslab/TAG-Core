@@ -3690,8 +3690,20 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
 
-                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
-
+                //TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                var switchRoot = $(document.createElement("div"))
+                root.append(switchRoot)
+                switchRoot.css({
+                    "width": "100%",
+                    "position": "absolute",
+                    "height": "100%",
+                    "top": "0%",
+                    "left": "100%",
+                    'z-index' : "10000000000"
+                })
+                switchRoot.append(artworkViewer.getRoot()).attr({id:"artworkViewerSwitchRoot"})
+                switchRoot.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { $("#artworkViewerSwitchRoot").css({"background-color":"black"})})
+                
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                 currentPage.obj  = artworkViewer;
             }
