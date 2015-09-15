@@ -137,7 +137,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             doNothing("ERROR IN openDZI");
             return false;
         }
-        viewer.openDzi(FIX_PATH(doq.Metadata.DeepZoom.Path));
+        viewer.openDzi(doq.Metadata.DeepZoom.Path);
         return true;
     }
 
@@ -574,9 +574,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
  *Inits the OpenSeadragon viewer
  */
     function initOSD() {
-        
-        setTimeout(function () { callback && callback() }, 1);
-        return;
 
         //Creates element that the OSD viewer will be appended to
         viewerelt = document.createElement("div");
@@ -736,6 +733,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         assetCanvas = $(document.createElement('div'));
         assetCanvas.attr('id', 'annotatedImageAssetCanvas');
         root.append(assetCanvas);
+
+
+        setTimeout(function () { callback && callback() }, 1)
+        return;
 
         // this is stupid, but it seems to work (for being able to reference zoomimage in artmode)
         noMedia ? setTimeout(function () { callback && callback() }, 1) : loadAssociatedMedia(callback);

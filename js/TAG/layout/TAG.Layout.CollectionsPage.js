@@ -197,24 +197,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @method init
      */
     function init() {
-        
-        if (!idleTimer && !previewing) {
-            var timerDuration = {
-                duration: idleTimerDuration ? idleTimerDuration : null
-            }
-            idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-            idleTimer.start();
-        }
-        else if (idleTimer && !previewing && idleTimerDuration) {
-            var timerDuration = {
-                duration: idleTimerDuration
-            }
-            var timerStopped = idleTimer.isStopped();
-            idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-            if (!timerStopped) {
-                idleTimer.start();
-            }
-        }
+
         if ((previewing || lockKioskMode) && idleTimer) {
             idleTimer.kill();
         }
@@ -515,25 +498,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             if (collection.Name === 'The Life of Alfred Nobel'){
                 twoDeep = true;
                 hideKeywords = true;
-            }
-
-            // if the idle timer hasn't started already, start it
-            if (!idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true) { // loadCollection is called without an event to show the first collection
-                var timerDuration = {
-                    duration: idleTimerDuration ? idleTimerDuration : null
-                }
-                idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                idleTimer.start();
-            }
-            else if (idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true && idleTimerDuration) {
-                var timerDuration = {
-                    duration: idleTimerDuration
-                }
-                var timerStopped = idleTimer.isStopped();
-                idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                if (!timerStopped) {
-                    idleTimer.start();
-                }
             }
             //Set background image
             //if (collection.Metadata.BackgroundImage) {
@@ -1704,24 +1668,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             main.on('click', function () {
                 switchPage(currentWork)();
                 console.log("clicked");
-                // if the idle timer hasn't started already, start it
-                if (!idleTimer && !previewing && !lockKioskMode) {
-                    var timerDuration = {
-                        duration: idleTimerDuration ? idleTimerDuration : null
-                    }
-                    idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                    idleTimer.start();
-                }
-                else if (idleTimer && !previewing && !lockKioskMode && idleTimerDuration) {
-                    var timerDuration = {
-                        duration: idleTimerDuration
-                    }
-                    var timerStopped = idleTimer.isStopped();
-                    idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                    if (!timerStopped) {
-                        idleTimer.start();
-                    }
-                }
                 //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
                 setTimeout(function () { showArtwork(currentWork, false)() }, 10)
                 zoomTimeline(artworkCircles[currentWork.Identifier])
@@ -3744,8 +3690,20 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 newPageRoot = artworkViewer.getRoot();
                 newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
 
-                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
-
+                //TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+                var switchRoot = $(document.createElement("div"))
+                root.append(switchRoot)
+                switchRoot.css({
+                    "width": "100%",
+                    "position": "absolute",
+                    "height": "100%",
+                    "top": "0%",
+                    "left": "100%",
+                    'z-index' : "10000000000"
+                })
+                switchRoot.append(artworkViewer.getRoot()).attr({id:"artworkViewerSwitchRoot"})
+                switchRoot.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { $("#artworkViewerSwitchRoot").css({"background-color":"black"})})
+                
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                 currentPage.obj  = artworkViewer;
             }

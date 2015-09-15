@@ -20,7 +20,103 @@ TAG.Layout.Spoof = (function () {
         "Medals": ["medal1", "medal2", "medal3", "medal4", "medal5", "medal6", "medal7", "medal8"], //TO-DO: make images smaller for thumbnails, deep zooms
         "Will": ["will1","will2","will3","will4"] //TO-DO: thumbnails and deep zooms
     };
+    var tourDoqs = {
+        "Will": {
+            "tracks": [
+                {
+                    "assetUrl": "Images\\artwork1\\dz.xml",
+                    "guid": "artwork1",
+                    "providerId": "deepZoom",
+                    "name": "Image1",
+                    "zIndex": 1,
+                    "keyframes": [
+                        {
+                            "SpecialKeyframeType": "INITIAL",
+                            "time": 0,
+                            "zIndex": 1,
+                            "opacity": 0,
+                            "scale": 1,
+                            "dispNum": 1,
+                            "pos": {"x":.1,"y":.1}
+                        },
+                        {
+                            "time": 1,
+                            "zIndex": 1,
+                            "opacity": 1,
+                            "scale": 1,
+                            "dispNum": 1,
+                            "pos": { "x": .1, "y": .1 }
+                        },
+                        {
+                            "time": 4,
+                            "zIndex": 1,
+                            "opacity": 1,
+                            "scale": 2,
+                            "dispNum": 1,
+                            "pos": { "x": .18, "y": .18 }
+                        },
+                        {
+                            "time": 7,
+                            "zIndex": 1,
+                            "opacity": 1,
+                            "scale": 2,
+                            "dispNum": 1,
+                            "pos": { "x": .19, "y": .6 }
+                        },
+                        {
+                            "time": 17,
+                            "zIndex": 1,
+                            "opacity": 1,
+                            "scale": 1,
+                            "dispNum": 1,
+                            "pos": { "x": .1, "y": .1 }
+                        },
+                        {
+                            "SpecialKeyframeType": "FINAL",
+                            "time": 20,
+                            "zIndex": 1,
+                            "opacity": 0,
+                            "scale": 1,
+                            "dispNum": 1,
+                            "pos": { "x": .1, "y": .1 }
+                        },
+                    ],
 
+                },
+                {
+                    "assetUrl": "Audio\\audio1.mp3",
+                    "guid": "audio1",
+                    "providerId": "audio",
+                    "name": "audio1",
+                    "zIndex": 2,
+                    "mediaLength" : 182,
+                    "keyframes": [
+                        {
+                            "SpecialKeyframeType": "INITIAL",
+                            "time": 0,
+                            "dispNum": 0,
+                            "data": {},
+                            "volume" : 1
+                        },
+                        {
+                            "SpecialKeyframeType": "FINAL",
+                            "time": 90,
+                            "dispNum": 0,
+                            "data": {},
+                            "volume": 1
+                        }
+                    ]
+                    
+                }
+            ],
+            "totalDuration" : "182"
+        }
+    }
+    var audioDoqs = {
+        "audio1": {
+
+        }
+    }
     var artDoqs = {
         //Medals
         "medal1":{
@@ -842,10 +938,22 @@ TAG.Layout.Spoof = (function () {
            "doqsInCollection": doqsInCollection,
            "artDoqs": artDoqs,
            "collectionDoqs": doqs,
+           "tourDoqs" : tourDoqs
            })
        }
        );
-    }
+   }
+   function getDoq(name, callback, error,erro2,error3) {
+       if (artDoqs[name] !== null && artDoqs[name] !== undefined) {
+           callback(artDoqs[name])
+       }
+       else if (audioDoqs[name] !== null && audioDoqs[name] !== undefined) {
+           callback(audioDoqs[name])
+       }
+       else {
+           error()
+       }
+   }
 
     return {
         getLaureates: getLaureates,
@@ -876,14 +984,20 @@ TAG.Layout.Spoof = (function () {
         doqs: doqs,
         doqsInCollection: doqsInCollection,
         setCollectionPaths: setCollectionPaths,
-        getData: getData
+        getData: getData,
+        staticSetPath: staticSetPath
     };
-
+    function staticSetPath(path, obj, srcName) {
+        Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\"+path).done(function (file) {
+            var url = URL.createObjectURL(file, { oneTimeOnly: false });
+            obj[srcName] = url;
+        });
+    }
     function setCollectionPaths(callback) {
         var count = 0
         var poll = function () {
             count++
-            if (count === artworkGuids.length * 2) {
+            if (count === artworkGuids.length) {
                 callback();
             }
         }
@@ -896,10 +1010,16 @@ TAG.Layout.Spoof = (function () {
         }
     }
 
-    function setImageFromPath(obj, filePath, onComplete) {
-        Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + filePath).done(function (file) {
+    function setImageFromPath(obj, filePath, onComplete, dontUseNobel)
+    {
+        var s = ""
+        if (dontUseNobel !== true) {
+            s = "NobelFolder\\";
+        }
+        Windows.Storage.KnownFolders.documentsLibrary.getFileAsync(s + filePath).done(function (file) {
             var url = URL.createObjectURL(file, { oneTimeOnly: false });
             obj["FilePath"] = url;
+            obj["FullPath"] = file.path;
             onComplete && onComplete();
         });
     }

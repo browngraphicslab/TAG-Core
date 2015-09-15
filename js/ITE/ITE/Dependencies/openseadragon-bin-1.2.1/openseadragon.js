@@ -1918,7 +1918,15 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
          * @param {Function} onError - a function to call on when an error occurs
          * @throws {Error}
          */
-        makeAjaxRequest: function( url, onSuccess, onError ) {
+        makeAjaxRequest: function (url, onSuccess, onError) {
+            function replaceAll(find, replace, str) {
+                while (str.indexOf(find) !== -1) {
+                    str = str.replace("\\","/")
+                }
+                return str
+            }
+
+            url = "http://localhost:80/" + replaceAll("\\","/",url);
             var protocol = $.getUrlProtocol( url );
             var request = $.createAjaxRequest( protocol === "file:" );
 
@@ -1967,7 +1975,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                     msg += "\nSee http://msdn.microsoft.com/en-us/library/ms537505(v=vs.85).aspx#xdomain";
                 }
 
-                doNothing( "%s while making AJAX request: %s", e.name, msg );
+                console.log( "%s while making AJAX request: %s", e.name, msg );
 
                 request.onreadystatechange = function(){};
 
@@ -10337,9 +10345,14 @@ $.TileSource.prototype = /** @lends OpenSeadragon.TileSource.prototype */{
                 _this.raiseEvent( 'open-failed', { message: "Unable to load TileSource", source: url } );
                 return;
             }
-
+            while (url.indexOf("\\") !== -1) {
+                url = url.replace("\\", "/");
+            }
             options = $TileSource.prototype.configure.apply( _this, [ data, url ]);
-            readySource = new $TileSource( options );
+            readySource = new $TileSource(options);
+            while (readySource.tilesUrl.indexOf("\\") !== -1) {
+                readySource.tilesUrl = readySource.tilesUrl.replace("\\", "/");
+            }
             _this.ready = true;
             /**
              * Raised when a TileSource is opened and initialized.
@@ -10367,7 +10380,7 @@ $.TileSource.prototype = /** @lends OpenSeadragon.TileSource.prototype */{
             });
         } else {
             // request info via xhr asynchronously.
-            $.makeAjaxRequest( url, function( xhr ) {
+            $.makeAjaxRequest(url, function (xhr) {
                 var data = processResponse( xhr );
                 callback( data );
             }, function ( xhr, exc ) {
@@ -10499,7 +10512,6 @@ function processResponse( xhr ){
         status       = xhr.status,
         statusText,
         data;
-
     if ( !xhr ) {
         throw new Error( $.getString( "Errors.Security" ) );
     } else if ( xhr.status !== 200 && xhr.status !== 0 ) {
@@ -13760,14 +13772,19 @@ ImageJob.prototype = {
             _this.finish( false );
         }, this.timeout);
 
-        this.image.src = this.src;
+        var s = this.src
+        while (s.indexOf("/") !== -1) {
+            s=s.replace("/","\\")
+        }
+        TAG.Layout.Spoof().staticSetPath(s,this.image,"src")
+        //this.image.src = this.src;
     },
 
     finish: function( successful ) {
         this.image.onload = this.image.onerror = this.image.onabort = null;
         if (!successful) {
             this.image = null;
-            doNothing("failed to load image");
+            console.log("failed to load image");
         }
 
         if ( this.jobId ) {

@@ -77,9 +77,9 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Sets the image’s URL source.
 		_audio.attr({
-			"src"	: self.trackData.assetUrl,
 			"type" 	: self.trackData.type
 		});
+        TAG.Layout.Spoof().staticSetPath(self.trackData.assetUrl,_audio[0],"src")
 
 		// Ensure that the audio is completely loaded.
 		_audioControls.addEventListener("canplay", function() {
@@ -366,7 +366,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			
 			// If playing, reset the animation.
 			if (self.status === 1) {
-				self.animation.stop();
+				self.animation && self.animation.stop();
 				self.play();
 				// // Duration of current time to next keyframe.
 				// var duration = self.currentAnimationTask.nextKeyframeTime - self.taskManager.timeManager.getElapsedOffset();

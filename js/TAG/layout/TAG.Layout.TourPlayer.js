@@ -12,15 +12,10 @@
  * @param idletimer    the idle timer 
  * @param nobel
  */
-TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj, idletimer, nobel) {
+TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj, idletimer) {
     "use strict";
     var artworkPrev;
-
-    var prevScroll = prevInfo.prevScroll;
-    var prevPreviewPos = prevInfo.prevPreviewPos;
 	var prevExhib = exhibition;
-    var prevTag = prevInfo.prevTag;
-    var prevMult = prevInfo.prevMult;
     var prevSearch = prevSearch;
     var prevS;
 
@@ -121,8 +116,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             backButtonContainer.css('display', 'none');
             linkButtonContainer.css('display', 'none');
         }
-        if(tourObj && tourObj.Metadata && tourObj.Metadata.Thumbnail) {
-            bigThumbnail.attr('src', TAG.Worktop.Database.fixPath(tourObj.Metadata.Thumbnail));
+        if(tourObj && tourObj.FilePath) {
+            bigThumbnail.attr('src', TAG.Layout.Spoof().fixPath(tourObj.FilePath));
             bigPlayButton.attr('src', tagPath + 'images/icons/Play.svg');
             bigThumbnailContainer.css('display', 'block');
 
@@ -161,55 +156,18 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     }
     this.getTourData = getTourData;
 
-    function goBack () {
-        var artmode, collectionsPage;
-
-        // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
-        // idleTimer.kill();
-        // idleTimer = null;
-        cancelLoad = true;
-        $("#startPageLoadingOverlay").remove();
+    function goBack() {
         if (player) {
             player.pause();
             player.unload();
             player.cancelLoad();
         }
-        backButton.off('click'); // prevent user from clicking twice
-        if (artmodeOptions) {
-            artmode = new TAG.Layout.ArtworkViewer(artmodeOptions);
-            TAG.Util.UI.slidePageRightSplit(root, artmode.getRoot());
-            currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-            currentPage.obj  = artmode;
-        } else if (nobel){
-            TAG.Layout.StartPage(null, function (page) {
-                TAG.Util.UI.slidePageRight(page);
-            });
-        } else {
-            var backInfo = { backArtwork: tourObj, backScroll: prevScroll };
-            collectionsPage = new TAG.Layout.CollectionsPage({
-                backScroll: prevScroll,
-                backArtwork: tourObj,
-                backCollection: exhibition,
-                backTag : prevTag,
-                backMult : prevMult,
-                backPreviewPos: prevPreviewPos,
-                backSearch: prevSearch
-            });
-            TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
-                artworkPrev = "catalog";
-                if (!IS_WINDOWS) {
-                    if (collectionsPage.getState().exhibition === exhibition) {
-                        collectionsPage.showArtwork(tourObj, prevMult && prevMult)();
-                    }
-                }
-			});
-            currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
-            currentPage.obj  = collectionsPage;
-            $('#ITEHolder').remove();
-        }
-        if (player) {
-            player.clearControlsTimeout();
-        }
+        var willRoot = $("#willOverlayRoot")
+        willRoot.css({ "background-color": "transparent" })
+        willRoot.animate({ left: "100%" }, 1000, "easeInOutQuart", function () {
+            willRoot.die()
+            willRoot.remove()
+        })
     }
     this.goBack = goBack;
 
@@ -243,7 +201,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             function doqReturn(doq) {
                 returned++;
                 for (var i = 0 ; i < nobelDoq.length; i++) {
-                    if (doq.Identifier === nobelDoq[i]) {
+                    if (doq && doq.Identifier === nobelDoq[i]) {
                         nobelDoq[i] = doq;
                         break;
                     }
@@ -251,7 +209,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             }
             for (var i = 0; i < self.iteTour.tracks.length; i++) {
                 if (self.iteTour.tracks[i].guid && self.iteTour.tracks[i].guid !== null && self.iteTour.tracks[i].guid !== [] && self.iteTour.tracks[i].guid !== '') {
-                    TAG.Worktop.Database.getDoq(self.iteTour.tracks[i].guid, doqReturn,
+                    TAG.Layout.Spoof().getDoq(self.iteTour.tracks[i].guid, doqReturn,
                         function () {
                             console.log("error getting doq in tourplayer")
                         }, function () {

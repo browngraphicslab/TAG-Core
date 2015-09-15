@@ -273,6 +273,8 @@ TAG.Util.IdleTimer = (function() {
      * @method returnHome
      */
     function returnHome() {
+        return;
+
         TAG.Util.Splitscreen.setOn(false);
         TELEMETRY_SESSION_ID = TAG.Util.IdCreator();
 

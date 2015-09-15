@@ -6,6 +6,10 @@
 TAG.Layout.SpoofTest = (function () {
 	"use strict";
 
+    //OPTIONS
+    var IDLE_TIMER_TIME = 30 //IN SECONDS
+
+
 	var root = $("#tagRoot")
 	var base = $(document.createElement("div"))
 	var laurs,
@@ -41,8 +45,8 @@ TAG.Layout.SpoofTest = (function () {
 	TAG.Layout.Spoof().getLaureates(init)
 	function makeTimer() {
 	    var ret = {}
-	    ret.time = 60*5*1000
-        ret.scrollTime = 1750000
+	    ret.time = IDLE_TIMER_TIME * 1000
+        ret.scrollTime = 1800000
         ret.start = function () {
             reset();
             $("#popup").hide()
@@ -115,8 +119,8 @@ TAG.Layout.SpoofTest = (function () {
 		}).attr({ src: '../tagcore/images/icons/search_icon.svg' }).click(function () { search(searchBox[0].value.toLowerCase()) })
 		var clearSortCSS = {
 		    "position": "absolute",
-		    "width": "60px",
-		    "height": "24px",
+		    "width": "90px",
+		    "height": "30px",
 		    "font-size": ".65em",
             "text-align" : "center",
 		    "border-radius": "4pt",
@@ -348,7 +352,8 @@ TAG.Layout.SpoofTest = (function () {
 		arrangeTiles(blocks)
 		searchText.text("You have " + blocks.length + " results for '"+s+"'");
 		searchText.show();
-        searchBox.text('')
+		searchBox.text('')
+		$("#scroller").scrollLeft(0)
 	}
 	function sort(tags) {
         $("#decadeList").hide();
