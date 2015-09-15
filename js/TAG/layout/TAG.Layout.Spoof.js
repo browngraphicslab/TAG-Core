@@ -6,15 +6,704 @@
 TAG.Layout.Spoof = (function () {
     var _main = getMain();
 
-    var collectionGuids = ["Patents"]; //, "Factories", "Family", "Bjorkborn", "Ceremonies", "SanRemo", "Diplomas", "Medals", "Will"];
+    var collectionGuids = ["Patents", "Factories", "Family", "Bjorkborn", "Ceremonies", "SanRemo", "Diplomas", "Medals", "Will"];
 
     var doqsInCollection =
     {
-        "Patents": ["artwork1"]
+        "Patents": ["patent1", "patent2", "patent3", "patent4", "patent5", "patent6", "patent7", "patent8", "patent9"], //TO-DO: make images smaller for thumbnails, deep zooms
+        "Family": ["family1","family2","family3", "family4", "family5", "family6", "family7", "family8"], //TO-Do: thumnbnails, deep zooms
+        "Bjorkborn": [], //no content yet
+        "Factories": [], //TO-Do deepzooms and thumbnails //demo content
+        "Ceremonies": [], //no content yet
+        "SanRemo": [], //no content yet
+        "Diplomas": ["dip1", "dip2", "dip3", "dip4", "dip5", "dip6", "dip7", "dip8", "dip9", "dip10", "dip11"], //TO-DO: thumbnails and deep zooms
+        "Medals": ["medal1", "medal2", "medal3", "medal4", "medal5", "medal6", "medal7", "medal8"], //TO-DO: make images smaller for thumbnails, deep zooms
+        "Will": ["will1","will2","will3","will4"] //TO-DO: thumbnails and deep zooms
     };
 
     var artDoqs = {
-        //Artwork Doqs
+        //Medals
+        "medal1":{
+            "Identifier": "medal1",
+            "Name": "Front of the Nobel medal for the Nobel Prize in Physics, Chemistry, Physiology, and Medicine and Literature.",
+            "Metadata": {
+                "Description": "The medal was Designed by Erik Lindberg in 1901–1902. It features a portrait of Alfred Nobel and the years of his birth and death in Latin – NAT-MDCCC XXXIII OB-MDCCC XCVI. It is made of 18 carat green gold plated with 24 carat gold. It has a diameter of 66 milimeters and weighs 175 grams",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "01_NW_medal_front.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "medal2": {
+            "Identifier": "medal2",
+            "Name": "Back of the Nobel medal for the Nobel Prize in Physics and Chemistry.",
+            "Metadata": {
+                "Description": "The medal represents Nature in the form of a goddess resembling Isis, emerging from the clouds and holding in her arms a cornucopia. The veil which covers her cold and austere face is held up by the Genius of Science. The inscription on the medal reads: Inventas vitam juvat excoluisse per artes (\"And they who bettered life on earth by their newly found mastery.\") The words are taken from Vergilius Aeneid. The name of the Nobel Laureate is engraved on the plate below the figures, and the text \"REG. ACAD. SCIENT. SUEC.\" stands for The Royal Swedish Academy of Sciences.",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "02_NW_medal_ph_ch_back.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        }, 
+        "medal3" : { 
+            "Identifier": "medal3",
+            "Name": "Back of the Nobel medal for the Nobel Prize in Physiology of Medicine.",
+            "Metadata": {
+                "Description": "The medal represents the Genius of Medicine holding an open book in her lap, collecting the water pouring out from a rock in order to quench a sick girl's thirst. The inscription reads: Inventas vitam juvat excoluisse per artes (\"And they who bettered life on earth by their newly found mastery.\" ) The words are taken from Vergilius Aeneid. The name of the laureate is engraved on the plate below the figures, and the text \"REG. UNIVERSITAS MED. CHIR. CAROL.\" stands for the Karolinska Institute. ",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "03_NW_medal_me_back.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "medal4" :{
+            "Identifier": "medal4",
+            "Name": "Back of the medal for the Nobel Prize in Literature",
+            "Metadata": {
+                "Description": "The medal represents a young man sitting under a laurel tree who, enchanted, listens to and writes down the song of the Muse. The inscription reads: Inventas vitam juvat excoluisse per artes (\"And they who bettered life on earth by their newly found mastery.\") The words are taken from Vergilius Aeneid. The name of the Leaureate is engraved on the plate below the figures, and the text \"ACAD. SUEC.\" stands for the the Swedish Academy.",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "04_NW_medal_li_back.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "medal5": {
+            "Identifier": "medal5",
+            "Name": "Front of the medal for the Nobel Peace Prize.",
+            "Metadata": {
+                "Description": "The Medal was designed by Gustav Vigeland. It features a portrait of Alfred Nobel and the years of his birth and death in Latin – NAT-MDCCC XXXIII OB-MDCCC XCVI.",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "05_NW_medal_pe_front.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "medal6":{
+            "Identifier": "medal6",
+            "Name": "Back of the medal for the Nobel Peace Prize ",
+            "Metadata": {
+                "Description": "The other side of the Nobel Peace Prize medal represents a group of three men forming a fraternal bond. The inscription reads: Pro pace et fraternitate gentium (\"For the peace and brotherhood of men\") \"Prix Nobel de la Paix\", the relevant year, and the name of the Nobel Peace Prize Laureate is engraved on the edge of the medal. ",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "06_NW_medal_pe_back.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "medal7": {
+            "Identifier": "medal7",
+            "Name": "Front of the medal for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel ",
+            "Metadata": {
+                "Description": "The medal was designed by Gunvor Svensson-Lunddqvist. It features a portrait of Alfred Nobel and the words: Sveriges Riksbank till Alfred Nobels Minne 1968(The Sveriges Riksbank, in memory of Alfred Nobel, 1968). The lower half displays the bank's crossed horns of plenty. The name of the Economics Laureate is engraved on the edge of the medal.",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "07_NW_medal_ec_front.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "medal8": {
+            "Identifier": "medal8",
+            "Name": "Back of the medal for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel ",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        //Patents
+        "patent1": {
+            "Identifier": "patent1",
+            "Name": "Title",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "01_NW_coll_patents.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "patent2": {
+            "Identifier": "patent2",
+            "Name": "Title",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "02_NW_coll_patents.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "patent3": {
+            "Identifier": "patent3",
+            "Name": "Belgian Letters Patent, 1867 ",
+            "Metadata": {
+                "Description": "Belgian letters patent for Nitroglycerine, May 16, 1867",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "03_NW_coll_patents.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "patent4": {
+            "Identifier": "patent4",
+            "Name": "British Letters Patent, 1887 ",
+            "Metadata": {
+                "Description": "British letters patent for ”An improved explosive compound”, December 8, 1887.",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "04_NW_coll_patents.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "patent5" : {
+            "Identifier": "patent5",
+            "Name": "French Letters Patent, 1864 ",
+            "Metadata": {
+                "Description": "French letters patent for ””, June 17, 1864. ",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "05_NW_coll_patents.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "patent6": {
+            "Identifier": "patent6",
+            "Name": "American Letters Patent, 1879 ",
+            "Metadata": {
+                "Description": "American letters patent for ”Primers for Blasting Charges”, June 17, 1879.",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "06_NW_coll_patents.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "patent7": {
+            "Identifier": "patent7",
+            "Name": "Italian Letters Patent, 1887",
+            "Metadata": {
+                "Description": "Italian letters patent for ”Explosive substances”, March 9, 1876. ",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "07_NW_coll_patents.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "patent8": {
+            "Identifier": "patent8",
+            "Name": "Norwegian Letters Patent, 1896 ",
+            "Metadata": {
+                "Description": "Norwegian letters patent for ”Improvements of tändrör för projektiler”, May 22, 1896.",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "08_NW_coll_patents.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "patent9":{
+            "Identifier": "patent9",
+            "Name": "Swedish Letters Patent, 1863",
+            "Metadata": {
+                "Description": "Swedish letters patent for ”Smokeless powder”, October 6, 1863.",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "09_NW_coll_patents.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        //Family
+        "family1":{
+            "Identifier": "family1",
+            "Name": "01_NW_AN_fam.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Family\\" + "01_NW_AN_fam.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "family2": {
+            "Identifier": "family2",
+            "Name": "02_NW_AN_fam.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Family\\" + "02_NW_AN_fam.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "family3": {
+            "Identifier": "family3",
+            "Name": "ALFRED-4org ED (kopia).tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Family\\" + "ALFRED-4org ED (kopia).tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "family4": {
+            "Identifier": "family4",
+            "Name": "nat_pers_emanuel.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_emanuel.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "family5":{
+            "Identifier": "family5",
+            "Name": "nat_pers_emil.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_emil.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "family6": {
+            "Identifier": "family6",
+            "Name": "nat_pers_immanuel.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_immanuel.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "family7": {
+            "Identifier": "family7",
+            "Name": "nat_pers_ludvig.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_ludvig.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "family8":{
+            "Identifier": "family8",
+            "Name": "nat_pers_robert.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_robert.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        //Diplomas
+        "dip1":{
+            "Identifier": "dip1",
+            "Name": "Andre Geim’s Nobel Diploma in Physics, 2010 ",
+            "Metadata": {
+                "Description": "Andre Geim’s Nobel Diploma for his Nobel prize in Physics in 2010. It reads: \"The Royal Swedish Academy of Sciences has on October 5, 2010 decided that with the Nobel Prize which this year is awarded to the one who within the field of physics has made the most important discovery or invention jointly award Andre Geim and Konstantin Novoselov for groundbreaking experiments regarding the two-dimensional material graphene. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "01_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip2":{
+            "Identifier": "dip2",
+            "Name": "Konstantin Novoselov’s Nobel Diploma, Physics, 2010",
+            "Metadata": {
+                "Description": "Konstantin Novoselov’s Nobel Diploma for his Nobel prize in Physic in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 5, 2010 decided that with the Nobel Prize which this year is awarded to the one who within the field of physics has made the most important discovery or invention jointly award Konstantin Novoselov and Andre Geim for groundbreaking experiments regarding the two-dimensional material graphene. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "02_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip3": {
+            "Identifier": "dip3",
+            "Name": "Richard F Heck’s Nobel Diploma, Chemistry, 2010 ",
+            "Metadata": {
+                "Description": "Richard F Heck’s Nobel Diploma for his Nobel prize in Chemistry in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 6, 2010 decided that with the Nobel Prize which this year is awarded to the one who has made the most important chemical discovery or improvement jointly award Richard F Heck, Ei-ichi Negishi and Akira Suzuki for for palladium-catalyzed cross couplings in organic synthesis. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "03_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip4": {
+            "Identifier": "dip4",
+            "Name": "Ei-ichi Negishi’s Nobel Diploma, Chemistry, 2010",
+            "Metadata": {
+                "Description": "Ei-ichi Negishi’s Nobel Diploma for his Nobel prize in Chemistry in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 6, 2010 decided that with the Nobel Prize which this year is awarded to the one who has made the most important chemical discovery or improvement jointly award Ei-ichi Negishi, Richard F Heck and Akira Suzuki for for palladium-catalyzed cross couplings in organic synthesis. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "04_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip5": {
+            "Identifier": "dip5",
+            "Name": "Akira Suzuki’s Nobel Diploma, Chemistry, 2010 ",
+            "Metadata": {
+                "Description": "Akira Suzuki’s Nobel Diploma for his Nobel Prize in Chemistry in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 6, 2010 decided that with the Nobel Prize which this year is awarded to the one who has made the most important chemical discovery or improvement jointly award Akira Suzuki, Richard F Heck and Ei-ichi Negishi for for palladium-catalyzed cross couplings in organic synthesis. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "05_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip6": {
+            "Identifier": "dip6",
+            "Name": "Robert G Edwards’ Nobel Diploma, Physiology of Medicine, 2010",
+            "Metadata": {
+                "Description": "Robert G Edwards’ Nobel Diploma for his Nobel Prize in Physiology or Medicine 2010. It reads: ”The Nobel Assembly at Karolinska Institutet has decided that the 2010 Nobel Prize in physiology or medicine shall be awarded to Robert G Edwards for the development of in vitro fertilization. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "06_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip7": {
+            "Identifier": "dip7",
+            "Name": "Mario Vargas Llosa’s Nobel Diploma, Literature, 2010",
+            "Metadata": {
+                "Description": "Mario Vargas Llosa’s Nobel Diploma for his Nobel Prize in Literature 2010. It reads: ”The Swedish Academy has at its assembly on October 7, 2010 in accordance with the directions in the will drawn up by on November 27, 1895 by Alfred Nobel decided that the Nobel Prize in Literature shall be awarded to Mario Vargas Llosa, ’for his cartography of structures of power and his trenchant images of the individual’s resistance, revolt, and defeat’. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "07_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip8": {
+            "Identifier": "dip8",
+            "Name": "Liu Xiaobo’s Nobel Diploma, Peace, 2010",
+            "Metadata": {
+                "Description": "Liu Xiaobo’s Nobel Diploma for his Nobel Peace Prize in 2010. It reads: ”.” ",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip9": {
+            "Identifier": "dip9",
+            "Name": "Peter A. Diamond’s Nobel Diploma, Economics, 2010 ",
+            "Metadata": {
+                "Description": "Peter A. Diamond’s Nobel Diploma for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 11, 2010 decided to award the prize in economic sciences in memory of Alfred Nobel established by The Sveriges Riksbank in 1968 jointly to Peter A. Diamond, Dale Mortensen and Christopher A. Pissarides for their analysis of markets with search frictions. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "09_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip10":{
+            "Identifier": "dip10",
+            "Name": "Dale T. Mortensen’s Nobel Diploma, Economics, 2010",
+            "Metadata": {
+                "Description": "Dale T. Mortensen’s Nobel Diploma for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 11, 2010 decided to award the prize in economic sciences in memory of Alfred Nobel established by The Sveriges Riksbank in 1968 jointly to Dale T. Mortensen, Peter A. Diamond and Christopher A. Pissarides for their analysis of markets with search frictions. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "10_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "dip11": {
+            "Identifier": "dip11",
+            "Name": "Christopher A. Pissarides’ Nobel Diploma, Economics, 2010 ",
+            "Metadata": {
+                "Description": "Christopher A. Pissarides’ Nobel Diploma for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 11, 2010 decided to award the prize in economic sciences in memory of Alfred Nobel established by The Sveriges Riksbank in 1968 jointly to Christopher A. Pissarides, Peter A. Diamond and Dale Mortensen and for their analysis of markets with search frictions. Stockholm, December 10, 2010.”",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "11_NW_coll_diplomas.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        //The Will
+        "will1":{
+            "Identifier": "will1",
+            "Name": "The first page of Alfred Nobel’s Will ",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Will\\" + "01_NW_coll_will_1.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "will2":{
+            "Identifier": "will2",
+            "Name": "The second page of Alfred Nobel’s Will",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Will\\" + "02_NW_coll_will_2.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "will3":{
+            "Identifier": "will3",
+            "Name": "The third page of Alfred Nobel’s Will",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Will\\" + "03_NW_coll_will_3.tif"},
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "will4":{
+            "Identifier": "will4",
+            "Name": "The fourth page of Alfred Nobel’s Will",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Will\\" + "04_NW_coll_will_4.tif"},
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        //Factories
+        "fac1": {
+            "Identifier": "fac1",
+            "Name": "inno_fab_hur_bland_1.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_bland_1.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "fac2": {
+            "Identifier": "fac2",
+            "Name": "inno_fab_hur_bland_2.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_bland_2.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "fac3": {
+            "Identifier": "fac3",
+            "Name": "inno_fab_hur_nitro_1.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_nitro_1.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "fac4": {
+            "Identifier": "fac4",
+            "Name": "inno_fab_hur_nitro_3.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_nitro_3.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        "fac5": {
+            "Identifier": "fac5",
+            "Name": "inno_fab_hur_prov.tif",
+            "Metadata": {
+                "Description": "",
+                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_prov.tif" },
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "Artwork",
+                "ContentType": "Image"
+            }
+        },
+        //Test
         "artwork1": {
             "Identifier": "artwork1",
             "Name": "L",
@@ -34,9 +723,105 @@ TAG.Layout.Spoof = (function () {
 
    var doqs = {
         //Collection Doqs
+        "Medals": {
+            "Identifier": "Medals",
+            "Name": "The Nobel Medals",
+            "Metadata": {
+                "Description": "Description",
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "eExhibit"
+            }
+        },
+        "Family": {
+            "Identifier": "Family",
+            "Name": "Alfred Nobel and His Family",
+            "Metadata": {
+                "Description": "Description",
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "eExhibit"
+            }
+        },
         "Patents": {
-            "Identifier": "Patents",
-            "Name": "Patents",
+        "Identifier": "Patents",
+        "Name": "Patents",
+        "Metadata": {
+            "Description": "Description",
+            "AssocMediaView": "false",
+            "Private": "false",
+            "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+            "Timeline": "true",
+            "Type": "eExhibit"
+            }
+        },
+        "Bjorkborn": {
+           "Identifier": "Bjorkborn",
+           "Name": "Björkborn",
+           "Metadata": {
+               "Description": "Description",
+               "AssocMediaView": "false",
+               "Private": "false",
+               "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+               "Timeline": "true",
+               "Type": "eExhibit"
+           }
+        },
+        "Ceremonies": {
+            "Identifier": "Ceremonies",
+            "Name": "Prize Award Ceremonies",
+            "Metadata": {
+                "Description": "Description",
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "eExhibit"
+            }
+        },
+        "Diplomas": {
+            "Identifier": "Diplomas",
+            "Name": "The Nobel Diplomas",
+            "Metadata": {
+                "Description": "Description",
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "eExhibit"
+            }
+        },
+        "Will": {
+            "Identifier": "Will",
+            "Name": "The Will",
+            "Metadata": {
+                "Description": "Description",
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "eExhibit"
+            }
+        },
+        "Factories": {
+            "Identifier": "Factories",
+            "Name": "Factories",
+            "Metadata": {
+                "Description": "Description",
+                "AssocMediaView": "false",
+                "Private": "false",
+                "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
+                "Timeline": "true",
+                "Type": "eExhibit"
+            }
+        },
+        "SanRemo": {
+            "Identifier": "SanRemo",
+            "Name": "San Remo",
             "Metadata": {
                 "Description": "Description",
                 "AssocMediaView": "false",
@@ -46,6 +831,7 @@ TAG.Layout.Spoof = (function () {
                 "Type": "eExhibit"
             }
         }
+
     };
 
    function getData(callback) {
