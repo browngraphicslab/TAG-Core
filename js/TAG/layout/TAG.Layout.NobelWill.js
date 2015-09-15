@@ -19,7 +19,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         agedWill = false,  //For the whiter or yellower will
         singleArrowUpDownIcons = true, //non-functional thus far
         tourAndCollectionTaskBar = false, //make the tour and collection UI on the popup the same as the one for taskbar
-        testamentHeader = true
+        testamentHeader = true // Use the orange script-y Testament image instead of plain text saying "The Will Page ..."
 
 
     var root = $("#tagRoot"),
@@ -1824,7 +1824,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             stopAudio();
             for (var i = 0; i < textDivArray.length; i++) {
                 var mid = textDivArray[i].offset().top + textDivArray[i].height()/2
-                if (mid > percentToPx(sliderPositions[chunk][0]) + 5 && mid < percentToPx(sliderPositions[chunk][0] + sliderPositions[chunk][1])-5) {
+                if (mid > percentToPx(sliderPositions[chunk][0]) +1 && mid < percentToPx(sliderPositions[chunk][0] + sliderPositions[chunk][1])-1) {
                     fadeText(textDivArray[i], 'white', null, duration || 1000)
                 }
                 else {
@@ -2190,11 +2190,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		var t = $(document.createElement('div'));
     		t.css({
     		    "position": 'absolute',
-    		    'width': "70px",
+    		    'width': "80px",
     		    'color': "black",
                 "background-color" : "transparent",
                 "font-size" : ".5em",
-                'text-align': 'center'
+                'text-align': 'center',
+                'padding-left': '3%',
+                'padding-right': '3%',
+                'top': '5%'
     		}).text(extra[1])
             t.attr('id', 'textCaption');
 
@@ -2202,17 +2205,17 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             bd.append(t);
 
             // special case for an alternative UI design
-            // if (tourAndCollectionTaskBar === true) {
-                // t.css({
-                //     'width': '80px',
-                //     'top': '90px',
-                //     'color': 'white',
-                //     'display': 'block'
-                // });
-                // bd.css({
-                //     'height': 80 + $("#textCaption").height() + 'px'
-                // })
-            // }
+             if (tourAndCollectionTaskBar === true) {
+                 t.css({
+                     'width': '80px',
+                     'top': '90px',
+                     'color': 'white',
+                     'display': 'block'
+                 });
+                 bd.css({
+                     'height': 80 + $("#textCaption").height() + 'px'
+                 })
+             }
 
 			return bd;
     	}
@@ -2225,26 +2228,28 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		"right": "2.5%",
 			"position" : "absolute"
     	})
+    	extras.attr('id', 'toursAndGalleriesDiv');
     	popup.append(extras);
     	if (info.collections && info.collections.length > 0) {
     		var gallery = $(document.createElement('div'));
     		gallery.css({
     			"width": "100%",
-    			"height": "5%",
+    			"height": "auto",
     			"color": "white",
 				"font-size" : ".8em"
     		})
 
             if (tourAndCollectionTaskBar === true) {
                 gallery.css({
-                    'margin-bottom': '10%'
-                })
+                    'margin-bottom': '5%'
+                }).attr('id', 'galleryDiv');
                 var galleryIcon = $(document.createElement('img'));
                 galleryIcon.attr({
                     'src': tagPath + 'images/collections.svg'
                 });
                 galleryIcon.css({
-                    'width': '100%'
+                    'width': '100%',
+                    'height': 'auto'
                 });
                 gallery.append(galleryIcon);
             }
@@ -2259,24 +2264,27 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			extras.append(extra);
     		}
     	}
+        
     	if (info.tours && info.tours.length > 0) {
     		var tour = $(document.createElement('div'));
     		tour.css({
     			"width": "100%",
     			"height": "5%",
     			"color": "white",
-    			"font-size": ".8em"
+    			"font-size": ".8em",
     		});
             if (tourAndCollectionTaskBar === true) {
                 tour.css({
-                    'margin-bottom': '10%'
+                    'margin-bottom': '5%',
+                    "margin-top": "50%"
                 })
                 var tourIcon = $(document.createElement('img'));
                 tourIcon.attr({
                     'src': tagPath + 'images/tours.svg'
                 });
                 tourIcon.css({
-                    'width': '65%'
+                    'width': '65%',
+                    'height': 'auto'
                 });
                 tour.append(tourIcon);
             }
