@@ -17,10 +17,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         showRedTracings = true,
         showOnlyHighlightedHotspots = true,
         agedWill = false,  //For the whiter or yellower will
-        singleArrowUpDownIcons = true, //non-functional thus far
+        singleArrowUpDownIcons = false,//non-functional thus far
         tourAndCollectionTaskBar = false, //make the tour and collection UI on the popup the same as the one for taskbar
         testamentHeader = true // Use the orange script-y Testament image instead of plain text saying "The Will Page ..."
 
+
+    var OFFLINE = false
 
     var root = $("#tagRoot"),
         showInitialNobelWillBox = true,
@@ -70,8 +72,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
         idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair)
 
-
-    TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
+    if (OFFLINE === true) {
+        TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
+    }
+    else {
+        nobelWillInit();
+    }
     videoOverlay();
 
     /** function videoOverlay
@@ -1094,6 +1100,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     id: 'upIcon',
                     src: tagPath + 'images/icons/up_nobel_icon.svg'
                 })
+                if (singleArrowUpDownIcons === false) {
+                    up.attr({ src: tagPath + 'images/icons/nobel_down_double.svg' })//the files names are fucked up--sorry
+                }
                 up.css({
                     'position': 'absolute',
                     'background-color': "transparent",
@@ -1121,6 +1130,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     id: 'downIcon',
                     src: tagPath + 'images/icons/down_nobel_icon.svg'
                 })
+                if (singleArrowUpDownIcons === false) {
+                    down.attr({ src: tagPath + 'images/icons/nobel_up_double.svg' })//the file names are fucked up -- sorry
+                }
                 down.css({
                     'position': 'absolute',
                     'background-color': "transparent",
