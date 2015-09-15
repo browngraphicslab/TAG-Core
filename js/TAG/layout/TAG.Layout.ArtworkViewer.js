@@ -257,10 +257,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 }
                 **/
                 //createSeadragonControls();
+                /*
                 TAG.Layout.Spoof().getMaps(doq.Identifier, function (mps) {
                     customMapsLength = mps.length;
                     setTimeout(function(){makeSidebar();},250);  //hack for some async styling stuff - lucyvk
-                });
+                });*/
 
                 if (isNobelWill === true) {
                     nobelWillInit();

@@ -137,7 +137,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             doNothing("ERROR IN openDZI");
             return false;
         }
-        viewer.openDzi(FIX_PATH(doq.Metadata.DeepZoom));
+        viewer.openDzi(doq.Metadata.DeepZoom.Path.substring(4));
         return true;
     }
 
@@ -734,6 +734,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         assetCanvas.attr('id', 'annotatedImageAssetCanvas');
         root.append(assetCanvas);
 
+
+        setTimeout(function () { callback && callback() }, 1)
+        return;
+
         // this is stupid, but it seems to work (for being able to reference zoomimage in artmode)
         noMedia ? setTimeout(function () { callback && callback() }, 1) : loadAssociatedMedia(callback);
     }
@@ -827,8 +831,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         associatedMedia = {
             guids: []
         };
-
-        TAG.Worktop.Database.getAssocMediaTo(doq.Identifier, mediaSuccess, null, mediaSuccess);
+        //TAG.Worktop.Database.getAssocMediaTo(doq.Identifier, mediaSuccess, null, mediaSuccess);
 
         /**
          * Success callback function for .getAssocMediaTo call above. If the list of media is
@@ -847,6 +850,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 callback && callback(associatedMedia);
             }
         }
+        mediaSuccess([]);
 
         /**
          * Helper function for the calls to .getLinq above. It accepts an assoc media doc and returns
