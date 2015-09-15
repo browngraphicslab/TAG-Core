@@ -20,7 +20,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "L",
             "Metadata": {
                 "Description": "Description",
-                "DeepZoom": {"Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": {"Path": "TAG\\DeepZooms\\artwork1\\dz.xml" },
                 "Thumbnail": {"Path":"Collections\\" + "Patents\\" + "artwork1.jpg"},
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -90,14 +90,20 @@ TAG.Layout.Spoof = (function () {
         doqs: doqs,
         doqsInCollection: doqsInCollection,
         setCollectionPaths: setCollectionPaths,
-        getData: getData
+        getData: getData,
+        staticSetPath: staticSetPath
     };
-
+    function staticSetPath(path, obj, srcName) {
+        Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\"+path).done(function (file) {
+            var url = URL.createObjectURL(file, { oneTimeOnly: false });
+            obj[srcName] = url;
+        });
+    }
     function setCollectionPaths(callback) {
         var count = 0
         var poll = function () {
             count++
-            if (count === artworkGuids.length * 2) {
+            if (count === artworkGuids.length) {
                 callback();
             }
         }
@@ -105,15 +111,21 @@ TAG.Layout.Spoof = (function () {
             var artworkGuids = doqsInCollection[collectionGuids[i]];
             for (var j = 0; j < artworkGuids.length; j++) {
                 setImageFromPath(artDoqs[artworkGuids[j]].Metadata.Thumbnail, artDoqs[artworkGuids[j]].Metadata.Thumbnail.Path, function () { poll() });
-                setImageFromPath(artDoqs[artworkGuids[j]].Metadata.DeepZoom, artDoqs[artworkGuids[j]].Metadata.DeepZoom.Path, function () { poll() });
+                setImageFromPath(artDoqs[artworkGuids[j]].Metadata.DeepZoom, artDoqs[artworkGuids[j]].Metadata.DeepZoom.Path, function () { poll() },true);
             }
         }
     }
 
-    function setImageFromPath(obj, filePath, onComplete) {
-        Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\" + filePath).done(function (file) {
+    function setImageFromPath(obj, filePath, onComplete, dontUseNobel)
+    {
+        var s = ""
+        if (dontUseNobel !== true) {
+            s = "NobelFolder\\";
+        }
+        Windows.Storage.KnownFolders.documentsLibrary.getFileAsync(s + filePath).done(function (file) {
             var url = URL.createObjectURL(file, { oneTimeOnly: false });
             obj["FilePath"] = url;
+            obj["FullPath"] = file.path;
             onComplete && onComplete();
         });
     }
