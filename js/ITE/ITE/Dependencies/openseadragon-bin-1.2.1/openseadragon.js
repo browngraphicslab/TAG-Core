@@ -1967,7 +1967,7 @@ window.OpenSeadragon = window.OpenSeadragon || function( options ){
                     msg += "\nSee http://msdn.microsoft.com/en-us/library/ms537505(v=vs.85).aspx#xdomain";
                 }
 
-                doNothing( "%s while making AJAX request: %s", e.name, msg );
+                console.log( "%s while making AJAX request: %s", e.name, msg );
 
                 request.onreadystatechange = function(){};
 

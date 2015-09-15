@@ -115,8 +115,8 @@ TAG.Layout.SpoofTest = (function () {
 		}).attr({ src: '../tagcore/images/icons/search_icon.svg' }).click(function () { search(searchBox[0].value.toLowerCase()) })
 		var clearSortCSS = {
 		    "position": "absolute",
-		    "width": "60px",
-		    "height": "24px",
+		    "width": "90px",
+		    "height": "30px",
 		    "font-size": ".65em",
             "text-align" : "center",
 		    "border-radius": "4pt",
@@ -348,7 +348,8 @@ TAG.Layout.SpoofTest = (function () {
 		arrangeTiles(blocks)
 		searchText.text("You have " + blocks.length + " results for '"+s+"'");
 		searchText.show();
-        searchBox.text('')
+		searchBox.text('')
+		$("#scroller").scrollLeft(0)
 	}
 	function sort(tags) {
         $("#decadeList").hide();

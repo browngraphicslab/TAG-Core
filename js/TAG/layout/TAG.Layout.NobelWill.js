@@ -17,7 +17,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         showRedTracings = true,
         showOnlyHighlightedHotspots = true,
         agedWill = false,  //For the whiter or yellower will
-        singleArrowUpDownIcons = true//non-functional thus far
+        singleArrowUpDownIcons = false//non-functional thus far
 
 
     var root = $("#tagRoot"),
@@ -1062,6 +1062,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     id: 'upIcon',
                     src: tagPath + 'images/icons/up_nobel_icon.svg'
                 })
+                if (singleArrowUpDownIcons === false) {
+                    up.attr({ src: tagPath + 'images/icons/nobel_down_double.svg' })//the files names are fucked up--sorry
+                }
                 up.css({
                     'position': 'absolute',
                     'background-color': "transparent",
@@ -1089,6 +1092,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     id: 'downIcon',
                     src: tagPath + 'images/icons/down_nobel_icon.svg'
                 })
+                if (singleArrowUpDownIcons === false) {
+                    down.attr({ src: tagPath + 'images/icons/nobel_up_double.svg' })//the file names are fucked up -- sorry
+                }
                 down.css({
                     'position': 'absolute',
                     'background-color': "transparent",
