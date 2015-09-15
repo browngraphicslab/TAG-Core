@@ -246,23 +246,27 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         })
 
         if (testamentHeader === true) {
+            titleDiv.css({
+                'top': '0%'
+            })
             var titleIcon = $(document.createElement('img'));
             titleIcon.attr({
                 'src': tagPath + 'images/testament.svg'
             });
             titleIcon.css({
-                'width': '50%'
+                'width': '40%',
+                'height': 'auto'
             });
             var pageNum = $(document.createElement('div'));
             pageNum.css({
                 'text-align': 'center',
-                'position': 'absolute',
+                'position': 'relative',
                 'color': 'white',
                 'font-weight': 'bold',
                 'width': '100%',
-                'font-size': '50%',
+                'font-size': '40%',
                 'color': NOBEL_ORANGE_COLOR,
-                'top': '50%'
+                'top': '-15%'
             }).text(pageNumber + "/4");
             titleDiv.append(titleIcon);
             titleDiv.append(pageNum);
