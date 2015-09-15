@@ -197,24 +197,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
      * @method init
      */
     function init() {
-        
-        if (!idleTimer && !previewing) {
-            var timerDuration = {
-                duration: idleTimerDuration ? idleTimerDuration : null
-            }
-            idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-            idleTimer.start();
-        }
-        else if (idleTimer && !previewing && idleTimerDuration) {
-            var timerDuration = {
-                duration: idleTimerDuration
-            }
-            var timerStopped = idleTimer.isStopped();
-            idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-            if (!timerStopped) {
-                idleTimer.start();
-            }
-        }
+
         if ((previewing || lockKioskMode) && idleTimer) {
             idleTimer.kill();
         }
@@ -515,25 +498,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             if (collection.Name === 'The Life of Alfred Nobel'){
                 twoDeep = true;
                 hideKeywords = true;
-            }
-
-            // if the idle timer hasn't started already, start it
-            if (!idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true) { // loadCollection is called without an event to show the first collection
-                var timerDuration = {
-                    duration: idleTimerDuration ? idleTimerDuration : null
-                }
-                idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                idleTimer.start();
-            }
-            else if (idleTimer && evt && !previewing && !lockKioskMode && jQuery.data(document.body, "isKiosk") == true && idleTimerDuration) {
-                var timerDuration = {
-                    duration: idleTimerDuration
-                }
-                var timerStopped = idleTimer.isStopped();
-                idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                if (!timerStopped) {
-                    idleTimer.start();
-                }
             }
             //Set background image
             //if (collection.Metadata.BackgroundImage) {
@@ -1704,24 +1668,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             main.on('click', function () {
                 switchPage(currentWork)();
                 console.log("clicked");
-                // if the idle timer hasn't started already, start it
-                if (!idleTimer && !previewing && !lockKioskMode) {
-                    var timerDuration = {
-                        duration: idleTimerDuration ? idleTimerDuration : null
-                    }
-                    idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                    idleTimer.start();
-                }
-                else if (idleTimer && !previewing && !lockKioskMode && idleTimerDuration) {
-                    var timerDuration = {
-                        duration: idleTimerDuration
-                    }
-                    var timerStopped = idleTimer.isStopped();
-                    idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerDuration);
-                    if (!timerStopped) {
-                        idleTimer.start();
-                    }
-                }
                 //Timeout so that double click is actually captured at all (otherwise, it scrolls out of the way too quickly for second click to occur)
                 setTimeout(function () { showArtwork(currentWork, false)() }, 10)
                 zoomTimeline(artworkCircles[currentWork.Identifier])

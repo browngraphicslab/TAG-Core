@@ -6,6 +6,10 @@
 TAG.Layout.SpoofTest = (function () {
 	"use strict";
 
+    //OPTIONS
+    var IDLE_TIMER_TIME = 30 //IN SECONDS
+
+
 	var root = $("#tagRoot")
 	var base = $(document.createElement("div"))
 	var laurs,
@@ -41,8 +45,8 @@ TAG.Layout.SpoofTest = (function () {
 	TAG.Layout.Spoof().getLaureates(init)
 	function makeTimer() {
 	    var ret = {}
-	    ret.time = 60*5*1000
-        ret.scrollTime = 1750000
+	    ret.time = IDLE_TIMER_TIME * 1000
+        ret.scrollTime = 1800000
         ret.start = function () {
             reset();
             $("#popup").hide()
