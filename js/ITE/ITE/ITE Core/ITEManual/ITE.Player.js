@@ -608,7 +608,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         progressIndicator.css({ 'opacity': 0 })
         $("#backButton").css({ 'opacity': 0 })
         $("#linkButton").css({ 'opacity': 0 })
-        $('.progressBarContainer').css('opacity', '0');
+        $('.progressBarContainer').css('opacity', '0.5');
     }
 
     /*
