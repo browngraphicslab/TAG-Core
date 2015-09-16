@@ -7394,8 +7394,8 @@ TAG.Layout.Spoof = (function () {
             "Name": "Front of the Nobel medal for the Nobel Prize in Physics, Chemistry, Physiology, and Medicine and Literature.",
             "Metadata": {
                 "Description": "The medal was Designed by Erik Lindberg in 1901–1902. It features a portrait of Alfred Nobel and the years of his birth and death in Latin – NAT-MDCCC XXXIII OB-MDCCC XCVI. It is made of 18 carat green gold plated with 24 carat gold. It has a diameter of 66 milimeters and weighs 175 grams",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
-                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "01_NW_medal_front.tif" },
+                "DeepZoom": { "Path": "Collections\\Medals\\medal1\\GeneratedImages\\dzc_output.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "01_NW_coll_medals.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
                 "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
@@ -7409,8 +7409,8 @@ TAG.Layout.Spoof = (function () {
             "Name": "Back of the Nobel medal for the Nobel Prize in Physics and Chemistry.",
             "Metadata": {
                 "Description": "The medal represents Nature in the form of a goddess resembling Isis, emerging from the clouds and holding in her arms a cornucopia. The veil which covers her cold and austere face is held up by the Genius of Science. The inscription on the medal reads: Inventas vitam juvat excoluisse per artes (\"And they who bettered life on earth by their newly found mastery.\") The words are taken from Vergilius Aeneid. The name of the Nobel Laureate is engraved on the plate below the figures, and the text \"REG. ACAD. SCIENT. SUEC.\" stands for The Royal Swedish Academy of Sciences.",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
-                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "02_NW_medal_ph_ch_back.tif" },
+                "DeepZoom": { "Path": "Collections\\Medals\\medal2\\GeneratedImages\\dzc_output.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "02_NW_coll_medals.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
                 "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
@@ -7424,8 +7424,8 @@ TAG.Layout.Spoof = (function () {
             "Name": "Back of the Nobel medal for the Nobel Prize in Physiology of Medicine.",
             "Metadata": {
                 "Description": "The medal represents the Genius of Medicine holding an open book in her lap, collecting the water pouring out from a rock in order to quench a sick girl's thirst. The inscription reads: Inventas vitam juvat excoluisse per artes (\"And they who bettered life on earth by their newly found mastery.\" ) The words are taken from Vergilius Aeneid. The name of the laureate is engraved on the plate below the figures, and the text \"REG. UNIVERSITAS MED. CHIR. CAROL.\" stands for the Karolinska Institute. ",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
-                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "03_NW_medal_me_back.tif" },
+                "DeepZoom": { "Path": "Collections\\Medals\\medal3\\GeneratedImages\\dzc_output.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "03_NW_coll_medals.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
                 "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
@@ -7439,8 +7439,8 @@ TAG.Layout.Spoof = (function () {
             "Name": "Back of the medal for the Nobel Prize in Literature",
             "Metadata": {
                 "Description": "The medal represents a young man sitting under a laurel tree who, enchanted, listens to and writes down the song of the Muse. The inscription reads: Inventas vitam juvat excoluisse per artes (\"And they who bettered life on earth by their newly found mastery.\") The words are taken from Vergilius Aeneid. The name of the Leaureate is engraved on the plate below the figures, and the text \"ACAD. SUEC.\" stands for the the Swedish Academy.",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
-                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "04_NW_medal_li_back.tif" },
+                "DeepZoom": { "Path": "Collections\\Medals\\medal4\\GeneratedImages\\dzc_output.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "04_NW_coll_medals.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
                 "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
@@ -7454,8 +7454,8 @@ TAG.Layout.Spoof = (function () {
             "Name": "Front of the medal for the Nobel Peace Prize.",
             "Metadata": {
                 "Description": "The Medal was designed by Gustav Vigeland. It features a portrait of Alfred Nobel and the years of his birth and death in Latin – NAT-MDCCC XXXIII OB-MDCCC XCVI.",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
-                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "05_NW_medal_pe_front.tif" },
+                "DeepZoom": { "Path": "Collections\\Medals\\medal5\\GeneratedImages\\dzc_output.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "05_NW_coll_medals.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
                 "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
@@ -7469,8 +7469,8 @@ TAG.Layout.Spoof = (function () {
             "Name": "Back of the medal for the Nobel Peace Prize ",
             "Metadata": {
                 "Description": "The other side of the Nobel Peace Prize medal represents a group of three men forming a fraternal bond. The inscription reads: Pro pace et fraternitate gentium (\"For the peace and brotherhood of men\") \"Prix Nobel de la Paix\", the relevant year, and the name of the Nobel Peace Prize Laureate is engraved on the edge of the medal. ",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
-                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "06_NW_medal_pe_back.tif" },
+                "DeepZoom": { "Path": "Collections\\Medals\\medal6\\GeneratedImages\\dzc_output.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "06_NW_coll_medals.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
                 "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
@@ -7484,8 +7484,8 @@ TAG.Layout.Spoof = (function () {
             "Name": "Front of the medal for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel ",
             "Metadata": {
                 "Description": "The medal was designed by Gunvor Svensson-Lunddqvist. It features a portrait of Alfred Nobel and the words: Sveriges Riksbank till Alfred Nobels Minne 1968(The Sveriges Riksbank, in memory of Alfred Nobel, 1968). The lower half displays the bank's crossed horns of plenty. The name of the Economics Laureate is engraved on the edge of the medal.",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
-                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "07_NW_medal_ec_front.tif" },
+                "DeepZoom": { "Path": "Collections\\Medals\\medal7\\GeneratedImages\\dzc_output.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "07_NW_coll_medals.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
                 "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
@@ -7499,8 +7499,8 @@ TAG.Layout.Spoof = (function () {
             "Name": "Back of the medal for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel ",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
-                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "" },
+                "DeepZoom": { "Path": "Collections\\Medals\\medal8\\GeneratedImages\\dzc_output.xml" },
+                "Thumbnail": { "Path": "Collections\\" + "Medals\\" + "08_NW_coll_medals.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
                 "SortOptions": "{\"Title\":true,\"Date\":false,\"Artist\":false,\"Year of Award\":true,\"Citizenship 1\":true,\"Tours\":false}",
@@ -7515,7 +7515,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Title",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Patents\\patent1\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "01_NW_coll_patents.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7530,7 +7530,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Title",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Patents\\patent2\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "02_NW_coll_patents.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7545,7 +7545,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Belgian Letters Patent, 1867 ",
             "Metadata": {
                 "Description": "Belgian letters patent for Nitroglycerine, May 16, 1867",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Patents\\patent3\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "03_NW_coll_patents.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7560,7 +7560,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "British Letters Patent, 1887 ",
             "Metadata": {
                 "Description": "British letters patent for ”An improved explosive compound”, December 8, 1887.",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Patents\\patent4\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "04_NW_coll_patents.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7575,7 +7575,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "French Letters Patent, 1864 ",
             "Metadata": {
                 "Description": "French letters patent for ””, June 17, 1864. ",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Patents\\patent5\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "05_NW_coll_patents.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7590,7 +7590,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "American Letters Patent, 1879 ",
             "Metadata": {
                 "Description": "American letters patent for ”Primers for Blasting Charges”, June 17, 1879.",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Patents\\patent6\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "06_NW_coll_patents.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7605,7 +7605,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Italian Letters Patent, 1887",
             "Metadata": {
                 "Description": "Italian letters patent for ”Explosive substances”, March 9, 1876. ",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Patents\\patent7\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "07_NW_coll_patents.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7620,7 +7620,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Norwegian Letters Patent, 1896 ",
             "Metadata": {
                 "Description": "Norwegian letters patent for ”Improvements of tändrör för projektiler”, May 22, 1896.",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Patents\\patent8\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "08_NW_coll_patents.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7635,7 +7635,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Swedish Letters Patent, 1863",
             "Metadata": {
                 "Description": "Swedish letters patent for ”Smokeless powder”, October 6, 1863.",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Patents\\patent9\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Patents\\" + "09_NW_coll_patents.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7651,7 +7651,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "01_NW_AN_fam.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Family\\family1\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Family\\" + "01_NW_AN_fam.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7666,7 +7666,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "02_NW_AN_fam.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Family\\family2\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Family\\" + "02_NW_AN_fam.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7681,7 +7681,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "ALFRED-4org ED (kopia).tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Family\\family3\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Family\\" + "ALFRED-4org ED (kopia).tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7696,7 +7696,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "nat_pers_emanuel.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Family\\family4\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_emanuel.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7711,7 +7711,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "nat_pers_emil.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Family\\family5\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_emil.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7726,7 +7726,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "nat_pers_immanuel.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Family\\family6\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_immanuel.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7741,7 +7741,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "nat_pers_ludvig.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Family\\family7\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_ludvig.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7756,7 +7756,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "nat_pers_robert.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Family\\family8\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Family\\" + "nat_pers_robert.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7772,7 +7772,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Andre Geim’s Nobel Diploma in Physics, 2010 ",
             "Metadata": {
                 "Description": "Andre Geim’s Nobel Diploma for his Nobel prize in Physics in 2010. It reads: \"The Royal Swedish Academy of Sciences has on October 5, 2010 decided that with the Nobel Prize which this year is awarded to the one who within the field of physics has made the most important discovery or invention jointly award Andre Geim and Konstantin Novoselov for groundbreaking experiments regarding the two-dimensional material graphene. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip1\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "01_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7787,7 +7787,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Konstantin Novoselov’s Nobel Diploma, Physics, 2010",
             "Metadata": {
                 "Description": "Konstantin Novoselov’s Nobel Diploma for his Nobel prize in Physic in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 5, 2010 decided that with the Nobel Prize which this year is awarded to the one who within the field of physics has made the most important discovery or invention jointly award Konstantin Novoselov and Andre Geim for groundbreaking experiments regarding the two-dimensional material graphene. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip2\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "02_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7802,7 +7802,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Richard F Heck’s Nobel Diploma, Chemistry, 2010 ",
             "Metadata": {
                 "Description": "Richard F Heck’s Nobel Diploma for his Nobel prize in Chemistry in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 6, 2010 decided that with the Nobel Prize which this year is awarded to the one who has made the most important chemical discovery or improvement jointly award Richard F Heck, Ei-ichi Negishi and Akira Suzuki for for palladium-catalyzed cross couplings in organic synthesis. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip3\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "03_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7817,7 +7817,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Ei-ichi Negishi’s Nobel Diploma, Chemistry, 2010",
             "Metadata": {
                 "Description": "Ei-ichi Negishi’s Nobel Diploma for his Nobel prize in Chemistry in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 6, 2010 decided that with the Nobel Prize which this year is awarded to the one who has made the most important chemical discovery or improvement jointly award Ei-ichi Negishi, Richard F Heck and Akira Suzuki for for palladium-catalyzed cross couplings in organic synthesis. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip4\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "04_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7832,7 +7832,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Akira Suzuki’s Nobel Diploma, Chemistry, 2010 ",
             "Metadata": {
                 "Description": "Akira Suzuki’s Nobel Diploma for his Nobel Prize in Chemistry in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 6, 2010 decided that with the Nobel Prize which this year is awarded to the one who has made the most important chemical discovery or improvement jointly award Akira Suzuki, Richard F Heck and Ei-ichi Negishi for for palladium-catalyzed cross couplings in organic synthesis. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip5\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "05_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7847,7 +7847,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Robert G Edwards’ Nobel Diploma, Physiology of Medicine, 2010",
             "Metadata": {
                 "Description": "Robert G Edwards’ Nobel Diploma for his Nobel Prize in Physiology or Medicine 2010. It reads: ”The Nobel Assembly at Karolinska Institutet has decided that the 2010 Nobel Prize in physiology or medicine shall be awarded to Robert G Edwards for the development of in vitro fertilization. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip6\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "06_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7862,7 +7862,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Mario Vargas Llosa’s Nobel Diploma, Literature, 2010",
             "Metadata": {
                 "Description": "Mario Vargas Llosa’s Nobel Diploma for his Nobel Prize in Literature 2010. It reads: ”The Swedish Academy has at its assembly on October 7, 2010 in accordance with the directions in the will drawn up by on November 27, 1895 by Alfred Nobel decided that the Nobel Prize in Literature shall be awarded to Mario Vargas Llosa, ’for his cartography of structures of power and his trenchant images of the individual’s resistance, revolt, and defeat’. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip7\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "07_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7877,7 +7877,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Liu Xiaobo’s Nobel Diploma, Peace, 2010",
             "Metadata": {
                 "Description": "Liu Xiaobo’s Nobel Diploma for his Nobel Peace Prize in 2010. It reads: ”.” ",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip8\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7892,7 +7892,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Peter A. Diamond’s Nobel Diploma, Economics, 2010 ",
             "Metadata": {
                 "Description": "Peter A. Diamond’s Nobel Diploma for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 11, 2010 decided to award the prize in economic sciences in memory of Alfred Nobel established by The Sveriges Riksbank in 1968 jointly to Peter A. Diamond, Dale Mortensen and Christopher A. Pissarides for their analysis of markets with search frictions. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip9\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "09_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7907,7 +7907,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Dale T. Mortensen’s Nobel Diploma, Economics, 2010",
             "Metadata": {
                 "Description": "Dale T. Mortensen’s Nobel Diploma for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 11, 2010 decided to award the prize in economic sciences in memory of Alfred Nobel established by The Sveriges Riksbank in 1968 jointly to Dale T. Mortensen, Peter A. Diamond and Christopher A. Pissarides for their analysis of markets with search frictions. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip10\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "10_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7922,7 +7922,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Christopher A. Pissarides’ Nobel Diploma, Economics, 2010 ",
             "Metadata": {
                 "Description": "Christopher A. Pissarides’ Nobel Diploma for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 11, 2010 decided to award the prize in economic sciences in memory of Alfred Nobel established by The Sveriges Riksbank in 1968 jointly to Christopher A. Pissarides, Peter A. Diamond and Dale Mortensen and for their analysis of markets with search frictions. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip11\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "11_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7938,7 +7938,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "The first page of Alfred Nobel’s Will ",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Will\\will1\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Will\\" + "01_NW_coll_will_1.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7953,7 +7953,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "The second page of Alfred Nobel’s Will",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Will\\will2\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Will\\" + "02_NW_coll_will_2.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7968,7 +7968,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "The third page of Alfred Nobel’s Will",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Will\\will3\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Will\\" + "03_NW_coll_will_3.tif"},
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7983,7 +7983,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "The fourth page of Alfred Nobel’s Will",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Will\\will4\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Will\\" + "04_NW_coll_will_4.tif"},
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7999,7 +7999,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "inno_fab_hur_bland_1.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Factories\\fac1\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_bland_1.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -8014,7 +8014,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "inno_fab_hur_bland_2.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Factories\\fac2\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_bland_2.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -8029,7 +8029,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "inno_fab_hur_nitro_1.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Factories\\fac3\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_nitro_1.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -8044,7 +8044,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "inno_fab_hur_nitro_3.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Factories\\fac4\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_nitro_3.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -8059,7 +8059,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "inno_fab_hur_prov.tif",
             "Metadata": {
                 "Description": "",
-                "DeepZoom": { "Path": "Images\\artwork1\\dz.xml" },
+                "DeepZoom": { "Path": "Collections\\Factories\\fac5\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Factories\\" + "inno_fab_hur_prov.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
