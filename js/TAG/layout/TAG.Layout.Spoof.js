@@ -19,8 +19,7 @@ TAG.Layout.Spoof = (function () {
         //"Diplomas": ["dip1", "dip2", "dip3", "dip4", "dip5", "dip6", "dip7", "dip8", "dip9", "dip10", "dip11"], //TO-DO: thumbnails and deep zooms
         "Diplomas": ["dip1", "dip2", "dip3", "dip4", "dip5", "dip6", "dip7", "dip9", "dip10", "dip11"],
         "Medals": ["medal1", "medal2", "medal3", "medal4", "medal5", "medal6", "medal7", "medal8"], //TO-DO: make images smaller for thumbnails, deep zooms
-        //"Will": ["will1","will2","will3","will4"] //TO-DO: thumbnails and deep zooms
-        "Will": ["will1", "will2", "will3"]
+        "Will": ["will1","will2","will3","will4"] //TO-DO: thumbnails and deep zooms
     };
     var tourDoqs = {
         "Will": {
@@ -7979,7 +7978,7 @@ TAG.Layout.Spoof = (function () {
                 "Type": "Artwork",
                 "ContentType": "Image"
             }
-        },/*
+        },
         "will4":{
             "Identifier": "will4",
             "Name": "The fourth page of Alfred Nobel’s Will",
@@ -7994,7 +7993,7 @@ TAG.Layout.Spoof = (function () {
                 "Type": "Artwork",
                 "ContentType": "Image"
             }
-        },*/
+        },
         //Factories
         "fac1": {
             "Identifier": "fac1",
