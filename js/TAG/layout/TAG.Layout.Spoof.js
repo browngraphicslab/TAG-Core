@@ -122,7 +122,7 @@ TAG.Layout.Spoof = (function () {
               {
                   "name": "colleagues and factories",
                   "providerId": "audio",
-                  "assetUrl": "http://tagnobel.cloudapp.net:8086/Images/colleaguesandfactories201509141716353565.mp3",
+                  "assetUrl": "audio\\factories.mp3",
                   "mediaLength": 353.88,
                   "keyframes": [
                     {

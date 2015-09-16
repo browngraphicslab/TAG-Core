@@ -334,11 +334,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                         isSeeking = true;
                     }
                 })
-            .css({
-                "background-color": "black" });
-
             progressBar.addClass("progressBar")
-
+            
             bottomContainer.append(progressBarContainer);
             progressBarContainer.append(progressBar);
         }
@@ -469,10 +466,10 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             $("#linkButton").stop();
         });
         volumeButton.mouseleave(function () {
-            volumeLevel.fadeTo(500, 0, null);
+            //volumeLevel.fadeTo(500, 0, null);
         })
         volumeButton.mouseenter(function () {
-            makeControlsVisible();
+            //makeControlsVisible();
         })
         $("#backButton").mouseenter(function () {
             makeControlsVisible();
@@ -577,11 +574,12 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     */
     function setControlsFade() {
         doNothing("set controls fade called")
-        //if (playerConfiguration.fadeControls) {
+        if (playerConfiguration.fadeControls) {
             controlsTimeout = window.setTimeout(function () {
                 time = 500
                 volumeButton.fadeTo(time,0.5,null);
-                volumeLevel.fadeTo(time,0,null);
+                volumeLevel.fadeTo(time, 0, null);
+                $('.volumeLevelContainer').fadeTo(time, 0, null);
                 playPauseButton.fadeTo(time,0.5,null);
                 loopButton.fadeTo(time,0.5,null);
                 progressBar.fadeTo(time,0.5,null);
@@ -590,7 +588,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 $("#linkButton").fadeTo(time,0.5,null);
                 $('.progressBarContainer').fadeTo(time,0.5,null);
             },2000)
-       //}
+       }
     }
 
     function hideControls()
@@ -608,7 +606,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         progressIndicator.css({ 'opacity': 0 })
         $("#backButton").css({ 'opacity': 0 })
         $("#linkButton").css({ 'opacity': 0 })
-        $('.progressBarContainer').css('opacity', '0.5');
+        $('.progressBarContainer').css('opacity', '0.1');
     }
 
     /*
@@ -632,14 +630,15 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         $("#backButton").css({ 'opacity' : 1 })
         $("#linkButton").css({ 'opacity' : 1 })
         $('.progressBarContainer').css('opacity', '1');
+        $('.volumeLevelContainer').css('opacity', '1');
         isMuted ? mute()   : unMute()
         isFullScreen ? enableFullScreen() : disableFullScreen()
         isLooped ? loop() : unLoop()
-        if (orchestrator.status !== 1) {
-            window.setTimeout(function() {
-                volumeLevel.fadeTo(500, 0, null);
-            }, 2000);
-        }
+        //if (orchestrator.status !== 1) {
+        //    window.setTimeout(function() {
+        //        volumeLevel.fadeTo(500, 0, null);
+        //    }, 2000);
+        //}
     }
 
     /*
