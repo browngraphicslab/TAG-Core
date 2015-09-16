@@ -107,14 +107,3562 @@ TAG.Layout.Spoof = (function () {
                         }
                     ]
                     
-                }
+                },
+                {"name":"Unattached Annotation","providerId":"ink","experienceReference":"","assetUrl":"noAssetUrl6","datastring":"TRANS::[path]M0.414949,0.223433C0.606009,0.223433,0.760893,0.392286,0.760893,0.600576C0.760893,0.808867,0.606009,0.977719,0.414949,0.977719C0.223889,0.977719,0.069005,0.808867,0.069005,0.600576C0.069005,0.392286,0.223889,0.223433,0.414949,0.223433z[color]#000000[opac]0.8[mode]isolate[]|BOUNDELLIPSE::[cx]0.4149490429599895[cy]0.6005760352327255[rx]0.34594399230793465[ry]0.37714332407888606[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|","inkObjects":[{"inkType":"trans","inkProperties":{"path":"M0.414949,0.223433C0.606009,0.223433,0.760893,0.392286,0.760893,0.600576C0.760893,0.808867,0.606009,0.977719,0.414949,0.977719C0.223889,0.977719,0.069005,0.808867,0.069005,0.600576C0.069005,0.392286,0.223889,0.223433,0.414949,0.223433z","color":"#000000","opac":0.8,"mode":"isolate"}},{"inkType":"boundellipse","inkProperties":{"cx":0.4149490429599895,"cy":0.6005760352327255,"rx":0.34594399230793465,"ry":0.37714332407888606,"fillc":"#000000","fillo":0,"strokec":"#ffffff","strokeo":0.7,"strokew":5}}],"initKeyframe":{},"keyframes":[{"type":"unattached","dispNum":0,"initKeyframe":{},"initproxy":{},"time":14.531564000000248,"opacity":0},{"type":"unattached","dispNum":0,"initKeyframe":{},"initproxy":{},"time":15.031564000000248,"opacity":1},{"type":"unattached","dispNum":0,"initKeyframe":{},"initproxy":{},"time":32.04323344732463,"opacity":1},{"type":"unattached","dispNum":0,"initKeyframe":{},"initproxy":{},"time":32.54323344732463,"opacity":0}],"zIndex":3}
             ],
             "totalDuration" : "182"
-        }
-    }
-    var audioDoqs = {
-        "audio1": {
-
+        },
+        "FromWillToPrize": {
+            "tourTitle": "From the Will to the Prize",
+            "totalDuration": 265.40419801917494,
+            "guid": "FromWillToPrize",
+            "timestamp": "2015-09-15T15:52:33.881Z",
+            "tracks": [
+              {
+                  "name": "will to the prizes",
+                  "providerId": "audio",
+                  "assetUrl": "Audio\\WillToPrize.mp3",
+                  "mediaLength": 260.858,
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "time": 0,
+                        "volume": 0.8,
+                        "data": {
+            
+                        },
+                        "audioOffset": null,
+                        "audioKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "time": 260.858,
+                        "volume": 0.8,
+                        "data": {
+            
+                        },
+                        "audioOffset": null,
+                        "audioKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "time": 260.868,
+                        "volume": 0,
+                        "data": {
+            
+                        },
+                        "audioOffset": null,
+                        "audioKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 1
+              },
+              {
+                  "name": "will_page_1",
+                  "guid": "will_page_1",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\will_page_1\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 0.9235956929898115,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.973409265150792,
+                        "pos": {
+                            "x": 0.013866908984116133,
+                            "y": 0.012108188850565027
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 2.9309235789198,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.973409265150792,
+                        "pos": {
+                            "x": 0.013866908984116133,
+                            "y": 0.012108188850565027
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 4.8,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.973409265150792,
+                        "pos": {
+                            "x": 0.013866908984116133,
+                            "y": 0.012108188850565027
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 14.98,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9735066158123732,
+                        "pos": {
+                            "x": 0.011054605176457677,
+                            "y": 0.11107756266810453
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 17.373612241634127,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9735066158123732,
+                        "pos": {
+                            "x": 0.011054605176457677,
+                            "y": 0.11107756266810453
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 20.373612241634127,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.9735066158123732,
+                        "pos": {
+                            "x": 0.011054605176457677,
+                            "y": 0.11107756266810453
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 2
+              },
+              {
+                  "name": "nobel_page_3",
+                  "guid": "nobel_page_3",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\will_page_3\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 16.47,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1,
+                        "pos": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 19.47,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1,
+                        "pos": {
+                            "x": 0,
+                            "y": 0
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 18.78,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1,
+                        "pos": {
+                            "x": 0,
+                            "y": 0
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 21.71,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8243365855465489,
+                        "pos": {
+                            "x": 0.14716938098414506,
+                            "y": 0.31196456272567074
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 25.82640718266638,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8243365855465489,
+                        "pos": {
+                            "x": 0.14716938098414506,
+                            "y": 0.31196456272567074
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 28.82640718266638,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.8243365855465489,
+                        "pos": {
+                            "x": 0.14716938098414506,
+                            "y": 0.31196456272567074
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 3
+              },
+              {
+                  "name": "Unattached Annotation",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl29",
+                  "datastring": "TRANS::[path]M0.681427,0.528942C0.691694,0.528942,0.974333,0.528942,0.984600,0.528942C0.984600,0.547190,0.984600,0.584726,0.984600,0.602974C0.974333,0.602974,0.691694,0.602974,0.681427,0.602974C0.681427,0.584726,0.681427,0.547190,0.681427,0.528942zM0.020236,0.638412C0.030503,0.638412,0.144620,0.638412,0.154887,0.638412C0.154887,0.656661,0.154887,0.708558,0.154887,0.726807C0.144620,0.726807,0.030503,0.726807,0.020236,0.726807C0.020236,0.708558,0.020236,0.656661,0.020236,0.638412z[color]#000000[opac]0.39800883372678613[mode]isolate[]|BOUNDRECT::[x]0.681427127281988[y]0.5289416347977018[w]0.303172462040394[h]0.07403280439167997[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|BOUNDRECT::[x]0.02023616218958547[y]0.6384124198969263[w]0.13465094909041325[h]0.08839410935005132[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.681427,0.528942C0.691694,0.528942,0.974333,0.528942,0.984600,0.528942C0.984600,0.547190,0.984600,0.584726,0.984600,0.602974C0.974333,0.602974,0.691694,0.602974,0.681427,0.602974C0.681427,0.584726,0.681427,0.547190,0.681427,0.528942zM0.020236,0.638412C0.030503,0.638412,0.144620,0.638412,0.154887,0.638412C0.154887,0.656661,0.154887,0.708558,0.154887,0.726807C0.144620,0.726807,0.030503,0.726807,0.020236,0.726807C0.020236,0.708558,0.020236,0.656661,0.020236,0.638412z",
+                            "color": "#000000",
+                            "opac": 0.39800883372678613,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.681427127281988,
+                            "y": 0.5289416347977018,
+                            "w": 0.303172462040394,
+                            "h": 0.07403280439167997,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.02023616218958547,
+                            "y": 0.6384124198969263,
+                            "w": 0.13465094909041325,
+                            "h": 0.08839410935005132,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 21.992702926189807,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 22.492702926189807,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 23.69952004291382,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 24.19952004291382,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 4
+              },
+              {
+                  "name": "Unattached Annotation-0",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl28",
+                  "datastring": "TRANS::[path]M0.015698,0.690566C0.025965,0.690566,0.369764,0.690566,0.380031,0.690566C0.380031,0.708814,0.380031,0.759909,0.380031,0.778157C0.369764,0.778157,0.025965,0.778157,0.015698,0.778157C0.015698,0.759909,0.015698,0.708814,0.015698,0.690566z[color]#000000[opac]0.39805370507218934[mode]isolate[]|BOUNDRECT::[x]0.015698129391523357[y]0.6905656800652943[w]0.364332633831173[h]0.08759124087591241[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.015698,0.690566C0.025965,0.690566,0.369764,0.690566,0.380031,0.690566C0.380031,0.708814,0.380031,0.759909,0.380031,0.778157C0.369764,0.778157,0.025965,0.778157,0.015698,0.778157C0.015698,0.759909,0.015698,0.708814,0.015698,0.690566z",
+                            "color": "#000000",
+                            "opac": 0.39805370507218934,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.015698129391523357,
+                            "y": 0.6905656800652943,
+                            "w": 0.364332633831173,
+                            "h": 0.08759124087591241,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 23.7556612055763,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 24.2556612055763,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 25.64855494388428,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 26.14855494388428,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 5
+              },
+              {
+                  "name": "sohlman",
+                  "guid": "sohlman",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\sohlman\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 27.060420293757268,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.9873449389779453,
+                        "pos": {
+                            "x": 0.010148433402369538,
+                            "y": 0.21992341418405808
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 30.060420293757268,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9873449389779453,
+                        "pos": {
+                            "x": 0.010148433402369538,
+                            "y": 0.21992341418405808
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 29.36,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9873449389779453,
+                        "pos": {
+                            "x": 0.010148433402369538,
+                            "y": 0.21992341418405808
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 33.93116356808456,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.185287970849337,
+                        "pos": {
+                            "x": -0.08125088323855312,
+                            "y": 0.22471765032702723
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 36.93116356808456,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.185287970849337,
+                        "pos": {
+                            "x": -0.08125088323855312,
+                            "y": 0.22471765032702723
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 39.93116356808456,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.185287970849337,
+                        "pos": {
+                            "x": -0.08125088323855312,
+                            "y": 0.22471765032702723
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 6
+              },
+              {
+                  "name": "Unattached Ink",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl26",
+                  "datastring": "TEXT::[str]Ragnar Sohlman\n(1870 - 1946)[font]Verdana[fontsize]0.05154477518426148[color]#000000[x]0.07557117750439367[y]0.8930122750704406[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Ragnar Sohlman\n(1870 - 1946)",
+                            "font": "Verdana",
+                            "fontsize": "0.05154477518426148",
+                            "color": "#000000",
+                            "x": 0.07557117750439367,
+                            "y": 0.8930122750704406,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 30.780863221255707,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 31.280863221255707,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 35.28086322125571,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 35.78086322125571,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 7
+              },
+              {
+                  "name": "emanuel_nobel",
+                  "guid": "emanuel_nobel",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\emanuel_nobel\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 8,
+                        "time": 37.46844771376664,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.0003000600100013,
+                        "pos": {
+                            "x": -0.0012632406084646663,
+                            "y": 0.2619087896708056
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 8,
+                        "time": 40.46844771376664,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.0003000600100013,
+                        "pos": {
+                            "x": -0.0012632406084646663,
+                            "y": 0.2619087896708056
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 8,
+                        "time": 42.4,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.0003000600100013,
+                        "pos": {
+                            "x": -0.0012632406084646663,
+                            "y": 0.2619087896708056
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 8,
+                        "time": 63.81655228945789,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.440576144028805,
+                        "pos": {
+                            "x": -0.22203287423886336,
+                            "y": 0.24451797316423174
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 8,
+                        "time": 66.81655228945789,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.440576144028805,
+                        "pos": {
+                            "x": -0.22203287423886336,
+                            "y": 0.24451797316423174
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 8,
+                        "time": 69.81655228945789,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.440576144028805,
+                        "pos": {
+                            "x": -0.22203287423886336,
+                            "y": 0.24451797316423174
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 8
+              },
+              {
+                  "name": "Unattached Ink-2",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl24",
+                  "datastring": "TEXT::[str]Emanuel Nobel[font]Verdana[fontsize]0.05887144888610322[color]#000000[x]0.5957012106131804[y]0.07495087170210041[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Emanuel Nobel",
+                            "font": "Verdana",
+                            "fontsize": "0.05887144888610322",
+                            "color": "#000000",
+                            "x": 0.5957012106131804,
+                            "y": 0.07495087170210041,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 42.7275352288594,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 43.2275352288594,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 63.639127851926965,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 64.13912785192696,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 9
+              },
+              {
+                  "name": "Unattached Ink-3",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl23",
+                  "datastring": "TEXT::[str](1859 - 1932)[font]Verdana[fontsize]0.05906866061110156[color]#000000[x]0.591734375900888[y]0.15455740006243596[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "(1859 - 1932)",
+                            "font": "Verdana",
+                            "fontsize": "0.05906866061110156",
+                            "color": "#000000",
+                            "x": 0.591734375900888,
+                            "y": 0.15455740006243596,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 44.099286386198436,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 44.599286386198436,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 63.61485564880349,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 64.11485564880348,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 10
+              },
+              {
+                  "name": "newspaper_article",
+                  "guid": "newspaper_article",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\newspaper_article\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 11,
+                        "time": 66.26357342132641,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.3898615001166963,
+                        "pos": {
+                            "x": -0.22187286941314455,
+                            "y": 0.007106656923591914
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 11,
+                        "time": 69.26357342132641,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.3898615001166963,
+                        "pos": {
+                            "x": -0.22187286941314455,
+                            "y": 0.007106656923591914
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 11,
+                        "time": 70.51,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.3898615001166963,
+                        "pos": {
+                            "x": -0.22187286941314455,
+                            "y": 0.007106656923591914
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 11,
+                        "time": 78.63,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8233403612017479,
+                        "pos": {
+                            "x": 0.0812103120969292,
+                            "y": 0.028946189978678177
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 11,
+                        "time": 81.91991569493974,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8233403612017479,
+                        "pos": {
+                            "x": 0.0812103120969292,
+                            "y": 0.028946189978678177
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 11,
+                        "time": 84.91991569493974,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8233403612017479,
+                        "pos": {
+                            "x": 0.0812103120969292,
+                            "y": 0.028946189978678177
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 11,
+                        "time": 90.91991569493974,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.8233403612017479,
+                        "pos": {
+                            "x": 0.0812103120969292,
+                            "y": 0.028946189978678177
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 11
+              },
+              {
+                  "name": "Unattached Annotation-1",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl21",
+                  "datastring": "TRANS::[path]M0.044235,0.417722C0.062029,0.417722,0.932384,0.417722,0.950178,0.417722C0.950178,0.449367,0.950178,0.688987,0.950178,0.720633C0.932384,0.720633,0.062029,0.720633,0.044235,0.720633C0.044235,0.688987,0.044235,0.449367,0.044235,0.417722z[color]#000000[opac]0.39738063489114067[mode]isolate[]|BOUNDRECT::[x]0.04423495798348532[y]0.4177215189873418[w]0.9059428693560944[h]0.30291139626804786[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.044235,0.417722C0.062029,0.417722,0.932384,0.417722,0.950178,0.417722C0.950178,0.449367,0.950178,0.688987,0.950178,0.720633C0.932384,0.720633,0.062029,0.720633,0.044235,0.720633C0.044235,0.688987,0.044235,0.449367,0.044235,0.417722z",
+                            "color": "#000000",
+                            "opac": 0.39738063489114067,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.04423495798348532,
+                            "y": 0.4177215189873418,
+                            "w": 0.9059428693560944,
+                            "h": 0.30291139626804786,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 79.46241524560749,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 79.96241524560749,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 81.80116466477881,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 82.30116466477881,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 12
+              },
+              {
+                  "name": "flag_of_norway",
+                  "guid": "flag_of_norway",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\flag_of_norway\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 95.83127290733785,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 3.5562500000000003,
+                        "pos": {
+                            "x": -1.2827234389853738,
+                            "y": -0.6986848352863487
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 96.33127290733785,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.5562500000000003,
+                        "pos": {
+                            "x": -1.2827234389853738,
+                            "y": -0.6986848352863487
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 97.51,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.5562500000000003,
+                        "pos": {
+                            "x": -1.2827234389853738,
+                            "y": -0.6986848352863487
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 100.14,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443226,
+                        "pos": {
+                            "x": -0.07891034576278977,
+                            "y": -0.0805195729821061
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 101.79104612527935,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443226,
+                        "pos": {
+                            "x": -0.07891034576278977,
+                            "y": -0.0805195729821061
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 102.29104612527935,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443226,
+                        "pos": {
+                            "x": -0.07891034576278977,
+                            "y": -0.0805195729821061
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 13
+              },
+              {
+                  "name": "flag_of_sweden",
+                  "guid": "flag_of_sweden",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\flag_of_sweden\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 95.83127290733785,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 3.5562500000000003,
+                        "pos": {
+                            "x": -1.2819242477416985,
+                            "y": -0.7473628282546985
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 96.33127290733785,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.5562500000000003,
+                        "pos": {
+                            "x": -1.2819242477416985,
+                            "y": -0.7473628282546985
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 97.51,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.5562500000000003,
+                        "pos": {
+                            "x": -1.2819242477416985,
+                            "y": -0.7473628282546985
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 100.25,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443217,
+                        "pos": {
+                            "x": -1.1803137784249095,
+                            "y": -0.5769767894934916
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 101.79104612527935,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443217,
+                        "pos": {
+                            "x": -1.1803137784249095,
+                            "y": -0.5769767894934916
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 102.29104612527935,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443217,
+                        "pos": {
+                            "x": -1.1803137784249095,
+                            "y": -0.5769767894934916
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 14
+              },
+              {
+                  "name": "union_flag",
+                  "guid": "union_flag",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\union_flag\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 15,
+                        "time": 94.01698269724875,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -0.6461159354113578,
+                            "y": -0.12701552138533933
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 15,
+                        "time": 96.01698269724875,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -0.6461159354113578,
+                            "y": -0.12701552138533933
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 15,
+                        "time": 96.68570489290502,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -0.6461159354113578,
+                            "y": -0.12701552138533933
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 15,
+                        "time": 98.68570489290502,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -0.6461159354113578,
+                            "y": -0.12701552138533933
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 15,
+                        "time": 100.68570489290502,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -0.6461159354113578,
+                            "y": -0.12701552138533933
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 15
+              },
+              {
+                  "name": "paris_sohlman_scene",
+                  "guid": "paris_sohlman_scene",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\paris_sohlman_scene\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 101.75810665833876,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.8890624999999989,
+                        "pos": {
+                            "x": 0.10238395094587343,
+                            "y": 0.1256948628771476
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 104.75810665833876,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8890624999999989,
+                        "pos": {
+                            "x": 0.10238395094587343,
+                            "y": 0.1256948628771476
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 104.42,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8890624999999989,
+                        "pos": {
+                            "x": 0.10238395094587343,
+                            "y": 0.1256948628771476
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 119.72449884414672,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.3427586052953922,
+                        "pos": {
+                            "x": 0.4376024512326018,
+                            "y": 0.2725745495172033
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 122.72449884414672,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.3427586052953922,
+                        "pos": {
+                            "x": 0.4376024512326018,
+                            "y": 0.2725745495172033
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 125.72449884414672,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.3427586052953922,
+                        "pos": {
+                            "x": 0.4376024512326018,
+                            "y": 0.2725745495172033
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 16
+              },
+              {
+                  "name": "Unattached Ink-1",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl16",
+                  "datastring": "TRANS::[path]M0.569689,0.357152C0.695964,0.357152,0.798330,0.475584,0.798330,0.621678C0.798330,0.767771,0.695964,0.886203,0.569689,0.886203C0.443413,0.886203,0.341047,0.767771,0.341047,0.621678C0.341047,0.475584,0.443413,0.357152,0.569689,0.357152z[color]#000000[opac]0.3288402516541995[mode]isolate[]|BOUNDELLIPSE::[cx]0.5696885188177518[cy]0.6216775782475524[rx]0.2286412467163494[ry]0.2645257258691901[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.569689,0.357152C0.695964,0.357152,0.798330,0.475584,0.798330,0.621678C0.798330,0.767771,0.695964,0.886203,0.569689,0.886203C0.443413,0.886203,0.341047,0.767771,0.341047,0.621678C0.341047,0.475584,0.443413,0.357152,0.569689,0.357152z",
+                            "color": "#000000",
+                            "opac": 0.3288402516541995,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.5696885188177518,
+                            "cy": 0.6216775782475524,
+                            "rx": 0.2286412467163494,
+                            "ry": 0.2645257258691901,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 115.65578308982076,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 116.15578308982076,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 116.50802995314214,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 117.00802995314214,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 17
+              },
+              {
+                  "name": "bofors",
+                  "guid": "bofors",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\bofors\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 126.42338768419273,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.000100010001,
+                        "pos": {
+                            "x": -1.1102230246251565e-16,
+                            "y": 0
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 129.42338768419273,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.000100010001,
+                        "pos": {
+                            "x": -1.1102230246251565e-16,
+                            "y": 0
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 130.02,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.000100010001,
+                        "pos": {
+                            "x": -1.1102230246251565e-16,
+                            "y": 0
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 140.08,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.7299431241825481,
+                        "pos": {
+                            "x": 0.17981694073997484,
+                            "y": 0.07260111032284827
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 148.1983259776285,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.7299431241825481,
+                        "pos": {
+                            "x": 0.17981694073997484,
+                            "y": 0.07260111032284827
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 151.1983259776285,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.7299431241825481,
+                        "pos": {
+                            "x": 0.17981694073997484,
+                            "y": 0.07260111032284827
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 18
+              },
+              {
+                  "name": "Unattached Annotation-5",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl14",
+                  "datastring": "TRANS::[path]M0.131770,0.341772C0.212813,0.341772,0.278510,0.445673,0.278510,0.573842C0.278510,0.702010,0.212813,0.805912,0.131770,0.805912C0.050728,0.805912,-0.014969,0.702010,-0.014969,0.573842C-0.014969,0.445673,0.050728,0.341772,0.131770,0.341772z[color]#000000[opac]0.40384210862920805[mode]isolate[]|BOUNDELLIPSE::[cx]0.13177046303043072[cy]0.5738418931477363[rx]0.14673990763291825[ry]0.23206974124900204[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.131770,0.341772C0.212813,0.341772,0.278510,0.445673,0.278510,0.573842C0.278510,0.702010,0.212813,0.805912,0.131770,0.805912C0.050728,0.805912,-0.014969,0.702010,-0.014969,0.573842C-0.014969,0.445673,0.050728,0.341772,0.131770,0.341772z",
+                            "color": "#000000",
+                            "opac": 0.40384210862920805,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.13177046303043072,
+                            "cy": 0.5738418931477363,
+                            "rx": 0.14673990763291825,
+                            "ry": 0.23206974124900204,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 139.91151335945682,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 140.41151335945682,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 142.1568360721783,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 142.6568360721783,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 19
+              },
+              {
+                  "name": "nobel_home",
+                  "guid": "nobel_home",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\nobel_home\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 140.73682568130388,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.3888888888888888,
+                        "pos": {
+                            "x": -0.34654013993978805,
+                            "y": -0.03688244719886208
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 141.23682568130388,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.3888888888888888,
+                        "pos": {
+                            "x": -0.34654013993978805,
+                            "y": -0.03688244719886208
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 142.86,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.3888888888888888,
+                        "pos": {
+                            "x": -0.34654013993978805,
+                            "y": -0.03688244719886208
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 145.23682568130388,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.3888888888888888,
+                        "pos": {
+                            "x": -0.34654013993978805,
+                            "y": -0.03688244719886208
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 145.73682568130388,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.3888888888888888,
+                        "pos": {
+                            "x": -0.34654013993978805,
+                            "y": -0.03688244719886208
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 20
+              },
+              {
+                  "name": "norwegian_storting",
+                  "guid": "norwegian_storting",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\norwegian_storting\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 21,
+                        "time": 91.48887546556642,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.05569867602345835,
+                            "y": 0.038615758112365395
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 21,
+                        "time": 94.48887546556642,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.05569867602345835,
+                            "y": 0.038615758112365395
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 21,
+                        "time": 93.46464608643919,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.05569867602345835,
+                            "y": 0.038615758112365395
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 21,
+                        "time": 96.46464608643919,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.05569867602345835,
+                            "y": 0.038615758112365395
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 21,
+                        "time": 99.46464608643919,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.05569867602345835,
+                            "y": 0.038615758112365395
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 21,
+                        "time": 150.46877147439187,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.4281911976782062,
+                        "pos": {
+                            "x": -0.07051752108764653,
+                            "y": -0.10914235714360498
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 21,
+                        "time": 153.46877147439187,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.4281911976782062,
+                        "pos": {
+                            "x": -0.07051752108764653,
+                            "y": -0.10914235714360498
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 21,
+                        "time": 155.87,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.4281911976782062,
+                        "pos": {
+                            "x": -0.07051752108764653,
+                            "y": -0.10914235714360498
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 21,
+                        "time": 158.26796313538924,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.2140955988391031,
+                        "pos": {
+                            "x": -0.09863457314425039,
+                            "y": -0.002071251191795409
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 21,
+                        "time": 161.26796313538924,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.2140955988391031,
+                        "pos": {
+                            "x": -0.09863457314425039,
+                            "y": -0.002071251191795409
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 21,
+                        "time": 164.26796313538924,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.2140955988391031,
+                        "pos": {
+                            "x": -0.09863457314425039,
+                            "y": -0.002071251191795409
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 21,
+                        "time": 191.7800568041523,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.4281911976782067,
+                        "pos": {
+                            "x": -0.08232264171163694,
+                            "y": -0.10212764875404145
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 21,
+                        "time": 192.2800568041523,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.4281911976782067,
+                        "pos": {
+                            "x": -0.08232264171163694,
+                            "y": -0.10212764875404145
+                        }
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 21,
+                        "time": 194.09,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.4281911976782067,
+                        "pos": {
+                            "x": -0.08232264171163694,
+                            "y": -0.10212764875404145
+                        }
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 21,
+                        "time": 194.8402537604901,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.4281911976782067,
+                        "pos": {
+                            "x": -0.08232264171163694,
+                            "y": -0.10212764875404145
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 21,
+                        "time": 196.8402537604901,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.4281911976782067,
+                        "pos": {
+                            "x": -0.08232264171163694,
+                            "y": -0.10212764875404145
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 21
+              },
+              {
+                  "name": "royal_swedish_academy_of_sciences",
+                  "guid": "royal_swedish_academy_of_sciences",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\royal_swedish_academy_of_sciences\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 22,
+                        "time": 151.3426281755681,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -1.771302524112678,
+                            "y": -0.17845520088993838
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 22,
+                        "time": 154.3426281755681,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -1.771302524112678,
+                            "y": -0.17845520088993838
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 22,
+                        "time": 152.18624559802808,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -1.771302524112678,
+                            "y": -0.17845520088993838
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 22,
+                        "time": 155.18624559802808,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -1.771302524112678,
+                            "y": -0.17845520088993838
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 22,
+                        "time": 158.18624559802808,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -1.771302524112678,
+                            "y": -0.17845520088993838
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 22,
+                        "time": 162.49118034129907,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.7784810126582275,
+                        "pos": {
+                            "x": -0.3515238146563219,
+                            "y": 0.007723024509564136
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 22,
+                        "time": 165.49118034129907,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7784810126582275,
+                        "pos": {
+                            "x": -0.3515238146563219,
+                            "y": 0.007723024509564136
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 22,
+                        "time": 165.83,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7784810126582275,
+                        "pos": {
+                            "x": -0.3515238146563219,
+                            "y": 0.007723024509564136
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 22,
+                        "time": 174.06721327789077,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.482067510548523,
+                        "pos": {
+                            "x": -0.24258290036945473,
+                            "y": 0.13817992405715496
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 22,
+                        "time": 177.06721327789077,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.482067510548523,
+                        "pos": {
+                            "x": -0.24258290036945473,
+                            "y": 0.13817992405715496
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 22,
+                        "time": 180.06721327789077,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.482067510548523,
+                        "pos": {
+                            "x": -0.24258290036945473,
+                            "y": 0.13817992405715496
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 22,
+                        "time": 190.08622087430288,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.964135021097046,
+                        "pos": {
+                            "x": -1.4326954893555756,
+                            "y": -0.09845245006078662
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 22,
+                        "time": 190.58622087430288,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.964135021097046,
+                        "pos": {
+                            "x": -1.4326954893555756,
+                            "y": -0.09845245006078662
+                        }
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 22,
+                        "time": 192.4,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.964135021097046,
+                        "pos": {
+                            "x": -1.4326954893555756,
+                            "y": -0.09845245006078662
+                        }
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 22,
+                        "time": 193.86403962142054,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.964135021097046,
+                        "pos": {
+                            "x": -1.4326954893555756,
+                            "y": -0.09845245006078662
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 22,
+                        "time": 196.86403962142054,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.964135021097046,
+                        "pos": {
+                            "x": -1.4326954893555756,
+                            "y": -0.09845245006078662
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 22
+              },
+              {
+                  "name": "swedish_academy",
+                  "guid": "swedish_academy",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\swedish_academy\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 152.03697227981337,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -0.7130865147455367,
+                            "y": -0.8393663321628266
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 155.03697227981337,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -0.7130865147455367,
+                            "y": -0.8393663321628266
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 152.21624559802808,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -0.7130865147455367,
+                            "y": -0.8393663321628266
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 155.21624559802808,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -0.7130865147455367,
+                            "y": -0.8393663321628266
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 158.21624559802808,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 3.557673524444609,
+                        "pos": {
+                            "x": -0.7130865147455367,
+                            "y": -0.8393663321628266
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 23,
+                        "time": 176.97133871066254,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.7784810126582275,
+                        "pos": {
+                            "x": -0.4088265179944848,
+                            "y": -0.0272198142558015
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 23,
+                        "time": 179.97133871066254,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7784810126582275,
+                        "pos": {
+                            "x": -0.4088265179944848,
+                            "y": -0.0272198142558015
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 23,
+                        "time": 180.97133871066254,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7784810126582275,
+                        "pos": {
+                            "x": -0.4088265179944848,
+                            "y": -0.0272198142558015
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 23,
+                        "time": 183.97133871066254,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7784810126582275,
+                        "pos": {
+                            "x": -0.4088265179944848,
+                            "y": -0.0272198142558015
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 23,
+                        "time": 186.97133871066254,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.7784810126582275,
+                        "pos": {
+                            "x": -0.4088265179944848,
+                            "y": -0.0272198142558015
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 23,
+                        "time": 191.10703932371783,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 3.556962025316465,
+                        "pos": {
+                            "x": -0.7951583166893383,
+                            "y": -0.9407865794914503
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 23,
+                        "time": 191.60703932371783,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.556962025316465,
+                        "pos": {
+                            "x": -0.7951583166893383,
+                            "y": -0.9407865794914503
+                        }
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 23,
+                        "time": 193.97806172391944,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.556962025316465,
+                        "pos": {
+                            "x": -0.7951583166893383,
+                            "y": -0.9407865794914503
+                        }
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 23,
+                        "time": 194.47806172391944,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 3.556962025316465,
+                        "pos": {
+                            "x": -0.7951583166893383,
+                            "y": -0.9407865794914503
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 23,
+                        "time": 196.97806172391944,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 3.556962025316465,
+                        "pos": {
+                            "x": -0.7951583166893383,
+                            "y": -0.9407865794914503
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 23
+              },
+              {
+                  "name": "karolinska_institute",
+                  "guid": "karolinska_institute",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\karolinska_institute\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 153.1162455980281,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.6379979681525,
+                        "pos": {
+                            "x": -1.4658777524550761,
+                            "y": -0.6251816307558512
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 155.1162455980281,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.6379979681525,
+                        "pos": {
+                            "x": -1.4658777524550761,
+                            "y": -0.6251816307558512
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 153.21624559802808,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.6379979681525,
+                        "pos": {
+                            "x": -1.4658777524550761,
+                            "y": -0.6251816307558512
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 155.21624559802808,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.6379979681525,
+                        "pos": {
+                            "x": -1.4658777524550761,
+                            "y": -0.6251816307558512
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 158.21624559802808,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.6379979681525,
+                        "pos": {
+                            "x": -1.4658777524550761,
+                            "y": -0.6251816307558512
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 182.17070914372456,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.060185253012624,
+                        "pos": {
+                            "x": -0.029202191604869365,
+                            "y": 0.05930465307679117
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 185.17070914372456,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.060185253012624,
+                        "pos": {
+                            "x": -0.029202191604869365,
+                            "y": 0.05930465307679117
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 183.8860002274557,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.060185253012624,
+                        "pos": {
+                            "x": -0.029202191604869365,
+                            "y": 0.05930465307679117
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 186.8860002274557,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.060185253012624,
+                        "pos": {
+                            "x": -0.029202191604869365,
+                            "y": 0.05930465307679117
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 188.8860002274557,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.060185253012624,
+                        "pos": {
+                            "x": -0.029202191604869365,
+                            "y": 0.05930465307679117
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 24,
+                        "time": 189.52669041409126,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.508975551583072,
+                        "pos": {
+                            "x": -1.3684825593501761,
+                            "y": -0.6323166370401545
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 24,
+                        "time": 190.02669041409126,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.508975551583072,
+                        "pos": {
+                            "x": -1.3684825593501761,
+                            "y": -0.6323166370401545
+                        }
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 24,
+                        "time": 191.84,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.508975551583072,
+                        "pos": {
+                            "x": -1.3684825593501761,
+                            "y": -0.6323166370401545
+                        }
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 24,
+                        "time": 193.91259624885188,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.508975551583072,
+                        "pos": {
+                            "x": -1.3684825593501761,
+                            "y": -0.6323166370401545
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 2,
+                        "zIndex": 24,
+                        "time": 196.91259624885188,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.508975551583072,
+                        "pos": {
+                            "x": -1.3684825593501761,
+                            "y": -0.6323166370401545
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 24
+              },
+              {
+                  "name": "nobel_foundation_first_ledger_2",
+                  "guid": "nobel_foundation_first_ledger_2",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\nobel_foundation_first_ledger_2\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 25,
+                        "time": 194.3239821557766,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.4019177637928402,
+                        "pos": {
+                            "x": 0.3942407730094364,
+                            "y": 0.1919009890724303
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 25,
+                        "time": 197.3239821557766,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.4019177637928402,
+                        "pos": {
+                            "x": 0.3942407730094364,
+                            "y": 0.1919009890724303
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 25,
+                        "time": 197.51,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.4019177637928402,
+                        "pos": {
+                            "x": 0.3942407730094364,
+                            "y": 0.1919009890724303
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 25,
+                        "time": 207.82,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.6865098372943216,
+                        "pos": {
+                            "x": 0.26660654650916454,
+                            "y": 0.11266590546966126
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 25,
+                        "time": 211.19497680947842,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.6865098372943216,
+                        "pos": {
+                            "x": 0.26660654650916454,
+                            "y": 0.11266590546966126
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 25,
+                        "time": 214.19497680947842,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.6865098372943216,
+                        "pos": {
+                            "x": 0.26660654650916454,
+                            "y": 0.11266590546966126
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 25
+              },
+              {
+                  "name": "Unattached Ink-0",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl7",
+                  "datastring": "TEXT::[str]The first ledger of the Nobel Foundation[font]Verdana[fontsize]0.045819431517067834[color]#000000[x]0.019332161687170474[y]0.9375[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "The first ledger of the Nobel Foundation",
+                            "font": "Verdana",
+                            "fontsize": "0.045819431517067834",
+                            "color": "#000000",
+                            "x": 0.019332161687170474,
+                            "y": 0.9375,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 197.28502379154534,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 197.78502379154534,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 208.2046136901368,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 208.7046136901368,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 26
+              },
+              {
+                  "name": "nobel_foundation_statute",
+                  "guid": "nobel_foundation_statute",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\nobel_foundation_statute\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 27,
+                        "time": 211.52735519406298,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1240003688288098,
+                        "pos": {
+                            "x": -0.04759246419718721,
+                            "y": 0.08470498021156497
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 27,
+                        "time": 217.52735519406298,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1240003688288098,
+                        "pos": {
+                            "x": -0.04759246419718721,
+                            "y": 0.08470498021156497
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 27,
+                        "time": 218.17,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1240003688288098,
+                        "pos": {
+                            "x": -0.04759246419718721,
+                            "y": 0.08470498021156497
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 27,
+                        "time": 227.82,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1241127801068204,
+                        "pos": {
+                            "x": -0.05189937076256923,
+                            "y": 0.2810982911033286
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 27,
+                        "time": 237.10272087556524,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.3492051636688666,
+                        "pos": {
+                            "x": -0.1608026331769169,
+                            "y": 0.23773667194114467
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 27,
+                        "time": 243.10272087556524,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.3492051636688666,
+                        "pos": {
+                            "x": -0.1608026331769169,
+                            "y": 0.23773667194114467
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 27,
+                        "time": 246.10272087556524,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.3492051636688666,
+                        "pos": {
+                            "x": -0.1608026331769169,
+                            "y": 0.23773667194114467
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 27
+              },
+              {
+                  "name": "Ink stadgar",
+                  "providerId": "ink",
+                  "experienceReference": "nobel_foundation_statute",
+                  "assetUrl": "noAssetUrl5",
+                  "datastring": "TEXT::[str]Statutes[font]Verdana[fontsize]0.07913052194437635[color]#080887[x]0.3884007029876977[y]0.403125[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Statutes",
+                            "font": "Verdana",
+                            "fontsize": "0.07913052194437635",
+                            "color": "#080887",
+                            "x": 0.3884007029876977,
+                            "y": 0.403125,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+                      "x": -0.049995796012121896,
+                      "y": 0.19423272980144524,
+                      "w": 1.124063096356491,
+                      "h": 0.6321620225554958
+                  },
+                  "keyframes": [
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.049995796012121896,
+                            "y": 0.19423272980144524,
+                            "w": 1.124063096356491,
+                            "h": 0.6321620225554958
+                        },
+                        "initproxy": {
+                            "x": 0.04447774877956315,
+                            "y": -0.30725150020285197,
+                            "w": 0.8896297754471026,
+                            "h": 2.1260372373634863
+                        },
+                        "time": 218.62929092045724,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.049995796012121896,
+                            "y": 0.19423272980144524,
+                            "w": 1.124063096356491,
+                            "h": 0.6321620225554958
+                        },
+                        "initproxy": {
+                            "x": 0.04447774877956315,
+                            "y": -0.30725150020285197,
+                            "w": 0.8896297754471026,
+                            "h": 2.1260372373634863
+                        },
+                        "time": 219.12929092045724,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.049995796012121896,
+                            "y": 0.19423272980144524,
+                            "w": 1.124063096356491,
+                            "h": 0.6321620225554958
+                        },
+                        "initproxy": {
+                            "x": 0.04447774877956315,
+                            "y": -0.30725150020285197,
+                            "w": 0.8896297754471026,
+                            "h": 2.1260372373634863
+                        },
+                        "time": 236.4854630062639,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.049995796012121896,
+                            "y": 0.19423272980144524,
+                            "w": 1.124063096356491,
+                            "h": 0.6321620225554958
+                        },
+                        "initproxy": {
+                            "x": 0.04447774877956315,
+                            "y": -0.30725150020285197,
+                            "w": 0.8896297754471026,
+                            "h": 2.1260372373634863
+                        },
+                        "time": 236.9854630062639,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 28
+              },
+              {
+                  "name": "Ink stadgar-0-0",
+                  "providerId": "ink",
+                  "experienceReference": "nobel_foundation_statute",
+                  "assetUrl": "noAssetUrl4",
+                  "datastring": "TEXT::[str]of[font]Verdana[fontsize]0.07913052194437635[color]#080887[x]0.46155444880630275[y]0.6946909889809397[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "of",
+                            "font": "Verdana",
+                            "fontsize": "0.07913052194437635",
+                            "color": "#080887",
+                            "x": 0.46155444880630275,
+                            "y": 0.6946909889809397,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+                      "x": -0.04924637232537055,
+                      "y": 0.16005929415211373,
+                      "w": 1.1240435362213638,
+                      "h": 0.6321510221280078
+                  },
+                  "keyframes": [
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.04924637232537055,
+                            "y": 0.16005929415211373,
+                            "w": 1.1240435362213638,
+                            "h": 0.6321510221280078
+                        },
+                        "initproxy": {
+                            "x": 0.0438118015347692,
+                            "y": -0.253197872896427,
+                            "w": 0.8896452564120832,
+                            "h": 2.1260742337735965
+                        },
+                        "time": 220.26666016039445,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.04924637232537055,
+                            "y": 0.16005929415211373,
+                            "w": 1.1240435362213638,
+                            "h": 0.6321510221280078
+                        },
+                        "initproxy": {
+                            "x": 0.0438118015347692,
+                            "y": -0.253197872896427,
+                            "w": 0.8896452564120832,
+                            "h": 2.1260742337735965
+                        },
+                        "time": 220.76666016039445,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.04924637232537055,
+                            "y": 0.16005929415211373,
+                            "w": 1.1240435362213638,
+                            "h": 0.6321510221280078
+                        },
+                        "initproxy": {
+                            "x": 0.0438118015347692,
+                            "y": -0.253197872896427,
+                            "w": 0.8896452564120832,
+                            "h": 2.1260742337735965
+                        },
+                        "time": 236.4854630601095,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.04924637232537055,
+                            "y": 0.16005929415211373,
+                            "w": 1.1240435362213638,
+                            "h": 0.6321510221280078
+                        },
+                        "initproxy": {
+                            "x": 0.0438118015347692,
+                            "y": -0.253197872896427,
+                            "w": 0.8896452564120832,
+                            "h": 2.1260742337735965
+                        },
+                        "time": 236.9854630601095,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 29
+              },
+              {
+                  "name": "Ink stadgar-0",
+                  "providerId": "ink",
+                  "experienceReference": "nobel_foundation_statute",
+                  "assetUrl": "noAssetUrl3",
+                  "datastring": "TEXT::[str]Nobel  Foundation[font]Verdana[fontsize]0.07913052194437635[color]#080887[x]0.27462698729113083[y]0.9215403037719515[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Nobel  Foundation",
+                            "font": "Verdana",
+                            "fontsize": "0.07913052194437635",
+                            "color": "#080887",
+                            "x": 0.27462698729113083,
+                            "y": 0.9215403037719515,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+                      "x": -0.05051656678820682,
+                      "y": 0.21797967951656771,
+                      "w": 1.124076688596676,
+                      "h": 0.6321696666976033
+                  },
+                  "keyframes": [
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.05051656678820682,
+                            "y": 0.21797967951656771,
+                            "w": 1.124076688596676,
+                            "h": 0.6321696666976033
+                        },
+                        "initproxy": {
+                            "x": 0.04494049854487499,
+                            "y": -0.3448119879830262,
+                            "w": 0.8896190181191496,
+                            "h": 2.1260115295011434
+                        },
+                        "time": 222.18577625599087,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.05051656678820682,
+                            "y": 0.21797967951656771,
+                            "w": 1.124076688596676,
+                            "h": 0.6321696666976033
+                        },
+                        "initproxy": {
+                            "x": 0.04494049854487499,
+                            "y": -0.3448119879830262,
+                            "w": 0.8896190181191496,
+                            "h": 2.1260115295011434
+                        },
+                        "time": 222.68577625599087,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.05051656678820682,
+                            "y": 0.21797967951656771,
+                            "w": 1.124076688596676,
+                            "h": 0.6321696666976033
+                        },
+                        "initproxy": {
+                            "x": 0.04494049854487499,
+                            "y": -0.3448119879830262,
+                            "w": 0.8896190181191496,
+                            "h": 2.1260115295011434
+                        },
+                        "time": 236.50183675143194,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "attached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+                            "x": -0.05051656678820682,
+                            "y": 0.21797967951656771,
+                            "w": 1.124076688596676,
+                            "h": 0.6321696666976033
+                        },
+                        "initproxy": {
+                            "x": 0.04494049854487499,
+                            "y": -0.3448119879830262,
+                            "w": 0.8896190181191496,
+                            "h": 2.1260115295011434
+                        },
+                        "time": 237.00183675143194,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 30
+              },
+              {
+                  "name": "first_banquet",
+                  "guid": "first_banquet",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\first_banquet\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 243.78681410880418,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.0588460296326931,
+                        "pos": {
+                            "x": -0.03020158673274642,
+                            "y": 0.11091247268717252
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 246.78681410880418,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.0588460296326931,
+                        "pos": {
+                            "x": -0.03020158673274642,
+                            "y": 0.11091247268717252
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 246.1,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.0588460296326931,
+                        "pos": {
+                            "x": -0.03020158673274642,
+                            "y": 0.11091247268717252
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 253.68584276599537,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.5558593338882668,
+                        "pos": {
+                            "x": 0.13690253785018236,
+                            "y": 0.2514183133488097
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 256.6858427659954,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.5558593338882668,
+                        "pos": {
+                            "x": 0.13690253785018236,
+                            "y": 0.2514183133488097
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 259.6858427659954,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.5558593338882668,
+                        "pos": {
+                            "x": 0.13690253785018236,
+                            "y": 0.2514183133488097
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 31
+              },
+              {
+                  "name": "medal",
+                  "guid": "medal",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\medal\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 32,
+                        "time": 257.9809731360369,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1812999886694768,
+                        "pos": {
+                            "x": -0.07808487510701645,
+                            "y": 0.003108776916020073
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 32,
+                        "time": 258.4809731360369,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1812999886694768,
+                        "pos": {
+                            "x": -0.07808487510701645,
+                            "y": 0.003108776916020073
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 32,
+                        "time": 259.75,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1812999886694768,
+                        "pos": {
+                            "x": -0.07808487510701645,
+                            "y": 0.003108776916020073
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 32,
+                        "time": 261.5809731360369,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1812999886694768,
+                        "pos": {
+                            "x": -0.07808487510701645,
+                            "y": 0.003108776916020073
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 32,
+                        "time": 262.0809731360369,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1812999886694768,
+                        "pos": {
+                            "x": -0.07808487510701645,
+                            "y": 0.003108776916020073
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 32
+              },
+              {
+                  "name": "diplomas",
+                  "guid": "diplomas",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\FromWillToPrize\\diplomas\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 260.4121515284564,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.6945138958340278,
+                        "pos": {
+                            "x": 0.11806488060473702,
+                            "y": 0.17262141837083036
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 260.9121515284564,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.6945138958340278,
+                        "pos": {
+                            "x": 0.11806488060473702,
+                            "y": 0.17262141837083036
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 262.90419801917494,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.6945138958340278,
+                        "pos": {
+                            "x": 0.11806488060473702,
+                            "y": 0.17262141837083036
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 263.40419801917494,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.6945138958340278,
+                        "pos": {
+                            "x": 0.11806488060473702,
+                            "y": 0.17262141837083036
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 265.40419801917494,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.6945138958340278,
+                        "pos": {
+                            "x": 0.11806488060473702,
+                            "y": 0.17262141837083036
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 33
+              }
+            ]
         }
     }
     var artDoqs = {
@@ -814,7 +4362,127 @@ TAG.Layout.Spoof = (function () {
                 "Type": "Artwork",
                 "ContentType": "Image"
             }
-        }
+        },
+        "academy_in_stockholm": {
+            "Identifier": "academy_in_stockholm",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\Academy_In_Stockholm\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "bofors": {
+            "Identifier": "bofors",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\bofors\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "diplomas": {
+            "Identifier": "diplomas",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\diplomas\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "first_banquet": {
+            "Identifier": "first_banquet",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\first_banquet\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "flag_of_norway": {
+            "Identifier": "flag_of_norway",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\flag_of_norway\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "flag_of_sweden": {
+            "Identifier": "flag_of_sweden",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\flag_of_sweden\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "karolinska_institute": {
+            "Identifier": "karolinska_institute",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\karolinska_institute\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "medal": {
+            "Identifier": "medal",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\medal\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "newspaper_article": {
+            "Identifier": "newspaper_article",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\newspaper_article\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "nobel_foundation_first_ledger": {
+            "Identifier": "nobel_foundation_first_ledger",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\nobel_foundation_first_ledger\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "nobel_foundation_statute": {
+            "Identifier": "nobel_foundation_statute",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\nobel_foundation_statute\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "nobel_home": {
+            "Identifier": "nobel_home",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\nobel_home\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "norwegian_storting": {
+            "Identifier": "norwegian_storting",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\norwegian_storting\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "paris_sohlman_scene": {
+            "Identifier": "paris_sohlman_scene",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\paris_sohlman_scene\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "royal_swedish_academy_of_sciences": {
+            "Identifier": "royal_swedish_academy_of_sciences",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\royal_swedish_academy_of_sciences\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "sohlman": {
+            "Identifier": "sohlman",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\sohlman\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "swedish_academy": {
+            "Identifier": "swedish_academy",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\swedish_academy\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "union_flag": {
+            "Identifier": "union_flag",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\union_flag\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "will_page_1": {
+            "Identifier": "will_page_1",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\will_page_1\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "will_page_2": {
+            "Identifier": "will_page_2",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\FromWillToPrize\\will_page_2\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
     };
 
    var doqs = {
@@ -946,9 +4614,6 @@ TAG.Layout.Spoof = (function () {
    function getDoq(name, callback, error,erro2,error3) {
        if (artDoqs[name] !== null && artDoqs[name] !== undefined) {
            callback(artDoqs[name])
-       }
-       else if (audioDoqs[name] !== null && audioDoqs[name] !== undefined) {
-           callback(audioDoqs[name])
        }
        else {
            error()
