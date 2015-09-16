@@ -112,6 +112,3728 @@ TAG.Layout.Spoof = (function () {
             ],
             "totalDuration" : "182"
         },
+        "Family" : {
+            "tourTitle": "Family",
+            "totalDuration": 258.0861344461403,
+            "guid": "Family",
+            "timestamp": "2015-09-15T15:54:42.651Z",
+            "tracks": [
+              {
+                  "name": "family nobel",
+                  "providerId": "audio",
+                  "assetUrl": "Audio\\family.mp3",
+                  "mediaLength": 257.358,
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "time": 0,
+                        "volume": 0.8,
+                        "data": {
+            
+                        },
+                        "audioOffset": null,
+                        "audioKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "time": 257.358,
+                        "volume": 0.8,
+                        "data": {
+            
+                        },
+                        "audioOffset": null,
+                        "audioKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "time": 257.368,
+                        "volume": 0,
+                        "data": {
+            
+                        },
+                        "audioOffset": null,
+                        "audioKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 1
+              },
+              {
+                  "name": "3_alfred_nobel",
+                  "guid": "3_alfred_nobel",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Family\\3_alfred_nobel\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 0,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.4408643024806582,
+                        "pos": {
+                            "x": -0.23592919348150476,
+                            "y": 0.1835029595475841
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 2,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4408643024806582,
+                        "pos": {
+                            "x": -0.23592919348150476,
+                            "y": 0.1835029595475841
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 2.04,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4408643024806582,
+                        "pos": {
+                            "x": -0.23592919348150476,
+                            "y": 0.1835029595475841
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 6.406999683380127,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.2008403361008253,
+                        "pos": {
+                            "x": -0.0946731787223779,
+                            "y": 0.23631265209751334
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 8.406999683380126,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.2008403361008253,
+                        "pos": {
+                            "x": -0.0946731787223779,
+                            "y": 0.23631265209751334
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 11.406999683380126,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.2008403361008253,
+                        "pos": {
+                            "x": -0.0946731787223779,
+                            "y": 0.23631265209751334
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 2
+              },
+              {
+                  "name": "will_page_1",
+                  "guid": "will_page_1",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Family\\will_page_1\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 6.124285485578877,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.2014409364369638,
+                        "pos": {
+                            "x": -0.0913885696248058,
+                            "y": 0.026598661371872056
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 10.124285485578877,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.2014409364369638,
+                        "pos": {
+                            "x": -0.0913885696248058,
+                            "y": 0.026598661371872056
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 9.94,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.2014409364369638,
+                        "pos": {
+                            "x": -0.0913885696248058,
+                            "y": 0.026598661371872056
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 13.12,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9895721896646679,
+                        "pos": {
+                            "x": -0.00006134817103731205,
+                            "y": 0.01934040808204024
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 18.820438734490633,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9896711567803459,
+                        "pos": {
+                            "x": 0.0011418392360911244,
+                            "y": 0.09570043700332692
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 22.820438734490633,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9896711567803459,
+                        "pos": {
+                            "x": 0.0011418392360911244,
+                            "y": 0.09570043700332692
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 26.820438734490633,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.9896711567803459,
+                        "pos": {
+                            "x": 0.0011418392360911244,
+                            "y": 0.09570043700332692
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 3
+              },
+              {
+                  "name": "Unattached Annotation-1",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl38",
+                  "datastring": "TRANS::[path]M0.520540,0.583271C0.532360,0.583271,0.696663,0.583271,0.708483,0.583271C0.708483,0.604279,0.708483,0.650498,0.708483,0.671506C0.696663,0.671506,0.532360,0.671506,0.520540,0.671506C0.520540,0.650498,0.520540,0.604279,0.520540,0.583271z[color]#000000[opac]0.3529175865327494[mode]isolate[]|BOUNDRECT::[x]0.5205400734260889[y]0.5832709859984402[w]0.1879432624113475[h]0.08823529411764706[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.520540,0.583271C0.532360,0.583271,0.696663,0.583271,0.708483,0.583271C0.708483,0.604279,0.708483,0.650498,0.708483,0.671506C0.696663,0.671506,0.532360,0.671506,0.520540,0.671506C0.520540,0.650498,0.520540,0.604279,0.520540,0.583271z",
+                            "color": "#000000",
+                            "opac": 0.3529175865327494,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.5205400734260889,
+                            "y": 0.5832709859984402,
+                            "w": 0.1879432624113475,
+                            "h": 0.08823529411764706,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 13.338993614017505,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 13.838993614017505,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 13.995445970153257,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 14.495445970153257,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 4
+              },
+              {
+                  "name": "Unattached Annotation-5",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl37",
+                  "datastring": "TRANS::[path]M0.771197,0.574472C0.783017,0.574472,0.904766,0.574472,0.916587,0.574472C0.916587,0.595480,0.916587,0.641699,0.916587,0.662707C0.904766,0.662707,0.783017,0.662707,0.771197,0.662707C0.771197,0.641699,0.771197,0.595480,0.771197,0.574472z[color]#000000[opac]0.39687150837988827[mode]isolate[]|BOUNDRECT::[x]0.7711965326423921[y]0.5744720265294112[w]0.1453900709219858[h]0.08823529411764706[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.771197,0.574472C0.783017,0.574472,0.904766,0.574472,0.916587,0.574472C0.916587,0.595480,0.916587,0.641699,0.916587,0.662707C0.904766,0.662707,0.783017,0.662707,0.771197,0.662707C0.771197,0.641699,0.771197,0.595480,0.771197,0.574472z",
+                            "color": "#000000",
+                            "opac": 0.39687150837988827,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.7711965326423921,
+                            "y": 0.5744720265294112,
+                            "w": 0.1453900709219858,
+                            "h": 0.08823529411764706,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 14,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 14.5,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 14.6,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 15.1,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 5
+              },
+              {
+                  "name": "Unattached Annotation-2",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl36",
+                  "datastring": "TRANS::[path]M0.483559,0.716199C0.495379,0.716199,0.658500,0.716199,0.670320,0.716199C0.670320,0.737208,0.670320,0.783426,0.670320,0.804435C0.658500,0.804435,0.495379,0.804435,0.483559,0.804435C0.483559,0.783426,0.483559,0.737208,0.483559,0.716199z[color]#000000[opac]0.3486391061452514[mode]isolate[]|BOUNDRECT::[x]0.48355898308490264[y]0.7161994783107295[w]0.18676122931442088[h]0.08823529411764706[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.483559,0.716199C0.495379,0.716199,0.658500,0.716199,0.670320,0.716199C0.670320,0.737208,0.670320,0.783426,0.670320,0.804435C0.658500,0.804435,0.495379,0.804435,0.483559,0.804435C0.483559,0.783426,0.483559,0.737208,0.483559,0.716199z",
+                            "color": "#000000",
+                            "opac": 0.3486391061452514,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.48355898308490264,
+                            "y": 0.7161994783107295,
+                            "w": 0.18676122931442088,
+                            "h": 0.08823529411764706,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 14.9,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 15.4,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 15.704094670488444,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 16.204094670488444,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 6
+              },
+              {
+                  "name": "Unattached Annotation-3",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl35",
+                  "datastring": "TRANS::[path]M0.805333,0.858642C0.817154,0.858642,0.949541,0.858642,0.961362,0.858642C0.961362,0.879650,0.961362,0.925868,0.961362,0.946877C0.949541,0.946877,0.817154,0.946877,0.805333,0.946877C0.805333,0.925868,0.805333,0.879650,0.805333,0.858642z[color]#000000[opac]0.3499620111731844[mode]isolate[]|BOUNDRECT::[x]0.8053332753752698[y]0.858641569809298[w]0.15602836879432624[h]0.08823529411764706[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.805333,0.858642C0.817154,0.858642,0.949541,0.858642,0.961362,0.858642C0.961362,0.879650,0.961362,0.925868,0.961362,0.946877C0.949541,0.946877,0.817154,0.946877,0.805333,0.946877C0.805333,0.925868,0.805333,0.879650,0.805333,0.858642z",
+                            "color": "#000000",
+                            "opac": 0.3499620111731844,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.8053332753752698,
+                            "y": 0.858641569809298,
+                            "w": 0.15602836879432624,
+                            "h": 0.08823529411764706,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 16.0707617006362,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 16.5707617006362,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 16.670761700636202,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 17.170761700636202,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 7
+              },
+              {
+                  "name": "Unattached Annotation-4",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl34",
+                  "datastring": "TRANS::[path]M0.200818,0.908506C0.212639,0.908506,0.298927,0.908506,0.310748,0.908506C0.310748,0.929514,0.310748,0.984136,0.310748,1.005144C0.298927,1.005144,0.212639,1.005144,0.200818,1.005144C0.200818,0.984136,0.200818,0.929514,0.200818,0.908506z[color]#000000[opac]0.35317988826815644[mode]isolate[]|BOUNDRECT::[x]0.2008184792732429[y]0.908505835288155[w]0.1099290780141844[h]0.09663865546218488[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.200818,0.908506C0.212639,0.908506,0.298927,0.908506,0.310748,0.908506C0.310748,0.929514,0.310748,0.984136,0.310748,1.005144C0.298927,1.005144,0.212639,1.005144,0.200818,1.005144C0.200818,0.984136,0.200818,0.929514,0.200818,0.908506z",
+                            "color": "#000000",
+                            "opac": 0.35317988826815644,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.2008184792732429,
+                            "y": 0.908505835288155,
+                            "w": 0.1099290780141844,
+                            "h": 0.09663865546218488,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 16.877527820229016,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 17.377527820229016,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 17.477527820229017,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 17.977527820229017,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 8
+              },
+              {
+                  "name": "3_immanuel_nobel",
+                  "guid": "3_immanuel_nobel",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Family\\3_immanuel_nobel\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 9,
+                        "time": 19.778500366210938,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.6950697570590624,
+                        "pos": {
+                            "x": 0.10341254516489367,
+                            "y": 0.17449600403109583
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 9,
+                        "time": 22.778500366210938,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.6950697570590624,
+                        "pos": {
+                            "x": 0.10341254516489367,
+                            "y": 0.17449600403109583
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 9,
+                        "time": 24.74,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.6950697570590624,
+                        "pos": {
+                            "x": 0.10341254516489367,
+                            "y": 0.17449600403109583
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 9,
+                        "time": 37.73322664261421,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1189017288480602,
+                        "pos": {
+                            "x": -0.05192760412546382,
+                            "y": 0.19950229135211495
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 9,
+                        "time": 40.73322664261421,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1189017288480602,
+                        "pos": {
+                            "x": -0.05192760412546382,
+                            "y": 0.19950229135211495
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 9,
+                        "time": 43.73322664261421,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1189017288480602,
+                        "pos": {
+                            "x": -0.05192760412546382,
+                            "y": 0.19950229135211495
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 9
+              },
+              {
+                  "name": "Unattached Annotation-16",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl32",
+                  "datastring": "TEXT::[str]Immanuel Nobel[font]Verdana, Geneva, sans-serif[fontsize]0.06961980938548273[color]#FFFFFF[x]0.5912633060984764[y]0.8363607865345629[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Immanuel Nobel",
+                            "font": "Verdana, Geneva, sans-serif",
+                            "fontsize": "0.06961980938548273",
+                            "color": "#FFFFFF",
+                            "x": 0.5912633060984764,
+                            "y": 0.8363607865345629,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 24.75399856567383,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 25.75399856567383,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 39.15402961847126,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 40.15402961847126,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 10
+              },
+              {
+                  "name": "Unattached Annotation-17",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl31",
+                  "datastring": "TEXT::[str](1801 - 1872)[font]Verdana, Geneva, sans-serif[fontsize]0.06882788693828685[color]#FFFFFF[x]0.6100711483123888[y]0.9154747105851958[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "(1801 - 1872)",
+                            "font": "Verdana, Geneva, sans-serif",
+                            "fontsize": "0.06882788693828685",
+                            "color": "#FFFFFF",
+                            "x": 0.6100711483123888,
+                            "y": 0.9154747105851958,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 26.136999988555907,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 27.136999988555907,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 39.153043978796205,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 40.153043978796205,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 11
+              },
+              {
+                  "name": "3_andriette",
+                  "guid": "3_andriette",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Family\\3_andriette\\GeneratedImages\\dzc_output.xml",
+                "keyframes": [
+        {
+          "dispNum": 0,
+            "zIndex": 12,
+            "time": 41.009083676621074,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 1.0004001000200035,
+            "pos": {
+                "x": -1.1102230246251565e-16,
+                "y": 0
+            },
+            "SpecialKeyframeType": "INITIAL"
+        },
+    {
+          "dispNum": 0,
+        "zIndex": 12,
+        "time": 45.009083676621074,
+        "opacity": 1,
+        "data": {
+            
+        },
+        "scale": 1.0004001000200035,
+        "pos": {
+            "x": -1.1102230246251565e-16,
+            "y": 0
+        }
+    },
+    {
+        "dispNum": 0,
+        "zIndex": 12,
+        "time": 46.94,
+        "opacity": 1,
+        "data": {
+            
+        },
+      "scale": 1.0004001000200035,
+      "pos": {
+          "x": -1.1102230246251565e-16,
+          "y": 0
+      }
+    },
+{
+          "dispNum": 0,
+          "zIndex": 12,
+          "time": 51.48,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.0005001500350072,
+          "pos": {
+              "x": -0.0008703395289057503,
+              "y": 0.12938219419923974
+          }
+},
+        {
+            "dispNum": 0,
+            "zIndex": 12,
+            "time": 64.31861985868195,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 1.2007202520672153,
+            "pos": {
+                "x": -0.08972091705804719,
+                "y": 0.1776573883381597
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 12,
+            "time": 68.31861985868195,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 1.2007202520672153,
+            "pos": {
+                "x": -0.08972091705804719,
+                "y": 0.1776573883381597
+            },
+            "SpecialKeyframeType": "HOLDING FOR DURATION"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 12,
+            "time": 77.31861985868195,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 1.2007202520672153,
+            "pos": {
+                "x": -0.08972091705804719,
+                "y": 0.1776573883381597
+            },
+            "SpecialKeyframeType": "FINAL"
+        }
+],
+      "zIndex": 12
+},
+{
+    "name": "Unattached Annotation-19",
+    "providerId": "ink",
+    "experienceReference": "",
+    "assetUrl": "noAssetUrl29",
+    "datastring": "TEXT::[str](1805-1889)[font]Verdana, Geneva, sans-serif[fontsize]0.07079938617745981[color]#FFFFFF[x]0.5821173725603314[y]0.9312974471080152[w]undefined[h]undefined[]|",
+    "inkObjects": [
+      {
+          "inkType": "text",
+          "inkProperties": {
+              "str": "(1805-1889)",
+              "font": "Verdana, Geneva, sans-serif",
+              "fontsize": "0.07079938617745981",
+              "color": "#FFFFFF",
+              "x": 0.5821173725603314,
+              "y": 0.9312974471080152,
+              "w": null,
+              "h": null
+          }
+      }
+    ],
+    "initKeyframe": {
+        
+    },
+  "keyframes": [
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 47.39983726897523,
+        "opacity": 0
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 48.39983726897523,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 63.481206368072605,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 64.4812063680726,
+        "opacity": 0
+    }
+  ],
+  "zIndex": 13
+},
+{
+      "name": "Unattached Annotation-18",
+      "providerId": "ink",
+      "experienceReference": "",
+      "assetUrl": "noAssetUrl28",
+      "datastring": "TEXT::[str]Andriette Ahlsell[font]Verdana, Geneva, sans-serif[fontsize]0.06882234901907569[color]#FFFFFF[x]0.5477936768446953[y]0.845348068430454[w]undefined[h]undefined[]|",
+      "inkObjects": [
+        {
+            "inkType": "text",
+            "inkProperties": {
+                "str": "Andriette Ahlsell",
+                "font": "Verdana, Geneva, sans-serif",
+                "fontsize": "0.06882234901907569",
+                "color": "#FFFFFF",
+                "x": 0.5477936768446953,
+                "y": 0.845348068430454,
+                "w": null,
+                "h": null
+            }
+        }
+      ],
+      "initKeyframe": {
+        
+      },
+      "keyframes": [
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 45.229126751544165,
+            "opacity": 0
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 46.229126751544165,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 62.98120636807261,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 63.98120636807261,
+            "opacity": 0
+        }
+      ],
+      "zIndex": 14
+},
+{
+    "name": "3_st_petersburg",
+    "guid": "3_st_petersburg",
+    "providerId": "deepZoom",
+    "assetUrl": "Images\\Family\\3_st_petersburg\\GeneratedImages\\dzc_output.xml",
+    "keyframes": [
+      {
+          "dispNum": 0,
+          "zIndex": 15,
+          "time": 75.28611965293424,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 1.1847389558232932,
+          "pos": {
+              "x": -0.08688277247418541,
+              "y": 0.0004505913196751754
+          },
+          "SpecialKeyframeType": "INITIAL"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 15,
+          "time": 77.28611965293424,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.1847389558232932,
+          "pos": {
+              "x": -0.08688277247418541,
+              "y": 0.0004505913196751754
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 15,
+          "time": 77.58,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.1847389558232932,
+          "pos": {
+              "x": -0.08688277247418541,
+              "y": 0.0004505913196751754
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 15,
+          "time": 78.6158019261952,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.965277777777778,
+          "pos": {
+              "x": 0.02291661600701328,
+              "y": 0.12028768267895068
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 15,
+          "time": 80.6158019261952,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.965277777777778,
+          "pos": {
+              "x": 0.02291661600701328,
+              "y": 0.12028768267895068
+          },
+          "SpecialKeyframeType": "HOLDING FOR DURATION"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 15,
+          "time": 82.6158019261952,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 0.965277777777778,
+          "pos": {
+              "x": 0.02291661600701328,
+              "y": 0.12028768267895068
+          },
+          "SpecialKeyframeType": "FINAL"
+      }
+    ],
+    "zIndex": 15
+},
+{
+      "name": "3_watercolor_by_immanuel",
+      "guid": "3_watercolor_by_immanuel",
+      "providerId": "deepZoom",
+      "assetUrl": "Images\\Family\\3_watercolor_by_immanuel\\GeneratedImages\\dzc_output.xml",
+      "keyframes": [
+        {
+            "dispNum": 0,
+            "zIndex": 16,
+            "time": 80.32252417615616,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 0.7277777777777777,
+            "pos": {
+                "x": -0.0035775852930545193,
+                "y": 0.15880085986687498
+            },
+            "SpecialKeyframeType": "INITIAL"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 16,
+            "time": 82.32252417615616,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.7277777777777777,
+            "pos": {
+                "x": -0.0035775852930545193,
+                "y": 0.15880085986687498
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 16,
+            "time": 81.54521891432537,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.7277777777777777,
+            "pos": {
+                "x": -0.0035775852930545193,
+                "y": 0.15880085986687498
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 16,
+            "time": 83.54521891432537,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.7277777777777777,
+            "pos": {
+                "x": -0.0035775852930545193,
+                "y": 0.15880085986687498
+            },
+            "SpecialKeyframeType": "HOLDING FOR DURATION"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 16,
+            "time": 85.54521891432537,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 0.7277777777777777,
+            "pos": {
+                "x": -0.0035775852930545193,
+                "y": 0.15880085986687498
+            },
+            "SpecialKeyframeType": "FINAL"
+        }
+      ],
+      "zIndex": 16
+},
+{
+    "name": "3_nobel_family",
+    "guid": "3_nobel_family",
+    "providerId": "deepZoom",
+    "assetUrl": "Images\\Family\\3_nobel_family\\GeneratedImages\\dzc_output.xml",
+    "keyframes": [
+      {
+          "dispNum": 0,
+          "zIndex": 17,
+          "time": 82.56010966205274,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 0.7655587962695723,
+          "pos": {
+              "x": 0.1031722902115883,
+              "y": 0.057632656919484215
+          },
+          "SpecialKeyframeType": "INITIAL"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 17,
+          "time": 86.56010966205274,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.7655587962695723,
+          "pos": {
+              "x": 0.1031722902115883,
+              "y": 0.057632656919484215
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 17,
+          "time": 92.31,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.7655587962695723,
+          "pos": {
+              "x": 0.1031722902115883,
+              "y": 0.057632656919484215
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 17,
+          "time": 97.761286665272,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.6442295256279951,
+          "pos": {
+              "x": 0.16962926517536814,
+              "y": 0.09760521978860037
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 17,
+          "time": 101.761286665272,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.6442295256279951,
+          "pos": {
+              "x": 0.16962926517536814,
+              "y": 0.09760521978860037
+          },
+          "SpecialKeyframeType": "HOLDING FOR DURATION"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 17,
+          "time": 105.761286665272,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 0.6442295256279951,
+          "pos": {
+              "x": 0.16962926517536814,
+              "y": 0.09760521978860037
+          },
+          "SpecialKeyframeType": "FINAL"
+      }
+    ],
+    "zIndex": 17
+},
+{
+      "name": "Unattached Annotation-14",
+      "providerId": "ink",
+      "experienceReference": "",
+      "assetUrl": "noAssetUrl24",
+      "datastring": "TRANS::[path]M0.505338,0.310570C0.554547,0.310570,0.594439,0.381411,0.594439,0.468797C0.594439,0.556184,0.554547,0.627025,0.505338,0.627025C0.456129,0.627025,0.416237,0.556184,0.416237,0.468797C0.416237,0.381411,0.456129,0.310570,0.505338,0.310570z[color]#000000[opac]0.3974255062365439[mode]isolate[]|BOUNDELLIPSE::[cx]0.505338078291815[cy]0.46879746642293807[rx]0.08910070216220131[ry]0.15822784810126583[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+      "inkObjects": [
+        {
+            "inkType": "trans",
+            "inkProperties": {
+                "path": "M0.505338,0.310570C0.554547,0.310570,0.594439,0.381411,0.594439,0.468797C0.594439,0.556184,0.554547,0.627025,0.505338,0.627025C0.456129,0.627025,0.416237,0.556184,0.416237,0.468797C0.416237,0.381411,0.456129,0.310570,0.505338,0.310570z",
+                "color": "#000000",
+                "opac": 0.3974255062365439,
+                "mode": "isolate"
+            }
+        },
+        {
+            "inkType": "boundellipse",
+            "inkProperties": {
+                "cx": 0.505338078291815,
+                "cy": 0.46879746642293807,
+                "rx": 0.08910070216220131,
+                "ry": 0.15822784810126583,
+                "fillc": "#000000",
+                "fillo": 0,
+                "strokec": "#ffffff",
+                "strokeo": 0.7,
+                "strokew": 5
+            }
+        }
+      ],
+      "initKeyframe": {
+        
+      },
+      "keyframes": [
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 84.06,
+            "opacity": 0
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 84.56,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 85.71385636443068,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 86.21385636443068,
+            "opacity": 0
+        }
+      ],
+      "zIndex": 18
+},
+{
+    "name": "Unattached Annotation-15",
+    "providerId": "ink",
+    "experienceReference": "",
+    "assetUrl": "noAssetUrl23",
+    "datastring": "TEXT::[str]Immanuel[font]Verdana[fontsize]0.0510179387551962[color]#FFFFFF[x]0.42893425270622887[y]0.6644760261657551[w]undefined[h]undefined[]|",
+    "inkObjects": [
+      {
+          "inkType": "text",
+          "inkProperties": {
+              "str": "Immanuel",
+              "font": "Verdana",
+              "fontsize": "0.0510179387551962",
+              "color": "#FFFFFF",
+              "x": 0.42893425270622887,
+              "y": 0.6644760261657551,
+              "w": null,
+              "h": null
+          }
+      }
+    ],
+    "initKeyframe": {
+        
+    },
+  "keyframes": [
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 84.06,
+        "opacity": 0
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 84.56,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 85.71983550509249,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 86.21983550509249,
+        "opacity": 0
+    }
+  ],
+  "zIndex": 19
+},
+{
+      "name": "Unattached Annotation",
+      "providerId": "ink",
+      "experienceReference": "",
+      "assetUrl": "noAssetUrl22",
+      "datastring": "TRANS::[path]M0.213020,0.324314C0.259380,0.324314,0.296961,0.391410,0.296961,0.474177C0.296961,0.556945,0.259380,0.624041,0.213020,0.624041C0.166660,0.624041,0.129078,0.556945,0.129078,0.474177C0.129078,0.391410,0.166660,0.324314,0.213020,0.324314zM0.649075,0.409116C0.703096,0.409116,0.746890,0.485965,0.746890,0.580763C0.746890,0.675560,0.703096,0.752409,0.649075,0.752409C0.595053,0.752409,0.551260,0.675560,0.551260,0.580763C0.551260,0.485965,0.595053,0.409116,0.649075,0.409116zM0.866599,0.388600C0.919461,0.388600,0.962314,0.469201,0.962314,0.568627C0.962314,0.668054,0.919461,0.748655,0.866599,0.748655C0.813738,0.748655,0.770885,0.668054,0.770885,0.568627C0.770885,0.469201,0.813738,0.388600,0.866599,0.388600z[color]#000000[opac]0.39868190390783475[mode]isolate[]|BOUNDELLIPSE::[cx]0.21301993054845977[cy]0.4741772177599469[rx]0.08394155335505672[ry]0.14986352418355803[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|BOUNDELLIPSE::[cx]0.6490747788373161[cy]0.5807625099464699[rx]0.09781480206576366[ry]0.17164672560925304[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|BOUNDELLIPSE::[cx]0.8665992138432521[cy]0.5686274343586176[rx]0.09571457846944412[ry]0.18002723067765508[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+      "inkObjects": [
+        {
+            "inkType": "trans",
+            "inkProperties": {
+                "path": "M0.213020,0.324314C0.259380,0.324314,0.296961,0.391410,0.296961,0.474177C0.296961,0.556945,0.259380,0.624041,0.213020,0.624041C0.166660,0.624041,0.129078,0.556945,0.129078,0.474177C0.129078,0.391410,0.166660,0.324314,0.213020,0.324314zM0.649075,0.409116C0.703096,0.409116,0.746890,0.485965,0.746890,0.580763C0.746890,0.675560,0.703096,0.752409,0.649075,0.752409C0.595053,0.752409,0.551260,0.675560,0.551260,0.580763C0.551260,0.485965,0.595053,0.409116,0.649075,0.409116zM0.866599,0.388600C0.919461,0.388600,0.962314,0.469201,0.962314,0.568627C0.962314,0.668054,0.919461,0.748655,0.866599,0.748655C0.813738,0.748655,0.770885,0.668054,0.770885,0.568627C0.770885,0.469201,0.813738,0.388600,0.866599,0.388600z",
+                "color": "#000000",
+                "opac": 0.39868190390783475,
+                "mode": "isolate"
+            }
+        },
+        {
+            "inkType": "boundellipse",
+            "inkProperties": {
+                "cx": 0.21301993054845977,
+                "cy": 0.4741772177599469,
+                "rx": 0.08394155335505672,
+                "ry": 0.14986352418355803,
+                "fillc": "#000000",
+                "fillo": 0,
+                "strokec": "#ffffff",
+                "strokeo": 0.7,
+                "strokew": 5
+            }
+        },
+        {
+            "inkType": "boundellipse",
+            "inkProperties": {
+                "cx": 0.6490747788373161,
+                "cy": 0.5807625099464699,
+                "rx": 0.09781480206576366,
+                "ry": 0.17164672560925304,
+                "fillc": "#000000",
+                "fillo": 0,
+                "strokec": "#ffffff",
+                "strokeo": 0.7,
+                "strokew": 5
+            }
+        },
+        {
+            "inkType": "boundellipse",
+            "inkProperties": {
+                "cx": 0.8665992138432521,
+                "cy": 0.5686274343586176,
+                "rx": 0.09571457846944412,
+                "ry": 0.18002723067765508,
+                "fillc": "#000000",
+                "fillo": 0,
+                "strokec": "#ffffff",
+                "strokeo": 0.7,
+                "strokew": 5
+            }
+        }
+      ],
+      "initKeyframe": {
+        
+      },
+      "keyframes": [
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 85.67581179630653,
+            "opacity": 0
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 86.17581179630653,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 88.52434545240885,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 89.02434545240885,
+            "opacity": 0
+        }
+      ],
+      "zIndex": 20
+},
+{
+    "name": "Unattached Annotation-0-0",
+    "providerId": "ink",
+    "experienceReference": "",
+    "assetUrl": "noAssetUrl21",
+    "datastring": "TEXT::[str]Robert[font]Verdana[fontsize]0.04084235806695393[color]#FFFFFF[x]0.17024286572507627[y]0.6535947379982809[w]undefined[h]undefined[]|",
+    "inkObjects": [
+      {
+          "inkType": "text",
+          "inkProperties": {
+              "str": "Robert",
+              "font": "Verdana",
+              "fontsize": "0.04084235806695393",
+              "color": "#FFFFFF",
+              "x": 0.17024286572507627,
+              "y": 0.6535947379982809,
+              "w": null,
+              "h": null
+          }
+      }
+    ],
+    "initKeyframe": {
+        
+    },
+  "keyframes": [
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 85.81362057432938,
+        "opacity": 0
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 86.31362057432938,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 90.31362057432938,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 90.81362057432938,
+        "opacity": 0
+    }
+  ],
+  "zIndex": 21
+},
+{
+      "name": "Unattached Annotation-0-1",
+      "providerId": "ink",
+      "experienceReference": "",
+      "assetUrl": "noAssetUrl20",
+      "datastring": "TEXT::[str]Alfred[font]Verdana[fontsize]0.04084235806695393[color]#FFFFFF[x]0.8280758577234605[y]0.7656644600928479[w]undefined[h]undefined[]|",
+      "inkObjects": [
+        {
+            "inkType": "text",
+            "inkProperties": {
+                "str": "Alfred",
+                "font": "Verdana",
+                "fontsize": "0.04084235806695393",
+                "color": "#FFFFFF",
+                "x": 0.8280758577234605,
+                "y": 0.7656644600928479,
+                "w": null,
+                "h": null
+            }
+        }
+      ],
+      "initKeyframe": {
+        
+      },
+      "keyframes": [
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 85.81362057432938,
+            "opacity": 0
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 86.31362057432938,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 90.31362057432938,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 90.81362057432938,
+            "opacity": 0
+        }
+      ],
+      "zIndex": 22
+},
+{
+    "name": "Unattached Annotation-0",
+    "providerId": "ink",
+    "experienceReference": "",
+    "assetUrl": "noAssetUrl19",
+    "datastring": "TEXT::[str]Ludvig[font]Verdana[fontsize]0.04084235806695393[color]#FFFFFF[x]0.6267355271716097[y]0.7773235101283262[w]undefined[h]undefined[]|",
+    "inkObjects": [
+      {
+          "inkType": "text",
+          "inkProperties": {
+              "str": "Ludvig",
+              "font": "Verdana",
+              "fontsize": "0.04084235806695393",
+              "color": "#FFFFFF",
+              "x": 0.6267355271716097,
+              "y": 0.7773235101283262,
+              "w": null,
+              "h": null
+          }
+      }
+    ],
+    "initKeyframe": {
+        
+    },
+  "keyframes": [
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 85.81362057432938,
+        "opacity": 0
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 86.31362057432938,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 90.31362057432938,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 90.81362057432938,
+        "opacity": 0
+    }
+  ],
+  "zIndex": 23
+},
+{
+      "name": "3_robert_nobel",
+      "guid": "3_robert_nobel",
+      "providerId": "deepZoom",
+      "assetUrl": "Images\\Family\\3_robert_nobel\\GeneratedImages\\dzc_output.xml",
+      "keyframes": [
+        {
+            "dispNum": 0,
+            "zIndex": 24,
+            "time": 102.19255860464385,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 0.8354750173270793,
+            "pos": {
+                "x": 0.08259848166139083,
+                "y": 0.21656931734468468
+            },
+            "SpecialKeyframeType": "INITIAL"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 24,
+            "time": 106.19255860464385,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.8354750173270793,
+            "pos": {
+                "x": 0.08259848166139083,
+                "y": 0.21656931734468468
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 24,
+            "time": 105.71,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.8354750173270793,
+            "pos": {
+                "x": 0.08259848166139083,
+                "y": 0.21656931734468468
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 24,
+            "time": 116.78197571667853,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 1.0225008533114647,
+            "pos": {
+                "x": -0.010677411919256085,
+                "y": 0.21654006313093993
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 24,
+            "time": 120.78197571667853,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 1.0225008533114647,
+            "pos": {
+                "x": -0.010677411919256085,
+                "y": 0.21654006313093993
+            },
+            "SpecialKeyframeType": "HOLDING FOR DURATION"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 24,
+            "time": 123.78197571667853,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 1.0225008533114647,
+            "pos": {
+                "x": -0.010677411919256085,
+                "y": 0.21654006313093993
+            },
+            "SpecialKeyframeType": "FINAL"
+        }
+      ],
+      "zIndex": 24
+},
+{
+    "name": "Unattached Annotation-6",
+    "providerId": "ink",
+    "experienceReference": "",
+    "assetUrl": "noAssetUrl17",
+    "datastring": "TEXT::[str]Robert Nobel[font]Verdana, Geneva, sans-serif[fontsize]0.06954227851652649[color]#FFFFFF[x]0.041020904246051065[y]0.07816897737056101[w]undefined[h]undefined[]|",
+    "inkObjects": [
+      {
+          "inkType": "text",
+          "inkProperties": {
+              "str": "Robert Nobel",
+              "font": "Verdana, Geneva, sans-serif",
+              "fontsize": "0.06954227851652649",
+              "color": "#FFFFFF",
+              "x": 0.041020904246051065,
+              "y": 0.07816897737056101,
+              "w": null,
+              "h": null
+          }
+      }
+    ],
+    "initKeyframe": {
+        
+    },
+  "keyframes": [
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 106.00720738829315,
+        "opacity": 0
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 107.00720738829315,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 118.28351875632435,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 119.28351875632435,
+        "opacity": 0
+    }
+  ],
+  "zIndex": 25
+},
+{
+      "name": "Unattached Annotation-7",
+      "providerId": "ink",
+      "experienceReference": "",
+      "assetUrl": "noAssetUrl16",
+      "datastring": "TEXT::[str](1829 - 1896)[font]Verdana, Geneva, sans-serif[fontsize]0.07079938617745981[color]#FFFFFF[x]0.05342439174603617[y]0.1545176225838696[w]undefined[h]undefined[]|",
+      "inkObjects": [
+        {
+            "inkType": "text",
+            "inkProperties": {
+                "str": "(1829 - 1896)",
+                "font": "Verdana, Geneva, sans-serif",
+                "fontsize": "0.07079938617745981",
+                "color": "#FFFFFF",
+                "x": 0.05342439174603617,
+                "y": 0.1545176225838696,
+                "w": null,
+                "h": null
+            }
+        }
+      ],
+      "initKeyframe": {
+        
+      },
+      "keyframes": [
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 107.7578593183508,
+            "opacity": 0
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 108.7578593183508,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 118.25414941303134,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 119.25414941303134,
+            "opacity": 0
+        }
+      ],
+      "zIndex": 26
+},
+{
+    "name": "3_branobel",
+    "guid": "3_branobel",
+    "providerId": "deepZoom",
+    "assetUrl": "Images\\Family\\3_branobel\\GeneratedImages\\dzc_output.xml",
+    "keyframes": [
+      {
+          "dispNum": 0,
+          "zIndex": 27,
+          "time": 119.35207800315257,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 1.0148076297166843,
+          "pos": {
+              "x": -0.0073655867411313025,
+              "y": -0.0037535832528448054
+          },
+          "SpecialKeyframeType": "INITIAL"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 27,
+          "time": 122.35207800315257,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.0148076297166843,
+          "pos": {
+              "x": -0.0073655867411313025,
+              "y": -0.0037535832528448054
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 27,
+          "time": 121.18431463135063,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.0148076297166843,
+          "pos": {
+              "x": -0.0073655867411313025,
+              "y": -0.0037535832528448054
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 27,
+          "time": 121.18431463135063,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.8047607533052287,
+          "pos": {
+              "x": 0.1007279113030955,
+              "y": 0.10251520554673377
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 27,
+          "time": 124.18431463135063,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.8047607533052287,
+          "pos": {
+              "x": 0.1007279113030955,
+              "y": 0.10251520554673377
+          },
+          "SpecialKeyframeType": "HOLDING FOR DURATION"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 27,
+          "time": 127.18431463135063,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 0.8047607533052287,
+          "pos": {
+              "x": 0.1007279113030955,
+              "y": 0.10251520554673377
+          },
+          "SpecialKeyframeType": "FINAL"
+      }
+    ],
+    "zIndex": 27
+},
+{
+      "name": "3_robert_family",
+      "guid": "3_robert_family",
+      "providerId": "deepZoom",
+      "assetUrl": "Images\\Family\\3_robert_family\\GeneratedImages\\dzc_output.xml",
+      "keyframes": [
+        {
+            "dispNum": 0,
+            "zIndex": 28,
+            "time": 125.16966584330725,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 0.243944336561542,
+            "pos": {
+                "x": 0.2662198317084949,
+                "y": 0.24142596353430465
+            },
+            "SpecialKeyframeType": "INITIAL"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 28,
+            "time": 128.16966584330726,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.243944336561542,
+            "pos": {
+                "x": 0.2662198317084949,
+                "y": 0.24142596353430465
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 28,
+            "time": 127.59,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.243944336561542,
+            "pos": {
+                "x": 0.2662198317084949,
+                "y": 0.24142596353430465
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 28,
+            "time": 139.43708225548698,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.5512360444267341,
+            "pos": {
+                "x": 0.18826276148692555,
+                "y": 0.19703315177195754
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 28,
+            "time": 142.43708225548698,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.5512360444267341,
+            "pos": {
+                "x": 0.18826276148692555,
+                "y": 0.19703315177195754
+            },
+            "SpecialKeyframeType": "HOLDING FOR DURATION"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 28,
+            "time": 145.43708225548698,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 0.5512360444267341,
+            "pos": {
+                "x": 0.18826276148692555,
+                "y": 0.19703315177195754
+            },
+            "SpecialKeyframeType": "FINAL"
+        },
+        {
+            "dispNum": 1,
+            "zIndex": 28,
+            "time": 200.87045797378425,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 0.5512360444267341,
+            "pos": {
+                "x": 0.18826276148692555,
+                "y": 0.19703315177195754
+            },
+            "SpecialKeyframeType": "INITIAL"
+        },
+        {
+            "dispNum": 1,
+            "zIndex": 28,
+            "time": 203.87045797378425,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.5512360444267341,
+            "pos": {
+                "x": 0.18826276148692555,
+                "y": 0.19703315177195754
+            }
+        },
+        {
+            "dispNum": 1,
+            "zIndex": 28,
+            "time": 206.24443193070624,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.5512360444267341,
+            "pos": {
+                "x": 0.18826276148692555,
+                "y": 0.19703315177195754
+            },
+            "SpecialKeyframeType": "HOLDING FOR DURATION"
+        },
+        {
+            "dispNum": 1,
+            "zIndex": 28,
+            "time": 209.24443193070624,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 0.5512360444267341,
+            "pos": {
+                "x": 0.18826276148692555,
+                "y": 0.19703315177195754
+            },
+            "SpecialKeyframeType": "FINAL"
+        }
+      ],
+      "zIndex": 28
+},
+{
+    "name": "3_ludvig_nobel",
+    "guid": "3_ludvig_nobel",
+    "providerId": "deepZoom",
+    "assetUrl": "Images\\Family\\3_ludvig_nobel\\GeneratedImages\\dzc_output.xml",
+    "keyframes": [
+      {
+          "dispNum": 0,
+          "zIndex": 29,
+          "time": 142.53456705139527,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 1.2004801200240042,
+          "pos": {
+              "x": -0.10985925656970285,
+              "y": 0.1760047008670284
+          },
+          "SpecialKeyframeType": "INITIAL"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 29,
+          "time": 145.53456705139527,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.2004801200240042,
+          "pos": {
+              "x": -0.10985925656970285,
+              "y": 0.1760047008670284
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 29,
+          "time": 147.86,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.2004801200240042,
+          "pos": {
+              "x": -0.10985925656970285,
+              "y": 0.1760047008670284
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 29,
+          "time": 177.00317625276827,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.8336667500166696,
+          "pos": {
+              "x": 0.11817773318668417,
+              "y": 0.21842922409364185
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 29,
+          "time": 180.00317625276827,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 0.8336667500166696,
+          "pos": {
+              "x": 0.11817773318668417,
+              "y": 0.21842922409364185
+          },
+          "SpecialKeyframeType": "HOLDING FOR DURATION"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 29,
+          "time": 183.00317625276827,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 0.8336667500166696,
+          "pos": {
+              "x": 0.11817773318668417,
+              "y": 0.21842922409364185
+          },
+          "SpecialKeyframeType": "FINAL"
+      }
+    ],
+    "zIndex": 29
+},
+{
+      "name": "Unattached Annotation-9",
+      "providerId": "ink",
+      "experienceReference": "",
+      "assetUrl": "noAssetUrl12",
+      "datastring": "TEXT::[str](1831 - 1888)[font]Verdana, Geneva, sans-serif[fontsize]0.06882234901907569[color]#FFFFFF[x]0.6313591632520417[y]0.9139915470741345[w]undefined[h]undefined[]|",
+      "inkObjects": [
+        {
+            "inkType": "text",
+            "inkProperties": {
+                "str": "(1831 - 1888)",
+                "font": "Verdana, Geneva, sans-serif",
+                "fontsize": "0.06882234901907569",
+                "color": "#FFFFFF",
+                "x": 0.6313591632520417,
+                "y": 0.9139915470741345,
+                "w": null,
+                "h": null
+            }
+        }
+      ],
+      "initKeyframe": {
+        
+      },
+      "keyframes": [
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 147.1810157983728,
+            "opacity": 0
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 148.1810157983728,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 176.60411879671597,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 177.60411879671597,
+            "opacity": 0
+        }
+      ],
+      "zIndex": 30
+},
+{
+    "name": "Unattached Annotation-8",
+    "providerId": "ink",
+    "experienceReference": "",
+    "assetUrl": "noAssetUrl11",
+    "datastring": "TEXT::[str]Ludvig Nobel[font]Verdana, Geneva, sans-serif[fontsize]0.0692210792022792[color]#FFFFFF[x]0.6177044525689501[y]0.838607643224016[w]undefined[h]undefined[]|",
+    "inkObjects": [
+      {
+          "inkType": "text",
+          "inkProperties": {
+              "str": "Ludvig Nobel",
+              "font": "Verdana, Geneva, sans-serif",
+              "fontsize": "0.0692210792022792",
+              "color": "#FFFFFF",
+              "x": 0.6177044525689501,
+              "y": 0.838607643224016,
+              "w": null,
+              "h": null
+          }
+      }
+    ],
+    "initKeyframe": {
+        
+    },
+  "keyframes": [
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 145.37259915659825,
+        "opacity": 0
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 146.37259915659825,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 176.60411879671597,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 177.60411879671597,
+        "opacity": 0
+    }
+  ],
+  "zIndex": 31
+},
+{
+      "name": "3_emanuel_nobel",
+      "guid": "3_emanuel_nobel",
+      "providerId": "deepZoom",
+      "assetUrl": "Images\\Family\\3_emanuel_nobel\\GeneratedImages\\dzc_output.xml",
+      "keyframes": [
+        {
+            "dispNum": 0,
+            "zIndex": 32,
+            "time": 180.81,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 0.6950002500833564,
+            "pos": {
+                "x": 0.16317634206977832,
+                "y": 0.35485410129497363
+            },
+            "SpecialKeyframeType": "INITIAL"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 32,
+            "time": 183.81,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.6950002500833564,
+            "pos": {
+                "x": 0.16317634206977832,
+                "y": 0.35485410129497363
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 32,
+            "time": 186.71,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 0.6950002500833564,
+            "pos": {
+                "x": 0.16317634206977832,
+                "y": 0.35485410129497363
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 32,
+            "time": 198.06995989081693,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 1.089660957850326,
+            "pos": {
+                "x": -0.04446644105806963,
+                "y": 0.32369326901389705
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 32,
+            "time": 201.06995989081693,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 1.089660957850326,
+            "pos": {
+                "x": -0.04446644105806963,
+                "y": 0.32369326901389705
+            },
+            "SpecialKeyframeType": "HOLDING FOR DURATION"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 32,
+            "time": 204.06995989081693,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 1.089660957850326,
+            "pos": {
+                "x": -0.04446644105806963,
+                "y": 0.32369326901389705
+            },
+            "SpecialKeyframeType": "FINAL"
+        }
+      ],
+      "zIndex": 32
+},
+{
+    "name": "Unattached Annotation-10",
+    "providerId": "ink",
+    "experienceReference": "",
+    "assetUrl": "noAssetUrl9",
+    "datastring": "TEXT::[str]Emanuel Nobel[font]Verdana, Geneva, sans-serif[fontsize]0.07041173183267862[color]#FFFFFF[x]0.04097304993141736[y]0.0726232305897525[w]undefined[h]undefined[]|",
+    "inkObjects": [
+      {
+          "inkType": "text",
+          "inkProperties": {
+              "str": "Emanuel Nobel",
+              "font": "Verdana, Geneva, sans-serif",
+              "fontsize": "0.07041173183267862",
+              "color": "#FFFFFF",
+              "x": 0.04097304993141736,
+              "y": 0.0726232305897525,
+              "w": null,
+              "h": null
+          }
+      }
+    ],
+    "initKeyframe": {
+        
+    },
+  "keyframes": [
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 184.61434910814572,
+        "opacity": 0
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 185.61434910814572,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 200.06122777850385,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 201.06122777850385,
+        "opacity": 0
+    }
+  ],
+  "zIndex": 33
+},
+{
+      "name": "Unattached Annotation-11",
+      "providerId": "ink",
+      "experienceReference": "",
+      "assetUrl": "noAssetUrl8",
+      "datastring": "TEXT::[str](1859 - 1932)[font]Verdana, Geneva, sans-serif[fontsize]0.06961980938548273[color]#FFFFFF[x]0.05659413675251017[y]0.15079603463126095[w]undefined[h]undefined[]|",
+      "inkObjects": [
+        {
+            "inkType": "text",
+            "inkProperties": {
+                "str": "(1859 - 1932)",
+                "font": "Verdana, Geneva, sans-serif",
+                "fontsize": "0.06961980938548273",
+                "color": "#FFFFFF",
+                "x": 0.05659413675251017,
+                "y": 0.15079603463126095,
+                "w": null,
+                "h": null
+            }
+        }
+      ],
+      "initKeyframe": {
+        
+      },
+      "keyframes": [
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 185.92232505804037,
+            "opacity": 0
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 186.92232505804037,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 200.1179034463237,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 201.1179034463237,
+            "opacity": 0
+        }
+      ],
+      "zIndex": 34
+},
+{
+    "name": "3_oscar_ii",
+    "guid": "3_oscar_ii",
+    "providerId": "deepZoom",
+    "assetUrl": "Images\\Family\\3_oscar_ii\\GeneratedImages\\dzc_output.xml",
+    "keyframes": [
+      {
+          "dispNum": 0,
+          "zIndex": 35,
+          "time": 207.3012922574141,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 1.0002000300040003,
+          "pos": {
+              "x": -0.002544913501091206,
+              "y": 0.09918959131717586
+          },
+          "SpecialKeyframeType": "INITIAL"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 35,
+          "time": 210.3012922574141,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.0002000300040003,
+          "pos": {
+              "x": -0.002544913501091206,
+              "y": 0.09918959131717586
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 35,
+          "time": 209.34,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.0002000300040003,
+          "pos": {
+              "x": -0.002544913501091206,
+              "y": 0.09918959131717586
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 35,
+          "time": 210.5067765364609,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.2002400360048004,
+          "pos": {
+              "x": -0.09713669901356359,
+              "y": 0.05596488954134504
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 35,
+          "time": 213.5067765364609,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.2002400360048004,
+          "pos": {
+              "x": -0.09713669901356359,
+              "y": 0.05596488954134504
+          },
+          "SpecialKeyframeType": "HOLDING FOR DURATION"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 35,
+          "time": 215.5067765364609,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 1.2002400360048004,
+          "pos": {
+              "x": -0.09713669901356359,
+              "y": 0.05596488954134504
+          },
+          "SpecialKeyframeType": "FINAL"
+      }
+    ],
+    "zIndex": 35
+},
+{
+      "name": "3_flag_of_norway",
+      "guid": "3_flag_of_norway",
+      "providerId": "deepZoom",
+      "assetUrl": "Images\\Family\\3_flag_of_norway\\GeneratedImages\\dzc_output.xml",
+      "keyframes": [
+        {
+            "dispNum": 0,
+            "zIndex": 36,
+            "time": 213.26,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 3.417417417417422,
+            "pos": {
+                "x": -1.155075136303259,
+                "y": -0.7617973344585135
+            },
+            "SpecialKeyframeType": "INITIAL"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 36,
+            "time": 214.26,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 3.417417417417422,
+            "pos": {
+                "x": -1.155075136303259,
+                "y": -0.7617973344585135
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 36,
+            "time": 215.45,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 3.417417417417422,
+            "pos": {
+                "x": -1.155075136303259,
+                "y": -0.7617973344585135
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 36,
+            "time": 217.7,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 2.2402971168443226,
+            "pos": {
+                "x": -0.09838232960978166,
+                "y": -0.056968037320911824
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 36,
+            "time": 218.9175722679613,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 2.2402971168443226,
+            "pos": {
+                "x": -0.09838232960978166,
+                "y": -0.056968037320911824
+            },
+            "SpecialKeyframeType": "HOLDING FOR DURATION"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 36,
+            "time": 220.9175722679613,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 2.2402971168443226,
+            "pos": {
+                "x": -0.09838232960978166,
+                "y": -0.056968037320911824
+            },
+            "SpecialKeyframeType": "FINAL"
+        }
+      ],
+      "zIndex": 36
+},
+{
+    "name": "3_flag_of_sweden",
+    "guid": "3_flag_of_sweden",
+    "providerId": "deepZoom",
+    "assetUrl": "Images\\Family\\3_flag_of_sweden\\GeneratedImages\\dzc_output.xml",
+    "keyframes": [
+      {
+          "dispNum": 0,
+          "zIndex": 37,
+          "time": 213.26,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 2.822597495530955,
+          "pos": {
+              "x": -0.845075577523224,
+              "y": -0.6424907025390116
+          },
+          "SpecialKeyframeType": "INITIAL"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 37,
+          "time": 214.26,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 2.822597495530955,
+          "pos": {
+              "x": -0.845075577523224,
+              "y": -0.6424907025390116
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 37,
+          "time": 215.45,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 2.822597495530955,
+          "pos": {
+              "x": -0.845075577523224,
+              "y": -0.6424907025390116
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 37,
+          "time": 217.7,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 2.2402971168443213,
+          "pos": {
+              "x": -1.0643144239017516,
+              "y": -0.5702844688497911
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 37,
+          "time": 218.9175722679613,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 2.2402971168443213,
+          "pos": {
+              "x": -1.0643144239017516,
+              "y": -0.5702844688497911
+          },
+          "SpecialKeyframeType": "HOLDING FOR DURATION"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 37,
+          "time": 220.9175722679613,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 2.2402971168443213,
+          "pos": {
+              "x": -1.0643144239017516,
+              "y": -0.5702844688497911
+          },
+          "SpecialKeyframeType": "FINAL"
+      }
+    ],
+    "zIndex": 37
+},
+{
+      "name": "3_union_flag",
+      "guid": "3_union_flag",
+      "providerId": "deepZoom",
+      "assetUrl": "Images\\Family\\3_union_flag\\GeneratedImages\\dzc_output.xml",
+      "keyframes": [
+        {
+            "dispNum": 0,
+            "zIndex": 38,
+            "time": 213.26,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 2.5405405405405412,
+            "pos": {
+                "x": -0.7612652936139264,
+                "y": -0.2402801284560928
+            },
+            "SpecialKeyframeType": "INITIAL"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 38,
+            "time": 214.26,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 2.5405405405405412,
+            "pos": {
+                "x": -0.7612652936139264,
+                "y": -0.2402801284560928
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 38,
+            "time": 214.54,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 2.5405405405405412,
+            "pos": {
+                "x": -0.7612652936139264,
+                "y": -0.2402801284560928
+            }
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 38,
+            "time": 215.75227671581928,
+            "opacity": 1,
+            "data": {
+            
+            },
+            "scale": 2.5405405405405412,
+            "pos": {
+                "x": -0.7612652936139264,
+                "y": -0.2402801284560928
+            },
+            "SpecialKeyframeType": "HOLDING FOR DURATION"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 38,
+            "time": 216.75227671581928,
+            "opacity": 0,
+            "data": {
+            
+            },
+            "scale": 2.5405405405405412,
+            "pos": {
+                "x": -0.7612652936139264,
+                "y": -0.2402801284560928
+            },
+            "SpecialKeyframeType": "FINAL"
+        }
+      ],
+      "zIndex": 38
+},
+{
+    "name": "3_emil_nobel",
+    "guid": "3_emil_nobel",
+    "providerId": "deepZoom",
+    "assetUrl": "Images\\Family\\3_emil_nobel\\GeneratedImages\\dzc_output.xml",
+    "keyframes": [
+      {
+          "dispNum": 0,
+          "zIndex": 39,
+          "time": 221.060895584339,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 1.000100010001,
+          "pos": {
+              "x": -1.1102230246251565e-16,
+              "y": 0.12202289147814937
+          },
+          "SpecialKeyframeType": "INITIAL"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 39,
+          "time": 225.060895584339,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.000100010001,
+          "pos": {
+              "x": -1.1102230246251565e-16,
+              "y": 0.12202289147814937
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 39,
+          "time": 225.43,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.000100010001,
+          "pos": {
+              "x": -1.1102230246251565e-16,
+              "y": 0.12202289147814937
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 39,
+          "time": 234.573260457152,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.2003600720120017,
+          "pos": {
+              "x": -0.09405122345111993,
+              "y": 0.046887477053648874
+          }
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 39,
+          "time": 238.573260457152,
+          "opacity": 1,
+          "data": {
+            
+          },
+          "scale": 1.2003600720120017,
+          "pos": {
+              "x": -0.09405122345111993,
+              "y": 0.046887477053648874
+          },
+          "SpecialKeyframeType": "HOLDING FOR DURATION"
+      },
+      {
+          "dispNum": 0,
+          "zIndex": 39,
+          "time": 242.54976044189323,
+          "opacity": 0,
+          "data": {
+            
+          },
+          "scale": 1.2003600720120017,
+          "pos": {
+              "x": -0.09405122345111993,
+              "y": 0.046887477053648874
+          },
+          "SpecialKeyframeType": "FINAL"
+      }
+    ],
+    "zIndex": 39
+},
+{
+      "name": "Unattached Annotation-13",
+      "providerId": "ink",
+      "experienceReference": "",
+      "assetUrl": "noAssetUrl2",
+      "datastring": "TEXT::[str](1843 - 1864)[font]Verdana, Geneva, sans-serif[fontsize]0.06882234901907569[color]#000000[x]0.08261575393405249[y]0.21025312399562401[w]undefined[h]undefined[]|",
+      "inkObjects": [
+        {
+            "inkType": "text",
+            "inkProperties": {
+                "str": "(1843 - 1864)",
+                "font": "Verdana, Geneva, sans-serif",
+                "fontsize": "0.06882234901907569",
+                "color": "#000000",
+                "x": 0.08261575393405249,
+                "y": 0.21025312399562401,
+                "w": null,
+                "h": null
+            }
+        }
+      ],
+      "initKeyframe": {
+        
+      },
+      "keyframes": [
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 227.1852257250283,
+            "opacity": 0
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 227.6852257250283,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 237.59913854445372,
+            "opacity": 1
+        },
+        {
+            "type": "unattached",
+            "dispNum": 0,
+            "initKeyframe": {
+            
+            },
+            "initproxy": {
+            
+            },
+            "time": 238.09913854445372,
+            "opacity": 0
+        }
+      ],
+      "zIndex": 40
+},
+{
+    "name": "Unattached Annotation-12",
+    "providerId": "ink",
+    "experienceReference": "",
+    "assetUrl": "noAssetUrl1",
+    "datastring": "TEXT::[str]Emil Nobel[font]Verdana, Geneva, sans-serif[fontsize]0.06882234901907569[color]#000000[x]0.1108363684386121[y]0.13791139819954015[w]undefined[h]undefined[]|",
+    "inkObjects": [
+      {
+          "inkType": "text",
+          "inkProperties": {
+              "str": "Emil Nobel",
+              "font": "Verdana, Geneva, sans-serif",
+              "fontsize": "0.06882234901907569",
+              "color": "#000000",
+              "x": 0.1108363684386121,
+              "y": 0.13791139819954015,
+              "w": null,
+              "h": null
+          }
+      }
+    ],
+    "initKeyframe": {
+        
+    },
+  "keyframes": [
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 225.48298380008137,
+        "opacity": 0
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 225.98298380008137,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 237.64644058820107,
+        "opacity": 1
+    },
+    {
+        "type": "unattached",
+        "dispNum": 0,
+        "initKeyframe": {
+            
+        },
+        "initproxy": {
+            
+        },
+        "time": 238.14644058820107,
+        "opacity": 0
+    }
+  ],
+  "zIndex": 41
+},
+{
+      "name": "3_heleneborg",
+      "guid": "3_heleneborg",
+      "providerId": "image",
+      "assetUrl": "Images\\Family\\3_heleneborg\\GeneratedImages\\dzc_output.xml",
+      "keyframes": [
+        {
+            "dispNum": 0,
+            "zIndex": 42,
+            "time": 239.32354794698958,
+            "opacity": 0,
+            "size": {
+                "x": 1920,
+                "y": 1080
+            },
+            "pos": {
+                "x": 0,
+                "y": 0
+            },
+            "data": {
+            
+            },
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080,
+            "SpecialKeyframeType": "INITIAL"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 42,
+            "time": 242.32354794698958,
+            "opacity": 1,
+            "size": {
+                "x": 1920,
+                "y": 1080
+            },
+            "pos": {
+                "x": 0,
+                "y": 0
+            },
+            "data": {
+            
+            },
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 42,
+            "time": 243.11,
+            "opacity": 1,
+            "size": {
+                "x": 1920,
+                "y": 1080
+            },
+            "pos": {
+                "x": 0,
+                "y": 0
+            },
+            "data": {
+            
+            },
+            "left": 0,
+            "top": 0,
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 42,
+            "time": 250.0861344461403,
+            "opacity": 1,
+            "size": {
+                "x": 4028.6705202312132,
+                "y": 2262.7249357326477
+            },
+            "pos": {
+                "x": -1724.3652061506502,
+                "y": -1011.2853470437018
+            },
+            "data": {
+            
+            },
+            "left": -1724.3652061506502,
+            "top": -1011.2853470437018,
+            "width": 4028.6705202312132,
+            "height": 2262.7249357326477
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 42,
+            "time": 253.0861344461403,
+            "opacity": 1,
+            "size": {
+                "x": 4028.6705202312132,
+                "y": 2262.7249357326477
+            },
+            "pos": {
+                "x": -1724.3652061506502,
+                "y": -1011.2853470437018
+            },
+            "data": {
+            
+            },
+            "left": -1724.3652061506502,
+            "top": -1011.2853470437018,
+            "width": 4028.6705202312132,
+            "height": 2262.7249357326477,
+            "SpecialKeyframeType": "HOLDING FOR DURATION"
+        },
+        {
+            "dispNum": 0,
+            "zIndex": 42,
+            "time": 258.0861344461403,
+            "opacity": 0,
+            "size": {
+                "x": 4028.6705202312132,
+                "y": 2262.7249357326477
+            },
+            "pos": {
+                "x": -1724.3652061506502,
+                "y": -1011.2853470437018
+            },
+            "data": {
+            
+            },
+            "left": -1724.3652061506502,
+            "top": -1011.2853470437018,
+            "width": 4028.6705202312132,
+            "height": 2262.7249357326477,
+            "SpecialKeyframeType": "FINAL"
+        }
+      ],
+      "zIndex": 42
+}
+]
+},
         "FromWillToPrize": {
             "tourTitle": "From the Will to the Prize",
             "totalDuration": 265.40419801917494,
@@ -4481,6 +8203,115 @@ TAG.Layout.Spoof = (function () {
             "Identifier": "will_page_2",
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\FromWillToPrize\\will_page_2\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        ///FAMILY TOUR
+        "will_page_1": {
+            "Identifier": "will_page_1",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\will_page_1\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_alfred_nobel": {
+            "Identifier": "3_alfred_nobel",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_alfred_nobel\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_andriette": {
+            "Identifier": "3_andriette",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_andriette\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_branobel": {
+            "Identifier": "3_branobel",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_branobel\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_emanuel_nobel": {
+            "Identifier": "3_emanuel_nobel",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_emanuel_nobel\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_emil_nobel": {
+            "Identifier": "3_emil_nobel",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_emil_nobel\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_flag_of_norway": {
+            "Identifier": "3_flag_of_norway",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_flag_of_norway\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_flag_of_sweden": {
+            "Identifier": "3_flag_of_sweden",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_flag_of_sweden\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_heleneborg": {
+            "Identifier": "3_heleneborg",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_heleneborg\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_immanuel_nobel": {
+            "Identifier": "3_immanuel_nobel",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_immanuel_nobel\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_ludvig_nobel": {
+            "Identifier": "3_ludvig_nobel",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_ludvig_nobel\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_nobel_family": {
+            "Identifier": "3_nobel_family",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_nobel_family\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_oscar_ii": {
+            "Identifier": "3_oscar_ii",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_oscar_ii\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_robert_family": {
+            "Identifier": "3_robert_family",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_robert_family\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_robert_nobel": {
+            "Identifier": "3_robert_nobel",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_robert_nobel\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_st_petersburg": {
+            "Identifier": "3_st_petersburg",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_st_petersburg\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_union_flag": {
+            "Identifier": "3_union_flag",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_union_flag\\GeneratedImages\\dzc_output.xml" },
+            }
+        },
+        "3_watercolor_by_immanuel": {
+            "Identifier": "3_watercolor_by_immanuel",
+            "Metadata": {
+                "DeepZoom": { "Path": "Images\\Family\\3_watercolor_by_immanuel\\GeneratedImages\\dzc_output.xml" },
             }
         },
     };
