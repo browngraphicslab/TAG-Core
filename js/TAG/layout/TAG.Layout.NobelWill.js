@@ -2555,10 +2555,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 		//START HARDCODING INFO AREA
 
     	var titles = [
-			["TESTAMENT", "ALFRED BERNHARD NOBEL", "ROBERT NOBEL","EMANUEL NOBEL", "SOFIE KAPY VON KAPIVAR","ALARIK LIEDBECK"],
-			["GEORGES FEHRENBACH", "A FUND", "SHALL BE ANNUALLY DISTRIBUTED IN THE FORM OF PRIZES","PHYSICS", "CHEMICAL", "PHYSIOLOGY OR MEDICINE", "LITERATURE"],
-			["PEACE", "SWEDISH ACADEMY OF SCIENCES", "THE CAROLINE INSTITUTE", "THE ACADEMY IN STOCKHOLM", "A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING", "WHETHER HE BE A SCANDINAVIAN OR NOT", "RAGNAR SOHLMAN", "BOFORS", "MY PROPERTY", "PARIS", "SAN REMO"],
-			["PATENTS","CREMATORIUM"]
+			["Alfred Nobel's last will", "Alfred Nobel: The founder of the Nobel Prize", "Robert Nobel: Alfred Nobel's eldest brother","Emanuel Nobel: Alfred Nobel's eldest nephew", "Sofie Hess: a woman in Alfred Nobel's life","Alarik Liedbeck: Alfred Nobel's friend and coworker"],
+			["Georges Fehrenbach: Chemist in Alfred Nobel's laboratory", "The Nobel Foundation", "The Nobel Prize","Physics", "Chemistry", "Physiology or medicine", "Literature"],
+			["Peace", "Royal Swedish Academy of Sciences", "Karolinska Institutet", "The Swedish Academy", "The Norwegian Nobel Committee", "An international prize", "Ragnar Sohlman: Alfred Nobel's assistant and executor of the will", "Björkborn: Alfred Nobel's last home in Sweden", "Alfred Nobel's fortune", "Paris: Alfred Nobel's home in France", "San Remo: Alfred Nobel's home in Italy"],
+			["Patents","Crematorium"]
     	]
     	var images = [
 			['','Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'],
@@ -2568,50 +2568,54 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	]
     	var texts = [
 			[
-                "Alfred Nobel was a wealthy inventor and industrialist. His handwritten will is four pages long and written in Swedish; in it he expresses a wish to let the majority of his realizable estate form the foundation for prizes to those who ”shall have conferred the greatest benefit to mankind” in the fields of physics, chemistry, physiology or medicine, literature and peace. ",
+                "Alfred Nobel was a wealthy inventor and industrialist. His handwritten will is four pages long and written in Swedish; in it he expresses a wish to let the majority of his realizable estate form the foundation for prizes to those who ”shall have conferred the greatest benefit to mankind” in the fields of physics, chemistry, physiology or medicine, literature and peace.",
 				"Alfred Nobel was born in Stockholm in 1833, grew up in St. Petersburg, Russia, and later lived in Hamburg, Paris, and San Remo. He spent a large part of his life traveling. Nobel’s inventions related to explosives, including dynamite, laid the groundwork for an extensive industrial enterprise and, at his death in 1896, Nobel left behind a huge fortune. In his will, Nobel left the bulk of his wealth to be used to fund prizes in five fields: physics, chemistry, physiology or medicine, literature, and peace.",
 				"Robert Nobel (1829–1896) was Alfred Nobel’s oldest brother. Robert Nobel was involved in the early establishment of the explosives industry. He started a dynamite factory outside Helsinki, and for a few years up to 1870, he was the head of the dynamite factory at Vinterviken outside Stockholm. After a trip to the Caucasus in 1873, Robert Nobel became a pioneer in the oil industry in Baku. In 1881 he ended his active participation in the company, and returned to Sweden.",
 				"Emanuel Nobel (1859–1932) was a nephew to Alfred Nobel. After the death of his father, Ludvig Nobel, Emanuel Nobel took over leadership of the Nobel brothers’ oil company. At first, Alfred Nobel seems to have doubted Emanuel’s ability to run the large company, but Emanuel proved that he was equal to the task.",
-				"Alfred Nobel, never married. However he had a long relationship with an Austrian woman, Sofie Hess (1851–1919). Alfred Nobel met Sofie Hess during a visit to Baden bei Wien in 1876. This relationship was everything but harmonious. For a while, Alfred seems to have been happy and in love, despite all of his business worries. Soon, however, he became dissatisfied in his relationship with Sofie, yet he did not seem to want to break up with her. He scolded her for being irresponsible and childish. Alfred and Sofie’s drawn-out and uneasy relationship finally came to an end. In 1890, Sofie became pregnant. The father was another man, Nicolaus Kapy von Kapivar, whom she eventually married.",
+				"Alfred Nobel never married. However he had a long relationship with an Austrian woman, Sofie Hess (1851–1919). Alfred Nobel met Sofie Hess during a visit to Baden bei Wien in 1876. This relationship was everything but harmonious. For a while, Alfred seems to have been happy and in love, despite all of his business worries. Soon, however, he became dissatisfied in his relationship with Sofie, yet he did not seem to want to break up with her. He scolded her for being irresponsible and childish. Alfred and Sofie’s drawn-out and uneasy relationship finally came to an end. In 1890, Sofie became pregnant. The father was another man, Nicolaus Kapy von Kapivar, whom she eventually married.",
 				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death.",
-                "PLACEHOLDER TEXT",
-                "PLACEHOLDER TEXT 2"
 			],
-			[   "Georges Fehrenbach was Alfred Nobel's assistant in the laboratory that was connected to Nobel's residence in Paris. Fehrenbach collaborated on the development of blasting gelatin and ballistite. When Nobel purchased a laboratory in Sèvran outside Paris, Fehrenbach also worked there, and he also worked for Nobel in the laboratories at the dynamite factory in Ardeer, Scotland. When Nobel moved to San Remo in the beginning of the 1890’s, Fehrenbach chose not to follow him, and remained in Paris.",
-			    "One of the tasks of the executors of the will was to create the fund in which Alfred Nobel fortune would be collected, once his shares, obligations and other valuable papers had been transferred into cash. In 1900, the Nobel Foundation was established and given the responsibility of administering Nobel’s fortune, as well as organizing the distribution of the prizes.",
+			[   "Georges Fehrenbach was Alfred Nobel’s assistant in the laboratory that was connected to Nobel’s residence in Paris. Fehrenbach collaborated on the development of blasting gelatin and ballistite. When Nobel purchased a laboratory in Sèvran outside Paris, Fehrenbach also worked there, and he also worked for Nobel in the laboratories at the dynamite factory in Ardeer, Scotland. When Nobel moved to San Remo in the beginning of the 1890’s, Fehrenbach chose not to follow him, and remained in Paris.",
+                "One of the tasks of the executors of the will was to create the fund in which Alfred Nobel fortune would be collected, once his shares, obligations and other valuable papers had been transferred into cash. In 1900, the Nobel Foundation was established and given the responsibility of administering Nobel’s fortune, as well as organizing the distribution of the prizes.",
 			    "The Nobel Prizes were established in Alfred Nobel’s will. However, the will provides no directions for how the Prizes are to be presented. It was decided that December 10, the date of Alfred Nobel’s death would be the day on which Nobel laureates would receive their awards. The prizes are manifested with a medal and a diploma. The presentation of the Peace Prize takes place in Oslo, and all other Prizes are awarded in Stockholm.",
 			    "The prize area Nobel mentioned first in his will was physics. Many regarded physics as the foremost of the sciences, and Nobel probably held this opinion, too. Physics was also closely related to his own area of research.",
 			    "In the era in which Alfred Nobel lived, belief in the potential of science and technology was very strong. Nobel was interested in many areas of science, including some which lay outside his own expertise. However, certain fields were especially important for his own work as an inventor, in particular chemistry. Chemistry was the second prize area Nobel mentioned in his will.",
-			    "Alfred Nobel had a strong interest in medicine. Partly, this was a result of his obsession with his own illnesses and complaints.  Nobel was also actively interested in medical research. Around 1890, through Karolinska Institutet in Stockholm, Nobel made contact with the physiologist, Jöns Johansson, who came to work at Nobel’s laboratory in Sevran. Physiology or medicine was the third prize area which Nobel mentioned in his will.",
-			    "Alfred Nobel had broad cultural interests. The literary interests which began early in Nobel’s youth lasted throughout his life. His library contains a rich spectrum of literary works in different languages. Further evidence of Nobel’s literary interests was that in the final years of his life, he returned to writing fiction.  The fourth prize area Nobel mentioned in his will was literature."
+			    "Alfred Nobel had a strong interest in medicine. Partly, this was a result of his obsession with his own illnesses and complaints. \n" 
+                + "Nobel was also actively interested in medical research. Around 1890, through Karolinska Institutet in Stockholm, Nobel made contact with the physiologist, Jöns Johansson, who came to work at Nobel’s laboratory in Sevran. \n" 
+                + "Physiology or medicine was the third prize area which Nobel mentioned in his will.",
+			    "Alfred Nobel had broad cultural interests. The literary interests which began early in Nobel’s youth lasted throughout his life. His library contains a rich spectrum of literary works in different languages. \n"
+                + "Further evidence of Nobel’s literary interests was that in the final years of his life, he returned to writing fiction. \n" 
+                + "The fourth prize area Nobel mentioned in his will was literature."
 			],
 			[
-                "Alfred Nobel was interested in social issues, and had a special interest in the peace movement. Nobel’s engagement in the cause for world peace was in part inspired by his acquaintance with Bertha von Suttner, and in part by the use of his inventions in war and terrorist attacks. Peace was the fifth and final prize area that Nobel mentioned in his will.",
-                "The Royal Swedish Academy of Sciences was formed in 1739 by Carl Linnaeus and a number of other Swedsih scientists. It is an independent organisation whose overall objective is to promote the sciences and strengthen their influence in society. Alfred Nobel blev 1884 utländsk ledamot i akademien.",
-                "Karolinska Institutet  is a medical university in Stockholm, Sweden. It was founded in 1810 on Kungsholmen on the west side of Stockholm; the main campus was relocated decades later to Solna, just outside Stockholm. The donation made in the will was not the first that Alfred Nobel made to Karolinska Institutet. In 1890 he donated 50,000 Swedish to the institute in order to create a fund in the memory of his mother Andriette Nobel.",
-                "When Alfred Nobel wrote “the Academy in Stockholm,” it was not entirely clear whether he meant the Swedish Academy or the Royal Academy of Sciences. However the interpretation was that he meant the Swedish Academy. The Swedish Academy was founded in 1786 by King Gustav III. The primary purpose of the Academy is to further the 'purity, strength, and sublimity of the Swedish language'.",
+                "Alfred Nobel was interested in social issues, and had a special interest in the peace movement. Nobel’s engagement in the cause for world peace was in part inspired by his acquaintance with Bertha von Suttner, and in part by the use of his inventions in war and terrorist attacks. \n"
+                + "Peace was the fifth and final prize area that Nobel mentioned in his will.",
+                "The Royal Swedish Academy of Sciences was formed in 1739 by Carl Linnaeus and a number of other Swedish scientists. It is an independent organisation whose overall objective is to promote the sciences and strengthen their influence in society. In 1884, Alfred Nobel became a foreign member of the academy.",
+                "Karolinska Institutet is a medical university in Stockholm, Sweden. It was founded in 1810 on Kungsholmen on the west side of Stockholm; the main campus was relocated decades later to Solna, just outside Stockholm. The donation made in the will was not the first that Alfred Nobel made to Karolinska Institutet. In 1890 he donated 50,000 Swedish to the institute in order to create a fund in the memory of his mother Andriette Nobel.",
+                "When Alfred Nobel wrote “the Academy in Stockholm,” it was not entirely clear whether he meant the Swedish Academy or the Royal Academy of Sciences. However the interpretation was that he meant the Swedish Academy. The Swedish Academy was founded in 1786 by King Gustav III. The primary purpose of the Academy is to further the “purity, strength, and sublimity of the Swedish language”.",
                 "At the time when Alfred Nobel wrote his will, Sweden and Norway were joined in a union with a common foreign policy. However, Norway had a parliament, the Storting, and Alfred Nobel tasked the Storting with electing a committee, which was to award a peace prize. Despite its members being appointed by a parliament, the committee is a private body.",
                 "Over the course of his life, Alfred Nobel experienced many different places. This is an important background to his express wish that no consideration be given to the nationality of the Nobel Prize candidates.",
                 "Ragnar Sohlman (1870–1948) was Alfred Nobel’s assistant during the years 1893–96. He began his career with Nobel in Paris, and later also worked with Nobel in San Remo, as well as at Nobel’s experimental laboratory in Bofors, Sweden in 1896–97. In Alfred Nobel’s will, Sohlman, along with Rudolph Lilljequist, was appointed an executor of Nobel’s estate. It was largely due to Sohlman’s work that the Nobel Foundation could be established in 1900. Sohlman was the acting director of the Nobel Foundation during the period 1929–1946.",
                 "During his later years Nobel took an interest in ammunition and weapons technology. In 1893 he bought the weapons factory at Bofors, outside the town of Karlskoga in western Sweden. There, Björkborn mansion became Nobel's last home in Sweden. His assistant Ragnar Sohlman worked at the laboratory of the factory.",
-                "Alfred Nobel's inventions and companies made him a very rich man. In today's money the estate would be worth approximately 200 million US dollars. According to an estate inventory made after his death his assets in different countries were as follows: \n" +
-                    "Country		Amount in Swedish Kronor \n" +
-                    "Sweden		5,796,140.00 \n" +
-                    "Norway		94,472.28 \n" +
-                    "Germany		6,152,250.95 \n" +
-                    "Austria		228,754.20 \n" +
-                    "France		7,280,817.23 \n" +
-                    "Scotland	3,913,938.67 \n" +
-                    "England		3,904,235.32 \n" +
-                    "Italy		630,410.10 \n" +
-                    "Russia		5,232,773.45 \n" +
-                    "Total		33,233,792.20", 
+                "Alfred Nobel's inventions and companies made him a very rich man. In today's money the estate would be worth approximately 200 million US dollars. According to an estate inventory made after his death his assets in different countries were as follows: \n" 
+                + "Country		Amount in Swedish Kronor \n"
+                + "Sweden		5,796,140.00 \n"
+                + "Norway		94,472.28 \n"
+                + "Germany		6,152,250.95 \n"
+                + "Austria	    228,754.20 \n"
+                + "France		7,280,817.23 \n"
+                + "Scotland		3,913,938.67 \n"
+                + "England		3,904,235.32 \n"
+                + "Italy		630,410.10 \n"
+                + "Russia		5,232,773.45 \n"
+                + "Total		33,233,792.20 \n", 
                 "Alfred Nobel had spent time in Paris in his youth, and at the age of 40, he bought a house there. In the years before this, he had lived in Hamburg, but he had spent most of that time traveling, and his “home” there seems to have been more of a provisory nature. He continued to travel extensively even after he had moved to Paris, but he had definitely found a more permanent residence. He had also gained a home that reflected his financial, social and cultural status.",
-                "Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy."
+                "In several respects, the early 1890s was a difficult time for Alfred Nobel. He experienced increasing health problems. He had had hopes that his business worries might come to an end, but instead they seemed to get even worse. His breakup with his long-time mistress Sofie Hess had also added much pain to his life. Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy. A few years into the 1890’s, Nobel’s problems seem to have cleared up somewhat, and he engaged himself in his various pursuits with even more energy."
 			],
 			[
                 "Alfred Nobel's incomes came from different sources. The companies he had established with various business partners generated profits, which Nobel received a share of. The patents he held also generated incomes. He held approximately 355 patents in different countries.",
-                "Alfred Nobel was a member of the French Cremation Society. In the version of his will that he wrote in 1893, Nobel left money to societies that promoted cremation. Nobel’s fear of 'premature burial' (being buried before one was dead) may have prompted his involvement in the cremation movement. He expressed this fear in the description he wrote about himself when his brother Ludvig asked for an autobiographical article: 'Greatest and only request: to not be buried alive.'" 
+                "Alfred Nobel was a member of the French Cremation Society. In the version of his will that he wrote in 1893, Nobel left money to societies that promoted cremation. \n" 
+                + "Nobel’s fear of “premature burial” (being buried before one was dead) may have prompted his involvement in the cremation movement. He expressed this fear in the description he wrote about himself when his brother Ludvig asked for an autobiographical article: “Greatest and only request: to not be buried alive.”" 
 			]
     	]
     	var collections = [
@@ -2628,16 +2632,39 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	]
     	var shortTexts = [
 			[
-                "short sentence or two about the will",
-				"short sentence or two about a person 1.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
-				"short sentence or two about a person 2.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
-				"short sentence",
-				"short sentence or two about a person 4.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
-				"short sentence or two about a person 5.  The max length should be more than 30-40 words I've been told.  If so, we might have to reconsider the sizing.  This is probably about the max length of a chunk of text here will be",
+                "In his will inventor and industrialist Alfred Nobel founded the Nobel Prize.",
+				"Alfred Nobel lived a multi-faceted life in many countries: Sweden, Russia, Germany, Great Britain, France, and Italy.",
+				"Alfred Nobel's brother Robert Nobel was involved in the early establishment of the explosives industry and a pioneer in the oil industry in Azerbaijan.",
+				"Emanuel Nobel was the son of Alfred Nobel's brother Ludvig and took over leadership of the Nobel brothers' oil company after the death of his father.",
+				"Alfred Nobel never married, but had a long relationship with an Austrian woman, Sofie Hess.",
+				"Engineer Alarik Liedbeck was a friend of Alfred Nobel since childhood and worked with Nobel on technical issues for many years.",
 			],
-			[],
-			[],
-			[]
+			[
+                "Chemist Georges Fehrenbach worked Alfred Nobel’s private laboratory at his house in Paris and also at laboratories at several dynamite factories.",
+                "After Alfred Nobel's death his assets were gathered and the Nobel Foundation created to administer the fortune and the distribution of the Nobel Prizes.",
+                "In Alfred Nobel’s will the Nobel Prizes were established but how the Prizes were to be presented and manifested was decided in the statutes of the Nobel Foundation.",
+                "Physics was the first prize category Alfred Nobel mentioned in his will.",
+                "Chemistry was the second prize category Alfred Nobel mentioned in his will.",
+                "Physiology or medicine was the third prize category Alfred Nobel mentioned in his will.",
+                "Literature was the fourth prize category Alfred Nobel mentioned in his will."
+			],
+			[
+                "Peace was the fifth and final prize category Alfred Nobel mentioned in his will.",
+                "In his will Alfred Nobel decided that The Royal Swedish Academy of Sciences would be awarding the prizes in physics and chemistry.",
+                "In his will Alfred Nobel decided that Karolinska Institutet would be awarding the prize in physiology or medicine.",
+                "In his will Alfred Nobel decided that the prize in literature would be awarded by “the Academy in Stockholm”, which was interpreted as the Swedish Academy.",
+                "In his will Alfred Nobel decided that the peace prize would be awarded by a special committee, elected by the Norwegian parliament.",
+                "In the will Alfred Nobel explicitly declared the prizes should be of an international character.",
+                "Ragnar Sohlman was Alfred Nobel’s assistant during Nobel's later years and un the will he was appointed executor of the estate.",
+                "In 1893, Alfred Nobel bought a weapons factory in Bofors, Sweden, where the mansion Björkborn became his last home in Sweden.",
+                "Alfred Nobel's inventions and companies laid the foundation for a large fortune.",
+                "In 1873 Alfred Nobel bought a house in Paris, France, which he kept until his death.",
+                "Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy."
+			],
+			[
+                "Alfred Nobel's inventions and technical improvements resulted in more than 350 patents and generated substantial incomes.",
+                "Alfred Nobel wanted to be cremated and an important reason for this was fear of being buried alive, which was not uncommen at the time."
+			]
     	]
 
 
