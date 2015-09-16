@@ -3708,6 +3708,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         'z-index': "10000000000"
                     })
                     switchRoot.append(artworkViewer.getRoot()).attr({ id: "artworkViewerSwitchRoot" })
+                    switchRoot.css({ "background-color": "black" })
                     switchRoot.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { $("#artworkViewerSwitchRoot").css({ "background-color": "black" }) })
                 }
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;

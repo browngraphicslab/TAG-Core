@@ -5500,7 +5500,7 @@ TAG.Layout.Spoof = (function () {
                         "initproxy": {
             
                         },
-                        "time": 16.162820086673168,
+                        "time": 16.662820086673168,
                         "opacity": 0
                     },
                     {
@@ -5512,7 +5512,7 @@ TAG.Layout.Spoof = (function () {
                         "initproxy": {
             
                         },
-                        "time": 16.662820086673168,
+                        "time": 17.162820086673168,
                         "opacity": 1
                     },
                     {
@@ -7233,12 +7233,12 @@ TAG.Layout.Spoof = (function () {
                   "providerId": "ink",
                   "experienceReference": "",
                   "assetUrl": "noAssetUrl26",
-                  "datastring": "TEXT::[str]KrÃƒÂ¼mmel factory in 1865[font]Verdana[fontsize]0.05779060463938183[color]#FFFFFF[x]0.31282952548330406[y]0.95625[w]undefined[h]undefined[]|",
+                  "datastring": "TEXT::[str]Krümmel factory in 1865[font]Verdana[fontsize]0.05779060463938183[color]#FFFFFF[x]0.31282952548330406[y]0.95625[w]undefined[h]undefined[]|",
                   "inkObjects": [
                     {
                         "inkType": "text",
                         "inkProperties": {
-                            "str": "KrÃƒÂ¼mmel factory in 1865",
+                            "str": "Krümmel factory in 1865",
                             "font": "Verdana",
                             "fontsize": "0.05779060463938183",
                             "color": "#FFFFFF",
@@ -7505,12 +7505,12 @@ TAG.Layout.Spoof = (function () {
                   "providerId": "ink",
                   "experienceReference": "",
                   "assetUrl": "noAssetUrl23",
-                  "datastring": "TEXT::[str]KrÃƒÂ¼mmel factory in 1915[font]Verdana[fontsize]0.05622914727560174[color]#FFFFFF[x]0.5637207971324164[y]0.7445164414702868[w]undefined[h]undefined[]|",
+                  "datastring": "TEXT::[str]Krümmel factory in 1915[font]Verdana[fontsize]0.05622914727560174[color]#FFFFFF[x]0.5637207971324164[y]0.7445164414702868[w]undefined[h]undefined[]|",
                   "inkObjects": [
                     {
                         "inkType": "text",
                         "inkProperties": {
-                            "str": "KrÃƒÂ¼mmel factory in 1915",
+                            "str": "Krümmel factory in 1915",
                             "font": "Verdana",
                             "fontsize": "0.05622914727560174",
                             "color": "#FFFFFF",
@@ -7663,12 +7663,12 @@ TAG.Layout.Spoof = (function () {
                   "providerId": "ink",
                   "experienceReference": "",
                   "assetUrl": "noAssetUrl21",
-                  "datastring": "TEXT::[str]Recon photo of KrÃƒÂ¼mmel factory,\ndynamite A/G,\nGermany, 7 April 1945[font]Verdana[fontsize]0.05154477518426148[color]#FFFFFF[x]0.057116562383533714[y]0.23826434025998974[w]undefined[h]undefined[]|",
+                  "datastring": "TEXT::[str]Recon photo of Krümmel factory,\ndynamite A/G,\nGermany, 7 April 1945[font]Verdana[fontsize]0.05154477518426148[color]#FFFFFF[x]0.057116562383533714[y]0.23826434025998974[w]undefined[h]undefined[]|",
                   "inkObjects": [
                     {
                         "inkType": "text",
                         "inkProperties": {
-                            "str": "Recon photo of KrÃƒÂ¼mmel factory,\ndynamite A/G,\nGermany, 7 April 1945",
+                            "str": "Recon photo of Krümmel factory,\ndynamite A/G,\nGermany, 7 April 1945",
                             "font": "Verdana",
                             "fontsize": "0.05154477518426148",
                             "color": "#FFFFFF",
@@ -7830,10 +7830,10 @@ TAG.Layout.Spoof = (function () {
                         "data": {
             
                         },
-                        "scale": 2.240297116844322,
+                        "scale": 2.13,
                         "pos": {
                             "x": -1.1868645650811136,
-                            "y": -0.2573892388873339
+                            "y": -0.27
                         },
                         "SpecialKeyframeType": "INITIAL"
                     },
@@ -7845,10 +7845,10 @@ TAG.Layout.Spoof = (function () {
                         "data": {
             
                         },
-                        "scale": 2.240297116844322,
+                        "scale": 2.13,
                         "pos": {
                             "x": -1.1868645650811136,
-                            "y": -0.2573892388873339
+                            "y": -0.27
                         }
                     },
                     {
@@ -7859,10 +7859,10 @@ TAG.Layout.Spoof = (function () {
                         "data": {
             
                         },
-                        "scale": 2.240297116844322,
+                        "scale": 2.13,
                         "pos": {
                             "x": -1.1868645650811136,
-                            "y": -0.2573892388873339
+                            "y": -0.27
                         }
                     },
                     {
@@ -7873,10 +7873,10 @@ TAG.Layout.Spoof = (function () {
                         "data": {
             
                         },
-                        "scale": 2.240297116844322,
+                        "scale": 2.13,
                         "pos": {
                             "x": -1.1868645650811136,
-                            "y": -0.2573892388873339
+                            "y": -0.27
                         },
                         "SpecialKeyframeType": "HOLDING FOR DURATION"
                     },
@@ -7888,10 +7888,10 @@ TAG.Layout.Spoof = (function () {
                         "data": {
             
                         },
-                        "scale": 2.240297116844322,
+                        "scale": 2.13,
                         "pos": {
                             "x": -1.1868645650811136,
-                            "y": -0.2573892388873339
+                            "y": -0.27
                         },
                         "SpecialKeyframeType": "FINAL"
                     }
@@ -8635,12 +8635,12 @@ TAG.Layout.Spoof = (function () {
                   "providerId": "ink",
                   "experienceReference": "",
                   "assetUrl": "noAssetUrl10",
-                  "datastring": "TEXT::[str]FranÃƒÂ§ois\nPaul Barbe\n(1836-1890)[font]Verdana, Geneva, sans-serif[fontsize]0.05622914727560174[color]#FFFFFF[x]0.006593214506840083[y]0.4578176529681096[w]undefined[h]undefined[]|",
+                  "datastring": "TEXT::[str]François\nPaul Barbe\n(1836-1890)[font]Verdana, Geneva, sans-serif[fontsize]0.05622914727560174[color]#FFFFFF[x]0.006593214506840083[y]0.4578176529681096[w]undefined[h]undefined[]|",
                   "inkObjects": [
                     {
                         "inkType": "text",
                         "inkProperties": {
-                            "str": "FranÃƒÂ§ois\nPaul Barbe\n(1836-1890)",
+                            "str": "François\nPaul Barbe\n(1836-1890)",
                             "font": "Verdana, Geneva, sans-serif",
                             "fontsize": "0.05622914727560174",
                             "color": "#FFFFFF",
@@ -13159,116 +13159,81 @@ TAG.Layout.Spoof = (function () {
   "zIndex": 41
 },
 {
-      "name": "3_heleneborg",
-      "guid": "3_heleneborg",
-      "providerId": "image",
-      "assetUrl": "Images\\Family\\3_heleneborg\\GeneratedImages\\image.png",
+    "name": "heleneborg_stockholm",
+    "guid": "heleneborg_stockholm",
+    "providerId": "deepZoom",
+    "assetUrl": "Images\\Family\\heleneborg_stockholm\\GeneratedImages\\dzc_output.xml",
       "keyframes": [
         {
-            "dispNum": 0,
+          "dispNum": 0,
             "zIndex": 42,
-            "time": 239.32354794698958,
+            "time": 239.938494682312,
             "opacity": 0,
-            "size": {
-                "x": 1920,
-                "y": 1080
-            },
-            "pos": {
-                "x": 0,
-                "y": 0
-            },
             "data": {
             
             },
-            "left": 0,
-            "top": 0,
-            "width": 1920,
-            "height": 1080,
+            "scale": 1.1624416199468805,
+            "pos": {
+                "x": -0.08123163459772026,
+                "y": 0.04837694817783594
+            },
             "SpecialKeyframeType": "INITIAL"
         },
-        {
-            "dispNum": 0,
-            "zIndex": 42,
-            "time": 242.32354794698958,
-            "opacity": 1,
-            "size": {
-                "x": 1920,
-                "y": 1080
-            },
-            "pos": {
-                "x": 0,
-                "y": 0
-            },
-            "data": {
+    {
+          "dispNum": 0,
+        "zIndex": 42,
+        "time": 242.938494682312,
+        "opacity": 1,
+        "data": {
             
-            },
-            "left": 0,
-            "top": 0,
-            "width": 1920,
-            "height": 1080
         },
-        {
-            "dispNum": 0,
-            "zIndex": 42,
-            "time": 243.11,
-            "opacity": 1,
-            "size": {
-                "x": 1920,
-                "y": 1080
-            },
-            "pos": {
-                "x": 0,
-                "y": 0
-            },
-            "data": {
+        "scale": 1.1624416199468805,
+        "pos": {
+            "x": -0.08123163459772026,
+            "y": 0.04837694817783594
+        }
+    },
+    {
+        "dispNum": 0,
+        "zIndex": 42,
+        "time": 243.51,
+        "opacity": 1,
+        "data": {
             
-            },
-            "left": 0,
-            "top": 0,
-            "width": 1920,
-            "height": 1080
         },
-        {
-            "dispNum": 0,
-            "zIndex": 42,
-            "time": 250.0861344461403,
-            "opacity": 1,
-            "size": {
-                "x": 4028.6705202312132,
-                "y": 2262.7249357326477
-            },
-            "pos": {
-                "x": -1724.3652061506502,
-                "y": -1011.2853470437018
-            },
-            "data": {
+      "scale": 1.1624416199468805,
+      "pos": {
+          "x": -0.08123163459772026,
+          "y": 0.04837694817783594
+      }
+    },
+{
+          "dispNum": 0,
+          "zIndex": 42,
+          "time": 250.0861344461403,
+          "opacity": 1,
+          "data": {
             
-            },
-            "left": -1724.3652061506502,
-            "top": -1011.2853470437018,
-            "width": 4028.6705202312132,
-            "height": 2262.7249357326477
-        },
+          },
+          "scale": 0.603030303030303,
+          "pos": {
+              "x": 0.3517161239390041,
+              "y": 0.19879722401097508
+          }
+},
         {
             "dispNum": 0,
             "zIndex": 42,
             "time": 253.0861344461403,
             "opacity": 1,
-            "size": {
-                "x": 4028.6705202312132,
-                "y": 2262.7249357326477
-            },
-            "pos": {
-                "x": -1724.3652061506502,
-                "y": -1011.2853470437018
-            },
             "data": {
             
             },
-            "left": -1724.3652061506502,
-            "top": -1011.2853470437018,
-            "width": 4028.6705202312132,
-            "height": 2262.7249357326477,
+            "scale": 0.603030303030303,
+            "pos": {
+                "x": 0.3517161239390041,
+                "y": 0.19879722401097508
+            },
             "SpecialKeyframeType": "HOLDING FOR DURATION"
         },
         {
@@ -13276,26 +13241,20 @@ TAG.Layout.Spoof = (function () {
             "zIndex": 42,
             "time": 258.0861344461403,
             "opacity": 0,
-            "size": {
-                "x": 4028.6705202312132,
-                "y": 2262.7249357326477
-            },
-            "pos": {
-                "x": -1724.3652061506502,
-                "y": -1011.2853470437018
-            },
             "data": {
             
             },
-            "left": -1724.3652061506502,
-            "top": -1011.2853470437018,
-            "width": 4028.6705202312132,
-            "height": 2262.7249357326477,
+            "scale": 0.603030303030303,
+            "pos": {
+                "x": 0.3517161239390041,
+                "y": 0.19879722401097508
+            },
             "SpecialKeyframeType": "FINAL"
         }
-      ],
+],
       "zIndex": 42
 }
+
 ]
 },
         "FromWillToPrize": {
