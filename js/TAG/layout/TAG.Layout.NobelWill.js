@@ -2066,6 +2066,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 doq = spoof.tourDoqs.Factories
                 doqType = "tour"
                 break;
+            case "Homes_Tour":
+                doq = spoof.tourDoqs.Homes
+                doqType = "tour"
+                break;
             //Collections
             case "Bjorkborn":
                 doq = spoof.collectionDoqs.Bjorkborn
@@ -2454,7 +2458,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     case 5:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Homes.svg';
                         title = "Homes";
-                        link = "";
+                        link = "Homes_Tour";
                         break;
                 }  
             }

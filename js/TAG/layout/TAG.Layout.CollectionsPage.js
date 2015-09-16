@@ -1527,6 +1527,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             artworkTiles[currentWork.Identifier] = main;
             main.addClass("tile");
             tileImage.addClass('tileImage');
+            tileImage.css({
+                "height": "auto",
+                "bottom" : "0%",
+            })
             artTitle.addClass('artTitle');
             artText.addClass('artText');
             artText.addClass('secondaryFont');
