@@ -16,9 +16,11 @@ TAG.Layout.Spoof = (function () {
         "Factories": [], //TO-Do deepzooms and thumbnails //demo content
         "Ceremonies": [], //no content yet
         "SanRemo": [], //no content yet
-        "Diplomas": ["dip1", "dip2", "dip3", "dip4", "dip5", "dip6", "dip7", "dip8", "dip9", "dip10", "dip11"], //TO-DO: thumbnails and deep zooms
+        //"Diplomas": ["dip1", "dip2", "dip3", "dip4", "dip5", "dip6", "dip7", "dip8", "dip9", "dip10", "dip11"], //TO-DO: thumbnails and deep zooms
+        "Diplomas": ["dip1", "dip2", "dip3", "dip4", "dip5", "dip6", "dip7", "dip9", "dip10", "dip11"],
         "Medals": ["medal1", "medal2", "medal3", "medal4", "medal5", "medal6", "medal7", "medal8"], //TO-DO: make images smaller for thumbnails, deep zooms
-        "Will": ["will1","will2","will3","will4"] //TO-DO: thumbnails and deep zooms
+        //"Will": ["will1","will2","will3","will4"] //TO-DO: thumbnails and deep zooms
+        "Will": ["will1", "will2", "will3"]
     };
     var tourDoqs = {
         "Will": {
@@ -7772,7 +7774,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Andre Geim’s Nobel Diploma in Physics, 2010 ",
             "Metadata": {
                 "Description": "Andre Geim’s Nobel Diploma for his Nobel prize in Physics in 2010. It reads: \"The Royal Swedish Academy of Sciences has on October 5, 2010 decided that with the Nobel Prize which this year is awarded to the one who within the field of physics has made the most important discovery or invention jointly award Andre Geim and Konstantin Novoselov for groundbreaking experiments regarding the two-dimensional material graphene. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip1\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip1\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "01_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7787,7 +7789,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Konstantin Novoselov’s Nobel Diploma, Physics, 2010",
             "Metadata": {
                 "Description": "Konstantin Novoselov’s Nobel Diploma for his Nobel prize in Physic in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 5, 2010 decided that with the Nobel Prize which this year is awarded to the one who within the field of physics has made the most important discovery or invention jointly award Konstantin Novoselov and Andre Geim for groundbreaking experiments regarding the two-dimensional material graphene. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip2\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip2\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "02_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7802,7 +7804,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Richard F Heck’s Nobel Diploma, Chemistry, 2010 ",
             "Metadata": {
                 "Description": "Richard F Heck’s Nobel Diploma for his Nobel prize in Chemistry in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 6, 2010 decided that with the Nobel Prize which this year is awarded to the one who has made the most important chemical discovery or improvement jointly award Richard F Heck, Ei-ichi Negishi and Akira Suzuki for for palladium-catalyzed cross couplings in organic synthesis. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip3\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip3\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "03_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7817,7 +7819,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Ei-ichi Negishi’s Nobel Diploma, Chemistry, 2010",
             "Metadata": {
                 "Description": "Ei-ichi Negishi’s Nobel Diploma for his Nobel prize in Chemistry in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 6, 2010 decided that with the Nobel Prize which this year is awarded to the one who has made the most important chemical discovery or improvement jointly award Ei-ichi Negishi, Richard F Heck and Akira Suzuki for for palladium-catalyzed cross couplings in organic synthesis. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip4\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip4\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "04_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7832,7 +7834,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Akira Suzuki’s Nobel Diploma, Chemistry, 2010 ",
             "Metadata": {
                 "Description": "Akira Suzuki’s Nobel Diploma for his Nobel Prize in Chemistry in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 6, 2010 decided that with the Nobel Prize which this year is awarded to the one who has made the most important chemical discovery or improvement jointly award Akira Suzuki, Richard F Heck and Ei-ichi Negishi for for palladium-catalyzed cross couplings in organic synthesis. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip5\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip5\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "05_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7847,7 +7849,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Robert G Edwards’ Nobel Diploma, Physiology of Medicine, 2010",
             "Metadata": {
                 "Description": "Robert G Edwards’ Nobel Diploma for his Nobel Prize in Physiology or Medicine 2010. It reads: ”The Nobel Assembly at Karolinska Institutet has decided that the 2010 Nobel Prize in physiology or medicine shall be awarded to Robert G Edwards for the development of in vitro fertilization. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip6\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip6\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "06_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7862,7 +7864,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Mario Vargas Llosa’s Nobel Diploma, Literature, 2010",
             "Metadata": {
                 "Description": "Mario Vargas Llosa’s Nobel Diploma for his Nobel Prize in Literature 2010. It reads: ”The Swedish Academy has at its assembly on October 7, 2010 in accordance with the directions in the will drawn up by on November 27, 1895 by Alfred Nobel decided that the Nobel Prize in Literature shall be awarded to Mario Vargas Llosa, ’for his cartography of structures of power and his trenchant images of the individual’s resistance, revolt, and defeat’. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip7\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip7\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "07_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7877,7 +7879,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Liu Xiaobo’s Nobel Diploma, Peace, 2010",
             "Metadata": {
                 "Description": "Liu Xiaobo’s Nobel Diploma for his Nobel Peace Prize in 2010. It reads: ”.” ",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip8\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip8\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7892,7 +7894,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Peter A. Diamond’s Nobel Diploma, Economics, 2010 ",
             "Metadata": {
                 "Description": "Peter A. Diamond’s Nobel Diploma for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 11, 2010 decided to award the prize in economic sciences in memory of Alfred Nobel established by The Sveriges Riksbank in 1968 jointly to Peter A. Diamond, Dale Mortensen and Christopher A. Pissarides for their analysis of markets with search frictions. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip9\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip9\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "09_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7907,7 +7909,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Dale T. Mortensen’s Nobel Diploma, Economics, 2010",
             "Metadata": {
                 "Description": "Dale T. Mortensen’s Nobel Diploma for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 11, 2010 decided to award the prize in economic sciences in memory of Alfred Nobel established by The Sveriges Riksbank in 1968 jointly to Dale T. Mortensen, Peter A. Diamond and Christopher A. Pissarides for their analysis of markets with search frictions. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip10\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip10\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "10_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7922,7 +7924,7 @@ TAG.Layout.Spoof = (function () {
             "Name": "Christopher A. Pissarides’ Nobel Diploma, Economics, 2010 ",
             "Metadata": {
                 "Description": "Christopher A. Pissarides’ Nobel Diploma for The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel in 2010. It reads: ”The Royal Swedish Academy of Sciences has on October 11, 2010 decided to award the prize in economic sciences in memory of Alfred Nobel established by The Sveriges Riksbank in 1968 jointly to Christopher A. Pissarides, Peter A. Diamond and Dale Mortensen and for their analysis of markets with search frictions. Stockholm, December 10, 2010.”",
-                "DeepZoom": { "Path": "Collections\\Dimplomas\\dip11\\GeneratedImages\\dzc_output.xml" },
+                "DeepZoom": { "Path": "Collections\\Diplomas\\dip11\\GeneratedImages\\dzc_output.xml" },
                 "Thumbnail": { "Path": "Collections\\" + "Diplomas\\" + "11_NW_coll_diplomas.tif" },
                 "AssocMediaView": "false",
                 "Private": "false",
@@ -7977,7 +7979,7 @@ TAG.Layout.Spoof = (function () {
                 "Type": "Artwork",
                 "ContentType": "Image"
             }
-        },
+        },/*
         "will4":{
             "Identifier": "will4",
             "Name": "The fourth page of Alfred Nobel’s Will",
@@ -7992,7 +7994,7 @@ TAG.Layout.Spoof = (function () {
                 "Type": "Artwork",
                 "ContentType": "Image"
             }
-        },
+        },*/
         //Factories
         "fac1": {
             "Identifier": "fac1",
@@ -8512,7 +8514,9 @@ TAG.Layout.Spoof = (function () {
         if (dontUseNobel !== true) {
             s = "NobelFolder\\";
         }
+        console.log("about to get: " + filePath);
         Windows.Storage.KnownFolders.documentsLibrary.getFileAsync(s + filePath).done(function (file) {
+            console.log("got: " + filePath);
             var url = URL.createObjectURL(file, { oneTimeOnly: false });
             obj["FilePath"] = url;
             obj["FullPath"] = file.path;
