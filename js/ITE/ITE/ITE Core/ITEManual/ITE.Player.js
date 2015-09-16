@@ -151,6 +151,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             "word-wrap": "break-word"
         })
         infoDiv.text("Loading Interactive Tour...");
+        infoDiv.attr('id', 'infoDiv')
 
         var moreinfoDiv = $(document.createElement('div'));
         moreinfoDiv.css({
@@ -167,6 +168,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             "word-wrap": "break-word"
         })
         moreinfoDiv.text("Tap on artworks to learn more");
+        moreinfoDiv.attr('id', 'moreinfoDiv')
 
         TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
         initialOverlay.append(infoDiv);
@@ -185,7 +187,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             $("#backButtonContainer").append($("#backButton"));
             initialLoading = false
             TAG.Util.hideLoading(initialOverlay)
-            initialOverlay.remove();
+            $('#infoDiv').remove();
+            $('#moreinfoDiv').remove();
         }
     }
 
@@ -524,6 +527,42 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         (orchestrator.status === 1) ? pause() : play()
     };
 
+    function makeTitleSlide() {
+        var tourName = tourPlayer.iteTour.guid;
+        var titleSlide = $(document.createElement('img'));
+        var imgPath;
+
+        switch (tourName.toLowerCase()) {
+            case 'will':
+                imgPath = tagPath + 'images/title_will.png'
+                break;
+            case 'fromwilltoprize':
+                imgPath = tagPath + 'images/title_prize.png'
+                break;
+            case 'family':
+                imgPath = tagPath + 'images/title_family.png'
+                break;
+            case 'homes':
+                imgPath = tagPath + 'images/title_homes.png'
+                break;
+            case 'factories':
+                imgPath = tagPath + 'images/title_factories.png'
+                break;
+        }
+        titleSlide.attr('src', imgPath);
+        var titleDiv = $(document.createElement('div'));
+        titleDiv.append(titleSlide);
+        initialOverlay.append(titleDiv);
+        titleDiv.css({
+            'height': '100%',
+            'width': '100%'
+        });
+        titleSlide.css({
+            'height': '100%',
+            'width': '100%'
+        });
+        titleSlide.attr('id', 'titleSlide');
+    }
     /*
     * I/P:   none
     * Starts tour from the beginning or from a resumed spot
@@ -534,16 +573,20 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             if (initialLoading === true) {
                 setTimeout(function () {
                     hideInitialOverlay();
-                    attachVolume();
-                    attachPlay();
-                    attachLoop();
-                    attachProgressBar();
-                    attachProgressIndicator();
-                    orchestrator.play();
-                    playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
-                    hideInfoPane();
-                    setControlsFade();
-                }, 10000);
+                    makeTitleSlide();
+                    setTimeout(function () {
+                        initialOverlay.fadeTo(1000, 0, function () { initialOverlay.remove(); });    
+                        attachVolume();
+                        attachPlay();
+                        attachLoop();
+                        attachProgressBar();
+                        attachProgressIndicator();
+                        orchestrator.play();
+                        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
+                        hideInfoPane();
+                        setControlsFade();
+                    }, 8000);
+                }, 6000);
                 return;
             }
             orchestrator.play();

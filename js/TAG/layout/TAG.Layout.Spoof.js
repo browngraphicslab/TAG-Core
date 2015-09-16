@@ -23,6 +23,9 @@ TAG.Layout.Spoof = (function () {
     };
     var tourDoqs = {
         "Will": {
+            "tourTitle": "Will_Tour",
+            "guid": "will",
+            "timestamp": "2015-09-16T04:26:49.019Z",
             "tracks": [
                 {
                     "assetUrl": "Images\\artwork1\\dz.xml",
@@ -116,7 +119,7 @@ TAG.Layout.Spoof = (function () {
         "Factories":{
             "tourTitle": "Colleagues, Inventions, Factories",
             "totalDuration": 508.6893456031156,
-            "guid": "e3ced195-0c8b-48f6-b42c-f989e52b4f03",
+            "guid": "factories",
             "timestamp": "2015-09-16T04:26:49.019Z",
             "tracks": [
               {
