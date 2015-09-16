@@ -113,6 +113,5150 @@ TAG.Layout.Spoof = (function () {
             ],
             "totalDuration" : "182"
         },
+        "Factories":{
+            "tourTitle": "Colleagues, Inventions, Factories",
+            "totalDuration": 508.6893456031156,
+            "guid": "e3ced195-0c8b-48f6-b42c-f989e52b4f03",
+            "timestamp": "2015-09-16T04:26:49.019Z",
+            "tracks": [
+              {
+                  "name": "colleagues and factories",
+                  "providerId": "audio",
+                  "assetUrl": "http://tagnobel.cloudapp.net:8086/Images/colleaguesandfactories201509141716353565.mp3",
+                  "mediaLength": 353.88,
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "time": 0.8367991830613051,
+                        "volume": 0.8,
+                        "data": {
+            
+                        },
+                        "audioOffset": null,
+                        "audioKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "time": 354.7167991830613,
+                        "volume": 0.8,
+                        "data": {
+            
+                        },
+                        "audioOffset": null,
+                        "audioKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "time": 354.7267991830613,
+                        "volume": 0,
+                        "data": {
+            
+                        },
+                        "audioOffset": null,
+                        "audioKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 1
+              },
+              {
+                  "name": "testament_1",
+                  "guid": "testament_1",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\testament_1\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 0.36712881154662047,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.2002400360048004,
+                        "pos": {
+                            "x": -0.1080858203775068,
+                            "y": 0.04238587717562586
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 1.8671288115466204,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.2002400360048004,
+                        "pos": {
+                            "x": -0.1080858203775068,
+                            "y": 0.04238587717562586
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 2.08,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.2002400360048004,
+                        "pos": {
+                            "x": -0.1080858203775068,
+                            "y": 0.04238587717562586
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 17.01,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4399059604755586,
+                        "pos": {
+                            "x": -0.2372811611242499,
+                            "y": -0.010619961399657151
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 23.259955600257594,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4399059604755586,
+                        "pos": {
+                            "x": -0.2372811611242499,
+                            "y": -0.010619961399657151
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 2,
+                        "time": 23.759955600257594,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.4399059604755586,
+                        "pos": {
+                            "x": -0.2372811611242499,
+                            "y": -0.010619961399657151
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 2
+              },
+              {
+                  "name": "ragnar_sohlman",
+                  "guid": "ragnar_sohlman",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\ragnar_sohlman\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 19.019136913267434,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 5.012208224659527,
+                        "pos": {
+                            "x": -3.5224619702610327,
+                            "y": -0.8189434878504544
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 19.519136913267434,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 5.012208224659527,
+                        "pos": {
+                            "x": -3.5224619702610327,
+                            "y": -0.8189434878504544
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 21.15,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 5.012208224659527,
+                        "pos": {
+                            "x": -3.5224619702610327,
+                            "y": -0.8189434878504544
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 23.261567872082267,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 5.012208224659527,
+                        "pos": {
+                            "x": -3.5224619702610327,
+                            "y": -0.8189434878504544
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 3,
+                        "time": 23.761567872082267,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 5.012208224659527,
+                        "pos": {
+                            "x": -3.5224619702610327,
+                            "y": -0.8189434878504544
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 3,
+                        "time": 321.30414877892457,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.50901541534069,
+                        "pos": {
+                            "x": -0.7662584147957622,
+                            "y": 0.011818979922959327
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 3,
+                        "time": 321.80414877892457,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.50901541534069,
+                        "pos": {
+                            "x": -0.7662584147957622,
+                            "y": 0.011818979922959327
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 3,
+                        "time": 324.38,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.50901541534069,
+                        "pos": {
+                            "x": -0.7662584147957622,
+                            "y": 0.011818979922959327
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 3,
+                        "time": 331.2962522998598,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.50901541534069,
+                        "pos": {
+                            "x": -0.7662584147957622,
+                            "y": 0.011818979922959327
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 3,
+                        "time": 331.7962522998598,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.50901541534069,
+                        "pos": {
+                            "x": -0.7662584147957622,
+                            "y": 0.011818979922959327
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 3
+              },
+              {
+                  "name": "Unattached Ink-13",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl49",
+                  "datastring": "TEXT::[str]Ragnar Sohlman[font]Verdana[fontsize]0.0375[color]#000000[x]0.7100175746924429[y]0.753125[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Ragnar Sohlman",
+                            "font": "Verdana",
+                            "fontsize": "0.0375",
+                            "color": "#000000",
+                            "x": 0.7100175746924429,
+                            "y": 0.753125,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 19.007106313448606,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 19.507106313448606,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 23.261567872082267,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 23.761567872082267,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 4
+              },
+              {
+                  "name": "Unattached Ink-10",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl48",
+                  "datastring": "TEXT::[str]Ragnar Sohlman\n(1870-1948)[font]Verdana[fontsize]0.05570866148767504[color]#FFFFFF[x]0.0210896309314587[y]0.453125[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Ragnar Sohlman\n(1870-1948)",
+                            "font": "Verdana",
+                            "fontsize": "0.05570866148767504",
+                            "color": "#FFFFFF",
+                            "x": 0.0210896309314587,
+                            "y": 0.453125,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 324.3466727885317,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 324.8466727885317,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 331.31162083447753,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 331.81162083447753,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 5
+              },
+              {
+                  "name": "georges_fehrenbach",
+                  "guid": "georges_fehrenbach",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\georges_fehrenbach\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 17.74492785844236,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 4.9974445023186735,
+                        "pos": {
+                            "x": -2.054247947351861,
+                            "y": -0.822999087995544
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 18.24492785844236,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 4.9974445023186735,
+                        "pos": {
+                            "x": -2.054247947351861,
+                            "y": -0.822999087995544
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 19.72,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 4.9974445023186735,
+                        "pos": {
+                            "x": -2.054247947351861,
+                            "y": -0.822999087995544
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 23.261567872082267,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 4.9974445023186735,
+                        "pos": {
+                            "x": -2.054247947351861,
+                            "y": -0.822999087995544
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 6,
+                        "time": 23.761567872082267,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 4.9974445023186735,
+                        "pos": {
+                            "x": -2.054247947351861,
+                            "y": -0.822999087995544
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 6,
+                        "time": 247.6075533833686,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.501624978774475,
+                        "pos": {
+                            "x": -0.8170183465955643,
+                            "y": -0.013403899008737174
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 6,
+                        "time": 248.1075533833686,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.501624978774475,
+                        "pos": {
+                            "x": -0.8170183465955643,
+                            "y": -0.013403899008737174
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 6,
+                        "time": 250.11,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.501624978774475,
+                        "pos": {
+                            "x": -0.8170183465955643,
+                            "y": -0.013403899008737174
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 6,
+                        "time": 265.87,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.575924984850388,
+                        "pos": {
+                            "x": -0.3170743363766234,
+                            "y": 0.08794535405185527
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 6,
+                        "time": 269.2150274416627,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.575924984850388,
+                        "pos": {
+                            "x": -0.3170743363766234,
+                            "y": 0.08794535405185527
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 6,
+                        "time": 269.7150274416627,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.575924984850388,
+                        "pos": {
+                            "x": -0.3170743363766234,
+                            "y": 0.08794535405185527
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 6
+              },
+              {
+                  "name": "ballistite",
+                  "guid": "ballistite",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\ballistite\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 7,
+                        "time": 269.5357117730528,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.38906249999999986,
+                            "y": 5.551115123125783e-17
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 7,
+                        "time": 270.0357117730528,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.38906249999999986,
+                            "y": 5.551115123125783e-17
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 7,
+                        "time": 272.36,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.38906249999999986,
+                            "y": 5.551115123125783e-17
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 7,
+                        "time": 279.67,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.024198797817725936,
+                            "y": 0.21690680999914225
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 7,
+                        "time": 282.6678256463525,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.024198797817725936,
+                            "y": 0.21690680999914225
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 7,
+                        "time": 283.1678256463525,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.024198797817725936,
+                            "y": 0.21690680999914225
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 7
+              },
+              {
+                  "name": "Unattached Ink-12",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl45",
+                  "datastring": "TEXT::[str]Georges\nFehrenbach[font]Verdana[fontsize]0.0375[color]#E0E0E0[x]0.44815465729349735[y]0.690625[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Georges\nFehrenbach",
+                            "font": "Verdana",
+                            "fontsize": "0.0375",
+                            "color": "#E0E0E0",
+                            "x": 0.44815465729349735,
+                            "y": 0.690625,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 17.931214210886285,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 18.431214210886285,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 23.36076469518209,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 23.86076469518209,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 8
+              },
+              {
+                  "name": "Unattached Ink-8",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl44",
+                  "datastring": "TEXT::[str]Georges Fehrenbach\n(1852-1932)[font]Verdana[fontsize]0.05310623254804157[color]#FFFFFF[x]0.0017574692442882233[y]0.43125[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Georges Fehrenbach\n(1852-1932)",
+                            "font": "Verdana",
+                            "fontsize": "0.05310623254804157",
+                            "color": "#FFFFFF",
+                            "x": 0.0017574692442882233,
+                            "y": 0.43125,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 247.80592148199963,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 248.30592148199963,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 252.30592148199963,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 252.80592148199963,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 9
+              },
+              {
+                  "name": "alarik_liedbeck",
+                  "guid": "alarik_liedbeck",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\alarik_liedbeck\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 10,
+                        "time": 16.162820086673168,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 5.1583938739777615,
+                        "pos": {
+                            "x": -0.6694722651596567,
+                            "y": -0.8721927778373861
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 10,
+                        "time": 16.662820086673168,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 5.1583938739777615,
+                        "pos": {
+                            "x": -0.6694722651596567,
+                            "y": -0.8721927778373861
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 10,
+                        "time": 19.23,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 5.1583938739777615,
+                        "pos": {
+                            "x": -0.6694722651596567,
+                            "y": -0.8721927778373861
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 10,
+                        "time": 23.076666367837383,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 5.1583938739777615,
+                        "pos": {
+                            "x": -0.6694722651596567,
+                            "y": -0.8721927778373861
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 10,
+                        "time": 23.576666367837383,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 5.1583938739777615,
+                        "pos": {
+                            "x": -0.6694722651596567,
+                            "y": -0.8721927778373861
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 10,
+                        "time": 115.28584019961224,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.985480188052233,
+                        "pos": {
+                            "x": -1.0124870029382391,
+                            "y": -0.11049716907871909
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 10,
+                        "time": 115.78584019961224,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.985480188052233,
+                        "pos": {
+                            "x": -1.0124870029382391,
+                            "y": -0.11049716907871909
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 10,
+                        "time": 118.45,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.985480188052233,
+                        "pos": {
+                            "x": -1.0124870029382391,
+                            "y": -0.11049716907871909
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 10,
+                        "time": 136.62,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7909298731216534,
+                        "pos": {
+                            "x": -0.406847724657311,
+                            "y": 0.2082948309170385
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 10,
+                        "time": 138.46105347751796,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7909298731216534,
+                        "pos": {
+                            "x": -0.406847724657311,
+                            "y": 0.2082948309170385
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 10,
+                        "time": 138.96105347751796,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.7909298731216534,
+                        "pos": {
+                            "x": -0.406847724657311,
+                            "y": 0.2082948309170385
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 10
+              },
+              {
+                  "name": "Unattached Ink-11",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl42",
+                  "datastring": "TEXT::[str]Alarik Liedbeck[font]Verdana[fontsize]0.0375[color]#000000[x]0.14411247803163443[y]0.75625[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Alarik Liedbeck",
+                            "font": "Verdana",
+                            "fontsize": "0.0375",
+                            "color": "#000000",
+                            "x": 0.14411247803163443,
+                            "y": 0.75625,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 16.162820086673168,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 16.662820086673168,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 23.066590292848506,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 23.566590292848506,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 11
+              },
+              {
+                  "name": "nitroglycerin",
+                  "guid": "nitroglycerin",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\nitroglycerin\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 12,
+                        "time": 23.32794432494234,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.38906249999999986,
+                            "y": -0.12496101856231684
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 12,
+                        "time": 23.82794432494234,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.38906249999999986,
+                            "y": -0.12496101856231684
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 12,
+                        "time": 27.18,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.38906249999999986,
+                            "y": -0.12496101856231684
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 12,
+                        "time": 38.28,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.061554723798219524,
+                            "y": 0.06529038692268268
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 12,
+                        "time": 41.84707735049732,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.061554723798219524,
+                            "y": 0.06529038692268268
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 12,
+                        "time": 42.34707735049732,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.061554723798219524,
+                            "y": 0.06529038692268268
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 12
+              },
+              {
+                  "name": "detonator_diagram",
+                  "guid": "detonator_diagram",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\detonator_diagram\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 41.82312581849858,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.73007512413328,
+                        "pos": {
+                            "x": -0.2994244435311967,
+                            "y": -0.11525737552314258
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 43.32312581849858,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.73007512413328,
+                        "pos": {
+                            "x": -0.2994244435311967,
+                            "y": -0.11525737552314258
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 48.27,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.73007512413328,
+                        "pos": {
+                            "x": -0.2994244435311967,
+                            "y": -0.11525737552314258
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 57.58862474266287,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.0025644647178517,
+                        "pos": {
+                            "x": -0.003548699757515872,
+                            "y": 0.06110733209504604
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 59.08862474266287,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.0025644647178517,
+                        "pos": {
+                            "x": -0.003548699757515872,
+                            "y": 0.06110733209504604
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 13,
+                        "time": 60.58862474266287,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.0025644647178517,
+                        "pos": {
+                            "x": -0.003548699757515872,
+                            "y": 0.06110733209504604
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 13
+              },
+              {
+                  "name": "heleneborg",
+                  "guid": "heleneborg",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\heleneborg\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 60.695870739754334,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.201634336590105,
+                        "pos": {
+                            "x": -0.11121159734489139,
+                            "y": 0.042169705645748234
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 61.195870739754334,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.201634336590105,
+                        "pos": {
+                            "x": -0.11121159734489139,
+                            "y": 0.042169705645748234
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 62.4,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.201634336590105,
+                        "pos": {
+                            "x": -0.11121159734489139,
+                            "y": 0.042169705645748234
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 71.23,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8494909218880455,
+                        "pos": {
+                            "x": 0.1521839991517172,
+                            "y": 0.22665117014351282
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 74.48900842311191,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8494909218880455,
+                        "pos": {
+                            "x": 0.1521839991517172,
+                            "y": 0.22665117014351282
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 14,
+                        "time": 74.98900842311191,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.8494909218880455,
+                        "pos": {
+                            "x": 0.1521839991517172,
+                            "y": 0.22665117014351282
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 14
+              },
+              {
+                  "name": "Unattached Ink",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl38",
+                  "datastring": "TEXT::[str]Result of explosion at Heleneborg laboratory[font]Verdana[fontsize]0.05674963306352844[color]#FFFFFF[x]0.13621262317370228[y]0.945313500576332[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Result of explosion at Heleneborg laboratory",
+                            "font": "Verdana",
+                            "fontsize": "0.05674963306352844",
+                            "color": "#FFFFFF",
+                            "x": 0.13621262317370228,
+                            "y": 0.945313500576332,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 68.52544093290554,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 69.02544093290554,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 74.38559160444234,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 74.88559160444234,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 15
+              },
+              {
+                  "name": "lake_malaren",
+                  "guid": "lake_malaren",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\lake_malaren\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 74.53078578909274,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.0171851331012531,
+                        "pos": {
+                            "x": -0.010561750413693504,
+                            "y": -0.0023094893283959194
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 75.03078578909274,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.0171851331012531,
+                        "pos": {
+                            "x": -0.010561750413693504,
+                            "y": -0.0023094893283959194
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 77.41,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.0171851331012531,
+                        "pos": {
+                            "x": -0.010561750413693504,
+                            "y": -0.0023094893283959194
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 79.56,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8014084507042253,
+                        "pos": {
+                            "x": 0.2001963080696993,
+                            "y": 0.11346003479232741
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 82.26502588985268,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8014084507042253,
+                        "pos": {
+                            "x": 0.2001963080696993,
+                            "y": 0.11346003479232741
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 16,
+                        "time": 82.76502588985268,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.8014084507042253,
+                        "pos": {
+                            "x": 0.2001963080696993,
+                            "y": 0.11346003479232741
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 16
+              },
+              {
+                  "name": "Unattached Ink-0",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl36",
+                  "datastring": "TEXT::[str]Barge on Lake Malaren, Sweden where Alfred Nobel later did his experiments.[font]Verdana[fontsize]0.0415712203207308[color]#FFFFFF[x]0.03294445003677521[y]0.9562521012102971[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Barge on Lake Malaren, Sweden where Alfred Nobel later did his experiments.",
+                            "font": "Verdana",
+                            "fontsize": "0.0415712203207308",
+                            "color": "#FFFFFF",
+                            "x": 0.03294445003677521,
+                            "y": 0.9562521012102971,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 74.69450539080888,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 75.19450539080888,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 81.95817239268048,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 82.45817239268048,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 17
+              },
+              {
+                  "name": "vinterviken",
+                  "guid": "vinterviken",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\vinterviken\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 82.76502588985268,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1477077903070682,
+                        "pos": {
+                            "x": -0.06492930779765282,
+                            "y": -0.00531764980768068
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 83.26502588985268,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1477077903070682,
+                        "pos": {
+                            "x": -0.06492930779765282,
+                            "y": -0.00531764980768068
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 84.19,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1477077903070682,
+                        "pos": {
+                            "x": -0.06492930779765282,
+                            "y": -0.00531764980768068
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 87.23,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.5641594401805565,
+                        "pos": {
+                            "x": 0.09281094624589708,
+                            "y": 0.19763406622441604
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 97.35,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.5641594401805565,
+                        "pos": {
+                            "x": 0.09281094624589708,
+                            "y": 0.19763406622441604
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 105.79,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.5641594401805565,
+                        "pos": {
+                            "x": 0.42894820805092826,
+                            "y": 0.20853887650290864
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 109.14545658992391,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.5641594401805565,
+                        "pos": {
+                            "x": 0.42894820805092826,
+                            "y": 0.20853887650290864
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 18,
+                        "time": 109.64545658992391,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.5641594401805565,
+                        "pos": {
+                            "x": 0.42894820805092826,
+                            "y": 0.20853887650290864
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 18
+              },
+              {
+                  "name": "Unattached Ink-20",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl34",
+                  "datastring": "TRANS::[path]M0.471721,0.120917C0.598844,0.120917,0.701897,0.316493,0.701897,0.557748C0.701897,0.799004,0.598844,0.994580,0.471721,0.994580C0.344598,0.994580,0.241545,0.799004,0.241545,0.557748C0.241545,0.316493,0.344598,0.120917,0.471721,0.120917z[color]#000000[opac]0.8[mode]isolate[]|BOUNDELLIPSE::[cx]0.4717210486588995[cy]0.5577482682556327[rx]0.23017584537089083[ry]0.4368312562993322[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.471721,0.120917C0.598844,0.120917,0.701897,0.316493,0.701897,0.557748C0.701897,0.799004,0.598844,0.994580,0.471721,0.994580C0.344598,0.994580,0.241545,0.799004,0.241545,0.557748C0.241545,0.316493,0.344598,0.120917,0.471721,0.120917z",
+                            "color": "#000000",
+                            "opac": 0.8,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.4717210486588995,
+                            "cy": 0.5577482682556327,
+                            "rx": 0.23017584537089083,
+                            "ry": 0.4368312562993322,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 86.9921954521444,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 87.4921954521444,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 92.7756605420523,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 93.2756605420523,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 19
+              },
+              {
+                  "name": "st_gotthard_tunnel",
+                  "guid": "st_gotthard_tunnel",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\st_gotthard_tunnel\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 108.99130673124566,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.0593115452331765,
+                            "y": -0.009558489169188111
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 109.49130673124566,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.0593115452331765,
+                            "y": -0.009558489169188111
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 111.13,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.0593115452331765,
+                            "y": -0.009558489169188111
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 115.71125733294298,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.0593115452331765,
+                            "y": -0.009558489169188111
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 20,
+                        "time": 116.21125733294298,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.0593115452331765,
+                            "y": -0.009558489169188111
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 20
+              },
+              {
+                  "name": "Unattached Ink-21",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl32",
+                  "datastring": "TEXT::[str]St. Gotthard Tunnel[font]Verdana[fontsize]0.05848382584041681[color]#FFFFFF[x]0.35452045285833716[y]0.4004261954886014[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "St. Gotthard Tunnel",
+                            "font": "Verdana",
+                            "fontsize": "0.05848382584041681",
+                            "color": "#FFFFFF",
+                            "x": 0.35452045285833716,
+                            "y": 0.4004261954886014,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 109.05353869357438,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 109.55353869357438,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 112.74078227465423,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 113.24078227465423,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 21
+              },
+              {
+                  "name": "Unattached Ink-1",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl31",
+                  "datastring": "TEXT::[str]Alarik Liedbeck\n(1834-1912)[font]Verdana[fontsize]0.05779060463938183[color]#FFFFFF[x]0.06678383128295255[y]0.475[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Alarik Liedbeck\n(1834-1912)",
+                            "font": "Verdana",
+                            "fontsize": "0.05779060463938183",
+                            "color": "#FFFFFF",
+                            "x": 0.06678383128295255,
+                            "y": 0.475,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 116.21125733294298,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 116.71125733294298,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 123.66747735410878,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 124.16747735410878,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 22
+              },
+              {
+                  "name": "robert_nobel",
+                  "guid": "robert_nobel",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\robert_nobel\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 93.96686049730826,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.9862826282628254,
+                        "pos": {
+                            "x": -1.7801370858079175,
+                            "y": -0.12137672403407007
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 94.46686049730826,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.9862826282628254,
+                        "pos": {
+                            "x": -1.7801370858079175,
+                            "y": -0.12137672403407007
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 95.67,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.9862826282628254,
+                        "pos": {
+                            "x": -1.7801370858079175,
+                            "y": -0.12137672403407007
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 96.89260287421501,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.9862826282628254,
+                        "pos": {
+                            "x": -1.7801370858079175,
+                            "y": -0.12137672403407007
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 23,
+                        "time": 97.39260287421501,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.9862826282628254,
+                        "pos": {
+                            "x": -1.7801370858079175,
+                            "y": -0.12137672403407007
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 23
+              },
+              {
+                  "name": "krummel_whole",
+                  "guid": "krummel_whole",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\krummel_whole\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 138.80823220609398,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.8630665573236367,
+                        "pos": {
+                            "x": 0.0691837123320721,
+                            "y": 0.2819462012610686
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 139.30823220609398,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8630665573236367,
+                        "pos": {
+                            "x": 0.0691837123320721,
+                            "y": 0.2819462012610686
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 141.4071145457289,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8630665573236367,
+                        "pos": {
+                            "x": 0.0691837123320721,
+                            "y": 0.2819462012610686
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 149.17330310104995,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8630665573236367,
+                        "pos": {
+                            "x": 0.0691837123320721,
+                            "y": 0.2819462012610686
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 24,
+                        "time": 149.67330310104995,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.8630665573236367,
+                        "pos": {
+                            "x": 0.0691837123320721,
+                            "y": 0.2819462012610686
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 156.88438052593975,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.9596068557666715,
+                        "pos": {
+                            "x": -0.003992471520308738,
+                            "y": 0.1927879951862016
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 157.38438052593975,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9596068557666715,
+                        "pos": {
+                            "x": -0.003992471520308738,
+                            "y": 0.1927879951862016
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 166.14,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9596068557666715,
+                        "pos": {
+                            "x": -0.003992471520308738,
+                            "y": 0.1927879951862016
+                        }
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 166.7290736147107,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.9596068557666715,
+                        "pos": {
+                            "x": -0.003992471520308738,
+                            "y": 0.1927879951862016
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 1,
+                        "zIndex": 24,
+                        "time": 167.2290736147107,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.9596068557666715,
+                        "pos": {
+                            "x": -0.003992471520308738,
+                            "y": 0.1927879951862016
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 24
+              },
+              {
+                  "name": "Unattached Ink-15",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl28",
+                  "datastring": "BEZIER::[pathstring]M0.2601291332737546,0.39901638343685963R0.2746309794183147,0.3919999919953893 0.2904428010497146,0.3919999919953893 0.307564570015207,0.38967212614465934 0.3233948316961197,0.3873114664046491 0.33920662517477223,0.3873114664046491 0.35501844680617217,0.3873114664046491 0.37214021577166456,0.3873114664046491 0.38797047745257723,0.3873114664046491 0.3998154925244321,0.40606556876761013 0.4103690003117072,0.424786877241291 0.4261807937903598,0.42947537781762296 0.4354058860412823,0.45055737104572235 0.44857931664948974,0.46459015392866293 0.4630811627940498,0.4763278648501537 0.4749446179154174,0.49504914830942625 0.48680812934227974,0.5114425909323771 0.5012914791318324,0.5231475329789958 0.5171217689654923,0.5348524249967982 0.5316051750605396,0.541901635341957 0.5474169403864448,0.541901635341957 0.5632472302201049,0.5395409756019467 0.5790590518515049,0.5348524249967982 0.5948708171774101,0.5348524249967982 0.6093726914747175,0.5208196421138576 0.6238560975697648,0.4997376989145748 0.6330811898206873,0.47396720511014345 0.6436346976079624,0.4552458716220543 0.6594464629338677,0.4552458716220543 0.6752582845652675,0.4552458716220543 0.6910701061966674,0.4599344222272029 0.7068819278280674,0.46695081366867313 0.7016236139839426,0.4927213074731045 0.6871217396866351,0.5020655397508965 0.6739483372311751,0.5161311415375256 0.6620848821098074,0.5372130847368084 0.6502213706829452,0.5559344182248975 0.6409962784320226,0.5793442522893186 0.6317711861811001,0.6027868552286116 0.6199077310597325,0.6215081887167008 0.6040959094283326,0.6238688484567111 0.5895940914365199,0.6144917972752305 0.5764206326755651,0.5980983546522797 0.5606088673496599,0.5934098040471312 0.5421586828478148,0.5934098040471312 0.5263468612164149,0.5934098040471312 0.5105165713827549,0.5957376949122695 0.49470480605684963,0.6004261954886014 0.4841697101663399,0.6191802978515625 0.4696678921745272,0.6355737404745133 0.4538560705431273,0.6332130807345031 0.44199261542175966,0.6168196381115523 0.4261807937903598,0.609803246670082 0.4103690003117072,0.609803246670082 0.4116789476457997,0.6144917972752305[stroke]#FF0606[strokeo]1[strokew]0.022950819672131146[]|BEZIER::[pathstring]M0.4090405847753546,0.6004261954886014R0.42354243091991467,0.5793442522893186 0.4340959387071898,0.5536065273597592 0.4209040398967222,0.5325245841604764 0.4103690003117072,0.5020655397508965 0.3945571786803073,0.49504914830942625 0.37874538520165474,0.49504914830942625 0.3616051480339022,0.49036064773309423 0.3497416929125346,0.4716393142450051 0.3405166006616121,0.45055737104572235 0.32865311738749714,0.4341639284227715 0.3167896622661295,0.41540982605981047 0.3009778406347296,0.41540982605981047 0.285166047156077,0.41540982605981047 0.26935422552467713,0.4177704857998207 0.2574907704033095,0.40606556876761013[stroke]#FF0606[strokeo]1[strokew]0.022950819672131146[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "bezier",
+                        "inkProperties": {
+                            "pathstring": "M0.2601291332737546,0.39901638343685963R0.2746309794183147,0.3919999919953893 0.2904428010497146,0.3919999919953893 0.307564570015207,0.38967212614465934 0.3233948316961197,0.3873114664046491 0.33920662517477223,0.3873114664046491 0.35501844680617217,0.3873114664046491 0.37214021577166456,0.3873114664046491 0.38797047745257723,0.3873114664046491 0.3998154925244321,0.40606556876761013 0.4103690003117072,0.424786877241291 0.4261807937903598,0.42947537781762296 0.4354058860412823,0.45055737104572235 0.44857931664948974,0.46459015392866293 0.4630811627940498,0.4763278648501537 0.4749446179154174,0.49504914830942625 0.48680812934227974,0.5114425909323771 0.5012914791318324,0.5231475329789958 0.5171217689654923,0.5348524249967982 0.5316051750605396,0.541901635341957 0.5474169403864448,0.541901635341957 0.5632472302201049,0.5395409756019467 0.5790590518515049,0.5348524249967982 0.5948708171774101,0.5348524249967982 0.6093726914747175,0.5208196421138576 0.6238560975697648,0.4997376989145748 0.6330811898206873,0.47396720511014345 0.6436346976079624,0.4552458716220543 0.6594464629338677,0.4552458716220543 0.6752582845652675,0.4552458716220543 0.6910701061966674,0.4599344222272029 0.7068819278280674,0.46695081366867313 0.7016236139839426,0.4927213074731045 0.6871217396866351,0.5020655397508965 0.6739483372311751,0.5161311415375256 0.6620848821098074,0.5372130847368084 0.6502213706829452,0.5559344182248975 0.6409962784320226,0.5793442522893186 0.6317711861811001,0.6027868552286116 0.6199077310597325,0.6215081887167008 0.6040959094283326,0.6238688484567111 0.5895940914365199,0.6144917972752305 0.5764206326755651,0.5980983546522797 0.5606088673496599,0.5934098040471312 0.5421586828478148,0.5934098040471312 0.5263468612164149,0.5934098040471312 0.5105165713827549,0.5957376949122695 0.49470480605684963,0.6004261954886014 0.4841697101663399,0.6191802978515625 0.4696678921745272,0.6355737404745133 0.4538560705431273,0.6332130807345031 0.44199261542175966,0.6168196381115523 0.4261807937903598,0.609803246670082 0.4103690003117072,0.609803246670082 0.4116789476457997,0.6144917972752305",
+                            "stroke": "#FF0606",
+                            "strokeo": 1,
+                            "strokew": 0.022950819672131146,
+                            "path": [
+                              {
+                                  "x": "0.2601291332737546",
+                                  "y": "0.39901638343685963"
+                              },
+                              {
+                                  "x": "0.2746309794183147",
+                                  "y": "0.3919999919953893"
+                              },
+                              {
+                                  "x": "0.2904428010497146",
+                                  "y": "0.3919999919953893"
+                              },
+                              {
+                                  "x": "0.307564570015207",
+                                  "y": "0.38967212614465934"
+                              },
+                              {
+                                  "x": "0.3233948316961197",
+                                  "y": "0.3873114664046491"
+                              },
+                              {
+                                  "x": "0.33920662517477223",
+                                  "y": "0.3873114664046491"
+                              },
+                              {
+                                  "x": "0.35501844680617217",
+                                  "y": "0.3873114664046491"
+                              },
+                              {
+                                  "x": "0.37214021577166456",
+                                  "y": "0.3873114664046491"
+                              },
+                              {
+                                  "x": "0.38797047745257723",
+                                  "y": "0.3873114664046491"
+                              },
+                              {
+                                  "x": "0.3998154925244321",
+                                  "y": "0.40606556876761013"
+                              },
+                              {
+                                  "x": "0.4103690003117072",
+                                  "y": "0.424786877241291"
+                              },
+                              {
+                                  "x": "0.4261807937903598",
+                                  "y": "0.42947537781762296"
+                              },
+                              {
+                                  "x": "0.4354058860412823",
+                                  "y": "0.45055737104572235"
+                              },
+                              {
+                                  "x": "0.44857931664948974",
+                                  "y": "0.46459015392866293"
+                              },
+                              {
+                                  "x": "0.4630811627940498",
+                                  "y": "0.4763278648501537"
+                              },
+                              {
+                                  "x": "0.4749446179154174",
+                                  "y": "0.49504914830942625"
+                              },
+                              {
+                                  "x": "0.48680812934227974",
+                                  "y": "0.5114425909323771"
+                              },
+                              {
+                                  "x": "0.5012914791318324",
+                                  "y": "0.5231475329789958"
+                              },
+                              {
+                                  "x": "0.5171217689654923",
+                                  "y": "0.5348524249967982"
+                              },
+                              {
+                                  "x": "0.5316051750605396",
+                                  "y": "0.541901635341957"
+                              },
+                              {
+                                  "x": "0.5474169403864448",
+                                  "y": "0.541901635341957"
+                              },
+                              {
+                                  "x": "0.5632472302201049",
+                                  "y": "0.5395409756019467"
+                              },
+                              {
+                                  "x": "0.5790590518515049",
+                                  "y": "0.5348524249967982"
+                              },
+                              {
+                                  "x": "0.5948708171774101",
+                                  "y": "0.5348524249967982"
+                              },
+                              {
+                                  "x": "0.6093726914747175",
+                                  "y": "0.5208196421138576"
+                              },
+                              {
+                                  "x": "0.6238560975697648",
+                                  "y": "0.4997376989145748"
+                              },
+                              {
+                                  "x": "0.6330811898206873",
+                                  "y": "0.47396720511014345"
+                              },
+                              {
+                                  "x": "0.6436346976079624",
+                                  "y": "0.4552458716220543"
+                              },
+                              {
+                                  "x": "0.6594464629338677",
+                                  "y": "0.4552458716220543"
+                              },
+                              {
+                                  "x": "0.6752582845652675",
+                                  "y": "0.4552458716220543"
+                              },
+                              {
+                                  "x": "0.6910701061966674",
+                                  "y": "0.4599344222272029"
+                              },
+                              {
+                                  "x": "0.7068819278280674",
+                                  "y": "0.46695081366867313"
+                              },
+                              {
+                                  "x": "0.7016236139839426",
+                                  "y": "0.4927213074731045"
+                              },
+                              {
+                                  "x": "0.6871217396866351",
+                                  "y": "0.5020655397508965"
+                              },
+                              {
+                                  "x": "0.6739483372311751",
+                                  "y": "0.5161311415375256"
+                              },
+                              {
+                                  "x": "0.6620848821098074",
+                                  "y": "0.5372130847368084"
+                              },
+                              {
+                                  "x": "0.6502213706829452",
+                                  "y": "0.5559344182248975"
+                              },
+                              {
+                                  "x": "0.6409962784320226",
+                                  "y": "0.5793442522893186"
+                              },
+                              {
+                                  "x": "0.6317711861811001",
+                                  "y": "0.6027868552286116"
+                              },
+                              {
+                                  "x": "0.6199077310597325",
+                                  "y": "0.6215081887167008"
+                              },
+                              {
+                                  "x": "0.6040959094283326",
+                                  "y": "0.6238688484567111"
+                              },
+                              {
+                                  "x": "0.5895940914365199",
+                                  "y": "0.6144917972752305"
+                              },
+                              {
+                                  "x": "0.5764206326755651",
+                                  "y": "0.5980983546522797"
+                              },
+                              {
+                                  "x": "0.5606088673496599",
+                                  "y": "0.5934098040471312"
+                              },
+                              {
+                                  "x": "0.5421586828478148",
+                                  "y": "0.5934098040471312"
+                              },
+                              {
+                                  "x": "0.5263468612164149",
+                                  "y": "0.5934098040471312"
+                              },
+                              {
+                                  "x": "0.5105165713827549",
+                                  "y": "0.5957376949122695"
+                              },
+                              {
+                                  "x": "0.49470480605684963",
+                                  "y": "0.6004261954886014"
+                              },
+                              {
+                                  "x": "0.4841697101663399",
+                                  "y": "0.6191802978515625"
+                              },
+                              {
+                                  "x": "0.4696678921745272",
+                                  "y": "0.6355737404745133"
+                              },
+                              {
+                                  "x": "0.4538560705431273",
+                                  "y": "0.6332130807345031"
+                              },
+                              {
+                                  "x": "0.44199261542175966",
+                                  "y": "0.6168196381115523"
+                              },
+                              {
+                                  "x": "0.4261807937903598",
+                                  "y": "0.609803246670082"
+                              },
+                              {
+                                  "x": "0.4103690003117072",
+                                  "y": "0.609803246670082"
+                              },
+                              {
+                                  "x": "0.4116789476457997",
+                                  "y": "0.6144917972752305"
+                              }
+                            ]
+                        }
+                    },
+                    {
+                        "inkType": "bezier",
+                        "inkProperties": {
+                            "pathstring": "M0.4090405847753546,0.6004261954886014R0.42354243091991467,0.5793442522893186 0.4340959387071898,0.5536065273597592 0.4209040398967222,0.5325245841604764 0.4103690003117072,0.5020655397508965 0.3945571786803073,0.49504914830942625 0.37874538520165474,0.49504914830942625 0.3616051480339022,0.49036064773309423 0.3497416929125346,0.4716393142450051 0.3405166006616121,0.45055737104572235 0.32865311738749714,0.4341639284227715 0.3167896622661295,0.41540982605981047 0.3009778406347296,0.41540982605981047 0.285166047156077,0.41540982605981047 0.26935422552467713,0.4177704857998207 0.2574907704033095,0.40606556876761013",
+                            "stroke": "#FF0606",
+                            "strokeo": 1,
+                            "strokew": 0.022950819672131146,
+                            "path": [
+                              {
+                                  "x": "0.4090405847753546",
+                                  "y": "0.6004261954886014"
+                              },
+                              {
+                                  "x": "0.42354243091991467",
+                                  "y": "0.5793442522893186"
+                              },
+                              {
+                                  "x": "0.4340959387071898",
+                                  "y": "0.5536065273597592"
+                              },
+                              {
+                                  "x": "0.4209040398967222",
+                                  "y": "0.5325245841604764"
+                              },
+                              {
+                                  "x": "0.4103690003117072",
+                                  "y": "0.5020655397508965"
+                              },
+                              {
+                                  "x": "0.3945571786803073",
+                                  "y": "0.49504914830942625"
+                              },
+                              {
+                                  "x": "0.37874538520165474",
+                                  "y": "0.49504914830942625"
+                              },
+                              {
+                                  "x": "0.3616051480339022",
+                                  "y": "0.49036064773309423"
+                              },
+                              {
+                                  "x": "0.3497416929125346",
+                                  "y": "0.4716393142450051"
+                              },
+                              {
+                                  "x": "0.3405166006616121",
+                                  "y": "0.45055737104572235"
+                              },
+                              {
+                                  "x": "0.32865311738749714",
+                                  "y": "0.4341639284227715"
+                              },
+                              {
+                                  "x": "0.3167896622661295",
+                                  "y": "0.41540982605981047"
+                              },
+                              {
+                                  "x": "0.3009778406347296",
+                                  "y": "0.41540982605981047"
+                              },
+                              {
+                                  "x": "0.285166047156077",
+                                  "y": "0.41540982605981047"
+                              },
+                              {
+                                  "x": "0.26935422552467713",
+                                  "y": "0.4177704857998207"
+                              },
+                              {
+                                  "x": "0.2574907704033095",
+                                  "y": "0.40606556876761013"
+                              }
+                            ]
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 165.2622868688771,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 165.7622868688771,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 166.64920504029476,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 167.14920504029476,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 25
+              },
+              {
+                  "name": "Unattached Ink-16",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl27",
+                  "datastring": "TRANS::[path]M0.374375,0.250443C0.426354,0.250443,0.468492,0.297589,0.468492,0.355746C0.468492,0.413903,0.426354,0.461049,0.374375,0.461049C0.322396,0.461049,0.280259,0.413903,0.280259,0.355746C0.280259,0.297589,0.322396,0.250443,0.374375,0.250443zM0.540012,0.509753C0.590961,0.509753,0.632263,0.583149,0.632263,0.673687C0.632263,0.764226,0.590961,0.837622,0.540012,0.837622C0.489063,0.837622,0.447761,0.764226,0.447761,0.673687C0.447761,0.583149,0.489063,0.509753,0.540012,0.509753z[color]#000000[opac]0.8[mode]isolate[]|BOUNDELLIPSE::[cx]0.37437529161919625[cy]0.35574600054868716[rx]0.09411652678614764[ry]0.1053025385285679[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|BOUNDELLIPSE::[cx]0.5400120032489536[cy]0.6736874999005717[rx]0.09225092250922509[ry]0.16393442622950818[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.374375,0.250443C0.426354,0.250443,0.468492,0.297589,0.468492,0.355746C0.468492,0.413903,0.426354,0.461049,0.374375,0.461049C0.322396,0.461049,0.280259,0.413903,0.280259,0.355746C0.280259,0.297589,0.322396,0.250443,0.374375,0.250443zM0.540012,0.509753C0.590961,0.509753,0.632263,0.583149,0.632263,0.673687C0.632263,0.764226,0.590961,0.837622,0.540012,0.837622C0.489063,0.837622,0.447761,0.764226,0.447761,0.673687C0.447761,0.583149,0.489063,0.509753,0.540012,0.509753z",
+                            "color": "#000000",
+                            "opac": 0.8,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.37437529161919625,
+                            "cy": 0.35574600054868716,
+                            "rx": 0.09411652678614764,
+                            "ry": 0.1053025385285679,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.5400120032489536,
+                            "cy": 0.6736874999005717,
+                            "rx": 0.09225092250922509,
+                            "ry": 0.16393442622950818,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 160.51013692414,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 161.01013692414,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 165.25975143678056,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 165.75975143678056,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 26
+              },
+              {
+                  "name": "Unattached Ink-2",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl26",
+                  "datastring": "TEXT::[str]KrÃƒÂ¼mmel factory in 1865[font]Verdana[fontsize]0.05779060463938183[color]#FFFFFF[x]0.31282952548330406[y]0.95625[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "KrÃƒÂ¼mmel factory in 1865",
+                            "font": "Verdana",
+                            "fontsize": "0.05779060463938183",
+                            "color": "#FFFFFF",
+                            "x": 0.31282952548330406,
+                            "y": 0.95625,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 138.87349068684614,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 139.37349068684614,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 148.59246695851314,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 149.09246695851314,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 27
+              },
+              {
+                  "name": "Unattached Ink-14",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl25",
+                  "datastring": "TRANS::[path]M0.544563,0.375401C0.609403,0.375401,0.661967,0.477424,0.661967,0.603277C0.661967,0.729129,0.609403,0.831152,0.544563,0.831152C0.479722,0.831152,0.427158,0.729129,0.427158,0.603277C0.427158,0.477424,0.479722,0.375401,0.544563,0.375401zM0.365562,0.059582C0.416510,0.059582,0.457813,0.132978,0.457813,0.223517C0.457813,0.314055,0.416510,0.387451,0.365562,0.387451C0.314613,0.387451,0.273311,0.314055,0.273311,0.223517C0.273311,0.132978,0.314613,0.059582,0.365562,0.059582zM0.242573,0.919410C0.261023,0.919410,0.773680,0.919410,0.792130,0.919410C0.792130,0.952197,0.792130,1.024328,0.792130,1.057115C0.773680,1.057115,0.261023,1.057115,0.242573,1.057115C0.242573,1.024328,0.242573,0.952197,0.242573,0.919410z[color]#000000[opac]0.7923682888407363[mode]isolate[]|BOUNDELLIPSE::[cx]0.5445626045785848[cy]0.6032765480707029[rx]0.11740413184002882[ry]0.22787546593268654[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|BOUNDELLIPSE::[cx]0.3655616312312189[cy]0.22351655261813[rx]0.09225092250922509[ry]0.16393442622950818[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|BOUNDRECT::[x]0.2425729609217007[y]0.9194101088213628[w]0.5495571685453182[h]0.1377049180327869[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.544563,0.375401C0.609403,0.375401,0.661967,0.477424,0.661967,0.603277C0.661967,0.729129,0.609403,0.831152,0.544563,0.831152C0.479722,0.831152,0.427158,0.729129,0.427158,0.603277C0.427158,0.477424,0.479722,0.375401,0.544563,0.375401zM0.365562,0.059582C0.416510,0.059582,0.457813,0.132978,0.457813,0.223517C0.457813,0.314055,0.416510,0.387451,0.365562,0.387451C0.314613,0.387451,0.273311,0.314055,0.273311,0.223517C0.273311,0.132978,0.314613,0.059582,0.365562,0.059582zM0.242573,0.919410C0.261023,0.919410,0.773680,0.919410,0.792130,0.919410C0.792130,0.952197,0.792130,1.024328,0.792130,1.057115C0.773680,1.057115,0.261023,1.057115,0.242573,1.057115C0.242573,1.024328,0.242573,0.952197,0.242573,0.919410z",
+                            "color": "#000000",
+                            "opac": 0.7923682888407363,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.5445626045785848,
+                            "cy": 0.6032765480707029,
+                            "rx": 0.11740413184002882,
+                            "ry": 0.22787546593268654,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.3655616312312189,
+                            "cy": 0.22351655261813,
+                            "rx": 0.09225092250922509,
+                            "ry": 0.16393442622950818,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.2425729609217007,
+                            "y": 0.9194101088213628,
+                            "w": 0.5495571685453182,
+                            "h": 0.1377049180327869,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 145.1234871308978,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 145.6234871308978,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 148.4567873941157,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 148.9567873941157,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 28
+              },
+              {
+                  "name": "krummel_map",
+                  "guid": "krummel_map",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\krummel_map\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 29,
+                        "time": 148.83103513356718,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.1008273579702154,
+                        "pos": {
+                            "x": -0.11817650385399325,
+                            "y": -0.5364449955509619
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 29,
+                        "time": 149.33103513356718,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.1008273579702154,
+                        "pos": {
+                            "x": -0.11817650385399325,
+                            "y": -0.5364449955509619
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 29,
+                        "time": 154.91,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.1008273579702154,
+                        "pos": {
+                            "x": -0.11817650385399325,
+                            "y": -0.5364449955509619
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 29,
+                        "time": 157.26162865323502,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.1008273579702154,
+                        "pos": {
+                            "x": -0.11817650385399325,
+                            "y": -0.5364449955509619
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 29,
+                        "time": 157.76162865323502,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.1008273579702154,
+                        "pos": {
+                            "x": -0.11817650385399325,
+                            "y": -0.5364449955509619
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 29
+              },
+              {
+                  "name": "Unattached Ink-3",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl23",
+                  "datastring": "TEXT::[str]KrÃƒÂ¼mmel factory in 1915[font]Verdana[fontsize]0.05622914727560174[color]#FFFFFF[x]0.5637207971324164[y]0.7445164414702868[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "KrÃƒÂ¼mmel factory in 1915",
+                            "font": "Verdana",
+                            "fontsize": "0.05622914727560174",
+                            "color": "#FFFFFF",
+                            "x": 0.5637207971324164,
+                            "y": 0.7445164414702868,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 148.83103513356718,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 149.33103513356718,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 157.20827645775537,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 157.70827645775537,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 30
+              },
+              {
+                  "name": "krummel_explosion",
+                  "guid": "krummel_explosion",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\krummel_explosion\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 152.55715657127175,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.445791943082934,
+                        "pos": {
+                            "x": -1.383050456199922,
+                            "y": -0.08838036405082083
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 153.05715657127175,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.445791943082934,
+                        "pos": {
+                            "x": -1.383050456199922,
+                            "y": -0.08838036405082083
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 154.27,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.445791943082934,
+                        "pos": {
+                            "x": -1.383050456199922,
+                            "y": -0.08838036405082083
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 157.19353161421841,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.445791943082934,
+                        "pos": {
+                            "x": -1.383050456199922,
+                            "y": -0.08838036405082083
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 31,
+                        "time": 157.69353161421841,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.445791943082934,
+                        "pos": {
+                            "x": -1.383050456199922,
+                            "y": -0.08838036405082083
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 31
+              },
+              {
+                  "name": "Unattached Ink-4",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl21",
+                  "datastring": "TEXT::[str]Recon photo of KrÃƒÂ¼mmel factory,\ndynamite A/G,\nGermany, 7 April 1945[font]Verdana[fontsize]0.05154477518426148[color]#FFFFFF[x]0.057116562383533714[y]0.23826434025998974[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Recon photo of KrÃƒÂ¼mmel factory,\ndynamite A/G,\nGermany, 7 April 1945",
+                            "font": "Verdana",
+                            "fontsize": "0.05154477518426148",
+                            "color": "#FFFFFF",
+                            "x": 0.057116562383533714,
+                            "y": 0.23826434025998974,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 152.55921535996055,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 153.05921535996055,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 157.19046626011843,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 157.69046626011843,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 32
+              },
+              {
+                  "name": "kieselguhr_micro",
+                  "guid": "kieselguhr_micro",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\kieselguhr_micro\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 167.34342468998898,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.04473470454487849,
+                            "y": -0.2624542254684355
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 167.84342468998898,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.04473470454487849,
+                            "y": -0.2624542254684355
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 170.42,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.04473470454487849,
+                            "y": -0.2624542254684355
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 178.63131558094622,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.04473470454487849,
+                            "y": -0.2624542254684355
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 33,
+                        "time": 179.13131558094622,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.04473470454487849,
+                            "y": -0.2624542254684355
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 33
+              },
+              {
+                  "name": "kieselguhr_powder",
+                  "guid": "kieselguhr_powder",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\kieselguhr_powder\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 34,
+                        "time": 170.82506181864747,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -1.1868645650811136,
+                            "y": -0.2573892388873339
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 34,
+                        "time": 171.32506181864747,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -1.1868645650811136,
+                            "y": -0.2573892388873339
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 34,
+                        "time": 172.62,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -1.1868645650811136,
+                            "y": -0.2573892388873339
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 34,
+                        "time": 178.58436828321714,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -1.1868645650811136,
+                            "y": -0.2573892388873339
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 34,
+                        "time": 179.08436828321714,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.240297116844322,
+                        "pos": {
+                            "x": -1.1868645650811136,
+                            "y": -0.2573892388873339
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 34
+              },
+              {
+                  "name": "women_mixing_dynamite",
+                  "guid": "women_mixing_dynamite",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\women_mixing_dynamite\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 35,
+                        "time": 178.59147043523467,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.06175616476264628,
+                            "y": 0.2063456063683039
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 35,
+                        "time": 179.09147043523467,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.06175616476264628,
+                            "y": 0.2063456063683039
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 35,
+                        "time": 181.1,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.06175616476264628,
+                            "y": 0.2063456063683039
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 35,
+                        "time": 183.8111003858457,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.06175616476264628,
+                            "y": 0.2063456063683039
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 35,
+                        "time": 184.3111003858457,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.06175616476264628,
+                            "y": 0.2063456063683039
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 35
+              },
+              {
+                  "name": "Unattached Ink-5",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl17",
+                  "datastring": "TEXT::[str]Women mixing dynamite, Ardeer, Ayrshire[font]Verdana[fontsize]0.05570866148767504[color]#FFFFFF[x]0.16872353257803227[y]0.9539220591060451[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Women mixing dynamite, Ardeer, Ayrshire",
+                            "font": "Verdana",
+                            "fontsize": "0.05570866148767504",
+                            "color": "#FFFFFF",
+                            "x": 0.16872353257803227,
+                            "y": 0.9539220591060451,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 178.59088652415676,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 179.09088652415676,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 183.60843324773685,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 184.10843324773685,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 36
+              },
+              {
+                  "name": "ardeer_factory",
+                  "guid": "ardeer_factory",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\ardeer_factory\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 37,
+                        "time": 183.87312888200452,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.20376335307065962,
+                            "y": -0.02265326065909745
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 37,
+                        "time": 184.37312888200452,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.20376335307065962,
+                            "y": -0.02265326065909745
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 37,
+                        "time": 186.39,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.20376335307065962,
+                            "y": -0.02265326065909745
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 37,
+                        "time": 190.99,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8890624999999999,
+                        "pos": {
+                            "x": 0.0754966012417444,
+                            "y": 0.23562158652256213
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 37,
+                        "time": 196.86406515883004,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8890624999999999,
+                        "pos": {
+                            "x": 0.0754966012417444,
+                            "y": 0.23562158652256213
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 37,
+                        "time": 203.86406515883004,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.8890624999999999,
+                        "pos": {
+                            "x": 0.0754966012417444,
+                            "y": 0.23562158652256213
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 37
+              },
+              {
+                  "name": "Unattached Ink-6",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl15",
+                  "datastring": "TEXT::[str]Factory at Ardeer, Scotland[font]Verdana[fontsize]0.05779060463938183[color]#000000[x]0.05052562760602017[y]0.12655734703189036[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Factory at Ardeer, Scotland",
+                            "font": "Verdana",
+                            "fontsize": "0.05779060463938183",
+                            "color": "#000000",
+                            "x": 0.05052562760602017,
+                            "y": 0.12655734703189036,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 188.9437301203323,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 189.4437301203323,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 193.4437301203323,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 193.9437301203323,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 38
+              },
+              {
+                  "name": "gelignite",
+                  "guid": "gelignite",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\gelignite\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 39,
+                        "time": 204.0881657239453,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.22912411507422958,
+                            "y": -0.1124312350285307
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 39,
+                        "time": 204.5881657239453,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.22912411507422958,
+                            "y": -0.1124312350285307
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 39,
+                        "time": 204.68,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.22912411507422958,
+                            "y": -0.1124312350285307
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 39,
+                        "time": 213.07,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8890624999999999,
+                        "pos": {
+                            "x": 0.04597894783806289,
+                            "y": 0.02450014510341278
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 39,
+                        "time": 216.02657547983202,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.8890624999999999,
+                        "pos": {
+                            "x": 0.04597894783806289,
+                            "y": 0.02450014510341278
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 39,
+                        "time": 216.52657547983202,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.8890624999999999,
+                        "pos": {
+                            "x": 0.04597894783806289,
+                            "y": 0.02450014510341278
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 39
+              },
+              {
+                  "name": "paul_barbe",
+                  "guid": "paul_barbe",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\paul_barbe\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 40,
+                        "time": 216.28083059383692,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.38906249999999986,
+                            "y": 5.551115123125783e-17
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 40,
+                        "time": 216.78083059383692,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.38906249999999986,
+                            "y": 5.551115123125783e-17
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 40,
+                        "time": 221.07,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.38906249999999986,
+                            "y": 5.551115123125783e-17
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 40,
+                        "time": 231.38,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.7056493738827386,
+                        "pos": {
+                            "x": 0.1480941686614659,
+                            "y": 0.054847657069203026
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 40,
+                        "time": 233.41655546695745,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.7056493738827386,
+                        "pos": {
+                            "x": 0.1480941686614659,
+                            "y": 0.054847657069203026
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 40,
+                        "time": 233.91655546695745,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.7056493738827386,
+                        "pos": {
+                            "x": 0.1480941686614659,
+                            "y": 0.054847657069203026
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 40
+              },
+              {
+                  "name": "panama_canal_scandal",
+                  "guid": "panama_canal_scandal",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\panama_canal_scandal\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 41,
+                        "time": 233.6223810353393,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.2107845607698562,
+                            "y": -0.07507747486267618
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 41,
+                        "time": 234.1223810353393,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.2107845607698562,
+                            "y": -0.07507747486267618
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 41,
+                        "time": 236.66,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.2107845607698562,
+                            "y": -0.07507747486267618
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 41,
+                        "time": 240.9,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.2107845607698562,
+                            "y": -0.07531772669393866
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 41,
+                        "time": 247.15,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.5600742792110802,
+                        "pos": {
+                            "x": -0.015448276414807171,
+                            "y": 0.10643133565211679
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 41,
+                        "time": 247.79004148876177,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 0.5600742792110802,
+                        "pos": {
+                            "x": -0.015448276414807171,
+                            "y": 0.10643133565211679
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 41,
+                        "time": 248.29004148876177,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 0.5600742792110802,
+                        "pos": {
+                            "x": -0.015448276414807171,
+                            "y": 0.10643133565211679
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 41
+              },
+              {
+                  "name": "Unattached Ink-17",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl11",
+                  "datastring": "TRANS::[path]M0.470019,0.077663C0.488469,0.077663,0.823210,0.077663,0.841661,0.077663C0.841661,0.110449,0.841661,0.182581,0.841661,0.215367C0.823210,0.215367,0.488469,0.215367,0.470019,0.215367C0.470019,0.182581,0.470019,0.110449,0.470019,0.077663zM0.239792,0.263292C0.290741,0.263292,0.332043,0.336688,0.332043,0.427226C0.332043,0.517765,0.290741,0.591161,0.239792,0.591161C0.188843,0.591161,0.147541,0.517765,0.147541,0.427226C0.147541,0.336688,0.188843,0.263292,0.239792,0.263292z[color]#000000[opac]0.7073292329405861[mode]isolate[]|BOUNDRECT::[x]0.4700186022982884[y]0.07766256737375715[w]0.3716420529073455[h]0.1377049180327869[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|BOUNDELLIPSE::[cx]0.23979226281392193[cy]0.42722644111522806[rx]0.09225092250922509[ry]0.16393442622950818[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.470019,0.077663C0.488469,0.077663,0.823210,0.077663,0.841661,0.077663C0.841661,0.110449,0.841661,0.182581,0.841661,0.215367C0.823210,0.215367,0.488469,0.215367,0.470019,0.215367C0.470019,0.182581,0.470019,0.110449,0.470019,0.077663zM0.239792,0.263292C0.290741,0.263292,0.332043,0.336688,0.332043,0.427226C0.332043,0.517765,0.290741,0.591161,0.239792,0.591161C0.188843,0.591161,0.147541,0.517765,0.147541,0.427226C0.147541,0.336688,0.188843,0.263292,0.239792,0.263292z",
+                            "color": "#000000",
+                            "opac": 0.7073292329405861,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundrect",
+                        "inkProperties": {
+                            "x": 0.4700186022982884,
+                            "y": 0.07766256737375715,
+                            "w": 0.3716420529073455,
+                            "h": 0.1377049180327869,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.23979226281392193,
+                            "cy": 0.42722644111522806,
+                            "rx": 0.09225092250922509,
+                            "ry": 0.16393442622950818,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 237.72429185987715,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 238.22429185987715,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 240.5886749139349,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 241.0886749139349,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 42
+              },
+              {
+                  "name": "Unattached Ink-7",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl10",
+                  "datastring": "TEXT::[str]FranÃƒÂ§ois\nPaul Barbe\n(1836-1890)[font]Verdana, Geneva, sans-serif[fontsize]0.05622914727560174[color]#FFFFFF[x]0.006593214506840083[y]0.4578176529681096[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "FranÃƒÂ§ois\nPaul Barbe\n(1836-1890)",
+                            "font": "Verdana, Geneva, sans-serif",
+                            "fontsize": "0.05622914727560174",
+                            "color": "#FFFFFF",
+                            "x": 0.006593214506840083,
+                            "y": 0.4578176529681096,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 216.40816627213044,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 216.90816627213044,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 220.90816627213044,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 221.40816627213044,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 43
+              },
+              {
+                  "name": "ragnar_lab",
+                  "guid": "ragnar_lab",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\ragnar_lab\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 44,
+                        "time": 331.61306253807225,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.822597495530955,
+                        "pos": {
+                            "x": -0.9063911618528783,
+                            "y": 0.054853263762235205
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 44,
+                        "time": 332.11306253807225,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.822597495530955,
+                        "pos": {
+                            "x": -0.9063911618528783,
+                            "y": 0.054853263762235205
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 44,
+                        "time": 331.84,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.822597495530955,
+                        "pos": {
+                            "x": -0.9063911618528783,
+                            "y": 0.054853263762235205
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 44,
+                        "time": 335.48,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.822597495530955,
+                        "pos": {
+                            "x": -0.9063911618528783,
+                            "y": 0.054853263762235205
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 44,
+                        "time": 341.61,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654783,
+                        "pos": {
+                            "x": -0.24602473416644088,
+                            "y": 0.07038326056600347
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 44,
+                        "time": 343.63736423689374,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654783,
+                        "pos": {
+                            "x": -0.24602473416644088,
+                            "y": 0.07038326056600347
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 44,
+                        "time": 344.13736423689374,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654783,
+                        "pos": {
+                            "x": -0.24602473416644088,
+                            "y": 0.07038326056600347
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 44
+              },
+              {
+                  "name": "first_prize_ceremony",
+                  "guid": "first_prize_ceremony",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\first_prize_ceremony\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 45,
+                        "time": 343.8524020410952,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.19852530324400852,
+                            "y": -0.03763202202896404
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 45,
+                        "time": 344.3524020410952,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.19852530324400852,
+                            "y": -0.03763202202896404
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 45,
+                        "time": 346.37,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.4112987477654772,
+                        "pos": {
+                            "x": -0.19852530324400852,
+                            "y": -0.03763202202896404
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 45,
+                        "time": 351.24,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.03990217723974099,
+                            "y": 0.0462847285023259
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 45,
+                        "time": 351.74843603669376,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.03990217723974099,
+                            "y": 0.0462847285023259
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 45,
+                        "time": 352.24843603669376,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.03990217723974099,
+                            "y": 0.0462847285023259
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 45
+              },
+              {
+                  "name": "peace_prize",
+                  "guid": "peace_prize",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\peace_prize\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 46,
+                        "time": 316.01453680227183,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1,
+                        "pos": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 46,
+                        "time": 316.51453680227183,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1,
+                        "pos": {
+                            "x": 0,
+                            "y": 0
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 46,
+                        "time": 321.33055693837883,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1,
+                        "pos": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 46,
+                        "time": 321.83055693837883,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1,
+                        "pos": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 46
+              },
+              {
+                  "name": "bertha_book",
+                  "guid": "bertha_book",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\bertha_book\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 47,
+                        "time": 312.57533711091434,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2389416689935135,
+                        "pos": {
+                            "x": -0.2456668727687491,
+                            "y": 0.11505329607761438
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 47,
+                        "time": 313.07533711091434,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2389416689935135,
+                        "pos": {
+                            "x": -0.2456668727687491,
+                            "y": 0.11505329607761438
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 47,
+                        "time": 315.3,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2389416689935135,
+                        "pos": {
+                            "x": -0.2456668727687491,
+                            "y": 0.11505329607761438
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 47,
+                        "time": 316.1631593955983,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2389416689935135,
+                        "pos": {
+                            "x": -0.2456668727687491,
+                            "y": 0.11505329607761438
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 47,
+                        "time": 316.6631593955983,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2389416689935135,
+                        "pos": {
+                            "x": -0.2456668727687491,
+                            "y": 0.11505329607761438
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 47
+              },
+              {
+                  "name": "Unattached Ink-19",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl5",
+                  "datastring": "TEXT::[str]Humanity's Higher\nThoughts\nby Bertha von Suttner[font]Verdana[fontsize]0.06041514066453857[color]#F4F4F4[x]0.5811808118081181[y]0.4520327708760246[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Humanity's Higher\nThoughts\nby Bertha von Suttner",
+                            "font": "Verdana",
+                            "fontsize": "0.06041514066453857",
+                            "color": "#F4F4F4",
+                            "x": 0.5811808118081181,
+                            "y": 0.4520327708760246,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 312.56123162292203,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 313.06123162292203,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 316.0215502002842,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 316.5215502002842,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 48
+              },
+              {
+                  "name": "bertha_von_suttner",
+                  "guid": "bertha_von_suttner",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\bertha_von_suttner\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 49,
+                        "time": 294.1130787736954,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.6703989028930659,
+                            "y": 0.04677152633667009
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 49,
+                        "time": 294.6130787736954,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.6703989028930659,
+                            "y": 0.04677152633667009
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 49,
+                        "time": 299.29,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.7781249999999997,
+                        "pos": {
+                            "x": -0.6703989028930659,
+                            "y": 0.04677152633667009
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 49,
+                        "time": 306.6,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.05551944879999915,
+                            "y": 0.012936749424140248
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 49,
+                        "time": 312.5882340536403,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.05551944879999915,
+                            "y": 0.012936749424140248
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 49,
+                        "time": 313.0882340536403,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 1.1201485584221604,
+                        "pos": {
+                            "x": -0.05551944879999915,
+                            "y": 0.012936749424140248
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 49
+              },
+              {
+                  "name": "Unattached Ink-9",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl3",
+                  "datastring": "TEXT::[str]Bertha von Suttner\n(1843-1914)[font]Verdana[fontsize]0.054147204123894954[color]#FFFFFF[x]0.012302284710017574[y]0.425[w]undefined[h]undefined[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "text",
+                        "inkProperties": {
+                            "str": "Bertha von Suttner\n(1843-1914)",
+                            "font": "Verdana",
+                            "fontsize": "0.054147204123894954",
+                            "color": "#FFFFFF",
+                            "x": 0.012302284710017574,
+                            "y": 0.425,
+                            "w": null,
+                            "h": null
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 297.44094309426935,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 297.94094309426935,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 301.94094309426935,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 302.44094309426935,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 50
+              },
+              {
+                  "name": "smokeless_powder",
+                  "guid": "smokeless_powder",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\smokeless_powder\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 51,
+                        "time": 282.52576006549424,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.637768298853806,
+                            "y": -0.647803023066536
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 51,
+                        "time": 283.02576006549424,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.637768298853806,
+                            "y": -0.647803023066536
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 51,
+                        "time": 288.82,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.637768298853806,
+                            "y": -0.647803023066536
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 51,
+                        "time": 293.6130787736954,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.637768298853806,
+                            "y": -0.647803023066536
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 51,
+                        "time": 294.1130787736954,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.637768298853806,
+                            "y": -0.647803023066536
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 51
+              },
+              {
+                  "name": "common_powder",
+                  "guid": "common_powder",
+                  "providerId": "deepZoom",
+                  "assetUrl": "Images\\Factories\\common_powder\\GeneratedImages\\dzc_output.xml",
+                  "keyframes": [
+                    {
+                        "dispNum": 0,
+                        "zIndex": 52,
+                        "time": 282.5554375758791,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.6383936401352999,
+                            "y": -0.034331973809418215
+                        },
+                        "SpecialKeyframeType": "INITIAL"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 52,
+                        "time": 283.0554375758791,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.6383936401352999,
+                            "y": -0.034331973809418215
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 52,
+                        "time": 288.02,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.6383936401352999,
+                            "y": -0.034331973809418215
+                        }
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 52,
+                        "time": 293.59649688978623,
+                        "opacity": 1,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.6383936401352999,
+                            "y": -0.034331973809418215
+                        },
+                        "SpecialKeyframeType": "HOLDING FOR DURATION"
+                    },
+                    {
+                        "dispNum": 0,
+                        "zIndex": 52,
+                        "time": 294.09649688978623,
+                        "opacity": 0,
+                        "data": {
+            
+                        },
+                        "scale": 2.2402971168443213,
+                        "pos": {
+                            "x": -0.6383936401352999,
+                            "y": -0.034331973809418215
+                        },
+                        "SpecialKeyframeType": "FINAL"
+                    }
+                  ],
+                  "zIndex": 52
+              },
+              {
+                  "name": "Unattached Ink-18",
+                  "providerId": "ink",
+                  "experienceReference": "",
+                  "assetUrl": "noAssetUrl0",
+                  "datastring": "TRANS::[path]M0.434223,0.124578C0.537157,0.124578,0.620603,0.174692,0.620603,0.236511C0.620603,0.298330,0.537157,0.348444,0.434223,0.348444C0.331288,0.348444,0.247843,0.298330,0.247843,0.236511C0.247843,0.174692,0.331288,0.124578,0.434223,0.124578zM0.426433,0.644064C0.524728,0.644064,0.604411,0.689870,0.604411,0.746376C0.604411,0.802881,0.524728,0.848687,0.426433,0.848687C0.328139,0.848687,0.248455,0.802881,0.248455,0.746376C0.248455,0.689870,0.328139,0.644064,0.426433,0.644064z[color]#000000[opac]0.7073292329405861[mode]isolate[]|BOUNDELLIPSE::[cx]0.4342228525205448[cy]0.23651120802169306[rx]0.18637965226191616[ry]0.11193307963081073[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|BOUNDELLIPSE::[cx]0.4264331038741484[cy]0.7463756904907571[rx]0.1779778637062403[ry]0.10231180479118158[fillc]#000000[fillo]0[strokec]#ffffff[strokeo]0.7[strokew]5[]|",
+                  "inkObjects": [
+                    {
+                        "inkType": "trans",
+                        "inkProperties": {
+                            "path": "M0.434223,0.124578C0.537157,0.124578,0.620603,0.174692,0.620603,0.236511C0.620603,0.298330,0.537157,0.348444,0.434223,0.348444C0.331288,0.348444,0.247843,0.298330,0.247843,0.236511C0.247843,0.174692,0.331288,0.124578,0.434223,0.124578zM0.426433,0.644064C0.524728,0.644064,0.604411,0.689870,0.604411,0.746376C0.604411,0.802881,0.524728,0.848687,0.426433,0.848687C0.328139,0.848687,0.248455,0.802881,0.248455,0.746376C0.248455,0.689870,0.328139,0.644064,0.426433,0.644064z",
+                            "color": "#000000",
+                            "opac": 0.7073292329405861,
+                            "mode": "isolate"
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.4342228525205448,
+                            "cy": 0.23651120802169306,
+                            "rx": 0.18637965226191616,
+                            "ry": 0.11193307963081073,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    },
+                    {
+                        "inkType": "boundellipse",
+                        "inkProperties": {
+                            "cx": 0.4264331038741484,
+                            "cy": 0.7463756904907571,
+                            "rx": 0.1779778637062403,
+                            "ry": 0.10231180479118158,
+                            "fillc": "#000000",
+                            "fillo": 0,
+                            "strokec": "#ffffff",
+                            "strokeo": 0.7,
+                            "strokew": 5
+                        }
+                    }
+                  ],
+                  "initKeyframe": {
+        
+                  },
+                  "keyframes": [
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 286.7013157987695,
+                        "opacity": 0
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 287.2013157987695,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 291.2013157987695,
+                        "opacity": 1
+                    },
+                    {
+                        "type": "unattached",
+                        "dispNum": 0,
+                        "initKeyframe": {
+            
+                        },
+                        "initproxy": {
+            
+                        },
+                        "time": 291.7013157987695,
+                        "opacity": 0
+                    }
+                  ],
+                  "zIndex": 53
+              }
+            ]
+        },
         "Family" : {
             "tourTitle": "Family",
             "totalDuration": 258.0861344461403,
