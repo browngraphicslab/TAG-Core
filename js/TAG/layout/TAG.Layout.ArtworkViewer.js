@@ -859,6 +859,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
 
         if (doq.Metadata.Description) {
+            console.log("description");
             var description = doq.Metadata.Description;
             var descriptionDiv = $(document.createElement('div'));
             descriptionDiv.css({

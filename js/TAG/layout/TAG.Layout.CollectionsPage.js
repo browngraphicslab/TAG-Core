@@ -704,6 +704,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             str = collection.Metadata.Description ? collection.Metadata.Description.replace(/\n\r?/g, '<br />') : "";
             collectionDescription.css({
                 'font-size': 0.2 * TAG.Util.getMaxFontSizeEM(str, 1.5, 0.55 * $(infoDiv).width(), 0.915 * $(infoDiv).height(), 0.1),
+                'color': 'white'
             });
             collectionDescription.html(Autolinker.link(str, {email: false, twitter: false}));
             if (IS_WINDOWS) {

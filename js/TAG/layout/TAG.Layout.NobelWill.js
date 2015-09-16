@@ -2114,8 +2114,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             root.append(slideDiv)
             switch (doqType) {
                 case "collection":
-                    for (var i = 0; i < spoof.doqsInCollection[doq.Name].length; i++) {
-                        artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Name][i]]);
+                    for (var i = 0; i < spoof.doqsInCollection[doq.Identifier].length; i++) {
+                        artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Identifier][i]]);
                     }
                     var collectionsPage = TAG.Layout.CollectionsPage({ "doqToUse": doq, "willRoot": slideDiv, "artworkDoqs": artworks });
                     slideDiv.append(collectionsPage.getRoot())
