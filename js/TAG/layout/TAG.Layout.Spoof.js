@@ -3700,7 +3700,7 @@ TAG.Layout.Spoof = (function () {
       "name": "3_heleneborg",
       "guid": "3_heleneborg",
       "providerId": "image",
-      "assetUrl": "Images\\Family\\3_heleneborg\\GeneratedImages\\dzc_output.xml",
+      "assetUrl": "Images\\Family\\3_heleneborg\\GeneratedImages\\image.png",
       "keyframes": [
         {
             "dispNum": 0,
@@ -8514,9 +8514,7 @@ TAG.Layout.Spoof = (function () {
         if (dontUseNobel !== true) {
             s = "NobelFolder\\";
         }
-        console.log("about to get: " + filePath);
         Windows.Storage.KnownFolders.documentsLibrary.getFileAsync(s + filePath).done(function (file) {
-            console.log("got: " + filePath);
             var url = URL.createObjectURL(file, { oneTimeOnly: false });
             obj["FilePath"] = url;
             obj["FullPath"] = file.path;

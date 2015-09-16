@@ -546,7 +546,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                     playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
                     hideInfoPane();
                     setControlsFade();
-                }, 5000);
+                }, 10000);
                 return;
             }
             orchestrator.play();

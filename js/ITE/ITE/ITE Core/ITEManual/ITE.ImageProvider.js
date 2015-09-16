@@ -115,7 +115,8 @@ ITE.ImageProvider = function (trackData, player, timeManager, orchestrator) {
 		_super.load();
 
 		// Sets the image’s URL source.
-		_image.attr("src", self.trackData.assetUrl);
+		//_image.attr("src", self.trackData.assetUrl);
+		TAG.Layout.Spoof().staticSetPath(self.trackData.assetUrl, _image[0],"src")
 		_image.css({
 		    "top": "0px",
 		    "left": "0px",

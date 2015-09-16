@@ -13776,6 +13776,7 @@ ImageJob.prototype = {
         while (s.indexOf("/") !== -1) {
             s=s.replace("/","\\")
         }
+        console.log(s)
         TAG.Layout.Spoof().staticSetPath(s,this.image,"src")
         //this.image.src = this.src;
     },
