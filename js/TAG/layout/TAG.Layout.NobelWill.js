@@ -2056,6 +2056,43 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 doq = spoof.tourDoqs.FromWillToPrize
                 doqType = "tour"
                 break;
+                //Collections
+            case "Bjorkborn":
+                doq = spoof.collectionDoqs.Bjorkborn
+                doqType = "collection"
+                break;
+            case "Ceremonies":
+                doq = spoof.collectionDoqs.Ceremonies
+                doqType = "collection"
+                break;
+            case "Diplomas":
+                doq = spoof.collectionDoqs.Diplomas
+                doqType = "collection"
+                break;
+            case "Factories":
+                doq = spoof.collectionDoqs.Factories
+                doqType = "collection"
+                break;
+            case "Family":
+                doq = spoof.collectionDoqs.Family
+                doqType = "collection"
+                break;
+            case "Medals":
+                doq = spoof.collectionDoqs.Medals
+                doqType = "collection"
+                break;
+            case "Patents":
+                doq = spoof.collectionDoqs.Patents
+                doqType = "collection"
+                break;
+            case "SanRemo":
+                doq = spoof.collectionDoqs.SanRemo
+                doqType = "collection"
+                break;
+            case "Will":
+                doq = spoof.collectionDoqs.Will
+                doqType = "collection"
+                break;
         }
         if (doqType) {
 
