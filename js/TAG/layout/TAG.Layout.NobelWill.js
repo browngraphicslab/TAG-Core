@@ -18,7 +18,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         showOnlyHighlightedHotspots = true,
         agedWill = false,  //For the whiter or yellower will
         singleArrowUpDownIcons = false,//non-functional thus far
-        tourAndCollectionTaskBar = false, //make the tour and collection UI on the popup the same as the one for taskbar
+        tourAndCollectionTaskBar = true, //make the tour and collection UI on the popup the same as the one for taskbar
         testamentHeader = true // Use the orange script-y Testament image instead of plain text saying "The Will Page ..."
 
 
@@ -108,7 +108,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'top': '10%',
             'width' : '100%',
             'height' : '20%',
-            'z-index': '1002',
+            'z-index': '1006',
             'color': NOBEL_ORANGE_COLOR,
             'font-weight': '900',
             'text-align': 'center',
