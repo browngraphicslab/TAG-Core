@@ -9,27 +9,24 @@
  *    prevScroll       value of scrollbar from new catalog page
  * @param artmodeOptions      options to pass into TAG.Layout.ArtworkViewer
  * @param tourObj      the tour doq object, so we can return to the proper tour in the collections screen
- * @param idletimer    the idle timer 
  */
-TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj, idletimer) {
+TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj) {
     "use strict";
     var artworkPrev;
     var prevScroll = prevInfo.prevScroll;
     var prevPreviewPos = prevInfo.prevPreviewPos;
-	var prevExhib = exhibition;
+    var prevExhib = exhibition;
     var prevTag = prevInfo.prevTag;
     var prevMult = prevInfo.prevMult;
-    var prevSearch = prevSearch;
-    var prevS;
-    var self = this;
-    var rinPath = IS_WINDOWS ? tagPath+'js/WIN8_RIN/web' : tagPath+'js/RIN/web';
+    var prevS
+    var rinPath = IS_WINDOWS ? tagPath + 'js/WIN8_RIN/web' : tagPath + 'js/RIN/web';
     var ispagetoload = pageToLoad && (pageToLoad.pagename === 'tour');
-    this.iteTour = tour;
+
     var tagContainer = $('#tagRoot');
 
     var player,
         root = TAG.Util.getHtmlAjax('TourPlayer.html'),
-        rinPlayer = root.find('#ITEContainer'),
+        rinPlayer = root.find('#rinPlayer'),
         backButtonContainer = root.find('#backButtonContainer'),
         backButton = root.find('#backButton'),
         linkButtonContainer = root.find('#linkContainer'),
@@ -40,36 +37,29 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         bigPlayButton = root.find('#bigPlayButton'),
         w = $('#tagRoot').width(),
         h = $('#tagRoot').height();
-    
-    if (w / h > 16 / 9) { // make sure player is 16:9
+
+    if (h * 16 / 9 < w) { // make sure player is 16:9
         root.css({
             'width': h * 16 / 9 + 'px',
             'left': (w - h * 16 / 9) / 2 + 'px'
         });
-        rinPlayer.css({
-            width: root.css('width'),
-            height: h + 'px'
-        });
-    } else if (w / h <= 16 / 9) {
+    } else if (w * 9 / 16 < h) {
         root.css({
             'height': w * 9 / 16 + 'px',
             'top': (h - w * 9 / 16) / 2 + 'px'
         });
-        rinPlayer.css({
-            width: w + 'px',
-            height: root.css('height')
-        })
     }
-    
+
     // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
     // idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
     // idleTimer.start();
-    //idleTimer && idleTimer.kill();
-    //idleTimer = null;
-    backButton.attr('src', tagPath+'images/Back_wshadow.svg');
+    idleTimer && idleTimer.kill();
+    idleTimer = null;
+
+    backButton.attr('src', tagPath + 'images/Back_wshadow.svg');
 
     //clicked effect for back button
-    backButton.on('mousedown', function(){
+    backButton.on('mousedown', function () {
         TAG.Util.UI.cgBackColor("backButton", backButton, false);
     });
     backButton.on('mouseleave', function () {
@@ -78,9 +68,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
 
     backButton.on('click', goBack);
 
-    if(IS_WEBAPP) {
-        linkButton.attr('src', tagPath+'images/link.svg');
-        linkButton.on('click', function() {
+    if (IS_WEBAPP) {
+        linkButton.attr('src', tagPath + 'images/link.svg');
+        linkButton.on('click', function () {
             var linkOverlay = TAG.Util.UI.showPageLink(urlToParse, {
                 tagpagename: 'tour',
                 tagguid: tourObj.Identifier,
@@ -89,7 +79,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             });
 
             root.append(linkOverlay);
-            linkOverlay.fadeIn(500, function() {
+            linkOverlay.fadeIn(500, function () {
                 linkOverlay.find('.linkDialogInput').select();
             });
         });
@@ -97,16 +87,16 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         linkButtonContainer.remove();
     }
 
-    if(ispagetoload) {
+    if (ispagetoload) {
         pageToLoad.pagename = '';
-        if(pageToLoad.onlytour) {
+        if (pageToLoad.onlytour) {
             backButtonContainer.remove();
             linkButtonContainer.remove();
         } else {
             backButtonContainer.css('display', 'none');
             linkButtonContainer.css('display', 'none');
         }
-        if(tourObj && tourObj.Metadata && tourObj.Metadata.Thumbnail) {
+        if (tourObj && tourObj.Metadata && tourObj.Metadata.Thumbnail) {
             bigThumbnail.attr('src', TAG.Worktop.Database.fixPath(tourObj.Metadata.Thumbnail));
             bigPlayButton.attr('src', tagPath + 'images/icons/Play.svg');
             bigThumbnailContainer.css('display', 'block');
@@ -130,32 +120,28 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     function startTour() {
         bigThumbnailContainer.remove();
         $('.rin_PlayPauseContainer').find('input').trigger('click');
-        if(!pageToLoad.onlytour) {
+        if (!pageToLoad.onlytour) {
             backButtonContainer.css('display', 'block');
             linkButtonContainer.css('display', 'block');
         }
     }
 
-    function reloadTourData(data) {
-        this.iteTour = data;
-    }
-    this.reloadTourData = reloadTourData;
+    function goBack() {
 
-    function getTourData() {
-        return this.iteTour;
-    }
-    this.getTourData = getTourData;
-
-    function goBack () {
         var artmode, collectionsPage;
 
         // UNCOMMENT IF WE WANT IDLE TIMER IN TOUR PLAYER
         // idleTimer.kill();
         // idleTimer = null;
-        
-        if(player) {
+
+        if (player) {
             player.pause();
+            player.screenplayEnded.unsubscribe();
             player.unload();
+        }
+
+        if (!player || rinPlayer.children().length === 0) {
+            return; // if page hasn't loaded yet, don't exit (TODO -- should have slide page overlay)
         }
 
         backButton.off('click'); // prevent user from clicking twice
@@ -165,17 +151,16 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             TAG.Util.UI.slidePageRightSplit(root, artmode.getRoot());
 
             currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-            currentPage.obj  = artmode;
+            currentPage.obj = artmode;
         } else {
             var backInfo = { backArtwork: tourObj, backScroll: prevScroll };
             collectionsPage = new TAG.Layout.CollectionsPage({
                 backScroll: prevScroll,
                 backArtwork: tourObj,
                 backCollection: exhibition,
-                backTag : prevTag,
-                backMult : prevMult,
-                backPreviewPos: prevPreviewPos,
-                backSearch: prevSearch
+                backTag: prevTag,
+                backMult: prevMult,
+                backPreviewPos: prevPreviewPos
             });
             TAG.Util.UI.slidePageRightSplit(root, collectionsPage.getRoot(), function () {
                 artworkPrev = "catalog";
@@ -184,43 +169,38 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                         collectionsPage.showArtwork(tourObj, prevMult && prevMult)();
                     }
                 }
-			});
+            });
+
             currentPage.name = TAG.Util.Constants.pages.COLLECTIONS_PAGE;
-            currentPage.obj  = collectionsPage;
-            $('#ITEHolder').remove();
+            currentPage.obj = collectionsPage;
         }
-        if (player) {
-            player.clearControlsTimeout();
-        }
+        // TODO: do we need this next line?
+        // tagContainer.css({ 'font-size': '11pt', 'font-family': "'source sans pro regular' sans-serif" }); // Quick hack to fix bug where rin.css was overriding styles for body element -jastern 4/30
     }
-    this.goBack = goBack;
 
     return {
         getRoot: function () {
             return root;
         },
-        startPlayback: function () { 
-            window.ITE = window.ITE || {};
-            var testOptions =   {
-                    attachVolume:               true,
-                    attachLoop:                 true,
-                    attachPlay:                 true,
-                    attachProgressBar:          true,
-                    attachFullScreen:           true,
-                    attachProgressIndicator:    true, 
-                    fadeControlskey:            true, 
-                    hideControls:               false,
-                    autoPlay:                   false,
-                    autoLoop:                   false,
-                    setMute:                    false,
-                    setInitVolume:              1,
-                    allowSeek:                  true,
-                    setFullScreen:              false,
-                    setStartingOffset:          0,
-                    setEndTime:                 NaN
-            };
-            player = new ITE.Player(testOptions, self, rinPlayer, idleTimer);
-            player.load(self.getTourData());
+        startPlayback: function () { // need to call this to ensure the tour will play when you exit and re-enter a tour, since sliding functionality and audio playback don't cooperate
+            rin.processAll(null, rinPath).then(function () {
+                var options = 'systemRootUrl=' + rinPath + '/&autoplay=' + (ispagetoload ? 'false' : 'true') + '&loop=false';
+                // create player
+                player = rin.createPlayerControl(rinPlayer[0], options);
+                for (var key in tour.resources) {
+                    if (tour.resources.hasOwnProperty(key)) {
+                        if (typeof tour.resources[key].uriReference === 'string') {
+                            tour.resources[key].uriReference = TAG.Worktop.Database.fixPath(tour.resources[key].uriReference);
+                        }
+                    }
+                }
+                player.loadData(tour, function () { });
+                if (!ispagetoload) {
+                    player.screenplayEnded.subscribe(function () { // at the end of a tour, go back to the collections view
+                        setTimeout(goBack, 1000);
+                    });
+                }
+            });
         }
     };
 

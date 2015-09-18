@@ -177,7 +177,7 @@
         var TAGSCRIPTS = [                                    // scripts to load
                 'js/raphael.js',
                 'js/tagInk.js',
-                //'js/RIN/web/lib/rin-core-1.0.js'
+                'js/RIN/web/lib/rin-core-1.0.js'
             ],
             i,                                                // index
             oHead,                                            // head element
@@ -185,10 +185,10 @@
             oCss,                                             // link element
             tagContainer;                                     // div containing TAG
 
-        //TAGSCRIPTS.push(
-        //    IS_WINDOWS ? 'js/WIN8_RIN/web/lib/rin-core-1.0.js'   : 'js/RIN/web/lib/rin-core-1.0.js',
-        //    IS_WINDOWS ? 'js/WIN8_RIN/web/lib/knockout-2.1.0.js' : 'js/RIN/web/lib/knockout-2.2.1.js'
-        //);
+        TAGSCRIPTS.push(
+            IS_WINDOWS ? 'js/WIN8_RIN/web/lib/rin-core-1.0.js'   : 'js/RIN/web/lib/rin-core-1.0.js',
+            IS_WINDOWS ? 'js/WIN8_RIN/web/lib/knockout-2.1.0.js' : 'js/RIN/web/lib/knockout-2.2.1.js'
+        );
 
         tagPath = tagPath || '';
         if(tagPath.length > 0 && tagPath[tagPath.length - 1] !== '/') {
@@ -260,29 +260,28 @@
                 TAG.Worktop.Database.getDoq(pageToLoad.guid, function (tour) {
                     if (pageToLoad.prevpage) {
                         TAG.Worktop.Database.getDoq(pageToLoad.prevpage, function (prevCollection) {
-                            var tourData = TAG.Util.RIN_TO_ITE(tour),
-                                itePlayer = TAG.Layout.TourPlayer(tourData, prevCollection, {}, null, tour);
+                            var tourData = JSON.parse(unescape(tour.Metadata.Content)),
+                                rinPlayer = TAG.Layout.TourPlayer(tourData, prevCollection, {}, null, tour);
 
                             tagContainer.css('overflow', 'hidden');
 
-                            tagContainer.append(itePlayer.getRoot());
-                            itePlayer.startPlayback();
+                            tagContainer.append(rinPlayer.getRoot());
+                            rinPlayer.startPlayback();
 
                             currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
-                            currentPage.obj = itePlayer;
+                            currentPage.obj = rinPlayer;
                         });
                     } else {
-
-                        var tourData = TAG.Util.RIN_TO_ITE(tour),
-                        itePlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
+                        var tourData = JSON.parse(unescape(tour.Metadata.Content)),
+                               rinPlayer = TAG.Layout.TourPlayer(tourData, null, {}, null, tour);
 
                         tagContainer.css('overflow', 'hidden');
 
-                        tagContainer.append(itePlayer.getRoot());
-                        itePlayer.startPlayback();
+                        tagContainer.append(rinPlayer.getRoot());
+                        rinPlayer.startPlayback();
 
                         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
-                        currentPage.obj = itePlayer;
+                        currentPage.obj = rinPlayer;
                     }
                 }, function() {
                     // TODO error handling

@@ -4319,17 +4319,23 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             prevMult : multipleShown
         }
 
-        //Parse RIN data to ITE Data
-        var iteData = TAG.Util.RIN_TO_ITE(tour);
-        //Create tag tourplayer (which will in turn create an ITE player)
-        var ITEPlayer = TAG.Layout.TourPlayer(iteData, currCollection, collectionOptions, null, tour, idleTimer);
-        TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
+        var rinData = JSON.parse(unescape(tour.Metadata.Content));
+
+        if (!rinData || !rinData.data) {
+            messageBox = $(TAG.Util.UI.popUpMessage(null, "Cannot play empty tour.", null));
+            messageBox.css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 7);
+            root.append(messageBox);
+            messageBox.fadeIn(500);
+            return;
+        }
+
+        var rinPlayer = TAG.Layout.TourPlayer(rinData, currCollection, collectionOptions, null, tour, idleTimer);
+        TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), function () {
             setTimeout(function () {
-                //var rindata = tour;
-                //ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
-                ITEPlayer.startPlayback();
+                rinPlayer.startPlayback();
             }, 1000);
         });
+
         currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
     }
     
