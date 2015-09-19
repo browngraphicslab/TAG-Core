@@ -168,7 +168,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         //});
 
         $(circle[0][0]).on('mousedown', function (e) {
-            doNothing("using new events");
+            console.log("using new events");
             var offsetX = e.offsetX;
             var offsetY = e.offsetY;
             _keyframeMousedown(offsetX - parseInt(circle.attr('cx'), 10), offsetY - parseInt(circle.attr('cy'), 10));
@@ -192,7 +192,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         //});
 
         $(innerCircle[0][0]).on('mousedown', function (e) {
-            doNothing("using new events");
+            console.log("using new events");
             var offsetX = e.offsetX;
             var offsetY = e.offsetY;
             _keyframeMousedown(offsetX - parseInt(innerCircle.attr('cx'), 10), offsetY - parseInt(innerCircle.attr('cy'), 10));
@@ -389,6 +389,20 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
      * functions for changing keyframe style based on selected status
      */
     function setSelected(forceInstant) {
+        //if (my.type !== TAG.TourAuthoring.TrackType.audio) {
+        //    my.selectedKeyframe = that;
+        //    $("circle").css({ 'fill': 'white' });
+        //    innerCircle.attr('style', 'display: inherit; fill: #296b2f');
+
+        //    var currData = _data;
+        //    var command = createKeyframeCommand();
+        //    if (!delayLogging) {
+        //        my.undoManager.logCommand(command);
+        //    }
+        //    needsLogging = !!delayLogging; // convert null or undefined to false
+        //    _updateKeyFrameCommand = command;
+        //}
+
         function createKeyframeCommand() {
             return TAG.TourAuthoring.Command({
                 execute: function () {
@@ -522,7 +536,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
 
         // error checking
         if ((!offsetx && offsetx !== 0) || (!offsety && offsety !== 0) || !my.currentKeyframe) {
-            doNothing('Move keyframe called when no keyframe is selected!');
+            console.log('Move keyframe called when no keyframe is selected!');
         }
         // Editing
         else {
@@ -666,17 +680,12 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 };
                 break;
             default:
-                doNothing('RIN track type not yet implemented');
+                console.log('RIN track type not yet implemented');
                 break;
         }
         return keyframe;
     }
     that.toRIN = toRIN;
-
-    function loadData(data) {
-        doNothing("initializing keyframe with provided ITE data");
-    }
-    that.loadData = loadData;
 
     /**
      * Initializes keyframe using RIN data
@@ -706,31 +715,6 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 }
             };
             // parse into new format
-        } else {
-            var ITEContainer = $('#ITEContainer');
-            var rinData = {
-                viewport: {
-                    region: {
-                        center: {
-                            x: (data.bounds ? data.bounds.x : data.left / (ITEContainer.width())), // -2 is for border!
-                            y: (data.bounds ? data.bounds.y : data.top / (ITEContainer.height()))
-                        },
-                        span: {
-                            x: (data.bounds ? data.bounds.width : data.width / (ITEContainer.width())),
-                            y: (data.bounds ? data.bounds.height : data.height / (ITEContainer.height()))
-                        }
-                    }
-                }
-            }
-            _data = rinData;
-
-            //doNothing("start keyframe.loadRIN");
-            //doNothing("incoming:");
-            //doNothing({ width: data.width, height: data.height });
-            //doNothing({ x: data.left, y: data.top });
-            //doNothing("calculated:");
-            //doNothing(rinData.viewport.region.span);
-            //doNothing(rinData.viewport.region.center);
         }
         if (_updateKeyFrameCommand) {
             (function (command) {

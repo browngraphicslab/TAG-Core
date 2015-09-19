@@ -60,7 +60,7 @@ TAG.TourAuthoring.Tests = (function () {
 
         displays = testtrack.getDisplays();
         for (i = 0; i < displays.length; i++) {
-            doNothing(i + ': ' + displays[i].getStart());
+            console.log(i + ': ' + displays[i].getStart());
         }
 
         // Keyframes
@@ -159,7 +159,7 @@ TAG.TourAuthoring.Tests = (function () {
      * @param viewer
      */
     function testRINreload(viewer) {
-        viewer.loadTour('js/RIN/web/narratives/TAGTest/narrative.js', function () { doNothing('TAG RIN data loaded !!! ???'); });
+        viewer.loadTour('js/RIN/web/narratives/TAGTest/narrative.js', function () { console.log('TAG RIN data loaded !!! ???'); });
     }
 
     /**

@@ -193,7 +193,7 @@ TAG.TourAuthoring.TourOptions = function (spec) {
             hideMenu();
             thumbnailcaptured.fadeIn('fast');
             //capture the thumbnail and upload it.
-            var rinplayer = $('#ITEHolder');
+            var rinplayer = $('#rinplayer');
             html2canvas([rinplayer[0]], {
                 onrendered: function (canvas) {
                     // no need for cropping anymore, since the rinplayer is always 16:9
@@ -630,7 +630,7 @@ TAG.TourAuthoring.TourOptions = function (spec) {
         }
         /*the helper function to hide menus when an option is clicked*/
         function hideMenu() {
-            $('.tourOptionDropDownIcon').css({ 'transform': 'scaleY(1)', 'margin-bottom': '2%' });
+            $('.tourOptionDropDownIcon').css({ 'transform': 'scaleY(1)', 'margin-bottom': '0%' });
             menuVisible = false;
             dropMain.hide();
         }

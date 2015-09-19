@@ -34,14 +34,11 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         // viewer state
         ready = false,
         getViewerTime = null,
-        viewer,
 
     /////////
     // PUBLIC
         that = {
-            setViewer : setViewer,
-            setTime: setTime,
-            setPlayer: setPlayer,
+            setTime : setTime,
             setStart : setStart,
             setEnd : setEnd,
             setScale : setScale,
@@ -70,11 +67,10 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
             onMove : onMove,
         };
  
+
     // SETTERS
 
-    function setViewer(v) {
-        viewer = v;
-    }
+    
 
     /**
      * Generally should use setTime once everything has been initialized:
@@ -150,9 +146,6 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
      * @param {Integer} newTime     in seconds
      */
     function seek(newTime) {
-        //if (viewer && viewer.getIsReloading()) {
-        //    return
-        //}
         if (newTime < 0) { //prevent seeking to -1 sec
             newTime = 0;
         } else if (newTime > end) { // prevent seeking past the end of the timeline
@@ -164,7 +157,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         _sendMove({ current: current, percent: pct });
         _sendSeek({ current: current, percent: pct });
         if (current > end) {
-            doNothing('On timeManager seek: asked to seek past end (normal seek)');
+            console.log('On timeManager seek: asked to seek past end (normal seek)');
         }
     }
     
@@ -173,9 +166,6 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
      * @param {Integer} amount        in seconds
      */
     function seekByAmount(amount) {
-        //if (viewer && viewer.getIsReloading()) {
-        //    return
-        //}
         currentPx = null;
         //TODO- should probably have check to make sure doesn't pass end
         current += amount;
@@ -183,7 +173,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         _sendMove({ current: current, percent: pct });
         _sendSeek({ current: current, percent: pct });
         if (current > end) {
-            doNothing('On timeManager seek: asked to seek past end (amount seek)');
+            console.log('On timeManager seek: asked to seek past end (amount seek)');
         }
     }
 
@@ -192,9 +182,6 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
      * @param {Integer} per         percent (as decimal)
      */
     function seekToPercent(per) {
-        //if (viewer && viewer.getIsReloading()) {
-        //    return
-        //}
         currentPx = null;
         current = (end - start) * per;
         _sendMove({ current: current, percent: ((current - start) / (end - start)) });
@@ -216,6 +203,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     function getReady() {
         return ready;
     }
+   
 
     function registerTime(func) {
         getViewerTime = func;
@@ -229,27 +217,30 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     /**
      * Drives forward current time to mimic playback
      */
-    function setPlayer(p) {
-        player = p;
-    }
-
-    function getPlayer() {
-        return player;
-    }
-
-    function play() {
-        if (viewer && (viewer.getIsReloading()||viewer.getCaptureStarted())) {
-            return
-        }
-        var interval = 100, last = -10,
+    function play () {
+        var interval = 100, last = -10,//?
+            useInternalTime = false, lastInternalTime = Date.now(),//?
             pct = ((current - start) / (end - start));
 
         _sendMove({ current: current, percent: pct });
         _sendPlayStart({ current: current, percent: pct });
 
-        function updateTime() {
-            if (getPlayer()) {
-                current = getPlayer().getTime();
+        player = window.requestAnimationFrame(function updatePlay(timestamp) {//window?
+            player = window.requestAnimationFrame(updatePlay);
+            // update program state
+            if (ready) {
+                if (!useInternalTime) {//internal time?
+                    current = getViewerTime();
+                    if (current === last) {
+                        useInternalTime = true;
+                        current += (timestamp - lastInternalTime) / 1000;
+                        //if(current > end)
+                        //    current = end;
+                        //stop();
+                    }
+                } else {
+                    current += (timestamp - lastInternalTime) / 1000;
+                }
 
                 if (current >= end) {
                     current = end;
@@ -257,24 +248,27 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
                 }
 
                 _sendPlay({ current: current, percent: ((current - start) / (end - start)) });
-
-                setTimeout(updateTime, 33);
+                
+                currentPx = null;
+                last = current;
+                lastInternalTime = timestamp;
             }
-        }
-
-        setTimeout(updateTime, 33);
+        });
     }
-    that.play = play;
+   // that.play = play;
 
     /**
      * Stops playback if time manager is playing
      */
     function stop () {
-        if (getPlayer()) {
+        if (player) {
+            window.cancelAnimationFrame(player);
+            player = null;
             _sendStop();
         }
     }
-    that.stop = stop;
+    //that.stop = stop;
+    onSeek(stop); // Automatically stop playback when a seek occurs
 
     /**
      * Functions for converting btw pixel space and time space
@@ -318,7 +312,9 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
     //that.getCurrentTime = getCurrentTime;
 
     function getCurrentPx() {
-        currentPx = timeToPx(current);
+        if (!currentPx) {
+            currentPx = timeToPx(current);
+        }
         return currentPx;
     }
    // that.getCurrentPx = getCurrentPx;

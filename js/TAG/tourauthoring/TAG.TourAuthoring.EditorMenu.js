@@ -426,7 +426,7 @@ TAG.TourAuthoring.EditorMenu = function (spec, my) {
             var clamp_command = {
                 execute: function () { disp.setTimes(cnew); },
                 unexecute: function () {
-                    doNothing("init: " + cinit.inStart + ", new: " + cnew.inStart);
+                    console.log("init: " + cinit.inStart + ", new: " + cnew.inStart);
                     disp.setTimes(cinit);
                 },
             };

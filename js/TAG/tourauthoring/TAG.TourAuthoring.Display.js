@@ -18,7 +18,7 @@ TAG.TourAuthoring.DisplayParts = {
 TAG.TourAuthoring.Display = function (spec, my) {
     "use strict";
     if (my.type === TAG.TourAuthoring.TrackType.audio) {
-        doNothing('audio');
+        console.log('audio');
     }
     var that = {}, //values of display
         storageContainer, parentDisplay, // parentDisplay used only by ink
@@ -32,7 +32,6 @@ TAG.TourAuthoring.Display = function (spec, my) {
         mainStart = (inStart + fadeIn), // start of main region
         outStart = (mainStart + main), // start of fade-out
         id,
-        lastRINData,
         mainRect,
         trackPos,
         dataHolder = spec.dataHolder,
@@ -409,7 +408,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             //});
 
         $(finD[0][0]).on("mousedown", function (e) {
-            doNothing("using new events");
+            console.log("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseInt(finD.attr('x'), 10), TAG.TourAuthoring.DisplayParts['fade-in']);
         });
@@ -430,7 +429,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             //});
 
         $(mainD[0][0]).on("mousedown", function (e) {
-            doNothing("using new events");
+            console.log("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseInt(mainD.attr('x'), 10), TAG.TourAuthoring.DisplayParts['main']);
         });
@@ -454,7 +453,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         $(fioD[0][0]).on("mousedown", function (e) {
             
-            doNothing("using new events");
+            console.log("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseFloat(fioD.attr('x')), TAG.TourAuthoring.DisplayParts['fade-out']);
         });
@@ -479,7 +478,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
         //});
 
         $(finHandle[0][0]).on("mousedown", function (e) {
-            doNothing("using new events");
+            console.log("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseInt(finD.attr('x'), 10), TAG.TourAuthoring.DisplayParts['fade-in']);
         });
@@ -495,7 +494,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             //});
 
         $(fioHandle[0][0]).on("mousedown", function (e) {
-            doNothing("using new events");
+            console.log("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseInt(fioD.attr('x'), 10), TAG.TourAuthoring.DisplayParts['fade-out']);
         });
@@ -552,7 +551,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
                     var clamp_command = {
                         execute: function () { disp.setTimes(cnew); },
                         unexecute: function () {
-                            doNothing("init: " + cinit.inStart + ", new: " + cnew.inStart);
+                            console.log("init: " + cinit.inStart + ", new: " + cnew.inStart);
                             disp.setTimes(cinit);
                         },
                     };
@@ -756,6 +755,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         //Telemetry
         TAG.Telemetry.register(deleteKFButton, "mousedown", "DeleteDisplay");
+
     })();
 
     function getLimits() {
@@ -997,7 +997,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             // for distributed warnings onto ink tracks (alternative option that can be implemented later)
             //var i;
             //for (i = 0; i < my.attachedInks.length; i++) {
-            //    doNothing('append warning here');
+            //    console.log('append warning here');
             //}
         } else {
             len = removeAttachedInkDisplays();
@@ -1075,7 +1075,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
         command.execute();
         if (acted) {
             my.undoManager.logCommand(command);
-            doNothing('logging');
+            console.log('logging');
         }
     }
     that.removeDisplay = removeDisplay;
@@ -1443,7 +1443,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         // error checking
         if (!loc || (offset !== 0 && !offset) || !my.currentDisplay) { // need that extra offset = 0 check since 0 and null are equal, arg
-            doNothing('Move display called when no display is selected!');
+            console.log('Move display called when no display is selected!');
         }
             // Actual editing
         else if (loc === TAG.TourAuthoring.DisplayParts['fade-in']) { // Drag fade-in section to adjust length
@@ -1592,7 +1592,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             }
         }
         else {
-            doNothing('currentDisplay.loc should be one of: \'fade-in\', \'fade-out\', or \'main\'');
+            console.log('currentDisplay.loc should be one of: \'fade-in\', \'fade-out\', or \'main\'');
         }
         that.outStart = outStart; //bleveque -- added for edit ink
         that.inStart = inStart;
@@ -2011,7 +2011,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
                 fadeIn: fin,
                 fadeOut: fout,
             };
-            //doNothing("init start: " + disp.clamped_init.inStart + ", new start: " + disp.clamped_new.inStart);
+            //console.log("init start: " + disp.clamped_init.inStart + ", new start: " + disp.clamped_new.inStart);
             var nextDisp = displayTree.findNext(disp.getStorageContainer());
             //if (dispArray.length > index+1 && dispArray[index + 1].display.getStart() < newEnd) {
             if (nextDisp && nextDisp.display.getStart() < newEnd) {
@@ -2050,7 +2050,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
     function getTranslation(res, leftbound, rightbound, fadeinrightbound, fadeoutleftbound) {
         var translation;
         if (!loc || (offset !== 0 && !offset) || !my.currentDisplay) { // need that extra offset = 0 check since 0 and null are equal, arg
-            doNothing('Move display called when no display is selected!');
+            console.log('Move display called when no display is selected!');
         }
         else if (loc === TAG.TourAuthoring.DisplayParts['fade-in']) {
           var newinStart = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offset), // note this is defined in TAG.Util
@@ -2087,7 +2087,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         // error checking
         if (!loc || (offset !== 0 && !offset)) { // need that extra offset = 0 check since 0 and null are equal, arg
-            doNothing('Move display called when no display is selected!');
+            console.log('Move display called when no display is selected!');
         }
         // Actual editing
         else if (loc === TAG.TourAuthoring.DisplayParts['fade-in']) { // Drag fade-in section to adjust length
@@ -2176,7 +2176,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             
         }
         else {
-            doNothing('currentDisplay.loc should be one of: \'fade-in\', \'fade-out\', or \'main\'');
+            console.log('currentDisplay.loc should be one of: \'fade-in\', \'fade-out\', or \'main\'');
         }
         that.outStart = outStart; //bleveque -- added for edit ink
         that.inStart = inStart;
@@ -2232,7 +2232,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
      */
     function scale() {
         if (T2P(inStart) < 1884 && T2P(inStart) > 1883)
-            doNothing('');
+            console.log('');
         outStart = inStart + fadeIn + main;
         finD.css('left', T2P(inStart) + "px")
             .css('width', T2P(fadeIn) + "px");
@@ -2261,41 +2261,10 @@ TAG.TourAuthoring.Display = function (spec, my) {
      * @param capture   whether the keyframe should immediately capture the state of the player
      * @returns     keyframe%A
      */
-
     function addKeyframe(x, y, customSpec) {
         if (canKeyframe) {
             var data = my.timeline.captureKeyframe(my.title),
                 keyframe, command, i;
-
-            if (!data) {
-                doNothing("unable to capture keyframe in track " + my.title);
-                return;
-            }
-
-            var ITEContainer = $('#ITEContainer');
-
-            var rinData = {
-                viewport: {
-                    region: {
-                        center: {
-                            x: (data.bounds ? data.bounds.x : (data.left / (parseInt($('#ITEContainer').width()) - 2)        )),
-                            y: (data.bounds ? data.bounds.y : (data.top / (parseInt($('#ITEContainer').height()) - 2)       ))
-                        },
-                        span: {
-                            x: (data.bounds ? data.bounds.width : (data.width / (parseInt($('#ITEContainer').width()) - 4)          )),
-                            y: (data.bounds ? data.bounds.height : (data.height / (parseInt($('#ITEContainer').height()) - 4)     ))
-                        }
-                    }
-                }
-            }
-
-            //doNothing("start display.addKeyframe");
-            //doNothing("incoming:");
-            //doNothing({ width: data.width, height: data.height });
-            //doNothing({ x: data.left, y: data.top });
-            //doNothing("calculated:");
-            //doNothing(rinData.viewport.region.span);
-            //doNothing(rinData.viewport.region.center);
 
             var keyspec = {
                     loc: {
@@ -2304,7 +2273,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
                     },
                     gkey: gkey,
                     display: that,
-                    data: rinData,
+                    data: data,
                     displayDiv: mainD
                 };
 
@@ -2345,7 +2314,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
                 }
             });
             my.undoManager.logCommand(command);
-            doNothing('logging');
+            console.log('logging');
 
             //keyframes.push(keyframe);
             //sortKeyframes();
@@ -2365,86 +2334,6 @@ TAG.TourAuthoring.Display = function (spec, my) {
         }
     }
     that.addKeyframe = addKeyframe;
-
-    /**
-     * Adds a keyframe to the display / sequence using prespecified data
-     * @param x         x location in px
-     * @param y         y location in px
-     * @param capture   whether the keyframe should immediately capture the state of the player
-     * @returns     keyframe%A
-     */
-    function addKeyframeWithData(x, y, data) {
-        if (canKeyframe) {
-            var keyframe, command, i;
-
-            var keyspec = {
-                loc: {
-                    x: Math.twoDecPlaces(my.timeManager.pxToTime(x)),
-                    y: (my.type === TAG.TourAuthoring.TrackType.audio) ? y : 48
-                },
-                gkey: gkey,
-                display: that,
-                data: data,
-                displayDiv: mainD
-            };
-
-            // check that you are not making a keyframe right on top of another
-            var neighbors = currkeyframes.nearestNeighbors(keyspec.loc.x, 1);
-            if ((neighbors[0] && Math.abs(neighbors[0].getTime() - keyspec.loc.x) < 0.05) ||
-                  (neighbors[1] && Math.abs(neighbors[1].getTime() - keyspec.loc.x) < 0.05)) {
-                return null;
-            }
-            //for (i = 0; i < keyframes.length; i++) {
-            //    if (keyframes[i].getTime() === keyspec.loc.x) {
-            //        return null; // no keyframe for u
-            //    }
-            //}
-            //var isUnique = currkeyframes.map(function (i) {
-            //    if (Math.twoDecPlaces(i.getTime()) === keyspec.loc.x) {
-            //        return null;
-            //    }
-            //});
-
-            keyframe = TAG.TourAuthoring.Keyframe(keyspec, my),
-            command = TAG.TourAuthoring.Command({ // NOTE: don't execute command or call update! might screw up user editing
-                execute: function () {
-                    //keyframes.push(keyframe);
-                    //sortKeyframes();
-                    currkeyframes.add(keyframe);
-                    keyframe.reactivateKeyframe();
-                    keyframe.restoreHandlers();
-                    my.that.addKeyframeToLines(keyframe);
-                    my.update();
-                },
-                unexecute: function () {
-                    // keyframe.remove() // TODO: add svg removal
-                    keyframe.remove(false, true);
-                    keyframe.setDeselected();
-                    //keyframes.remove(keyframe);
-                    my.update();
-                }
-            });
-            my.undoManager.logCommand(command);
-            doNothing('logging');
-
-            //keyframes.push(keyframe);
-            //sortKeyframes();
-            currkeyframes.add(keyframe);
-
-            if (my.that.getMinimizedState()) {
-                keyframe.toggleCircle();
-            }
-
-            var reloadingEvent = document.createEvent('Event');
-            reloadingEvent.initEvent('playerReloading', true, true);
-            $('body')[0].dispatchEvent(reloadingEvent);
-
-            return keyframe;
-        } else {
-            return null;
-        }
-    }
-    that.addKeyframeWithData = addKeyframeWithData;
 
     /**
     * Function to remove keyframe from keyframe array
@@ -2526,7 +2415,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
      * @param passthrough   whether this ES (layer) can be manipulated
      * @param prevState     final keyframe from previous display, defines start state for this display
      */
-    function toES(data, passthrough, prevState, id, noChange) {
+    function toES(data, passthrough, prevState, id) {
         var keySeq = {},
             esTitle = my.title + '-' + id;
 
@@ -2573,18 +2462,13 @@ TAG.TourAuthoring.Display = function (spec, my) {
                     'beginAt': 0,
                     'endAt': main
                 };
-                //data.experienceStreams[esTitle].data.markers = {
-                //    'beginAt': getStart(),
-                //    'length': main,
-                //    'endAt': getEnd()
-                //};
                 break;
 
             case TAG.TourAuthoring.TrackType.ink:
                 break;
 
             default:
-                doNothing('RIN track type not yet implemented');
+                console.log('RIN track type not yet implemented');
         }
     }
     that.toES = toES;
@@ -2592,12 +2476,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
     /**
      * Helper function for collecting RIN data of associated keyframes
      */
-    function _getKeyframesRIN(prevState, noChange) {
-        if (noChange && lastRINData) {
-            return lastRINData;
-        } else if (noChange && !lastRINData) {
-            doNothing("WARNING: no previously-stored RIN data for this display. Re-gathering keyframes now.")
-        }
+    function _getKeyframesRIN(prevState) {
         var i, rin = [],
             first;
         var dispkfs = dataHolder.getKeyframes(that.getStorageContainer());
@@ -2639,7 +2518,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         } else if (kfarray.length == 0) {
             //var data = my.timeline.captureKeyframe(my.title);
-            doNothing("capturing blank kf for reset");
+            console.log("capturing blank kf for reset");
             first = my.timeline.captureKeyframe(my.title);
             if (!first) {
                 first = {
@@ -2658,64 +2537,12 @@ TAG.TourAuthoring.Display = function (spec, my) {
                         },
                     },
                 };
-            } else if (first.bounds) {
-                // from ITE DZ format
-                var rin_first = {
-                    state: {
-                        viewport: {
-                            region: {
-                                center: {
-                                    x: first.bounds.x,
-                                    y: first.bounds.y
-                                },
-                                span: {
-                                    x: first.bounds.width,
-                                    y: first.bounds.height
-                                }
-                            },
-                        },
-                    },
-                };
-                first = rin_first;
-            } else {
-                // from ITE image format
-                var rin_first = {
-                    state: {
-                        viewport: {
-                            region: {
-                                center: {
-                                    //x: (first.left / parseInt($('#ITEContainer').width())),
-                                    //y: (first.top / parseInt($('#ITEContainer').height()))
-                                    // -2 is because left should be done from inner left, not border left
-                                    x: (first.left / (Math.round(dataHolder.getLastPreviewerHeight() * 16 / 9))),
-                                    // same for top
-                                    y: (first.top / parseInt(dataHolder.getLastPreviewerHeight()))
-                                },
-                                span: {
-                                    //x: (first.width / parseInt($('#ITEContainer').width())),
-                                    //y: (first.height / parseInt($('#ITEContainer').height()))
-                                    x: (first.width / (Math.round(dataHolder.getLastPreviewerHeight() * 16 / 9))),
-                                    y: (first.height / parseInt(dataHolder.getLastPreviewerHeight()))
-                                }
-                            },
-                        },
-                    },
-                };
-                //doNothing("start display.getKeyframesRIN");
-                //doNothing("incoming:")
-                //doNothing({ width: first.width, height: first.height });
-                //doNothing({ x: first.left, y: first.top });
-                //doNothing("calculated:")
-                //doNothing(rin_first.state.viewport.region.span);
-                //doNothing(rin_first.state.viewport.region.center);
-                first = rin_first;
             }
             //first.holdDuration = 0;
             first.offset = 0;
             first.init = true;
             rin.push(first);
         }
-        lastRINData = rin;
         return rin;
     }
 

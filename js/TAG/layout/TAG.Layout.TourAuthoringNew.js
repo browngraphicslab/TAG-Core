@@ -13,7 +13,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     var root = $(document.createElement('div')),
         resizableArea = $(document.createElement('div')),
         originalHeightSize = window.innerHeight * 0.3,
-        ITE,
         timeManager,
         undoManager,
         viewer,
@@ -45,6 +44,9 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     *Second row on screen, contains ComponentControls and Viewer
     **/
     (function setupResizableArea() {
+
+
+
         resizableArea.css({
             "background-color": "rgb(219,218,199)",
             "height": originalHeightSize + "px",
@@ -52,16 +54,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             "box-shadow": "0px 30px 30px -25px #888"
         });
         resizableArea.attr("id", "resizableArea");
-
-        dataHolder.setLastPreviewerHeight(originalHeightSize - 4);
-
-        if (!$mainScrollHider) {
-            $mainScrollHider = $('.mainScrollHider');
-        }
-        $mainScrollHider.css({
-            'z-index': '1000000'
-        });
-
         //mouse down and drag this button, aka three dots...to resize the viewer and component control
         var resizeButtonDocfrag = document.createDocumentFragment();
         var resizeButtonArea = $(document.createElement('div'));
@@ -69,7 +61,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         resizeButtonArea.addClass('resizeButtonArea');
         resizeButtonArea.css({
             'height': '3%', 'width': '10%', 'position': 'absolute', 'top': (originalHeightSize + window.innerHeight * 0.09) + 'px',
-            'left': '45%', 'margin-left': '-1.5%', 'z-index': 1000000, 'float': 'left'
+            'left': '45%', 'margin-left': '-1.5%', 'z-index': 0, 'float': 'left'
         });
 
         var resizeButton = $(document.createElement('img'));
@@ -98,18 +90,15 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 });
                 $($("#bufferingDiv").parent()).css({
                     "opacity": 0.9,
-                    "display": "block",
-                    "z-index": "10000000"
+                    "display": "block"
                 });
                 prevLocationY = ui.position.top;
                 timeManager.stop();
-                dataHolder.setLastPreviewerHeight(resizableArea.height() - 4);
             }, //commented out because broke with svg
             stop: function (evt, ui) {
                 // the css of bufferingDiv and its parentbeing reset in timeline.onUpdate
                 // if we ever eliminate timeline.onUpdate, reset css here
-                timeline.onUpdate(true);
-                dataHolder.setLastPreviewerHeight(resizableArea.height() - 4);
+                timeline.onUpdate();
             },
             drag: function (event, ui) {
                 if (timeline.getEditInkOn() === true) {
@@ -137,11 +126,9 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 if (!$mainScrollHider) {
                     $mainScrollHider = $('.mainScrollHider');
                 }
-
                 $mainScrollHider.css({
                     'height': $mainScrollHider.height() - distance + 'px',
                 });
-
                 if (!$trackBody) {
                     $trackBody = $('#trackBody');
                 }
@@ -197,10 +184,6 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             },
             appendTo: 'body'
         });
-
-        //Telemetry
-        TAG.Telemetry.register(resizeButtonArea, "mousedown", "ResizePreviewArea");
-
         resizeButtonArea.append(resizeButton);
 
         root.append(resizeButtonDocfrag);
@@ -215,20 +198,14 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         timeManager = TAG.TourAuthoring.TimeManager();
         undoManager = TAG.TourAuthoring.UndoManager();
         viewer = TAG.TourAuthoring.Viewer({
-            timeManager: timeManager,
-            tourobj: tourobj,
-            timeline:timeline
+            timeManager: timeManager
         });
-        timeManager.setViewer(viewer);
-        var tour = viewer.getTour();
-        ITE = viewer.getPlayer();
         timeline = TAG.TourAuthoring.Timeline({
             timeManager: timeManager,
             undoManager: undoManager,
+            dataHolder: dataHolder,
             viewer: viewer,
-            root: root,
-            ITE: ITE,
-            dataHolder: dataHolder
+            root: root
         });
         viewer.setTimeline(timeline);
         playbackControls = TAG.TourAuthoring.PlaybackControl({
@@ -245,7 +222,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             timeline: timeline,
             dataHolder: dataHolder,
             viewer: viewer,
-            timeManager: timeManager,
+            timeManager: timeManager
         });
         topbar = TAG.TourAuthoring.TopMenu({
             viewer: viewer,
@@ -270,14 +247,13 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         root.append(uiDocfrag);
 
         // Load tour from the rin object
-        var tourdata = JSON.parse(unescape(tourobj.Metadata.Content));   
-        if (jQuery.isEmptyObject(tourdata)) {
-            tourdata = timeline.toRIN();
+        var rin = JSON.parse(unescape(tourobj.Metadata.Content));   
+        if (jQuery.isEmptyObject(rin)) {
+            rin = timeline.toRIN();
         }
 
-        viewer.initializeTour(tourdata);
-        //timeline.loadTour(tour, onLoadCallback);
-        timeline.loadRIN(tourdata, onLoadCallback);
+        viewer.initializeTour(rin);
+        timeline.loadRIN(rin, onLoadCallback);
         timeline.updateVerticalScroller();
         //timeline.setLoaded();
     })();
@@ -285,19 +261,4 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     this.getRoot = function() {
         return root;
     };
-
-    this.getITE = function () {
-        return ITE;
-    };
-    
-    this.getTimeline = function () {
-        return timeline;
-    }
-
-    this.getViewer = function () {
-        return viewer;
-    };
-    this.uploadStillHappening = function (uploadDone) {
-        return componentControls.otherUpload(uploadDone);
-    }
 };

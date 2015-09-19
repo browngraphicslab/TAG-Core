@@ -26,6 +26,7 @@ TAG.TourAuthoring.TrackType = {
  */
 TAG.TourAuthoring.Track = function (spec, my) {
     "use strict";
+
     var that = {},
         media = spec.media,
         storageContainer,
@@ -72,6 +73,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
     my.toConvert = spec.toConvert;                                                                  // boolean to check if the user want to convert a video track right after uploading
 
     lastScale = my.timeManager.getDuration().scale;
+
     // private variables
     my.displays = [];
     // A variable to store all the keyframes for the audio track : Hak
@@ -90,32 +92,6 @@ TAG.TourAuthoring.Track = function (spec, my) {
     that.compOpsOpen = compOpsOpen;
     function checkVideoConverted() {
         var retstring;
-
-        function removeTrackOnFailure() {
-            remove();
-
-            //if artwork is removed, also check if ink functionality should be removed
-            if (!my.timeline.checkForArtworks(0)) {
-                my.timeline.disableInk();
-            }
-
-            //code to snap down track list such that the track list is always full if it can be
-            if (dataHolder.numTracks() > 0) {
-                var last = $('#Track-' + (dataHolder.numTracks() - 1) + '-title');
-                var trackBottom = ($(document.getElementById('playback-controls')).offset().top);
-                var lastDivBottom = ($(last).offset().top + TAG.TourAuthoring.Constants.trackHeight);
-                my.timeline.setEditInkOn(false);
-                $("#addComponentLabel").prop("disabled", false).css({
-                    "opacity": "1",
-                    'display': 'block'
-                })
-            }
-            my.update();
-            my.timeline.removeInkSession();
-            updateTrackArray();
-            my.update();
-        }
-
         if (my.converted === false && my.toConvert === true) {
             var videotag = $(document.createElement('video'));
             videotag.attr('preload', 'metadata');
@@ -127,7 +103,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                     return function (output) {
                         retstring = output;
                         if (output !== "False" && output !== "Error") {
-                            doNothing("converted: ");
+                            console.log("converted: ");
                             var mp4filepath = "/Images/" + basefilename + ".mp4";
                             var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
                             videotag.attr('src', mp4file);
@@ -160,12 +136,10 @@ TAG.TourAuthoring.Track = function (spec, my) {
                             $(popup).show();
                             //}
                             clearInterval(chkIntervalVal);
-                            doNothing("Error ocurred when converting");
-                            removeTrackOnFailure();
+                            console.log("Error ocurred when converting");
                         }
                         else {
-                            doNothing("not converted: ");
-                            //removeTrackOnFailure();
+                            console.log("not converted: ");
                         }
                     }
                 })(videotag), null, filename, basefilename);
@@ -466,7 +440,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         });
 
         deleteButton.on('mouseup', function () {
-            doNothing("track delete button press")
+            deleteButton.css({ "background-color": "transparent", "color": "white" });
         });
 
         deleteButton.on('mouseout', function () {
@@ -599,18 +573,11 @@ TAG.TourAuthoring.Track = function (spec, my) {
         }
 
 
-        var ES = $("div[id='" + my.title + "']");
+        var ES = $("[ES_ID='" + my.title + "']");
         if (!ES[0]) {
             displayError("The annotation must be visible in the preview window in order to edit it.");
             return;
         }
-
-        my.timeline.setEditInkOn(true);
-        $("#addComponentLabel").prop("disabled", true).css({
-            "opacity": "0",
-            'display': 'none'
-        })
-
 
         //that.setInkPath("");
         my.isVisible = false;
@@ -630,7 +597,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                 displayError("The annotation must be loaded and on screen in order to edit it.");
                 return;
             }
-            var rinplayer = $('#ITEHolder');
+            var rinplayer = $('#rinplayer');
             var dims = {
                 x: text_elt.offset().left - rinplayer.offset().left,
                 y: text_elt.offset().top - rinplayer.offset().top,
@@ -693,6 +660,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
             'left': '10%',
             'top': '12.5%',
             'font-size': '1.25em',
+            'position': 'relative',
             'text-align': 'center',
             'word-wrap': 'break-word',
         });
@@ -972,7 +940,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                 }
             }
             my.timeManager.setScale(my.timeManager.getScale()); // bleveque: TODO hacky fix before SAM release -- figure out why displays were showing up strangely otherwise
-            doNothing("combining " + (my.undoManager.undoStackSize() - undoStackSize));
+            console.log("combining " + (my.undoManager.undoStackSize() - undoStackSize));
             my.undoManager.combineLast(my.undoManager.undoStackSize() - undoStackSize);
         }
 
@@ -1183,11 +1151,6 @@ TAG.TourAuthoring.Track = function (spec, my) {
                                 //});
                             }
                         }
-                        my.timeline.setEditInkOn(false);
-                        $("#addComponentLabel").prop("disabled", false).css({
-                            "opacity": "1",
-                            'display' : 'block'
-                        })
                     }
                     my.update();
                 },
@@ -1475,7 +1438,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         my.resource = 'R-' + arrayPos;
         //prevTrack = my.track.prev(".track");
         //prevTitleDiv = titlediv.prev(".titlediv");
-        //doNothing("new position assigned: " + pos);
+        //console.log("new position assigned: " + pos);
     }
     that.updatePos = updatePos;
 
@@ -1551,7 +1514,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
     function debugTrackArray() {
         for (var i = 0; i < dataHolder._trackArray.length; i++) {
-            doNothing(i + " - " + dataHolder._trackArray[i].track.getTitle());
+            console.log(i + " - " + dataHolder._trackArray[i].track.getTitle());
         }
     }
 
@@ -1917,7 +1880,7 @@ function trackTitleReleased(evt) {
         } else if (that.getCurrentDisplay() !== null) {
             that.getCurrentDisplay().released(evt);
         } else {
-            doNothing("skipping release");
+            console.log("skipping release");
 
 
 
@@ -2450,16 +2413,9 @@ function trackTitleReleased(evt) {
         trackBody.scrollTop(topp);
     }
 
+
      //adds a key frame or display    
     function addKeyorDisplay(evt) {
-        doNothing("~~~~~~~~~~ Add key or display called in tour athoring track~~~~~~~~~~~~~~")
-        doNothing("is reloading: " + my.timeline.getViewer().getIsReloading() + "         capture started: " + my.timeline.getViewer().getCaptureStarted());
-        if (my.timeline.getViewer().getIsReloading() || my.timeline.getViewer().getCaptureStarted()) {
-            if (dataHolder.numTracks() !== 1 || dataHolder.getDisplays(that.getPos()).getContents().length !== 0) {
-                return;
-            }
-        }
-        doNothing("here");
         var positionX = evt.position.x,
             newTime = my.timeManager.pxToTime(positionX),
             positionY = evt.position.y,
@@ -2475,6 +2431,14 @@ function trackTitleReleased(evt) {
         if (my.type === TAG.TourAuthoring.TrackType.ink && my.inkEnabled) {
             var artDisplays = getInkLink().getStorageContainer().displays.getContents();
             var indisp = false;
+            //for (i = 0; i < artDisplays.length; i++) {
+            //    if (newTime <= artDisplays[i].display.getEnd() && newTime >= artDisplays[i].display.getStart()) {
+            //        indisp = true;
+            //        artDisplay = artDisplays[i].display;
+
+            //        break;
+            //    }
+            //}
             var artDisplays = getInkLink().getStorageContainer().displays.nearestNeighbors(newTime);
             for (i = 0; i < artDisplays.length; i++) { //will only be up to 2 elements in artDisplays -- the 2 closest ones
                 if (artDisplays[i] && newTime <= artDisplays[i].display.getEnd() && newTime >= artDisplays[i].display.getStart()){//check to make sure display is not null
@@ -2574,94 +2538,6 @@ function trackTitleReleased(evt) {
             }
         } 
     }
-
-    function captureHandler(evt) {
-        my.timeManager.stop();
-        if (my.timeline.getViewer().getIsReloading()) {
-            return;
-        }
-        captureTween(evt);
-        my.update();
-    }
-    that.captureHandler = captureHandler;
-
-    function captureTween(evt) {
-        var origin = evt.imageTrack ? evt.imageTrack : evt.eventSource.ITE_track;
-        var time = my.timeManager.getCurrentTime();
-
-        // enabled and disabled via custom event framework - see Viewer's event listener for playerReady event
-        if (my.timeline.getViewer().isKeyframingDisabled()) {
-            return;
-        }
-
-        if (my.type === TAG.TourAuthoring.TrackType.ink || my.type === TAG.TourAuthoring.TrackType.video) {
-            return;
-        }
-
-        var currentDisplay;
-
-        // find containing display
-        var minSpace = Infinity;
-        var displays = that.getStorageContainer().displays.getContents();
-        for (i = 0; i < displays.length; i++) {
-            var disp = displays[i].display;
-
-            // displays are ordered so just iterate and find first where time < last keyframe in display
-            if (time <= disp.getEnd()) {
-                currentDisplay = disp;
-                break;
-            }
-        }
-
-        // check to make sure we are adding keyframe to valid position, i.e. not in a fade
-        if (currentDisplay && time >= currentDisplay.getStart() && time <= currentDisplay.getEnd()) {
-            var time_px = my.timeManager.timeToPx(time);
-            keyframe = currentDisplay.addKeyframe(time_px, 48, true);
-
-
-            var time_2dec = Math.twoDecPlaces(time);
-
-            // check that you are not making a keyframe right on top of another
-            var neighbors = currentDisplay.getKeyframes().nearestNeighbors(time_2dec, 1);
-            if (neighbors[0] && (Math.abs(neighbors[0].getTime() - time_2dec) < 0.05)) {
-                if (neighbors[1] && (Math.abs(neighbors[1].getTime() - time_2dec) < 0.05)) {
-                    keyframe = (Math.abs(neighbors[0].getTime() - time_2dec) - Math.abs(neighbors[1].getTime() - time_2dec) > 0) ? neighbors[1] : neighbors[0];
-                } else {
-                    keyframe = neighbors[0];
-                }
-            } else if (neighbors[1] && (Math.abs(neighbors[1].getTime() - time_2dec) < 0.05)) {
-                keyframe = neighbors[1];
-            }
-
-            if (keyframe) {
-                my.timeline.allDeselected();
-                if (my.type == TAG.TourAuthoring.TrackType.audio) {
-                    my.allKeyframes.push(keyframe);
-                    that.drawLines();
-                }
-                else { // initialize keyframe and select it for further movements
-                    keyframe.loadRIN(my.timeline.captureKeyframe(my.title)); // send in my.title to specify which keyframe should be captured (works for images and artworks)
-                    keyframe.setSelected(true); // delay logging of edits
-                    my.dirtyKeyframe = true; // dirty b/c it's new
-                }
-            }
-        }
-    }
-    that.captureTween = captureTween;
-
-    // canvas-drag-end handler
-    function captureFinishedHandler(evt) {
-        captureHandler(evt);
-
-        var doCapture = $.debounce(500, function () {
-            captureHandler(evt);
-            my.update();
-        });
-
-        doCapture();
-        my.update();
-    }
-    that.captureFinishedHandler = captureFinishedHandler;
 
     //Deselects any active keyframes
     function deselectKeyframe() {
@@ -2927,7 +2803,7 @@ function trackTitleReleased(evt) {
         //for (i = index+1; i < my.displays.length; i++) {
         //    my.displays[i].setID(i);
         //}
-        my.update(true);
+        my.update();
         my.undoManager.logCommand(command);
         return newDisplay; // for testing
     }
@@ -3136,7 +3012,7 @@ function trackTitleReleased(evt) {
         if (my.attachedInks.indexOf(tr) < 0) {
             my.attachedInks.push(tr);
         } else {
-            doNothing("duplicate added");
+            console.log("duplicate added");
         }
     }
     function removeAttachedInkTrack(tr) {
@@ -3249,7 +3125,7 @@ function trackTitleReleased(evt) {
                 exp.resourceReferences = [];
                 break;
             default:
-                doNothing('Track type not yet implemented in RIN');
+                console.log('Track type not yet implemented in RIN');
         }
 
         // don't pass through if track is currently selected or there is no selection

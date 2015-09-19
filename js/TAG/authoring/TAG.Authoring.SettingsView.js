@@ -3767,10 +3767,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                         //doNothing("tour editor load time: " + tobj.load_time);
                     });
                     SPENT_TIMER.restart();
-                    toureditor.getViewer().loadITE();
-                    toureditor.getTimeline().onUpdate();
-                    toureditor.getViewer().setIsReloading(true);
-
                 });
             });
             if (progressBarLength > 0) { //other upload happening - disable import

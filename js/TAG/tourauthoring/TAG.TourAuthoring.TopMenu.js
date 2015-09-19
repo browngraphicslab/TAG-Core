@@ -26,15 +26,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         backDialogOverlay = $(TAG.Util.UI.blockInteractionOverlay());
 
     (function _createHTML() {
-        topbar.css({
-            "background-color": "rgb(63,55,53)",
-            "height": "8%",
-            "width": "100%",
-            "z-index": "100000000",
-            "position": "relative",
-            "top": "0px",
-            "left": "0px"
-        });
+        topbar.css({ "background-color": "rgb(63,55,53)", "height": "8%", "width": "100%" });
         topbar.attr('id', 'topbar');
         
         var buttonHeight = $(window).height() * 0.0504; // matches effective % size from SettingsView
@@ -68,14 +60,8 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         //save method saves all changes made
         var saveClicked = false;
         var nameChanged = false;
-
-        /*
-        parameter:      stay on page:                            idk i just wanted to add a second param and the first wasn't documented
-        parameter:      callback           function             a fucntion to call after saving is done
-
-        */
-        function save(stayOnPage, callback) {
-            doNothing("isUploading === " + componentControls.getIsUploading());
+        function save(stayOnPage) {
+            console.log("isUploading === " + componentControls.getIsUploading());
             saveClicked = true;
             nameChanged = false;
             if ($("#inkEditText").css('display') !== "none") {
@@ -109,41 +95,29 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
                 // success
                 dialogOverlay.fadeOut(500);
                 !stayOnPage && goBack();
-                if (callback) {
-                    callback();
-                }
             }, function () {
                 // unauth
                 dialogOverlay.hide();
                 var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  You must log in to save changes.");
                 $('body').append(popup);
                 $(popup).show();
-                if (callback) {
-                    callback();
-                }
             }, function (jqXHR, ajaxCall) {
                 // conflict
                 // Ignore conflict for now
                 ajaxCall.force();
-                if (callback) {
-                    callback();
-                }
             }, function () {
                 // error
                 dialogOverlay.hide();
                 var popup = TAG.Util.UI.popUpMessage(null, "Tour not saved.  There was an error contacting the server.");
                 $('body').append(popup);
                 $(popup).show();
-                if (callback) {
-                    callback();
-                }
             });   
         }
         // Takes you back to the tour authoring menu page
         function goBack() {
             var messageBox;
             // first, make sure that a tour reload isn't in progress
-            if (viewer.getIsReloading() && false) {//this is obvously never going to happen, but keeping in case of needing quick revert
+            if (viewer.getIsReloading()) {
                 messageBox = TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
                 $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
                 $('body').append(messageBox);
@@ -159,7 +133,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
                 TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
                     tobj.item = "tour_authoring";
                     tobj.time_spent = SPENT_TIMER.get_elapsed();
-                    doNothing("tour authoring spent time: " + tobj.time_spent);
+                    console.log("tour authoring spent time: " + tobj.time_spent);
                 });
             });
         }
@@ -290,7 +264,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
 
             $('.rightClickMenu').hide();//shuts the menu that appears on right clicking on a track
 
-            if (viewer.getIsReloading() && false) {//never will happen, only keeping in case we need this code again in the future
+            if (viewer.getIsReloading()) {
                 messageBox = TAG.Util.UI.popUpMessage(null, "Tour reload in progress. Please wait a few moments.", null);
                 $(messageBox).css('z-index', TAG.TourAuthoring.Constants.aboveRinZIndex + 1000);
                 $('body').append(messageBox);
@@ -305,11 +279,8 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
                     textArea.val('Untitled Tour');
                 }
                 var backDialog = TAG.Util.UI.PopUpConfirmation(function () {
-                    backButton.prop('disabled', true).css("opacity", "0.4");
                     $("#popupConfirmButton").text('Saving...').attr('disabled', true);
-                    save(null, function () {
-                        backButton.prop('disabled', false).css("opacity", "1");
-                    });
+                    save();
                 }, 'Save changes to ' +textArea.val() + ' before leaving?', "Save", false, function () {
                     goBack();
                     $("#popupConfirmButton").attr('disabled', true);//.css({ 'color': 'rgba(255, 255, 255, 0.5)' });
@@ -374,16 +345,10 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             ev.stopImmediatePropagation();
         });
         textArea.on('keyup', function (ev) {
-            saveButton.prop('disabled', false);
-            saveButton.css({
-                "background-color": "transparent",
-                "border-color": "white",
-                "opacity" : "1"
-            });
             nameChanged = true;
             ev.stopImmediatePropagation();
         });
-        
+
         topbar.append(textArea);
 
         // NOTE: save button click event handler is below dialog code
@@ -396,7 +361,6 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         saveButton.css('opacity', '0.4');
 
         //Save button highlighting
-        
         saveButton.on('mousedown', function () {
             if (!saveButton.is(":disabled")) {
                 saveButton.css({ "background-color": "white", "color": "black" });
@@ -579,8 +543,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
             {
                 "height": tourOptionsSpecs.height + "px",
                 "width": tourOptionsSpecs.width + 'px',
-                "left": "41%",
-                'margin-left' : '2%',
+                "left": "60%",
                 'top': tourOptionsSpecs.y + 'px',
                 "position": 'absolute',
             });

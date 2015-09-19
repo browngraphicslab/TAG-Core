@@ -17,7 +17,6 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         viewer = spec.viewer,
         timeline = spec.timeline,
         root = spec.root,
-        fader,
         playHeadGroup,//represents the black, long playhead
         lastScale = timeManager.getDuration().scale;//stores the scale of the timeline, which can change because of zoom (?)
 
@@ -28,8 +27,8 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             "width": "96.95%", "bottom": "0%",
             'margin-left': '1.25%',
             "position": "absolute",
-            "z-index": "999999999",
             "box-shadow": "0px -16px 14px -14px #888",
+            'z-index': '102',
 
         });
         bottombar.attr('id', 'playback-controls');
@@ -58,7 +57,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
             }
         });
 
-        $('#ITEContainer').on('click', function (event) {
+        $('#rinContainer').on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
         });
@@ -181,7 +180,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         sliderBox.append(greenBoxInSlider);
 
         // Fader
-        fader = createPlayhead();
+        var fader = createPlayhead();
         fader.css({
             'height': '155%', 'width': '0%', 'margin-top': '-4%',
             'position': 'absolute', 'left': '0%'
@@ -606,7 +605,7 @@ TAG.TourAuthoring.PlaybackControl = function (spec, my) {
         //    drag: function () {
         //        var percent = Math.constrain(volumefader.position().left / (volumeslider.width()-volumefader.width()), 0, 1);
         //        viewer.volume(percent);
-        //        doNothing("volume: " + percent);
+        //        console.log("volume: " + percent);
         //    }
         //});
 
