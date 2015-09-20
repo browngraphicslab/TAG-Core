@@ -17,12 +17,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         showRedTracings = true,
         showOnlyHighlightedHotspots = true,
         agedWill = false,  //For the whiter or yellower will
-        singleArrowUpDownIcons = false,//non-functional thus far
+        singleArrowUpDownIcons = true,//non-functional thus far
         tourAndCollectionTaskBar = true, //make the tour and collection UI on the popup the same as the one for taskbar
-        testamentHeader = true // Use the orange script-y Testament image instead of plain text saying "The Will Page ..."
-
-
-    var OFFLINE = true
+        testamentHeader = false, // Use the orange script-y Testament image instead of plain text saying "The Will Page ..."
+        OFFLINE = true;
 
     var root = $("#tagRoot"),
         showInitialNobelWillBox = true,
@@ -159,7 +157,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function SetWillImage(page) {
         willImage = $(document.createElement('img'));
         var s = agedWill ? "yellow" : "white"
-        var full = showOnlyHighlightedHotspots === false ? "full" : ""
+        var full = ""; //showOnlyHighlightedHotspots; //=== false ? "full" : ""
         willImage.attr({
             src: tagPath + 'images/nobelwillimages/willp' +page + '_'+s+full+'.png'
         })
@@ -188,7 +186,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": '90%',
             "width": "100%",
             'position': 'absolute',
-            'background-color' : "#666666",
+            'background-color' : "rgba(102,102,102,0.8)",
             'top': '0%',
             'left': '0%',
         })
@@ -247,8 +245,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'text-align': 'center',
             'height': '10%',
             'top': '2%',
-            'left': '12%',
-            'font-family': 'Cinzel'
+            'left': '8%'
         })
 
         if (testamentHeader === true) {
@@ -277,11 +274,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             titleDiv.append(titleIcon);
             titleDiv.append(pageNum);
         } else {
-            titleDiv.text("Will Page "+ pageNumber);
+            titleDiv.text("Will Page "+ pageNumber + " of 4");
         }
         titleDiv.attr({
             id: "titleDiv"
-        })
+        });
         sideBar.append(titleDiv);
         background.append(willImage)
 
@@ -369,13 +366,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         switch (pageNumber) {
             //hardcodedHotspotSpecs- left, top, width, height
             case 1:
-                associatedMediaNobelKeywords = [['WILL AND TESTAMENT'],['ALFRED BERNHARD'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
+                associatedMediaNobelKeywords = [['WILL AND TESTAMENT'],['ALFRED BERNHARD NOBEL'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
                 hardcodedHotspotSpecs = [[[47.95 + 8.25, 9, 11.75, 5]], [[63.5, 15, 17, 3.5], [45, 17, 8, 4]], [[66.5, 30, 11, 3]], [[61, 34.5, 12.5, 2.5]], [[51.5, 54, 19, 3]], [[52.5, 65.4, 13.5, 3]]]
                 infoBulbs = [[61.5, 7], [33.25, 59]];
                 if (paragraphed === true) {
                     leftTextArray = [
                         10.25,
-                        'TESTAMENT',
+                        'Testament',
                         15,
                         '\tI, the undersigned, Alfred Bernhard',
                         //17.5,
@@ -571,7 +568,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                 break;
             case 2:
-                associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['FUND'], ['SHALL BE ANNUALLY DISTRIBUTED IN THE FORM OF PRIZES'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
+                associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['FUND'], ['PRIZES'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
                 hardcodedHotspotSpecs = [[[53, 39.75, 14, 3.75]], [[46.5, 66, 4.5, 3.5]], [[55, 65.5, 27, 3.5]], [[75.25, 72, 6, 3]], [[69, 76.75, 13, 2.5]], [[62.5, 81, 20, 2.5]], [[65.5, 83.5, 7.5, 2.5]]]
 
                 leftTextArray = [ //aim for 1.75 space
@@ -781,20 +778,23 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 break;
         }
         if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
-            for (var i = 0; i < hardcodedHotspotSpecs.length; i++) {
-                var overlayDiv = $(document.createElement("img"))
-                overlayDiv.css({
-                    'position': 'absolute',
-                    'left': '32%',
-                    'height': '100%',
-                    'width': '43.73%'
-                }).attr({
-                    src: tagPath + 'images/nobelwillimages/willp' + pageNumber + '_' + (i + 1) + '.png',
-                    id : 'willp' + pageNumber + '_' + (i + 1)
-                })
-                background.append(overlayDiv)
+            if ($("#willp1_1").length !== 0) {
+                console.log('already loaded');
             }
-        }
+                for (var i = 0; i < hardcodedHotspotSpecs.length; i++) {
+                    var overlayDiv = $(document.createElement("img"))
+                    overlayDiv.css({
+                        'position': 'absolute',
+                        'left': '32%',
+                        'height': '100%',
+                        'width': '43.73%'
+                    }).attr({
+                        src: tagPath + 'images/nobelwillimages/willp' + pageNumber + '_' + (i + 1) + '.png',
+                        id: 'willp' + pageNumber + '_' + (i + 1)
+                    })
+                    background.append(overlayDiv)
+                }
+            }
         for (var i = 0; i < infoBulbs.length; i++) {
             var div = $(document.createElement("div"));
             div.css({
@@ -806,6 +806,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "z-index": "550",
                 "float": "right",
                 "top": infoBulbs[i][1] + "%",
+                'padding-bottom': '2px',
             })
             var img = $(document.createElement("img"));
             img.attr({
@@ -816,7 +817,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             div.popupNumber = i + associatedMediaNobelKeywords.length
             img.css({
                 "height" : "100%",
-                "width" : "100%"
+                "width": "100%",
             }).click(function () {
                 showLargePopup(this.id);
             })
@@ -1052,7 +1053,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 sliderBar.css({
                     'position': 'absolute',
                     'background-color': 'transparent',
-                    'border': '2px solid '+NOBEL_ORANGE_COLOR,
+                    'border': '1.5px solid '+NOBEL_ORANGE_COLOR,
                     'border-radius': '12px',
                     'left': '.5%',
                     'width': '75.5%',
@@ -1113,7 +1114,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '.75%',
                 })
                 up.css({
-                    'bottom': 'calc(50% + 5px)'
+                    'bottom': 'calc(50% + 30px)'
                 })
                 up.click(
                     function () {
@@ -1143,7 +1144,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '.75%'
                 })
                 down.css({
-                    'top': 'calc(50% + 5px)'
+                    'top': 'calc(50% + 30px)'
                 }).mouseup(function (e) {
                     mouseUp(e)
                 })
@@ -1329,10 +1330,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         var height = Math.min((100 - middlespace) / numberOfMedia,30);
         var gap = middlespace / (numberOfMedia + 1);
 
-        var div = $(document.createElement('div'));
+        var div = $(document.createElement('div')).addClass('smallPopup');
         div.css({
             "background-color": "#dfdcdd",
-            "border": "2px solid " + NOBEL_ORANGE_COLOR,
+            "box-shadow": "3px 3px rgba(0,0,0,.7)",
+            "border": "1.5px solid " + NOBEL_ORANGE_COLOR,
             "border-radius" : "12px",
             "left": "2.5%",
             "display" : "block",
@@ -1343,7 +1345,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": "auto",
             "z-index": "550",
             "overflow" : "hidden",
-			"margin-bottom" : "12px"
+            "margin-bottom": "12px",
+            'padding-bottom': '10px'
         }).click(function () {
         	showLargePopup(div.medianumber)
         })
@@ -1391,7 +1394,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "z-index": "550",
         })
 
-        var title = $(document.createElement('div'));
+        var title = $(document.createElement('div')).addClass('smallPopupTitle');
         title.css({
         	"width": "95%",
         	"top": "12px",
@@ -1425,22 +1428,23 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         });
         img.addClass('lightbulb');
         img.css({
-        	"right": "8px",
+        	"right": "13px",
         	"height": "30px",
         	"width": "30px",
         	"position": 'absolute',
         	"bottom": "0px",
         	"z-index": "550",
-        	"float": "right"
+        	"float": "right",
         })
         descWhole.append(img);
-        var desc = $(document.createElement('div'));
+        var desc = $(document.createElement('div')).addClass('smallPopupDesc');
         desc.css({
         	"width": "77.5%",
         	"position": "relative",
         	"font-size": ".45em",
         	"height": "auto",
-        	"top": '12px',
+        	"top": '15px',
+            'padding-bottom': '2px',
         	"color": "black",
         	'bottom': "50px",
         	"z-index": "550",
@@ -1825,7 +1829,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         else {
             $("#downIcon").css({
-                'top': 'calc(50% + 5px)'
+                'top': 'calc(50% + 30px)'
             })
         }
         function percentToPx(percent) {
@@ -2164,7 +2168,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		'height': "66%",
     		"left": "11%",
 			"top" : "17%",
-    		"border": "3px solid " + NOBEL_ORANGE_COLOR,
+    		"border": "1.5px solid " + NOBEL_ORANGE_COLOR,
     		"border-radius": "10px",
     		"background-color": "black",
     		"z-index": "1001",
@@ -2174,24 +2178,27 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	root.append(popup);
     	var pixWidth = popup.width()/2
 
-    	text.css({
-    		"width": "35%",
-    		'height': "85%",
-    		"left": "50%",
-    		"top": "10%",
-    		"position": "absolute",
-    		'font-size': ".625em",
-			'overflow' : 'hidden'
-    	}).text(info.text);
     	title.css({
-    		"width": "35%",
-    		'height': "auto",
-    		"left": "50%",
-    		"top": "2.5%",
-    		"position": "absolute",
-    		"font-weight": "bold",
-			'font-size' : "1.25em"
-    	}).text(info.title)
+    	    "width": "35%",
+    	    'height': "auto",
+    	    "left": "43%",
+    	    "top": "10%",
+    	    "position": "absolute",
+    	    "font-weight": "bold",
+    	    'font-size': "1.25em"
+    	}).text(info.title).attr('id', 'bigPopupTitle');
+
+    	popup.append(title);
+
+    	text.css({
+    	    "width": "35%",
+    	    'height': "85%",
+    	    "left": "43%",
+    	    "top": $("#bigPopupTitle").height() + ($("#bigPopup").height()*0.1) + 15 + 'px',
+    	    "position": "absolute",
+    	    'font-size': ".625em",
+    	    'overflow': 'hidden'
+    	}).text(info.text).attr('id', 'bigPopUpDesc');
 
 		var closeX = $(document.createElement("img"))
     	closeX.attr({
@@ -2199,9 +2206,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		id: 'closeX'
     	})
     	closeX.css({
-    		'left': '5px',
+    		'right': '18px',
     		'position': 'absolute',
-    		'top': '5px',
+    		'top': '15px',
     		'height': '30px',
     		'width': '30px',
             "z-index" : "1000",
@@ -2212,13 +2219,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     	popup.append(closeX);
 
-    	img = $(document.createElement('div'));
+    	img = $(document.createElement('div')).attr('id','bigPopupImage');
 
     	img.css({
-    		"height": "90%",
+    		"height": "80%",
     		"width": "45%",
-    		"left": "5%",
-    		"top": "5%",
+    		"top": "10%",
     		"position": 'absolute',
             "text-align" : "center"
     	})
@@ -2235,33 +2241,26 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	})
     	img.append(pic);
     	popup.append(img);
-    	popup.append(title);
     	popup.append(text);
-    	var imgwidth = img.width();
-    	img.css({
-			"left" : Math.max((pixWidth-imgwidth)/2,35) + "px"
-    	})
-
-        var currTop = 0;
-
 
     	function createExtra(extra) {
-    	    var bd = $(document.createElement('div'));
+    	    var bd = $(document.createElement('div')).addClass('bigPopupButton');
     	    bd.css({
     	        "position": 'relative',
-    	        'width': "80px",
-                'height' : "80px",
-    	        "border-radius": "10px",
-    	        "margin-bottom": "20%",
-    	        'color': 'red',
+    	        'width': "60px",
+                'height' : "60px",
+                "margin-left": "auto",
+                "margin-right": 'auto',
+                'margin-bottom': '35px',
+                'margin-top':'10px'
     	    }).click(function () { switchTo(extra[2]) })
     		var d = $(document.createElement('img'));
     		d.css({
     			"position": 'absolute',
-    			'width': "80px",
-                "border": "3px solid " + NOBEL_ORANGE_COLOR,
+    			'width': "60px",
+                "border": "1.5px solid " + NOBEL_ORANGE_COLOR,
     			"border-radius": "5px",
-    			'height': "80px",
+    			'height': "60px",
     		})
     		d.attr({
 				src : extra[0]
@@ -2269,32 +2268,19 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		var t = $(document.createElement('div'));
     		t.css({
     		    "position": 'absolute',
-    		    'width': "80px",
-    		    'color': "black",
+    		    'width': $('#toursAndGalleriesDiv').width() + 'px',
+    		    'color': "white",
+                'display': 'block',
                 "background-color" : "transparent",
-                "font-size" : ".5em",
-                'text-align': 'center',
-                'padding-left': '3%',
-                'padding-right': '3%',
-                'top': '5%'
+                "font-size": ".6em",
+                'left': '-28px',
+                'top': '67px',
+                'text-align':'center'
     		}).text(extra[1])
-            t.attr('id', 'textCaption');
+            t.addClass('textCaption');
 
             bd.append(d);
             bd.append(t);
-
-            // special case for an alternative UI design
-             if (tourAndCollectionTaskBar === true) {
-                 t.css({
-                     'width': '80px',
-                     'top': '90px',
-                     'color': 'white',
-                     'display': 'block'
-                 });
-                 bd.css({
-                     'height': 80 + $("#textCaption").height() + 'px'
-                 })
-             }
 
 			return bd;
     	}
@@ -2303,40 +2289,25 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	extras.css({
     		"width": "10%",
     		"height": "95%",
-    		"top": "2.5%",
-    		"right": "2.5%",
+    		"top": "5%",
+    		"right": "8%",
 			"position" : "absolute"
     	})
     	extras.attr('id', 'toursAndGalleriesDiv');
     	popup.append(extras);
     	if (info.collections && info.collections.length > 0) {
-    		var gallery = $(document.createElement('div'));
-    		gallery.css({
+    		var collectionsD = $(document.createElement('div')).attr('id','bigPopupCollectionsTitle');
+    		collectionsD.css({
     			"width": "100%",
-    			"height": "auto",
     			"color": "white",
-				"font-size" : ".8em"
+    			"font-size": "14pt",
+    			'text-align': 'center',
+                'margin-top': '15px',
     		})
+            collectionsD.text("COLLECTIONS");
 
-            if (tourAndCollectionTaskBar === true) {
-                gallery.css({
-                    'margin-bottom': '5%'
-                }).attr('id', 'galleryDiv');
-                var galleryIcon = $(document.createElement('img'));
-                galleryIcon.attr({
-                    'src': tagPath + 'images/collections.svg'
-                });
-                galleryIcon.css({
-                    'width': '100%',
-                    'height': 'auto'
-                });
-                gallery.append(galleryIcon);
-            }
-            else {
-                gallery.text("GALLERY");
-            }
 
-			extras.append(gallery);
+			extras.append(collectionsD);
     		for (var i = 0; i < info.collections.length; i++) {
                 var param = info.collections[i];
                 var extra = createExtra(param);
@@ -2345,38 +2316,20 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	}
         
     	if (info.tours && info.tours.length > 0) {
-    		var tour = $(document.createElement('div'));
-    		tour.css({
+    		var toursD = $(document.createElement('div')).attr('id','bigPopupToursTitle');
+    		toursD.css({
     			"width": "100%",
-    			"height": "5%",
     			"color": "white",
-    			"font-size": ".8em",
+    			"font-size": "14pt",
+    			'text-align': 'center',
+                'padding-top': '15px'
     		});
-            if (tourAndCollectionTaskBar === true) {
-                tour.css({
-                    'margin-bottom': '5%',
-                    "margin-top": "50%"
-                })
-                var tourIcon = $(document.createElement('img'));
-                tourIcon.attr({
-                    'src': tagPath + 'images/tours.svg'
-                });
-                tourIcon.css({
-                    'width': '65%',
-                    'height': 'auto'
-                });
-                tour.append(tourIcon);
-            }
-            else {
-                tour.text("TOUR");
-            }
-    		extras.append(tour)
+            toursD.text("TOURS");
+    		extras.append(toursD)
     		for (var i = 0; i < info.tours.length; i++) {
     			extras.append(createExtra(info.tours[i]));
     		}
     	}
-
-    	text.css({ "top": title.height() + 15 +"px" })
     }
 
     function makeTaskBar() {
@@ -2418,7 +2371,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         break;
                     case 7:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg';
-                        title = "Factories";
+                        title = "Industry";
                         link = "Factories";
                         break;
                     case 8:
@@ -2463,26 +2416,28 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 }  
             }
 
-            var bd = $(document.createElement('div'));
+            var bd = $(document.createElement('div')).addClass("taskBarbutton");
             bd.css({
                 "position": 'relative',
-                'height': "40px",
-                'width' : '40px',
+                'height': "60px",
+                'width' : '60px',
                 "border-radius": "3px",
                 'top': '30%',
-                'margin-right': '10px',
+                'margin-right': '25px',
                 'color': 'red',
                 'float': 'left',
                 "z-index" : "1003"
             }).click(function () {
                 switchTo(link)
             })
-            var d = $(document.createElement('img'));
+            var d = $(document.createElement('img')).addClass("taskBarImage");
             d.css({
                 "position": 'absolute',
-                'width': '40px',
+                'width': '60px',
                 "border-radius": "5px",
-                'height': '40px'
+                'height': '60px',
+                'box-shadow': '3px 3px rgba(0,0,0,.7)',
+                "border": "1.5px solid " + NOBEL_ORANGE_COLOR,
             })
             d.attr({
                 src : img
@@ -2490,18 +2445,18 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             var t = $(document.createElement('div'));
             t.css({
                 "position": 'absolute',
-                "left" : "-2.5px",
-                'width': "45px",
+                "left" : "-5px",
+                'width': "65px",
                 'color': "white",
                 "background-color" : "transparent",
-                "font-size" : ".4em",
-                'top': '41px',
-                'text-align': 'center'
+                "font-size" : ".6em",
+                'top': '67px',
+                'text-align': 'center',
+                'white-space': 'nowrap'
             }).text(title)
-
             if (assetNumber == 3)
             {
-                t.css("left", "-7px");
+                t.css("left", "-10px");
             }
             bd.append(d);
             bd.append(t);
@@ -2515,17 +2470,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'width': '100%',
             'position': 'absolute',
             'bottom': '0px',
-            'background-color': "#666666",
+            'background-color': "rgba(102,102,102,0.8",
         })
         taskBarArea.attr('id', 'taskBarArea');
 
         var taskBar = $(document.createElement('div'));
         taskBar.css({
-            "width": "57.5%",
+            "width": "85%",
             "height": "75%",
-            "border": "2px solid " + NOBEL_ORANGE_COLOR,
             "border-radius": "12px",
-            "bottom": "5%",
+            "bottom": "10%",
             "position": "absolute",
             "left": "2%"
         });
@@ -2536,8 +2490,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": "100%",
             "width": "60%",
             "position": "absolute",
-            "left": "4%",
-            "top": "-22.5%",
+            "left": "36.5%",
+            "top": "-40%",
         });
         collectionDiv.attr('id', 'collectionDiv');
 
@@ -2545,11 +2499,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         collectionTitleDiv.css({
             "height": "37.5%",
             "position": "absolute",
-            "left": "-4%",
-            "top": "-22.5%",
+            "top": "-10%",
+            "font-size":"14pt",
         });
-        collectionTitleDiv.attr('id', 'collectionTitleDiv');
+        collectionTitleDiv.attr('id', 'collectionTitleDiv').text("COLLECTIONS");
 
+        /**
         var collectionTextImg = $(document.createElement ('img'));
         collectionTextImg.css({
             "height": "100%",
@@ -2559,6 +2514,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             src: tagPath + 'images/collections.svg'
         })
         collectionTitleDiv.append(collectionTextImg);
+        **/
         collectionDiv.append(collectionTitleDiv);
 
         for (var i = 0; i<9; i++) {
@@ -2571,8 +2527,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": "100%",
             "width": "40%",
             "position": "absolute",
-            "left": "65%",
-            "top": "-22.5%"
+            "left": "0%",
+            "top": "-40%"
         });
         tourDiv.attr('id', 'tourDiv');
 
@@ -2580,11 +2536,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourTitleDiv.css({
             "height": "27.5%",
             "position": "absolute",
-            "left": "-7%",
-            "top": "-25%",
+            //"left": "-7%",
+            "top": "-10%",
+            "font-size": "14pt"
         });
-        tourTitleDiv.attr('id', 'tourTitleDiv');
-
+        tourTitleDiv.attr('id', 'tourTitleDiv').text("TOURS");
+        /**
         var tourTextImg = $(document.createElement ('img'));
         tourTextImg.css({
             "height": "100%",
@@ -2595,13 +2552,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         })
 
         tourTitleDiv.append(tourTextImg);
+        **/
         tourDiv.append(tourTitleDiv);
         for (var i = 0; i<5; i++) {
             tourDiv.append(createTaskbarExtra('tour', i+1));
         }
 
-        taskBar.append(collectionDiv);
         taskBar.append(tourDiv);
+        taskBar.append(collectionDiv);
         taskBarArea.append(taskBar);
         root.append(taskBarArea);
     }
@@ -2677,15 +2635,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			]
     	]
     	var collections = [
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Will.svg', "The Will", "Will"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Alfred Nobel and His Family", "Family"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Alfred Nobel and His Family", "Family"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Alfred Nobel and His Family", "Family"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg', "Factories", "Factories"]]],
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Patents.svg', "Patents", "Patents"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]]],
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Prize Award Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "The Nobel Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "The Nobel Diplomas", "Diplomas"]], [], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "Bjorkborn"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "Bjorkborn"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_San Remo.svg', "San Remo", "SanRemo"]]],
+			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Will.svg', "Will", "Will"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg', "Industry", "Factories"]]],
+			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Patents.svg', "Patents", "Patents"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]]],
+			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "Bjorkborn"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "Bjorkborn"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_San Remo.svg', "San Remo", "SanRemo"]]],
 			[[], []]
     	]
     	var tours = [
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "Will_Tour"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "FromWillToPrize"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "The Nobel Family", "Family_Tour"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "The Nobel Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "The Nobel Family", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Colleagues, Inventions, and Factories", "link"]]],
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Colleagues, Inventions, and Factories", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]]],
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Alfred Nobel's Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "From the Will to the Nobel Prize", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Colleagues, Inventions, and Factories", "Factories_Tour"]], [], [], [], []],
+			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "FromWillToPrize"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "Family_Tour"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Factories", "link"]]],
+			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Industry", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]]],
+			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Industry", "Factories_Tour"]], [], [], [], []],
 			[[], []]
     	]
     	var shortTexts = [

@@ -1870,7 +1870,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             }
             main.css({ 
                 'width': 1.25*tileHeight,
-                'box-shadow': '5px 5px 5px black',
+                'box-shadow': '8px 8px 20px #000',
                 'border': '3px solid',
                 'border-color': NOBEL_COLOR,
                 'border-radius': '3%'
