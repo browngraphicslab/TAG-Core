@@ -207,15 +207,16 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                     }
                 }
             }
+            var spoof = TAG.Layout.Spoof();
             for (var i = 0; i < self.iteTour.tracks.length; i++) {
                 if (self.iteTour.tracks[i].guid && self.iteTour.tracks[i].guid !== null && self.iteTour.tracks[i].guid !== [] && self.iteTour.tracks[i].guid !== '') {
-                    TAG.Layout.Spoof().getDoq(self.iteTour.tracks[i].guid, doqReturn,
+                    nobelDoq.push(self.iteTour.tracks[i].guid);
+                    spoof.getDoq(self.iteTour.tracks[i].guid, doqReturn,
                         function () {
                             console.log("error getting doq in tourplayer")
                         }, function () {
                             console.log("error getting doq in tourplayer .")
                     });
-                    nobelDoq.push(self.iteTour.tracks[i].guid);
                     needed++;
 
                 }

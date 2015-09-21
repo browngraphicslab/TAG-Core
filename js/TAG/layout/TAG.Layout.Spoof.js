@@ -23191,22 +23191,35 @@ TAG.Layout.Spoof = (function () {
                 "ContentType": "Image"
             }
         },
+        //Prize Tour
         "academy_in_stockholm": {
             "Identifier": "academy_in_stockholm",
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\FromWillToPrize\\Academy_In_Stockholm\\GeneratedImages\\dzc_output.xml" },
+            },
+            "SidebarInfo": {
+                "Text": ["This is a Test","of the ability to","put text and images into the sidebar"],
+                "Images": ["Thumbnails\\thumb__T_HOOFT_1999.TIF", "Thumbnails\\thumb_10.TIF"],
             }
         },
         "bofors": {
             "Identifier": "bofors",
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\FromWillToPrize\\bofors\\GeneratedImages\\dzc_output.xml" },
+            },
+            "SidebarInfo": {
+                "Text": ["This is a Test in bofors", "of the ability to", "put text and images into the sidebar"],
+                "Images": ["Thumbnails\\thumb__T_HOOFT_1999.TIF", "Thumbnails\\thumb_10.TIF"],
             }
         },
         "diplomas": {
             "Identifier": "diplomas",
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\FromWillToPrize\\diplomas\\GeneratedImages\\dzc_output.xml" },
+            },
+            "SidebarInfo": {
+                "Text": ["This is a Test in diplomas", "of the ability to", "put text and images into the sidebar with a slighty longer text, but still not a very long text"],
+                "Images": ["Thumbnails\\thumb__T_HOOFT_1999.TIF", "Thumbnails\\thumb_10.TIF"],
             }
         },
         "first_banquet": {
@@ -23303,19 +23316,31 @@ TAG.Layout.Spoof = (function () {
             "Identifier": "will_page_1",
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\FromWillToPrize\\will_page_1\\GeneratedImages\\dzc_output.xml" },
+            },
+            "SidebarInfo": {
+                "Text": ["This is a Test", "of the ability to", "put text and images into the sidebar"],
+                "Images": ["Thumbnails\\thumb__T_HOOFT_1999.TIF", "Thumbnails\\thumb_10.TIF"],
             }
         },
         "will_page_2": {
             "Identifier": "will_page_2",
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\FromWillToPrize\\will_page_2\\GeneratedImages\\dzc_output.xml" },
+            },
+            "SidebarInfo": {
+                "Text": ["This is a Test", "of the ability to", "put text and images into the sidebar"],
+                "Images": ["Thumbnails\\thumb__T_HOOFT_1999.TIF", "Thumbnails\\thumb_10.TIF"],
             }
         },
         ///FAMILY TOUR
-        "will_page_1": {
+        "will_page_1": {//TODO FIX THIS SHIT
             "Identifier": "will_page_1",
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\Family\\will_page_1\\GeneratedImages\\dzc_output.xml" },
+            },
+            "SidebarInfo": {
+                "Text": ["This is a Test", "of the ability to", "put text and images into the sidebar"],
+                "Images": ["Thumbnails\\thumb__T_HOOFT_1999.TIF", "Thumbnails\\thumb_10.TIF"],
             }
         },
         "3_alfred_nobel": {
@@ -23553,7 +23578,8 @@ TAG.Layout.Spoof = (function () {
            callback(artDoqs[name])
        }
        else {
-           error()
+           console.log("couldn't get doq: "+name)
+           callback();
        }
    }
 
@@ -23628,10 +23654,6 @@ TAG.Layout.Spoof = (function () {
 
     function getLocked() {
         return "undefined"
-    }
-
-    function getDoq(guid, callback) {
-        callback ? callback(doqs[guid]) : null;
     }
 
     function getArtworksAssocTo(guid, callback) {

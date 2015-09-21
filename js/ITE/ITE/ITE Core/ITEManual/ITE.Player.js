@@ -1077,15 +1077,15 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         infoBlock
             .css({
                 'position': 'absolute',
-                'height': '90%',
+                'height': '82.5%',
                 'z-index': '9999999999',
-                'top': '5%',
-                'width': '70%',
-                'margin': '50% 15% 0% 15%',
+                'top': '12.5%',
+                'width': '80%',
+                "left" : "10%",
                 'background-color': 'transparent',
                 'color': 'white',
                 'font-size': '70%',
-                'overflow': "auto",
+                'overflow-y': "scroll",
                 'text-align': 'left',
                 'scrollbar-face-color': NOBEL_WILL_COLOR,
                 'scrollbar-arrow-color': 'transparent',
@@ -1177,6 +1177,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         makePaneVisible(true);
         showInfoPane();
         $(".infoPaneInfoField").remove();
+        $(".infoPaneImage").remove();
         if (doq.Metadata.InfoFields && doq.Metadata.InfoFields.Name) {
             $("#infoPaneTitleDiv").text(doq.Metadata.InfoFields.Name);
         }
@@ -1184,13 +1185,45 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             $("#infoPaneTitleDiv").text(doq.Metadata.Name || "");
         }
         var top = 0;
-        var keys = Object.keys(doq.Metadata.InfoFields);
+        //var keys = Object.keys(doq.Metadata.InfoFields);
 
-        if (doq.Metadata.Description) {
+        if (doq.Metadata.Description && false) {
             var d = makeInfoField(doq.Metadata.Description);
             $("#infoBlock").append(d);
             d.css('top', $('#infoPaneTitleDiv').height() + 'px');
             top += d.height() + 50;
+        }
+        if (doq.SidebarInfo) {
+            var imgs = []
+            var texts = []
+            if (doq.SidebarInfo.Images && doq.SidebarInfo.Images.length > 0) {
+                var spoof = TAG.Layout.Spoof()
+                doq.SidebarInfo.Images.forEach(function (url) {
+                    var img = $(document.createElement("img")).css({
+                        "width": "100%",
+                        "height": "auto",
+                        "position" : "relative"
+                    }).attr({ class: "infoPaneImage" })
+                    spoof.staticSetPath(url, img[0], "src");
+                    imgs.push(img)
+                })
+            }
+            if (doq.SidebarInfo.Text && doq.SidebarInfo.Text.length > 0) {
+                doq.SidebarInfo.Text.forEach(function (t) {
+                    texts.push(makeInfoField(t))
+                })
+            }
+            var i = 0;
+            while (texts.length != 0) {
+                if (doq.SidebarInfo.Text[i] !== "") {
+                    $("#infoBlock").append(texts.shift());
+                }
+                if (imgs.length > 0) {
+                    $("#infoBlock").append(imgs.shift());
+                }
+                i++;
+            }
+
         }
     }
 
@@ -1253,7 +1286,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             class: 'infoPaneInfoField'
         })
             outer.css({
-                'position': 'absolute',
+                'position': 'relative',
                 'z-index': '9999999999',
                 'width': '100%',
                 'left': '0%',
@@ -1271,7 +1304,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
 
     function getDoqFromZIndex(z) {
-        if (data && data[z-1]!==false) {
+        if (data && data[z-1]!==false && data[z-1].SidebarInfo) {
             return data[z-1];
         }
         return null;
