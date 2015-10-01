@@ -17,7 +17,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         showRedTracings = true,
         showOnlyHighlightedHotspots = true,
         agedWill = false,  //For the whiter or yellower will
-        singleArrowUpDownIcons = true,//non-functional thus far
+        singleArrowUpDownIcons = true,
         tourAndCollectionTaskBar = true, //make the tour and collection UI on the popup the same as the one for taskbar
         testamentHeader = false, // Use the orange script-y Testament image instead of plain text saying "The Will Page ..."
         OFFLINE = true;
@@ -37,14 +37,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         nobelHotspots,//array of hotspots in form [[[hotspotDiv,assocMedia],[hotspotDiv,assocMedia]],[[hotspotDiv,assocMedia],[hotspotDiv,assocMedia]]]
         hardcodedHotspotSpecs,//array of hardcoded info about the locations of the hotspots
         pageNumber = startingPageNumber,//nobel will page number
-        audioFinishedHandler,
         sideBar,
-        nobelIsPlaying = false,
-        nobelPlayPauseButton,
 		canvas = $(document.createElement("canvas")),
-        currentAudio,
-        muteButton,
-        nobelMuted = false,
 		background,
         rightStack = getRightTable(),
         toggleHotspotButton,
@@ -56,6 +50,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         willImage,
         videoContainer,
         idleTimer,
+        lastMouseMoveEvent,
+        debounceTimeout = null,
         infoBulbs,
         NOBEL_ORANGE_COLOR = '#d99b3b',
         IDLE_TIMER_DURATION = 300000, //5 minutes
@@ -153,24 +149,51 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function restartTimer() {
         idleTimer && idleTimer.restart();
     }
-
-    function SetWillImage(page) {
-        willImage = $(document.createElement('img'));
-        var s = agedWill ? "yellow" : "white"
-        var full = ""; //showOnlyHighlightedHotspots; //=== false ? "full" : ""
-        willImage.attr({
-            src: tagPath + 'images/nobelwillimages/willp' +page + '_'+s+full+'.png'
-        })
-        willImage.css({
+    function firstInit() {
+        background = $(document.createElement('div'));
+        background.css({
+            "height": '90%',
+            "width": "100%",
             'position': 'absolute',
-            'left': '32%',
-            'height': '100%',
-            'width': '43.73%'
+            'background-color': "rgba(102,102,102,0.8)",
+            'top': '0%',
+            'left': '0%',
+            "pointer-events": "none"
         })
+        background.attr('id', 'background');
+        root.append(background);
+        for (var i = 1; i < 5; i++) {
+            var wi = $(document.createElement('img'));
+            var s = agedWill ? "yellow" : "white"
+            var full = ""; //showOnlyHighlightedHotspots; //=== false ? "full" : ""
+            wi.attr({
+                src: tagPath + 'images/nobelwillimages/willp' + i + '_' + s + full + '.png',
+                id: "willPage" + i
+            })
+            wi.css({
+                'position': 'absolute',
+                'left': '32%',
+                'height': '100%',
+                'width': '43.73%'
+            }).hide()
+            background.append(wi)
+        }
     }
-
+    firstInit();
+    function SetWillImage(page) {
+        willImage = $("#willPage" + page)
+        willImage.show();
+    }
+    function mouseMovePoll(e) {
+        if (e !== null) {
+            lastMouseMoveEvent = e;
+            if (debounceTimeout === null) {
+                mouseMove(e)
+                debounceTimeout = setTimeout(function () {mouseMove(lastMouseMoveEvent); debounceTimeout = null; }, 15);
+            }
+        }
+    }
     function nobelWillInit() {
-
         if (iconColor === "orig") {
             LIGHTBULB_ICON = tagPath + 'images/icons/nobel_lightbulb.svg'
         }
@@ -181,17 +204,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         //TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
         //TAG.Layout.Spoof().getLaureates(function (laurs) { laurs.forEach(function (laur) { if (laur.ID.indexOf("1867-11-07") > -1) { console.log(laur) } }) })
 
-        background = $(document.createElement('div'));
-        background.css({
-            "height": '90%',
-            "width": "100%",
-            'position': 'absolute',
-            'background-color' : "rgba(102,102,102,0.8)",
-            'top': '0%',
-            'left': '0%',
-        })
-        background.attr('id','background');
-        root.append(background);
 
         makeTaskBar();
 
@@ -280,41 +292,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             id: "titleDiv"
         });
         sideBar.append(titleDiv);
-        background.append(willImage)
-
-        nobelPlayPauseButton = $(document.createElement('img'));
-        nobelPlayPauseButton.attr({
-            src: tagPath + 'images/icons/nobel_play.svg'
-        })
-
-        nobelPlayPauseButton.css({
-            'position': 'absolute',
-            'left': '2.5%',
-            'bottom': '1.3%',
-            'height': '8%',
-            'background-color': 'transparent',
-        }).click(toggleNobelPlaying).hide()
-
-        var playPauseButtonHeight = nobelPlayPauseButton.height();
-        nobelPlayPauseButton.width(playPauseButtonHeight + '%');
-
-        muteButton = $(document.createElement('img'));
-        muteButton.attr({
-            src: tagPath + 'images/icons/nobel_sound.svg'
-        })
-        muteButton.css({
-            'position': 'absolute',
-            'left': '12%',
-            'bottom': '1.3%',
-            'height': '8%',
-            'background-color': 'transparent',
-        }).click(toggleNobelMute).hide()
-
-        var muteButtonHeight = muteButton.height();
-        muteButton.width(muteButtonHeight + '%');
-
-        sideBar.append(nobelPlayPauseButton);
-        sideBar.append(muteButton);
 
         $("#backButton").remove();
 
@@ -322,12 +299,22 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         canvas[0].width = 1920;
         canvas.css("position", "absolute");
         canvas.css({
-            "z-index" : "300"
+            "z-index" : "1003"
         })
 
         background.append(canvas);
         canvas.mousedown(function(e){
             if (e.buttons > 0) {
+                console.log("canvas mouseDown");
+                var offset = sliderBar.offset();
+                var willOffset = willImage.offset()
+                if (e.clientY > offset.top && e.clientY < offset.top + sliderBar.height()) {
+                    lastDragY = e.clientY;
+                    dragging = true;
+                }
+                else if(e.clientX > willOffset.left && e.clientX < willOffset.left + willImage.width()){
+                    mouseUp(e, true);
+                }/*
                 nobelHotspots.forEach(function (h) {
                     var hidden = h[0][0].style.display === "none"
                     h[0].show()
@@ -347,7 +334,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     if (hidden === true) {
                         h[0].hide();
                     }
-                })
+                })*/
             }
         })
         canvas.mouseenter(function (e) {
@@ -803,7 +790,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "width": "30px",
                 "position": 'absolute',
                 "top": infoBulbs[i][1]+"%",
-                "z-index": "550",
+                "z-index": "1003",
                 "float": "right",
                 "top": infoBulbs[i][1] + "%",
                 'padding-bottom': '2px',
@@ -837,7 +824,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             {
                 placeInChunk++;
             }
-            associatedMedia[i] = makeAsocciatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk,i);
+            associatedMedia[i] = makeAssociatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk,i);
         }
         var currentHeight = 0;
         var indentNext = true
@@ -872,51 +859,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 currentHeight = leftTextArray[i];
                 indentNext = true
             }
-
-            /*
-            tempText.css({
-                'position': 'absolute',
-                'background-color': "transparent",
-                'left': '22.5%',
-                'width': '80%',
-                'color': 'black',
-                'height': leftTextArray[i][1] > 65 ? 65 - leftTextArray[i][1] + "%" : '25%',
-                'top': leftTextArray[i][1] + '%',
-                'font-size': '.475em',
-            });
-            if (leftTextArray[i][0].length < 10) {
-                for (var j = 0; j < leftTextArray[i][0].length; j++) {
-                    var temp2 = $(document.createElement('div'));
-                    temp2.css({
-                        'position': 'absolute',
-                        'background-color': "transparent",
-                        'left': '0%',
-                        'width': '50%',
-                        'color': 'inherit',
-                        'height': '9%',
-                        'top': (j) * 9 + leftTextArray[i][1] + '%',
-                        'font-size': 'inherit'
-                    }).text(leftTextArray[i][0][j][0])
-                    if (leftTextArray[i][0][j].length === 2) {
-                        var temp3 = $(document.createElement('div'));
-                        temp3.css({
-                            'position': 'absolute',
-                            'background-color': "transparent",
-                            'left': parseInt(tempText.css('width')) / 2 + '%',
-                            'width': '50%',
-                            'color': 'inherit',
-                            'height': '9%',
-                            'top': (j) * 9 + leftTextArray[i][1] + '%',
-                            'font-size': 'inherit'
-                        }).text(leftTextArray[i][0][j][1])
-                        tempText.append(temp3);
-                    }
-                    tempText.append(temp2);
-                }
-            }
-            else {
-                tempText.text(leftTextArray[i][0])
-            }*/
         }
         showNobelInitialPopup(
             function () {
@@ -941,10 +883,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'height' : "30px",
                     'bottom': '20px',
                     'left': "31.75%",
-                    'z-index': '599'
+                    'z-index': '1003'
                 });
                 left.click(function () {
-                    pauseNobel();
                     goPrevPage();
                 })
                 rightArrow.css({
@@ -954,11 +895,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'background-color': 'transparent',
                     'bottom': '20px',
                     'left': "69.75%",
-                    'z-index': '599'
+                    'z-index': '1003'
                 });
                 right.click(
                     function () {
-                        pauseNobel();
                         nextPage()
                     }
                 )
@@ -1019,7 +959,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '0%',
                     'width': '100%',
                     'height': '100%',
-                }).click(pauseNobel)
+                })
 
                 var sliderBarInnerds = $(document.createElement('div'));
                 sliderBarInnerds.css({
@@ -1029,8 +969,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'left': '40.75%',
                     'width': '59.25%',
                     'height': '100%',
-                }).click(pauseNobel)
-
+                })
                 switch (pageNumber) {
                     case 1:
                         sliderBarInnerds.css({ "left": "43.1%", "width": "56.9%" })
@@ -1060,7 +999,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'height': '10%',
                     "overflow" : "hidden",
                     'z-index': '500'
-                }).click(pauseNobel)
+                })
                 sideBar.mouseup(function (e) {
                     mouseUp(e)
                 })
@@ -1084,14 +1023,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 $("#associatedMediaScroller").mouseup(function (e) {
                     mouseUp(e)
                 })
-                var debounceTime = 6
-                $("#associatedMediaScroller").mousemove($.debounce(debounceTime, false, mouseMove))
-                sliderBar.mousemove($.debounce(debounceTime, false, mouseMove))
-                sideBar.mousemove($.debounce(debounceTime, false, mouseMove))
-                willImage.mousemove($.debounce(debounceTime, false, mouseMove))
-                background.mousemove($.debounce(debounceTime, false, function (e) { touching = true; mouseMove(e); }))
+                var debounceTime = 8
+                $("#associatedMediaScroller").mousemove(function (e) { mouseMovePoll(e)})
+                sliderBar.mousemove(function (e) { mouseMovePoll(e) })
+                sideBar.mousemove(function (e) { mouseMovePoll(e) })
+                willImage.mousemove(function (e) { mouseMovePoll(e) })
+                background.mousemove(function (e) { mouseMovePoll(e) })
 
-                canvas.mousemove($.debounce(debounceTime, false, function (e) { touching = true; mouseMove(e); }))
+                canvas.mousemove(function (e) { mouseMovePoll(e) })
 
 
                 sideBar.css('z-index', '10');
@@ -1112,19 +1051,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'min-height': '20px',
                     'min-width': '20px',
                     'left': '.75%',
+                    "z-index" : "1300"
                 })
                 up.css({
                     'bottom': 'calc(50% + 30px)'
                 })
                 up.click(
                     function () {
-                        if (nobelIsPlaying === true) {
-                            pauseNobel()
-                            prevChunk(checkForHotspots);
-                        }
-                        else {
-                            prevChunk(checkForHotspots);
-                        }
+                        prevChunk(checkForHotspots);
                     }
                 )
                 down.attr({
@@ -1141,7 +1075,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     'max-width': '20px',
                     'min-height': '20px',
                     'min-width': '20px',
-                    'left': '.75%'
+                    'left': '.75%',
+                    "z-index": "1300"
                 })
                 down.css({
                     'top': 'calc(50% + 30px)'
@@ -1150,13 +1085,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 })
                 down.click(
                     function () {
-                        if (nobelIsPlaying === true) {
-                            pauseNobel();
-                            nextChunk(checkForHotspots);
-                        }
-                        else {
-                            nextChunk(checkForHotspots);
-                        }
+                        nextChunk(checkForHotspots);
                     }
                 )
 
@@ -1173,15 +1102,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 }
 
                 var j = 1
-                /*
-                var test = function () {
-                    setTimeout(function () {
-                        setChunkNumber(j, test);
-                        j = (j + 1) % textDivArray.length;
-                    }, 2500)
-                }*/
-                //test();
-                // var soundTest = makeAndPlaySound(function () { console.log("DONE!") });
             }
         )
     }
@@ -1203,11 +1123,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     closest = i;
                 }
             }
-            setChunkNumber(closest, checkForHotspots, 450);
+            setChunkNumber(closest, checkForHotspots, 400);
             dragging = false;
         }
     }
     function mouseMove(e) {
+        touching = true
         if (dragging) {
             var diff = e.clientY - lastDragY;
             lastDragY = e.clientY;
@@ -1237,6 +1158,17 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                             nobelHotspots[i][k].Hide()
                         }
                     }
+                }
+            }
+            var sliderTop = sliderBar.offset().top
+            var sliderFar = sliderTop + sliderBar.height()
+            for (var i = 0; i < textDivArray.length; i++) {
+                var mid = textDivArray[i].offset().top + textDivArray[i].height() / 2
+                if (mid > sliderTop + 1 && mid < sliderFar - 1) {
+                    textDivArray[i].css("color" , "white")
+                }
+                else {
+                    textDivArray[i].css("color", "black")
                 }
             }
         }
@@ -1304,7 +1236,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		     nobelHotspots[i][1].hide();
     		}
     	}
-    	if (BezierOn) { canvas.animate({ opacity: 1 }, 400, 'easeInOutQuart') }
+    	if (BezierOn) { canvas.animate({ opacity: 1 }, 100, 'easeInOutQuart') }
     	bezierVisible = true;
     }
 
@@ -1319,7 +1251,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	}
     }
 
-    function makeAsocciatedMediaDiv(string, imageurl, chunkN, numberInChunk, number) {
+    function makeAssociatedMediaDiv(string, imageurl, chunkN, numberInChunk, number) {
         var middlespace = 25;
         var numberOfMedia = 0;
         for (var i = 0; i < associatedMediaNobelKeywords.length; i++) {
@@ -1461,19 +1393,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.attr({ attr: string });
         associatedMediaScroller.append(div);
         div.hide();
+        div.show();
+        div.hide();
 
         div.medianumber = number;
-    	//div.height(titleHeight + 40 + desc.height());
 
 		div.css({"height":"auto"})
 
-    	/*
-        div.fadeIn = function () {
-            div.animate({ opacity : 1 }, 400, 'easeInOutQuart');
-        }
-        div.fadeOut = function () {
-            div.animate({ opacity: 0 }, 400, 'easeInOutQuart');
-        }*/
         div.getTop = function () {
             return div.css("top");
         }
@@ -1500,82 +1426,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         })
         return div;
     }
-
-    function toggleNobelMute() {
-        if (nobelMuted === false) {
-            nobelMute()
-        }
-        else if (nobelMuted === true) {
-            nobelUnmute();
-        }
-    }
-    function nobelMute() {
-        nobelMuted = true;
-        muteButton.attr({
-            src: tagPath + 'images/icons/nobel_mute.svg'
-        })
-        if (currentAudio) {
-            currentAudio.volume = 0;
-        }
-    }
-    function nobelUnmute() {
-        nobelMuted = false;
-        muteButton.attr({
-            src: tagPath + 'images/icons/nobel_sound.svg'
-        })
-        if (currentAudio) {
-            currentAudio.volume = 1;
-        }
-    }
-    function toggleNobelPlaying() {
-        if (nobelIsPlaying) {
-            pauseNobel();
-        }
-        else {
-            playNobel();
-        }
-    }
-    function pauseNobel() {
-        stopAudio();
-        nobelIsPlaying = false;
-        nobelPlayPauseButton.attr({
-            src: tagPath + '/images/icons/nobel_play.svg'
-        })
-    }
-    function stopAudio() {
-        if (currentAudio) {
-            currentAudio.pause();
-            currentAudio.removeEventListener('ended', audioFinishedHandler);
-            $("#audioFile").off();
-        }
-    }
-    function getAudioSource() {
-        return tagPath + 'images/nobel_sounds/' + pageNumber + '_' + chunkNumber + '.mp3'
-    }
-    function playNobel() {
-        if (currentAudio && currentAudio.paused === false) {
-            currentAudio.addEventListener('ended', incrNext);
-        }
-        else {
-            makeAndPlaySound(incrNext);
-        }
-        nobelIsPlaying = true;
-        nobelPlayPauseButton.attr({
-            src: tagPath + '/images/icons/nobel_pause.svg'
-        })
-    }
-
-    function incrNext() {
-        if (pageNumber === 4 && chunkNumber === textDivArray.length - 1) {
-            pauseNobel();
-        }
-        if (chunkNumber === textDivArray.length - 1) {
-            nextChunk(nextPage);
-        }
-        else if (nobelIsPlaying === true) {
-            nextChunk(incrNext);
-        }
-    }
     function hideNobelAssociatedMedia() {
     	$("#annotatedImageAssetCanvas").css("z-index", '50');
     	var ctx = canvas[0].getContext("2d");
@@ -1590,26 +1440,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
     }
     /*
-    * makes an audio file, plays it, and attaces a handler to fire when the audio finishes
-    * @param function callback      callback function after the audio is done 
-    */
-    function makeAndPlaySound(callback) {
-        stopAudio();
-        $(".audioFile").remove();
-        $(".audioFile").die();
-        var soundTest = $(document.createElement('audio'));
-        soundTest.attr({
-            src: getAudioSource(),
-            id: 'audioFile'
-        })
-        soundTest[0].play();
-        audioFinishedHandler = soundTest[0].addEventListener('ended', function () { callback && callback(); });
-        soundTest[0].volume = nobelMuted ? 0 : 1;
-
-        currentAudio = soundTest[0]
-        return soundTest[0];
-    }
-    /*
     *
     *goes to the previous nobel will page
     */
@@ -1621,7 +1451,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             associatedMedia = []
             pageNumber-=1
             sliderBar.remove();
-            stopAudio();
             willImage.remove();
             willImage.die();
             $("#upIcon").remove();
@@ -1633,10 +1462,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $('.lightbulb').remove();
             $("#annotatedImageAssetCanvas").remove();
             $(".nobelHotspot").remove();
-            $("#nobelPlayPauseButton").remove();
-            $("#audioFile").off();
-            $("#audioFile").remove();
-            $("#audioFile").die();
             sliderBar.die();
             $("#upIcon").die();
             $("#downIcon").die();
@@ -1646,7 +1471,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#titleDiv").die();
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
-            $("#nobelPlayPauseButton").die();
             $('.lightbulb').die();
             textDivArray = [];
             nobelWillInit();
@@ -1668,7 +1492,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             associatedMedia = []
             //annotatedImage && annotatedImage.unload();
             sliderBar.remove();
-            stopAudio();
             willImage.remove();
             willImage.die();
             $("#upIcon").remove();
@@ -1677,13 +1500,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#leftPageArrow").remove();
             $(".textChunkDiv").remove();
             $("#titleDiv").remove();
-            $("#nobelPlayPauseButton").remove();
             $("#annotatedImageAssetCanvas").remove();
             $(".nobelHotspot").remove();
-            $("#audioFile").off();
-            $("#audioFile").remove();
             $('.lightbulb').remove();
-            $("#audioFile").die();
             sliderBar.die();
             $("#upIcon").die();
             $("#downIcon").die();
@@ -1693,15 +1512,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             $("#titleDiv").die();
             $("#annotatedImageAssetCanvas").die();
             $(".nobelHotspot").die();
-            $("#nobelPlayPauseButton").die();
             $('.lightbulb').die();
             textDivArray = [];
             nobelWillInit();
-            if (isPlaying === true) {
-                setTimeout(function () {
-                    playNobel();
-                }, 2500)
-            }
         }
     }
 
@@ -1766,9 +1579,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     return (percent / 100) * background.width();
                 }
 
-                div.click(function () {
-                    pauseNobel();
-                })
                 div.assocMedia = associatedMedia[i];
                 background.append(div);
                 div.MiddleY = div.offset().top + (div.height() / 2);
@@ -1817,11 +1627,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     * @param int duration          for the excpetionally picky a duration of animation can be specified in milliseconds
     */
     function setChunkNumber(chunk, callback, duration) {
-        if (chunk === textDivArray.length && nobelIsPlaying === true) {
-            stopAudio();
-            nextPage(true);
-            return;
-        }
         if (chunk === 0 && pageNumber === 1) {
             $("#downIcon").css({
                 'top': '25%'
@@ -1837,7 +1642,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         if (chunk >= 0 && chunk < (textDivArray.length - 4)) {
             hideNobelAssociatedMedia();
-            stopAudio();
             for (var i = 0; i < textDivArray.length; i++) {
                 var mid = textDivArray[i].offset().top + textDivArray[i].height()/2
                 if (mid > percentToPx(sliderPositions[chunk][0]) +1 && mid < percentToPx(sliderPositions[chunk][0] + sliderPositions[chunk][1])-1) {
@@ -1862,7 +1666,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             else {
                 $("#downIcon").fadeIn(duration || 1000, 'easeInOutQuart');
             }
-            moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { if (nobelIsPlaying) { makeAndPlaySound(callback) }; checkForHotspots() } : function () { if (nobelIsPlaying) { makeAndPlaySound() }; checkForHotspots() }, duration || 1000);
+            moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { checkForHotspots() } : function () {checkForHotspots() }, duration || 1000);
 
             /*
             //TODO :  add enabling associated media
@@ -1905,120 +1709,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
      */
 
     function showNobelInitialPopup(onClose) {
-        if (pageNumber > 0 || showInitialNobelWillBox === false) {
-            onClose && onClose()
-            return;
-        }
-        showInitialNobelWillBox = false;
-        var popup = $(document.createElement('div'))
-        popup.css({
-            'display': 'block',
-            'position': 'absolute',
-            'opacity': '1',
-            'border-radius': '18px',
-            'border-color': NOBEL_ORANGE_COLOR,
-            'border': '8px solid ' + NOBEL_ORANGE_COLOR,
-            'width': '60%',
-            'height': '50%',
-            'top': '25%',
-            'left': '20%',
-            'background-color': 'black',
-            'z-index': '99999999'
-        })
-        var popupTopBar = $(document.createElement('div'));
-        var popupLeftBar = $(document.createElement('div'));
-        var popupRightBar = $(document.createElement('div'));
-        var popupLeftTopBar = $(document.createElement('div'));
-        var popupLeftBottomBar = $(document.createElement('div'));
-        var nobelIcon = $(document.createElement('img'));
-        var closeX = $(document.createElement('img'));
-
-        nobelIcon.attr({
-            src: tagPath + 'images/icons/nobel_icon.png',
-            id: 'nobelIcon'
-        })
-        nobelIcon.css({
-            'position': 'absolute',
-            'width': '90%',
-            'height': '80%',
-            'left': '18%',
-            'top': '5%'
-        })
-        popupRightBar.append(nobelIcon);
-        popupTopBar.append(closeX);
-        closeX.attr({
-            src: tagPath + 'images/icons/x.svg',
-            id: 'closeX'
-        })
-        closeX.css({
-            'left': '94.85%',
-            'position': 'absolute',
-            'top': '15%',
-            'height': '54%'
-        })
-        popupTopBar.css({
-            'height': '15%',
-            'position': 'absolute',
-            'width': '100%',
-        })
-
-        popupLeftBar.css({
-            'height': '85%',
-            'position': 'absolute',
-            'width': '65%',
-            'top': '15%',
-            'color': 'white'
-        })
-
-        popupRightBar.css({
-            'height': '85%',
-            'position': 'absolute',
-            'width': '35%',
-            'top': '15%',
-            'left': '60%',
-        })
-
-        popupLeftTopBar.css({
-            'height': '18%',
-            'position': 'absolute',
-            'width': '92%',
-            'left': '8%',
-            'font-size': '1.25em',
-            'font-weight': 'bold',
-            'color': 'white',
-            'font-family': 'Cinzel'
-        }).text("Alfred Nobel's Will")
-
-        popupLeftBottomBar.css({
-            'top': ' 18%',
-            'height': '82%',
-            'position': 'absolute',
-            'left': '8%',
-            'width': '92%',
-            'font-size': '.82em',
-            'color': 'white'
-        }).text('Alfred Nobel was a wealthy inventor and industrialist who \nlived in the 19th century. During his lifetime he built up a \nvast fortune. His handwritten will is four pages long and \nwritten in Swedish; in it he expresses a wish to let the majority of his realizable estate form the foundation for \na prize to those who "shall have conferred the greatest \nbenefit to mankind” in the fields of physics, chemistry, \nmedicine, literature and peace work.')
-
-        var temp = $(TAG.Util.UI.blockInteractionOverlay(.3));//add blocking div to stop all interaction
-        temp.css({
-            "display": 'block',
-            'z-index': '9999999'
-        })
-        popupLeftBar.append(popupLeftTopBar);
-        popupLeftBar.append(popupLeftBottomBar);
-        popup.append(popupTopBar);
-        popup.append(popupLeftBar);
-        popup.append(popupRightBar);
-        root.append(temp)
-        root.append(popup)
-        closeX.click(function () {
-            temp.remove();
-            popup.remove();
-            if (onClose) {
-                onClose();
-            }
-        })
-        $("#startPageLoadingOverlay").remove();
+        onClose && onClose()
     }
     function getRightTable() {
         var list = [];
@@ -2186,7 +1877,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	    "position": "absolute",
     	    "font-weight": "bold",
     	    'font-size': "1.25em"
-    	}).text(info.title).attr('id', 'bigPopupTitle');
+    	});
+    	title.text(info.title);
+        title.attr({ 'id': 'bigPopupTitle' });
 
     	popup.append(title);
 
