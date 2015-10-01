@@ -698,7 +698,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 case 2:
                     associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['FUND'], ['PRIZES'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
                     hardcodedHotspotSpecs = [[[53, 39.75, 14, 3.75]], [[46.5, 66, 4.5, 3.5]], [[55, 65.5, 27, 3.5]], [[75.25, 72, 6, 3]], [[69, 76.75, 13, 2.5]], [[62.5, 81, 20, 2.5]], [[65.5, 83.5, 7.5, 2.5]]]
-
+                    infoBulbs = []
                     leftTextArray = [ //aim for 1.75 space
                         9.75, 'Potsdamerstrasse, 51, Berlin, will',
                         11.75, 'receive Fifty Thousand Marks each;',
@@ -774,7 +774,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     associatedMediaNobelKeywords = [['PEACE'], ['THE SWEDISH ACADEMY OF SCIENCES'], ['THE CAROLINE INSTITUTE'], ['THE ACADEMY IN STOCKHOLM'], ['A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING'], ['WHETHER HE BE SCANDINAVIAN OR NOT'], ['RAGNAR SOHLMAN'], ['BOFORS'], ['MY PROPERTY'], ['PARIS'], ['SAN REMO']];
                     hardcodedHotspotSpecs = [[[69.75, 14.25, 3, 2.5]], [[71.5, 16.75, 10, 2.25], [47.5, 20, 10, 2.5]], [[54.5, 21.75, 12.5, 2.5]], [[53.5, 24.5, 15, 1.75]], [[55, 26.5, 25, 2.25], [47.5, 29, 16, 3]], [[47.5, 38.5, 26, 2.5]], [[71.25, 43, 10, 2.5], [47.5, 47.5, 5, 2.5]], [[60.5, 46, 6.25, 2.5]], [[50.25, 63, 13.5, 2.5]], [[61, 64.5, 4, 2.25]], [[68.5, 64, 8, 2.5]]];
 
-
+                    infoBulbs = []
                     leftTextArray = [
                         9, 'the most outstanding work in an ideal direction; and one part to the',
                         11.25, 'person who shall have done the most or the best work for fraternity',
@@ -851,6 +851,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 case 4:
                     associatedMediaNobelKeywords = [['PATENTS'], ['CREMATORIUM']];
                     hardcodedHotspotSpecs = [[[63.25, 13, 5.75, 2.5]], [[66.75, 36.75, 10, 2.75]]]
+                    infoBulbs = []
                     leftTextArray = [
                         8.5, 'in Enskilda Banden in Stockholm and in',
                         10.75, 'and in my strong-box at 59, Avenue Malakoff, Paris; further',
@@ -947,9 +948,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 var img = $(document.createElement("img"));
                 img.attr({
                     src: LIGHTBULB_ICON,
-                    class: "infobulb_page_" + p,
                 });
-                img.addClass('lightbulb');
+                img.addClass('infobulb')
+                img.addClass("infobulb_page_" + p)
                 img.attr({ id: i + hardcodedData[p - 1]["associatedMediaNobelKeywords"].length })
                 div.popupNumber = i + hardcodedData[p - 1]["associatedMediaNobelKeywords"].length
                 img.css({
@@ -1112,9 +1113,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         $("#splashScreenRoot").remove();
 
-        $(".lightbulb").hide()
-        $(".infobulb_page_"+pageNumber).show()
-
         SetWillImage(pageNumber);
         
         $(".highlight").hide()
@@ -1179,6 +1177,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         for (var i = 0; i < hardcodedData[pageNumber - 1]["associatedMedia"].length; i++) {
             hardcodedData[pageNumber - 1]["associatedMedia"][i].checkHeight();
         }
+        $(".infobulb").hide()
+        $(".infobulb_page_" + pageNumber).show()
     }
     function percentToPx(percent) {
         return (percent / 100) * sideBar.height();
@@ -1519,7 +1519,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function goPrevPage() {
         if (pageNumber > 0) {
             idleTimer.kill();
-            hardcodedData[pageNumber-1]["infoBulbs"] = []
             pageNumber -= 1
 
             $(".assocMedia").hide()
@@ -1537,7 +1536,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function nextPage() {
         if (pageNumber < 4) {
             idleTimer.kill();
-            hardcodedData[pageNumber-1]["infoBulbs"] = []
             pageNumber += 1
 
             $(".assocMedia").hide()
