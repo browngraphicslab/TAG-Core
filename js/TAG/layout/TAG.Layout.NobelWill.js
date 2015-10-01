@@ -1240,7 +1240,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             var sliderFar = sliderTop + sliderBar.height()
             for (var i = 0; i < hardcodedData[pageNumber - 1]["textDivArray"].length; i++) {
                 var mid = hardcodedData[pageNumber - 1]["textDivArray"][i].offset().top + hardcodedData[pageNumber - 1]["textDivArray"][i].height() / 2
-                if (mid > sliderTop + 1 && mid < sliderFar - 1) {
+                if (mid > sliderTop + 3 && mid < sliderFar - 3) {
                     hardcodedData[pageNumber - 1]["textDivArray"][i].css("color", "white")
                 }
                 else {
@@ -1596,7 +1596,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             hideNobelAssociatedMedia();
             for (var i = 0; i < hardcodedData[pageNumber - 1]["textDivArray"].length; i++) {
                 var mid = hardcodedData[pageNumber - 1]["textDivArray"][i].offset().top + hardcodedData[pageNumber - 1]["textDivArray"][i].height() / 2
-                if (mid > percentToPx(hardcodedData[pageNumber-1]["sliderPositions"][chunk][0]) +1 && mid < percentToPx(hardcodedData[pageNumber-1]["sliderPositions"][chunk][0] + hardcodedData[pageNumber-1]["sliderPositions"][chunk][1])-1) {
+                if (mid > percentToPx(hardcodedData[pageNumber-1]["sliderPositions"][chunk][0]) +3 && mid < percentToPx(hardcodedData[pageNumber-1]["sliderPositions"][chunk][0] + hardcodedData[pageNumber-1]["sliderPositions"][chunk][1])-3) {
                     fadeText(hardcodedData[pageNumber - 1]["textDivArray"][i], 'white', null, duration || 1000)
                 }
                 else {
@@ -1853,7 +1853,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     	img.css({
     		"height": "80%",
-    		"width": "45%",
+    		"width": "41.2%",
+            "left" : "1.25%",
     		"top": "10%",
     		"position": 'absolute',
             "text-align" : "center"
