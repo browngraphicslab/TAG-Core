@@ -26,16 +26,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         showInitialNobelWillBox = true,
         sliderBar,//the big yellow div sliding up and down
         chunkNumber,//the current chunk number (0-based) being observed
-        leftTextArray,//the array of textDiv-spacingPercent tuples
-        textDivArray = [],//array of divs on left with each paragraph of text
-        sliderPositions,//the array of yLocation-height tuples for each slider position
-        associatedMedia = [],
-        associatedMediaArrays,//the arrays with associated media
-        associatedMediaNobelLocations,//array keeping track of locations of associated media
         nobelAssociatedMediaCoordinates,//array of coordinates for associated media
-        associatedMediaNobelKeywords,//list of strings that identify the associated media being found. NOT ACTUAL KEYWORDS
-        nobelHotspots,//array of hotspots in form [[[hotspotDiv,assocMedia],[hotspotDiv,assocMedia]],[[hotspotDiv,assocMedia],[hotspotDiv,assocMedia]]]
-        hardcodedHotspotSpecs,//array of hardcoded info about the locations of the hotspots
         pageNumber = startingPageNumber,//nobel will page number
         sideBar,
 		canvas = $(document.createElement("canvas")),
@@ -52,9 +43,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         idleTimer,
         lastMouseMoveEvent,
         debounceTimeout = null,
-        infoBulbs,
         NOBEL_ORANGE_COLOR = '#d99b3b',
         IDLE_TIMER_DURATION = 300000, //5 minutes
+
+        hardcodedData,
 
         dragging = false,
         touching = false,
@@ -180,7 +172,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             background.append(wi)
         }
         makeTaskBar();
-
+        SetWillImage(pageNumber);
         sideBar = $(document.createElement('div'));
         sideBar.css({
             "height": '100%',
@@ -285,10 +277,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     lastDragY = e.clientY;
                     dragging = true;
                 }
-                else if (e.clientX > willOffset.left && e.clientX < willOffset.left + willImage.width()) {
+                else if (e.clientX < willOffset.left + willImage.width()) {
                     mouseUp(e, true);
                 }
-                associatedMedia.forEach(function (media) {
+                hardcodedData[pageNumber-1]["associatedMedia"].forEach(function (media) {
                     var medOffset = media.offset()
                     if (medOffset.left!==0 && medOffset.top!==0  && e.clientX > medOffset.left && e.clientX < medOffset.left + media.width() && e.clientY > medOffset.top && e.clientY < medOffset.top + media.height()) {
                         media.click();
@@ -322,6 +314,780 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 mouseUp();
             }
         }, 500)
+        leftArrow = $(document.createElement('div'));
+        rightArrow = $(document.createElement('div'));
+        var left = $(document.createElement('img'));
+        var right = $(document.createElement('img'));
+        rightArrow.append(right)
+        leftArrow.append(left)
+        left.attr({
+            id: 'leftPageArrow',
+            src: tagPath + 'images/icons/left_nobel_icon.svg'
+        })
+        right.attr({
+            id: 'rightPageArrow',
+            src: tagPath + 'images/icons/right_nobel_icon.svg'
+        })
+        leftArrow.css({
+            'position': 'absolute',
+            'background-color': 'transparent',
+            'width': '30px',
+            'height': "30px",
+            'bottom': '20px',
+            'left': "31.75%",
+            'z-index': '1003'
+        });
+        left.click(function () {
+            goPrevPage();
+        })
+        rightArrow.css({
+            'position': 'absolute',
+            'width': '30px',
+            'height': "30px",
+            'background-color': 'transparent',
+            'bottom': '20px',
+            'left': "69.75%",
+            'z-index': '1003'
+        });
+        right.click(
+            function () {
+                nextPage()
+            }
+        )
+
+        background.append(rightArrow);
+        background.append(leftArrow);
+
+        var hiddenInnerds = $(document.createElement('div'));
+        hiddenInnerds.css({
+            'position': 'absolute',
+            'background-color': NOBEL_ORANGE_COLOR,
+            'opacity': '0',
+            'left': '0%',
+            'width': '100%',
+            'height': '100%',
+        })
+
+        var sliderBarInnerds = $(document.createElement('div'));
+        sliderBarInnerds.css({
+            'position': 'absolute',
+            'background-color': NOBEL_ORANGE_COLOR,
+            'opacity': '.2',
+            'left': '40.75%',
+            'width': '59.25%',
+            'height': '100%',
+        })
+        sliderBarInnerds.attr({id:"sliderBarInnerds"})
+        sliderBar = $(document.createElement('div'));
+        sliderBar.attr('id', 'sliderBar');
+        sliderBar.append(hiddenInnerds);
+        sliderBar.append(sliderBarInnerds);
+        sliderBar.css({
+            'position': 'absolute',
+            'background-color': 'transparent',
+            'border': '1.5px solid ' + NOBEL_ORANGE_COLOR,
+            'border-radius': '12px',
+            'left': '.5%',
+            'width': '75.5%',
+            'height': '10%',
+            "overflow": "hidden",
+            'z-index': '500'
+        })
+        sideBar.mouseup(function (e) {
+            mouseUp(e)
+        })
+        willImage.mouseup(function (e) {
+            mouseUp(e)
+        })
+        background.mouseup(function (e) {
+            mouseUp(e)
+        })
+        sliderBar.mousedown(function (e) {
+            touching = true;
+            dragging = true;
+            lastDragY = e.clientY;
+        })
+        sliderBar.mouseup(function (e) {
+            mouseUp(e)
+        })
+        canvas.mouseup(function (e) {
+            mouseUp(e)
+        })
+        $("#associatedMediaScroller").mouseup(function (e) {
+            mouseUp(e)
+        })
+        var debounceTime = 8
+        $("#associatedMediaScroller").mousemove(function (e) { mouseMovePoll(e) })
+        sliderBar.mousemove(function (e) { mouseMovePoll(e) })
+        sideBar.mousemove(function (e) { mouseMovePoll(e) })
+        willImage.mousemove(function (e) { mouseMovePoll(e) })
+        background.mousemove(function (e) { mouseMovePoll(e) })
+
+        canvas.mousemove(function (e) { mouseMovePoll(e) })
+
+
+        sideBar.css('z-index', '10');
+        var up = $(document.createElement('img'))
+        var down = $(document.createElement('img'))
+        up.attr({
+            id: 'upIcon',
+            src: tagPath + 'images/icons/up_nobel_icon.svg'
+        })
+        if (singleArrowUpDownIcons === false) {
+            up.attr({ src: tagPath + 'images/icons/nobel_down_double.svg' })//the files names are fucked up--sorry
+        }
+        up.css({
+            'position': 'absolute',
+            'background-color': "transparent",
+            'max-height': '20px',
+            'max-width': '20px',
+            'min-height': '20px',
+            'min-width': '20px',
+            'left': '.75%',
+            "z-index": "1300"
+        })
+        up.css({
+            'bottom': 'calc(50% + 30px)'
+        })
+        up.click(
+            function () {
+                prevChunk(checkForHotspots);
+            }
+        )
+        down.attr({
+            id: 'downIcon',
+            src: tagPath + 'images/icons/down_nobel_icon.svg'
+        })
+        if (singleArrowUpDownIcons === false) {
+            down.attr({ src: tagPath + 'images/icons/nobel_up_double.svg' })//the file names are fucked up -- sorry
+        }
+        down.css({
+            'position': 'absolute',
+            'background-color': "transparent",
+            'max-height': '20px',
+            'max-width': '20px',
+            'min-height': '20px',
+            'min-width': '20px',
+            'left': '.75%',
+            "z-index": "1300"
+        })
+        down.css({
+            'top': 'calc(50% + 30px)'
+        }).mouseup(function (e) {
+            mouseUp(e)
+        })
+        down.click(
+            function () {
+                nextChunk(checkForHotspots);
+            }
+        )
+        if (iconColor === "orig") {
+            LIGHTBULB_ICON = tagPath + 'images/icons/nobel_lightbulb.svg'
+        }
+
+        sliderBar.append(down)
+        sliderBar.append(up)
+        background.append(sliderBar);
+        hardcodedData = [{},{},{},{}]
+        for (var p = 1; p < 5; p++) {
+            var associatedMediaNobelKeywords, hardcodedHotspotSpecs, infoBulbs, leftTextArray, sliderPositions, associatedMedia = [], textDivArray = [], nobelHotspots = []
+            switch (p) {
+                //hardcodedHotspotSpecs- left, top, width, height
+                case 1:
+                    associatedMediaNobelKeywords = [['WILL AND TESTAMENT'], ['ALFRED BERNHARD NOBEL'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
+                    hardcodedHotspotSpecs = [[[47.95 + 8.25, 9, 11.75, 5]], [[63.5, 15, 17, 3.5], [45, 17, 8, 4]], [[66.5, 30, 11, 3]], [[61, 34.5, 12.5, 2.5]], [[51.5, 54, 19, 3]], [[52.5, 65.4, 13.5, 3]]]
+                    infoBulbs = [[61.5, 7], [33.25, 59]];
+                    if (paragraphed === true) {
+                        leftTextArray = [
+                            10.25,
+                            'Testament',
+                            15,
+                            '\tI, the undersigned, Alfred Bernhard',
+                            //17.5,
+                            ' Nobel, do hereby, after mature',
+                            //20.25,
+                            ' deliberation, declare the following to be my last Will and Testament',
+                            //22.75,
+                            ' with respect to such property as may be',
+                            //25.5,
+                            ' left by me at the time of my death:',
+                            27.5,
+                            'To my nephews, Hjalmar and Ludvig',
+                            //30,
+                            ' Nobel, the sons of my brother Robert Nobel, I bequeath',
+                            //32.5,
+                            ' the sum of Two Hundred Thousand Crowns each;',
+                            34.75,
+                            'To my nephew Emanuel Nobel, the sum of Three',
+                            //37,
+                            ' Hundred Thousand, and to my niece Mina Nobel,',
+                            //40,
+                            ' One Hundred Thousand Crowns;',
+                            42,
+                            'To my brother Robert Nobel’s daughters, Ingeborg',
+                            //44.25,
+                            ' and Tyra, the sum of One Hundred Thousand Crowns each;',
+                            47.25,
+                            'Miss Olga Boettger, at present staying',
+                            //49.5,
+                            ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
+                            //51.75,
+                            ' One Hundred Thousand Francs;',
+                            54,
+                            'Mrs Sofie Kapy von Kapivar, whose address',
+                            //56.25,
+                            ' is known to the Anglo-Oesterreichische Bank in Vienna,',
+                            //58.75,
+                            ' is hereby entitled to an annuity of 6000 Florins Ö.W.',
+                            //61,
+                            ' which is paid to her by the said Bank, and to this end I have',
+                            //63.5,
+                            ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
+                            66,
+                            'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
+                            //67.75,
+                            ' Stockholm, will receive One Hundred Thousand Crowns;',
+                            71.25,
+                            'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
+                            //72.25,
+                            ' Paris, is entitled to an annuity of Two Thousand',
+                            //74.75,
+                            ' Five Hundred Francs. In addition,',
+                            //77.5,
+                            ' Forty Eight Thousand Francs owned',
+                            //79.75,
+                            ' by her are at present in my custody, and shall be refunded;',
+                            82.5,
+                            'Mr Alfred Hammond, Waterford, Texas,',
+                            //84.75,
+                            ' U.S.A. will receive Ten Thousand Dollars;',
+                            87.25,
+                            'The Misses Emy and Marie Winkelmann,'
+                        ]
+                        sliderPositions = [
+                            [8.5, 6],
+                            [14.5, 13],
+                            //[17.5, 13],
+                            //[20.25, 12.75],
+                            //[22.75, 12.5],
+                            //[25.5, 12],
+                            [27.5, 7.5],
+                            //[30, 12.5],
+                            //[32.5, 12.5],
+                            [34.5, 7.25],
+                            //[37, 12.75],
+                            //[40, 12.25],
+                            [42, 5.75],
+                            //[44.25, 12.5],
+                            [47.25, 7.25],
+                            //[49, 12.5],
+                            //[51.5, 12],
+                            [53.5, 13],
+                            //[56, 12.25],
+                            //[58.25, 12.25],
+                            //[61, 11.75],
+                            //[63, 12.5],
+                            [65.5, 5.75],
+                            //[67.25, 12.5],
+                            [70.25, 12.5],
+                            //[71.75, 12.5],
+                            [82.25, 5.5],
+                            [86.75, 5.25]
+                        ]
+                    }
+                    else {
+                        leftTextArray = [
+                           10.25,
+                           "INDENT", 'TESTAMENT',
+                           15,
+                           "INDENT", '\tI, the undersigned, Alfred Bernhard',
+                           17.5,
+                           ' Nobel, do hereby, after mature',
+                           20.25,
+                           ' deliberation, declare the following to be my last Will and Testament',
+                           22.75,
+                           ' with respect to such property as may be',
+                           25.5,
+                           ' left by me at the time of my death:',
+                           28,
+                           "INDENT", 'To my nephews, Hjalmar and Ludvig',
+                           30,
+                           ' Nobel, the sons of my brother Robert Nobel, I bequeath',
+                           32.5,
+                           ' the sum of Two Hundred Thousand Crowns each;',
+                           34.75,
+                           "INDENT", 'To my nephew Emanuel Nobel, the sum of Three',
+                           37,
+                           ' Hundred Thousand, and to my niece Mina Nobel,',
+                           40,
+                           ' One Hundred Thousand Crowns;',
+                           42,
+                           "INDENT", 'To my brother Robert Nobel’s daughters, Ingeborg',
+                           44.25,
+                           ' and Tyra, the sum of One Hundred Thousand Crowns each;',
+                           47.25,
+                           "INDENT", 'Miss Olga Boettger, at present staying',
+                           49.5,
+                           ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
+                           51.75,
+                           ' One Hundred Thousand Francs;',
+                           54,
+                           "INDENT", 'Mrs Sofie Kapy von Kapivar, whose address',
+                           56.25,
+                           ' is known to the Anglo-Oesterreichische Bank in Vienna,',
+                           58.75,
+                           ' is hereby entitled to an annuity of 6000 Florins Ö.W.',
+                           61,
+                           ' which is paid to her by the said Bank, and to this end I have',
+                           63.5,
+                           ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
+                           65.5,
+                           "INDENT", 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
+                           67.75,
+                           ' Stockholm, will receive One Hundred Thousand Crowns;',
+                           70.25,
+                           "INDENT", 'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
+                           72.25,
+                           ' Paris, is entitled to an annuity of Two Thousand',
+                           74.75,
+                           ' Five Hundred Francs. In addition,',
+                           77.5,
+                           ' Forty Eight Thousand Francs owned',
+                           79.75,
+                           ' by her are at present in my custody, and shall be refunded;',
+                           82.5,
+                           "INDENT", 'Mr Alfred Hammond, Waterford, Texas,',
+                           84.75,
+                           ' U.S.A. will receive Ten Thousand Dollars;',
+                           86.5,
+                           "INDENT", 'The Misses Emy and Marie Winkelmann,'
+                        ]
+                        sliderPositions = [
+                            [8.5, 6],
+                            [14.5, 13],
+                            [17.5, 13],
+                            [20.25, 12.75],
+                            [22.75, 12.5],
+                            [25.5, 12],
+                            [28, 12.25],
+                            [30, 12.5],
+                            [32.5, 12.5],
+                            [34.5, 12.75],
+                            [37, 12.75],
+                            [40, 12.25],
+                            [42, 12.25],
+                            [44.25, 12.5],
+                            [47.25, 12],
+                            [49, 12.5],
+                            [51.5, 12],
+                            [53.5, 12.25],
+                            [56, 12.25],
+                            [58.25, 12.25],
+                            [61, 11.75],
+                            [63, 12.5],
+                            [65.5, 12.25],
+                            [67.25, 12.5],
+                            [69.75, 12.25],
+                            [71.75, 12.5],
+                            [74.5, 12],
+                            [76.5, 11.75]
+                        ]
+                    }
+
+                    break;
+                case 2:
+                    associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['FUND'], ['PRIZES'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
+                    hardcodedHotspotSpecs = [[[53, 39.75, 14, 3.75]], [[46.5, 66, 4.5, 3.5]], [[55, 65.5, 27, 3.5]], [[75.25, 72, 6, 3]], [[69, 76.75, 13, 2.5]], [[62.5, 81, 20, 2.5]], [[65.5, 83.5, 7.5, 2.5]]]
+
+                    leftTextArray = [ //aim for 1.75 space
+                        9.75, 'Potsdamerstrasse, 51, Berlin, will',
+                        11.75, 'receive Fifty Thousand Marks each;',
+                        13.75, 'Mrs Gaucher, 2 bis Boulevard du Viaduc, Nimes',
+                        15.75, 'France will receive One Hundred Thousand Francs;',
+                        17.75, 'My servants, Auguste Oswald and his wife',
+                        19.75, 'Alphonse Tournand, employed in my laboratory',
+                        21.75, 'at San Remo, will each receive an annuity of One',
+                        24, 'Thousand Francs;',
+                        26, 'My former servant, Joseph Girardot, 5, Place',
+                        28.25, 'St. Laurent, Châlons sur Saône, France, is',
+                        30.5, 'entitled to an annuity of Five Hundred Francs,',
+                        32.75, 'and my former gardener, Jean Lecof, at present with',
+                        34.75, 'Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour',
+                        37, 'Ecouen, S.& O., France, will receive an annuity of Three Hundred',
+                        39, 'Francs;',
+                        41.5, 'Mr Georges Fehrenbach, 2, Rue Compiègne,',
+                        43.5, 'Paris, is entitled to an annual pension of Five Thousand',
+                        46, 'Francs from January 1, 1896 to January 1, 1899,',
+                        48, 'when the said pension shall discontinue;',
+                        50.5, 'A sum of Twenty Thousand Crowns each, which',
+                        52.5, 'has been placed in my custody, is the property of my brother’s',
+                        55.25, 'children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be',
+                        57.25, 'repaid to them.',
+                        59.75, 'The whole of my remaining realizable estate shall be',
+                        62.25, 'dealt with in the following way: the capital, invested in safe',
+                        64.5, 'securities by my executors, shall constitute a',
+                        66.75, 'fund, the interest on which shall be annually distributed in the form of prizes',
+                        69, 'to those who, during the preceding year, shall have conferred the greatest',
+                        71.25, 'benefit to mankind. The said interest shall be divided into five equal',
+                        73.5, 'parts, which shall be apportioned as follows: one part to the person who shall',
+                        75.5, 'have made the most important discovery or invention within the field of physics;',
+                        78, 'one part to the person who shall have made the most important chemical',
+                        80, 'discovery or improvement; one part to the person who shall have made the most',
+                        82, 'important discovery within the domain of physiology or medicine; one part to',
+                        84, 'the person who shall have produced in the field of literature',
+                    ]
+                    sliderPositions = [
+                        [7.75, 12.5],
+                        [11, 11.5],
+                        [12.25, 12.25],
+                        [14, 12.5],
+                        [16.5, 12.25],
+                        [18.5, 12],
+                        [20.5, 13.25],
+                        [24, 11.25],//8
+                        [24.75, 12.25],
+                        [27, 12.],
+                        [28.75, 12.75],
+                        [31.25, 12.75],
+                        [33.5, 12],
+                        [35, 13.25],
+                        [38.75, 11.75],
+                        [39.25, 13.5],
+                        [41.75, 14.25],
+                        [44, 13.5],
+                        [47.5, 12.5],
+                        [48.5, 13.5],
+                        [51.5, 13.25],
+                        [53.75, 13],
+                        [57.25, 12.5],
+                        [57.75, 13],
+                        [61, 12.25],
+                        [63.25, 12],
+                        [65.5, 11.75],
+                        [67.75, 11.75],
+                        [70, 11.5],
+                        [72, 11.75],
+                        [74.25, 12.5]
+                    ]
+                    break;
+                case 3:
+                    associatedMediaNobelKeywords = [['PEACE'], ['THE SWEDISH ACADEMY OF SCIENCES'], ['THE CAROLINE INSTITUTE'], ['THE ACADEMY IN STOCKHOLM'], ['A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING'], ['WHETHER HE BE SCANDINAVIAN OR NOT'], ['RAGNAR SOHLMAN'], ['BOFORS'], ['MY PROPERTY'], ['PARIS'], ['SAN REMO']];
+                    hardcodedHotspotSpecs = [[[69.75, 14.25, 3, 2.5]], [[71.5, 16.75, 10, 2.25], [47.5, 20, 10, 2.5]], [[54.5, 21.75, 12.5, 2.5]], [[53.5, 24.5, 15, 1.75]], [[55, 26.5, 25, 2.25], [47.5, 29, 16, 3]], [[47.5, 38.5, 26, 2.5]], [[71.25, 43, 10, 2.5], [47.5, 47.5, 5, 2.5]], [[60.5, 46, 6.25, 2.5]], [[50.25, 63, 13.5, 2.5]], [[61, 64.5, 4, 2.25]], [[68.5, 64, 8, 2.5]]];
+
+
+                    leftTextArray = [
+                        9, 'the most outstanding work in an ideal direction; and one part to the',
+                        11.25, 'person who shall have done the most or the best work for fraternity',
+                        13.5, 'between nations, for the abolition or reduction of standing armies',
+                        15.75, 'and for the holding and promotion of peace congresses.',
+                        18, 'The prizes for physics and chemistry shall be awarded by the Swedish',
+                        20.25, 'Academy of Sciences; that for physiological or medical',
+                        22.5, 'work by the Caroline Institute in Stockholm; that for literature',
+                        24.75, 'by the Academy in Stockholm, and that for champions of peace',
+                        27, 'by a committee of five persons to be elected',
+                        29.25, 'by the Norwegian Storting. It is my express',
+                        31.5, 'wish that in awarding the prizes no consideration whatever',
+                        34, 'shall be given to the nationality of the candidates,',
+                        36.5, 'but that the most worthy shall receive the prize,',
+                        38.75, 'whether he be a Scandinavian or not.',
+                        42, 'As Executors of my testamentary dispositions,',
+                        44.25, 'I hereby appoint Mr Ragnar Sohlman,',
+                        46.75, 'resident at Bofors, Värmland, and Mr',
+                        49.25, 'Rudolf Lilljequist, 31 Malmskillnadsgatan, Stockholm,',
+                        51.5, 'and at Bengtsfors near Uddevalla. To compensate',
+                        53.75, 'for their pains and attention, I grant to Mr,',
+                        56, 'Ragnar Sohlman, who will presumably have to',
+                        58.25, 'devote most time to this matter, One Hundred Thousand Crowns,',
+                        60.25, 'and to Mr Rudolf Lilljequist, Fifty Thousand Crowns;',
+                        63, 'At the present time, my property consists',
+                        65.25, 'in part of real estate in Paris and San Remo, and',
+                        67.75, 'in part of securities deposited as follows: with The Union Bank of Scotland',
+                        69.75, 'Ltd in Glasgow and London, Le Crédit Lyonnais,',
+                        72, 'Comptoir National d’Escompte, and with Alphen Messin',
+                        74.5, '& Co. in Paris; with the stockbroker M.V. Peter of Banque',
+                        76.75, 'Transatlantique, also in Paris; with Direction',
+                        79, 'der Disconto Gesellschaft and Joseph Goldschmidt',
+                        81.25, '& Cie, Berlin; with the Russian Central Bank, and with',
+                        83.5, 'Mr Emanuel Nobel in Petersburg; with',
+                        85.75, 'Skandinaviska Kredit Aktiebolaget in Gothenburg and Stockholm,'
+                    ]
+                    sliderPositions = [
+                        [7.75, 12.5],
+                        [11, 11.5],
+                        [13.25, 11.5],
+                        [15.5, 11.5],
+                        [17.75, 11.5],
+                        [20, 11.5],
+                        [22.25, 11.5],
+                        [24.5, 11.5],
+                        [26.75, 11.5],
+                        [29, 11.5],
+                        [31.25, 12],
+                        [33.75, 12],
+                        [36.25, 12],
+                        [38.5, 12.5],
+                        [41.75, 12],
+                        [44, 11.5],
+                        [46.5, 12],
+                        [49, 11.5],
+                        [51.25, 11.5],
+                        [53.5, 11.5],
+                        [55.75, 11.5],
+                        [58, 11.5],
+                        [60, 11.25],
+                        [62.75, 12],
+                        [65, 11.5],
+                        [67.5, 11.5],
+                        [69.5, 11.5],
+                        [71.75, 11.5],
+                        [74.25, 11.25],
+                        [76.5, 11.5],
+                        [78.75, 11.5],
+                        [81, 11.5],
+                        [83.25, 11.5],
+                        [85.5, 11.5]
+                    ]
+                    break;
+                case 4:
+                    associatedMediaNobelKeywords = [['PATENTS'], ['CREMATORIUM']];
+                    hardcodedHotspotSpecs = [[[63.25, 13, 5.75, 2.5]], [[66.75, 36.75, 10, 2.75]]]
+                    leftTextArray = [
+                        8.5, 'in Enskilda Banden in Stockholm and in',
+                        10.75, 'and in my strong-box at 59, Avenue Malakoff, Paris; further',
+                        13, 'to this are accounts receivable, patents, patent fees',
+                        15.5, 'or so-called royalties etc. in connection with which my',
+                        17.75, 'Executors will find full information in my papers',
+                        19.75, 'and books.',
+                        22, 'This Will and Testament is up to now the only one valid,',
+                        24, 'and revokes all my previous testamentary',
+                        26.5, 'dispositions, should any such exist after my death.',
+                        29, 'Finally, it is my express wish that following my death',
+                        31, 'my veins shall be opened,and when this has been done and',
+                        33, 'competent Doctors have confirmed clear signs of death,',
+                        35, 'my remains shall be',
+                        37.5, 'cremated in a so-called crematorium.',
+                        39.5, 'Paris, 27 November, 1895',
+                        45, 'Alfred Bernhard Nobel',
+                        50, 'That Mr Alfred Bernhard Nobel, being of sound mind,',
+                        53, 'has of his own free will declared the above',
+                        55.5, 'to be his last Will and Testament, and that he has signed the same, we have, in his presence and the presence of each other,',
+                        59, 'hereunto subscribed our names as witnesses:',
+                        62, 'Sigurd Ehrenborg        R. W. Strehlenert',
+                        64.5, 'former Lieutenant        Civil Engineer',
+                        67, '86 Boulevard Haussmann        8, Rue Auber, Paris',
+                        71, 'Thos Nordenfelt        Leonard Hwass',
+                        74, 'Constructor        Civil Engineer',
+                        76.5, '4, Passage Caroline        4, Passage Caroline'
+                    ]
+                    sliderPositions = [
+                        [7.75, 12],
+                        [10.5, 11.5],
+                        [12.75, 11.5],
+                        [15.25, 11.5],
+                        [17.5, 11],
+                        [19.5, 11.5],
+                        [21.75, 11],
+                        [23.75, 11.25],
+                        [26.25, 11],
+                        [28.75, 10.75],
+                        [30.75, 12],
+                        [32.75, 15],
+                        [34.75, 17],
+                        [37.25, 17.5],
+                        [39.25, 20],
+                        [44.75, 16],
+                        [49.75, 14.5],
+                        [52.75, 13.5],
+                        [55.25, 14],
+                        [58.75, 14.5],
+                        [60.75, 15],
+                        [64.25, 16],
+                    ]
+                    break;
+            }
+            hardcodedData[p - 1]["associatedMediaNobelKeywords"] = associatedMediaNobelKeywords
+            hardcodedData[p - 1]["hardcodedHotspotSpecs"] = hardcodedHotspotSpecs
+            hardcodedData[p - 1]["infoBulbs"] = infoBulbs
+            hardcodedData[p - 1]["leftTextArray"] = leftTextArray
+            hardcodedData[p - 1]["sliderPositions"] = sliderPositions
+
+            if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
+                if ($("#willp1_1").length !== 0) {
+                    console.log('already loaded');
+                }
+                for (var i = 0; i < hardcodedData[p - 1]["hardcodedHotspotSpecs"].length; i++) {
+                    var overlayDiv = $(document.createElement("img"))
+                    overlayDiv.css({
+                        'position': 'absolute',
+                        'left': '32%',
+                        'height': '100%',
+                        'width': '43.73%'
+                    }).attr({
+                        src: tagPath + 'images/nobelwillimages/willp' + p + '_' + (i + 1) + '.png',
+                        id: 'willp' + p + '_' + (i + 1),
+                        class: "highlight"
+                    })
+                    background.append(overlayDiv)
+                }
+            }
+
+            for (var i = 0; i < hardcodedData[p - 1]["infoBulbs"].length; i++) {
+                var div = $(document.createElement("div"));
+                div.css({
+                    "left": hardcodedData[p - 1]["infoBulbs"][i][0] + "%",
+                    "height": "30px",
+                    "width": "30px",
+                    "position": 'absolute',
+                    "top": hardcodedData[p - 1]["infoBulbs"][i][1] + "%",
+                    "z-index": "1003",
+                    "float": "right",
+                    "top": hardcodedData[p - 1]["infoBulbs"][i][1] + "%",
+                    'padding-bottom': '2px',
+                })
+                var img = $(document.createElement("img"));
+                img.attr({
+                    src: LIGHTBULB_ICON,
+                    class: "infobulb_page_" + p,
+                });
+                img.addClass('lightbulb');
+                img.attr({ id: i + hardcodedData[p - 1]["associatedMediaNobelKeywords"].length })
+                div.popupNumber = i + hardcodedData[p - 1]["associatedMediaNobelKeywords"].length
+                img.css({
+                    "height": "100%",
+                    "width": "100%",
+                }).click(function () {
+                    showLargePopup(this.id);
+                })
+                div.append(img);
+                background.append(div);
+            }
+
+            var placeInChunk = 0;
+            var currentChunkNumberIteratingOver = 0;
+            for (var i = 0; i < hardcodedData[p - 1]["associatedMediaNobelKeywords"].length; i++) {
+                var currMedia = hardcodedData[p - 1]["associatedMediaNobelKeywords"][i];
+                if (currentChunkNumberIteratingOver !== currMedia[1]) {
+                    placeInChunk = 1;
+                    currentChunkNumberIteratingOver = currMedia[1];
+                }
+                else {
+                    placeInChunk++;
+                }
+                associatedMedia[i] = makeAssociatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk, i);
+            }
+            hardcodedData[p - 1]["associatedMedia"] = associatedMedia
+
+            var currentHeight = 0;
+            var indentNext = true
+            var indexNextNonParagraphed = false
+            for (var i = 0; i < hardcodedData[p - 1]["leftTextArray"].length; i++) {
+                if (isNaN(hardcodedData[p - 1]["leftTextArray"][i]) && hardcodedData[p - 1]["leftTextArray"][i].toLowerCase() !== "indent") {
+                    var tempText = $(document.createElement('div'));
+                    tempText.css({
+                        'position': 'absolute',
+                        'background-color': "transparent",
+                        'left': '11.25%',
+                        'width': '105.5%',
+                        'color': 'black',
+                        'height': '2.1%',
+                        'top': currentHeight + '%',
+                        'font-size': '.479em',
+                    }).text(hardcodedData[p - 1]["leftTextArray"][i]);
+                    if ((indentNext === true && paragraphed === true) || (paragraphed === false && indexNextNonParagraphed == true)) {
+                        indentNext = false
+                        indexNextNonParagraphed = false
+                        tempText.css({ "left": "17.25%" })
+                    }
+                    currentHeight += 2.05;
+                    tempText.addClass('textChunkDiv');
+                    tempText.addClass('textChunkDiv_page_'+p);
+                    sideBar.append(tempText);
+                    textDivArray.push(tempText);
+                }
+                else if (isNaN(hardcodedData[p - 1]["leftTextArray"][i]) && hardcodedData[p - 1]["leftTextArray"][i].toLowerCase() === "indent") {
+                    indexNextNonParagraphed = true
+                }
+                else {
+                    currentHeight = hardcodedData[p - 1]["leftTextArray"][i];
+                    indentNext = true
+                }
+            }
+            hardcodedData[p - 1]["textDivArray"] = textDivArray
+
+            
+            for (var i = 0; i < hardcodedData[p - 1]["associatedMedia"].length; i++) {
+                //console.log("making nobel hotspot")
+                for (var x = 0; x < hardcodedData[p - 1]["hardcodedHotspotSpecs"][i].length; x++) {
+                    var div = $(document.createElement('img'));
+                    div.css({
+                        'position': 'absolute',
+                        'font-size': '.6em',
+                        'border-radius': '5px',
+                        'left': hardcodedData[p - 1]["hardcodedHotspotSpecs"][i][x][0] - 8.25 + '%',
+                        'top': hardcodedData[p - 1]["hardcodedHotspotSpecs"][i][x][1] + '%',
+                        'width': hardcodedData[p - 1]["hardcodedHotspotSpecs"][i][x][2] + '%',
+                        'height': hardcodedData[p - 1]["hardcodedHotspotSpecs"][i][x][3] + '%',
+                    })
+                    if (showRedHighlights === true) {
+                        div.css({
+                            'background-color': 'rgb(200,20,20)',
+                            'opacity': '.3',
+                            'border': '2px solid red',
+                        })
+                    }
+                    div.attr({
+                        id: hardcodedData[p - 1]["associatedMedia"][i].Identifier
+                    });
+                    div.addClass("nobelHostpot")
+                    div.addClass("nobelHotspot_page_"+p)
+                    div.hotspotImage = $('#willp' + p + '_' + (i + 1)).show();
+                    div.Show = function () {
+                        if (showRedHighlights == true) {
+                            this.show()
+                        }
+                        if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
+                            this.hotspotImage.show();
+                        }
+                    }
+                    div.Hide = function () {
+                        this.hide()
+                        if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
+                            this.hotspotImage.hide();
+                        }
+                    }
+                    div.FadeIn = function (dur) {
+                        if (showRedHighlights == true) {
+                            this.fadeIn(dur)
+                        }
+                        if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
+                            this.hotspotImage.show();
+                        }
+                    }
+                    function percentToPxLeft(percent) {
+                        return (percent / 100) * sideBar.height();
+                    }
+
+                    function percentToPxTop(percent) {
+                        return (percent / 100) * background.width();
+                    }
+
+                    div.assocMedia = hardcodedData[p - 1]["associatedMedia"][i];
+                    background.append(div);
+                    div.MiddleY = div.offset().top + (div.height() / 2);
+                    if (x === 0) { //only add first div
+                        nobelHotspots.push([div, hardcodedData[p - 1]["associatedMedia"][i]]);
+                    }
+                    else {
+                        nobelHotspots[nobelHotspots.length - 1].push(div)
+                    }
+                    div.mouseenter(function () {
+                        touching = true;
+                    })
+                }
+            }
+            hardcodedData[p - 1]["nobelHotspots"] = nobelHotspots
+
+        }
     }
     firstInit();
     function SetWillImage(page) {
@@ -335,7 +1101,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 lastMouseMoveEvent = e;
                 if (debounceTimeout === null) {
                     mouseMove(e)
-                    debounceTimeout = setTimeout(function () { mouseMove(lastMouseMoveEvent); debounceTimeout = null; }, 15);
+                    debounceTimeout = setTimeout(function () { mouseMove(lastMouseMoveEvent); debounceTimeout = null; }, 12);
                 }
             }
         }
@@ -344,774 +1110,75 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         if (testamentHeader !== true) {
             $("#titleDiv").text("Will Page " + pageNumber + " of 4");
         }
-        if (iconColor === "orig") {
-            LIGHTBULB_ICON = tagPath + 'images/icons/nobel_lightbulb.svg'
-        }
         $("#splashScreenRoot").remove();
+
+        $(".lightbulb").hide()
+        $(".infobulb_page_"+pageNumber).show()
 
         SetWillImage(pageNumber);
         
+        $(".highlight").hide()
         //TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
         //TAG.Layout.Spoof().getLaureates(function (laurs) { laurs.forEach(function (laur) { if (laur.ID.indexOf("1867-11-07") > -1) { console.log(laur) } }) })
-
-
-        
-
+        $(".textChunkDiv").hide()
+        $(".textChunkDiv_page_" + pageNumber).show()
+        $(".nobelHotspot").hide()
+        $(".nobelHotspot_page_" + pageNumber).show()
+        if (pageNumber === 4) {
+            rightArrow.hide();
+        }
+        else {
+            rightArrow.show()
+        }
+        if (pageNumber === 1) {
+            leftArrow.hide();
+        }
+        else {
+            leftArrow.show()
+        }
         switch (pageNumber) {
-            //hardcodedHotspotSpecs- left, top, width, height
             case 1:
-                associatedMediaNobelKeywords = [['WILL AND TESTAMENT'],['ALFRED BERNHARD NOBEL'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
-                hardcodedHotspotSpecs = [[[47.95 + 8.25, 9, 11.75, 5]], [[63.5, 15, 17, 3.5], [45, 17, 8, 4]], [[66.5, 30, 11, 3]], [[61, 34.5, 12.5, 2.5]], [[51.5, 54, 19, 3]], [[52.5, 65.4, 13.5, 3]]]
-                infoBulbs = [[61.5, 7], [33.25, 59]];
-                if (paragraphed === true) {
-                    leftTextArray = [
-                        10.25,
-                        'Testament',
-                        15,
-                        '\tI, the undersigned, Alfred Bernhard',
-                        //17.5,
-                        ' Nobel, do hereby, after mature',
-                        //20.25,
-                        ' deliberation, declare the following to be my last Will and Testament',
-                        //22.75,
-                        ' with respect to such property as may be',
-                        //25.5,
-                        ' left by me at the time of my death:',
-                        27.5,
-                        'To my nephews, Hjalmar and Ludvig',
-                        //30,
-                        ' Nobel, the sons of my brother Robert Nobel, I bequeath',
-                        //32.5,
-                        ' the sum of Two Hundred Thousand Crowns each;',
-                        34.75,
-                        'To my nephew Emanuel Nobel, the sum of Three',
-                        //37,
-                        ' Hundred Thousand, and to my niece Mina Nobel,',
-                        //40,
-                        ' One Hundred Thousand Crowns;',
-                        42,
-                        'To my brother Robert Nobel’s daughters, Ingeborg',
-                        //44.25,
-                        ' and Tyra, the sum of One Hundred Thousand Crowns each;',
-                        47.25,
-                        'Miss Olga Boettger, at present staying',
-                        //49.5,
-                        ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
-                        //51.75,
-                        ' One Hundred Thousand Francs;',
-                        54,
-                        'Mrs Sofie Kapy von Kapivar, whose address',
-                        //56.25,
-                        ' is known to the Anglo-Oesterreichische Bank in Vienna,',
-                        //58.75,
-                        ' is hereby entitled to an annuity of 6000 Florins Ö.W.',
-                        //61,
-                        ' which is paid to her by the said Bank, and to this end I have',
-                        //63.5,
-                        ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
-                        66,
-                        'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
-                        //67.75,
-                        ' Stockholm, will receive One Hundred Thousand Crowns;',
-                        71.25,
-                        'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
-                        //72.25,
-                        ' Paris, is entitled to an annuity of Two Thousand',
-                        //74.75,
-                        ' Five Hundred Francs. In addition,',
-                        //77.5,
-                        ' Forty Eight Thousand Francs owned',
-                        //79.75,
-                        ' by her are at present in my custody, and shall be refunded;',
-                        82.5,
-                        'Mr Alfred Hammond, Waterford, Texas,',
-                        //84.75,
-                        ' U.S.A. will receive Ten Thousand Dollars;',
-                        87.25,
-                        'The Misses Emy and Marie Winkelmann,'
-                    ]
-                    sliderPositions = [
-                        [8.5, 6],
-                        [14.5, 13],
-                        //[17.5, 13],
-                        //[20.25, 12.75],
-                        //[22.75, 12.5],
-                        //[25.5, 12],
-                        [27.5, 7.5],
-                        //[30, 12.5],
-                        //[32.5, 12.5],
-                        [34.5, 7.25],
-                        //[37, 12.75],
-                        //[40, 12.25],
-                        [42, 5.75],
-                        //[44.25, 12.5],
-                        [47.25, 7.25],
-                        //[49, 12.5],
-                        //[51.5, 12],
-                        [53.5, 13],
-                        //[56, 12.25],
-                        //[58.25, 12.25],
-                        //[61, 11.75],
-                        //[63, 12.5],
-                        [65.5, 5.75],
-                        //[67.25, 12.5],
-                        [70.25, 12.5],
-                        //[71.75, 12.5],
-                        [82.25, 5.5],
-                        [86.75, 5.25]
-                    ]
-                }
-                else {
-                    leftTextArray = [
-                       10.25,
-                       "INDENT",'TESTAMENT',
-                       15,
-                       "INDENT",'\tI, the undersigned, Alfred Bernhard',
-                       17.5,
-                       ' Nobel, do hereby, after mature',
-                       20.25,
-                       ' deliberation, declare the following to be my last Will and Testament',
-                       22.75,
-                       ' with respect to such property as may be',
-                       25.5,
-                       ' left by me at the time of my death:',
-                       28,
-                       "INDENT", 'To my nephews, Hjalmar and Ludvig',
-                       30,
-                       ' Nobel, the sons of my brother Robert Nobel, I bequeath',
-                       32.5,
-                       ' the sum of Two Hundred Thousand Crowns each;',
-                       34.75,
-                       "INDENT", 'To my nephew Emanuel Nobel, the sum of Three',
-                       37,
-                       ' Hundred Thousand, and to my niece Mina Nobel,',
-                       40,
-                       ' One Hundred Thousand Crowns;',
-                       42,
-                       "INDENT", 'To my brother Robert Nobel’s daughters, Ingeborg',
-                       44.25,
-                       ' and Tyra, the sum of One Hundred Thousand Crowns each;',
-                       47.25,
-                       "INDENT", 'Miss Olga Boettger, at present staying',
-                       49.5,
-                       ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
-                       51.75,
-                       ' One Hundred Thousand Francs;',
-                       54,
-                       "INDENT", 'Mrs Sofie Kapy von Kapivar, whose address',
-                       56.25,
-                       ' is known to the Anglo-Oesterreichische Bank in Vienna,',
-                       58.75,
-                       ' is hereby entitled to an annuity of 6000 Florins Ö.W.',
-                       61,
-                       ' which is paid to her by the said Bank, and to this end I have',
-                       63.5,
-                       ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
-                       65.5,
-                       "INDENT", 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
-                       67.75,
-                       ' Stockholm, will receive One Hundred Thousand Crowns;',
-                       70.25,
-                       "INDENT", 'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
-                       72.25,
-                       ' Paris, is entitled to an annuity of Two Thousand',
-                       74.75,
-                       ' Five Hundred Francs. In addition,',
-                       77.5,
-                       ' Forty Eight Thousand Francs owned',
-                       79.75,
-                       ' by her are at present in my custody, and shall be refunded;',
-                       82.5,
-                       "INDENT", 'Mr Alfred Hammond, Waterford, Texas,',
-                       84.75,
-                       ' U.S.A. will receive Ten Thousand Dollars;',
-                       86.5,
-                       "INDENT", 'The Misses Emy and Marie Winkelmann,'
-                    ]
-                    sliderPositions = [
-                        [8.5, 6],
-                        [14.5, 13],
-                        [17.5, 13],
-                        [20.25, 12.75],
-                        [22.75, 12.5],
-                        [25.5, 12],
-                        [28, 12.25],
-                        [30, 12.5],
-                        [32.5, 12.5],
-                        [34.5, 12.75],
-                        [37, 12.75],
-                        [40, 12.25],
-                        [42, 12.25],
-                        [44.25, 12.5],
-                        [47.25, 12],
-                        [49, 12.5],
-                        [51.5, 12],
-                        [53.5, 12.25],
-                        [56, 12.25],
-                        [58.25, 12.25],
-                        [61, 11.75],
-                        [63, 12.5],
-                        [65.5, 12.25],
-                        [67.25, 12.5],
-                        [69.75, 12.25],
-                        [71.75, 12.5],
-                        [74.5, 12],
-                        [76.5, 11.75]
-                    ]
-                }
-
+                rightArrow.css({
+                    "left": "69.75%",
+                    "bottom": "40px"
+                })
+                $("#sliderBarInnerds").css({ "left": "43.1%", "width": "56.9%" })
                 break;
             case 2:
-                associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['FUND'], ['PRIZES'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
-                hardcodedHotspotSpecs = [[[53, 39.75, 14, 3.75]], [[46.5, 66, 4.5, 3.5]], [[55, 65.5, 27, 3.5]], [[75.25, 72, 6, 3]], [[69, 76.75, 13, 2.5]], [[62.5, 81, 20, 2.5]], [[65.5, 83.5, 7.5, 2.5]]]
-
-                leftTextArray = [ //aim for 1.75 space
-                    9.75, 'Potsdamerstrasse, 51, Berlin, will',
-                    11.75 , 'receive Fifty Thousand Marks each;',
-                    13.75, 'Mrs Gaucher, 2 bis Boulevard du Viaduc, Nimes',
-                    15.75, 'France will receive One Hundred Thousand Francs;',
-                    17.75, 'My servants, Auguste Oswald and his wife',
-                    19.75, 'Alphonse Tournand, employed in my laboratory',
-                    21.75, 'at San Remo, will each receive an annuity of One',
-                    24, 'Thousand Francs;',
-                    26, 'My former servant, Joseph Girardot, 5, Place',
-                    28.25, 'St. Laurent, Châlons sur Saône, France, is',
-                    30.5, 'entitled to an annuity of Five Hundred Francs,',
-                    32.75, 'and my former gardener, Jean Lecof, at present with',
-                    34.75, 'Mrs Desoutter, receveur Curaliste, Mesnil, Aubry pour',
-                    37, 'Ecouen, S.& O., France, will receive an annuity of Three Hundred',
-                    39, 'Francs;',
-                    41.5, 'Mr Georges Fehrenbach, 2, Rue Compiègne,',
-                    43.5, 'Paris, is entitled to an annual pension of Five Thousand',
-                    46, 'Francs from January 1, 1896 to January 1, 1899,',
-                    48, 'when the said pension shall discontinue;',
-                    50.5, 'A sum of Twenty Thousand Crowns each, which',
-                    52.5, 'has been placed in my custody, is the property of my brother’s',
-                    55.25, 'children, Hjalmar, Ludvig, Ingeborg and Tyra, and shall be',
-                    57.25, 'repaid to them.',
-                    59.75, 'The whole of my remaining realizable estate shall be',
-                    62.25, 'dealt with in the following way: the capital, invested in safe',
-                    64.5, 'securities by my executors, shall constitute a',
-                    66.75, 'fund, the interest on which shall be annually distributed in the form of prizes',
-                    69, 'to those who, during the preceding year, shall have conferred the greatest',
-                    71.25, 'benefit to mankind. The said interest shall be divided into five equal',
-                    73.5, 'parts, which shall be apportioned as follows: one part to the person who shall',
-                    75.5, 'have made the most important discovery or invention within the field of physics;',
-                    78, 'one part to the person who shall have made the most important chemical',
-                    80, 'discovery or improvement; one part to the person who shall have made the most',
-                    82, 'important discovery within the domain of physiology or medicine; one part to',
-                    84, 'the person who shall have produced in the field of literature',
-                ]
-                sliderPositions = [
-                    [7.75, 12.5],
-                    [11, 11.5],
-                    [12.25, 12.25],
-                    [14, 12.5],
-                    [16.5, 12.25],
-                    [18.5, 12],
-                    [20.5, 13.25],
-                    [24, 11.25],//8
-                    [24.75, 12.25],
-                    [27, 12.],
-                    [28.75, 12.75],
-                    [31.25, 12.75],
-                    [33.5, 12],
-                    [35, 13.25],
-                    [38.75, 11.75],
-                    [39.25, 13.5], 
-                    [41.75, 14.25],
-                    [44, 13.5], 
-                    [47.5, 12.5],
-                    [48.5, 13.5],
-                    [51.5, 13.25],
-                    [53.75, 13],
-                    [57.25, 12.5],
-                    [57.75, 13],
-                    [61, 12.25],
-                    [63.25, 12],
-                    [65.5, 11.75],
-                    [67.75, 11.75],
-                    [70, 11.5],
-                    [72, 11.75],
-                    [74.25, 12.5]
-                ]
-                break;
-            case 3:
-                associatedMediaNobelKeywords = [['PEACE'], ['THE SWEDISH ACADEMY OF SCIENCES'], ['THE CAROLINE INSTITUTE'], ['THE ACADEMY IN STOCKHOLM'], ['A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING'], ['WHETHER HE BE SCANDINAVIAN OR NOT'], ['RAGNAR SOHLMAN'], ['BOFORS'], ['MY PROPERTY'], ['PARIS'], ['SAN REMO']];
-                hardcodedHotspotSpecs = [[[69.75, 14.25, 3, 2.5]], [[71.5, 16.75, 10, 2.25],[47.5,20,10,2.5]], [[54.5, 21.75, 12.5, 2.5]], [[53.5, 24.5, 15, 1.75]], [[55, 26.5, 25, 2.25],[47.5,29,16,3]], [[47.5, 38.5, 26, 2.5]], [[71.25, 43, 10, 2.5],[47.5, 47.5, 5, 2.5]], [[60.5, 46, 6.25, 2.5]], [[50.25, 63, 13.5, 2.5]], [[61, 64.5, 4, 2.25]], [[68.5, 64, 8, 2.5]]];
- 
-
-                leftTextArray = [
-                    9, 'the most outstanding work in an ideal direction; and one part to the',
-                    11.25, 'person who shall have done the most or the best work for fraternity',
-                    13.5, 'between nations, for the abolition or reduction of standing armies',
-                    15.75, 'and for the holding and promotion of peace congresses.',
-                    18, 'The prizes for physics and chemistry shall be awarded by the Swedish',
-                    20.25, 'Academy of Sciences; that for physiological or medical',
-                    22.5, 'work by the Caroline Institute in Stockholm; that for literature',
-                    24.75, 'by the Academy in Stockholm, and that for champions of peace',
-                    27, 'by a committee of five persons to be elected',
-                    29.25, 'by the Norwegian Storting. It is my express',
-                    31.5, 'wish that in awarding the prizes no consideration whatever',
-                    34, 'shall be given to the nationality of the candidates,',
-                    36.5, 'but that the most worthy shall receive the prize,',
-                    38.75, 'whether he be a Scandinavian or not.',
-                    42, 'As Executors of my testamentary dispositions,', 
-                    44.25, 'I hereby appoint Mr Ragnar Sohlman,',
-                    46.75, 'resident at Bofors, Värmland, and Mr',
-                    49.25, 'Rudolf Lilljequist, 31 Malmskillnadsgatan, Stockholm,',
-                    51.5, 'and at Bengtsfors near Uddevalla. To compensate',
-                    53.75, 'for their pains and attention, I grant to Mr,',
-                    56, 'Ragnar Sohlman, who will presumably have to',
-                    58.25, 'devote most time to this matter, One Hundred Thousand Crowns,',
-                    60.25, 'and to Mr Rudolf Lilljequist, Fifty Thousand Crowns;',
-                    63, 'At the present time, my property consists',
-                    65.25, 'in part of real estate in Paris and San Remo, and',
-                    67.75, 'in part of securities deposited as follows: with The Union Bank of Scotland',
-                    69.75, 'Ltd in Glasgow and London, Le Crédit Lyonnais,',
-                    72, 'Comptoir National d’Escompte, and with Alphen Messin',
-                    74.5, '& Co. in Paris; with the stockbroker M.V. Peter of Banque',
-                    76.75, 'Transatlantique, also in Paris; with Direction',
-                    79, 'der Disconto Gesellschaft and Joseph Goldschmidt',
-                    81.25, '& Cie, Berlin; with the Russian Central Bank, and with',
-                    83.5, 'Mr Emanuel Nobel in Petersburg; with',
-                    85.75, 'Skandinaviska Kredit Aktiebolaget in Gothenburg and Stockholm,'
-                ]
-                sliderPositions = [
-                    [7.75, 12.5],
-                    [11, 11.5],
-                    [13.25, 11.5],
-                    [15.5, 11.5],
-                    [17.75, 11.5],
-                    [20, 11.5],
-                    [22.25, 11.5],
-                    [24.5, 11.5],
-                    [26.75, 11.5],
-                    [29, 11.5],
-                    [31.25, 12],
-                    [33.75, 12],
-                    [36.25, 12],
-                    [38.5, 12.5],
-                    [41.75, 12],
-                    [44, 11.5],
-                    [46.5, 12],
-                    [49, 11.5],
-                    [51.25, 11.5],
-                    [53.5, 11.5],
-                    [55.75, 11.5],
-                    [58, 11.5],
-                    [60, 11.25],
-                    [62.75, 12],
-                    [65, 11.5],
-                    [67.5, 11.5],
-                    [69.5, 11.5],
-                    [71.75, 11.5],
-                    [74.25, 11.25],
-                    [76.5, 11.5],
-                    [78.75, 11.5],
-                    [81, 11.5],
-                    [83.25, 11.5],
-                    [85.5, 11.5]
-                ]
-                break;
-            case 4:
-                associatedMediaNobelKeywords = [['PATENTS'], ['CREMATORIUM']];
-                hardcodedHotspotSpecs = [[[63.25, 13, 5.75, 2.5]], [[66.75, 36.75, 10, 2.75]]]
-                leftTextArray = [
-                    8.5, 'in Enskilda Banden in Stockholm and in',
-                    10.75, 'and in my strong-box at 59, Avenue Malakoff, Paris; further',
-                    13, 'to this are accounts receivable, patents, patent fees',
-                    15.5, 'or so-called royalties etc. in connection with which my',
-                    17.75, 'Executors will find full information in my papers',
-                    19.75, 'and books.',
-                    22, 'This Will and Testament is up to now the only one valid,',
-                    24, 'and revokes all my previous testamentary',
-                    26.5, 'dispositions, should any such exist after my death.',
-                    29, 'Finally, it is my express wish that following my death',
-                    31, 'my veins shall be opened,and when this has been done and',
-                    33, 'competent Doctors have confirmed clear signs of death,',
-                    35, 'my remains shall be',
-                    37.5, 'cremated in a so-called crematorium.',
-                    39.5, 'Paris, 27 November, 1895', 
-                    45, 'Alfred Bernhard Nobel',
-                    50, 'That Mr Alfred Bernhard Nobel, being of sound mind,',
-                    53, 'has of his own free will declared the above',
-                    55.5, 'to be his last Will and Testament, and that he has signed the same, we have, in his presence and the presence of each other,',
-                    59, 'hereunto subscribed our names as witnesses:',
-                    62, 'Sigurd Ehrenborg        R. W. Strehlenert',
-                    64.5, 'former Lieutenant        Civil Engineer', 
-                    67, '86 Boulevard Haussmann        8, Rue Auber, Paris', 
-                    71, 'Thos Nordenfelt        Leonard Hwass', 
-                    74, 'Constructor        Civil Engineer', 
-                    76.5, '4, Passage Caroline        4, Passage Caroline'
-                ]
-                sliderPositions = [
-                    [7.75, 12],
-                    [10.5, 11.5],
-                    [12.75, 11.5],
-                    [15.25, 11.5],
-                    [17.5, 11],
-                    [19.5, 11.5],
-                    [21.75, 11],
-                    [23.75, 11.25],
-                    [26.25,11],
-                    [28.75, 10.75],
-                    [30.75, 12],
-                    [32.75, 15],
-                    [34.75, 17],
-                    [37.25, 17.5],
-                    [39.25, 20],
-                    [44.75, 16],
-                    [49.75, 14.5],
-                    [52.75, 13.5],
-                    [55.25, 14],
-                    [58.75, 14.5],
-                    [60.75, 15],
-                    [64.25, 16],
-                ]
-                break;
-        }
-        if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
-            if ($("#willp1_1").length !== 0) {
-                console.log('already loaded');
-            }
-            for (var i = 0; i < hardcodedHotspotSpecs.length; i++) {
-                var overlayDiv = $(document.createElement("img"))
-                overlayDiv.css({
-                    'position': 'absolute',
-                    'left': '32%',
-                    'height': '100%',
-                    'width': '43.73%'
-                }).attr({
-                    src: tagPath + 'images/nobelwillimages/willp' + pageNumber + '_' + (i + 1) + '.png',
-                    id: 'willp' + pageNumber + '_' + (i + 1),
-                    class : "highlight"
-                })
-                background.append(overlayDiv)
-            }
-        }
-        for (var i = 0; i < infoBulbs.length; i++) {
-            var div = $(document.createElement("div"));
-            div.css({
-                "left": infoBulbs[i][0] + "%",
-                "height": "30px",
-                "width": "30px",
-                "position": 'absolute',
-                "top": infoBulbs[i][1]+"%",
-                "z-index": "1003",
-                "float": "right",
-                "top": infoBulbs[i][1] + "%",
-                'padding-bottom': '2px',
-            })
-            var img = $(document.createElement("img"));
-            img.attr({
-                src: LIGHTBULB_ICON,
-            });
-            img.addClass('lightbulb');
-            img.attr({ id: i + associatedMediaNobelKeywords.length })
-            div.popupNumber = i + associatedMediaNobelKeywords.length
-            img.css({
-                "height" : "100%",
-                "width": "100%",
-            }).click(function () {
-                showLargePopup(this.id);
-            })
-            div.append(img);
-            background.append(div);
-        }
-
-        var placeInChunk = 0;
-        var currentChunkNumberIteratingOver = 0;
-        for (var i = 0; i < associatedMediaNobelKeywords.length; i++) {
-            var currMedia = associatedMediaNobelKeywords[i];
-            if(currentChunkNumberIteratingOver !== currMedia[1]){
-                placeInChunk = 1;
-                currentChunkNumberIteratingOver = currMedia[1];
-            }
-            else
-            {
-                placeInChunk++;
-            }
-            associatedMedia[i] = makeAssociatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk,i);
-        }
-        var currentHeight = 0;
-        var indentNext = true
-        var indexNextNonParagraphed = false
-        for (var i = 0; i < leftTextArray.length; i++) {
-            if (isNaN(leftTextArray[i]) && leftTextArray[i].toLowerCase()!=="indent") {
-                var tempText = $(document.createElement('div'));
-                tempText.css({
-                    'position': 'absolute',
-                    'background-color': "transparent",
-                    'left': '11.25%',
-                    'width': '105.5%',
-                    'color': 'black',
-                    'height': '2.1%',
-                    'top': currentHeight + '%',
-                    'font-size': '.479em',
-                }).text(leftTextArray[i]);
-                if ((indentNext === true && paragraphed === true) || (paragraphed === false && indexNextNonParagraphed == true)){
-                    indentNext = false
-                    indexNextNonParagraphed = false
-                    tempText.css({ "left": "17.25%" })
-                }
-                currentHeight += 2.05;
-                tempText.attr('class', 'textChunkDiv');
-                sideBar.append(tempText);
-                textDivArray.push(tempText);
-            }
-            else if (isNaN(leftTextArray[i]) && leftTextArray[i].toLowerCase() === "indent") {
-                indexNextNonParagraphed = true
-            }
-            else {
-                currentHeight = leftTextArray[i];
-                indentNext = true
-            }
-        }
-        showNobelInitialPopup(
-            function () {
-                leftArrow = $(document.createElement('div'));
-                rightArrow = $(document.createElement('div'));
-                var left = $(document.createElement('img'));
-                var right = $(document.createElement('img'));
-                rightArrow.append(right)
-                leftArrow.append(left)
-                left.attr({
-                    id: 'leftPageArrow',
-                    src: tagPath + 'images/icons/left_nobel_icon.svg'
-                })
-                right.attr({
-                    id: 'rightPageArrow',
-                    src: tagPath + 'images/icons/right_nobel_icon.svg'
-                })
                 leftArrow.css({
-                    'position': 'absolute',
-                    'background-color': 'transparent',
-                    'width': '30px',
-                    'height' : "30px",
-                    'bottom': '20px',
-                    'left': "31.75%",
-                    'z-index': '1003'
-                });
-                left.click(function () {
-                    goPrevPage();
+                    "left": "37.75%",
+                    "bottom": "40px"
                 })
                 rightArrow.css({
-                    'position': 'absolute',
-                    'width': '30px',
-                    'height': "30px",
-                    'background-color': 'transparent',
-                    'bottom': '20px',
-                    'left': "69.75%",
-                    'z-index': '1003'
-                });
-                right.click(
-                    function () {
-                        nextPage()
-                    }
-                )
+                    "left": "69.5%",
+                    "bottom": "40px"
+                })
+                $("#sliderBarInnerds").css({ "left": "44.25%", "width": "55.75%" })
+                break;
+            case 3:
+                leftArrow.css({
+                    "left": "34.25%",
+                    "bottom": "40px"
+                })
+                rightArrow.css({
+                    "left": "69.75%",
+                    "bottom": "40px"
+                })
+                $("#sliderBarInnerds").css({ "left": "41.35%", "width": "58.65%" })
+                break;
+            case 4:
+                leftArrow.css({
+                    "left": "36.75%",
+                    "bottom": "40px"
+                })
+                $("#sliderBarInnerds").css({ "left": "44.25%", "width": "55.75%" })
+                break;
+        }
+        setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
 
-                switch (pageNumber) {
-                    case 1:
-                        rightArrow.css({
-                            "left": "69.75%",
-                            "bottom": "40px"
-                        })
-                        break;
-                    case 2:
-                        leftArrow.css({
-                            "left": "37.75%",
-                            "bottom": "40px"
-                        })
-                        rightArrow.css({
-                            "left": "69.5%",
-                            "bottom": "40px"
-                        })
-                        break;
-                    case 3:
-                        leftArrow.css({
-                            "left": "34.25%",
-                            "bottom": "40px"
-                        })
-                        rightArrow.css({
-                            "left": "69.75%",
-                            "bottom": "40px"
-                        })
-                        break;
-                    case 4:
-                        leftArrow.css({
-                            "left": "36.75%",
-                            "bottom": "40px"
-                        })
-                        break;
-                }
-
-                //var arrowWidth = rightArrow.width();
-                //rightArrow.css('height', arrowWidth + '%');
-                //leftArrow.css('height', arrowWidth + '%');
-
-                background.append(rightArrow);
-                background.append(leftArrow);
-
-                if (pageNumber === 4) {
-                    rightArrow.hide();
-                }
-                if (pageNumber === 1) {
-                    leftArrow.hide();
-                }
-                var hiddenInnerds = $(document.createElement('div'));
-                hiddenInnerds.css({
-                    'position': 'absolute',
-                    'background-color': NOBEL_ORANGE_COLOR,
-                    'opacity': '0',
-                    'left': '0%',
-                    'width': '100%',
-                    'height': '100%',
-                })
-
-                var sliderBarInnerds = $(document.createElement('div'));
-                sliderBarInnerds.css({
-                    'position': 'absolute',
-                    'background-color': NOBEL_ORANGE_COLOR,
-                    'opacity': '.2',
-                    'left': '40.75%',
-                    'width': '59.25%',
-                    'height': '100%',
-                })
-                switch (pageNumber) {
-                    case 1:
-                        sliderBarInnerds.css({ "left": "43.1%", "width": "56.9%" })
-                        break;
-                    case 2:
-                        sliderBarInnerds.css({ "left": "44.25%", "width": "55.75%" })
-                        break;
-                    case 3:
-                        sliderBarInnerds.css({ "left": "41.35%", "width": "58.65%" })
-                        break;
-                    case 4:
-                        sliderBarInnerds.css({ "left": "44.25%", "width": "55.75%" })
-                        break;
-                }
-
-                sliderBar = $(document.createElement('div'));
-                sliderBar.attr('id', 'sliderBar');
-                sliderBar.append(hiddenInnerds);
-                sliderBar.append(sliderBarInnerds);
-                sliderBar.css({
-                    'position': 'absolute',
-                    'background-color': 'transparent',
-                    'border': '1.5px solid '+NOBEL_ORANGE_COLOR,
-                    'border-radius': '12px',
-                    'left': '.5%',
-                    'width': '75.5%',
-                    'height': '10%',
-                    "overflow" : "hidden",
-                    'z-index': '500'
-                })
-                sideBar.mouseup(function (e) {
-                    mouseUp(e)
-                })
-                willImage.mouseup(function (e) {
-                    mouseUp(e)
-                })
-                background.mouseup(function (e) {
-                    mouseUp(e)
-                })
-                sliderBar.mousedown(function (e) {
-                    touching = true;
-                    dragging = true;
-                    lastDragY = e.clientY;
-                })
-                sliderBar.mouseup(function (e) {
-                    mouseUp(e)
-                })
-                canvas.mouseup(function (e) {
-                    mouseUp(e)
-                })
-                $("#associatedMediaScroller").mouseup(function (e) {
-                    mouseUp(e)
-                })
-                var debounceTime = 8
-                $("#associatedMediaScroller").mousemove(function (e) { mouseMovePoll(e)})
-                sliderBar.mousemove(function (e) { mouseMovePoll(e) })
-                sideBar.mousemove(function (e) { mouseMovePoll(e) })
-                willImage.mousemove(function (e) { mouseMovePoll(e) })
-                background.mousemove(function (e) { mouseMovePoll(e) })
-
-                canvas.mousemove(function (e) { mouseMovePoll(e) })
-
-
-                sideBar.css('z-index', '10');
-                var up = $(document.createElement('img'))
-                var down = $(document.createElement('img'))
-                up.attr({
-                    id: 'upIcon',
-                    src: tagPath + 'images/icons/up_nobel_icon.svg'
-                })
-                if (singleArrowUpDownIcons === false) {
-                    up.attr({ src: tagPath + 'images/icons/nobel_down_double.svg' })//the files names are fucked up--sorry
-                }
-                up.css({
-                    'position': 'absolute',
-                    'background-color': "transparent",
-                    'max-height': '20px',
-                    'max-width': '20px',
-                    'min-height': '20px',
-                    'min-width': '20px',
-                    'left': '.75%',
-                    "z-index" : "1300"
-                })
-                up.css({
-                    'bottom': 'calc(50% + 30px)'
-                })
-                up.click(
-                    function () {
-                        prevChunk(checkForHotspots);
-                    }
-                )
-                down.attr({
-                    id: 'downIcon',
-                    src: tagPath + 'images/icons/down_nobel_icon.svg'
-                })
-                if (singleArrowUpDownIcons === false) {
-                    down.attr({ src: tagPath + 'images/icons/nobel_up_double.svg' })//the file names are fucked up -- sorry
-                }
-                down.css({
-                    'position': 'absolute',
-                    'background-color': "transparent",
-                    'max-height': '20px',
-                    'max-width': '20px',
-                    'min-height': '20px',
-                    'min-width': '20px',
-                    'left': '.75%',
-                    "z-index": "1300"
-                })
-                down.css({
-                    'top': 'calc(50% + 30px)'
-                }).mouseup(function (e) {
-                    mouseUp(e)
-                })
-                down.click(
-                    function () {
-                        nextChunk(checkForHotspots);
-                    }
-                )
-
-                sliderBar.append(down)
-                sliderBar.append(up)
-                background.append(sliderBar);
-
-                makeNobelHotspots(associatedMediaNobelKeywords, hardcodedHotspotSpecs)
-
-                setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
-
-                for (var i = 0; i < associatedMedia.length; i++) {
-                    associatedMedia[i].checkHeight();
-                }
-
-                var j = 1
-            }
-        )
+        for (var i = 0; i < hardcodedData[pageNumber - 1]["associatedMedia"].length; i++) {
+            hardcodedData[pageNumber - 1]["associatedMedia"][i].checkHeight();
+        }
     }
     function percentToPx(percent) {
         return (percent / 100) * sideBar.height();
@@ -1124,8 +1191,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             }
             var closest = 0;
             var closestDist = 5000000;
-            for (var i = 0; i < sliderPositions.length ; i++) {
-                var middle = percentToPx(sliderPositions[i][0]) + (percentToPx(sliderPositions[i][1]) / 2);
+            for (var i = 0; i < hardcodedData[pageNumber-1]["sliderPositions"].length ; i++) {
+                var middle = percentToPx(hardcodedData[pageNumber-1]["sliderPositions"][i][0]) + (percentToPx(hardcodedData[pageNumber-1]["sliderPositions"][i][1]) / 2);
                 if (Math.abs(lineMiddle - middle) < closestDist) {
                     closestDist = Math.abs(lineMiddle - middle);
                     closest = i;
@@ -1143,63 +1210,64 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             sliderBar.css({
                 "top": sliderBar.offset().top + diff + "px"
             })
-            for (var i = 0; i < nobelHotspots.length; i++) {
-                if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top && nobelHotspots[i][0].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
-                    rightStack.addMedia(nobelHotspots[i][1]);
-                    nobelHotspots[i][0].Show()
-                    for (var j = 2; j < nobelHotspots[i].length; j++) {
-                        nobelHotspots[i][j].Show()
+            $(".highlight").hide()
+            for (var i = 0; i < hardcodedData[pageNumber - 1]["nobelHotspots"].length; i++) {
+                if (hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].MiddleY > sliderBar.offset().top && hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
+                    rightStack.addMedia(hardcodedData[pageNumber - 1]["nobelHotspots"][i][1]);
+                    hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].Show()
+                    for (var j = 2; j < hardcodedData[pageNumber - 1]["nobelHotspots"][i].length; j++) {
+                        hardcodedData[pageNumber - 1]["nobelHotspots"][i][j].Show()
                     }
 
                 }
                 else {
-                    rightStack.removeMedia(nobelHotspots[i][1]);
-                    nobelHotspots[i][0].Hide()
+                    rightStack.removeMedia(hardcodedData[pageNumber - 1]["nobelHotspots"][i][1]);
+                    hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].Hide()
                 }
-                if (nobelHotspots[i].length > 2 && (nobelHotspots[i][0][0].style.display === "none"||nobelHotspots[i][0][0].style.opacity === "0")) {
-                    for (var k = 2; k < nobelHotspots[i].length; k++) {
-                        if (nobelHotspots[i][k].MiddleY > sliderBar.offset().top && nobelHotspots[i][k].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
-                            nobelHotspots[i][k].Show()
-                            nobelHotspots[i][0].Show()
+                if (hardcodedData[pageNumber - 1]["nobelHotspots"][i].length > 2 && (hardcodedData[pageNumber - 1]["nobelHotspots"][i][0][0].style.display === "none" || hardcodedData[pageNumber - 1]["nobelHotspots"][i][0][0].style.opacity === "0")) {
+                    for (var k = 2; k < hardcodedData[pageNumber - 1]["nobelHotspots"][i].length; k++) {
+                        if (hardcodedData[pageNumber - 1]["nobelHotspots"][i][k].MiddleY > sliderBar.offset().top && hardcodedData[pageNumber - 1]["nobelHotspots"][i][k].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
+                            hardcodedData[pageNumber - 1]["nobelHotspots"][i][k].Show()
+                            hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].Show()
                         }
                         else {
-                            nobelHotspots[i][k].Hide()
+                            hardcodedData[pageNumber - 1]["nobelHotspots"][i][k].Hide()
                         }
                     }
                 }
             }
             var sliderTop = sliderBar.offset().top
             var sliderFar = sliderTop + sliderBar.height()
-            for (var i = 0; i < textDivArray.length; i++) {
-                var mid = textDivArray[i].offset().top + textDivArray[i].height() / 2
+            for (var i = 0; i < hardcodedData[pageNumber - 1]["textDivArray"].length; i++) {
+                var mid = hardcodedData[pageNumber - 1]["textDivArray"][i].offset().top + hardcodedData[pageNumber - 1]["textDivArray"][i].height() / 2
                 if (mid > sliderTop + 1 && mid < sliderFar - 1) {
-                    textDivArray[i].css("color" , "white")
+                    hardcodedData[pageNumber - 1]["textDivArray"][i].css("color", "white")
                 }
                 else {
-                    textDivArray[i].css("color", "black")
+                    hardcodedData[pageNumber - 1]["textDivArray"][i].css("color", "black")
                 }
             }
         }
     }
     function checkForHotspots() {
-        for (var i = 0; i < nobelHotspots.length; i++) {
-            if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top + 8 && nobelHotspots[i][0].MiddleY < sliderBar.offset().top - 8 + (sliderBar.height())) {
-                nobelHotspots[i][0].Show()
-                for (var j = 2; j < nobelHotspots[i].length; j++) {
-                    nobelHotspots[i][j].Show()
+        for (var i = 0; i < hardcodedData[pageNumber - 1]["nobelHotspots"].length; i++) {
+            if (hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].MiddleY > sliderBar.offset().top + 8 && hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].MiddleY < sliderBar.offset().top - 8 + (sliderBar.height())) {
+                hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].Show()
+                for (var j = 2; j < hardcodedData[pageNumber - 1]["nobelHotspots"][i].length; j++) {
+                    hardcodedData[pageNumber - 1]["nobelHotspots"][i][j].Show()
                 }
             }
                 else {
-                nobelHotspots[i][0].Hide()
+                hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].Hide()
             }
-            if (nobelHotspots[i].length > 2 && (nobelHotspots[i][0][0].style.display === "none" || nobelHotspots[i][0][0].style.opacity === "0")) {
-                for (var k = 2; k < nobelHotspots[i].length; k++) {
-                    if (nobelHotspots[i][k].MiddleY > sliderBar.offset().top && nobelHotspots[i][k].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
-                        nobelHotspots[i][k].Show()
-                        nobelHotspots[i][0].Show()
+            if (hardcodedData[pageNumber - 1]["nobelHotspots"][i].length > 2 && (hardcodedData[pageNumber - 1]["nobelHotspots"][i][0][0].style.display === "none" || hardcodedData[pageNumber - 1]["nobelHotspots"][i][0][0].style.opacity === "0")) {
+                for (var k = 2; k < hardcodedData[pageNumber - 1]["nobelHotspots"][i].length; k++) {
+                    if (hardcodedData[pageNumber - 1]["nobelHotspots"][i][k].MiddleY > sliderBar.offset().top && hardcodedData[pageNumber - 1]["nobelHotspots"][i][k].MiddleY < sliderBar.offset().top + (sliderBar.height())) {
+                        hardcodedData[pageNumber - 1]["nobelHotspots"][i][k].Show()
+                        hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].Show()
                     }
                     else {
-                        nobelHotspots[i][k].Hide()
+                        hardcodedData[pageNumber - 1]["nobelHotspots"][i][k].Hide()
                     }
                 }
             }
@@ -1212,15 +1280,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	canvas[0].width = w;
         canvas.css({"opacity" : "0"})
 
-    	for (var i = 0; i < nobelHotspots.length; i++) {
-    		nobelHotspots[i][1].stop(true, true);
-    		if (nobelHotspots[i][0].MiddleY > sliderBar.offset().top + 8 && nobelHotspots[i][0].MiddleY < sliderBar.offset().top - 8 + (sliderBar.height())) {
-    			nobelHotspots[i][1].fadeIn();
+        for (var i = 0; i < hardcodedData[pageNumber - 1]["nobelHotspots"].length; i++) {
+            hardcodedData[pageNumber - 1]["nobelHotspots"][i][1].stop(true, true);
+            if (hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].MiddleY > sliderBar.offset().top + 8 && hardcodedData[pageNumber - 1]["nobelHotspots"][i][0].MiddleY < sliderBar.offset().top - 8 + (sliderBar.height())) {
+                hardcodedData[pageNumber - 1]["nobelHotspots"][i][1].fadeIn();
 
-    			var div = nobelHotspots[i][0];
+                var div = hardcodedData[pageNumber - 1]["nobelHotspots"][i][0];
     			var hidden = div[0].style.display === "none"
     			div.show();
-    			function percentToPxLeft(percent) {
+    			function percentToPx(percent) {
     				return (percent / 100) * sideBar.height();
     			}
 
@@ -1230,8 +1298,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     			ctx.beginPath();
     			ctx.moveTo(div.offset().left + div.width() + 4, div.offset().top + (div.height() / 2));
-    			var finalx = nobelHotspots[i][1].offset().left;
-    			var finaly = nobelHotspots[i][1].offset().top + (nobelHotspots[i][1].height() / 2);
+    			var finalx = hardcodedData[pageNumber - 1]["nobelHotspots"][i][1].offset().left;
+    			var finaly = hardcodedData[pageNumber - 1]["nobelHotspots"][i][1].offset().top + (hardcodedData[pageNumber - 1]["nobelHotspots"][i][1].height() / 2);
     			ctx.bezierCurveTo(finalx, div.offset().top + (div.height() / 2), div.offset().left + div.width() + 4, finaly, finalx, finaly)
     			ctx.lineWidth = 3.5;
     			ctx.strokeStyle = NOBEL_ORANGE_COLOR;
@@ -1241,7 +1309,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     			}
     		}
     		else {
-    		     nobelHotspots[i][1].hide();
+                hardcodedData[pageNumber - 1]["nobelHotspots"][i][1].hide();
     		}
     	}
     	if (BezierOn) { canvas.animate({ opacity: 1 }, 100, 'easeInOutQuart') }
@@ -1262,8 +1330,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function makeAssociatedMediaDiv(string, imageurl, chunkN, numberInChunk, number) {
         var middlespace = 25;
         var numberOfMedia = 0;
-        for (var i = 0; i < associatedMediaNobelKeywords.length; i++) {
-            if (associatedMediaNobelKeywords[i][1] === chunkN) {
+        for (var i = 0; i < hardcodedData[pageNumber-1]["associatedMediaNobelKeywords"].length; i++) {
+            if (hardcodedData[pageNumber-1]["associatedMediaNobelKeywords"][i][1] === chunkN) {
                 numberOfMedia++ ;
             }
         }
@@ -1401,9 +1469,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.attr({ attr: string,class:"assocMedia" });
         associatedMediaScroller.append(div);
         div.hide();
-        div.show();
-        div.hide();
-
         div.medianumber = number;
 
 		div.css({"height":"auto"})
@@ -1441,9 +1506,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var w = canvas[0].width;
     	canvas[0].width = 1;
     	canvas[0].width = w;
-    	for (var j = 0; j < associatedMedia.length; j++) {
-    		if (rightStack.indexOf(associatedMedia[j]) === -1) {
-    			associatedMedia[j].fadeOut();
+    	for (var j = 0; j < hardcodedData[pageNumber - 1]["associatedMedia"].length; j++) {
+    	    if (rightStack.indexOf(hardcodedData[pageNumber - 1]["associatedMedia"][j]) === -1) {
+    	        hardcodedData[pageNumber - 1]["associatedMedia"][j].fadeOut();
     		}
         }
     }
@@ -1453,34 +1518,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function goPrevPage() {
         if (pageNumber > 0) {
-
             idleTimer.kill();
-            infoBulbs = []
-            associatedMedia = []
-            pageNumber-=1
-            sliderBar.remove();
-            $(".highlight").remove()
-            $(".highlight").die()
-            $(".assocMedia").remove()
-            $(".assocMedia").die()
-            $("#upIcon").remove();
-            $("#downIcon").remove();
-            $("#rightPageArrow").remove();
-            $("#leftPageArrow").remove();
-            $(".textChunkDiv").remove();
-            $('.lightbulb').remove();
-            $("#annotatedImageAssetCanvas").remove();
-            $(".nobelHotspot").remove();
-            sliderBar.die();
-            $("#upIcon").die();
-            $("#downIcon").die();
-            $("#rightPageArrow").die();
-            $("#leftPageArrow").die();
-            $(".textChunkDiv").die();
-            $("#annotatedImageAssetCanvas").die();
-            $(".nobelHotspot").die();
-            $('.lightbulb').die();
-            textDivArray = [];
+            hardcodedData[pageNumber-1]["infoBulbs"] = []
+            pageNumber -= 1
+
+            $(".assocMedia").hide()
+            rightStack = getRightTable()
+
             nobelWillInit();
         }
     }
@@ -1490,116 +1534,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     *goes to the next nobel will page
     * @param boolean isPlaying      to set the status to playing upon loading next page
     */
-    function nextPage(isPlaying) {
+    function nextPage() {
         if (pageNumber < 4) {
             idleTimer.kill();
-
-            infoBulbs = []
-
+            hardcodedData[pageNumber-1]["infoBulbs"] = []
             pageNumber += 1
-            associatedMedia = []
-            //annotatedImage && annotatedImage.unload();
-            sliderBar.remove();
-            $(".highlight").remove()
-            $(".highlight").die()
-            $(".assocMedia").remove()
-            $(".assocMedia").die()
-            $("#upIcon").remove();
-            $("#downIcon").remove();
-            $("#rightPageArrow").remove();
-            $("#leftPageArrow").remove();
-            $(".textChunkDiv").remove();
-            $("#annotatedImageAssetCanvas").remove();
-            $(".nobelHotspot").remove();
-            $('.lightbulb').remove();
-            sliderBar.die();
-            $("#upIcon").die();
-            $("#downIcon").die();
-            $("#rightPageArrow").die();
-            $("#leftPageArrow").die();
-            $(".textChunkDiv").die();
-            $("#annotatedImageAssetCanvas").die();
-            $(".nobelHotspot").die();
-            $('.lightbulb').die();
-            textDivArray = [];
+
+            $(".assocMedia").hide()
+            rightStack = getRightTable()
+
             nobelWillInit();
-        }
-    }
-
-    /*
-    * parses through associated media and associated them with a hotspot.  also creates the hotspot div
-    * @param names array[string]        the array of strings that identify the associated media by name
-    */
-    function makeNobelHotspots(names, hotSpotInfo) {
-        nobelHotspots = [];
-        for (var i = 0; i < associatedMedia.length; i++) {
-            //console.log("making nobel hotspot")
-            for (var x = 0; x < hotSpotInfo[i].length; x++) {
-                var div = $(document.createElement('img'));
-                div.css({
-                    'position': 'absolute',
-                    'font-size': '.6em',
-                    'border-radius': '5px',
-                    'left': hotSpotInfo[i][x][0] - 8.25 + '%',
-                    'top': hotSpotInfo[i][x][1] + '%',
-                    'width': hotSpotInfo[i][x][2] + '%',
-                    'height': hotSpotInfo[i][x][3] + '%',
-                })
-                if (showRedHighlights === true) {
-                    div.css({
-                        'background-color': 'rgb(200,20,20)',
-                        'opacity': '.3',
-                        'border': '2px solid red',
-                    })
-                }
-                div.attr({
-                    id: associatedMedia[i].Identifier,
-                    class: 'nobelHotspot'
-                });
-                div.hotspotImage = $('#willp' + pageNumber + '_' + (i + 1)).show();
-                div.Show = function () {
-                    if (showRedHighlights == true) {
-                       this.show()
-                    }
-                    if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
-                        this.hotspotImage.show();
-                    }
-                }
-                div.Hide = function () {
-                    this.hide()
-                    if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
-                        this.hotspotImage.hide();
-                    }
-                }
-                div.FadeIn = function (dur) {
-                    if (showRedHighlights == true) {
-                        this.fadeIn(dur)
-                    }
-                    if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
-                        this.hotspotImage.show();
-                    }
-                }
-                function percentToPxLeft(percent) {
-                    return (percent / 100) * sideBar.height();
-                }
-
-                function percentToPxTop(percent) {
-                    return (percent / 100) * background.width();
-                }
-
-                div.assocMedia = associatedMedia[i];
-                background.append(div);
-                div.MiddleY = div.offset().top + (div.height() / 2);
-                if (x === 0) { //only add first div
-                    nobelHotspots.push([div, associatedMedia[i]]);
-                }
-                else {
-                    nobelHotspots[nobelHotspots.length-1].push(div)
-                }
-                div.mouseenter(function () {
-                    touching = true;
-                })
-            }
         }
     }
     /**
@@ -1648,19 +1592,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         function percentToPx(percent) {
             return (percent / 100) * sideBar.height();
         }
-        if (chunk >= 0 && chunk < (textDivArray.length - 4)) {
+        if (chunk >= 0 && chunk < (hardcodedData[pageNumber - 1]["textDivArray"].length - 4)) {
             hideNobelAssociatedMedia();
-            for (var i = 0; i < textDivArray.length; i++) {
-                var mid = textDivArray[i].offset().top + textDivArray[i].height()/2
-                if (mid > percentToPx(sliderPositions[chunk][0]) +1 && mid < percentToPx(sliderPositions[chunk][0] + sliderPositions[chunk][1])-1) {
-                    fadeText(textDivArray[i], 'white', null, duration || 1000)
+            for (var i = 0; i < hardcodedData[pageNumber - 1]["textDivArray"].length; i++) {
+                var mid = hardcodedData[pageNumber - 1]["textDivArray"][i].offset().top + hardcodedData[pageNumber - 1]["textDivArray"][i].height() / 2
+                if (mid > percentToPx(hardcodedData[pageNumber-1]["sliderPositions"][chunk][0]) +1 && mid < percentToPx(hardcodedData[pageNumber-1]["sliderPositions"][chunk][0] + hardcodedData[pageNumber-1]["sliderPositions"][chunk][1])-1) {
+                    fadeText(hardcodedData[pageNumber - 1]["textDivArray"][i], 'white', null, duration || 1000)
                 }
                 else {
-                    fadeText(textDivArray[i], 'black', null, duration || 1000)
+                    fadeText(hardcodedData[pageNumber - 1]["textDivArray"][i], 'black', null, duration || 1000)
                 }
-            }
-            for (var i = 0; i < nobelHotspots.length; i++) {
-
             }
             if (chunk === 0) {
                 $("#upIcon").fadeOut(duration || 1000, 'easeInOutQuart');
@@ -1668,21 +1609,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             else {
                 $("#upIcon").fadeIn(duration || 1000, 'easeInOutQuart');
             }
-            if (chunk === sliderPositions.length - 1) {
+            if (chunk === hardcodedData[pageNumber-1]["sliderPositions"].length - 1) {
                 $("#downIcon").fadeOut(duration || 1000, 'easeInOutQuart');
             }
             else {
                 $("#downIcon").fadeIn(duration || 1000, 'easeInOutQuart');
             }
-            moveSliderBar(sliderPositions[chunk][0] / 100, sliderPositions[chunk][1] / 100, callback ? function () { checkForHotspots() } : function () {checkForHotspots() }, duration || 1000);
+            moveSliderBar(hardcodedData[pageNumber-1]["sliderPositions"][chunk][0] / 100, hardcodedData[pageNumber-1]["sliderPositions"][chunk][1] / 100, callback ? function () { checkForHotspots() } : function () {checkForHotspots() }, duration || 1000);
 
-            /*
-            //TODO :  add enabling associated media
-            if (associatedMediaNobelLocations) {
-                for (var i = 0; i < associatedMediaNobelLocations.length; i++) {
-                    associatedMediaNobelLocations[i] = false;
-                }
-            }*/
             chunkNumber = chunk;
         }
 
@@ -1711,14 +1645,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         sliderBar.animate({ top: y + '%', height: height + '%' }, duration || 1000, 'easeInOutQuart', callback ? callback : null);
     }
 
-    /**
-     * Initializes the popup informative window before the nobel will exploration begins
-     * @param function onClose      the function called after the window is closed
-     */
-
-    function showNobelInitialPopup(onClose) {
-        onClose && onClose()
-    }
     function getRightTable() {
         var list = [];
         list.addMedia = function (media) {
