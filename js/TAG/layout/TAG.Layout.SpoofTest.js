@@ -135,13 +135,7 @@ TAG.Layout.SpoofTest = (function () {
 		sortButton.css({
 		    "left": "750px",
 		}).text("Apply").click(function () {
-		    var tagsToSort = []
-		    sortTags.forEach(function (t) {
-		        if (t.isSelected() === true) {
-                    tagsToSort.push(t.tag.toLowerCase())
-		        }
-		    })
-            sort(tagsToSort)
+		    sort(null);
 		})
 		clearButton.css({
 		    "left": "850px",
@@ -356,6 +350,15 @@ TAG.Layout.SpoofTest = (function () {
 		$("#scroller").scrollLeft(0)
 	}
 	function sort(tags) {
+	    if (tags === null || tags === undefined) {
+	        var tagsToSort = []
+	        sortTags.forEach(function (t) {
+	            if (t.isSelected() === true) {
+	                tagsToSort.push(t.tag.toLowerCase())
+	            }
+	        })
+	        sort(tagsToSort)
+	    }
         $("#decadeList").hide();
         $("#genderList").hide();
 	    $(".block").hide()
@@ -627,6 +630,7 @@ TAG.Layout.SpoofTest = (function () {
 	        img.css({
                 "border" : "1.5px solid white"
 	        })
+            sort()
 	    }
 	    div.unselect = function () {
 	        div.selected = false;
@@ -682,6 +686,7 @@ TAG.Layout.SpoofTest = (function () {
             }
 	        div.select = function () {
 	            div.box[0].checked = true
+                sort()
 	        }
 	        div.unselect = function () {
                 div.box[0].checked = false
