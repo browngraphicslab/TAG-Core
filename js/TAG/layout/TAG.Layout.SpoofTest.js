@@ -25,7 +25,8 @@ TAG.Layout.SpoofTest = (function () {
 		scroller = $(document.createElement("div")),
         sortTags = [],
         searchText = $(document.createElement("div")),
-        timer
+        timer,
+        searchBoxController
 
 	root.append(base)
 	base.append(sortDiv)
@@ -43,6 +44,41 @@ TAG.Layout.SpoofTest = (function () {
 	}).append(scroller)
 
 	TAG.Layout.Spoof().getLaureates(init)
+	function makeSearchBoxController() {
+	    searchIconButton.css({
+	        "right": "50px",
+	        "width": "auto",
+	        "position": "absolute",
+	        "height": "38px",
+	        "background-color": "transparent",
+	        "top": "92px",
+	        "border-radius": "12px",
+	    }).attr({ src: '../tagcore/images/icons/search_icon.svg' }).click(function () { ret.onclick() })
+	    var ret = {}
+        ret.isSearch = true
+	    ret.setClear = function () {
+	        searchIconButton.attr({ src: '../tagcore/images/icons/x.svg' })
+	        ret.isSearch = false
+	    }
+	    ret.setSearch = function () {
+	        searchIconButton.attr({ src: '../tagcore/images/icons/search_icon.svg' })
+            ret.isSearch = true
+	    }
+	    ret.onclick = function () {
+	        if (ret.isSearch === true) {
+	            ret.search()
+	        }
+	        else {
+	            reset();
+                ret.setSearch()
+	        }
+	    }
+	    ret.search = function () {
+	        search(searchBox[0].value.toLowerCase())
+	        ret.setClear()
+	    }
+        return ret
+	}
 	function makeTimer() {
 	    var ret = {}
 	    ret.time = IDLE_TIMER_TIME * 1000
@@ -107,16 +143,10 @@ TAG.Layout.SpoofTest = (function () {
 			"border": "2.5px solid " + NOBEL_ORANGE_COLOR,
 			"border-radius": "12px",
 			"position" : "absolute"
-		}).attr({id : "searchBox"})
-		searchIconButton.css({
-		    "right": "50px",
-		    "width": "auto",
-            "position" : "absolute",
-		    "height": "38px",
-		    "background-color": "transparent",
-		    "top": "92px",
-		    "border-radius": "12px",
-		}).attr({ src: '../tagcore/images/icons/search_icon.svg' }).click(function () { search(searchBox[0].value.toLowerCase()) })
+		}).attr({ id: "searchBox" })
+
+		searchBoxController = makeSearchBoxController()
+
 		var clearSortCSS = {
 		    "position": "absolute",
 		    "width": "90px",
@@ -139,7 +169,7 @@ TAG.Layout.SpoofTest = (function () {
 		}).hide();
 		clearButton.css({
 		    "left": "850px",
-		}).text("Clear").click(reset)
+		}).text("Clear").click(reset).mousedown(function () { clearButton.css("opacity", ".75") }).mouseleave(function () { clearButton.css("opacity","1")})
 
 		var subSearchText = $(document.createElement("div")).text("Single term: name, country of origin, or sub-field")
 		subSearchText.css({
@@ -166,7 +196,7 @@ TAG.Layout.SpoofTest = (function () {
 		}).text("Search")
         $(base).keyup(function (e) {
             if (e.keyCode === 13) {
-                search(searchBox[0].value.toLowerCase())
+                searchBoxController.search()
             }
 		 })
 		laurs = db
@@ -193,7 +223,6 @@ TAG.Layout.SpoofTest = (function () {
 		})
 
         timer = makeTimer()
-
         makeDropDowns()
         $("#decadeList").hide();
         $("#genderList").hide();
@@ -489,7 +518,8 @@ TAG.Layout.SpoofTest = (function () {
 	    })
 		$(".block").show()
 		arrangeTiles($(".block").toArray())
-		searchBox.text('')
+		searchBox[0].value = ''
+        searchBoxController.setSearch()
 	}
 	function makeBigPopup(laur) {
 		var overlay = $(document.createElement("div")).attr({ id: "overlay" });
