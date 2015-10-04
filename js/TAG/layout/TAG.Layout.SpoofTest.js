@@ -136,7 +136,7 @@ TAG.Layout.SpoofTest = (function () {
 		    "left": "750px",
 		}).text("Apply").click(function () {
 		    sort(null);
-		})
+		}).hide();
 		clearButton.css({
 		    "left": "850px",
 		}).text("Clear").click(reset)
@@ -358,9 +358,14 @@ TAG.Layout.SpoofTest = (function () {
 	            }
 	        })
 	        sort(tagsToSort)
+	        return;
 	    }
-        $("#decadeList").hide();
-        $("#genderList").hide();
+	    if (!tags || tags.length === 0) {
+	        reset();
+	        return;
+	    }
+        //$("#decadeList").hide();
+        //$("#genderList").hide();
 	    $(".block").hide()
 
 	    var p = ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics']
@@ -607,7 +612,10 @@ TAG.Layout.SpoofTest = (function () {
 	    }).click(
         function () {
             div.toggle()
-        })
+            div.css("opacity" , "1");
+        }).mousedown(function () {
+            div.css("opacity" , ".6")
+        }).mouseleave(function () { div.css("opacity", "1"); })
 	    img.css({
 	        "position": "relative",
 	        "width": "100%",
@@ -630,7 +638,6 @@ TAG.Layout.SpoofTest = (function () {
 	        img.css({
                 "border" : "1.5px solid white"
 	        })
-            sort()
 	    }
 	    div.unselect = function () {
 	        div.selected = false;
@@ -645,6 +652,7 @@ TAG.Layout.SpoofTest = (function () {
 	        else {
 	            div.select();
 	        }
+	        sort()
 	    }
 	    sortDiv.append(div)
         return div
@@ -686,7 +694,6 @@ TAG.Layout.SpoofTest = (function () {
             }
 	        div.select = function () {
 	            div.box[0].checked = true
-                sort()
 	        }
 	        div.unselect = function () {
                 div.box[0].checked = false
@@ -698,6 +705,7 @@ TAG.Layout.SpoofTest = (function () {
 	            else {
 	                div.select();
 	            }
+	            sort()
 	        }
 	        sortTags.push(div)
             return div
