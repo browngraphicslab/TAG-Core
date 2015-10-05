@@ -37,33 +37,13 @@
 	color rgb(189,125,13)
 
 #newCatalogRoot .artTitle
-	background-color rgba(0, 0, 0, 0.6)
+	background-color rgba(0, 0, 0, 0.9)
 	height 30%
 	word-wrap break-word
 	opacity .5
 	position absolute
 	width 100%
 	padding-top 2%
-
-#newCatalogRoot #assocMediaButton
-	right 0%
-
-#newCatalogRoot .audioLabel
-	bottom 0px
-	height 35%
-	position absolute
-	right 5px
-	width 20%
-
-#newCatalogRoot .audioThumbnail
-	top 
-                
-#newCatalogRoot	#bgimage
-	background-position center
-	background-size cover
-	opacity 1
-	position absolute
-	wh 100%
 
 #newCatalogRoot .bottomButton
 	cursor pointer
@@ -88,6 +68,10 @@
 	position absolute
 	left 0%
 	z-index 500
+	height 100%
+	top 0%
+	overflow-x scroll
+	padding-bottom 5%
 
 #newCatalogRoot #buttonRow
 	top 0%
@@ -117,6 +101,25 @@
 	border 2px solid #fff
 	text-align center
 	display: none
+
+#newCatalogRoot #centeredCollectionHeader
+	top 10%
+	white-space nowrap
+	position relative
+	margin-left auto
+	margin-right auto
+
+#newCatalogRoot #collection-title
+	 display inline-block
+	 position relative
+	 height 100%
+	 text-overflow ellipsis
+	 white-space nowrap
+	 font-size 80%
+	 text-transform uppercase
+	 top 7.5%
+	 margin-left auto
+	 margin-right auto
 
 #newCatalogRoot #collection-label
 	height 7%
@@ -148,12 +151,27 @@
 	text-align left
 	position absolute
 
+#newCatalogRoot #bottomScrollWrapper
+	width 100%
+	position absolute
+	left 0%
+	z-index 500
+	height 75%
+	top 25%
+	overflow hidden
+	
 #newCatalogRoot #collectionDescription
 	width 90%
-	height 100%
+	height 60%
+	top 40%
 	overflow-y auto
-	margin 5%
-	padding-right 5%
+	margin-left 5%
+	margin-right 5%
+	position absolute
+	text-align center
+	padding-top 1%
+	color white
+	word-wrap break-word
 
 #newCatalogRoot	.collectionDot
 	display inline-block
@@ -190,6 +208,8 @@
 	padding-top 30%
 	padding-left 20%
 	position absolute
+	z-index 999999999
+	display inline
 
 #newCatalogRoot #backButtonArea
 	position absolute
@@ -585,7 +605,6 @@
 	height 100%
 	width 98%
 	margin-left 2%
-	top 17.5%
 
 #newCatalogRoot .tileImage
 	position absolute
@@ -669,7 +688,7 @@
 	display none
 
 #newCatalogRoot #topBar
-	height 17%
+	height 25%
 	position absolute
 	top 0%
 	width 100%
