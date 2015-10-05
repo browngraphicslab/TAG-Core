@@ -58,14 +58,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
         idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair)
 
-    if (OFFLINE === true) {
-        TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
-    }
-    else {
-        nobelWillInit();
-    }
-    videoOverlay();
-
     /** function videoOverlay
     *   creates "screensaver" overlay to be displayed after idle timer expires
     */
@@ -1090,7 +1082,18 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         }
     }
+
+    //Start Auto Functions
     firstInit();
+    if (OFFLINE === true) {
+        TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
+    }
+    else {
+        nobelWillInit();
+    }
+    videoOverlay();
+    //End Auto Functions
+
     function SetWillImage(page) {
         $(".willPage").hide();
         willImage = $("#willPage" + page)
@@ -1736,7 +1739,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 break;
         }
         if (doqType) {
-
+            $("#willOverlayRoot").remove()
+            $("#willOverlayRoot").die()
             var slideDiv = $(document.createElement("div"))
             slideDiv.css({
                 "width": "100%",
