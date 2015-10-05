@@ -43,6 +43,22 @@ TAG.Layout.SpoofTest = (function () {
 		"background-color" : "rgb(50,50,50)"
 	}).append(scroller)
 
+	var ratio = root.width() / root.height()
+	if (ratio !== (16 / 9)) {
+	    if (ratio > (16 / 9)) {
+	        base.css("width", root.height() * (16 / 9) + "px")
+	        console.log("ratio was greater than 16/9")
+	    }
+	    else {
+	        base.css("height", (9 / 16) * root.width() + "px")
+	        console.log("ratio was less than 16/9")
+	    }
+	}
+	else {
+        console.log("ratio was 16/9")
+	}
+
+
 	TAG.Layout.Spoof().getLaureates(init)
 	function makeSearchBoxController() {
 	    searchIconButton.css({
@@ -57,7 +73,7 @@ TAG.Layout.SpoofTest = (function () {
 	    var ret = {}
         ret.isSearch = true
 	    ret.setClear = function () {
-	        searchIconButton.attr({ src: '../tagcore/images/icons/x.svg' })
+	        searchIconButton.attr({ src: '../tagcore/images/icons/clear search icon (1).svg' })
 	        ret.isSearch = false
 	    }
 	    ret.setSearch = function () {
