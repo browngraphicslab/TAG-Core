@@ -51,6 +51,7 @@ TAG.Layout.SpoofTest = (function () {
 	    }
 	    else {
 	        base.css("height", (9 / 16) * root.width() + "px")
+	        base.css("top", .5 * (root.height() - ((9 / 16) * root.width())) + "px")
 	        console.log("ratio was less than 16/9")
 	    }
 	}
