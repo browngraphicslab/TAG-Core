@@ -171,14 +171,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             script,
             meta;
 
-        if (!idleTimer && !previewing && locked !== doq.Identifier) {
-            idleTimer = TAG.Util.IdleTimer.TwoStageTimer();
-            idleTimer.start();
-        }
-        if (idleTimer && (previewing || locked === doq.Identifier)) {
-            idleTimer.kill();
-        }
-
         var progressCircCSS = {
             'position': 'absolute',
             'z-index': '50',
@@ -743,9 +735,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         root.find('#seadragonManipContainer').on('click', function (evt) {
             evt.stopPropagation(); //Prevent the click going through to the main container
             evt.preventDefault();
-            if (locked !== doq.Identifier) {
-                TAG.Util.IdleTimer.restartTimer();
-            }
         });
 
         root.find('#leftControl').on('mousedown', function (evt) {
@@ -952,8 +941,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 collectionsPageRoot;
             backButton.off('click');
 
-            //idleTimer && idleTimer.kill();
-            //idleTimer = null;
             if (isBarOpen === false) {
                 toggler.click();
             }
@@ -1057,9 +1044,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 media.toggle(false, noPanToPoint);
                 if (justCircle) {
                     media.toggle(true, noPanToPoint);
-                }
-                if (locked !== doq.Identifier) {
-                    TAG.Util.IdleTimer.restartTimer();
                 }
                 (media.linq.Metadata.Type !== 'Layer') && media.mediaManipPreprocessing();   // Set the newly opened media as active for manipulation
 
