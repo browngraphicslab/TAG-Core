@@ -5494,7 +5494,7 @@ TAG.Layout.Spoof = (function () {
             tours[tourName].tracks.forEach(function (track) {
                 if (track.providerId === "deepZoom") {
                     var src = {}
-                    obj[track.guid] = src
+                    obj[track.assetUrl] = src
                     staticSetPath(track.assetUrl, src, "src",function(){ret++})
                     num++
                 }
@@ -5502,8 +5502,6 @@ TAG.Layout.Spoof = (function () {
         })
         var p = function () {
             if (ret === num) {
-                console.log(num)
-                console.log(ret)
                 callback && callback()
             }
             else {
