@@ -79,7 +79,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'height': '100%',
             'top': '0%',
             'text-align':'center',
-            'z-index':'1004',
+            'z-index':'50002',
         });
         touchToExplore.css({
             'position': 'absolute',
@@ -119,6 +119,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function removeVideo() {
+
+        $("#willOverlayRoot").remove();
+        returnToTop();
         videoContainer.remove();
         //start new idle timer
         var timerPair1 = TAG.Util.IdleTimer.timerPair(IDLE_TIMER_DURATION, videoOverlay),
@@ -127,12 +130,21 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         idleTimer.start();
         //add handler to document to restart timer on mousedown and mousemove (in this case, touch drag on slider)
         $(document).mousedown(restartTimer);
-        $(document).mousemove($.debounce(100, false,restartTimer));
+        $(document).mousemove($.debounce(100, false, restartTimer));
     }
 
     function restartTimer() {
         idleTimer && idleTimer.restart();
     }
+
+    function returnToTop() {
+        chunkNumber = 1;
+        pageNumber = 1;
+        $(".assocMedia").hide()
+        rightStack = getRightTable()
+        nobelWillInit();
+    }
+
     function firstInit() {
         background = $(document.createElement('div'));
         background.css({
@@ -1521,12 +1533,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function goPrevPage() {
         if (pageNumber > 0) {
-            idleTimer.kill();
             pageNumber -= 1
-
             $(".assocMedia").hide()
             rightStack = getRightTable()
-
             nobelWillInit();
         }
     }
@@ -1538,12 +1547,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     */
     function nextPage() {
         if (pageNumber < 4) {
-            idleTimer.kill();
             pageNumber += 1
-
             $(".assocMedia").hide()
             rightStack = getRightTable()
-
             nobelWillInit();
         }
     }
