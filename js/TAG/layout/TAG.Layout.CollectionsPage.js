@@ -823,7 +823,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                         "height": "100%",
                         "top": "0%",
                         "left": "100%",
-                        'z-index': "10000000000"
+                        'z-index': "50001"
                     })
                     switchRoot.append(artworkViewer.getRoot()).attr({ id: "artworkViewerSwitchRoot" })
                     switchRoot.css({ "background-color": "black" })
