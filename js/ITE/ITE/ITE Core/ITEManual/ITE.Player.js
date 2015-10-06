@@ -1288,6 +1288,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             outer.css({
                 'position': 'relative',
                 'z-index': '9999999999',
+                'text-indent' : '20px',
                 'width': '100%',
                 'left': '0%',
                 'background-color': 'transparent',
