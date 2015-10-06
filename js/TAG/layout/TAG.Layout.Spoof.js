@@ -11255,12 +11255,42 @@ TAG.Layout.Spoof = (function () {
         doqsInCollection: doqsInCollection,
         setCollectionPaths: setCollectionPaths,
         getData: getData,
+        setGlobalImages: setGlobalImages,
         staticSetPath: staticSetPath
     };
-    function staticSetPath(path, obj, srcName) {
+    function setGlobalImages(callback) {
+        var obj = {}
+        var num = 0
+        var ret = 0
+        var tours = tourDoqs
+        Object.keys(tours).forEach(function (tourName) {
+            tours[tourName].tracks.forEach(function (track) {
+                if (track.providerId === "deepZoom") {
+                    var src = {}
+                    obj[track.guid] = src
+                    staticSetPath(track.assetUrl, src, "src",function(){ret++})
+                    num++
+                }
+            })
+        })
+        var p = function () {
+            if (ret === num) {
+                console.log(num)
+                console.log(ret)
+                callback && callback()
+            }
+            else {
+                setTimeout(p, 100);
+            }
+        }
+        $(document).data("seadragon_sources", obj)
+        p()
+    }
+    function staticSetPath(path, obj, srcName, callback) {
         Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\"+path).done(function (file) {
             var url = URL.createObjectURL(file, { oneTimeOnly: false });
             obj[srcName] = url;
+            callback && callback()
         });
     }
     function setCollectionPaths(callback) {

@@ -1093,17 +1093,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             hardcodedData[p - 1]["nobelHotspots"] = nobelHotspots
 
         }
+        if (OFFLINE === true) {
+            TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
+        }
+        else {
+            nobelWillInit();
+        }
+        videoOverlay();
     }
-
+    TAG.Layout.Spoof().setGlobalImages(firstInit)
     //Start Auto Functions
-    firstInit();
-    if (OFFLINE === true) {
-        TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
-    }
-    else {
-        nobelWillInit();
-    }
-    videoOverlay();
     //End Auto Functions
 
     function SetWillImage(page) {
