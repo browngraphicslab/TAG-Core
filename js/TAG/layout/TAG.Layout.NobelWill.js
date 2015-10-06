@@ -1705,6 +1705,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 doq = spoof.tourDoqs.Homes
                 doqType = "tour"
                 break;
+            case "Intro_Tour":
+                doq = spoof.tourDoqs.Intro
+                doqType = "tour"
             //Collections
             case "Bjorkborn":
                 doq = spoof.collectionDoqs.Bjorkborn
@@ -2028,25 +2031,30 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 switch (assetNumber) {
                     case 1:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg';
+                        title = "Intro";
+                        link = "Intro_Tour";
+                        break;
+                    case 2:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg';
                         title = "Will";
                         link = "Will_Tour";
                         break;
-                    case 2:
+                    case 3:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg';
                         title = "Prize";
                         link = "FromWillToPrize";
                         break;
-                    case 3:
+                    case 4:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg';
                         title = "Family";
                         link = "Family_Tour";
                         break;
-                    case 4:
+                    case 5:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg';
                         title = "Factories";
                         link = "Factories_Tour";
                         break;
-                    case 5:
+                    case 6:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Homes.svg';
                         title = "Homes";
                         link = "Homes_Tour";
@@ -2192,7 +2200,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourTitleDiv.append(tourTextImg);
         **/
         tourDiv.append(tourTitleDiv);
-        for (var i = 0; i<5; i++) {
+        for (var i = 0; i<6; i++) {
             tourDiv.append(createTaskbarExtra('tour', i+1));
         }
 
