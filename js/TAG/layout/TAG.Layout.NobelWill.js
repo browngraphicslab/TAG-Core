@@ -1212,7 +1212,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     closest = i;
                 }
             }
-            setChunkNumber(closest, checkForHotspots, 400);
+            setChunkNumber(closest, checkForHotspots, 300);
             dragging = false;
         }
     }
@@ -1746,9 +1746,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 doqType = "collection"
                 break;
         }
-        if (doqType) {
-            $("#willOverlayRoot").remove()
-            $("#willOverlayRoot").die()
+        if (doqType && $("#willOverlayRoot").length === 0) {
             var slideDiv = $(document.createElement("div"))
             slideDiv.css({
                 "width": "100%",
