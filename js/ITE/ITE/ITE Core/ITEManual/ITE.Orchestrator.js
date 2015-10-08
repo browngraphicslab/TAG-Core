@@ -231,9 +231,20 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 
-	function seek(seekPercent) {
+	function seek(seekPercent, audioOnly) {//Audio Only is an Nobel HACK attempt
 	    self.setLastMovedObjectByZIndex(-1);
 	    self.updateZIndices();
+
+	    if (audioOnly === true) {
+	        for (i = 0; i < self.trackManager.length; i++) {
+	            var track = self.trackManager[i];
+	            if (track.type === "audio") {
+	                track.play(track.seek());
+                    return
+	            }
+	        }
+	        return;
+	    }
 		// Pause.
 		if (self.prevStatus === 0) {
 			self.prevStatus = self.status;

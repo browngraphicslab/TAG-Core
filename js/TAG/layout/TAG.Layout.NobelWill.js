@@ -275,8 +275,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         background.append(canvas);
         canvas.mousedown(function (e) {
             if (e.buttons > 0 && $("#bigPopup").length === 0) {
-                var offset = sliderBar.offset();
-                var willOffset = willImage.offset()
+                var offset = sliderBar.offset(),
+                    willOffset = willImage.offset(),
+                    upOffset = $("#upIcon").offset()
                 if (e.clientY > offset.top && e.clientY < offset.top + sliderBar.height()) {
                     lastDragY = e.clientY;
                     dragging = true;
@@ -290,7 +291,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         media.click();
                     }
                 })
-                var upOffset = $("#upIcon").offset()
                 if (e.clientX < upOffset.left + $("#upIcon").width() && e.clientX > upOffset.left) {
                     var downOffset = $("#downIcon").offset()
                     if (e.clientY > upOffset.top && e.clientY < upOffset.top + $("#upIcon").height()) {
@@ -302,6 +302,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         dragging = false;
                         touching = false;
                         $("#downIcon").click()
+                    }
+                }
+                else if (chunkNumber === 0) {
+                    var downOffset = $("#downIcon").offset()
+                    if (e.clientX < downOffset.left + $("#downIcon").width() && e.clientX > downOffset.left) {
+                        if (e.clientY > downOffset.top && e.clientY < downOffset.top + $("#downIcon").height()) {
+                            dragging = false;
+                            touching = false;
+                            $("#downIcon").click()
+                        }
                     }
                 }
             }
@@ -451,7 +461,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "z-index": "1300"
         })
         up.css({
-            'bottom': 'calc(50% + 30px)'
+            'bottom': 'calc(50% + 17.5px)'
         })
         up.click(
             function () {
@@ -476,7 +486,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "z-index": "1300"
         })
         down.css({
-            'top': 'calc(50% + 30px)'
+            'top': 'calc(50% + 17.5px)'
         }).mouseup(function (e) {
             mouseUp(e)
         })
@@ -1093,17 +1103,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             hardcodedData[p - 1]["nobelHotspots"] = nobelHotspots
 
         }
+        if (OFFLINE === true) {
+            TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
+        }
+        else {
+            nobelWillInit();
+        }
+        videoOverlay();
     }
-
+    TAG.Layout.Spoof().setGlobalImages(firstInit)
     //Start Auto Functions
-    firstInit();
-    if (OFFLINE === true) {
-        TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
-    }
-    else {
-        nobelWillInit();
-    }
-    videoOverlay();
     //End Auto Functions
 
     function SetWillImage(page) {
@@ -1213,7 +1222,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     closest = i;
                 }
             }
-            setChunkNumber(closest, checkForHotspots, 400);
+            setChunkNumber(closest, checkForHotspots, 300);
             dragging = false;
         }
     }
@@ -1593,7 +1602,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         else {
             $("#downIcon").css({
-                'top': 'calc(50% + 30px)'
+                'top': 'calc(50% + 17.5px)'
             })
         }
         function percentToPx(percent) {
@@ -1636,6 +1645,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     * @param int duration          for the excpetionally picky a duration of animation can be specified in milliseconds
     */
     function fadeText(textDiv, finalColor, callback, duration) {
+        textDiv.stop();
         textDiv.animate({ color: finalColor }, duration || 1000, 'easeInOutQuart', callback ? callback : null);
     }
 
@@ -1649,6 +1659,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function moveSliderBar(y, height, callback, duration) {
         y *= 100;
         height *= 100;
+        sliderBar.stop()
         sliderBar.animate({ top: y + '%', height: height + '%' }, duration || 1000, 'easeInOutQuart', callback ? callback : null);
     }
 
@@ -1706,6 +1717,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 doq = spoof.tourDoqs.Homes
                 doqType = "tour"
                 break;
+            case "Intro_Tour":
+                doq = spoof.tourDoqs.Intro
+                doqType = "tour"
+                break;
             //Collections
             case "Bjorkborn":
                 doq = spoof.collectionDoqs.Bjorkborn
@@ -1744,9 +1759,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 doqType = "collection"
                 break;
         }
-        if (doqType) {
-            $("#willOverlayRoot").remove()
-            $("#willOverlayRoot").die()
+        if (doqType && $("#willOverlayRoot").length === 0) {
             var slideDiv = $(document.createElement("div"))
             slideDiv.css({
                 "width": "100%",
@@ -2029,25 +2042,30 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 switch (assetNumber) {
                     case 1:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg';
+                        title = "Intro";
+                        link = "Intro_Tour";
+                        break;
+                    case 2:
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg';
                         title = "Will";
                         link = "Will_Tour";
                         break;
-                    case 2:
+                    case 3:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg';
                         title = "Prize";
                         link = "FromWillToPrize";
                         break;
-                    case 3:
+                    case 4:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg';
                         title = "Family";
                         link = "Family_Tour";
                         break;
-                    case 4:
+                    case 5:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg';
                         title = "Factories";
                         link = "Factories_Tour";
                         break;
-                    case 5:
+                    case 6:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Homes.svg';
                         title = "Homes";
                         link = "Homes_Tour";
@@ -2193,7 +2211,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourTitleDiv.append(tourTextImg);
         **/
         tourDiv.append(tourTitleDiv);
-        for (var i = 0; i<5; i++) {
+        for (var i = 0; i<6; i++) {
             tourDiv.append(createTaskbarExtra('tour', i+1));
         }
 

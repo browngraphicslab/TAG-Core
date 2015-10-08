@@ -381,7 +381,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 			var surKeyframes = self.getSurroundingKeyframes(seekTime);
 			var interp = 0;
 			if (surKeyframes[1].time - surKeyframes[0].time !== 0) {
-				interp = (self.timeManager.getElapsedOffset() - surKeyframes[0].time) / (surKeyframes[1].time - surKeyframes[0].time);
+				interp = (seekTime - surKeyframes[0].time) / (surKeyframes[1].time - surKeyframes[0].time);
 			}
 			var soughtState = self.lerpState(surKeyframes[0], surKeyframes[1], interp);
 			self.setState(soughtState);
