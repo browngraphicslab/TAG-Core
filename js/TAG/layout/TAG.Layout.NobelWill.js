@@ -275,8 +275,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         background.append(canvas);
         canvas.mousedown(function (e) {
             if (e.buttons > 0 && $("#bigPopup").length === 0) {
-                var offset = sliderBar.offset();
-                var willOffset = willImage.offset()
+                var offset = sliderBar.offset(),
+                    willOffset = willImage.offset(),
+                    upOffset = $("#upIcon").offset()
                 if (e.clientY > offset.top && e.clientY < offset.top + sliderBar.height()) {
                     lastDragY = e.clientY;
                     dragging = true;
@@ -290,7 +291,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         media.click();
                     }
                 })
-                var upOffset = $("#upIcon").offset()
                 if (e.clientX < upOffset.left + $("#upIcon").width() && e.clientX > upOffset.left) {
                     var downOffset = $("#downIcon").offset()
                     if (e.clientY > upOffset.top && e.clientY < upOffset.top + $("#upIcon").height()) {
@@ -302,6 +302,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         dragging = false;
                         touching = false;
                         $("#downIcon").click()
+                    }
+                }
+                else if (chunkNumber === 0) {
+                    var downOffset = $("#downIcon").offset()
+                    if (e.clientX < downOffset.left + $("#downIcon").width() && e.clientX > downOffset.left) {
+                        if (e.clientY > downOffset.top && e.clientY < downOffset.top + $("#downIcon").height()) {
+                            dragging = false;
+                            touching = false;
+                            $("#downIcon").click()
+                        }
                     }
                 }
             }
@@ -451,7 +461,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "z-index": "1300"
         })
         up.css({
-            'bottom': 'calc(50% + 30px)'
+            'bottom': 'calc(50% + 17.5px)'
         })
         up.click(
             function () {
@@ -476,7 +486,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "z-index": "1300"
         })
         down.css({
-            'top': 'calc(50% + 30px)'
+            'top': 'calc(50% + 17.5px)'
         }).mouseup(function (e) {
             mouseUp(e)
         })
@@ -1592,7 +1602,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         else {
             $("#downIcon").css({
-                'top': 'calc(50% + 30px)'
+                'top': 'calc(50% + 17.5px)'
             })
         }
         function percentToPx(percent) {
@@ -1635,6 +1645,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     * @param int duration          for the excpetionally picky a duration of animation can be specified in milliseconds
     */
     function fadeText(textDiv, finalColor, callback, duration) {
+        textDiv.stop();
         textDiv.animate({ color: finalColor }, duration || 1000, 'easeInOutQuart', callback ? callback : null);
     }
 
@@ -1648,6 +1659,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function moveSliderBar(y, height, callback, duration) {
         y *= 100;
         height *= 100;
+        sliderBar.stop()
         sliderBar.animate({ top: y + '%', height: height + '%' }, duration || 1000, 'easeInOutQuart', callback ? callback : null);
     }
 
@@ -1708,6 +1720,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             case "Intro_Tour":
                 doq = spoof.tourDoqs.Intro
                 doqType = "tour"
+                break;
             //Collections
             case "Bjorkborn":
                 doq = spoof.collectionDoqs.Bjorkborn

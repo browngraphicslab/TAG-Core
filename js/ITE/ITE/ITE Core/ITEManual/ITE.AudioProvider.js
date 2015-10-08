@@ -79,7 +79,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		_audio.attr({
 			"type" 	: self.trackData.type
 		});
-        TAG.Layout.Spoof().staticSetPath(self.trackData.assetUrl,_audio[0],"src")
+        
 
 		// Ensure that the audio is completely loaded.
 		_audioControls.addEventListener("canplay", function() {
@@ -92,6 +92,13 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			//Tell orchestrator to play (if other tracks are ready)
 			self.orchestrator.playWhenAllTracksReady()
 		});
+		if (jQuery.data(document, "seadragon_sources")[self.trackData.assetUrl] === undefined) {
+            var tempUrl = self.trackData.assetUrl
+            TAG.Layout.Spoof().staticSetPath(self.trackData.assetUrl, _audio[0], "src", function () { (jQuery.data(document, "seadragon_sources"))[tempUrl] = _audio[0].src })
+		}
+		else {
+		    _audio[0].src = (jQuery.data(document, "seadragon_sources"))[self.trackData.assetUrl]
+		}
 
 		// // Ensure that the audio is completely loaded.
 		// function monitor(timeWaited) {
@@ -229,7 +236,6 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 			self.setState(soughtState);
 			nextKeyframe = surKeyframes[1];
 		}
-
 		return nextKeyframe;
 	};
 

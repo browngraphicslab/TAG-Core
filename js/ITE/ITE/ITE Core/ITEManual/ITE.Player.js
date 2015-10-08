@@ -575,18 +575,21 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                     hideInitialOverlay();
                     makeTitleSlide();
                     setTimeout(function () {
-                        initialOverlay.fadeTo(1000, 0, function () { initialOverlay.remove(); });    
                         attachVolume();
                         attachPlay();
                         attachLoop();
                         attachProgressBar();
                         attachProgressIndicator();
-                        orchestrator.play();
                         playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
                         hideInfoPane();
                         setControlsFade();
-                    }, 8000);
-                }, 6000);
+                        orchestrator.play();
+                        setTimeout(function () { orchestrator.seek(orchestrator.getElapsedTime() / orchestrator.tourData.totalDuration, true) }, 25)
+                        setTimeout(function () {
+                            initialOverlay.fadeTo(1000, 0, function () { initialOverlay.remove(); });
+                        },50);
+                    }, 2000);
+                }, 3000);
                 return;
             }
             orchestrator.play();
@@ -1305,7 +1308,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
 
     function getDoqFromZIndex(z) {
-        if (data && data[z-1]!==false && data[z-1].SidebarInfo) {
+        if (data && data.length > z && data[z-1]!==false && data[z-1].SidebarInfo) {
             return data[z-1];
         }
         return null;

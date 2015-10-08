@@ -13776,7 +13776,14 @@ ImageJob.prototype = {
         while (s.indexOf("/") !== -1) {
             s=s.replace("/","\\")
         }
-        this.image.src = (jQuery.data(document, "seadragon_sources"))[s]
+        if (jQuery.data(document, "seadragon_sources")[s] === undefined) {
+            var tempS = s;
+            var tempImg = this.image
+            TAG.Layout.Spoof().staticSetPath(s, this.image, "src", function () { (jQuery.data(document, "seadragon_sources"))[tempS] = tempImg.src })
+        }
+        else {
+            this.image.src = (jQuery.data(document, "seadragon_sources"))[s]
+        }
         //this.image.src = ($(document).data("seadragon_sources"))[]
         //TAG.Layout.Spoof().staticSetPath(s,this.image,"src")
         //this.image.src = this.src;
