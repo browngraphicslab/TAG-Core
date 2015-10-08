@@ -2062,7 +2062,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'width' : '60px',
                 "border-radius": "3px",
                 'top': '30%',
-                'margin-right': '25px',
+                'margin-right': '35px',
                 'color': 'red',
                 'float': 'left',
                 "z-index" : "1003"

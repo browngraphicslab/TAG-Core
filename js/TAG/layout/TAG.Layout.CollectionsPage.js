@@ -51,7 +51,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
         NOBEL_COLOR = "#D99B3B",
         TILE_BUFFER = $("#tagRoot").width() / 15,                  // number of pixels between artwork tiles
         TILE_HEIGHT_RATIO = 200,                                          //ratio between width and height of artwork tiles
-        TILE_WIDTH_RATIO = twoDeep ? 255 : 200,
+        TILE_WIDTH_RATIO = 255,
 
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
@@ -438,6 +438,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
 
             //CLICK HANDLER FOR TILE
             main.on('click', function () {
+
                 switchPage(currentWork)();
             });
 
