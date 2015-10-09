@@ -49,9 +49,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
         lockKioskMode = false, //TAG.Layout.Spoof().getKioskLocked() : TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
         NOBEL_COLOR = "#D99B3B",
-        TILE_BUFFER = $("#tagRoot").width() / 15,                  // number of pixels between artwork tiles
+        TILE_BUFFER = $("#tagRoot").width() / 18,                  // number of pixels between artwork tiles
         TILE_HEIGHT_RATIO = 200,                                          //ratio between width and height of artwork tiles
-        TILE_WIDTH_RATIO = twoDeep ? 255 : 200,
+        TILE_WIDTH_RATIO = 255,
 
         // misc uninitialized vars
         fullMinDisplayDate,             // minimum display date of full timeline
@@ -438,6 +438,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
 
             //CLICK HANDLER FOR TILE
             main.on('click', function () {
+
                 switchPage(currentWork)();
             });
 
@@ -447,7 +448,6 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
             artTitle.append(artText);
             artText.css('font-size', '.8em');
             artText.css('color', 'white');
-            artTitle.css('background-color', 'rgba(0,0,0,.9)');
             main.hover(
                 function () {
                     artText.css('color', 'white');
@@ -455,7 +455,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                 },
                 function(){
                     artText.css('color', 'white');
-                    artTitle.css('background-color', 'rgba(0,0,0,.9)')
+                    artTitle.css('background-color', 'rgba(0,0,0,.8)')
                 }
             )
 
@@ -465,9 +465,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
             tileDiv.append(main);
             tileDivHeight = bottomContainer.height();
             var tileHeight = (0.35) * tileDivHeight;
-            main.css({ 'height': (0.35) * tileDivHeight });
+            main.css({ 'height': (0.40) * tileDivHeight });
             main.css({ 
-                'width': 1.25*tileHeight,
+                'width': 1.42*tileHeight,
                 'box-shadow': '8px 8px 20px #000',
                 'border': '3px solid',
                 'border-color': NOBEL_COLOR,
