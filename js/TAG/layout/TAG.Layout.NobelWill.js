@@ -119,8 +119,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function removeVideo() {
-
+        var tourPlayer = jQuery.data(document, "currentTour")
+        if (Object.keys(tourPlayer).length !== 0) {
+            tourPlayer.goBack();
+            $(document).data("currentTour", {});
+        }
         $("#willOverlayRoot").remove();
+
         returnToTop();
         videoContainer.remove();
         //start new idle timer
@@ -1103,6 +1108,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             hardcodedData[p - 1]["nobelHotspots"] = nobelHotspots
 
         }
+
+        $(document).data("currentTour", {});
+
+
         if (OFFLINE === true) {
             TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
         }
@@ -1132,6 +1141,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
     }
     function nobelWillInit() {
+        $(document).data("currentTour", {});
         if (testamentHeader !== true) {
             $("#titleDiv").text("Will Page " + pageNumber + " of 4");
         }
@@ -1780,7 +1790,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     break
                 case "tour":
                     var tourDoq = spoof.tourDoqs[doq.Name]
-                    var tourPlayer = TAG.Layout.TourPlayer(doq, null,null, null,spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail,null)
+                    var tourPlayer = TAG.Layout.TourPlayer(doq, null, null, null, spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail, null)
+                    $(document).data("currentTour", tourPlayer);
                     slideDiv.append(tourPlayer.getRoot());
                     tourPlayer.startPlayback()
                     break;
@@ -2090,9 +2101,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             var d = $(document.createElement('img')).addClass("taskBarImage");
             d.css({
                 "position": 'absolute',
-                'width': '60px',
+                'width': '40px',
                 "border-radius": "5px",
-                'height': '60px',
+                'height': '40px',
                 'box-shadow': '3px 3px rgba(0,0,0,.7)',
                 "border": "1.5px solid " + NOBEL_ORANGE_COLOR,
             })

@@ -175,6 +175,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         getRoot: function () {
             return root;
         },
+        goBack:this.goBack,
         startPlayback: function () { 
             window.ITE = window.ITE || {};
             var testOptions =   {
