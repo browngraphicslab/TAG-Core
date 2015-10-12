@@ -955,7 +955,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             doNothing("ERROR: trying to change index of a track to an index that does not exist")
             return
         }
-        trackManger = self.getTracks();
+        trackManager = self.getTracks();
         var i = trackManager.indexOf(track);
         //If desired index is less than current index, keep switching down until you get to the desired index
         while (index < i){
@@ -1243,8 +1243,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     }
 
 
-    function showInfoPane(callback){
-        console.log("show info pane called");
+    function showInfoPane(callback) {
+        $("#infoPaneDiv").stop()
         infoPaneOut = true;
         $("#infoPaneDiv").animate({ left: '0%' }, 1000, 'easeInOutQuart', callback ? function () {
             callback(),
@@ -1264,7 +1264,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         })    
     }
 
-    function hideInfoPane(callback){
+    function hideInfoPane(callback) {
+        $("#infoPaneDiv").stop()
         infoPaneOut = false;
         $("#infoPaneDiv").animate({ left: '-22%' }, 1000, 'easeInOutQuart', callback ? function () {
             callback(),
