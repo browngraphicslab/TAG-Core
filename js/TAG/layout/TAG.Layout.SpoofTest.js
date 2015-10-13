@@ -767,7 +767,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
 	        "top": "100px",
-	        "padding-left": "3px",
+	        "padding-left": "5px",
 	        "font-size": ".75em",
 	        "height": "27.5px",
 	        "left": "45px",
@@ -802,7 +802,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "padding-left": "3px",
             "overflow" : "hidden",
 	        "left": "45px",
-	        "box-shadow": "3px 8px 17px 4px #000",
+	        "box-shadow": "3px 15px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
 	    }).attr({ id: "decadeList" })
 	    var ds = ['1900s', '1910s', '1920s', '1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s', ]
@@ -817,16 +817,16 @@ TAG.Layout.SpoofTest = (function () {
 	    var genderList = $(document.createElement('div'))
 	    genders.css({
 	        "position": "absolute",
-	        "width": "90px",
+	        "width": "92px",
 	        "border-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
 	        "top": "100px",
             "height" : "27.5px",
             "font-size": ".75em",
-            "padding-left" : "3px",
+            "padding-left" : "5px",
 	        "left": "150px",
-	        "box-shadow": "3px 8px 17px 4px #000",
+	        "box-shadow": "3px 20px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
 	    }).text("Gender").click(function () {
 	        if (genderList[0].style.display === "none") {
@@ -841,7 +841,7 @@ TAG.Layout.SpoofTest = (function () {
 	    base.append(genderList)
 	    genderList.css({
 	        "position": "absolute",
-	        "width": "90px",
+	        "width": "92px",
 	        "border-bottom-left-radius": "4pt",
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
@@ -850,7 +850,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "overflow": "hidden",
 	        "padding-left": "3px",
 	        "left": "150px",
-	        "box-shadow": "3px 8px 17px 4px #000",
+	        "box-shadow": "3px 20px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
 	    }).attr({ id: "genderList" })
 	    var ds = ["male","female"]
@@ -865,10 +865,10 @@ TAG.Layout.SpoofTest = (function () {
 	        "position": "absolute",
 	        "padding-right": "8px",
 	        "height": "50%",
-	        "right": "0%",
+	        "right": "5px",
             "width" : "auto",
             "transform" : "rotate(270deg)",
-	        "top": "12.5%",
+	        "top": "10%",
 	    }).attr({ src: '../tagcore/images/icons/blackclose.svg' })
         div.append(img)
 	}
