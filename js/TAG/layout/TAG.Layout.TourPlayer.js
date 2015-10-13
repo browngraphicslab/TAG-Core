@@ -81,6 +81,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     });
 
     backButton.on('click', goBack);
+    backButtonContainer.on('click', goBack);
 
     var prevpagelink;
     if(prevExhib===null){
@@ -215,7 +216,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     * O/P:   none
     */
     function hideInitialOverlay() {
-        if (player.isInitialLoading() === true) {
+        if (player && player.isInitialLoading() === true) {
             $("#backButtonContainer").append($("#backButton"));
             player.doneInitialLoading()
             TAG.Util.hideLoading(initialOverlay)

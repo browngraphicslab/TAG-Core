@@ -2147,7 +2147,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "z-index" : "1003"
             }).click(function () {
                 switchTo(link)
-            })
+            }).mousedown(function () { bd.css({ "opacity": ".75" }) }).mouseleave(function () { bd.css({ "opacity": "1" }) })
             var d = $(document.createElement('img')).addClass("taskBarImage");
             d.css({
                 "position": 'absolute',
