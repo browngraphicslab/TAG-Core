@@ -83,7 +83,6 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P: {object}   ITEPlayer       a new ITE player object 
     */
     function createITEPlayer(playerParent, options) {
-        makeInitialOverlay();
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
         this.playerConfiguration    = playerConfiguration; 
         this.playerParent           = playerParent;
@@ -127,69 +126,14 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         }
     }
 
-    /*
-    * I/P:   none
-    * show overlay when loading into the tour
-    * O/P:   none
-    */
-    function makeInitialOverlay() {
-        initialLoading = true;
-        initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(1));
-        initialOverlay.css('display','block')
-        var infoDiv = $(document.createElement('div'));
-        infoDiv.css({
-            "color": "white",
-            "background-color": "transparent",
-            "text-align": "center",
-            "top": "59%",
-            "display": "block",
-            "position": "absolute",
-            "font-size": "3em",
-            "width": '100%',
-            "height": "100%",
-            "overflow": "visible",
-            "word-wrap": "break-word"
-        })
-        infoDiv.text("Loading Interactive Tour...");
-        infoDiv.attr('id', 'infoDiv')
-
-        var moreinfoDiv = $(document.createElement('div'));
-        moreinfoDiv.css({
-            "color": "white",
-            "background-color": "transparent",
-            "text-align": "center",
-            "top": "70%",
-            "display": "block",
-            "position": "absolute",
-            "font-size": "2em",
-            "width": '100%',
-            "height": "100%",
-            "overflow": "visible",
-            "word-wrap": "break-word"
-        })
-        moreinfoDiv.text("Tap on artworks to learn more");
-        moreinfoDiv.attr('id', 'moreinfoDiv')
-
-        TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
-        initialOverlay.append(infoDiv);
-        initialOverlay.append(moreinfoDiv);
-        $("#ITEContainer").append(initialOverlay);
-        initialOverlay.append($("#backButton"));
-    }
-
+    
     /*
     * I/P:   none
     * hide the overlay when loading into the tour
     * O/P:   none
     */
     function hideInitialOverlay() {
-        if (initialLoading === true) {
-            $("#backButtonContainer").append($("#backButton"));
-            initialLoading = false
-            TAG.Util.hideLoading(initialOverlay)
-            $('#infoDiv').remove();
-            $('#moreinfoDiv').remove();
-        }
+        tourPlayer.hideInitialOverlay()
     }
 
     /*
@@ -198,6 +142,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function attachVolume() {
+        return
         if (playerConfiguration.attachVolume) {
             var volumeContainer = $(document.createElement("div"))
                 .addClass("volumeContainer");
@@ -282,6 +227,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function attachLoop() {
+        return;
         if (playerConfiguration.attachLoop) {
 
             var loopButtonContainer = $(document.createElement("div"))
@@ -432,6 +378,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function attachFullScreen() {
+        return;
         if (playerConfiguration.attachFullScreen) {
 
             var fullScreenButtonContainer = $(document.createElement("div"))
@@ -552,7 +499,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         titleSlide.attr('src', imgPath);
         var titleDiv = $(document.createElement('div'));
         titleDiv.append(titleSlide);
-        initialOverlay.append(titleDiv);
+        tourPlayer.getInitialOverlay().append(titleDiv);
         titleDiv.css({
             'height': '100%',
             'width': '100%'
@@ -589,7 +536,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                         setTimeout(function () {
                             orchestrator.seek(orchestrator.getElapsedTime()/orchestrator.tourData.totalDuration,true)
                             unMute()
-                            initialOverlay.fadeTo(1000, 0, function () { initialOverlay.remove(); });
+                            tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
                         },75);
                     }, 1500);
                 }, 3000);
@@ -1355,4 +1302,6 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     this.clearControlsTimeout = clearControlsTimeout;
     this.updateManipObjectZ = updateManipObjectZ;
     this.setInfoTrack = setInfoTrack;
+    this.isInitialLoading = function () { return initialLoading }
+    this.doneInitialLoading = function () { initialLoading = false;}
 };

@@ -618,6 +618,7 @@ TAG.Layout.SpoofTest = (function () {
 		var category = $(document.createElement("div"))
 		var year = $(document.createElement("div"))
 		var desc = $(document.createElement("div"))
+		var country = $(document.createElement("div"))
 		var icon = $(document.createElement("img")).attr({ src: '../tagcore/images/prize_icons/' + laur.Metadata.PrizeCategory.toLowerCase() + '.svg' })
 		icon.css({
 		    "width": "70px",
@@ -636,7 +637,8 @@ TAG.Layout.SpoofTest = (function () {
 		name.css({ "font-size": "1.4em" })
 		category.css({ "font-size": ".95em" })
 		year.css({ "font-size": ".95em" })
-		desc.css({ "font-size": ".98em" })
+		desc.css({ "font-size": ".95em" })
+		country.css({ "font-size": ".95em" })
 		var last = laur.Metadata.LastName
 		if (last === undefined || last === null || last === "undefined") {
             last = ""
@@ -644,6 +646,7 @@ TAG.Layout.SpoofTest = (function () {
 		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " +last));
 		rightSide.append(category.css(commonCSS).text(laur.Metadata.PrizeCategory));
 		rightSide.append(year.css(commonCSS).text(laur.Metadata.Year));
+		rightSide.append(country.css(commonCSS).text(laur.Metadata.bornCountry ? laur.Metadata.bornCountry : ""))
 		rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
         rightSide.append(icon)
 

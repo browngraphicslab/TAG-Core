@@ -1313,7 +1313,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var w = canvas[0].width;
     	canvas[0].width = 1;
     	canvas[0].width = w;
-        canvas.css({"opacity" : "0"})
+        canvas.css({"opacity" : "0","pointer-events":"auto"})
 
         for (var i = 0; i < hardcodedData[pageNumber - 1]["nobelHotspots"].length; i++) {
             hardcodedData[pageNumber - 1]["nobelHotspots"][i][1].stop(true, true);
@@ -1797,7 +1797,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     tourPlayer.startPlayback()
                     break;
             }
-            slideDiv.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { slideDiv.css({ "background-color": "black" }) })
+            slideDiv.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { slideDiv.css({ "background-color": "black" });})
         }
     }
     function showLargePopup(mediaNumber) {
@@ -2147,7 +2147,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "z-index" : "1003"
             }).click(function () {
                 switchTo(link)
-            })
+            }).mousedown(function () { bd.css({ "opacity": ".75" }) }).mouseleave(function () { bd.css({ "opacity": "1" }) })
             var d = $(document.createElement('img')).addClass("taskBarImage");
             d.css({
                 "position": 'absolute',

@@ -5,7 +5,7 @@
 */
 TAG.Layout.Spoof = (function () {
     var _main = getMain();
-
+    var noMotivationString = "Lucy, fill this in"
     var collectionGuids = ["Patents", "Factories", "Family", "Bjorkborn", "Ceremonies", "SanRemo", "Diplomas", "Medals", "Will"];
 
     var doqsInCollection =
@@ -1487,7 +1487,13 @@ TAG.Layout.Spoof = (function () {
                     for (var d = 0; d < doq.prizes.length; d++) {
                         if (id.indexOf(doq.prizes[d].year) > -1) {
                             doq.Year = doq.prizes[d].year
-                            doq.Motivation = doq.prizes[d].motivation
+                            if (doq.prizes[d].motivation !== undefined && doq.prizes[d].motivation.length > 0) {
+                                doq.Motivation = doq.prizes[d].motivation
+                            }
+                            else {
+                                doq.Motivation = noMotivationString
+                            }
+
                         }
                     }
                     for (var d = 0; d < doq.prizes.length; d++) {

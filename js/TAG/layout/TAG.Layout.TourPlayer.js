@@ -24,6 +24,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     var ispagetoload = pageToLoad && (pageToLoad.pagename === 'tour');
     this.iteTour = tour;
     var tagContainer = $('#tagRoot');
+    var initialOverlay
 
     
 
@@ -80,6 +81,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     });
 
     backButton.on('click', goBack);
+    backButtonContainer.on('click', goBack);
 
     var prevpagelink;
     if(prevExhib===null){
@@ -156,6 +158,154 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     }
     this.getTourData = getTourData;
 
+
+    /*
+    * I/P:   none
+    * show overlay when loading into the tour
+    * O/P:   none
+    */
+    function makeInitialOverlay() {
+        initialOverlay = $(TAG.Util.UI.blockInteractionOverlay(1));
+        initialOverlay.css({"background-color":"black"})
+        initialOverlay.css('display', 'block')
+        var infoDiv = $(document.createElement('div'));
+        infoDiv.css({
+            "color": "white",
+            "background-color": "transparent",
+            "text-align": "center",
+            "top": "59%",
+            "display": "block",
+            "position": "absolute",
+            "font-size": "3em",
+            "width": '100%',
+            "height": "100%",
+            "overflow": "visible",
+            "word-wrap": "break-word"
+        })
+        infoDiv.text("Loading Interactive Tour...");
+        infoDiv.attr('id', 'infoDiv')
+
+        var moreinfoDiv = $(document.createElement('div'));
+        moreinfoDiv.css({
+            "color": "white",
+            "background-color": "transparent",
+            "text-align": "center",
+            "top": "70%",
+            "display": "block",
+            "position": "absolute",
+            "font-size": "2em",
+            "width": '100%',
+            "height": "100%",
+            "overflow": "visible",
+            "word-wrap": "break-word"
+        })
+        moreinfoDiv.text("Tap on artworks to learn more");
+        moreinfoDiv.attr('id', 'moreinfoDiv')
+
+        TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
+        initialOverlay.append(infoDiv);
+        initialOverlay.append(moreinfoDiv);
+        $("#ITEContainer").append(initialOverlay);
+        initialOverlay.append($("#backButton"));
+        $("#blockInteractionOverlay").css({"background-color":"black"})
+    }
+
+    /*
+    * I/P:   none
+    * hide the overlay when loading into the tour
+    * O/P:   none
+    */
+    function hideInitialOverlay() {
+        if (player && player.isInitialLoading() === true) {
+            $("#backButtonContainer").append($("#backButton"));
+            player.doneInitialLoading()
+            TAG.Util.hideLoading(initialOverlay)
+            $('#infoDiv').remove();
+            $('#moreinfoDiv').remove();
+        }
+    }
+    this.hideInitialOverlay = hideInitialOverlay
+
+    var startPlayback = function () {
+        window.ITE = window.ITE || {};
+        var testOptions = {
+            attachVolume: true,
+            attachLoop: true,
+            attachPlay: true,
+            attachProgressBar: true,
+            attachFullScreen: true,
+            attachProgressIndicator: true,
+            fadeControlskey: false,
+            hideControls: true,
+            autoPlay: false,
+            autoLoop: false,
+            setMute: false,
+            setInitVolume: 1,
+            allowSeek: true,
+            setFullScreen: false,
+            setStartingOffset: 0,
+            setEndTime: NaN
+        };
+        var nobelDoq = []
+        var needed = 0;
+        var returned = 0;
+        function doqReturn(doq) {
+            returned++;
+            for (var i = 0 ; i < nobelDoq.length; i++) {
+                if (doq && doq.Identifier === nobelDoq[i]) {
+                    nobelDoq[i] = doq;
+                    break;
+                }
+            }
+        }
+        var spoof = TAG.Layout.Spoof();
+        for (var i = 0; i < self.iteTour.tracks.length; i++) {
+            if (self.iteTour.tracks[i].guid && self.iteTour.tracks[i].guid !== null && self.iteTour.tracks[i].guid !== [] && self.iteTour.tracks[i].guid !== '') {
+                nobelDoq.push(self.iteTour.tracks[i].guid);
+                spoof.getDoq(self.iteTour.tracks[i].guid, doqReturn,
+                    function () {
+                        console.log("error getting doq in tourplayer")
+                    }, function () {
+                        console.log("error getting doq in tourplayer .")
+                    });
+                needed++;
+
+            }
+            else {
+                nobelDoq.push(false)
+            }
+        }
+
+        function pollForData() {
+            if (!cancelLoad) {
+                if (returned < needed) {
+                    setTimeout(pollForData, 250);
+                }
+                else {
+                    donePolling();
+                }
+            }
+        }
+        function donePolling() {
+            if (!cancelLoad) {
+                makeInitialOverlay()
+                setTimeout(function () {
+                    $("#startPageLoadingOverlay").remove();
+                    player = new ITE.Player(testOptions, self, rinPlayer, idleTimer, nobelDoq);
+                    player.load(self.getTourData());
+                }, 1000)
+                return true;
+            }
+            $("#startPageLoadingOverlay").remove();
+            return false;
+        }
+        pollForData();
+        $("#backButton").click(function () {
+            cancelLoad = true;
+            return false;
+        })
+    }
+
     function goBack() {
         if (player) {
             player.pause();
@@ -170,88 +320,16 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         })
     }
     this.goBack = goBack;
+    this.getInitialOverlay = function () { return initialOverlay }
+
+
 
     return {
         getRoot: function () {
             return root;
         },
         goBack:this.goBack,
-        startPlayback: function () { 
-            window.ITE = window.ITE || {};
-            var testOptions =   {
-                    attachVolume:               true,
-                    attachLoop:                 true,
-                    attachPlay:                 true,
-                    attachProgressBar:          true,
-                    attachFullScreen:           true,
-                    attachProgressIndicator:    true, 
-                    fadeControlskey:            false, 
-                    hideControls:               true,
-                    autoPlay:                   false,
-                    autoLoop:                   false,
-                    setMute:                    false,
-                    setInitVolume:              1,
-                    allowSeek:                  true,
-                    setFullScreen:              false,
-                    setStartingOffset:          0,
-                    setEndTime:                 NaN
-            };
-            var nobelDoq = []
-            var needed = 0;
-            var returned = 0;
-            function doqReturn(doq) {
-                returned++;
-                for (var i = 0 ; i < nobelDoq.length; i++) {
-                    if (doq && doq.Identifier === nobelDoq[i]) {
-                        nobelDoq[i] = doq;
-                        break;
-                    }
-                }
-            }
-            var spoof = TAG.Layout.Spoof();
-            for (var i = 0; i < self.iteTour.tracks.length; i++) {
-                if (self.iteTour.tracks[i].guid && self.iteTour.tracks[i].guid !== null && self.iteTour.tracks[i].guid !== [] && self.iteTour.tracks[i].guid !== '') {
-                    nobelDoq.push(self.iteTour.tracks[i].guid);
-                    spoof.getDoq(self.iteTour.tracks[i].guid, doqReturn,
-                        function () {
-                            console.log("error getting doq in tourplayer")
-                        }, function () {
-                            console.log("error getting doq in tourplayer .")
-                    });
-                    needed++;
-
-                }
-                else {
-                    nobelDoq.push(false)
-                }
-            }
-
-            function pollForData() {
-                if (!cancelLoad) {
-                    if (returned < needed) {
-                        setTimeout(pollForData, 250);
-                    }
-                    else {
-                        donePolling();
-                    }
-                }
-            }
-            function donePolling() {
-                if (!cancelLoad) {
-                    $("#startPageLoadingOverlay").remove();
-                    player = new ITE.Player(testOptions, self, rinPlayer, idleTimer, nobelDoq);
-                    player.load(self.getTourData());
-                    return true;
-                }
-                $("#startPageLoadingOverlay").remove();
-                return false;
-            }
-            pollForData();
-            $("#backButton").click(function () {
-                cancelLoad = true;
-                return false;
-            })
-        }
+        startPlayback: startPlayback
     };
 
 };
