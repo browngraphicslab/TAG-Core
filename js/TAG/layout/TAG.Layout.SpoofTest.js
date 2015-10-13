@@ -121,7 +121,7 @@ TAG.Layout.SpoofTest = (function () {
                 duration = ret.scrollTime * ((finalX - scroller.scrollLeft()) / width)
             }
 	        scroller.animate({ scrollLeft: finalX }, duration, "linear", function () { ret.start() })
-	    }
+        }
 	    ret.timer = setTimeout(function () { ret.start() }, ret.time);
 	    ret.restart = function () {
 	        clearTimeout(ret.timer)
@@ -168,11 +168,12 @@ TAG.Layout.SpoofTest = (function () {
 		    "position": "absolute",
 		    "width": "90px",
 		    "height": "30px",
-		    "font-size": ".65em",
+		    "font-size": ".775em",
             "text-align" : "center",
 		    "border-radius": "4pt",
 		    "background-color": NOBEL_ORANGE_COLOR,
-		    "color": "white",
+		    "color": "black",
+            "vertical-align" : "middle",
 		    "box-shadow": "3px 8px 17px 4px #000",
 		    "border-color": NOBEL_ORANGE_COLOR,
 		    "top": "95px",
@@ -185,7 +186,7 @@ TAG.Layout.SpoofTest = (function () {
 		    sort(null);
 		}).hide();
 		clearButton.css({
-		    "left": "850px",
+		    "left": "765px",
 		}).text("Clear").click(reset).mousedown(function () { clearButton.css("opacity", ".75") }).mouseleave(function () { clearButton.css("opacity","1")})
 
 		var subSearchText = $(document.createElement("div")).text("Single term: name, country of origin, or sub-field")
@@ -239,7 +240,7 @@ TAG.Layout.SpoofTest = (function () {
             l+=70
 		})
 
-        timer = makeTimer()
+		//timer = makeTimer()
         makeDropDowns()
         $("#decadeList").hide();
         $("#genderList").hide();
@@ -248,19 +249,22 @@ TAG.Layout.SpoofTest = (function () {
 		$("#tagContainer").unbind()
 		$("#tagRoot").unbind()
 		root.unbind()
-
 		var ontouch = function () {
-		    timer.stop()
-		    timer.restart()
+		    //timer.stop()
+		    //timer.restart()
 		}
 		scroller.click(ontouch).mousedown(ontouch)
         $(".block").click(ontouch).mousedown(ontouch)
         $(document).click(ontouch).mousedown(ontouch)
         root.click(function (e) {
-            if (!(e.target.innerText === "Decade" || (e.target.parentNode && e.target.parentNode.innerText === "Decade"))) {//sloppy but gets the job done
+            if (!(e.target.id === "decadeButton" || (e.target.parentNode && e.target.parentNode.id === "decadeButton") ||
+                (e.target.id === "decadeList" || (e.target.parentNode && e.target.parentNode.id === "decadeList"))||
+                (e.target.className === "checkBox"))) {//sloppy but gets the job done
                 $("#decadeList").hide();
             }
-            if (!(e.target.innerText === "Gender" || (e.target.parentNode && e.target.parentNode.innerText === "Gender"))) {
+            if (!(e.target.id === "genderButton" || (e.target.parentNode && e.target.parentNode.id === "genderButton") ||
+                (e.target.id === "genderList" || (e.target.parentNode && e.target.parentNode.id === "genderList")) |
+                (e.target.className === "checkBox"))) {
                 $("#genderList").hide();
             }
         })
@@ -402,7 +406,7 @@ TAG.Layout.SpoofTest = (function () {
 		searchBox.text('')
 		$("#scroller").scrollLeft(0)
 	}
-	function sort(tags) {
+	function sort(tags,singleSearch) {
 	    if (tags === null || tags === undefined) {
 	        var tagsToSort = []
 	        sortTags.forEach(function (t) {
@@ -410,6 +414,9 @@ TAG.Layout.SpoofTest = (function () {
 	                tagsToSort.push(t.tag.toLowerCase())
 	            }
 	        })
+	        if (singleSearch !== null && singleSearch !== undefined) {
+                tagsToSort.push(singleSearch.tag.toLowerCase())
+	        }
 	        sort(tagsToSort)
 	        return;
 	    }
@@ -713,11 +720,11 @@ TAG.Layout.SpoofTest = (function () {
 	}
 	function makeDropDowns() {
 	    function makeCheckDiv(tag) {
-	        var div = $(document.createElement("div"))
-	        var title = $(document.createElement("div"))
-	        var box = $(document.createElement("input"))
+	        var div = $(document.createElement("div")).addClass("checkBox")
+	        var title = $(document.createElement("div")).addClass("checkBox")
+	        var box = $(document.createElement("input")).addClass("checkBox")
             box[0].type = "checkbox"
-	        div.append(box)
+            div.append(box)
             div.append(title)
 	        div.css({
 	            "position": "relative",
@@ -744,30 +751,29 @@ TAG.Layout.SpoofTest = (function () {
             div.tag = tag
             div.box = box
             div.isSelected = function () {
-                return div.box[0].checked
+                return div.box[0].checked === true
             }
 	        div.select = function () {
 	            div.box[0].checked = true
 	        }
 	        div.unselect = function () {
-                div.box[0].checked = false
+	            div.box[0].checked = false
 	        }
 	        div.toggle = function () {
 	            if (div.isSelected() === true) {
 	                div.unselect()
+                    sort()
 	            }
 	            else {
 	                div.select();
+	                sort(null, div)
 	            }
-	            sort()
-	            $("#decadeList").hide();
-	            $("#genderList").hide();
 	        }
 	        sortTags.push(div)
             return div
 	    }
 	    var filterDiv = $(document.createElement('div'))
-	    var decades = $(document.createElement('div'))
+	    var decades = $(document.createElement('div')).attr({id:'decadeButton'})
 	    var decadeList = $(document.createElement('div'))
 	    decades.css({
 	        "position": "absolute",
@@ -820,9 +826,7 @@ TAG.Layout.SpoofTest = (function () {
 	        decadeList.append(t);
 	    })
 
-
-
-	    var genders = $(document.createElement('div'))
+	    var genders = $(document.createElement('div')).attr({ id: 'genderButton' })
 	    var genderList = $(document.createElement('div'))
 	    genders.css({
 	        "position": "absolute",
