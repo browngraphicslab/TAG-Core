@@ -1487,7 +1487,7 @@ TAG.Layout.Spoof = (function () {
                     for (var d = 0; d < doq.prizes.length; d++) {
                         if (id.indexOf(doq.prizes[d].year) > -1) {
                             doq.Year = doq.prizes[d].year
-                            if (doq.prizes[d].motivation.length > 0) {
+                            if (doq.prizes[d].motivation !== undefined && doq.prizes[d].motivation.length > 0) {
                                 doq.Motivation = doq.prizes[d].motivation
                             }
                             else {
