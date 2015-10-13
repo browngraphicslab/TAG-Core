@@ -256,6 +256,14 @@ TAG.Layout.SpoofTest = (function () {
 		scroller.click(ontouch).mousedown(ontouch)
         $(".block").click(ontouch).mousedown(ontouch)
         $(document).click(ontouch).mousedown(ontouch)
+        root.click(function (e) {
+            if (!(e.target.innerText === "Decade" || (e.target.parentNode && e.target.parentNode.innerText === "Decade"))) {//sloppy but gets the job done
+                $("#decadeList").hide();
+            }
+            if (!(e.target.innerText === "Gender" || (e.target.parentNode && e.target.parentNode.innerText === "Gender"))) {
+                $("#genderList").hide();
+            }
+        })
 	}
 	function makeBlock(laur, i) {
 		var block = $(document.createElement("div"))
@@ -265,7 +273,6 @@ TAG.Layout.SpoofTest = (function () {
 		var firstNameDiv = $(document.createElement("div"))
 		var prizeAndYearDiv = $(document.createElement("div"))
 		var prizeIcon = $(document.createElement("img"))
-
 
 		block.append(img)
 		block.append(header)
@@ -753,6 +760,8 @@ TAG.Layout.SpoofTest = (function () {
 	                div.select();
 	            }
 	            sort()
+	            $("#decadeList").hide();
+	            $("#genderList").hide();
 	        }
 	        sortTags.push(div)
             return div

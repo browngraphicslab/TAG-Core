@@ -584,11 +584,14 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                         hideInfoPane();
                         setControlsFade();
                         orchestrator.play();
-                        setTimeout(function () { orchestrator.seek(orchestrator.getElapsedTime() / orchestrator.tourData.totalDuration, true) }, 25)
+                        mute()
+                        setTimeout(function () { orchestrator.pause(); orchestrator.play() }, 50)
                         setTimeout(function () {
+                            orchestrator.seek(orchestrator.getElapsedTime()/orchestrator.tourData.totalDuration,true)
+                            unMute()
                             initialOverlay.fadeTo(1000, 0, function () { initialOverlay.remove(); });
-                        },50);
-                    }, 2000);
+                        },75);
+                    }, 1500);
                 }, 3000);
                 return;
             }

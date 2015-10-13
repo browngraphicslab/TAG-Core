@@ -72,7 +72,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 
 		// Create ink object.
 		self._ink = new tagInk(trackData.assetUrl, _UIControl[0]);
-		if ((trackData.experienceReference !== "null") && (trackData.experienceReference !== '')) {
+		if ((trackData.experienceReference !== "null") && (trackData.experienceReference !== '') && (trackData.experienceReference !== undefined)) {
 			_attachedAsset = findAttachedAsset(trackData.experienceReference);
 			attachToAsset(_attachedAsset);
 		};
@@ -328,17 +328,24 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		var j,
 			track;
 
-		//Loop through trackManager to find the asset whose name matches the Ink's experienceReference
+	    //Loop through trackManager to find the asset whose name matches the Ink's experienceReference
+        /*
 		for (j = 0; j < self.orchestrator.trackManager.length; j++) {
 			track = self.orchestrator.trackManager[j];
 			if (track.trackData.name === experienceReference){
 			    _attachedAsset = track;
 			    break;
 			};
-		};
+		};*/
+		self.orchestrator.trackManager.forEach(function (track) {
+		    if (track.trackData.name === experienceReference) {
+		        _attachedAsset = track
+                return _attachedAsset
+		    }
+		})
 
 		//If it exists, return it, and if now, throw an error
-		if (_attachedAsset) {
+		if (_attachedAsset!==null && _attachedAsset) {
 			return _attachedAsset;
 		} else {
 			doNothing("Failed to find asset '" + experienceReference + "' for attached ink '" + trackData.name + "'");
