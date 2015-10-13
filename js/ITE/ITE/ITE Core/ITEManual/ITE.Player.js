@@ -142,6 +142,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function attachVolume() {
+        return
         if (playerConfiguration.attachVolume) {
             var volumeContainer = $(document.createElement("div"))
                 .addClass("volumeContainer");
@@ -226,6 +227,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function attachLoop() {
+        return;
         if (playerConfiguration.attachLoop) {
 
             var loopButtonContainer = $(document.createElement("div"))
@@ -376,6 +378,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P:   none
     */
     function attachFullScreen() {
+        return;
         if (playerConfiguration.attachFullScreen) {
 
             var fullScreenButtonContainer = $(document.createElement("div"))
