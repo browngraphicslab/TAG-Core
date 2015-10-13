@@ -762,11 +762,12 @@ TAG.Layout.SpoofTest = (function () {
 	        div.toggle = function () {
 	            if (div.isSelected() === true) {
 	                div.unselect()
+                    sort()
 	            }
 	            else {
 	                div.select();
+	                sort(null, div)
 	            }
-	            sort(null,div)
 	        }
 	        sortTags.push(div)
             return div
