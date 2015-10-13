@@ -2029,8 +2029,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'height': '40px',
                 'width': '40px',
                 'position': 'absolute',
-                'right': '10px',
-                'bottom': '10px',
+                'right': '1.5%',
+                'bottom': '-60px',
                 'z-index': '5004'
             }).attr({ id: 'infoButtonContainer' });
         var infoButton = $(document.createElement('img')).attr({ src: tagPath + 'images/question_icon.png', id: 'infoButton' })

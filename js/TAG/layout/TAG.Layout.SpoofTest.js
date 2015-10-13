@@ -302,7 +302,7 @@ TAG.Layout.SpoofTest = (function () {
 			"width": "65.75%",
             "height" : "33.3333%",
 			"float": "right",
-			"font-size": ".775em",
+			"font-size": ".75em",
 			"overflow": "hidden",
 			"color" : "white",
 			"right": "0%",
@@ -830,7 +830,7 @@ TAG.Layout.SpoofTest = (function () {
 	    var genderList = $(document.createElement('div'))
 	    genders.css({
 	        "position": "absolute",
-	        "width": "92px",
+	        "width": "94px",
 	        "border-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
@@ -854,7 +854,7 @@ TAG.Layout.SpoofTest = (function () {
 	    base.append(genderList)
 	    genderList.css({
 	        "position": "absolute",
-	        "width": "92px",
+	        "width": "94px",
 	        "border-bottom-left-radius": "4pt",
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
