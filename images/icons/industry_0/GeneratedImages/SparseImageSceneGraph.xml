@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<SceneGraph version="1">
+  <AspectRatio>0.75</AspectRatio>
+  <BackgroundColor>000000</BackgroundColor>
+  <SceneNode>
+    <FileName>C:\Users\LA2015\Documents\Expression\Deep Zoom Composer Projects\Tour0\Source Images\ugd89-2-13_at_600dpi.tif</FileName>
+    <x>0</x>
+    <y>0</y>
+    <Width>1</Width>
+    <Height>1</Height>
+    <ZOrder>1</ZOrder>
+  </SceneNode>
+</SceneGraph>
