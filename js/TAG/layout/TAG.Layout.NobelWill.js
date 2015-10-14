@@ -759,28 +759,28 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     sliderPositions = [
                         [7.75, 12.5],
                         [11, 11.5],
-                        [12.25, 12.25],
-                        [14, 12.5],
+                        [13.25, 11.25],
+                        [15, 11.5], //
                         [16.5, 12.25],
                         [18.5, 12],
                         [20.5, 13.25],
-                        [24, 11.25],//8
+                        [24, 11.25],
                         [24.75, 12.25],
-                        [27, 12.],
-                        [28.75, 12.75],
+                        [27, 12],
+                        [29.75, 11.75],
                         [31.25, 12.75],
                         [33.5, 12],
-                        [35, 13.25],
+                        [34, 12.25],
                         [38.75, 11.75],
-                        [39.25, 13.5],
-                        [41.75, 14.25],
-                        [44, 13.5],
+                        [40.25, 12.5], 
+                        [42.75, 13.25], //17 x
+                        [45, 12.5], //18 x
                         [47.5, 12.5],
-                        [48.5, 13.5],
+                        [49.5, 12.5], //20 x
                         [51.5, 13.25],
                         [53.75, 13],
                         [57.25, 12.5],
-                        [57.75, 13],
+                        [58.75, 12], //24 x
                         [61, 12.25],
                         [63.25, 12],
                         [65.5, 11.75],
@@ -2029,8 +2029,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'height': '40px',
                 'width': '40px',
                 'position': 'absolute',
-                'right': '10px',
-                'bottom': '10px',
+                'right': '1.5%',
+                'bottom': '-60px',
                 'z-index': '5004'
             }).attr({ id: 'infoButtonContainer' });
         var infoButton = $(document.createElement('img')).attr({ src: tagPath + 'images/question_icon.png', id: 'infoButton' })
