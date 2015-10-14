@@ -189,7 +189,7 @@ TAG.Layout.SpoofTest = (function () {
 		    "left": "765px",
 		}).text("Clear").click(reset).mousedown(function () { clearButton.css("opacity", ".75") }).mouseleave(function () { clearButton.css("opacity","1")})
 
-		var subSearchText = $(document.createElement("div")).text("Single term: name, country of origin, or sub-field")
+		var subSearchText = $(document.createElement("div")).text("Find laureates by name or country of origin")
 		subSearchText.css({
 		    "top": "138.5px",
 		    "right": "50px",
@@ -700,7 +700,7 @@ TAG.Layout.SpoofTest = (function () {
 	    div.select = function () {
 	        div.selected = true;
 	        img.css({
-                "border" : "1.5px solid white"
+                "border" : "2px solid white"
 	        })
 	    }
 	    div.unselect = function () {

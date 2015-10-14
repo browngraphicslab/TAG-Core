@@ -718,7 +718,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 case 2:
                     associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['FUND'], ['PRIZES'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
                     hardcodedHotspotSpecs = [[[53, 39.75, 14, 3.75]], [[46.5, 66, 4.5, 3.5]], [[55, 65.5, 27, 3.5]], [[75.25, 72, 6, 3]], [[69, 76.75, 13, 2.5]], [[62.5, 81, 20, 2.5]], [[65.5, 83.5, 7.5, 2.5]]]
-                    infoBulbs = []
+                    infoBulbs = [[34.5, 59]];
                     leftTextArray = [ //aim for 1.75 space
                         9.75, 'Potsdamerstrasse, 51, Berlin, will',
                         11.75, 'receive Fifty Thousand Marks each;',
@@ -794,7 +794,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     associatedMediaNobelKeywords = [['PEACE'], ['THE SWEDISH ACADEMY OF SCIENCES'], ['THE CAROLINE INSTITUTE'], ['THE ACADEMY IN STOCKHOLM'], ['A COMMITTEE OF FIVE PERSONS TO BE ELECTED BY THE NORWEGIAN STORTING'], ['WHETHER HE BE SCANDINAVIAN OR NOT'], ['RAGNAR SOHLMAN'], ['BOFORS'], ['MY PROPERTY'], ['PARIS'], ['SAN REMO']];
                     hardcodedHotspotSpecs = [[[69.75, 14.25, 3, 2.5]], [[71.5, 16.75, 10, 2.25], [47.5, 20, 10, 2.5]], [[54.5, 21.75, 12.5, 2.5]], [[53.5, 24.5, 15, 1.75]], [[55, 26.5, 25, 2.25], [47.5, 29, 16, 3]], [[47.5, 38.5, 26, 2.5]], [[71.25, 43, 10, 2.5], [47.5, 47.5, 5, 2.5]], [[60.5, 46, 6.25, 2.5]], [[50.25, 63, 13.5, 2.5]], [[61, 64.5, 4, 2.25]], [[68.5, 64, 8, 2.5]]];
 
-                    infoBulbs = []
+                    infoBulbs = [[33.5, 60]];
                     leftTextArray = [
                         9, 'the most outstanding work in an ideal direction; and one part to the',
                         11.25, 'person who shall have done the most or the best work for fraternity',
@@ -871,7 +871,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 case 4:
                     associatedMediaNobelKeywords = [['PATENTS'], ['CREMATORIUM']];
                     hardcodedHotspotSpecs = [[[63.25, 13, 5.75, 2.5]], [[66.75, 36.75, 10, 2.75]]]
-                    infoBulbs = []
+                    infoBulbs = [[34.5, 59]];
                     leftTextArray = [
                         8.5, 'in Enskilda Banden in Stockholm and in',
                         10.75, 'and in my strong-box at 59, Avenue Malakoff, Paris; further',
@@ -2286,13 +2286,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 		//START HARDCODING INFO AREA
 
     	var titles = [
-			["Alfred Nobel's last will", "Alfred Nobel: The founder of the Nobel Prize", "Robert Nobel: Alfred Nobel's eldest brother","Emanuel Nobel: Alfred Nobel's eldest nephew", "Sofie Hess: a woman in Alfred Nobel's life","Alarik Liedbeck: Alfred Nobel's friend and coworker"],
-			["Georges Fehrenbach: Chemist in Alfred Nobel's laboratory", "The Nobel Foundation", "The Nobel Prize","Physics", "Chemistry", "Physiology or medicine", "Literature"],
-			["Peace", "Royal Swedish Academy of Sciences", "Karolinska Institutet", "The Swedish Academy", "The Norwegian Nobel Committee", "An international prize", "Ragnar Sohlman: Alfred Nobel's assistant and executor of the will", "Björkborn: Alfred Nobel's last home in Sweden", "Alfred Nobel's fortune", "Paris: Alfred Nobel's home in France", "San Remo: Alfred Nobel's home in Italy"],
-			["Patents","Crematorium"]
+			["Alfred Nobel's last will", "Alfred Nobel: The founder of the Nobel Prize", "Robert Nobel: Alfred Nobel's eldest brother","Emanuel Nobel: Alfred Nobel's eldest nephew", "Sofie Hess: a woman in Alfred Nobel's life","Alarik Liedbeck: Alfred Nobel's friend and coworker", "Margin Text", "Margin Text"],
+			["Georges Fehrenbach: Chemist in Alfred Nobel's laboratory", "The Nobel Foundation", "The Nobel Prize","Physics", "Chemistry", "Physiology or medicine", "Literature", "Margin Text"],
+			["Peace", "Royal Swedish Academy of Sciences", "Karolinska Institutet", "The Swedish Academy", "The Norwegian Nobel Committee", "An international prize", "Ragnar Sohlman: Alfred Nobel's assistant and executor of the will", "Björkborn: Alfred Nobel's last home in Sweden", "Alfred Nobel's fortune", "Paris: Alfred Nobel's home in France", "San Remo: Alfred Nobel's home in Italy", "Margin Text"],
+			["Patents","Crematorium", "Margin Text"]
     	]
     	var images = [
-			['','Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'],
+			['','Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'], //add in lightbulb images and text to the end of these arrays (for marginalia)
 			['Popup_2_1.png', 'Popup_2_2.png', 'Popup_2_3.png', 'Popup_2_4.png', 'Popup_2_5.png', 'Popup_2_6.png', 'Popup_2_7.png', 'Popup_2_8.png'],
 			['Popup_3_1.png', 'Popup_3_2.png', 'Popup_3_3.png', 'Popup_3_4.png', 'Popup_3_5.png', 'Popup_3_6.png', 'Popup_3_7.png', 'Popup_3_8.png', '', 'Popup_3_10.png', 'Popup_3_11.png'],
 			['Popup_4_1.png', 'Popup_4_2.png']
@@ -2305,6 +2305,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 				"Emanuel Nobel (1859–1932) was a nephew to Alfred Nobel. After the death of his father, Ludvig Nobel, Emanuel Nobel took over leadership of the Nobel brothers’ oil company. At first, Alfred Nobel seems to have doubted Emanuel’s ability to run the large company, but Emanuel proved that he was equal to the task.",
 				"Alfred Nobel never married. However he had a long relationship with an Austrian woman, Sofie Hess (1851–1919). Alfred Nobel met Sofie Hess during a visit to Baden bei Wien in 1876. This relationship was everything but harmonious. For a while, Alfred seems to have been happy and in love, despite all of his business worries. Soon, however, he became dissatisfied in his relationship with Sofie, yet he did not seem to want to break up with her. He scolded her for being irresponsible and childish. Alfred and Sofie’s drawn-out and uneasy relationship finally came to an end. In 1890, Sofie became pregnant. The father was another man, Nicolaus Kapy von Kapivar, whom she eventually married.",
 				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death.",
+                "This is a note by an official at the district court in Stockholm, Sweden confirming that that Alfred Nobel's will has been shown to the court",
+                "This is a note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
 			],
 			[   "Georges Fehrenbach was Alfred Nobel’s assistant in the laboratory that was connected to Nobel’s residence in Paris. Fehrenbach collaborated on the development of blasting gelatin and ballistite. When Nobel purchased a laboratory in Sèvran outside Paris, Fehrenbach also worked there, and he also worked for Nobel in the laboratories at the dynamite factory in Ardeer, Scotland. When Nobel moved to San Remo in the beginning of the 1890’s, Fehrenbach chose not to follow him, and remained in Paris.",
                 "One of the tasks of the executors of the will was to create the fund in which Alfred Nobel fortune would be collected, once his shares, obligations and other valuable papers had been transferred into cash. In 1900, the Nobel Foundation was established and given the responsibility of administering Nobel’s fortune, as well as organizing the distribution of the prizes.",
@@ -2316,7 +2318,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 + "Physiology or medicine was the third prize area which Nobel mentioned in his will.",
 			    "Alfred Nobel had broad cultural interests. The literary interests which began early in Nobel’s youth lasted throughout his life. His library contains a rich spectrum of literary works in different languages. \n"
                 + "Further evidence of Nobel’s literary interests was that in the final years of his life, he returned to writing fiction. \n" 
-                + "The fourth prize area Nobel mentioned in his will was literature."
+                + "The fourth prize area Nobel mentioned in his will was literature.",
+                "This is a note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
 			],
 			[
                 "Alfred Nobel was interested in social issues, and had a special interest in the peace movement. Nobel’s engagement in the cause for world peace was in part inspired by his acquaintance with Bertha von Suttner, and in part by the use of his inventions in war and terrorist attacks. \n"
@@ -2341,12 +2344,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 + "Russia		5,232,773.45 \n"
                 + "Total		33,233,792.20 \n", 
                 "Alfred Nobel had spent time in Paris in his youth, and at the age of 40, he bought a house there. In the years before this, he had lived in Hamburg, but he had spent most of that time traveling, and his “home” there seems to have been more of a provisory nature. He continued to travel extensively even after he had moved to Paris, but he had definitely found a more permanent residence. He had also gained a home that reflected his financial, social and cultural status.",
-                "In several respects, the early 1890s was a difficult time for Alfred Nobel. He experienced increasing health problems. He had had hopes that his business worries might come to an end, but instead they seemed to get even worse. His breakup with his long-time mistress Sofie Hess had also added much pain to his life. Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy. A few years into the 1890’s, Nobel’s problems seem to have cleared up somewhat, and he engaged himself in his various pursuits with even more energy."
+                "In several respects, the early 1890s was a difficult time for Alfred Nobel. He experienced increasing health problems. He had had hopes that his business worries might come to an end, but instead they seemed to get even worse. His breakup with his long-time mistress Sofie Hess had also added much pain to his life. Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy. A few years into the 1890’s, Nobel’s problems seem to have cleared up somewhat, and he engaged himself in his various pursuits with even more energy.",
+                "This is a note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
 			],
 			[
                 "Alfred Nobel's incomes came from different sources. The companies he had established with various business partners generated profits, which Nobel received a share of. The patents he held also generated incomes. He held approximately 355 patents in different countries.",
                 "Alfred Nobel was a member of the French Cremation Society. In the version of his will that he wrote in 1893, Nobel left money to societies that promoted cremation. \n" 
-                + "Nobel’s fear of “premature burial” (being buried before one was dead) may have prompted his involvement in the cremation movement. He expressed this fear in the description he wrote about himself when his brother Ludvig asked for an autobiographical article: “Greatest and only request: to not be buried alive.”" 
+                + "Nobel’s fear of “premature burial” (being buried before one was dead) may have prompted his involvement in the cremation movement. He expressed this fear in the description he wrote about himself when his brother Ludvig asked for an autobiographical article: “Greatest and only request: to not be buried alive.”",
+                "This is a note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
 			]
     	]
     	var collections = [
