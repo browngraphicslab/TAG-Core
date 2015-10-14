@@ -45,6 +45,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         debounceTimeout = null,
         NOBEL_ORANGE_COLOR = '#d99b3b',
         IDLE_TIMER_DURATION = 300000, //5 minutes
+        MARGINALIA_2 = "margin_karlskoga.tif",
+        MARGINALIA_1 = "margin_stockholm.tif",
 
         hardcodedData,
 
@@ -68,6 +70,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         $(document).unbind('mousemove', restartTimer);
 
         $("#bigPopup").remove();
+        $("#infoDiv").css('display','none');
 
         videoContainer = $(document.createElement('div')).attr('id', 'videoContainer');
         var touchToExplore = $(document.createElement('div')).attr('id', 'touchToExplore'),
@@ -2000,6 +2003,21 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function makeInfoDiv() {
+        var infoblocker = $(document.createElement('div'));
+        infoblocker.css({
+            "width": "100%",
+            "height": "100%",
+            "background-color": "rgba(250,250,250,.55)",
+            "position": "absolute",
+            "z-index": "50050",
+            'display': 'none',
+        }).attr({
+            id: "infoblocker"
+        }).click(function () {
+            infoblocker.css('display', 'none');
+            infoDiv.css('display', 'none');
+        });
+        root.append(infoblocker);
         var infoDiv = $(document.createElement('div')).attr({ id: 'infoDiv' })
                        .css({
                            "width": "50%",
@@ -2009,7 +2027,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                            "border": "1.5px solid " + NOBEL_ORANGE_COLOR,
                            "border-radius": "10px",
                            "background-color": "black",
-                           "z-index": "1006",
+                           "z-index": "50051",
                            "position": "absolute",
                            'display': 'none',
                            'padding-left': '2%',
@@ -2019,14 +2037,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         .css({ width: '100%', height: '10%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '1.25em' });
         var infoText = $(document.createElement('div')).attr('id', 'infoText').text("Drag the highlighter to  find important words and phrases, which are traced in red ink.")
                         .css({ width: '100%', height: '20%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '0.62em' });
-        var tourText = $(document.createElement('div')).attr('id', 'tourText').text("Tap on tour buttons to learn more about specific experiences and influences in Nobel's life. Pause the tour at any time by touching the screen. Use pinch gestures to zoom into the images on screen to explore them in more detail and learn contexualizing information. Playing the tour again will continue from where you paused.")
+        var tourText = $(document.createElement('div')).attr('id', 'tourText').text("Tap on tour buttons to learn more about specific experiences in Nobel's life. Pause the tour at any time by touching the screen. Use pinch gestures to zoom into the images on screen to explore them in more detail and learn contexualizing information. Playing the tour again will continue from where you paused.")
                         .css({ width: '100%', height: '20%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '0.62em' });
         var collectionText = $(document.createElement('div')).attr('id', 'collectionText').text("Tap on collection buttons to explore galleries of images that relate to Nobel's life. Tap on an image to see it full screen and use pinch gestures to zoom in on image details.")
                         .css({ width: '100%', height: '20%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '0.62em' });
         var lightbulbText = $(document.createElement('div')).attr('id', 'lightbulbText').text("Tap on the lightbulb icon to get more information.")
                         .css({ width: '100%', height: '20%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '0.62em' });
         infoDiv.append(infoTitle).append(infoText).append(lightbulbText).append(tourText).append(collectionText);
-        background.append(infoDiv);
+        root.append(infoDiv);
+
         var infoButtonContainer = $(document.createElement('div'))
             .css({
                 'height': '40px',
@@ -2034,7 +2053,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'position': 'absolute',
                 'right': '1.5%',
                 'bottom': '-60px',
-                'z-index': '5004'
+                'z-index': '50050'
             }).attr({ id: 'infoButtonContainer' });
         var infoButton = $(document.createElement('img')).attr({ src: tagPath + 'images/question_icon.png', id: 'infoButton' })
                          .css({ width: '100%', height: '100%' });
@@ -2044,6 +2063,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             showInfoDiv();
         });
         function showInfoDiv() {
+            infoblocker.css('display', 'block');
             infoDiv.css('display', 'block');
         };
     }
@@ -2295,10 +2315,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			["Patents","Crematorium", "Margin Text"]
     	]
     	var images = [
-			['','Popup_1_1.png', 'Popup_1_2.png', 'Popup_1_3.png', 'Popup_1_4.png', 'Popup_1_5.png', 'Popup_1_5.png','Popup_1_5.png'], //add in lightbulb images and text to the end of these arrays (for marginalia)
-			['Popup_2_1.png', 'Popup_2_2.png', 'Popup_2_3.png', 'Popup_2_4.png', 'Popup_2_5.png', 'Popup_2_6.png', 'Popup_2_7.png', 'Popup_2_8.png'],
-			['Popup_3_1.png', 'Popup_3_2.png', 'Popup_3_3.png', 'Popup_3_4.png', 'Popup_3_5.png', 'Popup_3_6.png', 'Popup_3_7.png', 'Popup_3_8.png', '', 'Popup_3_10.png', 'Popup_3_11.png'],
-			['Popup_4_1.png', 'Popup_4_2.png']
+			['01_Testament.tif','Popup_1_1.png', '03_Robert.png', '04_Emanuel.png', '05_Sofie.tif', '06_Alarik.png', MARGINALIA_1, MARGINALIA_2], //add in lightbulb images and text to the end of these arrays (for marginalia)
+			['07_Georges.tif', '08_fund.tif', '09_prizes.tif', '10_benefit.png', '11_physics.png', '12_chemistry.png', '13_med.png', '14_litt.png', MARGINALIA_2],
+			['15_pea.tif', '16_academysci.tif', '17_Caroline.tif', '18_academystoc.tif', '19_storting.tif', '20_scandinavian.jpg', '21_Sohlman.tif', '22_Bofors.tif', '23_Paris.tif', '24_San Remo.tif', MARGINALIA_2],
+			['25_patent.tif', '26_crematorium.tif', MARGINALIA_2]
     	]
     	var texts = [
 			[
@@ -2308,8 +2328,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 				"Emanuel Nobel (1859–1932) was a nephew to Alfred Nobel. After the death of his father, Ludvig Nobel, Emanuel Nobel took over leadership of the Nobel brothers’ oil company. At first, Alfred Nobel seems to have doubted Emanuel’s ability to run the large company, but Emanuel proved that he was equal to the task.",
 				"Alfred Nobel never married. However he had a long relationship with an Austrian woman, Sofie Hess (1851–1919). Alfred Nobel met Sofie Hess during a visit to Baden bei Wien in 1876. This relationship was everything but harmonious. For a while, Alfred seems to have been happy and in love, despite all of his business worries. Soon, however, he became dissatisfied in his relationship with Sofie, yet he did not seem to want to break up with her. He scolded her for being irresponsible and childish. Alfred and Sofie’s drawn-out and uneasy relationship finally came to an end. In 1890, Sofie became pregnant. The father was another man, Nicolaus Kapy von Kapivar, whom she eventually married.",
 				"Alarik Liedbeck (1834–1912) and Alfred Nobel had known one another since childhood. In 1866, Liedbeck became head of the nitroglycerin factory at Vinterviken outside Stockholm. Liedbeck remained in this position until 1875, but worked together with Alfred Nobel on the establishment of new factories abroad. Liedbeck moved to Paris in 1876 to work for the Nobel company’s “syndicate,” which was intended to provide technical consultation to dynamite factories in other countries. In 1879, Liedbeck returned to Stockholm. His collaboration with Alfred Nobel continued until his death.",
-                "This is a note by an official at the district court in Stockholm, Sweden confirming that that Alfred Nobel's will has been shown to the court",
-                "This is a note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
+                "A note by an official at the district court in Stockholm, Sweden confirming that that Alfred Nobel's will has been shown to the court",
+                "A note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
 			],
 			[   "Georges Fehrenbach was Alfred Nobel’s assistant in the laboratory that was connected to Nobel’s residence in Paris. Fehrenbach collaborated on the development of blasting gelatin and ballistite. When Nobel purchased a laboratory in Sèvran outside Paris, Fehrenbach also worked there, and he also worked for Nobel in the laboratories at the dynamite factory in Ardeer, Scotland. When Nobel moved to San Remo in the beginning of the 1890’s, Fehrenbach chose not to follow him, and remained in Paris.",
                 "One of the tasks of the executors of the will was to create the fund in which Alfred Nobel fortune would be collected, once his shares, obligations and other valuable papers had been transferred into cash. In 1900, the Nobel Foundation was established and given the responsibility of administering Nobel’s fortune, as well as organizing the distribution of the prizes.",
@@ -2322,7 +2342,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			    "Alfred Nobel had broad cultural interests. The literary interests which began early in Nobel’s youth lasted throughout his life. His library contains a rich spectrum of literary works in different languages. \n"
                 + "Further evidence of Nobel’s literary interests was that in the final years of his life, he returned to writing fiction. \n" 
                 + "The fourth prize area Nobel mentioned in his will was literature.",
-                "This is a note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
+                "A note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
 			],
 			[
                 "Alfred Nobel was interested in social issues, and had a special interest in the peace movement. Nobel’s engagement in the cause for world peace was in part inspired by his acquaintance with Bertha von Suttner, and in part by the use of his inventions in war and terrorist attacks. \n"
@@ -2348,13 +2368,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 + "Total		33,233,792.20 \n", 
                 "Alfred Nobel had spent time in Paris in his youth, and at the age of 40, he bought a house there. In the years before this, he had lived in Hamburg, but he had spent most of that time traveling, and his “home” there seems to have been more of a provisory nature. He continued to travel extensively even after he had moved to Paris, but he had definitely found a more permanent residence. He had also gained a home that reflected his financial, social and cultural status.",
                 "In several respects, the early 1890s was a difficult time for Alfred Nobel. He experienced increasing health problems. He had had hopes that his business worries might come to an end, but instead they seemed to get even worse. His breakup with his long-time mistress Sofie Hess had also added much pain to his life. Around 1890, Alfred Nobel decided to leave Paris, and, in 1891, he bought a villa in San Remo, Italy. A few years into the 1890’s, Nobel’s problems seem to have cleared up somewhat, and he engaged himself in his various pursuits with even more energy.",
-                "This is a note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
+                "A note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
 			],
 			[
                 "Alfred Nobel's incomes came from different sources. The companies he had established with various business partners generated profits, which Nobel received a share of. The patents he held also generated incomes. He held approximately 355 patents in different countries.",
                 "Alfred Nobel was a member of the French Cremation Society. In the version of his will that he wrote in 1893, Nobel left money to societies that promoted cremation. \n" 
                 + "Nobel’s fear of “premature burial” (being buried before one was dead) may have prompted his involvement in the cremation movement. He expressed this fear in the description he wrote about himself when his brother Ludvig asked for an autobiographical article: “Greatest and only request: to not be buried alive.”",
-                "This is a note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
+                "A note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
 			]
     	]
     	var collections = [
@@ -2402,7 +2422,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			],
 			[
                 "Alfred Nobel's inventions and technical improvements resulted in more than 350 patents and generated substantial incomes.",
-                "Alfred Nobel wanted to be cremated and an important reason for this was fear of being buried alive, which was not uncommen at the time."
+                "Alfred Nobel wanted to be cremated and an important reason for this was fear of being buried alive, which was not uncommon at the time."
 			]
     	]
 
