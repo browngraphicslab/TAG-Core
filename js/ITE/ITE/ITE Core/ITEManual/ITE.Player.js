@@ -1156,7 +1156,13 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                             "height": "auto",
                             "position": "relative"
                         }).attr({ class: "infoPaneImage" })
-                        spoof.staticSetPath(info.substring(7), img[0], "src");
+                        var url = info.substring(7)
+                        if (jQuery.data(document, "sidebar_images")[url] !== undefined) {
+                            img[0].src = jQuery.data(document, "sidebar_images")[url]
+                        }
+                        else {
+                            spoof.staticSetPath(url, img[0], "src", function () { jQuery.data(document, "sidebar_images")[url] = img[0].src});
+                        }
                         $("#infoBlock").append(img)
                     }
                     else {

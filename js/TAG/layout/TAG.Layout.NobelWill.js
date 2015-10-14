@@ -355,7 +355,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'height': "30px",
             'bottom': '20px',
             'left': "31.75%",
-            'z-index': '1003'
+            'z-index': '1003',
+            "pointer-events": "auto"
         });
         left.click(function () {
             goPrevPage();
@@ -367,7 +368,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'background-color': 'transparent',
             'bottom': '20px',
             'left': "69.75%",
-            'z-index': '1003'
+            'z-index': '1003',
+            "pointer-events": "auto"
         });
         right.click(
             function () {
@@ -960,10 +962,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     "width": "30px",
                     "position": 'absolute',
                     "top": hardcodedData[p - 1]["infoBulbs"][i][1] + "%",
-                    "z-index": "1003",
+                    "z-index": "1005",
                     "float": "right",
                     "top": hardcodedData[p - 1]["infoBulbs"][i][1] + "%",
                     'padding-bottom': '2px',
+                    "pointer-events" : "auto"
                 })
                 var img = $(document.createElement("img"));
                 img.attr({
