@@ -1147,36 +1147,23 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             top += d.height() + 50;
         }
         if (doq.SidebarInfo) {
-            var imgs = []
-            var texts = []
-            if (doq.SidebarInfo.Images && doq.SidebarInfo.Images.length > 0) {
+            if (doq.SidebarInfo.length > 0) {
                 var spoof = TAG.Layout.Spoof()
-                doq.SidebarInfo.Images.forEach(function (url) {
-                    var img = $(document.createElement("img")).css({
-                        "width": "100%",
-                        "height": "auto",
-                        "position" : "relative"
-                    }).attr({ class: "infoPaneImage" })
-                    spoof.staticSetPath(url, img[0], "src");
-                    imgs.push(img)
+                doq.SidebarInfo.forEach(function (info) {
+                    if (info.indexOf("<image>") === 0) {
+                        var img = $(document.createElement("img")).css({
+                            "width": "100%",
+                            "height": "auto",
+                            "position": "relative"
+                        }).attr({ class: "infoPaneImage" })
+                        spoof.staticSetPath(info.substring(7), img[0], "src");
+                        $("#infoBlock").append(img)
+                    }
+                    else {
+                        $("#infoBlock").append(makeInfoField(info))
+                    }
                 })
             }
-            if (doq.SidebarInfo.Text && doq.SidebarInfo.Text.length > 0) {
-                doq.SidebarInfo.Text.forEach(function (t) {
-                    texts.push(makeInfoField(t))
-                })
-            }
-            var i = 0;
-            while (texts.length != 0) {
-                if (doq.SidebarInfo.Text[i] !== "") {
-                    $("#infoBlock").append(texts.shift());
-                }
-                if (imgs.length > 0) {
-                    $("#infoBlock").append(imgs.shift());
-                }
-                i++;
-            }
-
         }
     }
 

@@ -753,30 +753,21 @@ TAG.Layout.Spoof = (function () {
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\FromWillToPrize\\Academy_In_Stockholm\\GeneratedImages\\dzc_output.xml" },
             },
-            "SidebarInfo": {
-                "Text": ["This is a Test","of the ability to","put text and images into the sidebar"],
-                "Images": ["Thumbnails\\thumb__T_HOOFT_1999.TIF", "Thumbnails\\thumb_10.TIF"],
-            }
+            "SidebarInfo": ["This is a Test", "<image>Thumbnails\\thumb__T_HOOFT_1999.TIF", "This ia another test, of multiple lines of text in this sidebar", "<image>Thumbnails\\thumb__T_HOOFT_1999.TIF", "<image>Thumbnails\\thumb__T_HOOFT_1999.TIF"]
         },
         "bofors": {
             "Identifier": "bofors",
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\FromWillToPrize\\bofors\\GeneratedImages\\dzc_output.xml" },
             },
-            "SidebarInfo": {
-                "Text": ["This is a Test in bofors", "of the ability to", "put text and images into the sidebar"],
-                "Images": ["Thumbnails\\thumb__T_HOOFT_1999.TIF", "Thumbnails\\thumb_10.TIF"],
-            }
+            "SidebarInfo": ["This is a Test", "<image>Thumbnails\\thumb__T_HOOFT_1999.TIF", "This ia another test, of multiple lines of text in this sidebar", "<image>Thumbnails\\thumb__T_HOOFT_1999.TIF", "<image>Thumbnails\\thumb__T_HOOFT_1999.TIF"]
         },
         "diplomas": {
             "Identifier": "diplomas",
             "Metadata": {
                 "DeepZoom": { "Path": "Images\\FromWillToPrize\\diplomas\\GeneratedImages\\dzc_output.xml" },
             },
-            "SidebarInfo": {
-                "Text": ["This is a Test in diplomas", "of the ability to", "put text and images into the sidebar with a slighty longer text, but still not a very long text"],
-                "Images": ["Thumbnails\\thumb__T_HOOFT_1999.TIF", "Thumbnails\\thumb_10.TIF"],
-            }
+            "SidebarInfo": ["This is a Test", "Thumbnails\\thumb__T_HOOFT_1999.TIF"]
         },
         "first_banquet": {
             "Identifier": "first_banquet",
