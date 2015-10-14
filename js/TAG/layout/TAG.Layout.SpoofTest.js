@@ -240,7 +240,7 @@ TAG.Layout.SpoofTest = (function () {
             l+=70
 		})
 
-		//timer = makeTimer()
+		timer = makeTimer()
         makeDropDowns()
         $("#decadeList").hide();
         $("#genderList").hide();
@@ -250,8 +250,8 @@ TAG.Layout.SpoofTest = (function () {
 		$("#tagRoot").unbind()
 		root.unbind()
 		var ontouch = function () {
-		    //timer.stop()
-		    //timer.restart()
+		    timer.stop()
+		    timer.restart()
 		}
 		scroller.click(ontouch).mousedown(ontouch)
         $(".block").click(ontouch).mousedown(ontouch)
@@ -424,8 +424,6 @@ TAG.Layout.SpoofTest = (function () {
 	        reset();
 	        return;
 	    }
-        //$("#decadeList").hide();
-        //$("#genderList").hide();
 	    $(".block").hide()
 
 	    var p = ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics']
