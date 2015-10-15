@@ -5,7 +5,7 @@
 */
 TAG.Layout.Spoof = (function () {
     var _main = getMain();
-    var noMotivationString = "No citation was provided for peace prize laureates before ----";
+    var noMotivationString = "No citation was provided for peace prize laureates before 1990";
     var collectionGuids = ["Patents", "Factories", "Family", "Bjorkborn", "Ceremonies", "SanRemo", "Diplomas", "Medals", "Will"];
 
     var doqsInCollection =

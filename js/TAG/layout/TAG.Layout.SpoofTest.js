@@ -624,7 +624,7 @@ TAG.Layout.SpoofTest = (function () {
 		icon.css({
 		    "width": "70px",
 		    "height": "auto",
-		    "bottom": "480px",
+		    "bottom": "82%",
 		    "position": "absolute",
             "left" : "0px"
 		})
