@@ -13,7 +13,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     "use strict";
 
     options = options || {}; // cut down on null checks later
-
+    var origOptions = options
     var // DOM-related
         root = TAG.Util.getHtmlAjax('Artmode.html'),
         sideBar = root.find('#sideBar'),
@@ -59,7 +59,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         originalOptions = options,
         isSlideMode = options.isSlideMode,
         slideModeArray = options.slidesArray,
-        nextSlide= $(document.createElement('img')),
+        nextSlide = $(document.createElement('img')),
         prevSlide = $(document.createElement('img')),
 
         //Nobel will customizations
@@ -166,7 +166,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * Initiate artmode with a root, artwork image and a sidebar on the left
      * @method init
      */
-    function init() {
+    function init(partialSidebar) {
         var head,
             script,
             meta;
@@ -210,15 +210,39 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locationList = TAG.Util.UI.getLocationList(doq.Metadata);
 
         ///sideBar.css('visibility', 'hidden');
-        if (!slideModeArray || !slideModeArray.length || slideModeArray.length===0) {
-            isSlideMode = false;
-        }
-        else if(slideModeArray[0]._value && slideModeArray[0]._value.artwork) {
-            var temp = []
-            while (slideModeArray.length > 0) {
-                temp.push(slideModeArray.shift()._value.artwork)
+        if (!slideModeArray[0].Identifier) {
+            if (!slideModeArray || !slideModeArray.length || slideModeArray.length === 0) {
+                isSlideMode = false;
             }
-            slideModeArray = temp;
+            else {
+                isSlideMode = true
+                var s = TAG.Layout.Spoof()
+                var temp = []
+                while (slideModeArray.length > 0) {
+                    temp.push(s.getDoq(slideModeArray.shift()))
+                }
+                slideModeArray = temp;
+            }
+        }
+        nextSlide = $(document.createElement('img'))
+        prevSlide = $(document.createElement('img'))
+        nextSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "right": "40%", "position": "absolute", "z-index": "999999" }).attr({ src: tagPath + 'images/right_icon.png' })
+        prevSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "left": "40%","position":"absolute","z-index":"999999"}).attr({ src: tagPath + 'images/left_icon.png' })
+        nextSlide.click(nextSlidePage)
+        prevSlide.click(prevSlidePage)
+        root.append(nextSlide).append(prevSlide)
+
+        if (afterInSlideArray() === false || afterInSlideArray() === undefined) {
+            nextSlide.hide()
+        }
+        else {
+            nextSlide.show()
+        }
+        if (beforeInSlideArray() === false || beforeInSlideArray() === undefined) {
+            prevSlide.hide()
+        }
+        else {
+            prevSlide.show()
         }
 
         if (isImpactMap) sideBar.css
@@ -273,7 +297,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         // Keyword sets
         keywordSets = TAG.Layout.Spoof().getKeywordSets();
 
-        makeSidebar(0)
+        makeSidebar(0,partialSidebar)
     }
 
     /*
@@ -311,7 +335,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     function afterInSlideArray(item) {
         if (isSlideMode === true) {
             item = item || doq;
-            var index = slideModeArray.indexOf(item);
+            var index = false
+            var i = 0 
+            slideModeArray.forEach(function (it) { if (it.Identifier === item.Identifier) { index = i }; i++ })
+            if (index === false) { return false }
             if (index === slideModeArray.length - 1) {
                 return false;
             }
@@ -325,7 +352,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
     function beforeInSlideArray(item) {
         if (isSlideMode === true) {
             item = item || doq;
-            var index = slideModeArray.indexOf(item);
+            var index = false
+            var i = 0
+            slideModeArray.forEach(function (it) { if (it.Identifier === item.Identifier) { index = i }; i++ })
+            if (index === false) { return false }
             if (index === 0) {
                 return false;
             }
@@ -335,49 +365,42 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
         return false
     }
+    function switchSlidePage(d) {
+        annotatedImage && annotatedImage.unload();
+        doq = d
+        nextSlide.remove()
+        prevSlide.remove()
+        nextSlide.die()
+        prevSlide.die()
+        init(true);
+        /*
+        origOptions.doq = doq
+        var artworkViewer = TAG.Layout.ArtworkViewer(origOptions);
+        annotatedImage && annotatedImage.unload();
+        root.remove();
+        root.die()
 
+        var page = $(document.createElement('div')).attr({ id: "artworkViewerSwitchRoot" })
+        page.append(artworkViewer.getRoot())
+
+        $("#newCatalogRoot").append(page)
+
+        page.css({
+            "width": "100%",
+            "position": "absolute",
+            "height": "100%",
+            "top": "0%",
+            "left" : "0%",
+            'z-index': "50001"
+        })
+        currentPage.obj = artworkViewer;*/
+    }
     function nextSlidePage() {
-        var artworkViewer = TAG.Layout.ArtworkViewer({
-            doq: afterInSlideArray(),
-            isNobelWill: false,
-            isSlideMode: isSlideMode,
-            slidesArray: slideModeArray,
-
-            prevPreview: prevPreview,
-            prevTag: prevTag,
-            prevScroll: prevScroll,
-            prevPreviewPos: prevPreviewPos,
-            prevCollection: prevCollection,
-            prevPage: prevPage,
-            prevMult: prevMult,
-            showNobelLifeBox: showNobelLifeBox
-        });
-        var newPageRoot = artworkViewer.getRoot();
-        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-
-        TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+        switchSlidePage(afterInSlideArray())
     }
 
     function prevSlidePage() {
-        var artworkViewer = TAG.Layout.ArtworkViewer({
-            doq: beforeInSlideArray(),
-            isNobelWill: false,
-            isSlideMode: isSlideMode,
-            slidesArray: slideModeArray,
-
-            prevPreview: prevPreview,
-            prevTag: prevTag,
-            prevScroll: prevScroll,
-            prevPreviewPos: prevPreviewPos,
-            prevCollection: prevCollection,
-            prevPage: prevPage,
-            prevMult: prevMult,
-            showNobelLifeBox: showNobelLifeBox
-        });
-        var newPageRoot = artworkViewer.getRoot();
-        newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-
-        TAG.Util.UI.slidePageRightSplit(root, newPageRoot);
+        switchSlidePage(beforeInSlideArray())
     }
 
     /**
@@ -774,7 +797,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * Makes the artwork viewer sidebar
      * @method makeSidebar
      */
-    function makeSidebar(mapslength) {
+    function makeSidebar(mapslength,partialSidebar) {
         var backBttnContainer = root.find("#backBttnContainer"),
             sideBarSections = root.find('#sideBarSections'),
             sideBarInfo = root.find('#sideBarInfo'),
@@ -825,8 +848,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             backButton.hide();
         }
         backButton.css({"z-index":"10000000","height":"auto"})
-
-        togglerImage.attr("src", tagPath + 'images/icons/Close_nobel.svg');
+        if (!(partialSidebar === true)) {
+            togglerImage.attr("src", tagPath + 'images/icons/Close_nobel.svg');
+        }
         infoTitle.text(doq.Name);
         infoArtist.text(doq.Metadata.Artist);
         infoYear.text(doq.Metadata.Year);
@@ -850,6 +874,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         if (doq.Metadata.Description) {
             console.log("description");
             var description = doq.Metadata.Description;
+            $(".description").remove()
+            $(".description").die()
             var descriptionDiv = $(document.createElement('div'));
             descriptionDiv.css({
                 'font-size': '75%',
@@ -871,6 +897,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         // toggler to hide/show sidebar
         toggler.on('click', function () {
+            sideBar.stop()
             var opts = {},
                 isLeft = root.data('split') === 'L';
 
@@ -886,7 +913,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 togglerImage.attr('src', tagPath + 'images/icons/' + ((!!isBarOpen) ^ (!isLeft) ? 'Close_nobel.svg' : 'Open_nobel.svg'));
             });
         });
-
         var t_timer = new TelemetryTimer();
 
         TAG.Telemetry.register(toggler, 'mouseup', 'ToggleSidebar', function (tobj) {

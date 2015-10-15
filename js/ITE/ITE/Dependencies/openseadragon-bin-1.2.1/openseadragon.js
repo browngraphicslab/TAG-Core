@@ -13793,7 +13793,7 @@ ImageJob.prototype = {
         this.image.onload = this.image.onerror = this.image.onabort = null;
         if (!successful) {
             this.image = null;
-            console.log("failed to load image");
+            console.log("failed to load image "+this.image.src);
         }
 
         if ( this.jobId ) {
