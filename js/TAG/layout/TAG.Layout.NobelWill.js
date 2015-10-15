@@ -649,8 +649,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
                     break;
                 case 2:
-                    associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['FUND'], ['PRIZES'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
-                    hardcodedHotspotSpecs = [[[53, 39.75, 14, 3.75]], [[46.5, 66, 4.5, 3.5]], [[55, 65.5, 27, 3.5]], [[75.25, 72, 6, 3]], [[69, 76.75, 13, 2.5]], [[62.5, 81, 20, 2.5]], [[65.5, 83.5, 7.5, 2.5]]]
+                    associatedMediaNobelKeywords = [['GEORGES FEHRENBACH'], ['FUND'], ['PRIZES'],['GREATEST BENEFIT TO MANKIND'], ['PHYSICS'], ['CHEMICAL'], ['PHYSIOLOGY OR MEDICINE'], ['LITERATURE']];
+                    hardcodedHotspotSpecs = [[[53, 39.75, 14, 3.75]], [[46.5, 66, 4.5, 3.5]], [[55, 65.5, 27, 3.5]], [[55.5, 67.75, 27, 3.5]], [[75.25, 72, 6, 3]], [[69, 76.75, 13, 2.5]], [[62.5, 81, 20, 2.5]], [[65.5, 83.5, 7.5, 2.5]]]
                     infoBulbs = [[34.5, 59]];
                     leftTextArray = [ //aim for 1.75 space
                         9.75, 'Potsdamerstrasse, 51, Berlin, will',

@@ -7,7 +7,7 @@ TAG.Layout.SpoofTest = (function () {
 	"use strict";
 
     //OPTIONS
-    var IDLE_TIMER_TIME = 5 //IN SECONDS
+    var IDLE_TIMER_TIME = 45 //IN SECONDS
 
 	var root = $("#tagRoot")
 	var base = $(document.createElement("div"))
