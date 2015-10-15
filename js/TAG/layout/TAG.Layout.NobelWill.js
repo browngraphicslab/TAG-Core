@@ -961,8 +961,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 var div = $(document.createElement("div"));
                 div.css({
                     "left": hardcodedData[p - 1]["infoBulbs"][i][0] + "%",
-                    "height": "30px",
-                    "width": "30px",
+                    "height": "40px",
+                    "width": "40px",
                     "position": 'absolute',
                     "top": hardcodedData[p - 1]["infoBulbs"][i][1] + "%",
                     "z-index": "1005",
@@ -1478,8 +1478,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         img.addClass('lightbulb');
         img.css({
         	"right": "13px",
-        	"height": "30px",
-        	"width": "30px",
+        	"height": "40px",
+        	"width": "40px",
         	"position": 'absolute',
         	"bottom": "0px",
         	"z-index": "550",
