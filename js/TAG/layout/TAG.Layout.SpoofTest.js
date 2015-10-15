@@ -426,6 +426,14 @@ TAG.Layout.SpoofTest = (function () {
 	    }
 	    $(".block").hide()
 
+	    if (tags.length > 1) {
+	        var t = {}
+	        tags.forEach(function (tag) {
+                t[tag] = true
+	        })
+            tags = Object.keys(t)
+	    }
+
 	    var p = ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics']
 	    var d = ['1900s', '1910s', '1920s', '1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s']
 	    var g = ['male', 'female']
