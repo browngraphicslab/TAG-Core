@@ -1038,7 +1038,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 'background-color': 'transparent',
                 'color': 'white',
                 'font-size': '70%',
-                'overflow-y': "scroll",
+                'overflow-y': "auto",
                 'text-align': 'left',
                 'scrollbar-face-color': NOBEL_WILL_COLOR,
                 'scrollbar-arrow-color': 'transparent',
@@ -1232,19 +1232,25 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         outer.attr({
             class: 'infoPaneInfoField'
         })
-            outer.css({
-                'position': 'relative',
-                'z-index': '9999999999',
-                'text-indent' : '20px',
-                'width': '100%',
-                'left': '0%',
-                'background-color': 'transparent',
-                'color': 'white',
-                'font-size': '.9em',
-                'text-align': 'left',
-                'overflow-y': 'auto',
-                'max-height': .85 * ($('#infoPaneDiv').height() - $('#infoPaneTitleDiv').height() - $('#infoPaneTitleDiv').offset().top) + 'px'
-            });
+        outer.css({
+            'position': 'relative',
+            'z-index': '9999999999',
+            'width': '100%',
+            'left': '0%',
+            'background-color': 'transparent',
+            'color': 'white',
+            'font-size': '1.05em',
+            'text-align': 'left',
+            'overflow-y': 'auto',
+            'max-height': .85 * ($('#infoPaneDiv').height() - $('#infoPaneTitleDiv').height() - $('#infoPaneTitleDiv').offset().top) + 'px'
+        });
+        if (text === " " || text === "") {
+            outer.css({ "min-height": "15px"})
+        }
+        if (text.substring(0,7) === "<title>") {
+            text = text.substring(7)
+            outer.css({"font-weight":"bold","font-size":"1.65em"})
+        }
         outer.text(text);
         return outer;
     }
