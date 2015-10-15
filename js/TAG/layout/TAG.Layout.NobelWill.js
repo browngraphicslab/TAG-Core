@@ -975,17 +975,17 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 img.attr({
                     src: LIGHTBULB_ICON,
                 });
-                img.addClass('infobulb')
-                img.addClass("infobulb_page_" + p)
-                img.attr({ id: i + hardcodedData[p - 1]["associatedMediaNobelKeywords"].length })
+                div.addClass('infobulb')
+                div.addClass("infobulb_page_" + p)
+                div.attr({ id: i + hardcodedData[p - 1]["associatedMediaNobelKeywords"].length })
                 div.popupNumber = i + hardcodedData[p - 1]["associatedMediaNobelKeywords"].length
                 img.css({
                     "height": "100%",
                     "width": "100%",
-                }).click(function () {
+                })
+                div.append(img).click(function () {
                     showLargePopup(this.id);
                 })
-                div.append(img);
                 background.append(div);
             }
 

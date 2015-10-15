@@ -13,6 +13,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
 
     options = options || {}; // cut down on null checks later
 
+    //options :
+    var TILE_IMAGE_SPECIAL_CASING = true
+
     var // DOM-related
         root = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
         tileDiv = $(document.createElement("div")).attr("id", "tileDiv"),
@@ -428,6 +431,14 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                 "height": "auto",
                 "bottom" : "0%",
             })
+            if (TILE_IMAGE_SPECIAL_CASING === true) {
+                var collID = currCollection.Identifier.toLowerCase()
+                if (collID === "family" || collID === "will" || collID === "patents") {
+                    tileImage.css({
+                        "top": "0%",
+                    })
+                }
+            }
             artTitle.addClass('artTitle');
             artText.addClass('artText');
             artText.addClass('secondaryFont');
