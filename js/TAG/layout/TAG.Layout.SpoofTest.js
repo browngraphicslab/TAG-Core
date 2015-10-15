@@ -7,8 +7,7 @@ TAG.Layout.SpoofTest = (function () {
 	"use strict";
 
     //OPTIONS
-    var IDLE_TIMER_TIME = 45 //IN SECONDS
-
+    var IDLE_TIMER_TIME = 5 //IN SECONDS
 
 	var root = $("#tagRoot")
 	var base = $(document.createElement("div"))
@@ -222,7 +221,7 @@ TAG.Layout.SpoofTest = (function () {
 			"overflow-x": "scroll",
 			"overflow-y": "hidden",
 			"width": "100%",
-			"height": "75%",
+			"height": "74.5%",
 			"top": "25.5%",
 			"position": "absolute",
 			"background-color" : "transparent"

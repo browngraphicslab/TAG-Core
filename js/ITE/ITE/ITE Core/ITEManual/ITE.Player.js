@@ -531,9 +531,9 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         if (!cancelEntirely) {
             if (initialLoading === true) {
                 setTimeout(function () {
-                    hideInitialOverlay();
                     makeTitleSlide();
                     setTimeout(function () {
+                        hideInitialOverlay();
                         attachVolume();
                         attachPlay();
                         attachLoop();
@@ -550,8 +550,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                             unMute()
                             tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
                         },75);
-                    }, 1500);
-                }, 3000);
+                    }, 500);
+                }, 6000);
                 return;
             }
             orchestrator.play();

@@ -1357,6 +1357,7 @@ TAG.Layout.Spoof = (function () {
                             list[0].Metadata.Collaborators = ""
                         }
                     })
+                    console.log("number of laureates: "+ds.length)
                     callback(ds);
                 }
                 else {

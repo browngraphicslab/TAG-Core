@@ -257,21 +257,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 * O/P: 	none
 	 */
 	self.play = function (endKeyframe) {
-	    if (_super.trackData.guid && _circle === null && false) {
-	        var point = new OpenSeadragon.Point(.5, .5);
-	        _circle = $(document.createElement('img'));
-	        _circle.attr('src', itePath + "ITE Core/ITEManual/ITEPlayerImages/hotspot_circle.svg")
-	        _circle.css({
-	            'position': 'relative',
-	            'width': '5%',
-	            'height': '5%',
-	            'top': point.y+'px',
-	            'left': point.x+'px',
-	            'display': 'inherit',
-                'opacity' : 'inherit',
-	        })
-	        $(_viewer.canvas).append(_circle);
-	    }
 		if (self.status === 3) {
 			return;
 		}
