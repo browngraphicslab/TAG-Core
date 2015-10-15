@@ -582,8 +582,8 @@ TAG.Layout.SpoofTest = (function () {
 		    "height": "35px",
 		    "width": "35px",
 		    "position": "absolute",
-		    "top": "5px",
-            "left" : "5px"
+		    "top": "9px",
+            "right" : "9px"
 		}).click(hide)
 		imgwrapper.css({
 			"width": "40%",
