@@ -10,7 +10,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     //OPTIONS
 
 
-    var BezierOn = true,
+    var BezierOn = true,//These are all depracated, some partially, some fully, some barely  #classicTAG
         iconColor = "orig", //options are:   red, orange, blue, orig
         paragraphed = false,
         showRedHighlights = false,
@@ -513,211 +513,139 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         sliderBar.append(down)
         sliderBar.append(up)
         background.append(sliderBar);
-        hardcodedData = [{},{},{},{}]
+        hardcodedData = [{}, {}, {}, {}]
+
         for (var p = 1; p < 5; p++) {
             var associatedMediaNobelKeywords, hardcodedHotspotSpecs, infoBulbs, leftTextArray, sliderPositions, associatedMedia = [], textDivArray = [], nobelHotspots = []
             switch (p) {
+
+                /*
+                here is the start of the big part of the hardcoded info
+
+
+                The associated media nobel keywords must be the intentended title of each associated media on the right side
+                these associated media, when clicked, will bring up a popup associated with the index of the string in THIS array
+
+                the hardcoded hotspoc specs are the location in percentages of the whole windows of each invisible hotspot
+                the locations are encoded as left, top, width, height
+
+                the infobulbs are treated much like the associated media nobel keywords.  Their extra info is very similiar
+                just like the associated media nobel keywords, a registered click will bring up the bigger pop up specified by a passed in index.
+                This index is calculated by infobulb array index PLUS associatedMediaNobelKeywords array LENGTH
+                therefore the extra info for info-bulb popups are simply tacked on the end of the arrays for regular assocMedia info
+
+                The left text array is an array of either numbers or strings
+                the number sets the currrent distance from the top of the page (in percent of total page height) of the current counter
+                The strings create a div with that string in it at the location of the current counter as specified by the number.
+                If no number is specified, the counter automatically increments by 2.05 percent.  
+                Any text that is EXACTLY "INDENT" will not count as a text but rather as an indent for the next text, which must come 
+                    directly after the indent
+
+                the slider positions encode the locations of every possible chunk.  
+                the protocol is 'left, top, height', all in percents of the total page
+                */
+
                 //hardcodedHotspotSpecs- left, top, width, height
                 case 1:
                     associatedMediaNobelKeywords = [['WILL AND TESTAMENT'], ['ALFRED BERNHARD NOBEL'], ['ROBERT NOBEL'], ['EMANUEL NOBEL'], ['SOFIE KAPY VON KAPIVAR'], ['ALARIK LIEDBECK']]
                     hardcodedHotspotSpecs = [[[47.95 + 8.25, 9, 11.75, 5]], [[63.5, 15, 17, 3.5], [45, 17, 8, 4]], [[66.5, 30, 11, 3]], [[61, 34.5, 12.5, 2.5]], [[51.5, 54, 19, 3]], [[52.5, 65.4, 13.5, 3]]]
                     infoBulbs = [[61.5, 7], [33.25, 59]];
-                    if (paragraphed === true) {
-                        leftTextArray = [
-                            10.25,
-                            'Testament',
-                            15,
-                            '\tI, the undersigned, Alfred Bernhard',
-                            //17.5,
-                            ' Nobel, do hereby, after mature',
-                            //20.25,
-                            ' deliberation, declare the following to be my last Will and Testament',
-                            //22.75,
-                            ' with respect to such property as may be',
-                            //25.5,
-                            ' left by me at the time of my death:',
-                            27.5,
-                            'To my nephews, Hjalmar and Ludvig',
-                            //30,
-                            ' Nobel, the sons of my brother Robert Nobel, I bequeath',
-                            //32.5,
-                            ' the sum of Two Hundred Thousand Crowns each;',
-                            34.75,
-                            'To my nephew Emanuel Nobel, the sum of Three',
-                            //37,
-                            ' Hundred Thousand, and to my niece Mina Nobel,',
-                            //40,
-                            ' One Hundred Thousand Crowns;',
-                            42,
-                            'To my brother Robert Nobel’s daughters, Ingeborg',
-                            //44.25,
-                            ' and Tyra, the sum of One Hundred Thousand Crowns each;',
-                            47.25,
-                            'Miss Olga Boettger, at present staying',
-                            //49.5,
-                            ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
-                            //51.75,
-                            ' One Hundred Thousand Francs;',
-                            54,
-                            'Mrs Sofie Kapy von Kapivar, whose address',
-                            //56.25,
-                            ' is known to the Anglo-Oesterreichische Bank in Vienna,',
-                            //58.75,
-                            ' is hereby entitled to an annuity of 6000 Florins Ö.W.',
-                            //61,
-                            ' which is paid to her by the said Bank, and to this end I have',
-                            //63.5,
-                            ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
-                            66,
-                            'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
-                            //67.75,
-                            ' Stockholm, will receive One Hundred Thousand Crowns;',
-                            71.25,
-                            'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
-                            //72.25,
-                            ' Paris, is entitled to an annuity of Two Thousand',
-                            //74.75,
-                            ' Five Hundred Francs. In addition,',
-                            //77.5,
-                            ' Forty Eight Thousand Francs owned',
-                            //79.75,
-                            ' by her are at present in my custody, and shall be refunded;',
-                            82.5,
-                            'Mr Alfred Hammond, Waterford, Texas,',
-                            //84.75,
-                            ' U.S.A. will receive Ten Thousand Dollars;',
-                            87.25,
-                            'The Misses Emy and Marie Winkelmann,'
-                        ]
-                        sliderPositions = [
-                            [8.5, 6],
-                            [14.5, 13],
-                            //[17.5, 13],
-                            //[20.25, 12.75],
-                            //[22.75, 12.5],
-                            //[25.5, 12],
-                            [27.5, 7.5],
-                            //[30, 12.5],
-                            //[32.5, 12.5],
-                            [34.5, 7.25],
-                            //[37, 12.75],
-                            //[40, 12.25],
-                            [42, 5.75],
-                            //[44.25, 12.5],
-                            [47.25, 7.25],
-                            //[49, 12.5],
-                            //[51.5, 12],
-                            [53.5, 13],
-                            //[56, 12.25],
-                            //[58.25, 12.25],
-                            //[61, 11.75],
-                            //[63, 12.5],
-                            [65.5, 5.75],
-                            //[67.25, 12.5],
-                            [70.25, 12.5],
-                            //[71.75, 12.5],
-                            [82.25, 5.5],
-                            [86.75, 5.25]
-                        ]
-                    }
-                    else {
-                        leftTextArray = [
-                           10.25,
-                           "INDENT", 'TESTAMENT',
-                           15,
-                           "INDENT", '\tI, the undersigned, Alfred Bernhard',
-                           17.5,
-                           ' Nobel, do hereby, after mature',
-                           20.25,
-                           ' deliberation, declare the following to be my last Will and Testament',
-                           22.75,
-                           ' with respect to such property as may be',
-                           25.5,
-                           ' left by me at the time of my death:',
-                           28,
-                           "INDENT", 'To my nephews, Hjalmar and Ludvig',
-                           30,
-                           ' Nobel, the sons of my brother Robert Nobel, I bequeath',
-                           32.5,
-                           ' the sum of Two Hundred Thousand Crowns each;',
-                           34.75,
-                           "INDENT", 'To my nephew Emanuel Nobel, the sum of Three',
-                           37,
-                           ' Hundred Thousand, and to my niece Mina Nobel,',
-                           40,
-                           ' One Hundred Thousand Crowns;',
-                           42,
-                           "INDENT", 'To my brother Robert Nobel’s daughters, Ingeborg',
-                           44.25,
-                           ' and Tyra, the sum of One Hundred Thousand Crowns each;',
-                           47.25,
-                           "INDENT", 'Miss Olga Boettger, at present staying',
-                           49.5,
-                           ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
-                           51.75,
-                           ' One Hundred Thousand Francs;',
-                           54,
-                           "INDENT", 'Mrs Sofie Kapy von Kapivar, whose address',
-                           56.25,
-                           ' is known to the Anglo-Oesterreichische Bank in Vienna,',
-                           58.75,
-                           ' is hereby entitled to an annuity of 6000 Florins Ö.W.',
-                           61,
-                           ' which is paid to her by the said Bank, and to this end I have',
-                           63.5,
-                           ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
-                           65.5,
-                           "INDENT", 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
-                           67.75,
-                           ' Stockholm, will receive One Hundred Thousand Crowns;',
-                           70.25,
-                           "INDENT", 'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
-                           72.25,
-                           ' Paris, is entitled to an annuity of Two Thousand',
-                           74.75,
-                           ' Five Hundred Francs. In addition,',
-                           77.5,
-                           ' Forty Eight Thousand Francs owned',
-                           79.75,
-                           ' by her are at present in my custody, and shall be refunded;',
-                           82.5,
-                           "INDENT", 'Mr Alfred Hammond, Waterford, Texas,',
-                           84.75,
-                           ' U.S.A. will receive Ten Thousand Dollars;',
-                           86.5,
-                           "INDENT", 'The Misses Emy and Marie Winkelmann,'
-                        ]
-                        sliderPositions = [
-                            [8.5, 6],
-                            [14.5, 13],
-                            [17.5, 13],
-                            [20.25, 12.75],
-                            [22.75, 12.5],
-                            [25.5, 12],
-                            [28, 12.25],
-                            [30, 12.5],
-                            [32.5, 12.5],
-                            [34.5, 12.75],
-                            [37, 12.75],
-                            [40, 12.25],
-                            [42, 12.25],
-                            [44.25, 12.5],
-                            [47.25, 12],
-                            [49, 12.5],
-                            [51.5, 12],
-                            [53.5, 12.25],
-                            [56, 12.25],
-                            [58.25, 12.25],
-                            [61, 11.75],
-                            [63, 12.5],
-                            [65.5, 12.25],
-                            [67.25, 12.5],
-                            [69.75, 12.25],
-                            [71.75, 12.5],
-                            [74.5, 12],
-                            [76.5, 11.75]
-                        ]
-                    }
+                    leftTextArray = [
+                        10.25,
+                        "INDENT", 'TESTAMENT',
+                        15,
+                        "INDENT", '\tI, the undersigned, Alfred Bernhard',
+                        17.5,
+                        ' Nobel, do hereby, after mature',
+                        20.25,
+                        ' deliberation, declare the following to be my last Will and Testament',
+                        22.75,
+                        ' with respect to such property as may be',
+                        25.5,
+                        ' left by me at the time of my death:',
+                        28,
+                        "INDENT", 'To my nephews, Hjalmar and Ludvig',
+                        30,
+                        ' Nobel, the sons of my brother Robert Nobel, I bequeath',
+                        32.5,
+                        ' the sum of Two Hundred Thousand Crowns each;',
+                        34.75,
+                        "INDENT", 'To my nephew Emanuel Nobel, the sum of Three',
+                        37,
+                        ' Hundred Thousand, and to my niece Mina Nobel,',
+                        40,
+                        ' One Hundred Thousand Crowns;',
+                        42,
+                        "INDENT", 'To my brother Robert Nobel’s daughters, Ingeborg',
+                        44.25,
+                        ' and Tyra, the sum of One Hundred Thousand Crowns each;',
+                        47.25,
+                        "INDENT", 'Miss Olga Boettger, at present staying',
+                        49.5,
+                        ' with Mrs Brand, 10 Rue St Florentin, Paris, will receive',
+                        51.75,
+                        ' One Hundred Thousand Francs;',
+                        54,
+                        "INDENT", 'Mrs Sofie Kapy von Kapivar, whose address',
+                        56.25,
+                        ' is known to the Anglo-Oesterreichische Bank in Vienna,',
+                        58.75,
+                        ' is hereby entitled to an annuity of 6000 Florins Ö.W.',
+                        61,
+                        ' which is paid to her by the said Bank, and to this end I have',
+                        63.5,
+                        ' deposited in this Bank the amount of 150,000 Fl. in Hungarian State Bonds;',
+                        65.5,
+                        "INDENT", 'Mr Alarik Liedbeck, presently living at 26 Sturegatan,',
+                        67.75,
+                        ' Stockholm, will receive One Hundred Thousand Crowns;',
+                        70.25,
+                        "INDENT", 'Miss Elise Antun, presently living at 32 Rue de Lubeck,',
+                        72.25,
+                        ' Paris, is entitled to an annuity of Two Thousand',
+                        74.75,
+                        ' Five Hundred Francs. In addition,',
+                        77.5,
+                        ' Forty Eight Thousand Francs owned',
+                        79.75,
+                        ' by her are at present in my custody, and shall be refunded;',
+                        82.5,
+                        "INDENT", 'Mr Alfred Hammond, Waterford, Texas,',
+                        84.75,
+                        ' U.S.A. will receive Ten Thousand Dollars;',
+                        86.5,
+                        "INDENT", 'The Misses Emy and Marie Winkelmann,'
+                    ]
+                    sliderPositions = [
+                        [8.5, 6],
+                        [14.5, 13],
+                        [17.5, 13],
+                        [20.25, 12.75],
+                        [22.75, 12.5],
+                        [25.5, 12],
+                        [28, 12.25],
+                        [30, 12.5],
+                        [32.5, 12.5],
+                        [34.5, 12.75],
+                        [37, 12.75],
+                        [40, 12.25],
+                        [42, 12.25],
+                        [44.25, 12.5],
+                        [47.25, 12],
+                        [49, 12.5],
+                        [51.5, 12],
+                        [53.5, 12.25],
+                        [56, 12.25],
+                        [58.25, 12.25],
+                        [61, 11.75],
+                        [63, 12.5],
+                        [65.5, 12.25],
+                        [67.25, 12.5],
+                        [69.75, 12.25],
+                        [71.75, 12.5],
+                        [74.5, 12],
+                        [76.5, 11.75]
+                    ]
 
                     break;
                 case 2:
@@ -1157,8 +1085,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         SetWillImage(pageNumber);
         
         $(".highlight").hide()
-        //TAG.Layout.Spoof().getLaureates(function (doqs) { console.log(doqs)});
-        //TAG.Layout.Spoof().getLaureates(function (laurs) { laurs.forEach(function (laur) { if (laur.ID.indexOf("1867-11-07") > -1) { console.log(laur) } }) })
         $(".textChunkDiv").hide()
         $(".textChunkDiv_page_" + pageNumber).show()
         $(".nobelHotspot").hide()
@@ -2297,21 +2223,31 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         var info = {};
         var page = currPage ? currPage : pageNumber;
 
-		//START HARDCODING INFO AREA
+        //START HARDCODING INFO AREA
 
-    	var titles = [
+        /*
+        This is the start of the other big hardcoding area.  As specified in the pervious hardcoding area, this gives all the info about the popups 
+            from associated media and info-bulbs
+        each section (titles, images, texts, etc), has four arrays, which corrospond to the page number
+        the page number is automatically the current page number unless the 'currPage' argument is supplied
+        each of the sub-arrays within the arrays corresponds to the index number passed in.  
+        For instance, index 0 on page 1 will return a title of: "Alfred Nobel's last will"
+
+
+        */
+    	var titles = [//titles for big popups
 			["Alfred Nobel's last will", "Alfred Nobel: The founder of the Nobel Prize", "Robert Nobel: Alfred Nobel's eldest brother","Emanuel Nobel: Alfred Nobel's eldest nephew", "Sofie Hess: a woman in Alfred Nobel's life","Alarik Liedbeck: Alfred Nobel's friend and coworker", "Margin Text", "Margin Text"],
 			["Georges Fehrenbach: Chemist in Alfred Nobel's laboratory", "The Nobel Foundation", "The Nobel Prize","Physics", "Chemistry", "Physiology or medicine", "Literature", "Margin Text"],
 			["Peace", "Royal Swedish Academy of Sciences", "Karolinska Institutet", "The Swedish Academy", "The Norwegian Nobel Committee", "An international prize", "Ragnar Sohlman: Alfred Nobel's assistant and executor of the will", "Björkborn: Alfred Nobel's last home in Sweden", "Alfred Nobel's fortune", "Paris: Alfred Nobel's home in France", "San Remo: Alfred Nobel's home in Italy", "Margin Text"],
 			["Patents","Crematorium", "Margin Text"]
     	]
-    	var images = [
+    	var images = [//images locations after the regular tagpath
 			['01_Testament.tif','Popup_1_1.png', '03_Robert.png', '04_Emanuel.png', '05_Sofie.tif', '06_Alarik.png', MARGINALIA_1, MARGINALIA_2], //add in lightbulb images and text to the end of these arrays (for marginalia)
 			['07_Georges.tif', '08_fund.tif', '09_prizes.tif', '10_benefit.png', '11_physics.png', '12_chemistry.png', '13_med.png', '14_litt.png', MARGINALIA_2],
 			['15_pea.tif', '16_academysci.tif', '17_Caroline.tif', '18_academystoc.tif', '19_storting.tif', '20_scandinavian.jpg', '21_Sohlman.tif', '22_Bofors.tif', '23_Paris.tif', '24_San Remo.tif', MARGINALIA_2],
 			['25_patent.tif', '26_crematorium.tif', MARGINALIA_2]
     	]
-    	var texts = [
+    	var texts = [//big chunks of text per popup
 			[
                 "Alfred Nobel was a wealthy inventor and industrialist. His handwritten will is four pages long and written in Swedish; in it he expresses a wish to let the majority of his realizable estate form the foundation for prizes to those who ”shall have conferred the greatest benefit to mankind” in the fields of physics, chemistry, physiology or medicine, literature and peace.",
 				"Alfred Nobel was born in Stockholm in 1833, grew up in St. Petersburg, Russia, and later lived in Hamburg, Paris, and San Remo. He spent a large part of his life traveling. Nobel’s inventions related to explosives, including dynamite, laid the groundwork for an extensive industrial enterprise and, at his death in 1896, Nobel left behind a huge fortune. In his will, Nobel left the bulk of his wealth to be used to fund prizes in five fields: physics, chemistry, physiology or medicine, literature, and peace.",
@@ -2368,19 +2304,19 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "A note by an official at the district court in Karlskoga, Sweden confirming that that Alfred Nobel's will has been received by the court",
 			]
     	]
-    	var collections = [
+    	var collections = [//any collections available to travel to from a big popup, with name of collection and collection GUID supplied
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Will.svg', "Will", "Will"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg', "Industry", "Factories"]]],
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Patents.svg', "Patents", "Patents"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]]],
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "Bjorkborn"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "Bjorkborn"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_San Remo.svg', "San Remo", "SanRemo"]]],
 			[[], []]
     	]
-    	var tours = [
+    	var tours = [//very similiar to collections above, but with tours
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "FromWillToPrize"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "Family_Tour"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Factories", "link"]]],
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Industry", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]]],
 			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Industry", "Factories_Tour"]], [], [], [], []],
 			[[], []]
     	]
-    	var shortTexts = [
+    	var shortTexts = [//specified short texts for associated media
 			[
                 "In his will inventor and industrialist Alfred Nobel founded the Nobel Prize.",
 				"Alfred Nobel lived a multi-faceted life in many countries: Sweden, Russia, Germany, Great Britain, France, and Italy.",
