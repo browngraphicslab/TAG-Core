@@ -779,6 +779,16 @@ TAG.Layout.Spoof = (function () {
         "railroad_4":{"Identifier": "railroad_4","Metadata":{"DeepZoom":{"Path":"Images\\Factories\\railroad_4\\GeneratedImages\\dzc_output.xml"},},"SidebarInfo":["<title>Panama Canal"," ","The construction of the Panama canal between the Atlantic and pacific Oceans over the isthmus of Panama. The engineer behind the Suez Canal, Fernand Lesseps, had drawn up the plans for the Panama Canal in the 1870’s. Due to financial problems, construction on the canal was discontinued in the 1890’s. The French canal enterprise ended in failure. A new project under American direction was begun in 1906. The canal was completed in 1914."]},
         "industries_pic_4":{"Identifier": "industries_pic_4","Metadata":{"DeepZoom":{"Path":"Images\\Factories\\industries_pic_4\\GeneratedImages\\dzc_output.xml"},},"SidebarInfo":["<title>Factory at Ardeer"," ","The Nobel's explosives factory at Ardeer, Scotland."]},
 
+        //Intro
+        "nobelwill3_0": { "Identifier": "nobelwill3_0", "Metadata": { "DeepZoom": { "Path": "Images\\Intro\\nobelwill3_0\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": [] },
+        "industry_0": { "Identifier": "industry_0", "Metadata": { "DeepZoom": { "Path": "Images\\Intro\\industry_0\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Making Dynamite", " ", "Dynamite cartridging at the Nobel's Explosives factory at Ardeer, Scotland."] },
+        "prize_ceremony_0": { "Identifier": "prize_ceremony_0", "Metadata": { "DeepZoom": { "Path": "Images\\Intro\\prize_ceremony_0\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Prize Ceremony", " ", "The first Nobel Prize award ceremony at the Royal Academy of Music in Stockholm in 1901. Beneath the stage the first Nobel Laureate in physics Wilhelm Conrad Röntgen receives the prize from the Swedish Crown Prince Gustav. Röntgen received the prize for the discovery of X-rays."] },
+        "education_graph": { "Identifier": "education_graph", "Metadata": { "DeepZoom": { "Path": "Images\\Intro\\education_graph\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Nobel's Education", " ", "Alfred Nobel was born in Sweden, but spent his youth in Russia. Since he was not a Russian citizen he could not go to Russian schools. Instead he had private instruction in science and languages. He became fluent in Russian, French, German, and English in addition to his native Swedish."] },
+        "science_0": { "Identifier": "science_0", "Metadata": { "DeepZoom": { "Path": "Images\\Intro\\science_0\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Ardeer Laboratory", " ", "The laboratory at the Nobel's Explosives factory at Ardeer, Scotland."] },
+        "war and peace": { "Identifier": "war and peace", "Metadata": { "DeepZoom": { "Path": "Images\\Intro\\war and peace\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>War and Peace", " ", "Paris during the Franco-Prussian War, 1871."] },
+        "kensington": { "Identifier": "kensington", "Metadata": { "DeepZoom": { "Path": "Images\\Intro\\kensington\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Kensington", " ", "Kensington Railway station, London, England."] },
+        "suttner_0": { "Identifier": "suttner_0", "Metadata": { "DeepZoom": { "Path": "Images\\Intro\\suttner_0\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Bertha von Suttner", " ", "In 1876 Alfred Nobel hired Bertha von Suttner as a secretary, but she stayed only a week before she left to get married. She and Alfred Nobel became friends and she influenced  his interest in peace issues. She became a famous author, international peace activist, and ultimately a Nobel Peace Prize Laureate."] },
+        "stpetersburgeducationgraph_0": { "Identifier": "stpetersburgeducationgraph_0", "Metadata": { "DeepZoom": { "Path": "Images\\Intro\\stpetersburgeducationgraph_0\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Nobel's Education", " ", "Alfred Nobel was born in Sweden, but spent his youth in Russia. Since he was not a Russian citizen he could not go to Russian schools. Instead he had private instruction in science and languages. He became fluent in Russian, French, German, and English in addition to his native Swedish."] },
 
     };
 
@@ -1321,6 +1331,32 @@ TAG.Layout.Spoof = (function () {
                         doqarray[i].peace.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
                         doqarray[i].economics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
                     }
+                    var hash2 = {}
+                    ds.forEach(function (l) {
+                        var k = l.Metadata.Year + l.Metadata.PrizeCategory
+                        if (!hash2[k]) {
+                            hash2[k] = []
+                        }
+                        hash2[k].push(l)
+                    })
+                    var keys = Object.keys(hash2)
+                    keys.forEach(function (k) {
+                        var list = hash2[k]
+                        if (list.length > 1) {
+                            list.forEach(function (laur) {
+                                var string = ""
+                                list.forEach(function (l) {
+                                    if (l.Metadata.ID !== laur.Metadata.ID) {
+                                        string += l.Metadata.FirstName + " " + l.Metadata.LastName + ", "
+                                    }
+                                })
+                                laur.Metadata.Collaborators = string.substring(0, string.length - 2)
+                            })
+                        }
+                        else {
+                            list[0].Metadata.Collaborators = ""
+                        }
+                    })
                     callback(ds);
                 }
                 else {

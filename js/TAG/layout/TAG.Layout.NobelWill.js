@@ -1000,7 +1000,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 else {
                     placeInChunk++;
                 }
-                associatedMedia[i] = makeAssociatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk, i);
+                associatedMedia[i] = makeAssociatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk, i,p);
             }
             hardcodedData[p - 1]["associatedMedia"] = associatedMedia
 
@@ -1368,16 +1368,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	}
     }
 
-    function makeAssociatedMediaDiv(string, imageurl, chunkN, numberInChunk, number) {
+    function makeAssociatedMediaDiv(string, imageurl, chunkN, numberInChunk, number,currPage) {
         var middlespace = 25;
-        var numberOfMedia = 0;
-        for (var i = 0; i < hardcodedData[pageNumber-1]["associatedMediaNobelKeywords"].length; i++) {
-            if (hardcodedData[pageNumber-1]["associatedMediaNobelKeywords"][i][1] === chunkN) {
-                numberOfMedia++ ;
-            }
-        }
-        var height = Math.min((100 - middlespace) / numberOfMedia,30);
-        var gap = middlespace / (numberOfMedia + 1);
 
         var div = $(document.createElement('div')).addClass('smallPopup');
         div.css({
@@ -1387,7 +1379,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "border-radius" : "12px",
             "left": "2.5%",
             "display" : "block",
-            "top": numberInChunk * height + "%",
             "position" : "static",
             "border-color": NOBEL_ORANGE_COLOR,
             "display": "flex",
@@ -1402,7 +1393,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         background.append(div);
 
-        var info = getPopupInfo(number);
+        var info = getPopupInfo(number,currPage);
 
         var picWrapper = $(document.createElement("div"));
         picWrapper.css({
@@ -2302,9 +2293,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         root.append(taskBarArea);
     }
 
-    function getPopupInfo(number) {
+    function getPopupInfo(number,currPage) {
         var info = {};
-
+        var page = currPage ? currPage : pageNumber;
 
 		//START HARDCODING INFO AREA
 
@@ -2430,12 +2421,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	//END HARDCODING INFO AREA
 
 
-    	info.image = tagPath + 'images/nobelwillimages/NobelWillPopupImages/'+images[pageNumber-1][number];
-    	info.text = texts[pageNumber - 1][number];
-    	info.shortText = shortTexts[pageNumber - 1][number];
-    	info.collections = collections[pageNumber-1][number];
-    	info.tours = tours[pageNumber - 1][number];
-    	info.title = titles[pageNumber - 1][number];
+    	info.image = tagPath + 'images/nobelwillimages/NobelWillPopupImages/'+images[page-1][number];
+    	info.text = texts[page - 1][number];
+    	info.shortText = shortTexts[page - 1][number];
+    	info.collections = collections[page-1][number];
+    	info.tours = tours[page - 1][number];
+    	info.title = titles[page - 1][number];
 
     	return info;
     }

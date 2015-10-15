@@ -7,7 +7,7 @@ TAG.Layout.SpoofTest = (function () {
 	"use strict";
 
     //OPTIONS
-    var IDLE_TIMER_TIME = 30 //IN SECONDS
+    var IDLE_TIMER_TIME = 45 //IN SECONDS
 
 
 	var root = $("#tagRoot")
@@ -146,7 +146,7 @@ TAG.Layout.SpoofTest = (function () {
 			"position": "absolute",
 			"width": "100%",
 			"height": "15%",
-			"top": "0%",
+			"top": "-2.5%",
 			"left": "0%",
 		})
 		searchBox.css({
@@ -200,7 +200,7 @@ TAG.Layout.SpoofTest = (function () {
         sortDiv.append(subSearchText)
 		searchText.css({
 		    "height": "30px",
-		    "top": "152.5px",
+		    "top": "157.5px",
 		    "left": "45px",
 		    "font-size": ".8em",
 		    "color": "white",
@@ -223,7 +223,7 @@ TAG.Layout.SpoofTest = (function () {
 			"overflow-y": "hidden",
 			"width": "100%",
 			"height": "75%",
-			"top": "25%",
+			"top": "25.5%",
 			"position": "absolute",
 			"background-color" : "transparent"
 		}).attr({id:"scroller"})
@@ -615,6 +615,7 @@ TAG.Layout.SpoofTest = (function () {
 		var name = $(document.createElement("div"))
 		var category = $(document.createElement("div"))
 		var year = $(document.createElement("div"))
+		var collaborators = $(document.createElement("div"))
 		var citation = $(document.createElement("div"))
 		var desc = $(document.createElement("div"))
 		var country = $(document.createElement("div"))
@@ -634,6 +635,7 @@ TAG.Layout.SpoofTest = (function () {
             "margin-bottom" : "15px"
 		}
 		name.css({ "font-size": "1.4em" })
+		collaborators.css({ "font-size": ".95em" })
 		category.css({ "font-size": ".95em", "left" :"18%", "margin-bottom": "25px" })
 		year.css({ "font-size": ".95em" })
 		desc.css({ "font-size": ".95em" })
@@ -647,6 +649,7 @@ TAG.Layout.SpoofTest = (function () {
 		category.css({ "margin-bottom": "25px" })
 		rightSide.append(year.css(commonCSS).text(laur.Metadata.Year));
 		rightSide.append(country.css(commonCSS).text(laur.Metadata.bornCountry ? laur.Metadata.bornCountry : ""))
+		rightSide.append(collaborators.css(commonCSS).text(laur.Metadata.Collaborators ? "Collaborators: "+laur.Metadata.Collaborators : ""))
 		rightSide.append(citation.css(commonCSS).text("Citation:"));
 		rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
         rightSide.append(icon)
@@ -817,7 +820,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "122.5px",
+	        "top": "102.5px",
 	        "padding-left": "3px",
             "overflow" : "hidden",
 	        "left": "45px",
@@ -863,7 +866,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "122.5px",
+	        "top": "102.5px",
 	        "overflow": "hidden",
 	        "padding-left": "3px",
 	        "left": "150px",
