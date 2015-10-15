@@ -1932,36 +1932,21 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             id: "infoblocker"
         }).click(function () {
             infoblocker.css('display', 'none');
-            infoDiv.css('display', 'none');
+            helpDiv.css('display', 'none');
         });
         root.append(infoblocker);
-        var infoDiv = $(document.createElement('div')).attr({ id: 'infoDiv' })
+        var helpDiv = $(document.createElement('div')).attr({ id: 'helpDiv' })
                        .css({
                            "width": "50%",
-                           'height': "66%",
                            "left": "25%",
                            "top": "17%",
-                           "border": "1.5px solid " + NOBEL_ORANGE_COLOR,
-                           "border-radius": "10px",
-                           "background-color": "black",
                            "z-index": "50051",
                            "position": "absolute",
                            'display': 'none',
-                           'padding-left': '2%',
-                           'padding-right': '2%',
                        });
-        var infoTitle = $(document.createElement('div')).attr('id', 'infoTitle').text("Alfred Nobel's Interactive Will")
-                        .css({ width: '100%', height: '10%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '1.25em' });
-        var infoText = $(document.createElement('div')).attr('id', 'infoText').text("Drag the highlighter to  find important words and phrases, which are traced in red ink.")
-                        .css({ width: '100%', height: '20%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '0.62em' });
-        var tourText = $(document.createElement('div')).attr('id', 'tourText').text("Tap on tour buttons to learn more about specific experiences in Nobel's life. Pause the tour at any time by touching the screen. Use pinch gestures to zoom into the images on screen to explore them in more detail and learn contexualizing information. Playing the tour again will continue from where you paused.")
-                        .css({ width: '100%', height: '20%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '0.62em' });
-        var collectionText = $(document.createElement('div')).attr('id', 'collectionText').text("Tap on collection buttons to explore galleries of images that relate to Nobel's life. Tap on an image to see it full screen and use pinch gestures to zoom in on image details.")
-                        .css({ width: '100%', height: '20%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '0.62em' });
-        var lightbulbText = $(document.createElement('div')).attr('id', 'lightbulbText').text("Tap on the lightbulb icon to get more information.")
-                        .css({ width: '100%', height: '20%', 'text-align': 'center', 'padding-top': '1%', 'font-size': '0.62em' });
-        infoDiv.append(infoTitle).append(infoText).append(lightbulbText).append(tourText).append(collectionText);
-        root.append(infoDiv);
+        var infoImg = $(document.createElement('img')).attr({ 'id': 'infoImg', 'src': tagPath + 'images/will_pop.png' }).css({ 'width': '90%' });
+        helpDiv.append(infoImg);
+        root.append(helpDiv);
 
         var infoButtonContainer = $(document.createElement('div'))
             .css({
@@ -1977,11 +1962,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         infoButtonContainer.append(infoButton);
         background.append(infoButtonContainer);
         infoButtonContainer.click(function () {
-            showInfoDiv();
+            showHelpDiv();
         });
-        function showInfoDiv() {
+        function showHelpDiv() {
             infoblocker.css('display', 'block');
-            infoDiv.css('display', 'block');
+            helpDiv.css('display', 'block');
         };
     }
 
@@ -2244,7 +2229,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var images = [//images locations after the regular tagpath
 			['01_Testament.tif','Popup_1_1.png', '03_Robert.png', '04_Emanuel.png', '05_Sofie.tif', '06_Alarik.png', MARGINALIA_1, MARGINALIA_2], //add in lightbulb images and text to the end of these arrays (for marginalia)
 			['07_Georges.tif', '08_fund.tif', '09_prizes.tif', '10_benefit.png', '11_physics.png', '12_chemistry.png', '13_med.png', '14_litt.png', MARGINALIA_2],
-			['15_pea.tif', '16_academysci.tif', '17_Caroline.tif', '18_academystoc.tif', '19_storting.tif', '20_scandinavian.jpg', '21_Sohlman.tif', '22_Bofors.tif', '23_Paris.tif', '24_San Remo.tif', MARGINALIA_2],
+			['15_pea.tif', '16_academysci.tif', '17_Caroline.tif', '18_academystock.tif', '19_storting.tif', '20_scandinavian.jpg', '21_Sohlman.tif', '22_Bofors.tif', '23_Paris.tif', '24_San Remo.tif', MARGINALIA_2],
 			['25_patent.tif', '26_crematorium.tif', MARGINALIA_2]
     	]
     	var texts = [//big chunks of text per popup
