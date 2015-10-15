@@ -617,15 +617,16 @@ TAG.Layout.SpoofTest = (function () {
 		var name = $(document.createElement("div"))
 		var category = $(document.createElement("div"))
 		var year = $(document.createElement("div"))
+		var citation = $(document.createElement("div"))
 		var desc = $(document.createElement("div"))
 		var country = $(document.createElement("div"))
-		var icon = $(document.createElement("img")).attr({ src: '../tagcore/images/prize_icons/' + laur.Metadata.PrizeCategory.toLowerCase() + '.svg' })
+		var icon = $(document.createElement("img")).attr({ src: '../tagcore/images/prize_icons/' + laur.Metadata.PrizeCategory.toLowerCase() + '_white.svg' })
 		icon.css({
 		    "width": "70px",
 		    "height": "auto",
-		    "bottom": "0px",
+		    "bottom": "480px",
 		    "position": "absolute",
-            "left" : "0%"
+            "left" : "0px"
 		})
 		var commonCSS = {
 		    "position": "relative",
@@ -635,7 +636,7 @@ TAG.Layout.SpoofTest = (function () {
             "margin-bottom" : "15px"
 		}
 		name.css({ "font-size": "1.4em" })
-		category.css({ "font-size": ".95em" })
+		category.css({ "font-size": ".95em", "left" :"18%", "margin-bottom": "25px" })
 		year.css({ "font-size": ".95em" })
 		desc.css({ "font-size": ".95em" })
 		country.css({ "font-size": ".95em" })
@@ -645,8 +646,10 @@ TAG.Layout.SpoofTest = (function () {
 		}
 		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " +last));
 		rightSide.append(category.css(commonCSS).text(laur.Metadata.PrizeCategory));
+		category.css({ "margin-bottom": "25px" })
 		rightSide.append(year.css(commonCSS).text(laur.Metadata.Year));
 		rightSide.append(country.css(commonCSS).text(laur.Metadata.bornCountry ? laur.Metadata.bornCountry : ""))
+		rightSide.append(citation.css(commonCSS).text("Citation:"));
 		rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
         rightSide.append(icon)
 
@@ -811,7 +814,7 @@ TAG.Layout.SpoofTest = (function () {
 	    base.append(decadeList)
 	    decadeList.css({
 	        "position": "absolute",
-	        "width": "90px",
+	        "width": $("#decadeButton").width()+2 + "px",
 	        "border-bottom-left-radius": "4pt",
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
@@ -857,7 +860,7 @@ TAG.Layout.SpoofTest = (function () {
 	    base.append(genderList)
 	    genderList.css({
 	        "position": "absolute",
-	        "width": "94px",
+	        "width" : $("#genderButton").width() +2+ "px",
 	        "border-bottom-left-radius": "4pt",
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
