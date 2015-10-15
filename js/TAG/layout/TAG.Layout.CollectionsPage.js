@@ -434,6 +434,12 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
             artText.css({
                 'color': NOBEL_COLOR,
             });
+            var lightbulb = $(document.createElement('div')).attr('id','lightbulb')
+                            .css({ 'width': '40px', 'height': '40px', 'position': 'absolute', 'right': '5px', 'bottom': '0px', 'z-index': '50001'});
+            var lightimg = $(document.createElement('img')).attr({ 'id': 'lightbulbimg' , 'src': tagPath + 'images/lightbulb.png'})
+                            .css({ 'width': '100%', 'height': '100%' });
+            lightbulb.append(lightimg);
+            main.append(lightbulb);
 
 
             //CLICK HANDLER FOR TILE
