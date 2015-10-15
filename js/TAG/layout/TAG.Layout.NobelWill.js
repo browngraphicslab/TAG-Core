@@ -775,7 +775,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         [29.75, 11.75],
                         [31.25, 12.75],
                         [33.5, 12],
-                        [34, 12.25],
+                        [36, 12.25],
                         [38.75, 11.75],
                         [40.25, 12.5], 
                         [42.75, 13.25], //17 x
