@@ -622,11 +622,11 @@ TAG.Layout.SpoofTest = (function () {
 		var country = $(document.createElement("div"))
 		var icon = $(document.createElement("img")).attr({ src: '../tagcore/images/prize_icons/' + laur.Metadata.PrizeCategory.toLowerCase() + '_white.svg' })
 		icon.css({
-		    "width": "70px",
+		    "width": "20%",
 		    "height": "auto",
-		    "bottom": "82%",
-		    "position": "absolute",
-            "left" : "0px"
+		   // "bottom": "82%",
+		    "position": "relative",
+            "float" : "left"
 		})
 		var commonCSS = {
 		    "position": "relative",
@@ -637,7 +637,7 @@ TAG.Layout.SpoofTest = (function () {
 		}
 		name.css({ "font-size": "1.4em" })
 		collaborators.css({ "font-size": ".95em" })
-		category.css({ "font-size": ".95em", "left" :"18%", "margin-bottom": "25px" })
+		
 		year.css({ "font-size": ".95em" })
 		desc.css({ "font-size": ".95em" })
 		country.css({ "font-size": ".95em" })
@@ -645,15 +645,24 @@ TAG.Layout.SpoofTest = (function () {
 		if (last === undefined || last === null || last === "undefined") {
             last = ""
 		}
-		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " +last));
-		rightSide.append(category.css(commonCSS).text(laur.Metadata.PrizeCategory));
+		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " + last));
+		rightSide.append(icon);
+		category.css({
+		    "font-size": ".95em", 
+		    "margin-bottom": "25px",
+		    "position": "relative",
+		    "color": "white",
+		    "width": "80%",
+		    "height": "auto",
+            'float': 'left',
+		});
+		rightSide.append(category.text(laur.Metadata.PrizeCategory));
 		category.css({ "margin-bottom": "25px" })
 		rightSide.append(year.css(commonCSS).text(laur.Metadata.Year));
 		rightSide.append(country.css(commonCSS).text(laur.Metadata.bornCountry ? laur.Metadata.bornCountry : ""))
 		rightSide.append(collaborators.css(commonCSS).text(laur.Metadata.Collaborators ? "Collaborators: "+laur.Metadata.Collaborators : ""))
 		rightSide.append(citation.css(commonCSS).text("Citation:"));
 		rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
-        rightSide.append(icon)
 
 		function hide() {
 			$("#popup").hide()
