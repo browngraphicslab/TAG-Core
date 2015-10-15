@@ -797,6 +797,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                 avl,
                 avlArray = [],
                 prevInfo;
+                
+           avlArray = TAG.Layout.Spoof().doqsInCollection[currCollection.Identifier]
 
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
@@ -806,7 +808,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                     onAssocMediaView : onAssocMediaView,
                     titleIsName: titleIsName,
                     isNobelWill: false,
-                    isSlideMode: slideMode,
+                    isSlideMode: true,
                     slidesArray : avlArray,
                     twoDeep: twoDeep,
                 });

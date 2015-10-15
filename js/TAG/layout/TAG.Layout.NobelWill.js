@@ -1622,7 +1622,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         function percentToPx(percent) {
             return (percent / 100) * sideBar.height();
         }
-        if (chunk >= 0 && chunk < (hardcodedData[pageNumber - 1]["textDivArray"].length - 4)) {
+        if (chunk >= 0 && chunk < (hardcodedData[pageNumber - 1]["textDivArray"].length)) {
             hideNobelAssociatedMedia();
             for (var i = 0; i < hardcodedData[pageNumber - 1]["textDivArray"].length; i++) {
                 var mid = hardcodedData[pageNumber - 1]["textDivArray"][i].offset().top + hardcodedData[pageNumber - 1]["textDivArray"][i].height() / 2
