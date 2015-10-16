@@ -924,7 +924,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 else {
                     placeInChunk++;
                 }
-                associatedMedia[i] = makeAssociatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk, i,p);
+                associatedMedia[i] = makeAssociatedMediaDiv(currMedia[0], null, currMedia[1], placeInChunk, i, p);
+                associatedMedia[i].fixBulb()
             }
             hardcodedData[p - 1]["associatedMedia"] = associatedMedia
 
@@ -1123,7 +1124,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 $("#sliderBarInnerds").css({ "left": "44.25%", "width": "55.75%" })
                 break;
         }
+
+        dragging = true
+        lastDragY = 0
+        mouseMove({ clientY: 5, clientX: 500 })
         setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
+
 
         for (var i = 0; i < hardcodedData[pageNumber - 1]["associatedMedia"].length; i++) {
             hardcodedData[pageNumber - 1]["associatedMedia"][i].checkHeight();
@@ -1396,7 +1402,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         	"top": '15px',
             'padding-bottom': '2px',
         	"color": "black",
-        	'bottom': "50px",
+        	'bottom': "0px",
         	"z-index": "550",
         }).text(info.shortText);
         descWhole.append(desc);
@@ -1439,6 +1445,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.mousemove(function (e) {
         	mouseMove(e)
         })
+        div.descWhole = descWhole
+        div.fixBulb = function () {
+            div.show();
+            if (div.descWhole.height() + div.title.height() < div.height()) {
+                div.descWhole.css({"height":(div.height() - div.title.height())+"px"})
+            }
+            div.hide();
+        }
         return div;
     }
     function hideNobelAssociatedMedia() {
