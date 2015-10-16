@@ -1936,14 +1936,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         root.append(infoblocker);
         var helpDiv = $(document.createElement('div')).attr({ id: 'helpDiv' })
                        .css({
-                           "width": "50%",
-                           "left": "25%",
-                           "top": "17%",
+                           "width": "60%",
+                           "left": "20%",
+                           "top": "20%",
                            "z-index": "50051",
                            "position": "absolute",
                            'display': 'none',
                        });
-        var infoImg = $(document.createElement('img')).attr({ 'id': 'infoImg', 'src': tagPath + 'images/will_pop.png' }).css({ 'width': '90%' });
+        var infoImg = $(document.createElement('img')).attr({ 'id': 'infoImg', 'src': tagPath + 'images/will_pop.png' }).css({ 'width': '100%' });
         helpDiv.append(infoImg);
         root.append(helpDiv);
 
