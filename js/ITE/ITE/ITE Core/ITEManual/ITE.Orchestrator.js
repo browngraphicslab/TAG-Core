@@ -350,6 +350,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	function playWhenAllTracksReady() {
 	    self.loadedTracks++
 	    if (self.loadedTracks == trackManager.length) {
+	        $("#backButtonContainer").off('click')
 	        if (!self.isAuthoring) {
 	            window.setTimeout(self.player.play(), 7500);
 	        } else {

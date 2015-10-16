@@ -1270,7 +1270,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
 
     function getDoqFromZIndex(z) {
-        if (data && data.length > z && data[z-1]!==false && data[z-1].SidebarInfo) {
+        if (data && data.length > z && data[z - 1] !== false && data[z - 1].SidebarInfo && data[z - 1].SidebarInfo.length) {
             return data[z-1];
         }
         return null;
