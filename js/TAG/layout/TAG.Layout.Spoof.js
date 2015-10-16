@@ -26216,7 +26216,288 @@ TAG.Layout.Spoof = (function () {
                         ]
                     }
                 ]
-            }
+            },
+            {
+                "id": "916",
+                "firstname": "William C.",
+                "surname": "Campbell",
+                "born": "0000-00-00",
+                "died": "0000-00-00",
+                "bornCountry": "Ireland",
+                "bornCountryCode": "IE",
+                "bornCity": "Ramelton",
+                "gender": "male",
+                "prizes": [
+                    {
+                        "year": "2015",
+                        "category": "medicine",
+                        "share": "4",
+                        "motivation": "\“for their discoveries concerning a novel therapy against infections caused by roundworm parasites\”,
+                        "affiliations": [
+                            {
+                                "name": "Drew University",
+                                "city": "Madison, NJ",
+                                "country": "USA"
+                            }
+                        ]
+                    }
+                ]
+            },
+        {
+            "id": "917",
+            "firstname": "Satoshi",
+            "surname": "&#332;mura",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "bornCountry": "Japan",
+            "bornCountryCode": "JP",
+            "bornCity": "Yamanashi prefektur",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "medicine",
+                    "share": "4",
+                    "motivation": "\“for their discoveries concerning a novel therapy against infections caused by roundworm parasites\”,
+                    "affiliations": [
+                        {
+                            "name": "Kitasato University",
+                            "city": "Tokyo",
+                            "country": "Japan"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "918",
+            "firstname": "Youyou",
+            "surname": "Tu",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "bornCountry": "China",
+            "bornCountryCode": "CN",
+            "bornCity": "Zhejiang Ningpo",
+            "gender": "female",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "medicine",
+                    "share": "2",
+                    "motivation": "\“for her discoveries concerning a novel therapy against Malaria\”,
+                    "affiliations": [
+                        {
+                            "name": "China Academy of Traditional Chinese Medicine",
+                            "city": "Beijing",
+                            "country": "China"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "919",
+            "firstname": "Takaaki",
+            "surname": "Kajita",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "bornCountry": "Japan",
+            "bornCountryCode": "JP",
+            "bornCity": "Higashimatsuyama",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "physics",
+                    "share": "2",
+                    "motivation": "\“for the discovery of neutrino oscillations, which shows that neutrinos have mass\”,
+                    "affiliations": [
+                        {
+                            "name": "University of Tokyo",
+                            "city": "Kashiwa",
+                            "country": "Japan"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "920",
+            "firstname": "Arthur B.",
+            "surname": "McDonald",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "bornCountry": "Canada",
+            "bornCountryCode": "CA",
+            "bornCity": "Sydney",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "physics",
+                    "share": "2",
+                    "motivation": "\“for the discovery of neutrino oscillations, which shows that neutrinos have mass\”,
+                    "affiliations": [
+                        {
+                            "name": "Queen's University",
+                            "city": "Kingston",
+                            "country": "Canada"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "921",
+            "firstname": "Tomas",
+            "surname": "Lindahl",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "bornCountry": "Sweden",
+            "bornCountryCode": "SE",
+            "bornCity": "Stockholm",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "chemistry",
+                    "share": "3",
+                    "motivation": "\“for mechanistic studies of DNA repair\”,
+                    "affiliations": [
+                        {
+                            "name": "Francis Crick Institute",
+                            "city": "Hertfordshire",
+                            "country": "United Kingdom"
+                        },
+                        {
+                            "name": "Clare Hall Laboratory",
+                            "city": "Hertfordshire",
+                            "country": "United Kingdom"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "922",
+            "firstname": "Paul",
+            "surname": "Modrich",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "chemistry",
+                    "share": "3",
+                    "motivation": "\“for mechanistic studies of DNA repair\”,
+                    "affiliations": [
+                        {
+                            "name": "Howard Hughes Medical Institute",
+                            "city": "Durham, NC",
+                            "country": "USA"
+                        },
+                        {
+                            "name": "Duke University School of Medicine",
+                            "city": "Durham, NC",
+                            "country": "USA"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "923",
+            "firstname": "Aziz",
+            "surname": "Sancar",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "bornCountry": "Turkey",
+            "bornCountryCode": "TR",
+            "bornCity": "Savur",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "chemistry",
+                    "share": "3",
+                    "motivation": "\“for mechanistic studies of DNA repair\”,
+                    "affiliations": [
+                        {
+                            "name": "University of North Carolina",
+                            "city": "Chapel Hill, NC",
+                            "country": "USA"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "924",
+            "firstname": "Svetlana",
+            "surname": "Alexievich",
+            "born": "1948-05-31",
+            "died": "0000-00-00",
+            "bornCountry": "Ukraine",
+            "bornCountryCode": "UA",
+            "bornCity": "Ivano-Frankivsk",
+            "gender": "female",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "literature",
+                    "share": "1",
+                    "motivation": "\“for her polyphonic writings, a monument to suffering and courage in our time\”,
+                    "affiliations": [
+                        []
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "925",
+            "firstname": "National Dialogue Quartet",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "gender": "org",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "peace",
+                    "share": "1",
+                    "motivation": "\“for its decisive contribution to the building of a pluralistic democracy in Tunisia in the wake of the Jasmine Revolution of 2011\”,
+                    "affiliations": [
+                        []
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "926",
+            "firstname": "Angus",
+            "surname": "Deaton",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "bornCountry": "United Kingdom",
+            "bornCountryCode": "GB",
+            "bornCity": "Edinburgh",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2015",
+                    "category": "economics",
+                    "share": "1",
+                    "motivation": "\“for his analysis of consumption, poverty, and welfare\”,
+                    "affiliations": [
+                        {
+                            "name": "Princeton University",
+                            "city": "Princeton, NJ",
+                            "country": "USA"
+                        }
+                    ]
+                }
+            ]
+        }
         ]
         }
         return db
