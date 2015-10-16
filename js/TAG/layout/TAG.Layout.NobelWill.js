@@ -1825,6 +1825,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'margin-bottom': '20px',
                 'margin-top':'10px'
     	    }).click(function () { switchTo(extra[2]) })
+              .mousedown(function () { bd.css({ "opacity": ".5" }) }).mouseleave(function () { bd.css({ "opacity": "1" }) })
     		var d = $(document.createElement('img'));
     		d.css({
     		    "position": 'relative',
@@ -1993,7 +1994,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         break;
                     case 7:
                         img = tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg';
-                        title = "Industry";
+                        title = "Factories";
                         link = "Factories";
                         break;
                     case 8:
@@ -2056,7 +2057,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "z-index" : "1003"
             }).click(function () {
                 switchTo(link)
-            }).mousedown(function () { bd.css({ "opacity": ".75" }) }).mouseleave(function () { bd.css({ "opacity": "1" }) })
+            }).mousedown(function () { bd.css({ "opacity": ".5" }) }).mouseleave(function () { bd.css({ "opacity": "1" }) })
             var d = $(document.createElement('img')).addClass("taskBarImage");
             d.css({
                 "position": 'absolute',
@@ -2213,7 +2214,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var images = [//images locations after the regular tagpath
 			['01_Testament.tif','Popup_1_1.png', '03_Robert.png', '04_Emanuel.png', '05_Sofie.tif', '06_Alarik.png', MARGINALIA_1, MARGINALIA_2], //add in lightbulb images and text to the end of these arrays (for marginalia)
 			['07_Georges.tif', '08_fund.tif', '09_prizes.tif', '10_benefit.png', '11_physics.png', '12_chemistry.png', '13_med.png', '14_litt.png', MARGINALIA_2],
-			['15_pea.tif', '16_academysci.tif', '17_Caroline.tif', '18_academystock.tif', '19_storting.tif', '20_scandinavian.jpg', '21_Sohlman.tif', '22_Bofors.tif', '23_Paris.tif', '24_San Remo.tif', MARGINALIA_2],
+			['15_pea.tif', '16_academysci.tif', '17_Caroline.tif', '18_academystock.jpg', '19_storting.tif', '20_scandinavian.jpg', '21_Sohlman.tif', '22_Bofors.tif', '','23_Paris.tif', '24_San Remo.tif', MARGINALIA_2],
 			['25_patent.tif', '26_crematorium.tif', MARGINALIA_2]
     	]
     	var texts = [//big chunks of text per popup
