@@ -928,7 +928,6 @@ TAG.Layout.Spoof = (function () {
            }
        }
        else {
-           console.log("couldn't get doq: "+name)
            callback && callback();
        }
    }

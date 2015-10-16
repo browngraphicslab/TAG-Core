@@ -13,7 +13,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     var BezierOn = true,//These are all depracated, some partially, some fully, some barely  #classicTAG
         iconColor = "orig", //options are:   red, orange, blue, orig
         paragraphed = false,
-        showRedHighlights = false,
+        showRedHighlights = true,
         showRedTracings = true,
         showOnlyHighlightedHotspots = true,
         agedWill = false,  //For the whiter or yellower will
@@ -1004,20 +1004,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                             this.hotspotImage.show();
                         }
                     }
-                    div.Hide = function () {
-                        this.hide()
-                        if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
-                            this.hotspotImage.hide();
-                        }
-                    }
-                    div.FadeIn = function (dur) {
-                        if (showRedHighlights == true) {
-                            this.fadeIn(dur)
-                        }
-                        if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
-                            this.hotspotImage.show();
-                        }
-                    }
+                    div.Hide = function () {}
+                    div.FadeIn = function (dur) {}
                     function percentToPxLeft(percent) {
                         return (percent / 100) * sideBar.height();
                     }
