@@ -18,7 +18,7 @@ TAG.Layout.Spoof = (function () {
         "SanRemo": [], //no content yet
         //"Diplomas": ["dip1", "dip2", "dip3", "dip4", "dip5", "dip6", "dip7", "dip8", "dip9", "dip10", "dip11"], //TO-DO: thumbnails and deep zooms
         "Diplomas": ["dip1", "dip2", "dip3", "dip4", "dip5", "dip6", "dip7", "dip9", "dip10", "dip11"],
-        "Medals": ["medal1", "medal2", "medal3", "medal4", "medal5", "medal6", "medal7", "medal8"], //TO-DO: make images smaller for thumbnails, deep zooms
+        "Medals": ["medal1", "medal2", "medal3", "medal4", "medal5", "medal6", "medal7", "medal8"], //TO-DO: make imagetes smaller for thumbnails, deep zooms
         "Will": ["will1","will2","will3","will4"] //TO-DO: thumbnails and deep zooms
     };
     var tourDoqs = {
@@ -2321,7 +2321,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1901",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"in recognition of the extraordinary services he has rendered by the discovery of the remarkable rays subsequently named after him\"",
+                        "motivation": "\“in recognition of the extraordinary services he has rendered by the discovery of the remarkable rays subsequently named after him\”",
                         "affiliations": [
                             {
                                 "name": "Munich University",
@@ -2349,7 +2349,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1902",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"in recognition of the extraordinary service they rendered by their researches into the influence of magnetism upon radiation phenomena\"",
+                        "motivation": "\“in recognition of the extraordinary service they rendered by their researches into the influence of magnetism upon radiation phenomena\”",
                         "affiliations": [
                             {
                                 "name": "Leiden University",
@@ -2378,7 +2378,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1902",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"in recognition of the extraordinary service they rendered by their researches into the influence of magnetism upon radiation phenomena\"",
+                        "motivation": "\“in recognition of the extraordinary service they rendered by their researches into the influence of magnetism upon radiation phenomena\”",
                         "affiliations": [
                             {
                                 "name": "Amsterdam University",
@@ -2406,7 +2406,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1903",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"in recognition of the extraordinary services he has rendered by his discovery of spontaneous radioactivity\"",
+                        "motivation": "\“in recognition of the extraordinary services he has rendered by his discovery of spontaneous radioactivity\”",
                         "affiliations": [
                             {
                                 "name": "École Polytechnique",
@@ -2435,7 +2435,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1903",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"in recognition of the extraordinary services they have rendered by their joint researches on the radiation phenomena discovered by Professor Henri Becquerel\"",
+                        "motivation": "\“in recognition of the extraordinary services they have rendered by their joint researches on the radiation phenomena discovered by Professor Henri Becquerel\”",
                         "affiliations": [
                             {
                                 "name": "École municipale de physique et de chimie industrielles (Municipal School of Industrial Physics and Chemistry)",
@@ -2464,7 +2464,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1903",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"in recognition of the extraordinary services they have rendered by their joint researches on the radiation phenomena discovered by Professor Henri Becquerel\"",
+                        "motivation": "\“in recognition of the extraordinary services they have rendered by their joint researches on the radiation phenomena discovered by Professor Henri Becquerel\”",
                         "affiliations": [
                             []
                         ]
@@ -2473,7 +2473,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1911",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of her services to the advancement of chemistry by the discovery of the elements radium and polonium, by the isolation of radium and the study of the nature and compounds of this remarkable element\"",
+                        "motivation": "\“in recognition of her services to the advancement of chemistry by the discovery of the elements radium and polonium, by the isolation of radium and the study of the nature and compounds of this remarkable element\”",
                         "affiliations": [
                             {
                                 "name": "Sorbonne University",
@@ -2501,7 +2501,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1904",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his investigations of the densities of the most important gases and for his discovery of argon in connection with these studies\"",
+                        "motivation": "\“for his investigations of the densities of the most important gases and for his discovery of argon in connection with these studies\”",
                         "affiliations": [
                             {
                                 "name": "Royal Institution of Great Britain",
@@ -2530,7 +2530,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1905",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his work on cathode rays\"",
+                        "motivation": "\“for his work on cathode rays\”",
                         "affiliations": [
                             {
                                 "name": "Kiel University",
@@ -2559,7 +2559,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1906",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"in recognition of the great merits of his theoretical and experimental investigations on the conduction of electricity by gases\"",
+                        "motivation": "\“in recognition of the great merits of his theoretical and experimental investigations on the conduction of electricity by gases\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -2588,7 +2588,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1907",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his optical precision instruments and the spectroscopic and metrological investigations carried out with their aid\"",
+                        "motivation": "\“for his optical precision instruments and the spectroscopic and metrological investigations carried out with their aid\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -2614,7 +2614,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1908",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his method of reproducing colours photographically based on the phenomenon of interference\"",
+                        "motivation": "\“for his method of reproducing colours photographically based on the phenomenon of interference\”",
                         "affiliations": [
                             {
                                 "name": "Sorbonne University",
@@ -2643,7 +2643,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1909",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"in recognition of their contributions to the development of wireless telegraphy\"",
+                        "motivation": "\“in recognition of their contributions to the development of wireless telegraphy\”",
                         "affiliations": [
                             {
                                 "name": "Marconi Wireless Telegraph Co. Ltd.",
@@ -2672,7 +2672,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1909",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"in recognition of their contributions to the development of wireless telegraphy\"",
+                        "motivation": "\“in recognition of their contributions to the development of wireless telegraphy\”",
                         "affiliations": [
                             {
                                 "name": "Strasbourg University",
@@ -2701,7 +2701,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1910",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his work on the equation of state for gases and liquids\"",
+                        "motivation": "\“for his work on the equation of state for gases and liquids\”",
                         "affiliations": [
                             {
                                 "name": "Amsterdam University",
@@ -2730,7 +2730,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1911",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his discoveries regarding the laws governing the radiation of heat\"",
+                        "motivation": "\“for his discoveries regarding the laws governing the radiation of heat\”",
                         "affiliations": [
                             {
                                 "name": "Würzburg University",
@@ -2759,7 +2759,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1912",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his invention of automatic regulators for use in conjunction with gas accumulators for illuminating lighthouses and buoys\"",
+                        "motivation": "\“for his invention of automatic regulators for use in conjunction with gas accumulators for illuminating lighthouses and buoys\”",
                         "affiliations": [
                             {
                                 "name": "Swedish Gas-Accumulator Co.",
@@ -2788,7 +2788,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1913",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his investigations on the properties of matter at low temperatures which led, inter alia, to the production of liquid helium\"",
+                        "motivation": "\“for his investigations on the properties of matter at low temperatures which led, inter alia, to the production of liquid helium\”",
                         "affiliations": [
                             {
                                 "name": "Leiden University",
@@ -2817,7 +2817,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1914",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his discovery of the diffraction of X-rays by crystals\"",
+                        "motivation": "\“for his discovery of the diffraction of X-rays by crystals\”",
                         "affiliations": [
                             {
                                 "name": "Frankfurt-on-the-Main University",
@@ -2846,7 +2846,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1915",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their services in the analysis of crystal structure by means of X-rays\"",
+                        "motivation": "\“for their services in the analysis of crystal structure by means of X-rays\”",
                         "affiliations": [
                             {
                                 "name": "University College",
@@ -2875,7 +2875,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1915",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their services in the analysis of crystal structure by means of X-rays\"",
+                        "motivation": "\“for their services in the analysis of crystal structure by means of X-rays\”",
                         "affiliations": [
                             {
                                 "name": "Victoria University",
@@ -2904,7 +2904,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1917",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his discovery of the characteristic R&ouml;ntgen radiation of the elements\"",
+                        "motivation": "\“for his discovery of the characteristic R&ouml;ntgen radiation of the elements\”",
                         "affiliations": [
                             {
                                 "name": "Edinburgh University",
@@ -2933,7 +2933,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1918",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"in recognition of the services he rendered to the advancement of Physics by his discovery of energy quanta\"",
+                        "motivation": "\“in recognition of the services he rendered to the advancement of Physics by his discovery of energy quanta\”",
                         "affiliations": [
                             {
                                 "name": "Berlin University",
@@ -2962,7 +2962,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1919",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his discovery of the Doppler effect in canal rays and the splitting of spectral lines in electric fields\"",
+                        "motivation": "\“for his discovery of the Doppler effect in canal rays and the splitting of spectral lines in electric fields\”",
                         "affiliations": [
                             {
                                 "name": "Greifswald University",
@@ -2991,7 +2991,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1920",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"in recognition of the service he has rendered to precision measurements in Physics by his discovery of anomalies in nickel steel alloys\"",
+                        "motivation": "\“in recognition of the service he has rendered to precision measurements in Physics by his discovery of anomalies in nickel steel alloys\”",
                         "affiliations": [
                             {
                                 "name": "Bureau International des Poids et Mesures (International Bureau of Weights and Measures)",
@@ -3020,7 +3020,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1921",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his services to Theoretical Physics, and especially for his discovery of the law of the photoelectric effect\"",
+                        "motivation": "\“for his services to Theoretical Physics, and especially for his discovery of the law of the photoelectric effect\”",
                         "affiliations": [
                             {
                                 "name": "Kaiser-Wilhelm-Institut (now Max-Planck-Institut) für Physik",
@@ -3049,7 +3049,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1922",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his services in the investigation of the structure of atoms and of the radiation emanating from them\"",
+                        "motivation": "\“for his services in the investigation of the structure of atoms and of the radiation emanating from them\”",
                         "affiliations": [
                             {
                                 "name": "Copenhagen University",
@@ -3078,7 +3078,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1923",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his work on the elementary charge of electricity and on the photoelectric effect\"",
+                        "motivation": "\“for his work on the elementary charge of electricity and on the photoelectric effect\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -3107,7 +3107,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1924",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his discoveries and research in the field of X-ray spectroscopy\"",
+                        "motivation": "\“for his discoveries and research in the field of X-ray spectroscopy\”",
                         "affiliations": [
                             {
                                 "name": "Uppsala University",
@@ -3136,7 +3136,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1925",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their discovery of the laws governing the impact of an electron upon an atom\"",
+                        "motivation": "\“for their discovery of the laws governing the impact of an electron upon an atom\”",
                         "affiliations": [
                             {
                                 "name": "Goettingen University",
@@ -3165,7 +3165,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1925",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their discovery of the laws governing the impact of an electron upon an atom\"",
+                        "motivation": "\“for their discovery of the laws governing the impact of an electron upon an atom\”",
                         "affiliations": [
                             {
                                 "name": "Halle University",
@@ -3194,7 +3194,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1926",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his work on the discontinuous structure of matter, and especially for his discovery of sedimentation equilibrium\"",
+                        "motivation": "\“for his work on the discontinuous structure of matter, and especially for his discovery of sedimentation equilibrium\”",
                         "affiliations": [
                             {
                                 "name": "Sorbonne University",
@@ -3223,7 +3223,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1927",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his discovery of the effect named after him\"",
+                        "motivation": "\“for his discovery of the effect named after him\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -3252,7 +3252,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1927",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his method of making the paths of electrically charged particles visible by condensation of vapour\"",
+                        "motivation": "\“for his method of making the paths of electrically charged particles visible by condensation of vapour\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -3281,7 +3281,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1928",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his work on the thermionic phenomenon and especially for the discovery of the law named after him\"",
+                        "motivation": "\“for his work on the thermionic phenomenon and especially for the discovery of the law named after him\”",
                         "affiliations": [
                             {
                                 "name": "London University",
@@ -3310,7 +3310,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1929",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his discovery of the wave nature of electrons\"",
+                        "motivation": "\“for his discovery of the wave nature of electrons\”",
                         "affiliations": [
                             {
                                 "name": "Sorbonne University, Institut Henri Poincaré",
@@ -3339,7 +3339,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1930",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his work on the scattering of light and for the discovery of the effect named after him\"",
+                        "motivation": "\“for his work on the scattering of light and for the discovery of the effect named after him\”",
                         "affiliations": [
                             {
                                 "name": "Calcutta University",
@@ -3368,7 +3368,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1932",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for the creation of quantum mechanics, the application of which has, inter alia, led to the discovery of the allotropic forms of hydrogen\"",
+                        "motivation": "\“for the creation of quantum mechanics, the application of which has, inter alia, led to the discovery of the allotropic forms of hydrogen\”",
                         "affiliations": [
                             {
                                 "name": "Leipzig University",
@@ -3397,7 +3397,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1933",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of new productive forms of atomic theory\"",
+                        "motivation": "\“for the discovery of new productive forms of atomic theory\”",
                         "affiliations": [
                             {
                                 "name": "Berlin University",
@@ -3426,7 +3426,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1933",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of new productive forms of atomic theory\"",
+                        "motivation": "\“for the discovery of new productive forms of atomic theory\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -3455,7 +3455,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1935",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for the discovery of the neutron\"",
+                        "motivation": "\“for the discovery of the neutron\”",
                         "affiliations": [
                             {
                                 "name": "Liverpool University",
@@ -3484,7 +3484,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1936",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his discovery of cosmic radiation\"",
+                        "motivation": "\“for his discovery of cosmic radiation\”",
                         "affiliations": [
                             {
                                 "name": "Innsbruck University",
@@ -3513,7 +3513,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1936",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his discovery of the positron\"",
+                        "motivation": "\“for his discovery of the positron\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -3542,7 +3542,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1937",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their experimental discovery of the diffraction of electrons by crystals\"",
+                        "motivation": "\“for their experimental discovery of the diffraction of electrons by crystals\”",
                         "affiliations": [
                             {
                                 "name": "Bell Telephone Laboratories",
@@ -3571,7 +3571,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1937",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their experimental discovery of the diffraction of electrons by crystals\"",
+                        "motivation": "\“for their experimental discovery of the diffraction of electrons by crystals\”",
                         "affiliations": [
                             {
                                 "name": "London University",
@@ -3600,7 +3600,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1938",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his demonstrations of the existence of new radioactive elements produced by neutron irradiation, and for his related discovery of nuclear reactions brought about by slow neutrons\"",
+                        "motivation": "\“for his demonstrations of the existence of new radioactive elements produced by neutron irradiation, and for his related discovery of nuclear reactions brought about by slow neutrons\”",
                         "affiliations": [
                             {
                                 "name": "Rome University",
@@ -3629,7 +3629,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1939",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for the invention and development of the cyclotron and for results obtained with it, especially with regard to artificial radioactive elements\"",
+                        "motivation": "\“for the invention and development of the cyclotron and for results obtained with it, especially with regard to artificial radioactive elements\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -3658,7 +3658,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1943",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his contribution to the development of the molecular ray method and his discovery of the magnetic moment of the proton\"",
+                        "motivation": "\“for his contribution to the development of the molecular ray method and his discovery of the magnetic moment of the proton\”",
                         "affiliations": [
                             {
                                 "name": "Carnegie Institute of Technology",
@@ -3687,7 +3687,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1944",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his resonance method for recording the magnetic properties of atomic nuclei\"",
+                        "motivation": "\“for his resonance method for recording the magnetic properties of atomic nuclei\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -3716,7 +3716,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1945",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for the discovery of the Exclusion Principle, also called the Pauli Principle\"",
+                        "motivation": "\“for the discovery of the Exclusion Principle, also called the Pauli Principle\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -3745,7 +3745,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1946",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for the invention of an apparatus to produce extremely high pressures, and for the discoveries he made therewith in the field of high pressure physics\"",
+                        "motivation": "\“for the invention of an apparatus to produce extremely high pressures, and for the discoveries he made therewith in the field of high pressure physics\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -3774,7 +3774,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1947",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his investigations of the physics of the upper atmosphere especially for the discovery of the so-called Appleton layer\"",
+                        "motivation": "\“for his investigations of the physics of the upper atmosphere especially for the discovery of the so-called Appleton layer\”",
                         "affiliations": [
                             {
                                 "name": "Department of Scientific and Industrial Research",
@@ -3803,7 +3803,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1948",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his development of the Wilson cloud chamber method, and his discoveries therewith in the fields of nuclear physics and cosmic radiation\"",
+                        "motivation": "\“for his development of the Wilson cloud chamber method, and his discoveries therewith in the fields of nuclear physics and cosmic radiation\”",
                         "affiliations": [
                             {
                                 "name": "Victoria University",
@@ -3832,7 +3832,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1949",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his prediction of the existence of mesons on the basis of theoretical work on nuclear forces\"",
+                        "motivation": "\“for his prediction of the existence of mesons on the basis of theoretical work on nuclear forces\”",
                         "affiliations": [
                             {
                                 "name": "Kyoto Imperial University",
@@ -3865,7 +3865,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1950",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his development of the photographic method of studying nuclear processes and his discoveries regarding mesons made with this method\"",
+                        "motivation": "\“for his development of the photographic method of studying nuclear processes and his discoveries regarding mesons made with this method\”",
                         "affiliations": [
                             {
                                 "name": "Bristol University",
@@ -3894,7 +3894,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1951",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their pioneer work on the transmutation of atomic nuclei by artificially accelerated atomic particles\"",
+                        "motivation": "\“for their pioneer work on the transmutation of atomic nuclei by artificially accelerated atomic particles\”",
                         "affiliations": [
                             {
                                 "name": "Atomic Energy Research Establishment",
@@ -3923,7 +3923,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1951",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their pioneer work on the transmutation of atomic nuclei by artificially accelerated atomic particles\"",
+                        "motivation": "\“for their pioneer work on the transmutation of atomic nuclei by artificially accelerated atomic particles\”",
                         "affiliations": [
                             {
                                 "name": "Trinity College",
@@ -3952,7 +3952,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1952",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their development of new methods for nuclear magnetic precision measurements and discoveries in connection therewith\"",
+                        "motivation": "\“for their development of new methods for nuclear magnetic precision measurements and discoveries in connection therewith\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -3981,7 +3981,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1952",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their development of new methods for nuclear magnetic precision measurements and discoveries in connection therewith\"",
+                        "motivation": "\“for their development of new methods for nuclear magnetic precision measurements and discoveries in connection therewith\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -4010,7 +4010,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1953",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his demonstration of the phase contrast method, especially for his invention of the phase contrast microscope\"",
+                        "motivation": "\“for his demonstration of the phase contrast method, especially for his invention of the phase contrast microscope\”",
                         "affiliations": [
                             {
                                 "name": "Groningen University",
@@ -4039,7 +4039,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his fundamental research in quantum mechanics, especially for his statistical interpretation of the wavefunction\"",
+                        "motivation": "\“for his fundamental research in quantum mechanics, especially for his statistical interpretation of the wavefunction\”",
                         "affiliations": [
                             {
                                 "name": "Edinburgh University",
@@ -4068,7 +4068,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the coincidence method and his discoveries made therewith\"",
+                        "motivation": "\“for the coincidence method and his discoveries made therewith\”",
                         "affiliations": [
                             {
                                 "name": "University of Heidelberg",
@@ -4102,7 +4102,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1955",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his discoveries concerning the fine structure of the hydrogen spectrum\"",
+                        "motivation": "\“for his discoveries concerning the fine structure of the hydrogen spectrum\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -4131,7 +4131,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1955",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his precision determination of the magnetic moment of the electron\"",
+                        "motivation": "\“for his precision determination of the magnetic moment of the electron\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -4160,7 +4160,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1956",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their researches on semiconductors and their discovery of the transistor effect\"",
+                        "motivation": "\“for their researches on semiconductors and their discovery of the transistor effect\”",
                         "affiliations": [
                             {
                                 "name": "Semiconductor Laboratory of Beckman Instruments, Inc.",
@@ -4189,7 +4189,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1956",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their researches on semiconductors and their discovery of the transistor effect\"",
+                        "motivation": "\“for their researches on semiconductors and their discovery of the transistor effect\”",
                         "affiliations": [
                             {
                                 "name": "University of Illinois",
@@ -4202,7 +4202,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their jointly developed theory of superconductivity, usually called the BCS-theory\"",
+                        "motivation": "\“for their jointly developed theory of superconductivity, usually called the BCS-theory\”",
                         "affiliations": [
                             {
                                 "name": "University of Illinois",
@@ -4231,7 +4231,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1956",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their researches on semiconductors and their discovery of the transistor effect\"",
+                        "motivation": "\“for their researches on semiconductors and their discovery of the transistor effect\”",
                         "affiliations": [
                             {
                                 "name": "Bell Telephone Laboratories",
@@ -4257,7 +4257,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1957",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their penetrating investigation of the so-called parity laws which has led to important discoveries regarding the elementary particles\"",
+                        "motivation": "\“for their penetrating investigation of the so-called parity laws which has led to important discoveries regarding the elementary particles\”",
                         "affiliations": [
                             {
                                 "name": "Institute for Advanced Study",
@@ -4283,7 +4283,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1957",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their penetrating investigation of the so-called parity laws which has led to important discoveries regarding the elementary particles\"",
+                        "motivation": "\“for their penetrating investigation of the so-called parity laws which has led to important discoveries regarding the elementary particles\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -4311,7 +4311,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1958",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the discovery and the interpretation of the Cherenkov effect\"",
+                        "motivation": "\“for the discovery and the interpretation of the Cherenkov effect\”",
                         "affiliations": [
                             {
                                 "name": "P.N. Lebedev Physical Institute",
@@ -4340,7 +4340,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1958",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the discovery and the interpretation of the Cherenkov effect\"",
+                        "motivation": "\“for the discovery and the interpretation of the Cherenkov effect\”",
                         "affiliations": [
                             {
                                 "name": "University of Moscow",
@@ -4374,7 +4374,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1959",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their discovery of the antiproton\"",
+                        "motivation": "\“for their discovery of the antiproton\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -4403,7 +4403,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1959",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their discovery of the antiproton\"",
+                        "motivation": "\“for their discovery of the antiproton\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -4432,7 +4432,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1960",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for the invention of the bubble chamber\"",
+                        "motivation": "\“for the invention of the bubble chamber\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -4461,7 +4461,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1961",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his pioneering studies of electron scattering in atomic nuclei and for his thereby achieved discoveries concerning the structure of the nucleons\"",
+                        "motivation": "\“for his pioneering studies of electron scattering in atomic nuclei and for his thereby achieved discoveries concerning the structure of the nucleons\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -4487,7 +4487,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1961",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his researches concerning the resonance absorption of gamma radiation and his discovery in this connection of the effect which bears his name\"",
+                        "motivation": "\“for his researches concerning the resonance absorption of gamma radiation and his discovery in this connection of the effect which bears his name\”",
                         "affiliations": [
                             {
                                 "name": "Technical University",
@@ -4521,7 +4521,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1962",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his pioneering theories for condensed matter, especially liquid helium\"",
+                        "motivation": "\“for his pioneering theories for condensed matter, especially liquid helium\”",
                         "affiliations": [
                             {
                                 "name": "Academy of Sciences",
@@ -4550,7 +4550,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1963",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his contributions to the theory of the atomic nucleus and the elementary particles, particularly through the discovery and application of fundamental symmetry principles\"",
+                        "motivation": "\“for his contributions to the theory of the atomic nucleus and the elementary particles, particularly through the discovery and application of fundamental symmetry principles\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -4579,7 +4579,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1963",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their discoveries concerning nuclear shell structure\"",
+                        "motivation": "\“for their discoveries concerning nuclear shell structure\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -4608,7 +4608,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1963",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their discoveries concerning nuclear shell structure\"",
+                        "motivation": "\“for their discoveries concerning nuclear shell structure\”",
                         "affiliations": [
                             {
                                 "name": "University of Heidelberg",
@@ -4637,7 +4637,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1964",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for fundamental work in the field of quantum electronics, which has led to the construction of oscillators and amplifiers based on the maser-laser principle\"",
+                        "motivation": "\“for fundamental work in the field of quantum electronics, which has led to the construction of oscillators and amplifiers based on the maser-laser principle\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -4666,7 +4666,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1964",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for fundamental work in the field of quantum electronics, which has led to the construction of oscillators and amplifiers based on the maser-laser principle\"",
+                        "motivation": "\“for fundamental work in the field of quantum electronics, which has led to the construction of oscillators and amplifiers based on the maser-laser principle\”",
                         "affiliations": [
                             {
                                 "name": "P.N. Lebedev Physical Institute",
@@ -4695,7 +4695,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1964",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for fundamental work in the field of quantum electronics, which has led to the construction of oscillators and amplifiers based on the maser-laser principle\"",
+                        "motivation": "\“for fundamental work in the field of quantum electronics, which has led to the construction of oscillators and amplifiers based on the maser-laser principle\”",
                         "affiliations": [
                             {
                                 "name": "P.N. Lebedev Physical Institute",
@@ -4724,7 +4724,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1965",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their fundamental work in quantum electrodynamics, with deep-ploughing consequences for the physics of elementary particles\"",
+                        "motivation": "\“for their fundamental work in quantum electrodynamics, with deep-ploughing consequences for the physics of elementary particles\”",
                         "affiliations": [
                             {
                                 "name": "Tokyo University of Education",
@@ -4753,7 +4753,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1965",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their fundamental work in quantum electrodynamics, with deep-ploughing consequences for the physics of elementary particles\"",
+                        "motivation": "\“for their fundamental work in quantum electrodynamics, with deep-ploughing consequences for the physics of elementary particles\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -4782,7 +4782,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1965",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their fundamental work in quantum electrodynamics, with deep-ploughing consequences for the physics of elementary particles\"",
+                        "motivation": "\“for their fundamental work in quantum electrodynamics, with deep-ploughing consequences for the physics of elementary particles\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -4811,7 +4811,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1966",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for the discovery and development of optical methods for studying Hertzian resonances in atoms\"",
+                        "motivation": "\“for the discovery and development of optical methods for studying Hertzian resonances in atoms\”",
                         "affiliations": [
                             {
                                 "name": "École Normale Supérieure",
@@ -4840,7 +4840,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1967",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his contributions to the theory of nuclear reactions, especially his discoveries concerning the energy production in stars\"",
+                        "motivation": "\“for his contributions to the theory of nuclear reactions, especially his discoveries concerning the energy production in stars\”",
                         "affiliations": [
                             {
                                 "name": "Cornell University",
@@ -4869,7 +4869,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1968",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his decisive contributions to elementary particle physics, in particular the discovery of a large number of resonance states, made possible through his development of the technique of using hydrogen bubble chamber and data analysis\"",
+                        "motivation": "\“for his decisive contributions to elementary particle physics, in particular the discovery of a large number of resonance states, made possible through his development of the technique of using hydrogen bubble chamber and data analysis\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -4895,7 +4895,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1969",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his contributions and discoveries concerning the classification of elementary particles and their interactions\"",
+                        "motivation": "\“for his contributions and discoveries concerning the classification of elementary particles and their interactions\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -4924,7 +4924,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1970",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for fundamental work and discoveries in magnetohydro-dynamics with fruitful applications in different parts of plasma physics\"",
+                        "motivation": "\“for fundamental work and discoveries in magnetohydro-dynamics with fruitful applications in different parts of plasma physics\”",
                         "affiliations": [
                             {
                                 "name": "Royal Institute of Technology",
@@ -4953,7 +4953,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1970",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for fundamental work and discoveries concerning antiferromagnetism and ferrimagnetism which have led to important applications in solid state physics\"",
+                        "motivation": "\“for fundamental work and discoveries concerning antiferromagnetism and ferrimagnetism which have led to important applications in solid state physics\”",
                         "affiliations": [
                             {
                                 "name": "University of Grenoble",
@@ -4982,7 +4982,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1971",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his invention and development of the holographic method\"",
+                        "motivation": "\“for his invention and development of the holographic method\”",
                         "affiliations": [
                             {
                                 "name": "Imperial College",
@@ -5008,7 +5008,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their jointly developed theory of superconductivity, usually called the BCS-theory\"",
+                        "motivation": "\“for their jointly developed theory of superconductivity, usually called the BCS-theory\”",
                         "affiliations": [
                             {
                                 "name": "Brown University",
@@ -5034,7 +5034,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their jointly developed theory of superconductivity, usually called the BCS-theory\"",
+                        "motivation": "\“for their jointly developed theory of superconductivity, usually called the BCS-theory\”",
                         "affiliations": [
                             {
                                 "name": "University of Pennsylvania",
@@ -5060,7 +5060,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their experimental discoveries regarding tunneling phenomena in semiconductors and superconductors, respectively\"",
+                        "motivation": "\“for their experimental discoveries regarding tunneling phenomena in semiconductors and superconductors, respectively\”",
                         "affiliations": [
                             {
                                 "name": "IBM Thomas J. Watson Research Center",
@@ -5086,7 +5086,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their experimental discoveries regarding tunneling phenomena in semiconductors and superconductors, respectively\"",
+                        "motivation": "\“for their experimental discoveries regarding tunneling phenomena in semiconductors and superconductors, respectively\”",
                         "affiliations": [
                             {
                                 "name": "General Electric Company",
@@ -5112,7 +5112,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his theoretical predictions of the properties of a supercurrent through a tunnel barrier, in particular those phenomena which are generally known as the Josephson effects\"",
+                        "motivation": "\“for his theoretical predictions of the properties of a supercurrent through a tunnel barrier, in particular those phenomena which are generally known as the Josephson effects\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -5141,7 +5141,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their pioneering research in radio astrophysics: Ryle for his observations and inventions, in particular of the aperture synthesis technique, and Hewish for his decisive role in the discovery of pulsars\"",
+                        "motivation": "\“for their pioneering research in radio astrophysics: Ryle for his observations and inventions, in particular of the aperture synthesis technique, and Hewish for his decisive role in the discovery of pulsars\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -5167,7 +5167,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their pioneering research in radio astrophysics: Ryle for his observations and inventions, in particular of the aperture synthesis technique, and Hewish for his decisive role in the discovery of pulsars\"",
+                        "motivation": "\“for their pioneering research in radio astrophysics: Ryle for his observations and inventions, in particular of the aperture synthesis technique, and Hewish for his decisive role in the discovery of pulsars\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -5196,7 +5196,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the discovery of the connection between collective motion and particle motion in atomic nuclei and the development of the theory of the structure of the atomic nucleus based on this connection\"",
+                        "motivation": "\“for the discovery of the connection between collective motion and particle motion in atomic nuclei and the development of the theory of the structure of the atomic nucleus based on this connection\”",
                         "affiliations": [
                             {
                                 "name": "Niels Bohr Institute",
@@ -5222,7 +5222,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the discovery of the connection between collective motion and particle motion in atomic nuclei and the development of the theory of the structure of the atomic nucleus based on this connection\"",
+                        "motivation": "\“for the discovery of the connection between collective motion and particle motion in atomic nuclei and the development of the theory of the structure of the atomic nucleus based on this connection\”",
                         "affiliations": [
                             {
                                 "name": "Nordita",
@@ -5251,7 +5251,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the discovery of the connection between collective motion and particle motion in atomic nuclei and the development of the theory of the structure of the atomic nucleus based on this connection\"",
+                        "motivation": "\“for the discovery of the connection between collective motion and particle motion in atomic nuclei and the development of the theory of the structure of the atomic nucleus based on this connection\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -5277,7 +5277,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1976",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their pioneering work in the discovery of a heavy elementary particle of a new kind\"",
+                        "motivation": "\“for their pioneering work in the discovery of a heavy elementary particle of a new kind\”",
                         "affiliations": [
                             {
                                 "name": "Stanford Linear Accelerator Center",
@@ -5303,7 +5303,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1976",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their pioneering work in the discovery of a heavy elementary particle of a new kind\"",
+                        "motivation": "\“for their pioneering work in the discovery of a heavy elementary particle of a new kind\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -5329,7 +5329,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their fundamental theoretical investigations of the electronic structure of magnetic and disordered systems\"",
+                        "motivation": "\“for their fundamental theoretical investigations of the electronic structure of magnetic and disordered systems\”",
                         "affiliations": [
                             {
                                 "name": "Bell Telephone Laboratories",
@@ -5358,7 +5358,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their fundamental theoretical investigations of the electronic structure of magnetic and disordered systems\"",
+                        "motivation": "\“for their fundamental theoretical investigations of the electronic structure of magnetic and disordered systems\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -5387,7 +5387,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their fundamental theoretical investigations of the electronic structure of magnetic and disordered systems\"",
+                        "motivation": "\“for their fundamental theoretical investigations of the electronic structure of magnetic and disordered systems\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -5416,7 +5416,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1978",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his basic inventions and discoveries in the area of low-temperature physics\"",
+                        "motivation": "\“for his basic inventions and discoveries in the area of low-temperature physics\”",
                         "affiliations": [
                             {
                                 "name": "Academy of Sciences",
@@ -5442,7 +5442,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1978",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their discovery of cosmic microwave background radiation\"",
+                        "motivation": "\“for their discovery of cosmic microwave background radiation\”",
                         "affiliations": [
                             {
                                 "name": "Bell Laboratories",
@@ -5468,7 +5468,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1978",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their discovery of cosmic microwave background radiation\"",
+                        "motivation": "\“for their discovery of cosmic microwave background radiation\”",
                         "affiliations": [
                             {
                                 "name": "Bell Laboratories",
@@ -5494,7 +5494,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their contributions to the theory of the unified weak and electromagnetic interaction between elementary particles, including, inter alia, the prediction of the weak neutral current\"",
+                        "motivation": "\“for their contributions to the theory of the unified weak and electromagnetic interaction between elementary particles, including, inter alia, the prediction of the weak neutral current\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University, Lyman Laboratory",
@@ -5523,7 +5523,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their contributions to the theory of the unified weak and electromagnetic interaction between elementary particles, including, inter alia, the prediction of the weak neutral current\"",
+                        "motivation": "\“for their contributions to the theory of the unified weak and electromagnetic interaction between elementary particles, including, inter alia, the prediction of the weak neutral current\”",
                         "affiliations": [
                             {
                                 "name": "International Centre for Theoretical Physics",
@@ -5554,7 +5554,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their contributions to the theory of the unified weak and electromagnetic interaction between elementary particles, including, inter alia, the prediction of the weak neutral current\"",
+                        "motivation": "\“for their contributions to the theory of the unified weak and electromagnetic interaction between elementary particles, including, inter alia, the prediction of the weak neutral current\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -5580,7 +5580,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of violations of fundamental symmetry principles in the decay of neutral K-mesons\"",
+                        "motivation": "\“for the discovery of violations of fundamental symmetry principles in the decay of neutral K-mesons\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -5609,7 +5609,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of violations of fundamental symmetry principles in the decay of neutral K-mesons\"",
+                        "motivation": "\“for the discovery of violations of fundamental symmetry principles in the decay of neutral K-mesons\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -5635,7 +5635,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their contribution to the development of laser spectroscopy\"",
+                        "motivation": "\“for their contribution to the development of laser spectroscopy\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -5664,7 +5664,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their contribution to the development of laser spectroscopy\"",
+                        "motivation": "\“for their contribution to the development of laser spectroscopy\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -5693,7 +5693,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his contribution to the development of high-resolution electron spectroscopy\"",
+                        "motivation": "\“for his contribution to the development of high-resolution electron spectroscopy\”",
                         "affiliations": [
                             {
                                 "name": "Uppsala University",
@@ -5722,7 +5722,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1982",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his theory for critical phenomena in connection with phase transitions\"",
+                        "motivation": "\“for his theory for critical phenomena in connection with phase transitions\”",
                         "affiliations": [
                             {
                                 "name": "Cornell University",
@@ -5751,7 +5751,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1983",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his theoretical studies of the physical processes of importance to the structure and evolution of the stars\"",
+                        "motivation": "\“for his theoretical studies of the physical processes of importance to the structure and evolution of the stars\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -5780,7 +5780,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1983",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his theoretical and experimental studies of the nuclear reactions of importance in the formation of the chemical elements in the universe\"",
+                        "motivation": "\“for his theoretical and experimental studies of the nuclear reactions of importance in the formation of the chemical elements in the universe\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -5809,7 +5809,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1984",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their decisive contributions to the large project, which led to the discovery of the field particles W and Z, communicators of weak interaction\"",
+                        "motivation": "\“for their decisive contributions to the large project, which led to the discovery of the field particles W and Z, communicators of weak interaction\”",
                         "affiliations": [
                             {
                                 "name": "CERN",
@@ -5838,7 +5838,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1984",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their decisive contributions to the large project, which led to the discovery of the field particles W and Z, communicators of weak interaction\"",
+                        "motivation": "\“for their decisive contributions to the large project, which led to the discovery of the field particles W and Z, communicators of weak interaction\”",
                         "affiliations": [
                             {
                                 "name": "CERN",
@@ -5864,7 +5864,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1985",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for the discovery of the quantized Hall effect\"",
+                        "motivation": "\“for the discovery of the quantized Hall effect\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Festkörperforschung",
@@ -5893,7 +5893,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his fundamental work in electron optics, and for the design of the first electron microscope\"",
+                        "motivation": "\“for his fundamental work in electron optics, and for the design of the first electron microscope\”",
                         "affiliations": [
                             {
                                 "name": "Fritz-Haber-Institut der Max-Planck-Gesellschaft",
@@ -5919,7 +5919,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their design of the scanning tunneling microscope\"",
+                        "motivation": "\“for their design of the scanning tunneling microscope\”",
                         "affiliations": [
                             {
                                 "name": "IBM Zurich Research Laboratory",
@@ -5948,7 +5948,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their design of the scanning tunneling microscope\"",
+                        "motivation": "\“for their design of the scanning tunneling microscope\”",
                         "affiliations": [
                             {
                                 "name": "IBM Zurich Research Laboratory",
@@ -5974,7 +5974,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1987",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their important break-through in the discovery of superconductivity in ceramic materials\"",
+                        "motivation": "\“for their important break-through in the discovery of superconductivity in ceramic materials\”",
                         "affiliations": [
                             {
                                 "name": "IBM Zurich Research Laboratory",
@@ -6000,7 +6000,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1987",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their important break-through in the discovery of superconductivity in ceramic materials\"",
+                        "motivation": "\“for their important break-through in the discovery of superconductivity in ceramic materials\”",
                         "affiliations": [
                             {
                                 "name": "IBM Zurich Research Laboratory",
@@ -6026,7 +6026,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the neutrino beam method and the demonstration of the doublet structure of the leptons through the discovery of the muon neutrino\"",
+                        "motivation": "\“for the neutrino beam method and the demonstration of the doublet structure of the leptons through the discovery of the muon neutrino\”",
                         "affiliations": [
                             {
                                 "name": "Fermi National Accelerator Laboratory",
@@ -6055,7 +6055,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the neutrino beam method and the demonstration of the doublet structure of the leptons through the discovery of the muon neutrino\"",
+                        "motivation": "\“for the neutrino beam method and the demonstration of the doublet structure of the leptons through the discovery of the muon neutrino\”",
                         "affiliations": [
                             {
                                 "name": "Digital Pathways, Inc.",
@@ -6081,7 +6081,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the neutrino beam method and the demonstration of the doublet structure of the leptons through the discovery of the muon neutrino\"",
+                        "motivation": "\“for the neutrino beam method and the demonstration of the doublet structure of the leptons through the discovery of the muon neutrino\”",
                         "affiliations": [
                             {
                                 "name": "CERN",
@@ -6110,7 +6110,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the invention of the separated oscillatory fields method and its use in the hydrogen maser and other atomic clocks\"",
+                        "motivation": "\“for the invention of the separated oscillatory fields method and its use in the hydrogen maser and other atomic clocks\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -6136,7 +6136,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for the development of the ion trap technique\"",
+                        "motivation": "\“for the development of the ion trap technique\”",
                         "affiliations": [
                             {
                                 "name": "University of Washington",
@@ -6165,7 +6165,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for the development of the ion trap technique\"",
+                        "motivation": "\“for the development of the ion trap technique\”",
                         "affiliations": [
                             {
                                 "name": "University of Bonn",
@@ -6191,7 +6191,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their pioneering investigations concerning deep inelastic scattering of electrons on protons and bound neutrons, which have been of essential importance for the development of the quark model in particle physics\"",
+                        "motivation": "\“for their pioneering investigations concerning deep inelastic scattering of electrons on protons and bound neutrons, which have been of essential importance for the development of the quark model in particle physics\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -6220,7 +6220,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their pioneering investigations concerning deep inelastic scattering of electrons on protons and bound neutrons, which have been of essential importance for the development of the quark model in particle physics\"",
+                        "motivation": "\“for their pioneering investigations concerning deep inelastic scattering of electrons on protons and bound neutrons, which have been of essential importance for the development of the quark model in particle physics\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -6246,7 +6246,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their pioneering investigations concerning deep inelastic scattering of electrons on protons and bound neutrons, which have been of essential importance for the development of the quark model in particle physics\"",
+                        "motivation": "\“for their pioneering investigations concerning deep inelastic scattering of electrons on protons and bound neutrons, which have been of essential importance for the development of the quark model in particle physics\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -6275,7 +6275,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1991",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for discovering that methods developed for studying order phenomena in simple systems can be generalized to more complex forms of matter, in particular to liquid crystals and polymers\"",
+                        "motivation": "\“for discovering that methods developed for studying order phenomena in simple systems can be generalized to more complex forms of matter, in particular to liquid crystals and polymers\”",
                         "affiliations": [
                             {
                                 "name": "Collège de France",
@@ -6304,7 +6304,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1992",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\"for his invention and development of particle detectors, in particular the multiwire proportional chamber\"",
+                        "motivation": "\“for his invention and development of particle detectors, in particular the multiwire proportional chamber\”",
                         "affiliations": [
                             {
                                 "name": "École Supérieure de Physique et Chimie",
@@ -6335,7 +6335,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1993",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of a new type of pulsar, a discovery that has opened up new possibilities for the study of gravitation\"",
+                        "motivation": "\“for the discovery of a new type of pulsar, a discovery that has opened up new possibilities for the study of gravitation\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -6361,7 +6361,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1993",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of a new type of pulsar, a discovery that has opened up new possibilities for the study of gravitation\"",
+                        "motivation": "\“for the discovery of a new type of pulsar, a discovery that has opened up new possibilities for the study of gravitation\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -6389,9 +6389,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1994",
                         "category": "physics",
-                        "overallMotivation": "\"for pioneering contributions to the development of neutron scattering techniques for studies of condensed matter\"",
+                        "overallMotivation": "\“for pioneering contributions to the development of neutron scattering techniques for studies of condensed matter\”",
                         "share": "2",
-                        "motivation": "\"for the development of neutron spectroscopy\"",
+                        "motivation": "\“for the development of neutron spectroscopy\”",
                         "affiliations": [
                             {
                                 "name": "McMaster University",
@@ -6419,9 +6419,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1994",
                         "category": "physics",
-                        "overallMotivation": "\"for pioneering contributions to the development of neutron scattering techniques for studies of condensed matter\"",
+                        "overallMotivation": "\“for pioneering contributions to the development of neutron scattering techniques for studies of condensed matter\”",
                         "share": "2",
-                        "motivation": "\"for the development of the neutron diffraction technique\"",
+                        "motivation": "\“for the development of the neutron diffraction technique\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -6449,9 +6449,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1995",
                         "category": "physics",
-                        "overallMotivation": "\"for pioneering experimental contributions to lepton physics\"",
+                        "overallMotivation": "\“for pioneering experimental contributions to lepton physics\”",
                         "share": "2",
-                        "motivation": "\"for the discovery of the tau lepton\"",
+                        "motivation": "\“for the discovery of the tau lepton\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -6479,9 +6479,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1995",
                         "category": "physics",
-                        "overallMotivation": "\"for pioneering experimental contributions to lepton physics\"",
+                        "overallMotivation": "\“for pioneering experimental contributions to lepton physics\”",
                         "share": "2",
-                        "motivation": "\"for the detection of the neutrino\"",
+                        "motivation": "\“for the detection of the neutrino\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -6507,7 +6507,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their discovery of superfluidity in helium-3\"",
+                        "motivation": "\“for their discovery of superfluidity in helium-3\”",
                         "affiliations": [
                             {
                                 "name": "Cornell University",
@@ -6533,7 +6533,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their discovery of superfluidity in helium-3\"",
+                        "motivation": "\“for their discovery of superfluidity in helium-3\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -6562,7 +6562,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their discovery of superfluidity in helium-3\"",
+                        "motivation": "\“for their discovery of superfluidity in helium-3\”",
                         "affiliations": [
                             {
                                 "name": "Cornell University",
@@ -6588,7 +6588,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for development of methods to cool and trap atoms with laser light\"",
+                        "motivation": "\“for development of methods to cool and trap atoms with laser light\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -6614,7 +6614,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for development of methods to cool and trap atoms with laser light\"",
+                        "motivation": "\“for development of methods to cool and trap atoms with laser light\”",
                         "affiliations": [
                             {
                                 "name": "Collège de France",
@@ -6645,7 +6645,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for development of methods to cool and trap atoms with laser light\"",
+                        "motivation": "\“for development of methods to cool and trap atoms with laser light\”",
                         "affiliations": [
                             {
                                 "name": "National Institute of Standards and Technology",
@@ -6671,7 +6671,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their discovery of a new form of quantum fluid with fractionally charged excitations\"",
+                        "motivation": "\“for their discovery of a new form of quantum fluid with fractionally charged excitations\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -6697,7 +6697,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their discovery of a new form of quantum fluid with fractionally charged excitations\"",
+                        "motivation": "\“for their discovery of a new form of quantum fluid with fractionally charged excitations\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -6723,7 +6723,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for their discovery of a new form of quantum fluid with fractionally charged excitations\"",
+                        "motivation": "\“for their discovery of a new form of quantum fluid with fractionally charged excitations\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -6749,7 +6749,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1999",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for elucidating the quantum structure of electroweak interactions in physics\"",
+                        "motivation": "\“for elucidating the quantum structure of electroweak interactions in physics\”",
                         "affiliations": [
                             {
                                 "name": "Utrecht University",
@@ -6775,7 +6775,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1999",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for elucidating the quantum structure of electroweak interactions in physics\"",
+                        "motivation": "\“for elucidating the quantum structure of electroweak interactions in physics\”",
                         "affiliations": [
                             {
                                 "city": "Bilthoven",
@@ -6803,7 +6803,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1901",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of the extraordinary services he has rendered by the discovery of the laws of chemical dynamics and osmotic pressure in solutions\"",
+                        "motivation": "\“in recognition of the extraordinary services he has rendered by the discovery of the laws of chemical dynamics and osmotic pressure in solutions\”",
                         "affiliations": [
                             {
                                 "name": "Berlin University",
@@ -6832,7 +6832,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1902",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of the extraordinary services he has rendered by his work on sugar and purine syntheses\"",
+                        "motivation": "\“in recognition of the extraordinary services he has rendered by his work on sugar and purine syntheses\”",
                         "affiliations": [
                             {
                                 "name": "Berlin University",
@@ -6861,7 +6861,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1903",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of the extraordinary services he has rendered to the advancement of chemistry by his electrolytic theory of dissociation\"",
+                        "motivation": "\“in recognition of the extraordinary services he has rendered to the advancement of chemistry by his electrolytic theory of dissociation\”",
                         "affiliations": [
                             {
                                 "name": "Stockholm University",
@@ -6890,7 +6890,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1904",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of his services in the discovery of the inert gaseous elements in air, and his determination of their place in the periodic system\"",
+                        "motivation": "\“in recognition of his services in the discovery of the inert gaseous elements in air, and his determination of their place in the periodic system\”",
                         "affiliations": [
                             {
                                 "name": "University College",
@@ -6919,7 +6919,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1905",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of his services in the advancement of organic chemistry and the chemical industry, through his work on organic dyes and hydroaromatic compounds\"",
+                        "motivation": "\“in recognition of his services in the advancement of organic chemistry and the chemical industry, through his work on organic dyes and hydroaromatic compounds\”",
                         "affiliations": [
                             {
                                 "name": "Munich University",
@@ -6948,7 +6948,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1906",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of the great services rendered by him in his investigation and isolation of the element fluorine, and for the adoption in the service of science of the electric furnace called after him\"",
+                        "motivation": "\“in recognition of the great services rendered by him in his investigation and isolation of the element fluorine, and for the adoption in the service of science of the electric furnace called after him\”",
                         "affiliations": [
                             {
                                 "name": "Sorbonne University",
@@ -6977,7 +6977,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1907",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his biochemical researches and his discovery of cell-free fermentation\"",
+                        "motivation": "\“for his biochemical researches and his discovery of cell-free fermentation\”",
                         "affiliations": [
                             {
                                 "name": "Landwirtschaftliche Hochschule (Agricultural College)",
@@ -7006,7 +7006,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1908",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his investigations into the disintegration of the elements, and the chemistry of radioactive substances\"",
+                        "motivation": "\“for his investigations into the disintegration of the elements, and the chemistry of radioactive substances\”",
                         "affiliations": [
                             {
                                 "name": "Victoria University",
@@ -7035,7 +7035,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1909",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of his work on catalysis and for his investigations into the fundamental principles governing chemical equilibria and rates of reaction\"",
+                        "motivation": "\“in recognition of his work on catalysis and for his investigations into the fundamental principles governing chemical equilibria and rates of reaction\”",
                         "affiliations": [
                             {
                                 "name": "Leipzig University",
@@ -7064,7 +7064,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1910",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of his services to organic chemistry and the chemical industry by his pioneer work in the field of alicyclic compounds\"",
+                        "motivation": "\“in recognition of his services to organic chemistry and the chemical industry by his pioneer work in the field of alicyclic compounds\”",
                         "affiliations": [
                             {
                                 "name": "Goettingen University",
@@ -7093,7 +7093,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1912",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for the discovery of the so-called Grignard reagent, which in recent years has greatly advanced the progress of organic chemistry\"",
+                        "motivation": "\“for the discovery of the so-called Grignard reagent, which in recent years has greatly advanced the progress of organic chemistry\”",
                         "affiliations": [
                             {
                                 "name": "Nancy University",
@@ -7122,7 +7122,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1912",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his method of hydrogenating organic compounds in the presence of finely disintegrated metals whereby the progress of organic chemistry has been greatly advanced in recent years\"",
+                        "motivation": "\“for his method of hydrogenating organic compounds in the presence of finely disintegrated metals whereby the progress of organic chemistry has been greatly advanced in recent years\”",
                         "affiliations": [
                             {
                                 "name": "Toulouse University",
@@ -7151,7 +7151,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1913",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of his work on the linkage of atoms in molecules by which he has thrown new light on earlier investigations and opened up new fields of research especially in inorganic chemistry\"",
+                        "motivation": "\“in recognition of his work on the linkage of atoms in molecules by which he has thrown new light on earlier investigations and opened up new fields of research especially in inorganic chemistry\”",
                         "affiliations": [
                             {
                                 "name": "University of Zurich",
@@ -7180,7 +7180,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1914",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of his accurate determinations of the atomic weight of a large number of chemical elements\"",
+                        "motivation": "\“in recognition of his accurate determinations of the atomic weight of a large number of chemical elements\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -7209,7 +7209,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1915",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his researches on plant pigments, especially chlorophyll\"",
+                        "motivation": "\“for his researches on plant pigments, especially chlorophyll\”",
                         "affiliations": [
                             {
                                 "name": "Munich University",
@@ -7238,7 +7238,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1918",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for the synthesis of ammonia from its elements\"",
+                        "motivation": "\“for the synthesis of ammonia from its elements\”",
                         "affiliations": [
                             {
                                 "name": "Kaiser-Wilhelm-Institut (now Fritz-Haber-Institut) für physikalische Chemie und Electrochemie",
@@ -7267,7 +7267,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1920",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"in recognition of his work in thermochemistry\"",
+                        "motivation": "\“in recognition of his work in thermochemistry\”",
                         "affiliations": [
                             {
                                 "name": "Berlin University",
@@ -7296,7 +7296,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1921",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his contributions to our knowledge of the chemistry of radioactive substances, and his investigations into the origin and nature of isotopes\"",
+                        "motivation": "\“for his contributions to our knowledge of the chemistry of radioactive substances, and his investigations into the origin and nature of isotopes\”",
                         "affiliations": [
                             {
                                 "name": "University of Oxford",
@@ -7325,7 +7325,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1922",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his discovery, by means of his mass spectrograph, of isotopes, in a large number of non-radioactive elements, and for his enunciation of the whole-number rule\"",
+                        "motivation": "\“for his discovery, by means of his mass spectrograph, of isotopes, in a large number of non-radioactive elements, and for his enunciation of the whole-number rule\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -7354,7 +7354,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1923",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his invention of the method of micro-analysis of organic substances\"",
+                        "motivation": "\“for his invention of the method of micro-analysis of organic substances\”",
                         "affiliations": [
                             {
                                 "name": "Graz University",
@@ -7383,7 +7383,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1925",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his demonstration of the heterogenous nature of colloid solutions and for the methods he used, which have since become fundamental in modern colloid chemistry\"",
+                        "motivation": "\“for his demonstration of the heterogenous nature of colloid solutions and for the methods he used, which have since become fundamental in modern colloid chemistry\”",
                         "affiliations": [
                             {
                                 "name": "Goettingen University",
@@ -7412,7 +7412,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1926",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his work on disperse systems\"",
+                        "motivation": "\“for his work on disperse systems\”",
                         "affiliations": [
                             {
                                 "name": "Uppsala University",
@@ -7441,7 +7441,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1927",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his investigations of the constitution of the bile acids and related substances\"",
+                        "motivation": "\“for his investigations of the constitution of the bile acids and related substances\”",
                         "affiliations": [
                             {
                                 "name": "Munich University",
@@ -7470,7 +7470,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1928",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for the services rendered through his research into the constitution of the sterols and their connection with the vitamins\"",
+                        "motivation": "\“for the services rendered through his research into the constitution of the sterols and their connection with the vitamins\”",
                         "affiliations": [
                             {
                                 "name": "Goettingen University",
@@ -7499,7 +7499,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1929",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their investigations on the fermentation of sugar and fermentative enzymes\"",
+                        "motivation": "\“for their investigations on the fermentation of sugar and fermentative enzymes\”",
                         "affiliations": [
                             {
                                 "name": "London University",
@@ -7528,7 +7528,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1929",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their investigations on the fermentation of sugar and fermentative enzymes\"",
+                        "motivation": "\“for their investigations on the fermentation of sugar and fermentative enzymes\”",
                         "affiliations": [
                             {
                                 "name": "Stockholm University",
@@ -7557,7 +7557,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1930",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his researches into the constitution of haemin and chlorophyll and especially for his synthesis of haemin\"",
+                        "motivation": "\“for his researches into the constitution of haemin and chlorophyll and especially for his synthesis of haemin\”",
                         "affiliations": [
                             {
                                 "name": "Technische Hochschule (Institute of Technology)",
@@ -7586,7 +7586,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1931",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"in recognition of their contributions to the invention and development of chemical high pressure methods\"",
+                        "motivation": "\“in recognition of their contributions to the invention and development of chemical high pressure methods\”",
                         "affiliations": [
                             {
                                 "name": "University of Heidelberg",
@@ -7620,7 +7620,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1931",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"in recognition of their contributions to the invention and development of chemical high pressure methods\"",
+                        "motivation": "\“in recognition of their contributions to the invention and development of chemical high pressure methods\”",
                         "affiliations": [
                             {
                                 "name": "University of Heidelberg",
@@ -7654,7 +7654,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1932",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his discoveries and investigations in surface chemistry\"",
+                        "motivation": "\“for his discoveries and investigations in surface chemistry\”",
                         "affiliations": [
                             {
                                 "name": "General Electric Company",
@@ -7683,7 +7683,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1934",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his discovery of heavy hydrogen\"",
+                        "motivation": "\“for his discovery of heavy hydrogen\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -7712,7 +7712,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1935",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"in recognition of their synthesis of new radioactive elements\"",
+                        "motivation": "\“in recognition of their synthesis of new radioactive elements\”",
                         "affiliations": [
                             {
                                 "name": "Institut du Radium",
@@ -7741,7 +7741,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1935",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"in recognition of their synthesis of new radioactive elements\"",
+                        "motivation": "\“in recognition of their synthesis of new radioactive elements\”",
                         "affiliations": [
                             {
                                 "name": "Institut du Radium",
@@ -7770,7 +7770,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1936",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his contributions to our knowledge of molecular structure through his investigations on dipole moments and on the diffraction of X-rays and electrons in gases\"",
+                        "motivation": "\“for his contributions to our knowledge of molecular structure through his investigations on dipole moments and on the diffraction of X-rays and electrons in gases\”",
                         "affiliations": [
                             {
                                 "name": "Berlin University",
@@ -7804,7 +7804,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1937",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his investigations on carbohydrates and vitamin C\"",
+                        "motivation": "\“for his investigations on carbohydrates and vitamin C\”",
                         "affiliations": [
                             {
                                 "name": "Birmingham University",
@@ -7833,7 +7833,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1937",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his investigations on carotenoids, flavins and vitamins A and B2\"",
+                        "motivation": "\“for his investigations on carotenoids, flavins and vitamins A and B2\”",
                         "affiliations": [
                             {
                                 "name": "University of Zurich",
@@ -7862,7 +7862,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1938",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his work on carotenoids and vitamins\"",
+                        "motivation": "\“for his work on carotenoids and vitamins\”",
                         "affiliations": [
                             {
                                 "name": "Kaiser-Wilhelm-Institut (now Max-Planck Institut) für Medizinische Forschung",
@@ -7896,7 +7896,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1939",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his work on sex hormones\"",
+                        "motivation": "\“for his work on sex hormones\”",
                         "affiliations": [
                             {
                                 "name": "Kaiser-Wilhelm-Institut (now Max-Planck-Institut) für Biochemie",
@@ -7930,7 +7930,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1939",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his work on polymethylenes and higher terpenes\"",
+                        "motivation": "\“for his work on polymethylenes and higher terpenes\”",
                         "affiliations": [
                             {
                                 "name": "Eidgenössische Technische Hochschule (Swiss Federal Institute of Technology)",
@@ -7959,7 +7959,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1943",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his work on the use of isotopes as tracers in the study of chemical processes\"",
+                        "motivation": "\“for his work on the use of isotopes as tracers in the study of chemical processes\”",
                         "affiliations": [
                             {
                                 "name": "Stockholm University",
@@ -7988,7 +7988,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1944",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his discovery of the fission of heavy nuclei\"",
+                        "motivation": "\“for his discovery of the fission of heavy nuclei\”",
                         "affiliations": [
                             {
                                 "name": "Kaiser-Wilhelm-Institut (now Max-Planck Institut) für Chemie",
@@ -8017,7 +8017,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1945",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his research and inventions in agricultural and nutrition chemistry, especially for his fodder preservation method\"",
+                        "motivation": "\“for his research and inventions in agricultural and nutrition chemistry, especially for his fodder preservation method\”",
                         "affiliations": [
                             {
                                 "name": "University of Helsinki",
@@ -8046,7 +8046,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1946",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his discovery that enzymes can be crystallized\"",
+                        "motivation": "\“for his discovery that enzymes can be crystallized\”",
                         "affiliations": [
                             {
                                 "name": "Cornell University",
@@ -8075,7 +8075,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1946",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their preparation of enzymes and virus proteins in a pure form\"",
+                        "motivation": "\“for their preparation of enzymes and virus proteins in a pure form\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller Institute for Medical Research",
@@ -8104,7 +8104,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1946",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their preparation of enzymes and virus proteins in a pure form\"",
+                        "motivation": "\“for their preparation of enzymes and virus proteins in a pure form\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller Institute for Medical Research",
@@ -8133,7 +8133,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1947",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his investigations on plant products of biological importance, especially the alkaloids\"",
+                        "motivation": "\“for his investigations on plant products of biological importance, especially the alkaloids\”",
                         "affiliations": [
                             {
                                 "name": "University of Oxford",
@@ -8162,7 +8162,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1948",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his research on electrophoresis and adsorption analysis, especially for his discoveries concerning the complex nature of the serum proteins\"",
+                        "motivation": "\“for his research on electrophoresis and adsorption analysis, especially for his discoveries concerning the complex nature of the serum proteins\”",
                         "affiliations": [
                             {
                                 "name": "Uppsala University",
@@ -8191,7 +8191,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1949",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his contributions in the field of chemical thermodynamics, particularly concerning the behaviour of substances at extremely low temperatures\"",
+                        "motivation": "\“for his contributions in the field of chemical thermodynamics, particularly concerning the behaviour of substances at extremely low temperatures\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -8220,7 +8220,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1950",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their discovery and development of the diene synthesis\"",
+                        "motivation": "\“for their discovery and development of the diene synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Kiel University",
@@ -8249,7 +8249,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1950",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their discovery and development of the diene synthesis\"",
+                        "motivation": "\“for their discovery and development of the diene synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Cologne University",
@@ -8278,7 +8278,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1951",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their discoveries in the chemistry of the transuranium elements\"",
+                        "motivation": "\“for their discoveries in the chemistry of the transuranium elements\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -8307,7 +8307,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1951",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their discoveries in the chemistry of the transuranium elements\"",
+                        "motivation": "\“for their discoveries in the chemistry of the transuranium elements\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -8336,7 +8336,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1952",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their invention of partition chromatography\"",
+                        "motivation": "\“for their invention of partition chromatography\”",
                         "affiliations": [
                             {
                                 "name": "National Institute for Medical Research",
@@ -8365,7 +8365,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1952",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their invention of partition chromatography\"",
+                        "motivation": "\“for their invention of partition chromatography\”",
                         "affiliations": [
                             {
                                 "name": "Rowett Research Institute",
@@ -8394,7 +8394,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1953",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his discoveries in the field of macromolecular chemistry\"",
+                        "motivation": "\“for his discoveries in the field of macromolecular chemistry\”",
                         "affiliations": [
                             {
                                 "name": "University of Freiburg",
@@ -8428,7 +8428,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his research into the nature of the chemical bond and its application to the elucidation of the structure of complex substances\"",
+                        "motivation": "\“for his research into the nature of the chemical bond and its application to the elucidation of the structure of complex substances\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -8469,7 +8469,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1955",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his work on biochemically important sulphur compounds, especially for the first synthesis of a polypeptide hormone\"",
+                        "motivation": "\“for his work on biochemically important sulphur compounds, especially for the first synthesis of a polypeptide hormone\”",
                         "affiliations": [
                             {
                                 "name": "Cornell University",
@@ -8498,7 +8498,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1956",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their researches into the mechanism of chemical reactions\"",
+                        "motivation": "\“for their researches into the mechanism of chemical reactions\”",
                         "affiliations": [
                             {
                                 "name": "University of Oxford",
@@ -8527,7 +8527,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1956",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their researches into the mechanism of chemical reactions\"",
+                        "motivation": "\“for their researches into the mechanism of chemical reactions\”",
                         "affiliations": [
                             {
                                 "name": "Institute for Chemical Physics of the Academy of Sciences of the USSR",
@@ -8556,7 +8556,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1957",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his work on nucleotides and nucleotide co-enzymes\"",
+                        "motivation": "\“for his work on nucleotides and nucleotide co-enzymes\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -8585,7 +8585,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1958",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his work on the structure of proteins, especially that of insulin\"",
+                        "motivation": "\“for his work on the structure of proteins, especially that of insulin\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -8598,7 +8598,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their contributions concerning the determination of base sequences in nucleic acids\"",
+                        "motivation": "\“for their contributions concerning the determination of base sequences in nucleic acids\”",
                         "affiliations": [
                             {
                                 "name": "MRC Laboratory of Molecular Biology",
@@ -8627,7 +8627,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1959",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his discovery and development of the polarographic methods of analysis\"",
+                        "motivation": "\“for his discovery and development of the polarographic methods of analysis\”",
                         "affiliations": [
                             {
                                 "name": "Polarographic Institute of the Czechoslovak Academy of Science",
@@ -8656,7 +8656,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1960",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his method to use carbon-14 for age determination in archaeology, geology, geophysics, and other branches of science\"",
+                        "motivation": "\“for his method to use carbon-14 for age determination in archaeology, geology, geophysics, and other branches of science\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -8685,7 +8685,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1961",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his research on the carbon dioxide assimilation in plants\"",
+                        "motivation": "\“for his research on the carbon dioxide assimilation in plants\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -8714,7 +8714,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1962",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their studies of the structures of globular proteins\"",
+                        "motivation": "\“for their studies of the structures of globular proteins\”",
                         "affiliations": [
                             {
                                 "name": "MRC Laboratory of Molecular Biology",
@@ -8743,7 +8743,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1962",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their studies of the structures of globular proteins\"",
+                        "motivation": "\“for their studies of the structures of globular proteins\”",
                         "affiliations": [
                             {
                                 "name": "MRC Laboratory of Molecular Biology",
@@ -8772,7 +8772,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1963",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their discoveries in the field of the chemistry and technology of high polymers\"",
+                        "motivation": "\“for their discoveries in the field of the chemistry and technology of high polymers\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Kohlenforschung (Max-Planck-Institute for Carbon Research)",
@@ -8801,7 +8801,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1963",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their discoveries in the field of the chemistry and technology of high polymers\"",
+                        "motivation": "\“for their discoveries in the field of the chemistry and technology of high polymers\”",
                         "affiliations": [
                             {
                                 "name": "Institute of Technology",
@@ -8830,7 +8830,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1964",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for her determinations by X-ray techniques of the structures of important biochemical substances\"",
+                        "motivation": "\“for her determinations by X-ray techniques of the structures of important biochemical substances\”",
                         "affiliations": [
                             {
                                 "name": "University of Oxford, Royal Society",
@@ -8859,7 +8859,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1965",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his outstanding achievements in the art of organic synthesis\"",
+                        "motivation": "\“for his outstanding achievements in the art of organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -8888,7 +8888,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1966",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his fundamental work concerning chemical bonds and the electronic structure of molecules by the molecular orbital method\"",
+                        "motivation": "\“for his fundamental work concerning chemical bonds and the electronic structure of molecules by the molecular orbital method\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -8914,7 +8914,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1967",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their studies of extremely fast chemical reactions, effected by disturbing the equlibrium by means of very short pulses of energy\"",
+                        "motivation": "\“for their studies of extremely fast chemical reactions, effected by disturbing the equlibrium by means of very short pulses of energy\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Physikalische Chemie",
@@ -8943,7 +8943,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1967",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their studies of extremely fast chemical reactions, effected by disturbing the equlibrium by means of very short pulses of energy\"",
+                        "motivation": "\“for their studies of extremely fast chemical reactions, effected by disturbing the equlibrium by means of very short pulses of energy\”",
                         "affiliations": [
                             {
                                 "name": "Institute of Physical Chemistry",
@@ -8972,7 +8972,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1967",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their studies of extremely fast chemical reactions, effected by disturbing the equlibrium by means of very short pulses of energy\"",
+                        "motivation": "\“for their studies of extremely fast chemical reactions, effected by disturbing the equlibrium by means of very short pulses of energy\”",
                         "affiliations": [
                             {
                                 "name": "Royal Institution of Great Britain",
@@ -9001,7 +9001,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1968",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for the discovery of the reciprocal relations bearing his name, which are fundamental for the thermodynamics of irreversible processes\"",
+                        "motivation": "\“for the discovery of the reciprocal relations bearing his name, which are fundamental for the thermodynamics of irreversible processes\”",
                         "affiliations": [
                             {
                                 "name": "Yale University",
@@ -9030,7 +9030,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1969",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their contributions to the development of the concept of conformation and its application in chemistry\"",
+                        "motivation": "\“for their contributions to the development of the concept of conformation and its application in chemistry\”",
                         "affiliations": [
                             {
                                 "name": "Imperial College",
@@ -9059,7 +9059,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1969",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their contributions to the development of the concept of conformation and its application in chemistry\"",
+                        "motivation": "\“for their contributions to the development of the concept of conformation and its application in chemistry\”",
                         "affiliations": [
                             {
                                 "name": "University of Oslo",
@@ -9088,7 +9088,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1970",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his discovery of sugar nucleotides and their role in the biosynthesis of carbohydrates\"",
+                        "motivation": "\“for his discovery of sugar nucleotides and their role in the biosynthesis of carbohydrates\”",
                         "affiliations": [
                             {
                                 "name": "Institute for Biochemical Research",
@@ -9117,7 +9117,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1971",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his contributions to the knowledge of electronic structure and geometry of molecules, particularly free radicals\"",
+                        "motivation": "\“for his contributions to the knowledge of electronic structure and geometry of molecules, particularly free radicals\”",
                         "affiliations": [
                             {
                                 "name": "National Research Council of Canada",
@@ -9146,7 +9146,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his work on ribonuclease, especially concerning the connection between the amino acid sequence and the biologically active conformation\"",
+                        "motivation": "\“for his work on ribonuclease, especially concerning the connection between the amino acid sequence and the biologically active conformation\”",
                         "affiliations": [
                             {
                                 "name": "National Institutes of Health",
@@ -9175,7 +9175,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their contribution to the understanding of the connection between chemical structure and catalytic activity of the active centre of the ribonuclease molecule\"",
+                        "motivation": "\“for their contribution to the understanding of the connection between chemical structure and catalytic activity of the active centre of the ribonuclease molecule\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -9204,7 +9204,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their contribution to the understanding of the connection between chemical structure and catalytic activity of the active centre of the ribonuclease molecule\"",
+                        "motivation": "\“for their contribution to the understanding of the connection between chemical structure and catalytic activity of the active centre of the ribonuclease molecule\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -9233,7 +9233,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their pioneering work, performed independently, on the chemistry of the organometallic, so called sandwich compounds\"",
+                        "motivation": "\“for their pioneering work, performed independently, on the chemistry of the organometallic, so called sandwich compounds\”",
                         "affiliations": [
                             {
                                 "name": "Technical University",
@@ -9262,7 +9262,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their pioneering work, performed independently, on the chemistry of the organometallic, so called sandwich compounds\"",
+                        "motivation": "\“for their pioneering work, performed independently, on the chemistry of the organometallic, so called sandwich compounds\”",
                         "affiliations": [
                             {
                                 "name": "Imperial College",
@@ -9291,7 +9291,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his fundamental achievements, both theoretical and experimental, in the physical chemistry of the macromolecules\"",
+                        "motivation": "\“for his fundamental achievements, both theoretical and experimental, in the physical chemistry of the macromolecules\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -9317,7 +9317,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his work on the stereochemistry of enzyme-catalyzed reactions\"",
+                        "motivation": "\“for his work on the stereochemistry of enzyme-catalyzed reactions\”",
                         "affiliations": [
                             {
                                 "name": "University of Sussex",
@@ -9346,7 +9346,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his research into the stereochemistry of organic molecules and reactions\"",
+                        "motivation": "\“for his research into the stereochemistry of organic molecules and reactions\”",
                         "affiliations": [
                             {
                                 "name": "Eidgenössische Technische Hochschule (Swiss Federal Institute of Technology)",
@@ -9375,7 +9375,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1976",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his studies on the structure of boranes illuminating problems of chemical bonding\"",
+                        "motivation": "\“for his studies on the structure of boranes illuminating problems of chemical bonding\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -9404,7 +9404,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his contributions to non-equilibrium thermodynamics, particularly the theory of dissipative structures\"",
+                        "motivation": "\“for his contributions to non-equilibrium thermodynamics, particularly the theory of dissipative structures\”",
                         "affiliations": [
                             {
                                 "name": "Université Libre de Bruxelles",
@@ -9438,7 +9438,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1978",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his contribution to the understanding of biological energy transfer through the formulation of the chemiosmotic theory\"",
+                        "motivation": "\“for his contribution to the understanding of biological energy transfer through the formulation of the chemiosmotic theory\”",
                         "affiliations": [
                             {
                                 "name": "Glynn Research Laboratories",
@@ -9467,7 +9467,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their development of the use of boron- and phosphorus-containing compounds, respectively, into important reagents in organic synthesis\"",
+                        "motivation": "\“for their development of the use of boron- and phosphorus-containing compounds, respectively, into important reagents in organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Purdue University",
@@ -9496,7 +9496,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their development of the use of boron- and phosphorus-containing compounds, respectively, into important reagents in organic synthesis\"",
+                        "motivation": "\“for their development of the use of boron- and phosphorus-containing compounds, respectively, into important reagents in organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "University of Heidelberg",
@@ -9522,7 +9522,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his fundamental studies of the biochemistry of nucleic acids, with particular regard to recombinant-DNA\"",
+                        "motivation": "\“for his fundamental studies of the biochemistry of nucleic acids, with particular regard to recombinant-DNA\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -9548,7 +9548,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their contributions concerning the determination of base sequences in nucleic acids\"",
+                        "motivation": "\“for their contributions concerning the determination of base sequences in nucleic acids\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University, Biological Laboratories",
@@ -9577,7 +9577,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their theories, developed independently, concerning the course of chemical reactions\"",
+                        "motivation": "\“for their theories, developed independently, concerning the course of chemical reactions\”",
                         "affiliations": [
                             {
                                 "name": "Kyoto University",
@@ -9603,7 +9603,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their theories, developed independently, concerning the course of chemical reactions\"",
+                        "motivation": "\“for their theories, developed independently, concerning the course of chemical reactions\”",
                         "affiliations": [
                             {
                                 "name": "Cornell University",
@@ -9629,7 +9629,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1982",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his development of crystallographic electron microscopy and his structural elucidation of biologically important nucleic acid-protein complexes\"",
+                        "motivation": "\“for his development of crystallographic electron microscopy and his structural elucidation of biologically important nucleic acid-protein complexes\”",
                         "affiliations": [
                             {
                                 "name": "MRC Laboratory of Molecular Biology",
@@ -9658,7 +9658,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1983",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his work on the mechanisms of electron transfer reactions, especially in metal complexes\"",
+                        "motivation": "\“for his work on the mechanisms of electron transfer reactions, especially in metal complexes\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -9687,7 +9687,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1984",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his development of methodology for chemical synthesis on a solid matrix\"",
+                        "motivation": "\“for his development of methodology for chemical synthesis on a solid matrix\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -9716,7 +9716,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1985",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their outstanding achievements in the development of direct methods for the determination of crystal structures\"",
+                        "motivation": "\“for their outstanding achievements in the development of direct methods for the determination of crystal structures\”",
                         "affiliations": [
                             {
                                 "name": "The Medical Foundation of Buffalo",
@@ -9742,7 +9742,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1985",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their outstanding achievements in the development of direct methods for the determination of crystal structures\"",
+                        "motivation": "\“for their outstanding achievements in the development of direct methods for the determination of crystal structures\”",
                         "affiliations": [
                             {
                                 "name": "US Naval Research Laboratory",
@@ -9768,7 +9768,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their contributions concerning the dynamics of chemical elementary processes\"",
+                        "motivation": "\“for their contributions concerning the dynamics of chemical elementary processes\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -9794,7 +9794,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their contributions concerning the dynamics of chemical elementary processes\"",
+                        "motivation": "\“for their contributions concerning the dynamics of chemical elementary processes\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -9820,7 +9820,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their contributions concerning the dynamics of chemical elementary processes\"",
+                        "motivation": "\“for their contributions concerning the dynamics of chemical elementary processes\”",
                         "affiliations": [
                             {
                                 "name": "University of Toronto",
@@ -9849,7 +9849,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1987",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their development and use of molecules with structure-specific interactions of high selectivity\"",
+                        "motivation": "\“for their development and use of molecules with structure-specific interactions of high selectivity\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -9875,7 +9875,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1987",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their development and use of molecules with structure-specific interactions of high selectivity\"",
+                        "motivation": "\“for their development and use of molecules with structure-specific interactions of high selectivity\”",
                         "affiliations": [
                             {
                                 "name": "Université Louis Pasteur",
@@ -9909,7 +9909,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1987",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their development and use of molecules with structure-specific interactions of high selectivity\"",
+                        "motivation": "\“for their development and use of molecules with structure-specific interactions of high selectivity\”",
                         "affiliations": [
                             {
                                 "name": "Du Pont",
@@ -9935,7 +9935,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the determination of the three-dimensional structure of a photosynthetic reaction centre\"",
+                        "motivation": "\“for the determination of the three-dimensional structure of a photosynthetic reaction centre\”",
                         "affiliations": [
                             {
                                 "name": "University of Texas Southwestern Medical Center at Dallas",
@@ -9964,7 +9964,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the determination of the three-dimensional structure of a photosynthetic reaction centre\"",
+                        "motivation": "\“for the determination of the three-dimensional structure of a photosynthetic reaction centre\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Biochemie",
@@ -9990,7 +9990,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the determination of the three-dimensional structure of a photosynthetic reaction centre\"",
+                        "motivation": "\“for the determination of the three-dimensional structure of a photosynthetic reaction centre\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Biophysik",
@@ -10016,7 +10016,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their discovery of catalytic properties of RNA\"",
+                        "motivation": "\“for their discovery of catalytic properties of RNA\”",
                         "affiliations": [
                             {
                                 "name": "Yale University",
@@ -10042,7 +10042,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for their discovery of catalytic properties of RNA\"",
+                        "motivation": "\“for their discovery of catalytic properties of RNA\”",
                         "affiliations": [
                             {
                                 "name": "University of Colorado",
@@ -10068,7 +10068,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his development of the theory and methodology of organic synthesis\"",
+                        "motivation": "\“for his development of the theory and methodology of organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -10094,7 +10094,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1991",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his contributions to the development of the methodology of high resolution nuclear magnetic resonance (NMR) spectroscopy\"",
+                        "motivation": "\“for his contributions to the development of the methodology of high resolution nuclear magnetic resonance (NMR) spectroscopy\”",
                         "affiliations": [
                             {
                                 "name": "Eidgenössische Technische Hochschule (Swiss Federal Institute of Technology)",
@@ -10120,7 +10120,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1992",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his contributions to the theory of electron transfer reactions in chemical systems\"",
+                        "motivation": "\“for his contributions to the theory of electron transfer reactions in chemical systems\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -10145,9 +10145,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1993",
                         "category": "chemistry",
-                        "overallMotivation": "\"for contributions to the developments of methods within DNA-based chemistry\"",
+                        "overallMotivation": "\“for contributions to the developments of methods within DNA-based chemistry\”",
                         "share": "2",
-                        "motivation": "\"for his invention of the polymerase chain reaction (PCR) method\"",
+                        "motivation": "\“for his invention of the polymerase chain reaction (PCR) method\”",
                         "affiliations": [
                             {
                                 "city": "La Jolla, CA",
@@ -10174,9 +10174,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1993",
                         "category": "chemistry",
-                        "overallMotivation": "\"for contributions to the developments of methods within DNA-based chemistry\"",
+                        "overallMotivation": "\“for contributions to the developments of methods within DNA-based chemistry\”",
                         "share": "2",
-                        "motivation": "\"for his fundamental contributions to the establishment of oligonucleotide-based, site-directed mutagenesis and its development for protein studies\"",
+                        "motivation": "\“for his fundamental contributions to the establishment of oligonucleotide-based, site-directed mutagenesis and its development for protein studies\”",
                         "affiliations": [
                             {
                                 "name": "University of British Columbia",
@@ -10202,7 +10202,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his contribution to carbocation chemistry\"",
+                        "motivation": "\“for his contribution to carbocation chemistry\”",
                         "affiliations": [
                             {
                                 "name": "University of Southern California",
@@ -10228,7 +10228,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their work in atmospheric chemistry, particularly concerning the formation and decomposition of ozone\"",
+                        "motivation": "\“for their work in atmospheric chemistry, particularly concerning the formation and decomposition of ozone\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Chemie",
@@ -10254,7 +10254,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their work in atmospheric chemistry, particularly concerning the formation and decomposition of ozone\"",
+                        "motivation": "\“for their work in atmospheric chemistry, particularly concerning the formation and decomposition of ozone\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -10283,7 +10283,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their work in atmospheric chemistry, particularly concerning the formation and decomposition of ozone\"",
+                        "motivation": "\“for their work in atmospheric chemistry, particularly concerning the formation and decomposition of ozone\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -10309,7 +10309,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their discovery of fullerenes\"",
+                        "motivation": "\“for their discovery of fullerenes\”",
                         "affiliations": [
                             {
                                 "name": "Rice University",
@@ -10335,7 +10335,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their discovery of fullerenes\"",
+                        "motivation": "\“for their discovery of fullerenes\”",
                         "affiliations": [
                             {
                                 "name": "University of Sussex",
@@ -10364,7 +10364,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for their discovery of fullerenes\"",
+                        "motivation": "\“for their discovery of fullerenes\”",
                         "affiliations": [
                             {
                                 "name": "Rice University",
@@ -10390,7 +10390,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their elucidation of the enzymatic mechanism underlying the synthesis of adenosine triphosphate (ATP)\"",
+                        "motivation": "\“for their elucidation of the enzymatic mechanism underlying the synthesis of adenosine triphosphate (ATP)\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -10416,7 +10416,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their elucidation of the enzymatic mechanism underlying the synthesis of adenosine triphosphate (ATP)\"",
+                        "motivation": "\“for their elucidation of the enzymatic mechanism underlying the synthesis of adenosine triphosphate (ATP)\”",
                         "affiliations": [
                             {
                                 "name": "MRC Laboratory of Molecular Biology",
@@ -10442,7 +10442,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for the first discovery of an ion-transporting enzyme, Na+, K+ -ATPase\"",
+                        "motivation": "\“for the first discovery of an ion-transporting enzyme, Na+, K+ -ATPase\”",
                         "affiliations": [
                             {
                                 "name": "Aarhus University",
@@ -10468,7 +10468,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his development of the density-functional theory\"",
+                        "motivation": "\“for his development of the density-functional theory\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -10497,7 +10497,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his development of computational methods in quantum chemistry\"",
+                        "motivation": "\“for his development of computational methods in quantum chemistry\”",
                         "affiliations": [
                             {
                                 "name": "Northwestern University",
@@ -10523,7 +10523,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1999",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his studies of the transition states of chemical reactions using femtosecond spectroscopy\"",
+                        "motivation": "\“for his studies of the transition states of chemical reactions using femtosecond spectroscopy\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -10552,7 +10552,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1901",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his work on serum therapy, especially its application against diphtheria, by which he has opened a new road in the domain of medical science and thereby placed in the hands of the physician a victorious weapon against illness and deaths\"",
+                        "motivation": "\“for his work on serum therapy, especially its application against diphtheria, by which he has opened a new road in the domain of medical science and thereby placed in the hands of the physician a victorious weapon against illness and deaths\”",
                         "affiliations": [
                             {
                                 "name": "Marburg University",
@@ -10581,7 +10581,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1902",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his work on malaria, by which he has shown how it enters the organism and thereby has laid the foundation for successful research on this disease and methods of combating it\"",
+                        "motivation": "\“for his work on malaria, by which he has shown how it enters the organism and thereby has laid the foundation for successful research on this disease and methods of combating it\”",
                         "affiliations": [
                             {
                                 "name": "University College",
@@ -10610,7 +10610,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1903",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"in recognition of his contribution to the treatment of diseases, especially lupus vulgaris, with concentrated light radiation, whereby he has opened a new avenue for medical science\"",
+                        "motivation": "\“in recognition of his contribution to the treatment of diseases, especially lupus vulgaris, with concentrated light radiation, whereby he has opened a new avenue for medical science\”",
                         "affiliations": [
                             {
                                 "name": "Finsen Medical Light Institute",
@@ -10639,7 +10639,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1904",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"in recognition of his work on the physiology of digestion, through which knowledge on vital aspects of the subject has been transformed and enlarged\"",
+                        "motivation": "\“in recognition of his work on the physiology of digestion, through which knowledge on vital aspects of the subject has been transformed and enlarged\”",
                         "affiliations": [
                             {
                                 "name": "Military Medical Academy",
@@ -10668,7 +10668,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1905",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his investigations and discoveries in relation to tuberculosis\"",
+                        "motivation": "\“for his investigations and discoveries in relation to tuberculosis\”",
                         "affiliations": [
                             {
                                 "name": "Institute for Infectious Diseases",
@@ -10697,7 +10697,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1906",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"in recognition of their work on the structure of the nervous system\"",
+                        "motivation": "\“in recognition of their work on the structure of the nervous system\”",
                         "affiliations": [
                             {
                                 "name": "Pavia University",
@@ -10726,7 +10726,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1906",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"in recognition of their work on the structure of the nervous system\"",
+                        "motivation": "\“in recognition of their work on the structure of the nervous system\”",
                         "affiliations": [
                             {
                                 "name": "Madrid University",
@@ -10755,7 +10755,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1907",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"in recognition of his work on the role played by protozoa in causing diseases\"",
+                        "motivation": "\“in recognition of his work on the role played by protozoa in causing diseases\”",
                         "affiliations": [
                             {
                                 "name": "Institut Pasteur",
@@ -10784,7 +10784,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1908",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"in recognition of their work on immunity\"",
+                        "motivation": "\“in recognition of their work on immunity\”",
                         "affiliations": [
                             {
                                 "name": "Institut Pasteur",
@@ -10813,7 +10813,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1908",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"in recognition of their work on immunity\"",
+                        "motivation": "\“in recognition of their work on immunity\”",
                         "affiliations": [
                             {
                                 "name": "Goettingen University",
@@ -10847,7 +10847,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1909",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his work on the physiology, pathology and surgery of the thyroid gland\"",
+                        "motivation": "\“for his work on the physiology, pathology and surgery of the thyroid gland\”",
                         "affiliations": [
                             {
                                 "name": "Berne University",
@@ -10876,7 +10876,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1910",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"in recognition of the contributions to our knowledge of cell chemistry made through his work on proteins, including the nucleic substances\"",
+                        "motivation": "\“in recognition of the contributions to our knowledge of cell chemistry made through his work on proteins, including the nucleic substances\”",
                         "affiliations": [
                             {
                                 "name": "University of Heidelberg",
@@ -10905,7 +10905,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1911",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his work on the dioptrics of the eye\"",
+                        "motivation": "\“for his work on the dioptrics of the eye\”",
                         "affiliations": [
                             {
                                 "name": "Uppsala University",
@@ -10934,7 +10934,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1912",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"in recognition of his work on vascular suture and the transplantation of blood vessels and organs\"",
+                        "motivation": "\“in recognition of his work on vascular suture and the transplantation of blood vessels and organs\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller Institute for Medical Research",
@@ -10963,7 +10963,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1913",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"in recognition of his work on anaphylaxis\"",
+                        "motivation": "\“in recognition of his work on anaphylaxis\”",
                         "affiliations": [
                             {
                                 "name": "Sorbonne University",
@@ -10992,7 +10992,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1914",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his work on the physiology and pathology of the vestibular apparatus\"",
+                        "motivation": "\“for his work on the physiology and pathology of the vestibular apparatus\”",
                         "affiliations": [
                             {
                                 "name": "Vienna University",
@@ -11021,7 +11021,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1919",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discoveries relating to immunity\"",
+                        "motivation": "\“for his discoveries relating to immunity\”",
                         "affiliations": [
                             {
                                 "name": "Brussels University",
@@ -11050,7 +11050,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1920",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of the capillary motor regulating mechanism\"",
+                        "motivation": "\“for his discovery of the capillary motor regulating mechanism\”",
                         "affiliations": [
                             {
                                 "name": "Copenhagen University",
@@ -11079,7 +11079,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1922",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery relating to the production of heat in the muscle\"",
+                        "motivation": "\“for his discovery relating to the production of heat in the muscle\”",
                         "affiliations": [
                             {
                                 "name": "London University",
@@ -11108,7 +11108,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1922",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of the fixed relationship between the consumption of oxygen and the metabolism of lactic acid in the muscle\"",
+                        "motivation": "\“for his discovery of the fixed relationship between the consumption of oxygen and the metabolism of lactic acid in the muscle\”",
                         "affiliations": [
                             {
                                 "name": "Kiel University",
@@ -11137,7 +11137,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1923",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for the discovery of insulin\"",
+                        "motivation": "\“for the discovery of insulin\”",
                         "affiliations": [
                             {
                                 "name": "University of Toronto",
@@ -11166,7 +11166,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1923",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for the discovery of insulin\"",
+                        "motivation": "\“for the discovery of insulin\”",
                         "affiliations": [
                             {
                                 "name": "University of Toronto",
@@ -11195,7 +11195,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1924",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of the mechanism of the electrocardiogram\"",
+                        "motivation": "\“for his discovery of the mechanism of the electrocardiogram\”",
                         "affiliations": [
                             {
                                 "name": "Leiden University",
@@ -11224,7 +11224,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1926",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of the Spiroptera carcinoma\"",
+                        "motivation": "\“for his discovery of the Spiroptera carcinoma\”",
                         "affiliations": [
                             {
                                 "name": "Copenhagen University",
@@ -11253,7 +11253,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1927",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of the therapeutic value of malaria inoculation in the treatment of dementia paralytica\"",
+                        "motivation": "\“for his discovery of the therapeutic value of malaria inoculation in the treatment of dementia paralytica\”",
                         "affiliations": [
                             {
                                 "name": "Vienna University",
@@ -11282,7 +11282,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1928",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his work on typhus\"",
+                        "motivation": "\“for his work on typhus\”",
                         "affiliations": [
                             {
                                 "name": "Institut Pasteur",
@@ -11310,7 +11310,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1929",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of the antineuritic vitamin\"",
+                        "motivation": "\“for his discovery of the antineuritic vitamin\”",
                         "affiliations": [
                             {
                                 "name": "Utrecht University",
@@ -11339,7 +11339,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1929",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of the growth-stimulating vitamins\"",
+                        "motivation": "\“for his discovery of the growth-stimulating vitamins\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -11368,7 +11368,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1930",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of human blood groups\"",
+                        "motivation": "\“for his discovery of human blood groups\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller Institute for Medical Research",
@@ -11397,7 +11397,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1931",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of the nature and mode of action of the respiratory enzyme\"",
+                        "motivation": "\“for his discovery of the nature and mode of action of the respiratory enzyme\”",
                         "affiliations": [
                             {
                                 "name": "Kaiser-Wilhelm-Institut (now Max-Planck-Institut) für Biologie",
@@ -11426,7 +11426,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1932",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries regarding the functions of neurons\"",
+                        "motivation": "\“for their discoveries regarding the functions of neurons\”",
                         "affiliations": [
                             {
                                 "name": "University of Oxford",
@@ -11455,7 +11455,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1932",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries regarding the functions of neurons\"",
+                        "motivation": "\“for their discoveries regarding the functions of neurons\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -11484,7 +11484,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1933",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discoveries concerning the role played by the chromosome in heredity\"",
+                        "motivation": "\“for his discoveries concerning the role played by the chromosome in heredity\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -11513,7 +11513,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1934",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning liver therapy in cases of anaemia\"",
+                        "motivation": "\“for their discoveries concerning liver therapy in cases of anaemia\”",
                         "affiliations": [
                             {
                                 "name": "University of Rochester",
@@ -11542,7 +11542,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1934",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning liver therapy in cases of anaemia\"",
+                        "motivation": "\“for their discoveries concerning liver therapy in cases of anaemia\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -11571,7 +11571,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1934",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning liver therapy in cases of anaemia\"",
+                        "motivation": "\“for their discoveries concerning liver therapy in cases of anaemia\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -11605,7 +11605,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1935",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of the organizer effect in embryonic development\"",
+                        "motivation": "\“for his discovery of the organizer effect in embryonic development\”",
                         "affiliations": [
                             {
                                 "name": "University of Freiburg im Breisgau",
@@ -11634,7 +11634,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1936",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries relating to chemical transmission of nerve impulses\"",
+                        "motivation": "\“for their discoveries relating to chemical transmission of nerve impulses\”",
                         "affiliations": [
                             {
                                 "name": "National Institute for Medical Research",
@@ -11663,7 +11663,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1936",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries relating to chemical transmission of nerve impulses\"",
+                        "motivation": "\“for their discoveries relating to chemical transmission of nerve impulses\”",
                         "affiliations": [
                             {
                                 "name": "Graz University",
@@ -11692,7 +11692,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1937",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discoveries in connection with the biological combustion processes, with special reference to vitamin C and the catalysis of fumaric acid\"",
+                        "motivation": "\“for his discoveries in connection with the biological combustion processes, with special reference to vitamin C and the catalysis of fumaric acid\”",
                         "affiliations": [
                             {
                                 "name": "Szeged University",
@@ -11721,7 +11721,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1938",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for the discovery of the role played by the sinus and aortic mechanisms in the regulation of respiration\"",
+                        "motivation": "\“for the discovery of the role played by the sinus and aortic mechanisms in the regulation of respiration\”",
                         "affiliations": [
                             {
                                 "name": "Ghent University",
@@ -11750,7 +11750,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1939",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for the discovery of the antibacterial effects of prontosil\"",
+                        "motivation": "\“for the discovery of the antibacterial effects of prontosil\”",
                         "affiliations": [
                             {
                                 "name": "Munster University",
@@ -11779,7 +11779,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1943",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of vitamin K\"",
+                        "motivation": "\“for his discovery of vitamin K\”",
                         "affiliations": [
                             {
                                 "name": "Polytechnic Institute",
@@ -11808,7 +11808,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1943",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of the chemical nature of vitamin K\"",
+                        "motivation": "\“for his discovery of the chemical nature of vitamin K\”",
                         "affiliations": [
                             {
                                 "name": "Saint Louis University",
@@ -11837,7 +11837,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1944",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries relating to the highly differentiated functions of single nerve fibres\"",
+                        "motivation": "\“for their discoveries relating to the highly differentiated functions of single nerve fibres\”",
                         "affiliations": [
                             {
                                 "name": "Washington University",
@@ -11866,7 +11866,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1944",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries relating to the highly differentiated functions of single nerve fibres\"",
+                        "motivation": "\“for their discoveries relating to the highly differentiated functions of single nerve fibres\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller Institute for Medical Research",
@@ -11895,7 +11895,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1945",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for the discovery of penicillin and its curative effect in various infectious diseases\"",
+                        "motivation": "\“for the discovery of penicillin and its curative effect in various infectious diseases\”",
                         "affiliations": [
                             {
                                 "name": "London University",
@@ -11924,7 +11924,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1945",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for the discovery of penicillin and its curative effect in various infectious diseases\"",
+                        "motivation": "\“for the discovery of penicillin and its curative effect in various infectious diseases\”",
                         "affiliations": [
                             {
                                 "name": "University of Oxford",
@@ -11953,7 +11953,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1945",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for the discovery of penicillin and its curative effect in various infectious diseases\"",
+                        "motivation": "\“for the discovery of penicillin and its curative effect in various infectious diseases\”",
                         "affiliations": [
                             {
                                 "name": "University of Oxford",
@@ -11979,7 +11979,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1946",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for the discovery of the production of mutations by means of X-ray irradiation\"",
+                        "motivation": "\“for the discovery of the production of mutations by means of X-ray irradiation\”",
                         "affiliations": [
                             {
                                 "name": "Indiana University",
@@ -12008,7 +12008,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1947",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discovery of the course of the catalytic conversion of glycogen\"",
+                        "motivation": "\“for their discovery of the course of the catalytic conversion of glycogen\”",
                         "affiliations": [
                             {
                                 "name": "Washington University",
@@ -12037,7 +12037,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1947",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discovery of the course of the catalytic conversion of glycogen\"",
+                        "motivation": "\“for their discovery of the course of the catalytic conversion of glycogen\”",
                         "affiliations": [
                             {
                                 "name": "Washington University",
@@ -12066,7 +12066,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1947",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of the part played by the hormone of the anterior pituitary lobe in the metabolism of sugar\"",
+                        "motivation": "\“for his discovery of the part played by the hormone of the anterior pituitary lobe in the metabolism of sugar\”",
                         "affiliations": [
                             {
                                 "name": "Instituto de Biologia y Medicina Experimental (Institute for Biology and Experimental Medicine)",
@@ -12095,7 +12095,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1948",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of the high efficiency of DDT as a contact poison against several arthropods\"",
+                        "motivation": "\“for his discovery of the high efficiency of DDT as a contact poison against several arthropods\”",
                         "affiliations": [
                             {
                                 "name": "Laboratorium der Farben-Fabriken J.R. Geigy A.G. (Laboratory of the J.R. Geigy Dye-Factory Co.)",
@@ -12124,7 +12124,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1949",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of the functional organization of the interbrain as a coordinator of the activities of the internal organs\"",
+                        "motivation": "\“for his discovery of the functional organization of the interbrain as a coordinator of the activities of the internal organs\”",
                         "affiliations": [
                             {
                                 "name": "University of Zurich",
@@ -12153,7 +12153,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1949",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of the therapeutic value of leucotomy in certain psychoses\"",
+                        "motivation": "\“for his discovery of the therapeutic value of leucotomy in certain psychoses\”",
                         "affiliations": [
                             {
                                 "name": "University of Lisbon",
@@ -12187,7 +12187,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1950",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries relating to the hormones of the adrenal cortex, their structure and biological effects\"",
+                        "motivation": "\“for their discoveries relating to the hormones of the adrenal cortex, their structure and biological effects\”",
                         "affiliations": [
                             {
                                 "name": "Mayo Clinic",
@@ -12216,7 +12216,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1950",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries relating to the hormones of the adrenal cortex, their structure and biological effects\"",
+                        "motivation": "\“for their discoveries relating to the hormones of the adrenal cortex, their structure and biological effects\”",
                         "affiliations": [
                             {
                                 "name": "Basel University",
@@ -12245,7 +12245,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1950",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries relating to the hormones of the adrenal cortex, their structure and biological effects\"",
+                        "motivation": "\“for their discoveries relating to the hormones of the adrenal cortex, their structure and biological effects\”",
                         "affiliations": [
                             {
                                 "name": "Mayo Clinic",
@@ -12274,7 +12274,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1951",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discoveries concerning yellow fever and how to combat it\"",
+                        "motivation": "\“for his discoveries concerning yellow fever and how to combat it\”",
                         "affiliations": [
                             {
                                 "name": "Laboratories of the Division of Medicine and Public Health, Rockefeller Foundation",
@@ -12303,7 +12303,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1952",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of streptomycin, the first antibiotic effective against tuberculosis\"",
+                        "motivation": "\“for his discovery of streptomycin, the first antibiotic effective against tuberculosis\”",
                         "affiliations": [
                             {
                                 "name": "Rutgers University",
@@ -12332,7 +12332,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1953",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of the citric acid cycle\"",
+                        "motivation": "\“for his discovery of the citric acid cycle\”",
                         "affiliations": [
                             {
                                 "name": "Sheffield University",
@@ -12361,7 +12361,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1953",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of co-enzyme A and its importance for intermediary metabolism\"",
+                        "motivation": "\“for his discovery of co-enzyme A and its importance for intermediary metabolism\”",
                         "affiliations": [
                             {
                                 "name": "Harvard Medical School",
@@ -12395,7 +12395,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discovery of the ability of poliomyelitis viruses to grow in cultures of various types of tissue\"",
+                        "motivation": "\“for their discovery of the ability of poliomyelitis viruses to grow in cultures of various types of tissue\”",
                         "affiliations": [
                             {
                                 "name": "Harvard Medical School",
@@ -12429,7 +12429,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discovery of the ability of poliomyelitis viruses to grow in cultures of various types of tissue\"",
+                        "motivation": "\“for their discovery of the ability of poliomyelitis viruses to grow in cultures of various types of tissue\”",
                         "affiliations": [
                             {
                                 "name": "Research Division of Infectious Diseases, Children's Medical Center",
@@ -12458,7 +12458,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discovery of the ability of poliomyelitis viruses to grow in cultures of various types of tissue\"",
+                        "motivation": "\“for their discovery of the ability of poliomyelitis viruses to grow in cultures of various types of tissue\”",
                         "affiliations": [
                             {
                                 "name": "Western Reserve University",
@@ -12487,7 +12487,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1955",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discoveries concerning the nature and mode of action of oxidation enzymes\"",
+                        "motivation": "\“for his discoveries concerning the nature and mode of action of oxidation enzymes\”",
                         "affiliations": [
                             {
                                 "name": "Karolinska Institutet, Nobel Medical Institute",
@@ -12516,7 +12516,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1956",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning heart catheterization and pathological changes in the circulatory system\"",
+                        "motivation": "\“for their discoveries concerning heart catheterization and pathological changes in the circulatory system\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University Division, Cardio-Pulmonary Laboratory, Bellevue Hospital",
@@ -12545,7 +12545,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1956",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning heart catheterization and pathological changes in the circulatory system\"",
+                        "motivation": "\“for their discoveries concerning heart catheterization and pathological changes in the circulatory system\”",
                         "affiliations": [
                             {
                                 "name": "Mainz University",
@@ -12578,7 +12578,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1956",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning heart catheterization and pathological changes in the circulatory system\"",
+                        "motivation": "\“for their discoveries concerning heart catheterization and pathological changes in the circulatory system\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -12607,7 +12607,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1957",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discoveries relating to synthetic compounds that inhibit the action of certain body substances, and especially their action on the vascular system and the skeletal muscles\"",
+                        "motivation": "\“for his discoveries relating to synthetic compounds that inhibit the action of certain body substances, and especially their action on the vascular system and the skeletal muscles\”",
                         "affiliations": [
                             {
                                 "name": "Istituto Superiore di Sanità (Chief Institute of Public Health)",
@@ -12636,7 +12636,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1958",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discovery that genes act by regulating definite chemical events\"",
+                        "motivation": "\“for their discovery that genes act by regulating definite chemical events\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -12665,7 +12665,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1958",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discovery that genes act by regulating definite chemical events\"",
+                        "motivation": "\“for their discovery that genes act by regulating definite chemical events\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller Institute for Medical Research",
@@ -12694,7 +12694,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1958",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discoveries concerning genetic recombination and the organization of the genetic material of bacteria\"",
+                        "motivation": "\“for his discoveries concerning genetic recombination and the organization of the genetic material of bacteria\”",
                         "affiliations": [
                             {
                                 "name": "University of Wisconsin",
@@ -12723,7 +12723,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1959",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of the mechanisms in the biological synthesis of ribonucleic acid and deoxyribonucleic acid\"",
+                        "motivation": "\“for their discovery of the mechanisms in the biological synthesis of ribonucleic acid and deoxyribonucleic acid\”",
                         "affiliations": [
                             {
                                 "name": "New York University, College of Medicine",
@@ -12752,7 +12752,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1959",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of the mechanisms in the biological synthesis of ribonucleic acid and deoxyribonucleic acid\"",
+                        "motivation": "\“for their discovery of the mechanisms in the biological synthesis of ribonucleic acid and deoxyribonucleic acid\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -12781,7 +12781,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1960",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for discovery of acquired immunological tolerance\"",
+                        "motivation": "\“for discovery of acquired immunological tolerance\”",
                         "affiliations": [
                             {
                                 "name": "Walter and Eliza Hall Institute for Medical Research",
@@ -12810,7 +12810,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1960",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for discovery of acquired immunological tolerance\"",
+                        "motivation": "\“for discovery of acquired immunological tolerance\”",
                         "affiliations": [
                             {
                                 "name": "University College",
@@ -12839,7 +12839,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1961",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discoveries of the physical mechanism of stimulation within the cochlea\"",
+                        "motivation": "\“for his discoveries of the physical mechanism of stimulation within the cochlea\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -12868,7 +12868,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1962",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the molecular structure of nucleic acids and its significance for information transfer in living material\"",
+                        "motivation": "\“for their discoveries concerning the molecular structure of nucleic acids and its significance for information transfer in living material\”",
                         "affiliations": [
                             {
                                 "name": "MRC Laboratory of Molecular Biology",
@@ -12894,7 +12894,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1962",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the molecular structure of nucleic acids and its significance for information transfer in living material\"",
+                        "motivation": "\“for their discoveries concerning the molecular structure of nucleic acids and its significance for information transfer in living material\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -12923,7 +12923,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1962",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the molecular structure of nucleic acids and its significance for information transfer in living material\"",
+                        "motivation": "\“for their discoveries concerning the molecular structure of nucleic acids and its significance for information transfer in living material\”",
                         "affiliations": [
                             {
                                 "name": "London University",
@@ -12952,7 +12952,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1963",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the ionic mechanisms involved in excitation and inhibition in the peripheral and central portions of the nerve cell membrane\"",
+                        "motivation": "\“for their discoveries concerning the ionic mechanisms involved in excitation and inhibition in the peripheral and central portions of the nerve cell membrane\”",
                         "affiliations": [
                             {
                                 "name": "Australian National University",
@@ -12981,7 +12981,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1963",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the ionic mechanisms involved in excitation and inhibition in the peripheral and central portions of the nerve cell membrane\"",
+                        "motivation": "\“for their discoveries concerning the ionic mechanisms involved in excitation and inhibition in the peripheral and central portions of the nerve cell membrane\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -13010,7 +13010,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1963",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the ionic mechanisms involved in excitation and inhibition in the peripheral and central portions of the nerve cell membrane\"",
+                        "motivation": "\“for their discoveries concerning the ionic mechanisms involved in excitation and inhibition in the peripheral and central portions of the nerve cell membrane\”",
                         "affiliations": [
                             {
                                 "name": "University College",
@@ -13039,7 +13039,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1964",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the mechanism and regulation of the cholesterol and fatty acid metabolism\"",
+                        "motivation": "\“for their discoveries concerning the mechanism and regulation of the cholesterol and fatty acid metabolism\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -13068,7 +13068,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1964",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the mechanism and regulation of the cholesterol and fatty acid metabolism\"",
+                        "motivation": "\“for their discoveries concerning the mechanism and regulation of the cholesterol and fatty acid metabolism\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Zellchemie",
@@ -13097,7 +13097,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1965",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning genetic control of enzyme and virus synthesis\"",
+                        "motivation": "\“for their discoveries concerning genetic control of enzyme and virus synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Institut Pasteur",
@@ -13126,7 +13126,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1965",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning genetic control of enzyme and virus synthesis\"",
+                        "motivation": "\“for their discoveries concerning genetic control of enzyme and virus synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Institut Pasteur",
@@ -13155,7 +13155,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1965",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning genetic control of enzyme and virus synthesis\"",
+                        "motivation": "\“for their discoveries concerning genetic control of enzyme and virus synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Institut Pasteur",
@@ -13184,7 +13184,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1966",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of tumour-inducing viruses\"",
+                        "motivation": "\“for his discovery of tumour-inducing viruses\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -13213,7 +13213,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1966",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discoveries concerning hormonal treatment of prostatic cancer\"",
+                        "motivation": "\“for his discoveries concerning hormonal treatment of prostatic cancer\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago, Ben May Laboratory for Cancer Research",
@@ -13242,7 +13242,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1967",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the primary physiological and chemical visual processes in the eye\"",
+                        "motivation": "\“for their discoveries concerning the primary physiological and chemical visual processes in the eye\”",
                         "affiliations": [
                             {
                                 "name": "Karolinska Institutet",
@@ -13271,7 +13271,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1967",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the primary physiological and chemical visual processes in the eye\"",
+                        "motivation": "\“for their discoveries concerning the primary physiological and chemical visual processes in the eye\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -13300,7 +13300,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1967",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the primary physiological and chemical visual processes in the eye\"",
+                        "motivation": "\“for their discoveries concerning the primary physiological and chemical visual processes in the eye\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -13329,7 +13329,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1968",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their interpretation of the genetic code and its function in protein synthesis\"",
+                        "motivation": "\“for their interpretation of the genetic code and its function in protein synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Cornell University",
@@ -13358,7 +13358,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1968",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their interpretation of the genetic code and its function in protein synthesis\"",
+                        "motivation": "\“for their interpretation of the genetic code and its function in protein synthesis\”",
                         "affiliations": [
                             {
                                 "name": "University of Wisconsin",
@@ -13387,7 +13387,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1968",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their interpretation of the genetic code and its function in protein synthesis\"",
+                        "motivation": "\“for their interpretation of the genetic code and its function in protein synthesis\”",
                         "affiliations": [
                             {
                                 "name": "National Institutes of Health",
@@ -13416,7 +13416,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1969",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the replication mechanism and the genetic structure of viruses\"",
+                        "motivation": "\“for their discoveries concerning the replication mechanism and the genetic structure of viruses\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -13445,7 +13445,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1969",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the replication mechanism and the genetic structure of viruses\"",
+                        "motivation": "\“for their discoveries concerning the replication mechanism and the genetic structure of viruses\”",
                         "affiliations": [
                             {
                                 "name": "Carnegie Institution of Washington",
@@ -13474,7 +13474,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1969",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the replication mechanism and the genetic structure of viruses\"",
+                        "motivation": "\“for their discoveries concerning the replication mechanism and the genetic structure of viruses\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -13503,7 +13503,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1970",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the humoral transmittors in the nerve terminals and the mechanism for their storage, release and inactivation\"",
+                        "motivation": "\“for their discoveries concerning the humoral transmittors in the nerve terminals and the mechanism for their storage, release and inactivation\”",
                         "affiliations": [
                             {
                                 "name": "University College",
@@ -13532,7 +13532,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1970",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the humoral transmittors in the nerve terminals and the mechanism for their storage, release and inactivation\"",
+                        "motivation": "\“for their discoveries concerning the humoral transmittors in the nerve terminals and the mechanism for their storage, release and inactivation\”",
                         "affiliations": [
                             {
                                 "name": "Karolinska Institutet",
@@ -13561,7 +13561,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1970",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the humoral transmittors in the nerve terminals and the mechanism for their storage, release and inactivation\"",
+                        "motivation": "\“for their discoveries concerning the humoral transmittors in the nerve terminals and the mechanism for their storage, release and inactivation\”",
                         "affiliations": [
                             {
                                 "name": "National Institutes of Health",
@@ -13590,7 +13590,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1971",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discoveries concerning the mechanisms of the action of hormones\"",
+                        "motivation": "\“for his discoveries concerning the mechanisms of the action of hormones\”",
                         "affiliations": [
                             {
                                 "name": "Vanderbilt University",
@@ -13619,7 +13619,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the chemical structure of antibodies\"",
+                        "motivation": "\“for their discoveries concerning the chemical structure of antibodies\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -13648,7 +13648,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the chemical structure of antibodies\"",
+                        "motivation": "\“for their discoveries concerning the chemical structure of antibodies\”",
                         "affiliations": [
                             {
                                 "name": "University of Oxford",
@@ -13677,7 +13677,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning organization and elicitation of individual and social behaviour patterns\"",
+                        "motivation": "\“for their discoveries concerning organization and elicitation of individual and social behaviour patterns\”",
                         "affiliations": [
                             {
                                 "name": "Zoologisches Institut der Universität München",
@@ -13706,7 +13706,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning organization and elicitation of individual and social behaviour patterns\"",
+                        "motivation": "\“for their discoveries concerning organization and elicitation of individual and social behaviour patterns\”",
                         "affiliations": [
                             {
                                 "name": "Konrad-Lorenz-Institut der Österreichischen Akademie der Wissen­schaften, Forschungsstelle für Ethologie",
@@ -13735,7 +13735,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning organization and elicitation of individual and social behaviour patterns\"",
+                        "motivation": "\“for their discoveries concerning organization and elicitation of individual and social behaviour patterns\”",
                         "affiliations": [
                             {
                                 "name": "University of Oxford",
@@ -13764,7 +13764,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the structural and functional organization of the cell\"",
+                        "motivation": "\“for their discoveries concerning the structural and functional organization of the cell\”",
                         "affiliations": [
                             {
                                 "name": "Université Catholique de Louvain",
@@ -13793,7 +13793,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the structural and functional organization of the cell\"",
+                        "motivation": "\“for their discoveries concerning the structural and functional organization of the cell\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -13827,7 +13827,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the structural and functional organization of the cell\"",
+                        "motivation": "\“for their discoveries concerning the structural and functional organization of the cell\”",
                         "affiliations": [
                             {
                                 "name": "Yale University, School of Medicine",
@@ -13853,7 +13853,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the interaction between tumour viruses and the genetic material of the cell\"",
+                        "motivation": "\“for their discoveries concerning the interaction between tumour viruses and the genetic material of the cell\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -13882,7 +13882,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the interaction between tumour viruses and the genetic material of the cell\"",
+                        "motivation": "\“for their discoveries concerning the interaction between tumour viruses and the genetic material of the cell\”",
                         "affiliations": [
                             {
                                 "name": "Imperial Cancer Research Fund Laboratory",
@@ -13911,7 +13911,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the interaction between tumour viruses and the genetic material of the cell\"",
+                        "motivation": "\“for their discoveries concerning the interaction between tumour viruses and the genetic material of the cell\”",
                         "affiliations": [
                             {
                                 "name": "University of Wisconsin",
@@ -13940,7 +13940,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1976",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning new mechanisms for the origin and dissemination of infectious diseases\"",
+                        "motivation": "\“for their discoveries concerning new mechanisms for the origin and dissemination of infectious diseases\”",
                         "affiliations": [
                             {
                                 "name": "The Institute for Cancer Research",
@@ -13969,7 +13969,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1976",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning new mechanisms for the origin and dissemination of infectious diseases\"",
+                        "motivation": "\“for their discoveries concerning new mechanisms for the origin and dissemination of infectious diseases\”",
                         "affiliations": [
                             {
                                 "name": "National Institutes of Health",
@@ -13995,7 +13995,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discoveries concerning the peptide hormone production of the brain\"",
+                        "motivation": "\“for their discoveries concerning the peptide hormone production of the brain\”",
                         "affiliations": [
                             {
                                 "name": "The Salk Institute",
@@ -14021,7 +14021,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discoveries concerning the peptide hormone production of the brain\"",
+                        "motivation": "\“for their discoveries concerning the peptide hormone production of the brain\”",
                         "affiliations": [
                             {
                                 "name": "Veterans Administration Hospital",
@@ -14050,7 +14050,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for the development of radioimmunoassays of peptide hormones\"",
+                        "motivation": "\“for the development of radioimmunoassays of peptide hormones\”",
                         "affiliations": [
                             {
                                 "name": "Veterans Administration Hospital",
@@ -14076,7 +14076,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1978",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for the discovery of restriction enzymes and their application to problems of molecular genetics\"",
+                        "motivation": "\“for the discovery of restriction enzymes and their application to problems of molecular genetics\”",
                         "affiliations": [
                             {
                                 "name": "Biozentrum der Universität",
@@ -14105,7 +14105,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1978",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for the discovery of restriction enzymes and their application to problems of molecular genetics\"",
+                        "motivation": "\“for the discovery of restriction enzymes and their application to problems of molecular genetics\”",
                         "affiliations": [
                             {
                                 "name": "Johns Hopkins University School of Medicine",
@@ -14131,7 +14131,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1978",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for the discovery of restriction enzymes and their application to problems of molecular genetics\"",
+                        "motivation": "\“for the discovery of restriction enzymes and their application to problems of molecular genetics\”",
                         "affiliations": [
                             {
                                 "name": "Johns Hopkins University School of Medicine",
@@ -14160,7 +14160,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for the development of computer assisted tomography\"",
+                        "motivation": "\“for the development of computer assisted tomography\”",
                         "affiliations": [
                             {
                                 "name": "Tufts University",
@@ -14189,7 +14189,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for the development of computer assisted tomography\"",
+                        "motivation": "\“for the development of computer assisted tomography\”",
                         "affiliations": [
                             {
                                 "name": "Central Research Laboratories, EMI",
@@ -14218,7 +14218,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning genetically determined structures on the cell surface that regulate immunological reactions\"",
+                        "motivation": "\“for their discoveries concerning genetically determined structures on the cell surface that regulate immunological reactions\”",
                         "affiliations": [
                             {
                                 "name": "Harvard Medical School",
@@ -14247,7 +14247,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning genetically determined structures on the cell surface that regulate immunological reactions\"",
+                        "motivation": "\“for their discoveries concerning genetically determined structures on the cell surface that regulate immunological reactions\”",
                         "affiliations": [
                             {
                                 "name": "Université de Paris, Laboratoire Immuno-Hématologie",
@@ -14276,7 +14276,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning genetically determined structures on the cell surface that regulate immunological reactions\"",
+                        "motivation": "\“for their discoveries concerning genetically determined structures on the cell surface that regulate immunological reactions\”",
                         "affiliations": [
                             {
                                 "name": "Jackson Laboratory",
@@ -14305,7 +14305,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discoveries concerning the functional specialization of the cerebral hemispheres\"",
+                        "motivation": "\“for his discoveries concerning the functional specialization of the cerebral hemispheres\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -14334,7 +14334,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discoveries concerning information processing in the visual system\"",
+                        "motivation": "\“for their discoveries concerning information processing in the visual system\”",
                         "affiliations": [
                             {
                                 "name": "Harvard Medical School",
@@ -14360,7 +14360,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discoveries concerning information processing in the visual system\"",
+                        "motivation": "\“for their discoveries concerning information processing in the visual system\”",
                         "affiliations": [
                             {
                                 "name": "Harvard Medical School",
@@ -14389,7 +14389,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1982",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning prostaglandins and related biologically active substances\"",
+                        "motivation": "\“for their discoveries concerning prostaglandins and related biologically active substances\”",
                         "affiliations": [
                             {
                                 "name": "Karolinska Institutet",
@@ -14415,7 +14415,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1982",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning prostaglandins and related biologically active substances\"",
+                        "motivation": "\“for their discoveries concerning prostaglandins and related biologically active substances\”",
                         "affiliations": [
                             {
                                 "name": "Karolinska Institutet",
@@ -14444,7 +14444,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1982",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning prostaglandins and related biologically active substances\"",
+                        "motivation": "\“for their discoveries concerning prostaglandins and related biologically active substances\”",
                         "affiliations": [
                             {
                                 "name": "The Wellcome Research Laboratories",
@@ -14473,7 +14473,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1983",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for her discovery of mobile genetic elements\"",
+                        "motivation": "\“for her discovery of mobile genetic elements\”",
                         "affiliations": [
                             {
                                 "name": "Cold Spring Harbor Laboratory",
@@ -14502,7 +14502,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1984",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for theories concerning the specificity in development and control of the immune system and the discovery of the principle for production of monoclonal antibodies\"",
+                        "motivation": "\“for theories concerning the specificity in development and control of the immune system and the discovery of the principle for production of monoclonal antibodies\”",
                         "affiliations": [
                             {
                                 "name": "Basel Institute for Immunology",
@@ -14531,7 +14531,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1984",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for theories concerning the specificity in development and control of the immune system and the discovery of the principle for production of monoclonal antibodies\"",
+                        "motivation": "\“for theories concerning the specificity in development and control of the immune system and the discovery of the principle for production of monoclonal antibodies\”",
                         "affiliations": [
                             {
                                 "name": "Basel Institute for Immunology",
@@ -14560,7 +14560,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1984",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for theories concerning the specificity in development and control of the immune system and the discovery of the principle for production of monoclonal antibodies\"",
+                        "motivation": "\“for theories concerning the specificity in development and control of the immune system and the discovery of the principle for production of monoclonal antibodies\”",
                         "affiliations": [
                             {
                                 "name": "MRC Laboratory of Molecular Biology",
@@ -14586,7 +14586,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1985",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the regulation of cholesterol metabolism\"",
+                        "motivation": "\“for their discoveries concerning the regulation of cholesterol metabolism\”",
                         "affiliations": [
                             {
                                 "name": "University of Texas Southwestern Medical Center at Dallas",
@@ -14612,7 +14612,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1985",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the regulation of cholesterol metabolism\"",
+                        "motivation": "\“for their discoveries concerning the regulation of cholesterol metabolism\”",
                         "affiliations": [
                             {
                                 "name": "University of Texas Southwestern Medical Center at Dallas",
@@ -14638,7 +14638,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries of growth factors\"",
+                        "motivation": "\“for their discoveries of growth factors\”",
                         "affiliations": [
                             {
                                 "name": "Vanderbilt University School of Medicine",
@@ -14667,7 +14667,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries of growth factors\"",
+                        "motivation": "\“for their discoveries of growth factors\”",
                         "affiliations": [
                             {
                                 "name": "Institute of Cell Biology of the C.N.R.",
@@ -14693,7 +14693,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1987",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of the genetic principle for generation of antibody diversity\"",
+                        "motivation": "\“for his discovery of the genetic principle for generation of antibody diversity\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -14719,7 +14719,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of important principles for drug treatment\"",
+                        "motivation": "\“for their discoveries of important principles for drug treatment\”",
                         "affiliations": [
                             {
                                 "name": "London University, King's College Hospital Medical School",
@@ -14748,7 +14748,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of important principles for drug treatment\"",
+                        "motivation": "\“for their discoveries of important principles for drug treatment\”",
                         "affiliations": [
                             {
                                 "name": "Wellcome Research Laboratories",
@@ -14777,7 +14777,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of important principles for drug treatment\"",
+                        "motivation": "\“for their discoveries of important principles for drug treatment\”",
                         "affiliations": [
                             {
                                 "name": "Wellcome Research Laboratories",
@@ -14803,7 +14803,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of the cellular origin of retroviral oncogenes\"",
+                        "motivation": "\“for their discovery of the cellular origin of retroviral oncogenes\”",
                         "affiliations": [
                             {
                                 "name": "University of California School of Medicine",
@@ -14829,7 +14829,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of the cellular origin of retroviral oncogenes\"",
+                        "motivation": "\“for their discovery of the cellular origin of retroviral oncogenes\”",
                         "affiliations": [
                             {
                                 "name": "University of California School of Medicine",
@@ -14858,7 +14858,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning organ and cell transplantation in the treatment of human disease\"",
+                        "motivation": "\“for their discoveries concerning organ and cell transplantation in the treatment of human disease\”",
                         "affiliations": [
                             {
                                 "name": "Brigham and Women's Hospital",
@@ -14887,7 +14887,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning organ and cell transplantation in the treatment of human disease\"",
+                        "motivation": "\“for their discoveries concerning organ and cell transplantation in the treatment of human disease\”",
                         "affiliations": [
                             {
                                 "name": "Fred Hutchinson Cancer Research Center",
@@ -14913,7 +14913,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1991",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the function of single ion channels in cells\"",
+                        "motivation": "\“for their discoveries concerning the function of single ion channels in cells\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Biophysikalische Chemie",
@@ -14939,7 +14939,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1991",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the function of single ion channels in cells\"",
+                        "motivation": "\“for their discoveries concerning the function of single ion channels in cells\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für medizinische Forschung",
@@ -14965,7 +14965,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1992",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning reversible protein phosphorylation as a biological regulatory mechanism\"",
+                        "motivation": "\“for their discoveries concerning reversible protein phosphorylation as a biological regulatory mechanism\”",
                         "affiliations": [
                             {
                                 "name": "University of Washington",
@@ -14994,7 +14994,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1992",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning reversible protein phosphorylation as a biological regulatory mechanism\"",
+                        "motivation": "\“for their discoveries concerning reversible protein phosphorylation as a biological regulatory mechanism\”",
                         "affiliations": [
                             {
                                 "name": "University of Washington",
@@ -15020,7 +15020,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1993",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries of split genes\"",
+                        "motivation": "\“for their discoveries of split genes\”",
                         "affiliations": [
                             {
                                 "name": "New England Biolabs",
@@ -15046,7 +15046,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1993",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries of split genes\"",
+                        "motivation": "\“for their discoveries of split genes\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT), Center for Cancer Research",
@@ -15072,7 +15072,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of G-proteins and the role of these proteins in signal transduction in cells\"",
+                        "motivation": "\“for their discovery of G-proteins and the role of these proteins in signal transduction in cells\”",
                         "affiliations": [
                             {
                                 "name": "University of Texas Southwestern Medical Center at Dallas",
@@ -15101,7 +15101,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of G-proteins and the role of these proteins in signal transduction in cells\"",
+                        "motivation": "\“for their discovery of G-proteins and the role of these proteins in signal transduction in cells\”",
                         "affiliations": [
                             {
                                 "name": "National Institute of Environmental Health Sciences",
@@ -15130,7 +15130,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the genetic control of early embryonic development\"",
+                        "motivation": "\“for their discoveries concerning the genetic control of early embryonic development\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -15156,7 +15156,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the genetic control of early embryonic development\"",
+                        "motivation": "\“for their discoveries concerning the genetic control of early embryonic development\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Entwicklungsbiologie",
@@ -15182,7 +15182,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning the genetic control of early embryonic development\"",
+                        "motivation": "\“for their discoveries concerning the genetic control of early embryonic development\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -15208,7 +15208,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the specificity of the cell mediated immune defence\"",
+                        "motivation": "\“for their discoveries concerning the specificity of the cell mediated immune defence\”",
                         "affiliations": [
                             {
                                 "name": "St. Jude Children's Research Hospital",
@@ -15234,7 +15234,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning the specificity of the cell mediated immune defence\"",
+                        "motivation": "\“for their discoveries concerning the specificity of the cell mediated immune defence\”",
                         "affiliations": [
                             {
                                 "name": "University of Zurich, Institute of Experimental Immunology",
@@ -15260,7 +15260,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for his discovery of Prions - a new biological principle of infection\"",
+                        "motivation": "\“for his discovery of Prions - a new biological principle of infection\”",
                         "affiliations": [
                             {
                                 "name": "University of California School of Medicine",
@@ -15289,7 +15289,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning nitric oxide as a signalling molecule in the cardiovascular system\"",
+                        "motivation": "\“for their discoveries concerning nitric oxide as a signalling molecule in the cardiovascular system\”",
                         "affiliations": [
                             {
                                 "name": "SUNY Health Science Center",
@@ -15315,7 +15315,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning nitric oxide as a signalling molecule in the cardiovascular system\"",
+                        "motivation": "\“for their discoveries concerning nitric oxide as a signalling molecule in the cardiovascular system\”",
                         "affiliations": [
                             {
                                 "name": "University of California School of Medicine",
@@ -15341,7 +15341,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning nitric oxide as a signalling molecule in the cardiovascular system\"",
+                        "motivation": "\“for their discoveries concerning nitric oxide as a signalling molecule in the cardiovascular system\”",
                         "affiliations": [
                             {
                                 "name": "University of Texas Medical School at Houston",
@@ -15367,7 +15367,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1999",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for the discovery that proteins have intrinsic signals that govern their transport and localization in the cell\"",
+                        "motivation": "\“for the discovery that proteins have intrinsic signals that govern their transport and localization in the cell\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -17289,7 +17289,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1987",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for his work for peace in Central America, efforts which led to the accord signed in Guatemala on August 7 this year\"",
+                        "motivation": "\“for his work for peace in Central America, efforts which led to the accord signed in Guatemala on August 7 this year\”",
                         "affiliations": [
                             []
                         ]
@@ -17348,7 +17348,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for his leading role in the peace process which today characterizes important parts of the international community\"",
+                        "motivation": "\“for his leading role in the peace process which today characterizes important parts of the international community\”",
                         "affiliations": [
                             []
                         ]
@@ -17369,7 +17369,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1991",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for her non-violent struggle for democracy and human rights\"",
+                        "motivation": "\“for her non-violent struggle for democracy and human rights\”",
                         "affiliations": [
                             []
                         ]
@@ -17391,7 +17391,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1992",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"in recognition of her work for social justice and ethno-cultural reconciliation based on respect for the rights of indigenous peoples\"",
+                        "motivation": "\“in recognition of her work for social justice and ethno-cultural reconciliation based on respect for the rights of indigenous peoples\”",
                         "affiliations": [
                             []
                         ]
@@ -17416,7 +17416,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1993",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their work for the peaceful termination of the apartheid regime, and for laying the foundations for a new democratic South Africa\"",
+                        "motivation": "\“for their work for the peaceful termination of the apartheid regime, and for laying the foundations for a new democratic South Africa\”",
                         "affiliations": [
                             []
                         ]
@@ -17438,7 +17438,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1993",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their work for the peaceful termination of the apartheid regime, and for laying the foundations for a new democratic South Africa\"",
+                        "motivation": "\“for their work for the peaceful termination of the apartheid regime, and for laying the foundations for a new democratic South Africa\”",
                         "affiliations": [
                             []
                         ]
@@ -17460,7 +17460,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "peace",
                         "share": "3",
-                        "motivation": "\"for their efforts to create peace in the Middle East\"",
+                        "motivation": "\“for their efforts to create peace in the Middle East\”",
                         "affiliations": [
                             []
                         ]
@@ -17482,7 +17482,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "peace",
                         "share": "3",
-                        "motivation": "\"for their efforts to create peace in the Middle East\"",
+                        "motivation": "\“for their efforts to create peace in the Middle East\”",
                         "affiliations": [
                             []
                         ]
@@ -17507,7 +17507,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "peace",
                         "share": "3",
-                        "motivation": "\"for their efforts to create peace in the Middle East\"",
+                        "motivation": "\“for their efforts to create peace in the Middle East\”",
                         "affiliations": [
                             []
                         ]
@@ -17532,7 +17532,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to diminish the part played by nuclear arms in international politics and, in the longer run, to eliminate such arms\"",
+                        "motivation": "\“for their efforts to diminish the part played by nuclear arms in international politics and, in the longer run, to eliminate such arms\”",
                         "affiliations": [
                             []
                         ]
@@ -17550,7 +17550,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to diminish the part played by nuclear arms in international politics and, in the longer run, to eliminate such arms\"",
+                        "motivation": "\“for their efforts to diminish the part played by nuclear arms in international politics and, in the longer run, to eliminate such arms\”",
                         "affiliations": [
                             []
                         ]
@@ -17572,7 +17572,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their work towards a just and peaceful solution to the conflict in East Timor\"",
+                        "motivation": "\“for their work towards a just and peaceful solution to the conflict in East Timor\”",
                         "affiliations": [
                             []
                         ]
@@ -17594,7 +17594,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their work towards a just and peaceful solution to the conflict in East Timor\"",
+                        "motivation": "\“for their work towards a just and peaceful solution to the conflict in East Timor\”",
                         "affiliations": [
                             []
                         ]
@@ -17612,7 +17612,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their work for the banning and clearing of anti-personnel mines\"",
+                        "motivation": "\“for their work for the banning and clearing of anti-personnel mines\”",
                         "affiliations": [
                             []
                         ]
@@ -17634,7 +17634,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their work for the banning and clearing of anti-personnel mines\"",
+                        "motivation": "\“for their work for the banning and clearing of anti-personnel mines\”",
                         "affiliations": [
                             []
                         ]
@@ -17656,7 +17656,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to find a peaceful solution to the conflict in Northern Ireland\"",
+                        "motivation": "\“for their efforts to find a peaceful solution to the conflict in Northern Ireland\”",
                         "affiliations": [
                             []
                         ]
@@ -17678,7 +17678,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to find a peaceful solution to the conflict in Northern Ireland\"",
+                        "motivation": "\“for their efforts to find a peaceful solution to the conflict in Northern Ireland\”",
                         "affiliations": [
                             []
                         ]
@@ -17696,7 +17696,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1999",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"in recognition of the organization's pioneering humanitarian work on several continents\"",
+                        "motivation": "\“in recognition of the organization's pioneering humanitarian work on several continents\”",
                         "affiliations": [
                             []
                         ]
@@ -17721,7 +17721,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1901",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in special recognition of his poetic composition, which gives evidence of lofty idealism, artistic perfection and a rare combination of the qualities of both heart and intellect\"",
+                        "motivation": "\“in special recognition of his poetic composition, which gives evidence of lofty idealism, artistic perfection and a rare combination of the qualities of both heart and intellect\”",
                         "affiliations": [
                             []
                         ]
@@ -17746,7 +17746,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1902",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"the greatest living master of the art of historical writing, with special reference to his monumental work, <I>A history of Rome</I>\"",
+                        "motivation": "\“the greatest living master of the art of historical writing, with special reference to his monumental work, <I>A history of Rome</I>\”",
                         "affiliations": [
                             []
                         ]
@@ -17771,7 +17771,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1903",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"as a tribute to his noble, magnificent and versatile poetry, which has always been distinguished by both the freshness of its inspiration and the rare purity of its spirit\"",
+                        "motivation": "\“as a tribute to his noble, magnificent and versatile poetry, which has always been distinguished by both the freshness of its inspiration and the rare purity of its spirit\”",
                         "affiliations": [
                             []
                         ]
@@ -17796,7 +17796,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1904",
                         "category": "literature",
                         "share": "2",
-                        "motivation": "\"in recognition of the fresh originality and true inspiration of his poetic production, which faithfully reflects the natural scenery and native spirit of his people, and, in addition, his significant work as a Proven&ccedil;al philologist\"",
+                        "motivation": "\“in recognition of the fresh originality and true inspiration of his poetic production, which faithfully reflects the natural scenery and native spirit of his people, and, in addition, his significant work as a Proven&ccedil;al philologist\”",
                         "affiliations": [
                             []
                         ]
@@ -17821,7 +17821,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1904",
                         "category": "literature",
                         "share": "2",
-                        "motivation": "\"in recognition of the numerous and brilliant compositions which, in an individual and original manner, have revived the great traditions of the Spanish drama\"",
+                        "motivation": "\“in recognition of the numerous and brilliant compositions which, in an individual and original manner, have revived the great traditions of the Spanish drama\”",
                         "affiliations": [
                             []
                         ]
@@ -17846,7 +17846,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1905",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"because of his outstanding merits as an epic writer\"",
+                        "motivation": "\“because of his outstanding merits as an epic writer\”",
                         "affiliations": [
                             []
                         ]
@@ -17871,7 +17871,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1906",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"not only in consideration of his deep learning and critical research, but above all as a tribute to the creative energy, freshness of style, and lyrical force which characterize his poetic masterpieces\"",
+                        "motivation": "\“not only in consideration of his deep learning and critical research, but above all as a tribute to the creative energy, freshness of style, and lyrical force which characterize his poetic masterpieces\”",
                         "affiliations": [
                             []
                         ]
@@ -17896,7 +17896,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1907",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in consideration of the power of observation, originality of imagination, virility of ideas and remarkable talent for narration which characterize the creations of this world-famous author\"",
+                        "motivation": "\“in consideration of the power of observation, originality of imagination, virility of ideas and remarkable talent for narration which characterize the creations of this world-famous author\”",
                         "affiliations": [
                             []
                         ]
@@ -17921,7 +17921,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1908",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in recognition of his earnest search for truth, his penetrating power of thought, his wide range of vision, and the warmth and strength in presentation with which in his numerous works he has vindicated and developed an idealistic philosophy of life\"",
+                        "motivation": "\“in recognition of his earnest search for truth, his penetrating power of thought, his wide range of vision, and the warmth and strength in presentation with which in his numerous works he has vindicated and developed an idealistic philosophy of life\”",
                         "affiliations": [
                             []
                         ]
@@ -17946,7 +17946,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1909",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in appreciation of the lofty idealism, vivid imagination and spiritual perception that characterize her writings\"",
+                        "motivation": "\“in appreciation of the lofty idealism, vivid imagination and spiritual perception that characterize her writings\”",
                         "affiliations": [
                             []
                         ]
@@ -17971,7 +17971,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1910",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"as a tribute to the consummate artistry, permeated with idealism, which he has demonstrated during his long productive career as a lyric poet, dramatist, novelist and writer of world-renowned short stories\"",
+                        "motivation": "\“as a tribute to the consummate artistry, permeated with idealism, which he has demonstrated during his long productive career as a lyric poet, dramatist, novelist and writer of world-renowned short stories\”",
                         "affiliations": [
                             []
                         ]
@@ -17996,7 +17996,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1911",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in appreciation of his many-sided literary activities, and especially of his dramatic works, which are distinguished by a wealth of imagination and by a poetic fancy, which reveals, sometimes in the guise of a fairy tale, a deep inspiration, while in a mysterious way they appeal to the readers' own feelings and stimulate their imaginations\"",
+                        "motivation": "\“in appreciation of his many-sided literary activities, and especially of his dramatic works, which are distinguished by a wealth of imagination and by a poetic fancy, which reveals, sometimes in the guise of a fairy tale, a deep inspiration, while in a mysterious way they appeal to the readers' own feelings and stimulate their imaginations\”",
                         "affiliations": [
                             []
                         ]
@@ -18021,7 +18021,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1912",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"primarily in recognition of his fruitful, varied and outstanding production in the realm of dramatic art\"",
+                        "motivation": "\“primarily in recognition of his fruitful, varied and outstanding production in the realm of dramatic art\”",
                         "affiliations": [
                             []
                         ]
@@ -18046,7 +18046,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1913",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"because of his profoundly sensitive, fresh and beautiful verse, by which, with consummate skill, he has made his poetic thought, expressed in his own English words, a part of the literature of the West\"",
+                        "motivation": "\“because of his profoundly sensitive, fresh and beautiful verse, by which, with consummate skill, he has made his poetic thought, expressed in his own English words, a part of the literature of the West\”",
                         "affiliations": [
                             []
                         ]
@@ -18071,7 +18071,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1915",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"as a tribute to the lofty idealism of his literary production and to the sympathy and love of truth with which he has described different types of human beings\"",
+                        "motivation": "\“as a tribute to the lofty idealism of his literary production and to the sympathy and love of truth with which he has described different types of human beings\”",
                         "affiliations": [
                             []
                         ]
@@ -18096,7 +18096,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1916",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in recognition of his significance as the leading representative of a new era in our literature\"",
+                        "motivation": "\“in recognition of his significance as the leading representative of a new era in our literature\”",
                         "affiliations": [
                             []
                         ]
@@ -18121,7 +18121,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1917",
                         "category": "literature",
                         "share": "2",
-                        "motivation": "\"for his varied and rich poetry, which is inspired by lofty ideals\"",
+                        "motivation": "\“for his varied and rich poetry, which is inspired by lofty ideals\”",
                         "affiliations": [
                             []
                         ]
@@ -18146,7 +18146,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1917",
                         "category": "literature",
                         "share": "2",
-                        "motivation": "\"for his authentic descriptions of present-day life in Denmark\"",
+                        "motivation": "\“for his authentic descriptions of present-day life in Denmark\”",
                         "affiliations": [
                             []
                         ]
@@ -18171,7 +18171,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1919",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in special appreciation of his epic, <I>Olympian Spring</I>\"",
+                        "motivation": "\“in special appreciation of his epic, <I>Olympian Spring</I>\”",
                         "affiliations": [
                             []
                         ]
@@ -18196,7 +18196,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1920",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his monumental work, <I>Growth of the Soil</I>\"",
+                        "motivation": "\“for his monumental work, <I>Growth of the Soil</I>\”",
                         "affiliations": [
                             []
                         ]
@@ -18221,7 +18221,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1921",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in recognition of his brilliant literary achievements, characterized as they are by a nobility of style, a profound human sympathy, grace, and a true Gallic temperament\"",
+                        "motivation": "\“in recognition of his brilliant literary achievements, characterized as they are by a nobility of style, a profound human sympathy, grace, and a true Gallic temperament\”",
                         "affiliations": [
                             []
                         ]
@@ -18246,7 +18246,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1922",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the happy manner in which he has continued the illustrious traditions of the Spanish drama\"",
+                        "motivation": "\“for the happy manner in which he has continued the illustrious traditions of the Spanish drama\”",
                         "affiliations": [
                             []
                         ]
@@ -18271,7 +18271,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1923",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his always inspired poetry, which in a highly artistic form gives expression to the spirit of a whole nation\"",
+                        "motivation": "\“for his always inspired poetry, which in a highly artistic form gives expression to the spirit of a whole nation\”",
                         "affiliations": [
                             []
                         ]
@@ -18296,7 +18296,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1924",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his great national epic, <I>The Peasants</I>\"",
+                        "motivation": "\“for his great national epic, <I>The Peasants</I>\”",
                         "affiliations": [
                             []
                         ]
@@ -18321,7 +18321,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1925",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his work which is marked by both idealism and humanity, its stimulating satire often being infused with a singular poetic beauty\"",
+                        "motivation": "\“for his work which is marked by both idealism and humanity, its stimulating satire often being infused with a singular poetic beauty\”",
                         "affiliations": [
                             []
                         ]
@@ -18346,7 +18346,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1926",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for her idealistically inspired writings which with plastic clarity picture the life on her native island and with depth and sympathy deal with human problems in general\"",
+                        "motivation": "\“for her idealistically inspired writings which with plastic clarity picture the life on her native island and with depth and sympathy deal with human problems in general\”",
                         "affiliations": [
                             []
                         ]
@@ -18371,7 +18371,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1927",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in recognition of his rich and vitalizing ideas and the brilliant skill with which they have been presented\"",
+                        "motivation": "\“in recognition of his rich and vitalizing ideas and the brilliant skill with which they have been presented\”",
                         "affiliations": [
                             []
                         ]
@@ -18396,7 +18396,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1928",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"principally for her powerful descriptions of Northern life during the Middle Ages\"",
+                        "motivation": "\“principally for her powerful descriptions of Northern life during the Middle Ages\”",
                         "affiliations": [
                             []
                         ]
@@ -18421,7 +18421,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1929",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"principally for his great novel, <I>Buddenbrooks</I>, which has won steadily increased recognition as one of the classic works of contemporary literature\"",
+                        "motivation": "\“principally for his great novel, <I>Buddenbrooks</I>, which has won steadily increased recognition as one of the classic works of contemporary literature\”",
                         "affiliations": [
                             []
                         ]
@@ -18446,7 +18446,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1930",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his vigorous and graphic art of description and his ability to create, with wit and humour, new types of characters\"",
+                        "motivation": "\“for his vigorous and graphic art of description and his ability to create, with wit and humour, new types of characters\”",
                         "affiliations": [
                             []
                         ]
@@ -18471,7 +18471,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1931",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"The poetry of Erik Axel Karlfeldt\"",
+                        "motivation": "\“The poetry of Erik Axel Karlfeldt\”",
                         "affiliations": [
                             []
                         ]
@@ -18496,7 +18496,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1932",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his distinguished art of narration which takes its highest form in <I>The Forsyte Saga</I>\"",
+                        "motivation": "\“for his distinguished art of narration which takes its highest form in <I>The Forsyte Saga</I>\”",
                         "affiliations": [
                             []
                         ]
@@ -18521,7 +18521,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1933",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the strict artistry with which he has carried on the classical Russian traditions in prose writing\"",
+                        "motivation": "\“for the strict artistry with which he has carried on the classical Russian traditions in prose writing\”",
                         "affiliations": [
                             []
                         ]
@@ -18546,7 +18546,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1934",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his bold and ingenious revival of dramatic and scenic art\"",
+                        "motivation": "\“for his bold and ingenious revival of dramatic and scenic art\”",
                         "affiliations": [
                             []
                         ]
@@ -18571,7 +18571,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1936",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the power, honesty and deep-felt emotions of his dramatic works, which embody an original concept of tragedy\"",
+                        "motivation": "\“for the power, honesty and deep-felt emotions of his dramatic works, which embody an original concept of tragedy\”",
                         "affiliations": [
                             []
                         ]
@@ -18596,7 +18596,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1937",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the artistic power and truth with which he has depicted human conflict as well as some fundamental aspects of contemporary life in his novel-cycle <I>Les Thibault</I>\"",
+                        "motivation": "\“for the artistic power and truth with which he has depicted human conflict as well as some fundamental aspects of contemporary life in his novel-cycle <I>Les Thibault</I>\”",
                         "affiliations": [
                             []
                         ]
@@ -18621,7 +18621,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1938",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for her rich and truly epic descriptions of peasant life in China and for her biographical masterpieces\"",
+                        "motivation": "\“for her rich and truly epic descriptions of peasant life in China and for her biographical masterpieces\”",
                         "affiliations": [
                             []
                         ]
@@ -18646,7 +18646,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1939",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his deep understanding of his country's peasantry and the exquisite art with which he has portrayed their way of life and their relationship with Nature\"",
+                        "motivation": "\“for his deep understanding of his country's peasantry and the exquisite art with which he has portrayed their way of life and their relationship with Nature\”",
                         "affiliations": [
                             []
                         ]
@@ -18671,7 +18671,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1944",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the rare strength and fertility of his poetic imagination with which is combined an intellectual curiosity of wide scope and a bold, freshly creative style\"",
+                        "motivation": "\“for the rare strength and fertility of his poetic imagination with which is combined an intellectual curiosity of wide scope and a bold, freshly creative style\”",
                         "affiliations": [
                             []
                         ]
@@ -18696,7 +18696,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1945",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for her lyric poetry which, inspired by powerful emotions, has made her name a symbol of the idealistic aspirations of the entire Latin American world\"",
+                        "motivation": "\“for her lyric poetry which, inspired by powerful emotions, has made her name a symbol of the idealistic aspirations of the entire Latin American world\”",
                         "affiliations": [
                             []
                         ]
@@ -18721,7 +18721,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1946",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his inspired writings which, while growing in boldness and penetration, exemplify the classical humanitarian ideals and high qualities of style\"",
+                        "motivation": "\“for his inspired writings which, while growing in boldness and penetration, exemplify the classical humanitarian ideals and high qualities of style\”",
                         "affiliations": [
                             []
                         ]
@@ -18746,7 +18746,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1947",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his comprehensive and artistically significant writings, in which human problems and conditions have been presented with a fearless love of truth and keen psychological insight\"",
+                        "motivation": "\“for his comprehensive and artistically significant writings, in which human problems and conditions have been presented with a fearless love of truth and keen psychological insight\”",
                         "affiliations": [
                             []
                         ]
@@ -18771,7 +18771,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1948",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his outstanding, pioneer contribution to present-day poetry\"",
+                        "motivation": "\“for his outstanding, pioneer contribution to present-day poetry\”",
                         "affiliations": [
                             []
                         ]
@@ -18796,7 +18796,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1949",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his powerful and artistically unique contribution to the modern American novel\"",
+                        "motivation": "\“for his powerful and artistically unique contribution to the modern American novel\”",
                         "affiliations": [
                             []
                         ]
@@ -18821,7 +18821,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1950",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"in recognition of his varied and significant writings in which he champions humanitarian ideals and freedom of thought\"",
+                        "motivation": "\“in recognition of his varied and significant writings in which he champions humanitarian ideals and freedom of thought\”",
                         "affiliations": [
                             []
                         ]
@@ -18846,7 +18846,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1951",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the artistic vigour and true independence of mind with which he endeavours in his poetry to find answers to the eternal questions confronting mankind\"",
+                        "motivation": "\“for the artistic vigour and true independence of mind with which he endeavours in his poetry to find answers to the eternal questions confronting mankind\”",
                         "affiliations": [
                             []
                         ]
@@ -18871,7 +18871,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1952",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the deep spiritual insight and the artistic intensity with which he has in his novels penetrated the drama of human life\"",
+                        "motivation": "\“for the deep spiritual insight and the artistic intensity with which he has in his novels penetrated the drama of human life\”",
                         "affiliations": [
                             []
                         ]
@@ -18896,7 +18896,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1953",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his mastery of historical and biographical description as well as for brilliant oratory in defending exalted human values\"",
+                        "motivation": "\“for his mastery of historical and biographical description as well as for brilliant oratory in defending exalted human values\”",
                         "affiliations": [
                             []
                         ]
@@ -18921,7 +18921,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his mastery of the art of narrative, most recently demonstrated in <I>The Old Man and the Sea,</I> and for the influence that he has exerted on contemporary style\"",
+                        "motivation": "\“for his mastery of the art of narrative, most recently demonstrated in <I>The Old Man and the Sea,</I> and for the influence that he has exerted on contemporary style\”",
                         "affiliations": [
                             []
                         ]
@@ -18946,7 +18946,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1955",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his vivid epic power which has renewed the great narrative art of Iceland\"",
+                        "motivation": "\“for his vivid epic power which has renewed the great narrative art of Iceland\”",
                         "affiliations": [
                             []
                         ]
@@ -18971,7 +18971,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1956",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his lyrical poetry, which in Spanish language constitutes an example of high spirit and artistical purity\"",
+                        "motivation": "\“for his lyrical poetry, which in Spanish language constitutes an example of high spirit and artistical purity\”",
                         "affiliations": [
                             []
                         ]
@@ -18996,7 +18996,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1957",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his important literary production, which with clear-sighted earnestness illuminates the problems of the human conscience in our times\"",
+                        "motivation": "\“for his important literary production, which with clear-sighted earnestness illuminates the problems of the human conscience in our times\”",
                         "affiliations": [
                             []
                         ]
@@ -19021,7 +19021,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1958",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his important achievement both in contemporary lyrical poetry and in the field of the great Russian epic tradition\"",
+                        "motivation": "\“for his important achievement both in contemporary lyrical poetry and in the field of the great Russian epic tradition\”",
                         "affiliations": [
                             []
                         ]
@@ -19046,7 +19046,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1959",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his lyrical poetry, which with classical fire expresses the tragic experience of life in our own times\"",
+                        "motivation": "\“for his lyrical poetry, which with classical fire expresses the tragic experience of life in our own times\”",
                         "affiliations": [
                             []
                         ]
@@ -19071,7 +19071,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1960",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the soaring flight and the evocative imagery of his poetry which in a visionary fashion reflects the conditions of our time\"",
+                        "motivation": "\“for the soaring flight and the evocative imagery of his poetry which in a visionary fashion reflects the conditions of our time\”",
                         "affiliations": [
                             []
                         ]
@@ -19096,7 +19096,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1961",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the epic force with which he has traced themes and depicted human destinies drawn from the history of his country\"",
+                        "motivation": "\“for the epic force with which he has traced themes and depicted human destinies drawn from the history of his country\”",
                         "affiliations": [
                             []
                         ]
@@ -19121,7 +19121,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1962",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his realistic and imaginative writings, combining as they do symetic humour and keen social perception\"",
+                        "motivation": "\“for his realistic and imaginative writings, combining as they do symetic humour and keen social perception\”",
                         "affiliations": [
                             []
                         ]
@@ -19146,7 +19146,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1963",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his eminent lyrical writing, inspired by a deep feeling for the Hellenic world of culture\"",
+                        "motivation": "\“for his eminent lyrical writing, inspired by a deep feeling for the Hellenic world of culture\”",
                         "affiliations": [
                             []
                         ]
@@ -19171,7 +19171,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1964",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his work which, rich in ideas and filled with the spirit of freedom and the quest for truth, has exerted a far-reaching influence on our age\"",
+                        "motivation": "\“for his work which, rich in ideas and filled with the spirit of freedom and the quest for truth, has exerted a far-reaching influence on our age\”",
                         "affiliations": [
                             []
                         ]
@@ -19196,7 +19196,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1965",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the artistic power and integrity with which, in his epic of the Don, he has given expression to a historic phase in the life of the Russian people\"",
+                        "motivation": "\“for the artistic power and integrity with which, in his epic of the Don, he has given expression to a historic phase in the life of the Russian people\”",
                         "affiliations": [
                             []
                         ]
@@ -19221,7 +19221,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1966",
                         "category": "literature",
                         "share": "2",
-                        "motivation": "\"for his profoundly characteristic narrative art with motifs from the life of the Jewish people\"",
+                        "motivation": "\“for his profoundly characteristic narrative art with motifs from the life of the Jewish people\”",
                         "affiliations": [
                             []
                         ]
@@ -19246,7 +19246,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1966",
                         "category": "literature",
                         "share": "2",
-                        "motivation": "\"for her outstanding lyrical and dramatic writing, which interprets Israel's destiny with touching strength\" ",
+                        "motivation": "\“for her outstanding lyrical and dramatic writing, which interprets Israel's destiny with touching strength\“ ",
                         "affiliations": [
                             []
                         ]
@@ -19271,7 +19271,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1967",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his vivid literary achievement, deep-rooted in the national traits and traditions of Indian peoples of Latin America\"",
+                        "motivation": "\“for his vivid literary achievement, deep-rooted in the national traits and traditions of Indian peoples of Latin America\”",
                         "affiliations": [
                             []
                         ]
@@ -19296,7 +19296,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1968",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his narrative mastery, which with great sensibility expresses the essence of the Japanese mind\"",
+                        "motivation": "\“for his narrative mastery, which with great sensibility expresses the essence of the Japanese mind\”",
                         "affiliations": [
                             []
                         ]
@@ -19321,7 +19321,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1969",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his writing, which - in new forms for the novel and drama - in the destitution of modern man acquires its elevation\"",
+                        "motivation": "\“for his writing, which - in new forms for the novel and drama - in the destitution of modern man acquires its elevation\”",
                         "affiliations": [
                             []
                         ]
@@ -19346,7 +19346,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1970",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the ethical force with which he has pursued the indispensable traditions of Russian literature\"",
+                        "motivation": "\“for the ethical force with which he has pursued the indispensable traditions of Russian literature\”",
                         "affiliations": [
                             []
                         ]
@@ -19371,7 +19371,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1971",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for a poetry that with the action of an elemental force brings alive a continent's destiny and dreams\"",
+                        "motivation": "\“for a poetry that with the action of an elemental force brings alive a continent's destiny and dreams\”",
                         "affiliations": [
                             []
                         ]
@@ -19396,7 +19396,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his writing which through its combination of a broad perspective on his time and a sensitive skill in characterization has contributed to a renewal of German literature\"",
+                        "motivation": "\“for his writing which through its combination of a broad perspective on his time and a sensitive skill in characterization has contributed to a renewal of German literature\”",
                         "affiliations": [
                             []
                         ]
@@ -19421,7 +19421,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for an epic and psychological narrative art which has introduced a new continent into literature\"",
+                        "motivation": "\“for an epic and psychological narrative art which has introduced a new continent into literature\”",
                         "affiliations": [
                             []
                         ]
@@ -19446,7 +19446,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "literature",
                         "share": "2",
-                        "motivation": "\"for a narrative art, far-seeing in lands and ages, in the service of freedom\"",
+                        "motivation": "\“for a narrative art, far-seeing in lands and ages, in the service of freedom\”",
                         "affiliations": [
                             []
                         ]
@@ -19471,7 +19471,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "literature",
                         "share": "2",
-                        "motivation": "\"for writings that catch the dewdrop and reflect the cosmos\"",
+                        "motivation": "\“for writings that catch the dewdrop and reflect the cosmos\”",
                         "affiliations": [
                             []
                         ]
@@ -19496,7 +19496,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his distinctive poetry which, with great artistic sensitivity, has interpreted human values under the sign of an outlook on life with no illusions\"",
+                        "motivation": "\“for his distinctive poetry which, with great artistic sensitivity, has interpreted human values under the sign of an outlook on life with no illusions\”",
                         "affiliations": [
                             []
                         ]
@@ -19521,7 +19521,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1976",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the human understanding and subtle analysis of contemporary culture that are combined in his work\"",
+                        "motivation": "\“for the human understanding and subtle analysis of contemporary culture that are combined in his work\”",
                         "affiliations": [
                             []
                         ]
@@ -19546,7 +19546,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for a creative poetic writing which illuminates man's condition in the cosmos and in present-day society, at the same time representing the great renewal of the traditions of Spanish poetry between the wars\"",
+                        "motivation": "\“for a creative poetic writing which illuminates man's condition in the cosmos and in present-day society, at the same time representing the great renewal of the traditions of Spanish poetry between the wars\”",
                         "affiliations": [
                             []
                         ]
@@ -19571,7 +19571,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1978",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his impassioned narrative art which, with roots in a Polish-Jewish cultural tradition, brings universal human conditions to life\"",
+                        "motivation": "\“for his impassioned narrative art which, with roots in a Polish-Jewish cultural tradition, brings universal human conditions to life\”",
                         "affiliations": [
                             []
                         ]
@@ -19596,7 +19596,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his poetry, which, against the background of Greek tradition, depicts with sensuous strength and intellectual clear-sightedness modern man's struggle for freedom and creativeness\"",
+                        "motivation": "\“for his poetry, which, against the background of Greek tradition, depicts with sensuous strength and intellectual clear-sightedness modern man's struggle for freedom and creativeness\”",
                         "affiliations": [
                             []
                         ]
@@ -19621,7 +19621,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who with uncompromising clear-sightedness voices man's exposed condition in a world of severe conflicts\"",
+                        "motivation": "\“who with uncompromising clear-sightedness voices man's exposed condition in a world of severe conflicts\”",
                         "affiliations": [
                             []
                         ]
@@ -19646,7 +19646,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for writings marked by a broad outlook, a wealth of ideas and artistic power\"",
+                        "motivation": "\“for writings marked by a broad outlook, a wealth of ideas and artistic power\”",
                         "affiliations": [
                             []
                         ]
@@ -19671,7 +19671,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1982",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his novels and short stories, in which the fantastic and the realistic are combined in a richly composed world of imagination, reflecting a continent's life and conflicts\"",
+                        "motivation": "\“for his novels and short stories, in which the fantastic and the realistic are combined in a richly composed world of imagination, reflecting a continent's life and conflicts\”",
                         "affiliations": [
                             []
                         ]
@@ -19696,7 +19696,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1983",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his novels which, with the perspicuity of realistic narrative art and the diversity and universality of myth, illuminate the human condition in the world of today\"",
+                        "motivation": "\“for his novels which, with the perspicuity of realistic narrative art and the diversity and universality of myth, illuminate the human condition in the world of today\”",
                         "affiliations": [
                             []
                         ]
@@ -19721,7 +19721,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1984",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his poetry which endowed with freshness, sensuality and rich inventiveness provides a liberating image of the indomitable spirit and versatility of man\"",
+                        "motivation": "\“for his poetry which endowed with freshness, sensuality and rich inventiveness provides a liberating image of the indomitable spirit and versatility of man\”",
                         "affiliations": [
                             []
                         ]
@@ -19746,7 +19746,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1985",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who in his novel combines the poet's and the painter's creativeness with a deepened awareness of time in the depiction of the human condition\"",
+                        "motivation": "\“who in his novel combines the poet's and the painter's creativeness with a deepened awareness of time in the depiction of the human condition\”",
                         "affiliations": [
                             []
                         ]
@@ -19768,7 +19768,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who in a wide cultural perspective and with poetic overtones fashions the drama of existence\"",
+                        "motivation": "\“who in a wide cultural perspective and with poetic overtones fashions the drama of existence\”",
                         "affiliations": [
                             []
                         ]
@@ -19793,7 +19793,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1987",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for an all-embracing authorship, imbued with clarity of thought and poetic intensity\"",
+                        "motivation": "\“for an all-embracing authorship, imbued with clarity of thought and poetic intensity\”",
                         "affiliations": [
                             []
                         ]
@@ -19818,7 +19818,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who, through works rich in nuance - now clear-sightedly realistic, now evocatively ambiguous - has formed an Arabian narrative art that applies to all mankind\"",
+                        "motivation": "\“who, through works rich in nuance - now clear-sightedly realistic, now evocatively ambiguous - has formed an Arabian narrative art that applies to all mankind\”",
                         "affiliations": [
                             []
                         ]
@@ -19843,7 +19843,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for a rich and intensive prose, which with restrained compassion forms a challenging vision of man's vulnerability\"",
+                        "motivation": "\“for a rich and intensive prose, which with restrained compassion forms a challenging vision of man's vulnerability\”",
                         "affiliations": [
                             []
                         ]
@@ -19868,7 +19868,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for impassioned writing with wide horizons, characterized by sensuous intelligence and humanistic integrity\"",
+                        "motivation": "\“for impassioned writing with wide horizons, characterized by sensuous intelligence and humanistic integrity\”",
                         "affiliations": [
                             []
                         ]
@@ -19893,7 +19893,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1991",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who through her magnificent epic writing has - in the words of Alfred Nobel - been of very great benefit to humanity\"",
+                        "motivation": "\“who through her magnificent epic writing has - in the words of Alfred Nobel - been of very great benefit to humanity\”",
                         "affiliations": [
                             []
                         ]
@@ -19915,7 +19915,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1992",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for a poetic oeuvre of great luminosity, sustained by a historical vision, the outcome of a multicultural commitment\"",
+                        "motivation": "\“for a poetic oeuvre of great luminosity, sustained by a historical vision, the outcome of a multicultural commitment\”",
                         "affiliations": [
                             []
                         ]
@@ -19937,7 +19937,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1993",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who in novels characterized by visionary force and poetic import, gives life to an essential aspect of American reality\"",
+                        "motivation": "\“who in novels characterized by visionary force and poetic import, gives life to an essential aspect of American reality\”",
                         "affiliations": [
                             []
                         ]
@@ -19959,7 +19959,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who with poetic force creates an imagined world, where life and myth condense to form a disconcerting picture of the human predicament today\"",
+                        "motivation": "\“who with poetic force creates an imagined world, where life and myth condense to form a disconcerting picture of the human predicament today\”",
                         "affiliations": [
                             []
                         ]
@@ -19984,7 +19984,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for works of lyrical beauty and ethical depth, which exalt everyday miracles and the living past\"",
+                        "motivation": "\“for works of lyrical beauty and ethical depth, which exalt everyday miracles and the living past\”",
                         "affiliations": [
                             []
                         ]
@@ -20009,7 +20009,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for poetry that with ironic precision allows the historical and biological context to come to light in fragments of human reality\"",
+                        "motivation": "\“for poetry that with ironic precision allows the historical and biological context to come to light in fragments of human reality\”",
                         "affiliations": [
                             []
                         ]
@@ -20031,7 +20031,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who emulates the jesters of the Middle Ages in scourging authority and upholding the dignity of the downtrodden\"",
+                        "motivation": "\“who emulates the jesters of the Middle Ages in scourging authority and upholding the dignity of the downtrodden\”",
                         "affiliations": [
                             []
                         ]
@@ -20056,7 +20056,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who with parables sustained by imagination, compassion and irony continually enables us once again to apprehend an elusory reality\"",
+                        "motivation": "\“who with parables sustained by imagination, compassion and irony continually enables us once again to apprehend an elusory reality\”",
                         "affiliations": [
                             []
                         ]
@@ -20081,7 +20081,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1999",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"whose frolicsome black fables portray the forgotten face of history\"",
+                        "motivation": "\“whose frolicsome black fables portray the forgotten face of history\”",
                         "affiliations": [
                             []
                         ]
@@ -20106,7 +20106,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1969",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for having developed and applied dynamic models for the analysis of economic processes\"",
+                        "motivation": "\“for having developed and applied dynamic models for the analysis of economic processes\”",
                         "affiliations": [
                             {
                                 "name": "University of Oslo",
@@ -20135,7 +20135,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1969",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for having developed and applied dynamic models for the analysis of economic processes\"",
+                        "motivation": "\“for having developed and applied dynamic models for the analysis of economic processes\”",
                         "affiliations": [
                             {
                                 "name": "The Netherlands School of Economics",
@@ -20164,7 +20164,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1970",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for the scientific work through which he has developed static and dynamic economic theory and actively contributed to raising the level of analysis in economic science\"",
+                        "motivation": "\“for the scientific work through which he has developed static and dynamic economic theory and actively contributed to raising the level of analysis in economic science\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -20193,7 +20193,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1971",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his empirically founded interpretation of economic growth which has led to new and deepened insight into the economic and social structure and process of development\"",
+                        "motivation": "\“for his empirically founded interpretation of economic growth which has led to new and deepened insight into the economic and social structure and process of development\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -20222,7 +20222,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their pioneering contributions to general economic equilibrium theory and welfare theory\"",
+                        "motivation": "\“for their pioneering contributions to general economic equilibrium theory and welfare theory\”",
                         "affiliations": [
                             {
                                 "name": "All Souls College",
@@ -20248,7 +20248,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1972",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their pioneering contributions to general economic equilibrium theory and welfare theory\"",
+                        "motivation": "\“for their pioneering contributions to general economic equilibrium theory and welfare theory\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -20277,7 +20277,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1973",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for the development of the input-output method and for its application to important economic problems\"",
+                        "motivation": "\“for the development of the input-output method and for its application to important economic problems\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -20306,7 +20306,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their pioneering work in the theory of money and economic fluctuations and for their penetrating analysis of the interdependence of economic, social and institutional phenomena\"",
+                        "motivation": "\“for their pioneering work in the theory of money and economic fluctuations and for their penetrating analysis of the interdependence of economic, social and institutional phenomena\”",
                         "affiliations": [
                             []
                         ]
@@ -20331,7 +20331,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1974",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their pioneering work in the theory of money and economic fluctuations and for their penetrating analysis of the interdependence of economic, social and institutional phenomena\"",
+                        "motivation": "\“for their pioneering work in the theory of money and economic fluctuations and for their penetrating analysis of the interdependence of economic, social and institutional phenomena\”",
                         "affiliations": [
                             []
                         ]
@@ -20356,7 +20356,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their contributions to the theory of optimum allocation of resources\"",
+                        "motivation": "\“for their contributions to the theory of optimum allocation of resources\”",
                         "affiliations": [
                             {
                                 "name": "Academy of Sciences",
@@ -20385,7 +20385,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1975",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their contributions to the theory of optimum allocation of resources\"",
+                        "motivation": "\“for their contributions to the theory of optimum allocation of resources\”",
                         "affiliations": [
                             {
                                 "name": "Yale University",
@@ -20414,7 +20414,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1976",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his achievements in the fields of consumption analysis, monetary history and theory and for his demonstration of the complexity of stabilization policy\"",
+                        "motivation": "\“for his achievements in the fields of consumption analysis, monetary history and theory and for his demonstration of the complexity of stabilization policy\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -20443,7 +20443,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their pathbreaking contribution to the theory of international trade and international capital movements\"",
+                        "motivation": "\“for their pathbreaking contribution to the theory of international trade and international capital movements\”",
                         "affiliations": [
                             {
                                 "name": "Stockholm School of Economics",
@@ -20472,7 +20472,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their pathbreaking contribution to the theory of international trade and international capital movements\"",
+                        "motivation": "\“for their pathbreaking contribution to the theory of international trade and international capital movements\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -20501,7 +20501,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1978",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his pioneering research into the decision-making process within economic organizations\"",
+                        "motivation": "\“for his pioneering research into the decision-making process within economic organizations\”",
                         "affiliations": [
                             {
                                 "name": "Carnegie Mellon University",
@@ -20530,7 +20530,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their pioneering research into economic development research with particular consideration of the problems of developing countries\"",
+                        "motivation": "\“for their pioneering research into economic development research with particular consideration of the problems of developing countries\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -20559,7 +20559,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their pioneering research into economic development research with particular consideration of the problems of developing countries\"",
+                        "motivation": "\“for their pioneering research into economic development research with particular consideration of the problems of developing countries\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -20588,7 +20588,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for the creation of econometric models and the application to the analysis of economic fluctuations and economic policies\"",
+                        "motivation": "\“for the creation of econometric models and the application to the analysis of economic fluctuations and economic policies\”",
                         "affiliations": [
                             {
                                 "name": "University of Pennsylvania",
@@ -20617,7 +20617,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1981",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his analysis of financial markets and their relations to expenditure decisions, employment, production and prices\"",
+                        "motivation": "\“for his analysis of financial markets and their relations to expenditure decisions, employment, production and prices\”",
                         "affiliations": [
                             {
                                 "name": "Yale University",
@@ -20646,7 +20646,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1982",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his seminal studies of industrial structures, functioning of markets and causes and effects of public regulation\"",
+                        "motivation": "\“for his seminal studies of industrial structures, functioning of markets and causes and effects of public regulation\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -20675,7 +20675,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1983",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for having incorporated new analytical methods into economic theory and for his rigorous reformulation of the theory of general equilibrium\"",
+                        "motivation": "\“for having incorporated new analytical methods into economic theory and for his rigorous reformulation of the theory of general equilibrium\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -20704,7 +20704,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1984",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for having made fundamental contributions to the development of systems of national accounts and hence greatly improved the basis for empirical economic analysis\"",
+                        "motivation": "\“for having made fundamental contributions to the development of systems of national accounts and hence greatly improved the basis for empirical economic analysis\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -20733,7 +20733,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1985",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his pioneering analyses of saving and of financial markets\"",
+                        "motivation": "\“for his pioneering analyses of saving and of financial markets\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -20762,7 +20762,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1986",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his development of the contractual and constitutional bases for the theory of economic and political decision-making\"",
+                        "motivation": "\“for his development of the contractual and constitutional bases for the theory of economic and political decision-making\”",
                         "affiliations": [
                             {
                                 "name": "Center for Study of Public Choice",
@@ -20788,7 +20788,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1987",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his contributions to the theory of economic growth\"",
+                        "motivation": "\“for his contributions to the theory of economic growth\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -20817,7 +20817,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1988",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his pioneering contributions to the theory of markets and efficient utilization of resources\"",
+                        "motivation": "\“for his pioneering contributions to the theory of markets and efficient utilization of resources\”",
                         "affiliations": [
                             {
                                 "name": "École Nationale Supérieur des Mines de Paris",
@@ -20846,7 +20846,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his clarification of the probability theory foundations of econometrics and his analyses of simultaneous economic structures\"",
+                        "motivation": "\“for his clarification of the probability theory foundations of econometrics and his analyses of simultaneous economic structures\”",
                         "affiliations": [
                             {
                                 "name": "University of Oslo",
@@ -20872,7 +20872,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their pioneering work in the theory of financial economics\"",
+                        "motivation": "\“for their pioneering work in the theory of financial economics\”",
                         "affiliations": [
                             {
                                 "name": "City University of New York",
@@ -20901,7 +20901,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their pioneering work in the theory of financial economics\"",
+                        "motivation": "\“for their pioneering work in the theory of financial economics\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -20927,7 +20927,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1990",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their pioneering work in the theory of financial economics\"",
+                        "motivation": "\“for their pioneering work in the theory of financial economics\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -20956,7 +20956,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1991",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his discovery and clarification of the significance of transaction costs and property rights for the institutional structure and functioning of the economy\"",
+                        "motivation": "\“for his discovery and clarification of the significance of transaction costs and property rights for the institutional structure and functioning of the economy\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -20985,7 +20985,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1992",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for having extended the domain of microeconomic analysis to a wide range of human behaviour and interaction, including nonmarket behaviour\"",
+                        "motivation": "\“for having extended the domain of microeconomic analysis to a wide range of human behaviour and interaction, including nonmarket behaviour\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -21014,7 +21014,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1993",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for having renewed research in economic history by applying economic theory and quantitative methods in order to explain economic and institutional change\"",
+                        "motivation": "\“for having renewed research in economic history by applying economic theory and quantitative methods in order to explain economic and institutional change\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -21040,7 +21040,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1993",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for having renewed research in economic history by applying economic theory and quantitative methods in order to explain economic and institutional change\"",
+                        "motivation": "\“for having renewed research in economic history by applying economic theory and quantitative methods in order to explain economic and institutional change\”",
                         "affiliations": [
                             {
                                 "name": "Washington University",
@@ -21069,7 +21069,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their pioneering analysis of equilibria in the theory of non-cooperative games\"",
+                        "motivation": "\“for their pioneering analysis of equilibria in the theory of non-cooperative games\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -21098,7 +21098,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their pioneering analysis of equilibria in the theory of non-cooperative games\"",
+                        "motivation": "\“for their pioneering analysis of equilibria in the theory of non-cooperative games\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -21124,7 +21124,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1994",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their pioneering analysis of equilibria in the theory of non-cooperative games\"",
+                        "motivation": "\“for their pioneering analysis of equilibria in the theory of non-cooperative games\”",
                         "affiliations": [
                             {
                                 "name": "Rheinische Friedrich-Wilhelms-Universität",
@@ -21150,7 +21150,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1995",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for having developed and applied the hypothesis of rational expectations, and thereby having transformed macroeconomic analysis and deepened our understanding of economic policy\"",
+                        "motivation": "\“for having developed and applied the hypothesis of rational expectations, and thereby having transformed macroeconomic analysis and deepened our understanding of economic policy\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -21176,7 +21176,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their fundamental contributions to the economic theory of incentives under asymmetric information\"",
+                        "motivation": "\“for their fundamental contributions to the economic theory of incentives under asymmetric information\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -21205,7 +21205,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1996",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their fundamental contributions to the economic theory of incentives under asymmetric information\"",
+                        "motivation": "\“for their fundamental contributions to the economic theory of incentives under asymmetric information\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -21231,7 +21231,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for a new method to determine the value of derivatives\"",
+                        "motivation": "\“for a new method to determine the value of derivatives\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -21257,7 +21257,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1997",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for a new method to determine the value of derivatives\"",
+                        "motivation": "\“for a new method to determine the value of derivatives\”",
                         "affiliations": [
                             {
                                 "name": "Long Term Capital Management",
@@ -21283,7 +21283,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1998",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his contributions to welfare economics\"",
+                        "motivation": "\“for his contributions to welfare economics\”",
                         "affiliations": [
                             {
                                 "name": "Trinity College",
@@ -21309,7 +21309,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1999",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his analysis of monetary and fiscal policy under different exchange rate regimes and his analysis of optimum currency areas\"",
+                        "motivation": "\“for his analysis of monetary and fiscal policy under different exchange rate regimes and his analysis of optimum currency areas\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -21338,7 +21338,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1958",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the discovery and the interpretation of the Cherenkov effect\"",
+                        "motivation": "\“for the discovery and the interpretation of the Cherenkov effect\”",
                         "affiliations": [
                             {
                                 "name": "University of Moscow",
@@ -21369,7 +21369,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning signal transduction in the nervous system\"",
+                        "motivation": "\“for their discoveries concerning signal transduction in the nervous system\”",
                         "affiliations": [
                             {
                                 "name": "Göteborg University",
@@ -21395,7 +21395,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning signal transduction in the nervous system\"",
+                        "motivation": "\“for their discoveries concerning signal transduction in the nervous system\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -21421,7 +21421,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning signal transduction in the nervous system\"",
+                        "motivation": "\“for their discoveries concerning signal transduction in the nervous system\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -21447,7 +21447,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for his work for democracy and human rights in South Korea and in East Asia in general, and for peace and reconciliation with North Korea in particular\"",
+                        "motivation": "\“for his work for democracy and human rights in South Korea and in East Asia in general, and for peace and reconciliation with North Korea in particular\”",
                         "affiliations": [
                             []
                         ]
@@ -21468,9 +21468,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "2000",
                         "category": "physics",
-                        "overallMotivation": "\"for basic work on information and communication technology\"",
+                        "overallMotivation": "\“for basic work on information and communication technology\”",
                         "share": "4",
-                        "motivation": "\"for developing semiconductor heterostructures used in high-speed- and opto-electronics\"",
+                        "motivation": "\“for developing semiconductor heterostructures used in high-speed- and opto-electronics\”",
                         "affiliations": [
                             {
                                 "name": "A.F. Ioffe Physico-Technical Institute",
@@ -21495,9 +21495,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "2000",
                         "category": "physics",
-                        "overallMotivation": "\"for basic work on information and communication technology\"",
+                        "overallMotivation": "\“for basic work on information and communication technology\”",
                         "share": "4",
-                        "motivation": "\"for developing semiconductor heterostructures used in high-speed- and opto-electronics\"",
+                        "motivation": "\“for developing semiconductor heterostructures used in high-speed- and opto-electronics\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -21525,9 +21525,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "2000",
                         "category": "physics",
-                        "overallMotivation": "\"for basic work on information and communication technology\"",
+                        "overallMotivation": "\“for basic work on information and communication technology\”",
                         "share": "2",
-                        "motivation": "\"for his part in the invention of the integrated circuit\"",
+                        "motivation": "\“for his part in the invention of the integrated circuit\”",
                         "affiliations": [
                             {
                                 "name": "Texas Instruments",
@@ -21553,7 +21553,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the discovery and development of conductive polymers\"",
+                        "motivation": "\“for the discovery and development of conductive polymers\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -21582,7 +21582,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the discovery and development of conductive polymers\"",
+                        "motivation": "\“for the discovery and development of conductive polymers\”",
                         "affiliations": [
                             {
                                 "name": "University of Pennsylvania",
@@ -21608,7 +21608,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the discovery and development of conductive polymers\"",
+                        "motivation": "\“for the discovery and development of conductive polymers\”",
                         "affiliations": [
                             {
                                 "name": "University of Tsukuba",
@@ -21634,7 +21634,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for his development of theory and methods for analyzing selective samples\"",
+                        "motivation": "\“for his development of theory and methods for analyzing selective samples\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -21660,7 +21660,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for his development of theory and methods for analyzing discrete choice\"",
+                        "motivation": "\“for his development of theory and methods for analyzing discrete choice\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -21686,7 +21686,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for an &aelig;uvre of universal validity, bitter insights and linguistic ingenuity, which has opened new paths for the Chinese novel and drama\"",
+                        "motivation": "\“for an &aelig;uvre of universal validity, bitter insights and linguistic ingenuity, which has opened new paths for the Chinese novel and drama\”",
                         "affiliations": [
                             []
                         ]
@@ -21708,7 +21708,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of key regulators of the cell cycle\"",
+                        "motivation": "\“for their discoveries of key regulators of the cell cycle\”",
                         "affiliations": [
                             {
                                 "name": "Fred Hutchinson Cancer Research Center",
@@ -21734,7 +21734,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of key regulators of the cell cycle\"",
+                        "motivation": "\“for their discoveries of key regulators of the cell cycle\”",
                         "affiliations": [
                             {
                                 "name": "Imperial Cancer Research Fund",
@@ -21760,7 +21760,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of key regulators of the cell cycle\"",
+                        "motivation": "\“for their discoveries of key regulators of the cell cycle\”",
                         "affiliations": [
                             {
                                 "name": "Imperial Cancer Research Fund",
@@ -21786,7 +21786,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the achievement of Bose-Einstein condensation in dilute gases of alkali atoms, and for early fundamental studies of the properties of the condensates\"",
+                        "motivation": "\“for the achievement of Bose-Einstein condensation in dilute gases of alkali atoms, and for early fundamental studies of the properties of the condensates\”",
                         "affiliations": [
                             {
                                 "name": "University of Colorado, JILA",
@@ -21812,7 +21812,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the achievement of Bose-Einstein condensation in dilute gases of alkali atoms, and for early fundamental studies of the properties of the condensates\"",
+                        "motivation": "\“for the achievement of Bose-Einstein condensation in dilute gases of alkali atoms, and for early fundamental studies of the properties of the condensates\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -21838,7 +21838,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the achievement of Bose-Einstein condensation in dilute gases of alkali atoms, and for early fundamental studies of the properties of the condensates\"",
+                        "motivation": "\“for the achievement of Bose-Einstein condensation in dilute gases of alkali atoms, and for early fundamental studies of the properties of the condensates\”",
                         "affiliations": [
                             {
                                 "name": "University of Colorado, JILA",
@@ -21867,7 +21867,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their work on chirally catalysed hydrogenation reactions\"",
+                        "motivation": "\“for their work on chirally catalysed hydrogenation reactions\”",
                         "affiliations": [
                             {
                                 "city": "St. Louis, MO",
@@ -21892,7 +21892,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "chemistry",
                         "share": "4",
-                        "motivation": "\"for their work on chirally catalysed hydrogenation reactions\"",
+                        "motivation": "\“for their work on chirally catalysed hydrogenation reactions\”",
                         "affiliations": [
                             {
                                 "name": "Nagoya University",
@@ -21918,7 +21918,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for his work on chirally catalysed oxidation reactions\"",
+                        "motivation": "\“for his work on chirally catalysed oxidation reactions\”",
                         "affiliations": [
                             {
                                 "name": "The Scripps Research Institute",
@@ -21944,7 +21944,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their analyses of markets with asymmetric information\"",
+                        "motivation": "\“for their analyses of markets with asymmetric information\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -21970,7 +21970,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their analyses of markets with asymmetric information\"",
+                        "motivation": "\“for their analyses of markets with asymmetric information\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -21996,7 +21996,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their analyses of markets with asymmetric information\"",
+                        "motivation": "\“for their analyses of markets with asymmetric information\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -22021,7 +22021,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for having united perceptive narrative and incorruptible scrutiny in works that compel us to see the presence of suppressed histories\"",
+                        "motivation": "\“for having united perceptive narrative and incorruptible scrutiny in works that compel us to see the presence of suppressed histories\”",
                         "affiliations": [
                             []
                         ]
@@ -22039,7 +22039,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their work for a better organized and more peaceful world\"",
+                        "motivation": "\“for their work for a better organized and more peaceful world\”",
                         "affiliations": [
                             []
                         ]
@@ -22061,7 +22061,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2001",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their work for a better organized and more peaceful world\"",
+                        "motivation": "\“for their work for a better organized and more peaceful world\”",
                         "affiliations": [
                             []
                         ]
@@ -22083,7 +22083,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning genetic regulation of organ development and programmed cell death'\"",
+                        "motivation": "\“for their discoveries concerning genetic regulation of organ development and programmed cell death'\”",
                         "affiliations": [
                             {
                                 "name": "The Molecular Sciences Institute",
@@ -22109,7 +22109,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning genetic regulation of organ development and programmed cell death'\"",
+                        "motivation": "\“for their discoveries concerning genetic regulation of organ development and programmed cell death'\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -22135,7 +22135,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries concerning genetic regulation of organ development and programmed cell death'\"",
+                        "motivation": "\“for their discoveries concerning genetic regulation of organ development and programmed cell death'\”",
                         "affiliations": [
                             {
                                 "name": "The Wellcome Trust Sanger Institute",
@@ -22164,7 +22164,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for pioneering contributions to astrophysics, in particular for the detection of cosmic neutrinos\"",
+                        "motivation": "\“for pioneering contributions to astrophysics, in particular for the detection of cosmic neutrinos\”",
                         "affiliations": [
                             {
                                 "name": "University of Pennsylvania",
@@ -22190,7 +22190,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for pioneering contributions to astrophysics, in particular for the detection of cosmic neutrinos\"",
+                        "motivation": "\“for pioneering contributions to astrophysics, in particular for the detection of cosmic neutrinos\”",
                         "affiliations": [
                             {
                                 "name": "University of Tokyo",
@@ -22216,7 +22216,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for pioneering contributions to astrophysics, which have led to the discovery of cosmic X-ray sources\"",
+                        "motivation": "\“for pioneering contributions to astrophysics, which have led to the discovery of cosmic X-ray sources\”",
                         "affiliations": [
                             {
                                 "name": "Associated Universities Inc.",
@@ -22244,9 +22244,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "2002",
                         "category": "chemistry",
-                        "overallMotivation": "\"for the development of methods for identification and structure analyses of biological macromolecules\"",
+                        "overallMotivation": "\“for the development of methods for identification and structure analyses of biological macromolecules\”",
                         "share": "4",
-                        "motivation": "\"for their development of soft desorption ionisation methods for mass spectrometric analyses of biological macromolecules\"",
+                        "motivation": "\“for their development of soft desorption ionisation methods for mass spectrometric analyses of biological macromolecules\”",
                         "affiliations": [
                             {
                                 "name": "Virginia Commonwealth University",
@@ -22271,9 +22271,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "2002",
                         "category": "chemistry",
-                        "overallMotivation": "\"for the development of methods for identification and structure analyses of biological macromolecules\"",
+                        "overallMotivation": "\“for the development of methods for identification and structure analyses of biological macromolecules\”",
                         "share": "4",
-                        "motivation": "\"for their development of soft desorption ionisation methods for mass spectrometric analyses of biological macromolecules\"",
+                        "motivation": "\“for their development of soft desorption ionisation methods for mass spectrometric analyses of biological macromolecules\”",
                         "affiliations": [
                             {
                                 "name": "Shimadzu Corp.",
@@ -22298,9 +22298,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "2002",
                         "category": "chemistry",
-                        "overallMotivation": "\"for the development of methods for identification and structure analyses of biological macromolecules\"",
+                        "overallMotivation": "\“for the development of methods for identification and structure analyses of biological macromolecules\”",
                         "share": "2",
-                        "motivation": "\"for his development of nuclear magnetic resonance spectroscopy for determining the three-dimensional structure of biological macromolecules in solution\"",
+                        "motivation": "\“for his development of nuclear magnetic resonance spectroscopy for determining the three-dimensional structure of biological macromolecules in solution\”",
                         "affiliations": [
                             {
                                 "name": "Eidgenössische Technische Hochschule (Swiss Federal Institute of Technology)",
@@ -22331,7 +22331,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for having integrated insights from psychological research into economic science, especially concerning human judgment and decision-making under uncertainty\"",
+                        "motivation": "\“for having integrated insights from psychological research into economic science, especially concerning human judgment and decision-making under uncertainty\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -22357,7 +22357,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for having established laboratory experiments as a tool in empirical economic analysis, especially in the study of alternative market mechanisms\"",
+                        "motivation": "\“for having established laboratory experiments as a tool in empirical economic analysis, especially in the study of alternative market mechanisms\”",
                         "affiliations": [
                             {
                                 "name": "George Mason University",
@@ -22383,7 +22383,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for writing that upholds the fragile experience of the individual against the barbaric arbitrariness of history\"",
+                        "motivation": "\“for writing that upholds the fragile experience of the individual against the barbaric arbitrariness of history\”",
                         "affiliations": [
                             []
                         ]
@@ -22405,7 +22405,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for his decades of untiring effort to find peaceful solutions to international conflicts, to advance democracy and human rights, and to promote economic and social development\"",
+                        "motivation": "\“for his decades of untiring effort to find peaceful solutions to international conflicts, to advance democracy and human rights, and to promote economic and social development\”",
                         "affiliations": [
                             []
                         ]
@@ -22427,7 +22427,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2003",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who in innumerable guises portrays the surprising involvement of the outsider\"",
+                        "motivation": "\“who in innumerable guises portrays the surprising involvement of the outsider\”",
                         "affiliations": [
                             []
                         ]
@@ -22452,7 +22452,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2003",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning magnetic resonance imaging\"",
+                        "motivation": "\“for their discoveries concerning magnetic resonance imaging\”",
                         "affiliations": [
                             {
                                 "name": "University of Illinois",
@@ -22478,7 +22478,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2003",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries concerning magnetic resonance imaging\"",
+                        "motivation": "\“for their discoveries concerning magnetic resonance imaging\”",
                         "affiliations": [
                             {
                                 "name": "University of Nottingham, School of Physics and Astronomy",
@@ -22504,7 +22504,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2003",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for pioneering contributions to the theory of superconductors and superfluids\"",
+                        "motivation": "\“for pioneering contributions to the theory of superconductors and superfluids\”",
                         "affiliations": [
                             {
                                 "name": "Argonne National Laboratory",
@@ -22530,7 +22530,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2003",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for pioneering contributions to the theory of superconductors and superfluids\"",
+                        "motivation": "\“for pioneering contributions to the theory of superconductors and superfluids\”",
                         "affiliations": [
                             {
                                 "name": "P.N. Lebedev Physical Institute",
@@ -22556,7 +22556,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2003",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for pioneering contributions to the theory of superconductors and superfluids\"",
+                        "motivation": "\“for pioneering contributions to the theory of superconductors and superfluids\”",
                         "affiliations": [
                             {
                                 "name": "University of Illinois",
@@ -22581,9 +22581,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "2003",
                         "category": "chemistry",
-                        "overallMotivation": "\"for discoveries concerning channels in cell membranes\"",
+                        "overallMotivation": "\“for discoveries concerning channels in cell membranes\”",
                         "share": "2",
-                        "motivation": "\"for the discovery of water channels\"",
+                        "motivation": "\“for the discovery of water channels\”",
                         "affiliations": [
                             {
                                 "name": "Johns Hopkins University School of Medicine",
@@ -22608,9 +22608,9 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "2003",
                         "category": "chemistry",
-                        "overallMotivation": "\"for discoveries concerning channels in cell membranes\"",
+                        "overallMotivation": "\“for discoveries concerning channels in cell membranes\”",
                         "share": "2",
-                        "motivation": "\"for structural and mechanistic studies of ion channels\"",
+                        "motivation": "\“for structural and mechanistic studies of ion channels\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -22639,7 +22639,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2003",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for methods of analyzing economic time series with time-varying volatility (ARCH)\"",
+                        "motivation": "\“for methods of analyzing economic time series with time-varying volatility (ARCH)\”",
                         "affiliations": [
                             {
                                 "name": "New York University",
@@ -22668,7 +22668,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2003",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for methods of analyzing economic time series with common trends (cointegration)\"",
+                        "motivation": "\“for methods of analyzing economic time series with common trends (cointegration)\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -22694,7 +22694,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2003",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for her efforts for democracy and human rights. She has focused especially on the struggle for the rights of women and children\"",
+                        "motivation": "\“for her efforts for democracy and human rights. She has focused especially on the struggle for the rights of women and children\”",
                         "affiliations": [
                             []
                         ]
@@ -22716,7 +22716,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries of odorant receptors and the organization of the olfactory system\"",
+                        "motivation": "\“for their discoveries of odorant receptors and the organization of the olfactory system\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -22742,7 +22742,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries of odorant receptors and the organization of the olfactory system\"",
+                        "motivation": "\“for their discoveries of odorant receptors and the organization of the olfactory system\”",
                         "affiliations": [
                             {
                                 "name": "Fred Hutchinson Cancer Research Center",
@@ -22768,7 +22768,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the discovery of asymptotic freedom in the theory of the strong interaction\"",
+                        "motivation": "\“for the discovery of asymptotic freedom in the theory of the strong interaction\”",
                         "affiliations": [
                             {
                                 "name": "University of California, Kavli Institute for Theoretical Physics",
@@ -22794,7 +22794,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the discovery of asymptotic freedom in the theory of the strong interaction\"",
+                        "motivation": "\“for the discovery of asymptotic freedom in the theory of the strong interaction\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -22820,7 +22820,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the discovery of asymptotic freedom in the theory of the strong interaction\"",
+                        "motivation": "\“for the discovery of asymptotic freedom in the theory of the strong interaction\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -22846,7 +22846,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the discovery of ubiquitin-mediated protein degradation\"",
+                        "motivation": "\“for the discovery of ubiquitin-mediated protein degradation\”",
                         "affiliations": [
                             {
                                 "name": "Technion - Israel Institute of Technology",
@@ -22872,7 +22872,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the discovery of ubiquitin-mediated protein degradation\"",
+                        "motivation": "\“for the discovery of ubiquitin-mediated protein degradation\”",
                         "affiliations": [
                             {
                                 "name": "Technion - Israel Institute of Technology",
@@ -22901,7 +22901,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the discovery of ubiquitin-mediated protein degradation\"",
+                        "motivation": "\“for the discovery of ubiquitin-mediated protein degradation\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -22927,7 +22927,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for her musical flow of voices and counter-voices in novels and plays that with extraordinary linguistic zeal reveal the absurdity of society's clich&eacute;s and their subjugating power\"",
+                        "motivation": "\“for her musical flow of voices and counter-voices in novels and plays that with extraordinary linguistic zeal reveal the absurdity of society's clich&eacute;s and their subjugating power\”",
                         "affiliations": [
                             []
                         ]
@@ -22952,7 +22952,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for her contribution to sustainable development, democracy and peace\"",
+                        "motivation": "\“for her contribution to sustainable development, democracy and peace\”",
                         "affiliations": [
                             []
                         ]
@@ -22974,7 +22974,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their contributions to dynamic macroeconomics: the time consistency of economic policy and the driving forces behind business cycles\"",
+                        "motivation": "\“for their contributions to dynamic macroeconomics: the time consistency of economic policy and the driving forces behind business cycles\”",
                         "affiliations": [
                             {
                                 "name": "Carnegie Mellon University",
@@ -23005,7 +23005,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their contributions to dynamic macroeconomics: the time consistency of economic policy and the driving forces behind business cycles\"",
+                        "motivation": "\“for their contributions to dynamic macroeconomics: the time consistency of economic policy and the driving forces behind business cycles\”",
                         "affiliations": [
                             {
                                 "name": "Arizona State University",
@@ -23036,7 +23036,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of the bacterium <i>Helicobacter pylori</i> and its role in gastritis and peptic ulcer disease\"",
+                        "motivation": "\“for their discovery of the bacterium <i>Helicobacter pylori</i> and its role in gastritis and peptic ulcer disease\”",
                         "affiliations": [
                             {
                                 "name": "NHMRC Helicobacter pylori Research Laboratory, QEII Medical Centre",
@@ -23067,7 +23067,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of the bacterium <i>Helicobacter pylori</i> and its role in gastritis and peptic ulcer disease\"",
+                        "motivation": "\“for their discovery of the bacterium <i>Helicobacter pylori</i> and its role in gastritis and peptic ulcer disease\”",
                         "affiliations": [
                             {
                                 "city": "Perth",
@@ -23092,7 +23092,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for his contribution to the quantum theory of optical coherence\"",
+                        "motivation": "\“for his contribution to the quantum theory of optical coherence\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -23118,7 +23118,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their contributions to the development of laser-based precision spectroscopy, including the optical frequency comb technique\"",
+                        "motivation": "\“for their contributions to the development of laser-based precision spectroscopy, including the optical frequency comb technique\”",
                         "affiliations": [
                             {
                                 "name": "University of Colorado, JILA",
@@ -23149,7 +23149,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for their contributions to the development of laser-based precision spectroscopy, including the optical frequency comb technique\"",
+                        "motivation": "\“for their contributions to the development of laser-based precision spectroscopy, including the optical frequency comb technique\”",
                         "affiliations": [
                             {
                                 "name": "Max-Planck-Institut für Quantenoptik",
@@ -23183,7 +23183,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the development of the metathesis method in organic synthesis\"",
+                        "motivation": "\“for the development of the metathesis method in organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Institut Français du Pétrole",
@@ -23209,7 +23209,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the development of the metathesis method in organic synthesis\"",
+                        "motivation": "\“for the development of the metathesis method in organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "California Institute of Technology (Caltech)",
@@ -23235,7 +23235,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the development of the metathesis method in organic synthesis\"",
+                        "motivation": "\“for the development of the metathesis method in organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -23257,7 +23257,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to prevent nuclear energy from being used for military purposes and to ensure that nuclear energy for peaceful purposes is used in the safest possible way\"",
+                        "motivation": "\“for their efforts to prevent nuclear energy from being used for military purposes and to ensure that nuclear energy for peaceful purposes is used in the safest possible way\”",
                         "affiliations": [
                             []
                         ]
@@ -23279,7 +23279,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to prevent nuclear energy from being used for military purposes and to ensure that nuclear energy for peaceful purposes is used in the safest possible way\"",
+                        "motivation": "\“for their efforts to prevent nuclear energy from being used for military purposes and to ensure that nuclear energy for peaceful purposes is used in the safest possible way\”",
                         "affiliations": [
                             []
                         ]
@@ -23301,7 +23301,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for having enhanced our understanding of conflict and cooperation through game-theory analysis\"",
+                        "motivation": "\“for having enhanced our understanding of conflict and cooperation through game-theory analysis\”",
                         "affiliations": [
                             {
                                 "name": "University of Jerusalem, Center for RationalityHebrew",
@@ -23327,7 +23327,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for having enhanced our understanding of conflict and cooperation through game-theory analysis\"",
+                        "motivation": "\“for having enhanced our understanding of conflict and cooperation through game-theory analysis\”",
                         "affiliations": [
                             {
                                 "name": "University of Maryland, Department of Economics and School of Public Policy",
@@ -23356,7 +23356,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who in his plays uncovers the precipice under everyday prattle and forces entry into oppression's closed rooms\"",
+                        "motivation": "\“who in his plays uncovers the precipice under everyday prattle and forces entry into oppression's closed rooms\”",
                         "affiliations": [
                             []
                         ]
@@ -23378,7 +23378,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2006",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of RNA interference - gene silencing by double-stranded RNA\"",
+                        "motivation": "\“for their discovery of RNA interference - gene silencing by double-stranded RNA\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University School of Medicine",
@@ -23404,7 +23404,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2006",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discovery of RNA interference - gene silencing by double-stranded RNA\"",
+                        "motivation": "\“for their discovery of RNA interference - gene silencing by double-stranded RNA\”",
                         "affiliations": [
                             {
                                 "name": "University of Massachusetts Medical School",
@@ -23430,7 +23430,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2006",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their discovery of the blackbody form and anisotropy of the cosmic microwave background radiation\"",
+                        "motivation": "\“for their discovery of the blackbody form and anisotropy of the cosmic microwave background radiation\”",
                         "affiliations": [
                             {
                                 "name": "NASA Goddard Space Flight Center",
@@ -23456,7 +23456,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2006",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for their discovery of the blackbody form and anisotropy of the cosmic microwave background radiation\"",
+                        "motivation": "\“for their discovery of the blackbody form and anisotropy of the cosmic microwave background radiation\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -23482,7 +23482,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2006",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his studies of the molecular basis of eukaryotic transcription\"",
+                        "motivation": "\“for his studies of the molecular basis of eukaryotic transcription\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -23508,7 +23508,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2006",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his analysis of intertemporal tradeoffs in macroeconomic policy\"",
+                        "motivation": "\“for his analysis of intertemporal tradeoffs in macroeconomic policy\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -23534,7 +23534,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2006",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who in the quest for the melancholic soul of his native city has discovered new symbols for the clash and interlacing of cultures\"",
+                        "motivation": "\“who in the quest for the melancholic soul of his native city has discovered new symbols for the clash and interlacing of cultures\”",
                         "affiliations": [
                             []
                         ]
@@ -23556,7 +23556,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2006",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to create economic and social development from below\"",
+                        "motivation": "\“for their efforts to create economic and social development from below\”",
                         "affiliations": [
                             []
                         ]
@@ -23574,7 +23574,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2006",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to create economic and social development from below\"",
+                        "motivation": "\“for their efforts to create economic and social development from below\”",
                         "affiliations": [
                             []
                         ]
@@ -23596,7 +23596,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of principles for introducing specific gene modifications in mice by the use of embryonic stem cells\"",
+                        "motivation": "\“for their discoveries of principles for introducing specific gene modifications in mice by the use of embryonic stem cells\”",
                         "affiliations": [
                             {
                                 "name": "University of Utah",
@@ -23625,7 +23625,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of principles for introducing specific gene modifications in mice by the use of embryonic stem cells\"",
+                        "motivation": "\“for their discoveries of principles for introducing specific gene modifications in mice by the use of embryonic stem cells\”",
                         "affiliations": [
                             {
                                 "name": "Cardiff University",
@@ -23651,7 +23651,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of principles for introducing specific gene modifications in mice by the use of embryonic stem cells\"",
+                        "motivation": "\“for their discoveries of principles for introducing specific gene modifications in mice by the use of embryonic stem cells\”",
                         "affiliations": [
                             {
                                 "name": "University of North Carolina at Chapel Hill",
@@ -23677,7 +23677,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of Giant Magnetoresistance\"",
+                        "motivation": "\“for the discovery of Giant Magnetoresistance\”",
                         "affiliations": [
                             {
                                 "name": "Universit&eacute; Paris-Sud",
@@ -23708,7 +23708,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of Giant Magnetoresistance\"",
+                        "motivation": "\“for the discovery of Giant Magnetoresistance\”",
                         "affiliations": [
                             {
                                 "name": "Forschungszentrum J&uuml;lich",
@@ -23734,7 +23734,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for his studies of chemical processes on solid surfaces\"",
+                        "motivation": "\“for his studies of chemical processes on solid surfaces\”",
                         "affiliations": [
                             {
                                 "name": "Fritz-Haber-Institut der Max-Planck-Gesellschaft",
@@ -23763,7 +23763,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"that epicist of the female experience, who with scepticism, fire and visionary power has subjected a divided civilisation to scrutiny\"",
+                        "motivation": "\“that epicist of the female experience, who with scepticism, fire and visionary power has subjected a divided civilisation to scrutiny\”",
                         "affiliations": [
                             []
                         ]
@@ -23781,7 +23781,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to build up and disseminate greater knowledge about man-made climate change, and to lay the foundations for the measures that are needed to counteract such change\"",
+                        "motivation": "\“for their efforts to build up and disseminate greater knowledge about man-made climate change, and to lay the foundations for the measures that are needed to counteract such change\”",
                         "affiliations": [
                             []
                         ]
@@ -23803,7 +23803,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their efforts to build up and disseminate greater knowledge about man-made climate change, and to lay the foundations for the measures that are needed to counteract such change\"",
+                        "motivation": "\“for their efforts to build up and disseminate greater knowledge about man-made climate change, and to lay the foundations for the measures that are needed to counteract such change\”",
                         "affiliations": [
                             []
                         ]
@@ -23828,7 +23828,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for having laid the foundations of mechanism design theory\"",
+                        "motivation": "\“for having laid the foundations of mechanism design theory\”",
                         "affiliations": [
                             {
                                 "name": "University of Minnesota",
@@ -23854,7 +23854,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for having laid the foundations of mechanism design theory\"",
+                        "motivation": "\“for having laid the foundations of mechanism design theory\”",
                         "affiliations": [
                             {
                                 "name": "Institute for Advanced Study",
@@ -23880,7 +23880,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2007",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for having laid the foundations of mechanism design theory\"",
+                        "motivation": "\“for having laid the foundations of mechanism design theory\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -23906,7 +23906,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of human papilloma viruses causing cervical cancer\"",
+                        "motivation": "\“for his discovery of human papilloma viruses causing cervical cancer\”",
                         "affiliations": [
                             {
                                 "name": "German Cancer Research Center",
@@ -23932,7 +23932,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discovery of human immunodeficiency virus\"",
+                        "motivation": "\“for their discovery of human immunodeficiency virus\”",
                         "affiliations": [
                             {
                                 "name": "Regulation of Retroviral Infections Unit, Virology Department, Institut Pasteur",
@@ -23958,7 +23958,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discovery of human immunodeficiency virus\"",
+                        "motivation": "\“for their discovery of human immunodeficiency virus\”",
                         "affiliations": [
                             {
                                 "name": "World Foundation for AIDS Research and Prevention",
@@ -23987,7 +23987,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of the mechanism of spontaneous broken symmetry in subatomic physics\"",
+                        "motivation": "\“for the discovery of the mechanism of spontaneous broken symmetry in subatomic physics\”",
                         "affiliations": [
                             {
                                 "name": "Enrico Fermi Institute, University of Chicago",
@@ -24013,7 +24013,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for the discovery of the origin of the broken symmetry which predicts the existence of at least three families of quarks in nature\"",
+                        "motivation": "\“for the discovery of the origin of the broken symmetry which predicts the existence of at least three families of quarks in nature\”",
                         "affiliations": [
                             {
                                 "name": "High Energy Accelerator Research Organization (KEK)",
@@ -24039,7 +24039,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for the discovery of the origin of the broken symmetry which predicts the existence of at least three families of quarks in nature\"",
+                        "motivation": "\“for the discovery of the origin of the broken symmetry which predicts the existence of at least three families of quarks in nature\”",
                         "affiliations": [
                             {
                                 "name": "Kyoto Sangyo University",
@@ -24070,7 +24070,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the discovery and development of the green fluorescent protein, GFP\"",
+                        "motivation": "\“for the discovery and development of the green fluorescent protein, GFP\”",
                         "affiliations": [
                             {
                                 "name": "Marine Biological Laboratory (MBL)",
@@ -24101,7 +24101,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the discovery and development of the green fluorescent protein, GFP\"",
+                        "motivation": "\“for the discovery and development of the green fluorescent protein, GFP\”",
                         "affiliations": [
                             {
                                 "name": "Columbia University",
@@ -24127,7 +24127,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the discovery and development of the green fluorescent protein, GFP\"",
+                        "motivation": "\“for the discovery and development of the green fluorescent protein, GFP\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -24156,7 +24156,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"author of new departures, poetic adventure and sensual ecstasy, explorer of a humanity beyond and below the reigning civilization\"",
+                        "motivation": "\“author of new departures, poetic adventure and sensual ecstasy, explorer of a humanity beyond and below the reigning civilization\”",
                         "affiliations": [
                             []
                         ]
@@ -24178,7 +24178,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for his important efforts, on several continents and over more than three decades, to resolve international conflicts\"",
+                        "motivation": "\“for his important efforts, on several continents and over more than three decades, to resolve international conflicts\”",
                         "affiliations": [
                             []
                         ]
@@ -24200,7 +24200,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2008",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his analysis of trade patterns and location of economic activity\"",
+                        "motivation": "\“for his analysis of trade patterns and location of economic activity\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -24226,7 +24226,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for the discovery of how chromosomes are protected by telomeres and the enzyme telomerase\"",
+                        "motivation": "\“for the discovery of how chromosomes are protected by telomeres and the enzyme telomerase\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -24252,7 +24252,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for the discovery of how chromosomes are protected by telomeres and the enzyme telomerase\"",
+                        "motivation": "\“for the discovery of how chromosomes are protected by telomeres and the enzyme telomerase\”",
                         "affiliations": [
                             {
                                 "name": "Johns Hopkins University School of Medicine",
@@ -24278,7 +24278,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for the discovery of how chromosomes are protected by telomeres and the enzyme telomerase\"",
+                        "motivation": "\“for the discovery of how chromosomes are protected by telomeres and the enzyme telomerase\”",
                         "affiliations": [
                             {
                                 "name": "Harvard Medical School",
@@ -24312,7 +24312,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for groundbreaking achievements concerning the transmission of light in fibers for optical communication\"",
+                        "motivation": "\“for groundbreaking achievements concerning the transmission of light in fibers for optical communication\”",
                         "affiliations": [
                             {
                                 "name": "Standard Telecommunication Laboratories",
@@ -24346,7 +24346,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for the invention of an imaging semiconductor circuit - the CCD sensor\"",
+                        "motivation": "\“for the invention of an imaging semiconductor circuit - the CCD sensor\”",
                         "affiliations": [
                             {
                                 "name": "Bell Laboratories",
@@ -24372,7 +24372,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for the invention of an imaging semiconductor circuit - the CCD sensor\"",
+                        "motivation": "\“for the invention of an imaging semiconductor circuit - the CCD sensor\”",
                         "affiliations": [
                             {
                                 "name": "Bell Laboratories",
@@ -24398,7 +24398,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for studies of the structure and function of the ribosome\"",
+                        "motivation": "\“for studies of the structure and function of the ribosome\”",
                         "affiliations": [
                             {
                                 "name": "MRC Laboratory of Molecular Biology",
@@ -24424,7 +24424,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for studies of the structure and function of the ribosome\"",
+                        "motivation": "\“for studies of the structure and function of the ribosome\”",
                         "affiliations": [
                             {
                                 "name": "Yale University",
@@ -24453,7 +24453,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for studies of the structure and function of the ribosome\"",
+                        "motivation": "\“for studies of the structure and function of the ribosome\”",
                         "affiliations": [
                             {
                                 "name": "Weizmann Institute of Science",
@@ -24479,7 +24479,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who, with the concentration of poetry and the frankness of prose, depicts the landscape of the dispossessed\"",
+                        "motivation": "\“who, with the concentration of poetry and the frankness of prose, depicts the landscape of the dispossessed\”",
                         "affiliations": [
                             []
                         ]
@@ -24501,7 +24501,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for his extraordinary efforts to strengthen international diplomacy and cooperation between peoples\"",
+                        "motivation": "\“for his extraordinary efforts to strengthen international diplomacy and cooperation between peoples\”",
                         "affiliations": [
                             []
                         ]
@@ -24526,7 +24526,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for her analysis of economic governance, especially the commons\"",
+                        "motivation": "\“for her analysis of economic governance, especially the commons\”",
                         "affiliations": [
                             {
                                 "name": "Indiana University",
@@ -24557,7 +24557,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2009",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for his analysis of economic governance, especially the boundaries of the firm\"",
+                        "motivation": "\“for his analysis of economic governance, especially the boundaries of the firm\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -24586,7 +24586,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "medicine",
                         "share": "1",
-                        "motivation": "\"for the development of in vitro fertilization\"",
+                        "motivation": "\“for the development of in vitro fertilization\”",
                         "affiliations": [
                             {
                                 "name": "University of Cambridge",
@@ -24612,7 +24612,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for groundbreaking experiments regarding the two-dimensional material graphene\"",
+                        "motivation": "\“for groundbreaking experiments regarding the two-dimensional material graphene\”",
                         "affiliations": [
                             {
                                 "name": "University of Manchester",
@@ -24638,7 +24638,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for groundbreaking experiments regarding the two-dimensional material graphene\"",
+                        "motivation": "\“for groundbreaking experiments regarding the two-dimensional material graphene\”",
                         "affiliations": [
                             {
                                 "name": "University of Manchester",
@@ -24664,7 +24664,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for palladium-catalyzed cross couplings in organic synthesis\"",
+                        "motivation": "\“for palladium-catalyzed cross couplings in organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "University of Delaware",
@@ -24689,7 +24689,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for palladium-catalyzed cross couplings in organic synthesis\"",
+                        "motivation": "\“for palladium-catalyzed cross couplings in organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Purdue University",
@@ -24715,7 +24715,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for palladium-catalyzed cross couplings in organic synthesis\"",
+                        "motivation": "\“for palladium-catalyzed cross couplings in organic synthesis\”",
                         "affiliations": [
                             {
                                 "name": "Hokkaido University",
@@ -24741,7 +24741,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for his cartography of structures of power and his trenchant images of the individual's resistance, revolt, and defeat\"",
+                        "motivation": "\“for his cartography of structures of power and his trenchant images of the individual's resistance, revolt, and defeat\”",
                         "affiliations": [
                             []
                         ]
@@ -24762,7 +24762,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for his long and non-violent struggle for fundamental human rights in China\"",
+                        "motivation": "\“for his long and non-violent struggle for fundamental human rights in China\”",
                         "affiliations": [
                             []
                         ]
@@ -24784,7 +24784,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their analysis of markets with search frictions\"",
+                        "motivation": "\“for their analysis of markets with search frictions\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -24813,7 +24813,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their analysis of markets with search frictions\"",
+                        "motivation": "\“for their analysis of markets with search frictions\”",
                         "affiliations": [
                             {
                                 "name": "Northwestern University",
@@ -24844,7 +24844,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2010",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their analysis of markets with search frictions\"",
+                        "motivation": "\“for their analysis of markets with search frictions\”",
                         "affiliations": [
                             {
                                 "name": "London School of Economics and Political Science",
@@ -24870,7 +24870,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discoveries concerning the activation of innate immunity\"",
+                        "motivation": "\“for their discoveries concerning the activation of innate immunity\”",
                         "affiliations": [
                             {
                                 "name": "University of Texas Southwestern Medical Center at Dallas",
@@ -24901,7 +24901,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discoveries concerning the activation of innate immunity\"",
+                        "motivation": "\“for their discoveries concerning the activation of innate immunity\”",
                         "affiliations": [
                             {
                                 "name": "University of Strasbourg",
@@ -24927,7 +24927,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for his discovery of the dendritic cell and its role in adaptive immunity\"",
+                        "motivation": "\“for his discovery of the dendritic cell and its role in adaptive immunity\”",
                         "affiliations": [
                             {
                                 "name": "Rockefeller University",
@@ -24953,7 +24953,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the discovery of the accelerating expansion of the Universe through observations of distant supernovae\"",
+                        "motivation": "\“for the discovery of the accelerating expansion of the Universe through observations of distant supernovae\”",
                         "affiliations": [
                             {
                                 "name": "Lawrence Berkeley National Laboratory",
@@ -24984,7 +24984,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for the discovery of the accelerating expansion of the Universe through observations of distant supernovae\"",
+                        "motivation": "\“for the discovery of the accelerating expansion of the Universe through observations of distant supernovae\”",
                         "affiliations": [
                             {
                                 "name": "Australian National University",
@@ -25010,7 +25010,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "physics",
                         "share": "4",
-                        "motivation": "\"for the discovery of the accelerating expansion of the Universe through observations of distant supernovae\"",
+                        "motivation": "\“for the discovery of the accelerating expansion of the Universe through observations of distant supernovae\”",
                         "affiliations": [
                             {
                                 "name": "Johns Hopkins University",
@@ -25041,7 +25041,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "chemistry",
                         "share": "1",
-                        "motivation": "\"for the discovery of quasicrystals\"",
+                        "motivation": "\“for the discovery of quasicrystals\”",
                         "affiliations": [
                             {
                                 "name": "Technion - Israel Institute of Technology",
@@ -25070,7 +25070,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"because, through his condensed, translucent images, he gives us fresh access to reality\"",
+                        "motivation": "\“because, through his condensed, translucent images, he gives us fresh access to reality\”",
                         "affiliations": [
                             []
                         ]
@@ -25092,7 +25092,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "peace",
                         "share": "3",
-                        "motivation": "\"for their non-violent struggle for the safety of women and for women&apos;s rights to full participation in peace-building work\"",
+                        "motivation": "\“for their non-violent struggle for the safety of women and for women&apos;s rights to full participation in peace-building work\”",
                         "affiliations": [
                             []
                         ]
@@ -25114,7 +25114,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "peace",
                         "share": "3",
-                        "motivation": "\"for their non-violent struggle for the safety of women and for women&apos;s rights to full participation in peace-building work\"",
+                        "motivation": "\“for their non-violent struggle for the safety of women and for women&apos;s rights to full participation in peace-building work\”",
                         "affiliations": [
                             []
                         ]
@@ -25136,7 +25136,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "peace",
                         "share": "3",
-                        "motivation": "\"for their non-violent struggle for the safety of women and for women&apos;s rights to full participation in peace-building work\"",
+                        "motivation": "\“for their non-violent struggle for the safety of women and for women&apos;s rights to full participation in peace-building work\”",
                         "affiliations": [
                             []
                         ]
@@ -25158,7 +25158,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their empirical research on cause and effect in the macroeconomy\"",
+                        "motivation": "\“for their empirical research on cause and effect in the macroeconomy\”",
                         "affiliations": [
                             {
                                 "name": "New York University",
@@ -25184,7 +25184,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for their empirical research on cause and effect in the macroeconomy\"",
+                        "motivation": "\“for their empirical research on cause and effect in the macroeconomy\”",
                         "affiliations": [
                             {
                                 "name": "Princeton University",
@@ -25210,7 +25210,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for the discovery that mature cells can be reprogrammed to become pluripotent\"",
+                        "motivation": "\“for the discovery that mature cells can be reprogrammed to become pluripotent\”",
                         "affiliations": [
                             {
                                 "name": "Gurdon Institute",
@@ -25236,7 +25236,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for the discovery that mature cells can be reprogrammed to become pluripotent\"",
+                        "motivation": "\“for the discovery that mature cells can be reprogrammed to become pluripotent\”",
                         "affiliations": [
                             {
                                 "name": "Kyoto University",
@@ -25267,7 +25267,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for ground-breaking experimental methods that enable measuring and manipulation of individual quantum systems\"",
+                        "motivation": "\“for ground-breaking experimental methods that enable measuring and manipulation of individual quantum systems\”",
                         "affiliations": [
                             {
                                 "name": "Collège de France",
@@ -25298,7 +25298,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for ground-breaking experimental methods that enable measuring and manipulation of individual quantum systems\"",
+                        "motivation": "\“for ground-breaking experimental methods that enable measuring and manipulation of individual quantum systems\”",
                         "affiliations": [
                             {
                                 "name": "National Institute of Standards and Technology",
@@ -25329,7 +25329,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for studies of G-protein-coupled receptors\"",
+                        "motivation": "\“for studies of G-protein-coupled receptors\”",
                         "affiliations": [
                             {
                                 "name": "Howard Hughes Medical Institute"
@@ -25358,7 +25358,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "chemistry",
                         "share": "2",
-                        "motivation": "\"for studies of G-protein-coupled receptors\"",
+                        "motivation": "\“for studies of G-protein-coupled receptors\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University School of Medicine",
@@ -25384,7 +25384,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"who with hallucinatory realism merges folk tales, history and the contemporary\"",
+                        "motivation": "\“who with hallucinatory realism merges folk tales, history and the contemporary\”",
                         "affiliations": [
                             []
                         ]
@@ -25402,7 +25402,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for over six decades contributed to the advancement of peace and reconciliation, democracy and human rights in Europe\"",
+                        "motivation": "\“for over six decades contributed to the advancement of peace and reconciliation, democracy and human rights in Europe\”",
                         "affiliations": [
                             []
                         ]
@@ -25424,7 +25424,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for the theory of stable allocations and the practice of market design\"",
+                        "motivation": "\“for the theory of stable allocations and the practice of market design\”",
                         "affiliations": [
                             {
                                 "name": "Harvard University",
@@ -25455,7 +25455,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2012",
                         "category": "economics",
                         "share": "2",
-                        "motivation": "\"for the theory of stable allocations and the practice of market design\"",
+                        "motivation": "\“for the theory of stable allocations and the practice of market design\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -25481,7 +25481,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of machinery regulating vesicle traffic, a major transport system in our cells\"",
+                        "motivation": "\“for their discoveries of machinery regulating vesicle traffic, a major transport system in our cells\”",
                         "affiliations": [
                             {
                                 "name": "Yale University",
@@ -25507,7 +25507,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of machinery regulating vesicle traffic, a major transport system in our cells\"",
+                        "motivation": "\“for their discoveries of machinery regulating vesicle traffic, a major transport system in our cells\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -25536,7 +25536,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\"for their discoveries of machinery regulating vesicle traffic, a major transport system in our cells\"",
+                        "motivation": "\“for their discoveries of machinery regulating vesicle traffic, a major transport system in our cells\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -25565,7 +25565,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the theoretical discovery of a mechanism that contributes to our understanding of the origin of mass of subatomic particles, and which recently was confirmed through the discovery of the predicted fundamental particle, by the ATLAS and CMS experiments at CERN's Large Hadron Collider\"",
+                        "motivation": "\“for the theoretical discovery of a mechanism that contributes to our understanding of the origin of mass of subatomic particles, and which recently was confirmed through the discovery of the predicted fundamental particle, by the ATLAS and CMS experiments at CERN's Large Hadron Collider\”",
                         "affiliations": [
                             {
                                 "name": "Université Libre de Bruxelles",
@@ -25591,7 +25591,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\"for the theoretical discovery of a mechanism that contributes to our understanding of the origin of mass of subatomic particles, and which recently was confirmed through the discovery of the predicted fundamental particle, by the ATLAS and CMS experiments at CERN's Large Hadron Collider\"",
+                        "motivation": "\“for the theoretical discovery of a mechanism that contributes to our understanding of the origin of mass of subatomic particles, and which recently was confirmed through the discovery of the predicted fundamental particle, by the ATLAS and CMS experiments at CERN's Large Hadron Collider\”",
                         "affiliations": [
                             {
                                 "name": "University of Edinburgh",
@@ -25617,7 +25617,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the development of multiscale models for complex chemical systems\"",
+                        "motivation": "\“for the development of multiscale models for complex chemical systems\”",
                         "affiliations": [
                             {
                                 "name": "Université de Strasbourg",
@@ -25648,7 +25648,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the development of multiscale models for complex chemical systems\"",
+                        "motivation": "\“for the development of multiscale models for complex chemical systems\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University School of Medicine",
@@ -25674,7 +25674,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the development of multiscale models for complex chemical systems\"",
+                        "motivation": "\“for the development of multiscale models for complex chemical systems\”",
                         "affiliations": [
                             {
                                 "name": "University of Southern California",
@@ -25700,7 +25700,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"master of the contemporary short story\"",
+                        "motivation": "\“master of the contemporary short story\”",
                         "affiliations": [
                             []
                         ]
@@ -25718,7 +25718,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "peace",
                         "share": "1",
-                        "motivation": "\"for its extensive efforts to eliminate chemical weapons\"",
+                        "motivation": "\“for its extensive efforts to eliminate chemical weapons\”",
                         "affiliations": [
                             []
                         ]
@@ -25740,7 +25740,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their empirical analysis of asset prices\"",
+                        "motivation": "\“for their empirical analysis of asset prices\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -25766,7 +25766,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their empirical analysis of asset prices\"",
+                        "motivation": "\“for their empirical analysis of asset prices\”",
                         "affiliations": [
                             {
                                 "name": "University of Chicago",
@@ -25792,7 +25792,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2013",
                         "category": "economics",
                         "share": "3",
-                        "motivation": "\"for their empirical analysis of asset prices\"",
+                        "motivation": "\“for their empirical analysis of asset prices\”",
                         "affiliations": [
                             {
                                 "name": "Yale University",
@@ -25896,7 +25896,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\"for their discoveries of cells that constitute a positioning system in the brain\"",
+                        "motivation": "\“for their discoveries of cells that constitute a positioning system in the brain\”",
                         "affiliations": [
                             {
                                 "name": "University College",
@@ -25922,7 +25922,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discoveries of cells that constitute a positioning system in the brain\"",
+                        "motivation": "\“for their discoveries of cells that constitute a positioning system in the brain\”",
                         "affiliations": [
                             {
                                 "name": "Norwegian University of Science and Technology (NTNU)",
@@ -25948,7 +25948,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\"for their discoveries of cells that constitute a positioning system in the brain\"",
+                        "motivation": "\“for their discoveries of cells that constitute a positioning system in the brain\”",
                         "affiliations": [
                             {
                                 "name": "Norwegian University of Science and Technology (NTNU)",
@@ -25974,7 +25974,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the invention of efficient blue light-emitting diodes which has enabled bright and energy-saving white light sources\"",
+                        "motivation": "\“for the invention of efficient blue light-emitting diodes which has enabled bright and energy-saving white light sources\”",
                         "affiliations": [
                             {
                                 "name": "Meijo University",
@@ -26005,7 +26005,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the invention of efficient blue light-emitting diodes which has enabled bright and energy-saving white light sources\"",
+                        "motivation": "\“for the invention of efficient blue light-emitting diodes which has enabled bright and energy-saving white light sources\”",
                         "affiliations": [
                             {
                                 "name": "Nagoya University",
@@ -26031,7 +26031,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "physics",
                         "share": "3",
-                        "motivation": "\"for the invention of efficient blue light-emitting diodes which has enabled bright and energy-saving white light sources\"",
+                        "motivation": "\“for the invention of efficient blue light-emitting diodes which has enabled bright and energy-saving white light sources\”",
                         "affiliations": [
                             {
                                 "name": "University of California",
@@ -26057,7 +26057,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the development of super-resolved fluorescence microscopy\"",
+                        "motivation": "\“for the development of super-resolved fluorescence microscopy\”",
                         "affiliations": [
                             {
                                 "name": "Janelia Research Campus, Howard Hughes Medical Institute",
@@ -26083,7 +26083,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the development of super-resolved fluorescence microscopy\"",
+                        "motivation": "\“for the development of super-resolved fluorescence microscopy\”",
                         "affiliations": [
                             {
                                 "name": "Max Planck Institute for Biophysical Chemistry",
@@ -26114,7 +26114,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "chemistry",
                         "share": "3",
-                        "motivation": "\"for the development of super-resolved fluorescence microscopy\"",
+                        "motivation": "\“for the development of super-resolved fluorescence microscopy\”",
                         "affiliations": [
                             {
                                 "name": "Stanford University",
@@ -26140,7 +26140,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\"for the art of memory with which he has evoked the most ungraspable human destinies and\r\nuncovered the life-world of the occupation\"",
+                        "motivation": "\“for the art of memory with which he has evoked the most ungraspable human destinies and\r\nuncovered the life-world of the occupation\”",
                         "affiliations": [
                             []
                         ]
@@ -26162,7 +26162,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their struggle against the suppression of children and young people and for the right of all children to education\"",
+                        "motivation": "\“for their struggle against the suppression of children and young people and for the right of all children to education\”",
                         "affiliations": [
                             []
                         ]
@@ -26184,7 +26184,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "peace",
                         "share": "2",
-                        "motivation": "\"for their struggle against the suppression of children and young people and for the right of all children to education\"",
+                        "motivation": "\“for their struggle against the suppression of children and young people and for the right of all children to education\”",
                         "affiliations": [
                             []
                         ]
@@ -26206,7 +26206,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2014",
                         "category": "economics",
                         "share": "1",
-                        "motivation": "\"for his analysis of market power and regulation\"",
+                        "motivation": "\“for his analysis of market power and regulation\”",
                         "affiliations": [
                             {
                                 "name": "Toulouse School of Economics (TSE)",
