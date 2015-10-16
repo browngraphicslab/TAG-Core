@@ -1841,6 +1841,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'margin-bottom': '20px',
                 'margin-top':'10px'
     	    }).click(function () { switchTo(extra[2]) })
+              .mousedown(function () { bd.css({ "opacity": ".5" }) }).mouseleave(function () { bd.css({ "opacity": "1" }) })
     		var d = $(document.createElement('img'));
     		d.css({
     		    "position": 'relative',
@@ -2072,7 +2073,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "z-index" : "1003"
             }).click(function () {
                 switchTo(link)
-            }).mousedown(function () { bd.css({ "opacity": ".75" }) }).mouseleave(function () { bd.css({ "opacity": "1" }) })
+            }).mousedown(function () { bd.css({ "opacity": ".5" }) }).mouseleave(function () { bd.css({ "opacity": "1" }) })
             var d = $(document.createElement('img')).addClass("taskBarImage");
             d.css({
                 "position": 'absolute',
