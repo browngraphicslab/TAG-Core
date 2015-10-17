@@ -44,7 +44,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         lastMouseMoveEvent,
         debounceTimeout = null,
         NOBEL_ORANGE_COLOR = '#d99b3b',
-        IDLE_TIMER_DURATION = 300000, //5 minutes
+        IDLE_TIMER_DURATION = 20 * 1000, //THIS WAS UNTESTED.  NOW IT IS AND THIS SHIT DON'T WORK
         MARGINALIA_2 = "margin_karlskoga.tif",
         MARGINALIA_1 = "margin_stockholm.tif",
 
@@ -64,6 +64,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     *   creates "screensaver" overlay to be displayed after idle timer expires
     */
     function videoOverlay() {
+        if (jQuery.data(document, "tourPlaying") === true) {
+            restartTimer()
+            return;
+        }
         //stop timer and unbind mousedown and mousemove
         idleTimer && idleTimer.kill();
         $(document).unbind('mousedown', restartTimer);
@@ -154,6 +158,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function firstInit() {
+        $(document).data("tourPlaying",false)
         background = $(document.createElement('div'));
         background.css({
             "height": '90%',
@@ -285,32 +290,37 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         canvas.mousedown(function (e) {
             if (e.buttons > 0 && $("#bigPopup").length === 0) {
                 var offset = sliderBar.offset(),
-                    willOffset = willImage.offset(),
-                    upOffset = $("#upIcon").offset()
+                    willOffset = willImage.offset()
                 if (e.clientY > offset.top && e.clientY < offset.top + sliderBar.height()) {
                     lastDragY = e.clientY;
                     dragging = true;
                 }
                 else if (e.clientX < willOffset.left + willImage.width()) {
+                    $(".highlight").hide()
                     mouseUp(e, true);
+                    return;
                 }
                 hardcodedData[pageNumber-1]["associatedMedia"].forEach(function (media) {
                     var medOffset = media.offset()
                     if (medOffset.left!==0 && medOffset.top!==0  && e.clientX > medOffset.left && e.clientX < medOffset.left + media.width() && e.clientY > medOffset.top && e.clientY < medOffset.top + media.height()) {
                         media.click();
+                        return;
                     }
                 })
+                var upOffset = $("#upIcon").offset()
                 if (e.clientX < upOffset.left + $("#upIcon").width() && e.clientX > upOffset.left) {
                     var downOffset = $("#downIcon").offset()
                     if (e.clientY > upOffset.top && e.clientY < upOffset.top + $("#upIcon").height()) {
                         dragging = false;
                         touching = false;
                         $("#upIcon").click()
+                        return;
                     }
                     else if (e.clientY > downOffset.top && e.clientY < downOffset.top + $("#downIcon").height()) {
                         dragging = false;
                         touching = false;
                         $("#downIcon").click()
+                        return;
                     }
                 }
                 else if (chunkNumber === 0) {
@@ -320,9 +330,18 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                             dragging = false;
                             touching = false;
                             $("#downIcon").click()
+                            return;
                         }
                     }
                 }
+                var qOffset = $("#infoButton").offset()
+                if (e.clientX < qOffset.left + $("#infoButton").width() && e.clientX > qOffset.left) {
+                    if (e.clientY < qOffset.top + $("#infoButton").height() && e.clientY > qOffset.top) {
+                        $("#infoButton").click()
+                        return;
+                    }
+                }
+
             }
         })
         canvas.mouseenter(function (e) {
@@ -862,9 +881,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             hardcodedData[p - 1]["sliderPositions"] = sliderPositions
 
             if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
-                if ($("#willp1_1").length !== 0) {
-                    console.log('already loaded');
-                }
                 for (var i = 0; i < hardcodedData[p - 1]["hardcodedHotspotSpecs"].length; i++) {
                     var overlayDiv = $(document.createElement("img"))
                     overlayDiv.css({

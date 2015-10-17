@@ -31,7 +31,8 @@ TAG.Layout.SpoofTest = (function () {
         sortTags = [],
         searchText = $(document.createElement("div")),
         timer,
-        searchBoxController
+        searchBoxController,
+        isSurface
 
 	root.append(base)
 	base.append(sortDiv)
@@ -53,15 +54,18 @@ TAG.Layout.SpoofTest = (function () {
 	    if (ratio > (16 / 9)) {
 	        base.css("width", root.height() * (16 / 9) + "px")
 	        console.log("ratio was greater than 16/9")
+            isSurface = false
 	    }
 	    else {
 	        base.css("height", (9 / 16) * root.width() + "px")
 	        base.css("top", .5 * (root.height() - ((9 / 16) * root.width())) + "px")
 	        console.log("ratio was less than 16/9")
+            isSurface = true
 	    }
 	}
 	else {
-        console.log("ratio was 16/9")
+	    console.log("ratio was 16/9")
+        isSurface = false
 	}
 
 
@@ -304,7 +308,7 @@ TAG.Layout.SpoofTest = (function () {
 
 		var css = {
 			"position": "relative",
-			"width": SANDBOX_NEW_UI ? "60.5%" : "65.75%",
+			"width": SANDBOX_NEW_UI ? "65%" : "65.75%",
             "height" : "33.3333%",
 			"float": "right",
 			"font-size": ".75em",
@@ -866,7 +870,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "76.5px",
+	        "top": isSurface ? "71px" : "76.5px",
 	        "padding-left": "3px",
             "overflow" : "hidden",
 	        "left": "45px",
@@ -912,7 +916,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "76.5px",
+	        "top": isSurface ? "71px" : "76.5px",
 	        "overflow": "hidden",
 	        "padding-left": "3px",
 	        "left": "150px",

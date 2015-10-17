@@ -544,7 +544,9 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                         setControlsFade();
                         orchestrator.play();
                         mute()
-                        setTimeout(function () { orchestrator.pause(); orchestrator.play() }, 50)
+
+
+                        setTimeout(function () { orchestrator.pause(); orchestrator.play(); }, 50)
                         setTimeout(function () {
                             orchestrator.seek(orchestrator.getElapsedTime()/orchestrator.tourData.totalDuration,true)
                             unMute()
