@@ -150,6 +150,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function returnToTop() {
+        $(document).data("tourPlaying", false)
         chunkNumber = 1;
         pageNumber = 1;
         $(".assocMedia").hide()
@@ -296,7 +297,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     dragging = true;
                 }
                 else if (e.clientX < willOffset.left + willImage.width()) {
-                    $(".highlight").hide()
                     mouseUp(e, true);
                     return;
                 }
@@ -1017,7 +1017,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                             this.hotspotImage.show();
                         }
                     }
-                    div.Hide = function () {}
+                    div.Hide = function () {
+                        this.hide()
+                        if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
+                            this.hotspotImage.hide();
+                        }
+                    }
                     div.FadeIn = function (dur) {}
                     function percentToPxLeft(percent) {
                         return (percent / 100) * sideBar.height();
@@ -1143,7 +1148,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         dragging = true
         lastDragY = 0
-        mouseMove({ clientY: 5, clientX: 500 })
+        mouseMove({ clientY: .1, clientX: 500 })
         setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
 
 

@@ -89,10 +89,11 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             "position": "absolute",
             "top": "20px",
             "right": "20px",
-            "z-index" : "0099999"
+            "z-index": "0099999",
+            "opacity" : "0"
         })
         infoAvailableIcon.attr({
-            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/unlit_info.svg"
+            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/lightbulb.png"
         })
         $("#ITEContainer").append(infoAvailableIcon)
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
@@ -531,7 +532,61 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         if (!cancelEntirely) {
             if (initialLoading === true) {
                 setTimeout(function () {
-                    makeTitleSlide();
+                    //makeTitleSlide();
+                    var hugeVidOverlay = $(document.createElement('div')).attr({id:"videoOverlay"})
+                    var vid = $(document.createElement('video')).attr({ id: "videoOverlayVideo", src: itePath + "ITE Core/ITEManual/ITEPlayerImages/NW_instruction_video.mp4" })
+                    var css = {
+                        "width": "100%",
+                        "height": "100%",
+                        "position": "absolute",
+                        "z-index": "42314431322341324"
+                    }
+                    var backimg = $(document.createElement("img")).attr({ src: itePath + "ITE Core/ITEManual/ITEPlayerImages/Back.png" })
+                    backimg.css({
+                        "width": "100%",
+                        "position": "absolute"
+                    })
+                    var back = $(document.createElement('div'))
+                    back.click(function () {
+                        back.css({"background-color":"rgba(255,255,255,.25)"})
+                        tourPlayer.goBack();
+                    }).append(backimg).mouseup(function () { back.css({ "background-color": "transparent" }) })
+                    back.css({
+                        "width": "7.5%",
+                        "position": "absolute",
+                        "z-index": "500",
+                        "height" : "50px"
+                    })
+                    vid.css(css).css({ "z-index": "1" })
+                    hugeVidOverlay.css(css).append(back)
+                    hugeVidOverlay.css({"background-color":"black"})
+                    vid[0].play()
+                    hugeVidOverlay.append(vid)
+                    $("#ITEContainer").append(hugeVidOverlay)
+                    vid.bind("ended", function () {
+                        $("#videoOverlay").remove().die()
+                        $("#videoOverlayVideo").remove().die()
+                        setTimeout(function(){
+                            hideInitialOverlay();
+                            attachVolume();
+                            attachPlay();
+                            attachLoop();
+                            attachProgressBar();
+                            attachProgressIndicator();
+                            playPauseButton.attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/new_pause.svg");
+                            hideInfoPane();
+                            setControlsFade();
+                            orchestrator.play();
+                            mute()
+                            setTimeout(function () { orchestrator.pause(); orchestrator.play(); }, 50)
+                            setTimeout(function () {
+                                orchestrator.seek(orchestrator.getElapsedTime() / orchestrator.tourData.totalDuration, true)
+                                unMute()
+                                tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
+                            }, 75);
+                        },100)
+                    });
+                    /*
                     setTimeout(function () {
                         hideInitialOverlay();
                         attachVolume();
@@ -544,16 +599,14 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                         setControlsFade();
                         orchestrator.play();
                         mute()
-
-
                         setTimeout(function () { orchestrator.pause(); orchestrator.play(); }, 50)
                         setTimeout(function () {
                             orchestrator.seek(orchestrator.getElapsedTime()/orchestrator.tourData.totalDuration,true)
                             unMute()
                             tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
                         },75);
-                    }, 500);
-                }, 6000);
+                    }, 500);*/
+                }, 1);
                 return;
             }
             orchestrator.play();
@@ -994,21 +1047,18 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     }
 
     function setInfoAvailable(yes) {
+        infoAvailableIcon.attr({
+            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/lightbulb.png"
+        })
         if (yes === true) {
-            infoAvailableIcon.attr({
-                src: itePath + "ITE Core/ITEManual/ITEPlayerImages/lit_info.svg"
-            })
             infoAvailableIcon.css({
                 'opacity' : '1'
             })
             
         }
         else {
-            infoAvailableIcon.attr({
-                src: itePath + "ITE Core/ITEManual/ITEPlayerImages/unlit_info.svg"
-            })
             infoAvailableIcon.css({
-                'opacity': '.25'
+                'opacity': '0'
             })
         }
     }
