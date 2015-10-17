@@ -164,6 +164,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'left': '0%',
             "pointer-events": "none"
         })
+        $("#tagRoot").css({"background-color":"rgba(102,102,102,1)"})
         background.attr('id', 'background');
         root.append(background);
         for (var i = 1; i < 5; i++) {
@@ -225,7 +226,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "width": '40%',
             'background-color': 'rgb(102,102,102)'
         });
-        root.css("background-color", 'rgb(60,60,60)')
         var titleDiv = $(document.createElement('div'))
         titleDiv.css({
             'position': 'absolute',
@@ -1449,7 +1449,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.fixBulb = function () {
             div.show();
             if (div.descWhole.height() + div.title.height() < div.height()) {
-                div.descWhole.css({"height":(div.height() - div.title.height())+"px"})
+                div.descWhole.css({"height":(div.height() - div.title.height()-2)+"px"})
             }
             div.hide();
         }
@@ -2109,7 +2109,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'width': '100%',
             'position': 'absolute',
             'bottom': '0px',
-            'background-color': "rgba(102,102,102,0.8",
+            'background-color': "transparent",
         })
         taskBarArea.attr('id', 'taskBarArea');
 
