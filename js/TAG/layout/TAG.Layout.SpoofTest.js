@@ -378,21 +378,31 @@ TAG.Layout.SpoofTest = (function () {
 		img.css({
 			"position": "absolute",
 			"width": "100%",
-			"height": "auto"
+			"height": "auto",
+			//"top": SANDBOX_NEW_UI ? "15px": "0%"
+            
 		}).attr({ src: laur.Metadata.Thumbnail.FilePath })
 
+	    //console.log(img.height());
+		img.load(function(){
+		    if (img.height()+12.5 < block.height()) {
+		        //console.log("Laureate image DOES NOT hit bottom: " + laur.Metadata.LastName);
 
-        //either aligns image at bottom or moves down to 
-		if (img.height()-15 < (pageHeight / 5 + SQUISH_FACTOR)) {
-		    img.css({
-		        "bottom": "0%",
-		        "vertical-align": "bottom"
-		    });
+		        img.css({
+		            "bottom": "0%",
+		            //"top": img.height(),
+		            "vertical-align": "bottom"
+		        });
 
-		} else {
-		   img.css("top", SANDBOX_NEW_UI ? "6.75%": "0%");
+		    } else {
+		        //console.log("Laureate image hits bottom: " + laur.Metadata.LastName);
+		        img.css("top", SANDBOX_NEW_UI ? "12.5px": "0%");
 
-		}
+		    }
+		})
+
+
+	    //pageHeight /5 + SQUISH_FACTOR +"px" -> This is the height of a laureate tile
 
 		laur.block = block
 		laur.searchString = searchString
@@ -856,7 +866,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "102.5px",
+	        "top": "76.5px",
 	        "padding-left": "3px",
             "overflow" : "hidden",
 	        "left": "45px",
@@ -902,7 +912,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "102.5px",
+	        "top": "76.5px",
 	        "overflow": "hidden",
 	        "padding-left": "3px",
 	        "left": "150px",

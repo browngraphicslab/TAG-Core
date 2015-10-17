@@ -26232,7 +26232,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2015",
                         "category": "medicine",
                         "share": "4",
-                        "motivation": "\“for their discoveries concerning a novel therapy against infections caused by roundworm parasites\”,
+                        "motivation": "\“for their discoveries concerning a novel therapy against infections caused by roundworm parasites\”",
                         "affiliations": [
                             {
                                 "name": "Drew University",
@@ -26258,7 +26258,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "medicine",
                     "share": "4",
-                    "motivation": "\“for their discoveries concerning a novel therapy against infections caused by roundworm parasites\”,
+                    "motivation": "\“for their discoveries concerning a novel therapy against infections caused by roundworm parasites\”",
                     "affiliations": [
                         {
                             "name": "Kitasato University",
@@ -26284,7 +26284,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "medicine",
                     "share": "2",
-                    "motivation": "\“for her discoveries concerning a novel therapy against Malaria\”,
+                    "motivation": "\“for her discoveries concerning a novel therapy against Malaria\”",
                     "affiliations": [
                         {
                             "name": "China Academy of Traditional Chinese Medicine",
@@ -26310,7 +26310,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "physics",
                     "share": "2",
-                    "motivation": "\“for the discovery of neutrino oscillations, which shows that neutrinos have mass\”,
+                    "motivation": "\“for the discovery of neutrino oscillations, which shows that neutrinos have mass\”",
                     "affiliations": [
                         {
                             "name": "University of Tokyo",
@@ -26336,7 +26336,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "physics",
                     "share": "2",
-                    "motivation": "\“for the discovery of neutrino oscillations, which shows that neutrinos have mass\”,
+                    "motivation": "\“for the discovery of neutrino oscillations, which shows that neutrinos have mass\”",
                     "affiliations": [
                         {
                             "name": "Queen's University",
@@ -26362,7 +26362,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "chemistry",
                     "share": "3",
-                    "motivation": "\“for mechanistic studies of DNA repair\”,
+                    "motivation": "\“for mechanistic studies of DNA repair\”",
                     "affiliations": [
                         {
                             "name": "Francis Crick Institute",
@@ -26390,7 +26390,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "chemistry",
                     "share": "3",
-                    "motivation": "\“for mechanistic studies of DNA repair\”,
+                    "motivation": "\“for mechanistic studies of DNA repair\”",
                     "affiliations": [
                         {
                             "name": "Howard Hughes Medical Institute",
@@ -26421,7 +26421,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "chemistry",
                     "share": "3",
-                    "motivation": "\“for mechanistic studies of DNA repair\”,
+                    "motivation": "\“for mechanistic studies of DNA repair\”",
                     "affiliations": [
                         {
                             "name": "University of North Carolina",
@@ -26447,7 +26447,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "literature",
                     "share": "1",
-                    "motivation": "\“for her polyphonic writings, a monument to suffering and courage in our time\”,
+                    "motivation": "\“for her polyphonic writings, a monument to suffering and courage in our time\”",
                     "affiliations": [
                         []
                     ]
@@ -26465,7 +26465,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "peace",
                     "share": "1",
-                    "motivation": "\“for its decisive contribution to the building of a pluralistic democracy in Tunisia in the wake of the Jasmine Revolution of 2011\”,
+                    "motivation": "\“for its decisive contribution to the building of a pluralistic democracy in Tunisia in the wake of the Jasmine Revolution of 2011\”",
                     "affiliations": [
                         []
                     ]
@@ -26487,7 +26487,7 @@ TAG.Layout.Spoof = (function () {
                     "year": "2015",
                     "category": "economics",
                     "share": "1",
-                    "motivation": "\“for his analysis of consumption, poverty, and welfare\”,
+                    "motivation": "\“for his analysis of consumption, poverty, and welfare\”",
                     "affiliations": [
                         {
                             "name": "Princeton University",
