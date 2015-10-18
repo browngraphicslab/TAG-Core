@@ -7,7 +7,13 @@ TAG.Layout.SpoofTest = (function () {
 	"use strict";
 
     //OPTIONS
-    var IDLE_TIMER_TIME = 45 //IN SECONDS
+	var IDLE_TIMER_TIME = 45 //IN SECONDS
+
+	var SANDBOX_NEW_UI = true
+
+    var SQUISH_FACTOR = SANDBOX_NEW_UI ? 30 : 0
+    var LAUR_WIDTH_REDUCITON = SANDBOX_NEW_UI ? 5 : 0
+    var HORIZ_SPACING_CONSTANT = SANDBOX_NEW_UI ? 40 : 25
 
 	var root = $("#tagRoot")
 	var base = $(document.createElement("div"))
@@ -25,7 +31,8 @@ TAG.Layout.SpoofTest = (function () {
         sortTags = [],
         searchText = $(document.createElement("div")),
         timer,
-        searchBoxController
+        searchBoxController,
+        isSurface
 
 	root.append(base)
 	base.append(sortDiv)
@@ -47,15 +54,18 @@ TAG.Layout.SpoofTest = (function () {
 	    if (ratio > (16 / 9)) {
 	        base.css("width", root.height() * (16 / 9) + "px")
 	        console.log("ratio was greater than 16/9")
+            isSurface = false
 	    }
 	    else {
 	        base.css("height", (9 / 16) * root.width() + "px")
 	        base.css("top", .5 * (root.height() - ((9 / 16) * root.width())) + "px")
 	        console.log("ratio was less than 16/9")
+            isSurface = true
 	    }
 	}
 	else {
-        console.log("ratio was 16/9")
+	    console.log("ratio was 16/9")
+        isSurface = false
 	}
 
 
@@ -107,7 +117,7 @@ TAG.Layout.SpoofTest = (function () {
             $("#overlay").die()
             $("#popup").remove()
             $("#overlay").remove()
-            var width = Math.floor(laurs.length / 3) * ((pageHeight / 5) + 25) + 15
+            var width = Math.floor(laurs.length / 3) * ((pageHeight / 5) + HORIZ_SPACING_CONSTANT - LAUR_WIDTH_REDUCITON - SQUISH_FACTOR) + 15
             var finalX = width - pageWidth
             if (scroller.scrollLeft() > width / 2) {
                 finalX = 0
@@ -145,7 +155,7 @@ TAG.Layout.SpoofTest = (function () {
 			"position": "absolute",
 			"width": "100%",
 			"height": "15%",
-			"top": "-2.5%",
+			"top": "-6%",
 			"left": "0%",
 		})
 		searchBox.css({
@@ -190,7 +200,7 @@ TAG.Layout.SpoofTest = (function () {
 
 		var subSearchText = $(document.createElement("div")).text("Find laureates by name or country of origin")
 		subSearchText.css({
-		    "top": "138.5px",
+		    "top": "137.5px",
 		    "right": "50px",
 		    "font-size": ".55em",
 		    "color": "white",
@@ -221,8 +231,8 @@ TAG.Layout.SpoofTest = (function () {
 			"overflow-x": "scroll",
 			"overflow-y": "hidden",
 			"width": "100%",
-			"height": "74.5%",
-			"top": "25.5%",
+			"height": "82%",
+			"top": "21.5%",
 			"position": "absolute",
 			"background-color" : "transparent"
 		}).attr({id:"scroller"})
@@ -287,10 +297,10 @@ TAG.Layout.SpoofTest = (function () {
 
 		block.css({
 			"position": "absolute",
-			"width": pageHeight /5 + "px",
-			"height": pageHeight /5 + "px",
-			"top": i % 3 * ((pageHeight /5) +35 )+ "px",
-			"left": Math.floor(i / 3) * ((pageHeight /5) + 25) + 15 + "px",
+			"width": pageHeight / 5 - LAUR_WIDTH_REDUCITON + "px",
+			"height": pageHeight /5 + SQUISH_FACTOR +"px",
+			"top": i % 3 * ((pageHeight /5) +45 )+ "px",
+			"left": Math.floor(i / 3) * ((pageHeight / 5) + HORIZ_SPACING_CONSTANT - LAUR_WIDTH_REDUCITON - SQUISH_FACTOR) + 15 + "px",
 			"overflow": "hidden",
 			"box-shadow": "3px 8px 17px 4px #000"
 		}).addClass("block")
@@ -298,7 +308,7 @@ TAG.Layout.SpoofTest = (function () {
 
 		var css = {
 			"position": "relative",
-			"width": "65.75%",
+			"width": SANDBOX_NEW_UI ? "65%" : "65.75%",
             "height" : "33.3333%",
 			"float": "right",
 			"font-size": ".75em",
@@ -363,7 +373,7 @@ TAG.Layout.SpoofTest = (function () {
 		header.css({
 			"position": "absolute",
 			"width": "100%",
-			"height": "25%",
+			"height": "20%",
 			"font-size": ".5em",
 			"text-align": "right",
 			"background-color" : prizecolor
@@ -372,8 +382,31 @@ TAG.Layout.SpoofTest = (function () {
 		img.css({
 			"position": "absolute",
 			"width": "100%",
-			"height" : "auto"
+			"height": "auto",
+			//"top": SANDBOX_NEW_UI ? "15px": "0%"
+            
 		}).attr({ src: laur.Metadata.Thumbnail.FilePath })
+
+	    //console.log(img.height());
+		img.load(function(){
+		    if (img.height()+12.5 < block.height()) {
+		        //console.log("Laureate image DOES NOT hit bottom: " + laur.Metadata.LastName);
+
+		        img.css({
+		            "bottom": "0%",
+		            //"top": img.height(),
+		            "vertical-align": "bottom"
+		        });
+
+		    } else {
+		        //console.log("Laureate image hits bottom: " + laur.Metadata.LastName);
+		        img.css("top", SANDBOX_NEW_UI ? "12.5px": "0%");
+
+		    }
+		})
+
+
+	    //pageHeight /5 + SQUISH_FACTOR +"px" -> This is the height of a laureate tile
 
 		laur.block = block
 		laur.searchString = searchString
@@ -381,11 +414,17 @@ TAG.Layout.SpoofTest = (function () {
 	function arrangeTiles(tiles) {
 		for (var tile = 0; tile < tiles.length; tile++) {
 			var t = tiles[tile]
-			t.style.top = tile % 3 * ((pageHeight /5) + 35) + "px"
-			t.style.left = Math.floor(tile/ 3) * ((pageHeight /5) + 25) + 15 + "px"
+			t.style.top = tile % 3 * ((pageHeight /5) + 45) + "px"
+			t.style.left = Math.floor(tile / 3) * ((pageHeight / 5) + HORIZ_SPACING_CONSTANT - LAUR_WIDTH_REDUCITON - SQUISH_FACTOR) + 15 + "px"
 		}
 	}
 	function search(s) {
+	    while (s.slice(-1) === " ") {
+            s = s.substring(0,s.length-1)
+	    }
+	    while (s.substring(0, 1) === " ") {
+	        s = s.substring(1)
+	    }
 	    $("#decadeList").hide();
 	    $("#genderList").hide();
 	    sortTags.forEach(function (t) {
@@ -837,7 +876,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "102.5px",
+	        "top": isSurface ? "71px" : "76.5px",
 	        "padding-left": "3px",
             "overflow" : "hidden",
 	        "left": "45px",
@@ -883,7 +922,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "102.5px",
+	        "top": isSurface ? "71px" : "76.5px",
 	        "overflow": "hidden",
 	        "padding-left": "3px",
 	        "left": "150px",

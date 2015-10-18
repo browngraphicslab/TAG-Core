@@ -339,6 +339,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             player.pause();
             player.unload();
             player.cancelLoad();
+            $(document).data("tourPlaying",false)
         }
         var willRoot = $("#willOverlayRoot")
         willRoot.css({ "background-color": "transparent" })

@@ -44,7 +44,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         lastMouseMoveEvent,
         debounceTimeout = null,
         NOBEL_ORANGE_COLOR = '#d99b3b',
-        IDLE_TIMER_DURATION = 300000, //5 minutes
+        IDLE_TIMER_DURATION = 20 * 1000, //THIS WAS UNTESTED.  NOW IT IS AND THIS SHIT DON'T WORK
         MARGINALIA_2 = "margin_karlskoga.tif",
         MARGINALIA_1 = "margin_stockholm.tif",
 
@@ -64,6 +64,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     *   creates "screensaver" overlay to be displayed after idle timer expires
     */
     function videoOverlay() {
+        if (jQuery.data(document, "tourPlaying") === true) {
+            restartTimer()
+            return;
+        }
         //stop timer and unbind mousedown and mousemove
         idleTimer && idleTimer.kill();
         $(document).unbind('mousedown', restartTimer);
@@ -75,6 +79,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         videoContainer = $(document.createElement('div')).attr('id', 'videoContainer');
         var touchToExplore = $(document.createElement('div')).attr('id', 'touchToExplore'),
             video = $(document.createElement('video')).attr('id', 'nobelVideo');
+        var helpimg = $(document.createElement('img')).attr('src', tagPath + 'images/will_pop.png');
+        helpimg.css({
+            "left": "20%",
+            "top": "20%",
+            "width": "60%",
+            "display": "block",
+            "position": "absolute",
+            "z-index": "50051",
+        }).click(removeVideo);
+        videoContainer.append(helpimg)
         videoContainer.css({
             'background-color' : 'black',
             'position': 'absolute',
@@ -146,6 +160,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function returnToTop() {
+        $(document).data("tourPlaying", false)
         chunkNumber = 1;
         pageNumber = 1;
         $(".assocMedia").hide()
@@ -154,6 +169,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function firstInit() {
+        $(document).data("tourPlaying",false)
         background = $(document.createElement('div'));
         background.css({
             "height": '90%',
@@ -164,6 +180,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'left': '0%',
             "pointer-events": "none"
         })
+        $("#tagRoot").css({"background-color":"rgba(102,102,102,1)"})
         background.attr('id', 'background');
         root.append(background);
         for (var i = 1; i < 5; i++) {
@@ -225,7 +242,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "width": '40%',
             'background-color': 'rgb(102,102,102)'
         });
-        root.css("background-color", 'rgb(60,60,60)')
         var titleDiv = $(document.createElement('div'))
         titleDiv.css({
             'position': 'absolute',
@@ -285,32 +301,36 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         canvas.mousedown(function (e) {
             if (e.buttons > 0 && $("#bigPopup").length === 0) {
                 var offset = sliderBar.offset(),
-                    willOffset = willImage.offset(),
-                    upOffset = $("#upIcon").offset()
+                    willOffset = willImage.offset()
                 if (e.clientY > offset.top && e.clientY < offset.top + sliderBar.height()) {
                     lastDragY = e.clientY;
                     dragging = true;
                 }
                 else if (e.clientX < willOffset.left + willImage.width()) {
                     mouseUp(e, true);
+                    return;
                 }
                 hardcodedData[pageNumber-1]["associatedMedia"].forEach(function (media) {
                     var medOffset = media.offset()
                     if (medOffset.left!==0 && medOffset.top!==0  && e.clientX > medOffset.left && e.clientX < medOffset.left + media.width() && e.clientY > medOffset.top && e.clientY < medOffset.top + media.height()) {
                         media.click();
+                        return;
                     }
                 })
+                var upOffset = $("#upIcon").offset()
                 if (e.clientX < upOffset.left + $("#upIcon").width() && e.clientX > upOffset.left) {
                     var downOffset = $("#downIcon").offset()
                     if (e.clientY > upOffset.top && e.clientY < upOffset.top + $("#upIcon").height()) {
                         dragging = false;
                         touching = false;
                         $("#upIcon").click()
+                        return;
                     }
                     else if (e.clientY > downOffset.top && e.clientY < downOffset.top + $("#downIcon").height()) {
                         dragging = false;
                         touching = false;
                         $("#downIcon").click()
+                        return;
                     }
                 }
                 else if (chunkNumber === 0) {
@@ -320,9 +340,18 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                             dragging = false;
                             touching = false;
                             $("#downIcon").click()
+                            return;
                         }
                     }
                 }
+                var qOffset = $("#infoButton").offset()
+                if (e.clientX < qOffset.left + $("#infoButton").width() && e.clientX > qOffset.left) {
+                    if (e.clientY < qOffset.top + $("#infoButton").height() && e.clientY > qOffset.top) {
+                        $("#infoButton").click()
+                        return;
+                    }
+                }
+
             }
         })
         canvas.mouseenter(function (e) {
@@ -862,9 +891,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             hardcodedData[p - 1]["sliderPositions"] = sliderPositions
 
             if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
-                if ($("#willp1_1").length !== 0) {
-                    console.log('already loaded');
-                }
                 for (var i = 0; i < hardcodedData[p - 1]["hardcodedHotspotSpecs"].length; i++) {
                     var overlayDiv = $(document.createElement("img"))
                     overlayDiv.css({
@@ -1001,7 +1027,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                             this.hotspotImage.show();
                         }
                     }
-                    div.Hide = function () {}
+                    div.Hide = function () {
+                        this.hide()
+                        if (showRedTracings === true && showOnlyHighlightedHotspots === true) {
+                            this.hotspotImage.hide();
+                        }
+                    }
                     div.FadeIn = function (dur) {}
                     function percentToPxLeft(percent) {
                         return (percent / 100) * sideBar.height();
@@ -1127,7 +1158,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         dragging = true
         lastDragY = 0
-        mouseMove({ clientY: 5, clientX: 500 })
+        mouseMove({ clientY: .1, clientX: 500 })
         setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
 
 
@@ -1449,7 +1480,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         div.fixBulb = function () {
             div.show();
             if (div.descWhole.height() + div.title.height() < div.height()) {
-                div.descWhole.css({"height":(div.height() - div.title.height())+"px"})
+                div.descWhole.css({"height":(div.height() - div.title.height()-2)+"px"})
             }
             div.hide();
         }
@@ -1798,7 +1829,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	}).click(function () {
     	    $("#blocker").remove()
     	    $("#bigPopup").remove()
-    	})
+    	}).css({"opacity":"0"})
 
     	popup.append(closeX);
 
@@ -1953,13 +1984,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'width': '40px',
                 'position': 'absolute',
                 'right': '1.5%',
-                'bottom': '-60px',
+                'bottom': '20px',
                 'z-index': '50050'
             }).attr({ id: 'infoButtonContainer' });
         var infoButton = $(document.createElement('img')).attr({ src: tagPath + 'images/question_icon.png', id: 'infoButton' })
                          .css({ width: '100%', height: '100%' });
         infoButtonContainer.append(infoButton);
-        background.append(infoButtonContainer);
+        $("#tagRoot").append(infoButtonContainer);
         infoButtonContainer.click(function () {
             showHelpDiv();
         });
@@ -2109,7 +2140,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'width': '100%',
             'position': 'absolute',
             'bottom': '0px',
-            'background-color': "rgba(102,102,102,0.8",
+            'background-color': "transparent",
         })
         taskBarArea.attr('id', 'taskBarArea');
 
