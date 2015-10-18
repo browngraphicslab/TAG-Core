@@ -79,6 +79,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         videoContainer = $(document.createElement('div')).attr('id', 'videoContainer');
         var touchToExplore = $(document.createElement('div')).attr('id', 'touchToExplore'),
             video = $(document.createElement('video')).attr('id', 'nobelVideo');
+        var helpimg = $(document.createElement('img')).attr('src', tagPath + 'images/will_pop.png');
+        helpimg.css({
+            "left": "20%",
+            "top": "20%",
+            "width": "60%",
+            "display": "block",
+            "position": "absolute",
+            "z-index": "50051",
+        }).click(removeVideo);
+        videoContainer.append(helpimg)
         videoContainer.css({
             'background-color' : 'black',
             'position': 'absolute',
@@ -1819,7 +1829,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	}).click(function () {
     	    $("#blocker").remove()
     	    $("#bigPopup").remove()
-    	})
+    	}).css({"opacity":"0"})
 
     	popup.append(closeX);
 
@@ -1974,13 +1984,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'width': '40px',
                 'position': 'absolute',
                 'right': '1.5%',
-                'bottom': '-60px',
+                'bottom': '20px',
                 'z-index': '50050'
             }).attr({ id: 'infoButtonContainer' });
         var infoButton = $(document.createElement('img')).attr({ src: tagPath + 'images/question_icon.png', id: 'infoButton' })
                          .css({ width: '100%', height: '100%' });
         infoButtonContainer.append(infoButton);
-        background.append(infoButtonContainer);
+        $("#tagRoot").append(infoButtonContainer);
         infoButtonContainer.click(function () {
             showHelpDiv();
         });

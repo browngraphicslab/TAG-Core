@@ -532,6 +532,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         if (!cancelEntirely) {
             if (initialLoading === true) {
                 setTimeout(function () {
+                    /*
                     //makeTitleSlide();
                     var hugeVidOverlay = $(document.createElement('div')).attr({id:"videoOverlay"})
                     var vid = $(document.createElement('video')).attr({ id: "videoOverlayVideo", src: itePath + "ITE Core/ITEManual/ITEPlayerImages/NW_instruction_video.mp4" })
@@ -586,7 +587,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                             }, 75);
                         },100)
                     });
-                    /*
+                    */
                     setTimeout(function () {
                         hideInitialOverlay();
                         attachVolume();
@@ -605,7 +606,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                             unMute()
                             tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
                         },75);
-                    }, 500);*/
+                    }, 5000);
                 }, 1);
                 return;
             }
@@ -1048,7 +1049,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
     function setInfoAvailable(yes) {
         infoAvailableIcon.attr({
-            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/lightbulb.png"
+            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/lit_info.svg"
         })
         if (yes === true) {
             infoAvailableIcon.css({

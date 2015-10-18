@@ -4141,7 +4141,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      */
     function getPointRelativeToAbsolute( point, element ) {
         var offset = $.getElementOffset( element );
-        return point.minus? point.minus( offset ) : 0;
+        return point ? point.minus? point.minus( offset ) : 0 : 0
     }
 
     /**
