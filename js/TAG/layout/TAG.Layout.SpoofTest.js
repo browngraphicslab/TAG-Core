@@ -419,6 +419,12 @@ TAG.Layout.SpoofTest = (function () {
 		}
 	}
 	function search(s) {
+	    while (s.slice(-1) === " ") {
+            s = s.substring(0,s.length-1)
+	    }
+	    while (s.substring(0, 1) === " ") {
+	        s = s.substring(1)
+	    }
 	    $("#decadeList").hide();
 	    $("#genderList").hide();
 	    sortTags.forEach(function (t) {
