@@ -889,6 +889,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             descriptionDiv.addClass('description');
             descriptionDiv.text(description);
             descriptionDiv.appendTo(info);
+        }
+        else {
+            $(".description").remove()
+            $(".description").die()
         };
 
         if (!previewing) {

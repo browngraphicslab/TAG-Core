@@ -28,7 +28,7 @@ TAG.Util.IdleTimer = (function() {
     function TwoStageTimer(stageOne, stageTwo) {
         stageOne = stageOne || {};
         stageTwo = stageTwo || {};
-        var s1d = 45000, 
+        var s1d = 60000, 
             s1c = stageOne.callback || defaultStageOne,          // stage one callback
             s2d = stageTwo.duration || 10000,                    // duration of stage two timer
             s2c = stageTwo.callback || defaultStageTwo,          // stage two callback
@@ -85,7 +85,9 @@ TAG.Util.IdleTimer = (function() {
         function tourPlaying(isTourPlaying) {
             tourIsPlaying = isTourPlaying;
         }
-
+        function getTourPlaying() {
+            return tourIsPlaying
+        }
         /**
          * A general restart method -- clears timeouts and intervals and
          * restarts stage one timeout
@@ -147,7 +149,8 @@ TAG.Util.IdleTimer = (function() {
             restart:      restart,
             reinitialize: reinitialize,
             s1d: s1d,
-            tourPlaying: tourPlaying
+            tourPlaying: tourPlaying,
+            getTourPlaying:getTourPlaying
         };
     }
 

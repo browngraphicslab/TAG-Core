@@ -64,10 +64,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     *   creates "screensaver" overlay to be displayed after idle timer expires
     */
     function videoOverlay() {
-        if (jQuery.data(document, "tourPlaying") === true) {
+        if (jQuery.data(document, "tourPlaying") === true || idleTimer.getTourPlaying() === true) {
             restartTimer()
             return;
         }
+        var tourPlayer = jQuery.data(document, "currentTour")
+        if (Object.keys(tourPlayer).length !== 0) {
+            tourPlayer.goBack();
+            $(document).data("currentTour", {});
+        }
+        $("#willOverlayRoot").remove();
         //stop timer and unbind mousedown and mousemove
         idleTimer && idleTimer.kill();
         $(document).unbind('mousedown', restartTimer);
@@ -161,6 +167,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function returnToTop() {
         $(document).data("tourPlaying", false)
+        idleTimer && idleTimer.tourPlaying(false)
         chunkNumber = 1;
         pageNumber = 1;
         $(".assocMedia").hide()
@@ -169,7 +176,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function firstInit() {
-        $(document).data("tourPlaying",false)
+        $(document).data("tourPlaying", false)
+        idleTimer && idleTimer.tourPlaying(false)
         background = $(document.createElement('div'));
         background.css({
             "height": '90%',
