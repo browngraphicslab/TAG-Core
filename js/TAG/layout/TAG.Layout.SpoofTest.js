@@ -672,7 +672,8 @@ TAG.Layout.SpoofTest = (function () {
 		    "height": "auto",
 		   // "bottom": "82%",
 		    "position": "relative",
-            "float" : "left"
+		    "float": "right",
+            "margin-right" : '55%',
 		})
 		var commonCSS = {
 		    "position": "relative",
@@ -691,21 +692,14 @@ TAG.Layout.SpoofTest = (function () {
 		if (last === undefined || last === null || last === "undefined") {
             last = ""
 		}
+
 		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " + last));
 		rightSide.append(icon);
-		category.css({
-		    "font-size": ".95em", 
-		    "margin-bottom": "25px",
-		    "position": "relative",
-		    "color": "white",
-		    "width": "80%",
-		    "height": "auto",
-            'float': 'left',
-		});
-		rightSide.append(category.text(laur.Metadata.PrizeCategory));
-		category.css({ "margin-bottom": "25px" })
+		rightSide.append(category.css(commonCSS).text(laur.Metadata.PrizeCategory));
 		rightSide.append(year.css(commonCSS).text(laur.Metadata.Year));
 		rightSide.append(country.css(commonCSS).text(laur.Metadata.bornCountry ? laur.Metadata.bornCountry : ""))
+
+
 		rightSide.append(collaborators.css(commonCSS).text(laur.Metadata.Collaborators ? "Collaborators: "+laur.Metadata.Collaborators : ""))
 		rightSide.append(citation.css(commonCSS).text("Citation:"));
 		rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
