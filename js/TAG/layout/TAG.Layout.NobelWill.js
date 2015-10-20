@@ -64,10 +64,16 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     *   creates "screensaver" overlay to be displayed after idle timer expires
     */
     function videoOverlay() {
-        if (jQuery.data(document, "tourPlaying") === true) {
+        if (jQuery.data(document, "tourPlaying") === true || idleTimer.getTourPlaying() === true) {
             restartTimer()
             return;
         }
+        var tourPlayer = jQuery.data(document, "currentTour")
+        if (Object.keys(tourPlayer).length !== 0) {
+            tourPlayer.goBack();
+            $(document).data("currentTour", {});
+        }
+        $("#willOverlayRoot").remove();
         //stop timer and unbind mousedown and mousemove
         idleTimer && idleTimer.kill();
         $(document).unbind('mousedown', restartTimer);
@@ -86,8 +92,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "width": "60%",
             "display": "block",
             "position": "absolute",
-            "z-index": "50051",
-        }).click(removeVideo);
+            "z-index": "400",
+        }).click(removeVideo)
+        .attr('id', 'helpImg');
+
         videoContainer.append(helpimg)
         videoContainer.css({
             'background-color' : 'black',
@@ -108,7 +116,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             'font-weight': '900',
             'text-align': 'center',
             'font-size': '36pt',
-        }).text("TOUCH TO EXPLORE");
+        }).text("TOUCH TO EXPLORE")
+        .attr('id','touchToExplore');
         video.css({
             'position': 'relative',
             'width': '100%',
@@ -118,7 +127,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         video.attr({
             controls: false,
             preload: 'none',
-            loop: true
+            loop: true,
+            id: 'willVideo'
         });
         videoElt = video[0],
         videoElt.innerHTML = '<source src="' + tagPath + 'images/nobels_will.mp4' + '" type="video/mp4">';
@@ -133,9 +143,11 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         touchToExplore.click(function () {
             removeVideo();
         });
+
     }
 
     function removeVideo() {
+        $('#infoButton').click();
         var tourPlayer = jQuery.data(document, "currentTour")
         if (Object.keys(tourPlayer).length !== 0) {
             tourPlayer.goBack();
@@ -161,6 +173,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function returnToTop() {
         $(document).data("tourPlaying", false)
+        idleTimer && idleTimer.tourPlaying(false)
         chunkNumber = 1;
         pageNumber = 1;
         $(".assocMedia").hide()
@@ -169,7 +182,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function firstInit() {
-        $(document).data("tourPlaying",false)
+        $(document).data("tourPlaying", false)
+        idleTimer && idleTimer.tourPlaying(false)
         background = $(document.createElement('div'));
         background.css({
             "height": '90%',
