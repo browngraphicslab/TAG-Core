@@ -431,12 +431,10 @@ TAG.Layout.SpoofTest = (function () {
 		arrangeTiles(blocks)
 		searchText.text("You have " + blocks.length + " results for '"+s+"'");
 		searchText.show();
-		searchBox.text('')
 		$("#scroller").scrollLeft(0)
 	}
 	function sort(tags, singleSearch) {
 	    searchBoxController.setSearch()
-	    searchBox[0].innerText = " "
 	    if (tags === null || tags === undefined) {
 	        var tagsToSort = []
 	        sortTags.forEach(function (t) {
@@ -585,7 +583,6 @@ TAG.Layout.SpoofTest = (function () {
 	    })
 		$(".block").show()
 		arrangeTiles($(".block").toArray())
-		searchBox[0].value = ''
         searchBoxController.setSearch()
 	}
 	function makeBigPopup(laur) {
