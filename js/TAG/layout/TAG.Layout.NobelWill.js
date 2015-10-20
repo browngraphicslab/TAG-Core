@@ -183,7 +183,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function firstInit() {
         $(document).data("OSDViewers", {})
-        $(document).data("tourObjects", {})
+        $(document).data("tourOSDObjects", {})
         $(document).data("tourPlaying", false)
         idleTimer && idleTimer.tourPlaying(false)
         background = $(document.createElement('div'));
@@ -1760,15 +1760,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 case "tour":
                     var tourDoq = spoof.tourDoqs[doq.Name]
 
-                    var tourPlayer;
-
-                    var tobj = jQuery.data(document, "tourObjects")[objName]
-                    if (tobj !== undefined && tobj !== null && false) {
-                        tourPlayer = tobj
-                    }
-                    else {
-                        tourPlayer = TAG.Layout.TourPlayer(doq, null, null, null, spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail, null)
-                    }
+                    var tourPlayer = TAG.Layout.TourPlayer(doq, null, null, null, spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail, null)
                     
                     $(document).data("currentTour", tourPlayer);
                     slideDiv.append(tourPlayer.getRoot());

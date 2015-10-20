@@ -199,10 +199,9 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @method unload
      */
     function unload() {
-        if (viewer &&  viewerelt && viewerelt.children && viewerelt.children[0] && viewerelt.children[0].uniqueID === viewer.container.uniqueID) {
-            viewerelt.removeChild(viewer.container)
-        }
-        return;
+        //if (viewer &&  viewerelt && viewerelt.children && viewerelt.children[0] && viewerelt.children[0].uniqueID === viewer.container.uniqueID) {
+            //viewerelt.removeChild(viewer.container)
+        //}
         viewer && viewer.destroy();
     }
 
@@ -627,21 +626,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         if (osdv !== undefined && osdv !== null) {
             viewer = osdv
             viewerelt.appendChild(viewer.container)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
         else {
             viewer = new OpenSeadragon.Viewer({
@@ -658,7 +642,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 visibilityRatio: isNobelWill === false ? .2 : 0, //set for consistency with ITE
                 gestureSettingsTouch: { flickEnabled: false }, //don't allow flick gesture to throw art off screen
             });
-            jQuery.data(document, "OSDViewers")[doq.Identifier] = viewer
+            //jQuery.data(document, "OSDViewers")[doq.Identifier] = viewer
         }
         if (locationHist) {
             viewer.setMouseNavEnabled(false);

@@ -892,6 +892,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $(".description").remove()
             $(".description").die()
             var descriptionDiv = $(document.createElement('div'));
+
             descriptionDiv.css({
                 'font-size': '75%',
                 'display': 'inline-block',
@@ -904,6 +905,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             descriptionDiv.addClass('description');
             descriptionDiv.text(description);
             descriptionDiv.appendTo(info);
+
+            //hackiest shit ever, too lazy to find better way. WAY too tired   --Trent
+            setTimeout(function () { descriptionDiv.css({ 'max-height': .85 * (sideBar.height() - infoTitle.offset().top - infoTitle.height()) + 'px' }) }, 5)
+            setTimeout(function () { descriptionDiv.css({ 'max-height': .85 * (sideBar.height() - infoTitle.offset().top - infoTitle.height()) + 'px' }) }, 75)
         }
         else {
             $(".description").remove()
