@@ -1783,9 +1783,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "left": "100%",
                 "z-index": "50000"
             }).attr({id:"willOverlayRoot"})
-            root.append(slideDiv)
+            root.append(slideDiv)            
             switch (doqType) {
                 case "collection":
+                    TAG.Telemetry.recordEvent("Collection", function (tobj) {
+                        tobj.name = doq.Identifier;
+                    });
                     for (var i = 0; i < spoof.doqsInCollection[doq.Identifier].length; i++) {
                         artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Identifier][i]]);
                     }
@@ -1793,6 +1796,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     slideDiv.append(collectionsPage.getRoot())
                     break
                 case "tour":
+                    TAG.Telemetry.recordEvent("Tour", function (tobj) {
+                        tobj.name = doq.tourTitle;
+                    });
                     var tourDoq = spoof.tourDoqs[doq.Name]
                     var tourPlayer = TAG.Layout.TourPlayer(doq, null, null, null, spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail, null)
                     $(document).data("currentTour", tourPlayer);
