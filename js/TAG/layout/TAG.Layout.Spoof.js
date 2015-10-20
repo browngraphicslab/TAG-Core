@@ -1344,49 +1344,65 @@ TAG.Layout.Spoof = (function () {
                         d.Metadata.FullImage = { "FilePath": url }
                     })
                 }
+                else {
+                    console.log("couldn't get map for: "+id)
+                }
                 }
             }
 
             function poll() {
                 if (doqs.length >= Object.keys(map).length) {
-                    var ds = []
-                    var hash = {}
-                    for (var i = 0; i < doqarray.length; i++) {
-                        doqarray[i].physics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
-                        doqarray[i].chemistry.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
-                        doqarray[i].medicine.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
-                        doqarray[i].literature.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
-                        doqarray[i].peace.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
-                        doqarray[i].economics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
-                    }
-                    var hash2 = {}
-                    ds.forEach(function (l) {
-                        var k = l.Metadata.Year + l.Metadata.PrizeCategory
-                        if (!hash2[k]) {
-                            hash2[k] = []
+                    setTimeout(function(){
+                        var ds = []
+                        var hash = {}
+                        for (var i = 0; i < doqarray.length; i++) {
+                            doqarray[i].physics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
+                            doqarray[i].chemistry.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                            doqarray[i].medicine.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                            doqarray[i].literature.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                            doqarray[i].peace.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                            doqarray[i].economics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
                         }
-                        hash2[k].push(l)
-                    })
-                    var keys = Object.keys(hash2)
-                    keys.forEach(function (k) {
-                        var list = hash2[k]
-                        if (list.length > 1) {
-                            list.forEach(function (laur) {
-                                var string = ""
-                                list.forEach(function (l) {
-                                    if (l.Metadata.ID !== laur.Metadata.ID) {
-                                        string += l.Metadata.FirstName + " " + l.Metadata.LastName + ", "
-                                    }
+                        var hash2 = {}
+                        ds.forEach(function (l) {
+                            var k = l.Metadata.Year + l.Metadata.PrizeCategory
+                            if (!hash2[k]) {
+                                hash2[k] = []
+                            }
+                            hash2[k].push(l)
+                        })
+                        var keys = Object.keys(hash2)
+                        keys.forEach(function (k) {
+                            var list = hash2[k]
+                            if (list.length > 1) {
+                                list.forEach(function (laur) {
+                                    var collabs = []
+                                    list.forEach(function (l) {
+                                        if (l.Metadata.ID !== laur.Metadata.ID) {
+                                            collabs.push(l)
+                                        }
+                                    })
+                                    laur.Metadata.Collaborators = collabs
                                 })
-                                laur.Metadata.Collaborators = string.substring(0, string.length - 2)
+                            }
+                            else {
+                                list[0].Metadata.Collaborators = ""
+                            }
+                        })
+                        console.log("number of laureates: " + ds.length)
+                        doqs.forEach(function (d) {
+                            var found  = false
+                            ds.forEach(function (da) {
+                                if (da.Metadata.ID == d.Metadata.ID) {
+                                    found = true
+                                }
                             })
-                        }
-                        else {
-                            list[0].Metadata.Collaborators = ""
-                        }
-                    })
-                    console.log("number of laureates: "+ds.length)
-                    callback(ds);
+                            if (found === false) {
+                                console.log(d.Metadata.ID)
+                            }
+                        })
+                        callback(ds);
+                    },500)
                 }
                 else {
                     setTimeout(poll, 500);
