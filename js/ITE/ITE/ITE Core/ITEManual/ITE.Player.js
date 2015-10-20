@@ -83,6 +83,19 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     * O/P: {object}   ITEPlayer       a new ITE player object 
     */
     function createITEPlayer(playerParent, options) {
+        infoAvailableIcon.css({
+            "height": "40px",
+            "width": "40px",
+            "position": "absolute",
+            "top": "20px",
+            "right": "20px",
+            "z-index": "0099999",
+            "opacity" : "0"
+        })
+        infoAvailableIcon.attr({
+            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/lightbulb.png"
+        })
+        $("#ITEContainer").append(infoAvailableIcon)
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
         this.playerConfiguration    = playerConfiguration; 
         this.playerParent           = playerParent;
@@ -151,7 +164,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 .addClass("volumeButtonContainer");
 
             volumeButton.addClass("volumeButton")
-            .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg")
+            .attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/volume.svg")
 
                 volumeLevelContainer.addClass("volumeLevelContainer")
                 .on({
@@ -211,7 +224,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 .addClass("playPauseButtonContainer");
 
                 playPauseButton.addClass("playPauseButton")
-                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_play.svg")
+                .attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/new_play.svg")
                 .on("click", togglePlayPause);
 
             buttonContainer.append(playPauseButtonContainer);
@@ -234,7 +247,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 .addClass("loopButtonContainer");
 
                 loopButton.addClass("loopButton")
-                .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/loop.svg")
+                .attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/loop.svg")
                 .on("click", toggleLoop);
 
             buttonContainer.append(loopButtonContainer);
@@ -385,7 +398,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 .addClass("fullScreenButtonContainer");
 
             fullScreenButton.addClass("fullScreenButton")
-            .attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/fullscreen.svg")
+            .attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/fullscreen.svg")
             .on("click", toggleFullScreen);
 
             buttonContainer.append(fullScreenButtonContainer);
@@ -519,31 +532,86 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         if (!cancelEntirely) {
             if (initialLoading === true) {
                 setTimeout(function () {
-                    hideInitialOverlay();
-                    makeTitleSlide();
+                    /*
+                    //makeTitleSlide();
+                    var hugeVidOverlay = $(document.createElement('div')).attr({id:"videoOverlay"})
+                    var vid = $(document.createElement('video')).attr({ id: "videoOverlayVideo", src: itePath + "ITE Core/ITEManual/ITEPlayerImages/NW_instruction_video.mp4" })
+                    var css = {
+                        "width": "100%",
+                        "height": "100%",
+                        "position": "absolute",
+                        "z-index": "42314431322341324"
+                    }
+                    var backimg = $(document.createElement("img")).attr({ src: itePath + "ITE Core/ITEManual/ITEPlayerImages/Back.png" })
+                    backimg.css({
+                        "width": "100%",
+                        "position": "absolute"
+                    })
+                    var back = $(document.createElement('div'))
+                    back.click(function () {
+                        back.css({"background-color":"rgba(255,255,255,.25)"})
+                        tourPlayer.goBack();
+                    }).append(backimg).mouseup(function () { back.css({ "background-color": "transparent" }) })
+                    back.css({
+                        "width": "7.5%",
+                        "position": "absolute",
+                        "z-index": "500",
+                        "height" : "50px"
+                    })
+                    vid.css(css).css({ "z-index": "1" })
+                    hugeVidOverlay.css(css).append(back)
+                    hugeVidOverlay.css({"background-color":"black"})
+                    vid[0].play()
+                    hugeVidOverlay.append(vid)
+                    $("#ITEContainer").append(hugeVidOverlay)
+                    vid.bind("ended", function () {
+                        $("#videoOverlay").remove().die()
+                        $("#videoOverlayVideo").remove().die()
+                        setTimeout(function(){
+                            hideInitialOverlay();
+                            attachVolume();
+                            attachPlay();
+                            attachLoop();
+                            attachProgressBar();
+                            attachProgressIndicator();
+                            playPauseButton.attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/new_pause.svg");
+                            hideInfoPane();
+                            setControlsFade();
+                            orchestrator.play();
+                            mute()
+                            setTimeout(function () { orchestrator.pause(); orchestrator.play(); }, 50)
+                            setTimeout(function () {
+                                orchestrator.seek(orchestrator.getElapsedTime() / orchestrator.tourData.totalDuration, true)
+                                unMute()
+                                tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
+                            }, 75);
+                        },100)
+                    });
+                    */
                     setTimeout(function () {
+                        hideInitialOverlay();
                         attachVolume();
                         attachPlay();
                         attachLoop();
                         attachProgressBar();
                         attachProgressIndicator();
-                        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
+                        playPauseButton.attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/new_pause.svg");
                         hideInfoPane();
                         setControlsFade();
                         orchestrator.play();
                         mute()
-                        setTimeout(function () { orchestrator.pause(); orchestrator.play() }, 50)
+                        setTimeout(function () { orchestrator.pause(); orchestrator.play(); }, 50)
                         setTimeout(function () {
                             orchestrator.seek(orchestrator.getElapsedTime()/orchestrator.tourData.totalDuration,true)
                             unMute()
                             tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
                         },75);
-                    }, 1500);
-                }, 3000);
+                    }, 5000);
+                }, 1);
                 return;
             }
             orchestrator.play();
-            playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_pause.svg");
+            playPauseButton.attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/new_pause.svg");
             hideInfoPane();
             setControlsFade();
         }
@@ -644,7 +712,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     */
     function pause() {
         orchestrator.pause();
-        playPauseButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/new_play.svg");
+        playPauseButton.attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/new_play.svg");
         makeControlsVisible();
     };
 
@@ -702,7 +770,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         volumeLevel.css({
             height : newVolume * 100 + "%"
         });
-        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg");
+        volumeButton.attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/volume.svg");
         self.previousVolumeLevel = self.currentVolumeLevel   // Reference to previous volume level for volume control in video/audio tracks
         self.currentVolumeLevel = newVolume;
         orchestrator.setVolume(self.currentVolumeLevel);
@@ -724,7 +792,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     */ 
     function mute(){
         isMuted = true;
-        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume0.svg")
+        volumeButton.attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/volume0.svg")
         volumeButton.css("opacity" , ".5")
         volumeLevel.css("opacity" , "0")
         orchestrator.toggleMute(true);
@@ -737,7 +805,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     */ 
     function unMute(){
         isMuted = false;
-        volumeButton.attr("src", itePath + "ITE%20Core/ITEManual/ITEPlayerImages/volume.svg");
+        volumeButton.attr("src", itePath + "ITE Core/ITEManual/ITEPlayerImages/volume.svg");
         volumeButton.css("opacity" , "1");
         volumeLevel.css("opacity" , "1")
         orchestrator.toggleMute(false);
@@ -980,21 +1048,18 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     }
 
     function setInfoAvailable(yes) {
+        infoAvailableIcon.attr({
+            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/lit_info.svg"
+        })
         if (yes === true) {
-            infoAvailableIcon.attr({
-                src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/lit_info.svg"
-            })
             infoAvailableIcon.css({
                 'opacity' : '1'
             })
             
         }
         else {
-            infoAvailableIcon.attr({
-                src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/unlit_info.svg"
-            })
             infoAvailableIcon.css({
-                'opacity': '.25'
+                'opacity': '0'
             })
         }
     }
@@ -1038,7 +1103,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 'background-color': 'transparent',
                 'color': 'white',
                 'font-size': '70%',
-                'overflow-y': "scroll",
+                'overflow-y': "auto",
                 'text-align': 'left',
                 'scrollbar-face-color': NOBEL_WILL_COLOR,
                 'scrollbar-arrow-color': 'transparent',
@@ -1048,7 +1113,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         
         tabImg
             .attr({
-                src: itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg",
+                src: itePath + "ITE Core/ITEManual/ITEPlayerImages/Close.svg",
                 id : 'tabImg'
             })
             .css({
@@ -1188,14 +1253,14 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         infoPaneOut = true;
         $("#infoPaneDiv").animate({ left: '0%' }, 1000, 'easeInOutQuart', callback ? function () {
             callback(),
-            $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Close.svg")
+            $("#tabImg").attr('src', itePath + "ITE Core/ITEManual/ITEPlayerImages/Close.svg")
             $("#infoPaneTab").css({
                 'border-right': '3px solid '+ NOBEL_WILL_COLOR,
                 'border-top': '3px solid '+ NOBEL_WILL_COLOR,
                 'border-bottom': '3px solid ' + NOBEL_WILL_COLOR,
             })
         } : function () {
-            $("#tabImg").attr('src', itePath + 'ITE%20Core/ITEManual/ITEPlayerImages/Close.svg');
+            $("#tabImg").attr('src', itePath + 'ITE Core/ITEManual/ITEPlayerImages/Close.svg');
             $("#infoPaneTab").css({
                 'border-right': '3px solid '+NOBEL_WILL_COLOR,
                 'border-top': '3px solid '+NOBEL_WILL_COLOR,
@@ -1209,7 +1274,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         infoPaneOut = false;
         $("#infoPaneDiv").animate({ left: '-22%' }, 1000, 'easeInOutQuart', callback ? function () {
             callback(),
-            $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
+            $("#tabImg").attr('src', itePath + "ITE Core/ITEManual/ITEPlayerImages/Open.svg")
             $("#infoPaneTab").css({
                 'background-color': NOBEL_WILL_COLOR,
                 'border-right': '3px solid '+ NOBEL_WILL_COLOR,
@@ -1217,7 +1282,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                 'border-bottom': '3px solid ' + NOBEL_WILL_COLOR,
             })
         } : function () {
-            $("#tabImg").attr('src', itePath + "ITE%20Core/ITEManual/ITEPlayerImages/Open.svg")
+            $("#tabImg").attr('src', itePath + "ITE Core/ITEManual/ITEPlayerImages/Open.svg")
             $("#infoPaneTab").css({
                 'background-color': NOBEL_WILL_COLOR,
                 'border-right': '3px solid '+ NOBEL_WILL_COLOR,
@@ -1232,19 +1297,25 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         outer.attr({
             class: 'infoPaneInfoField'
         })
-            outer.css({
-                'position': 'relative',
-                'z-index': '9999999999',
-                'text-indent' : '20px',
-                'width': '100%',
-                'left': '0%',
-                'background-color': 'transparent',
-                'color': 'white',
-                'font-size': '.9em',
-                'text-align': 'left',
-                'overflow-y': 'auto',
-                'max-height': .85 * ($('#infoPaneDiv').height() - $('#infoPaneTitleDiv').height() - $('#infoPaneTitleDiv').offset().top) + 'px'
-            });
+        outer.css({
+            'position': 'relative',
+            'z-index': '9999999999',
+            'width': '100%',
+            'left': '0%',
+            'background-color': 'transparent',
+            'color': 'white',
+            'font-size': '1.05em',
+            'text-align': 'left',
+            'overflow-y': 'auto',
+            'max-height': .85 * ($('#infoPaneDiv').height() - $('#infoPaneTitleDiv').height() - $('#infoPaneTitleDiv').offset().top) + 'px'
+        });
+        if (text === " " || text === "") {
+            outer.css({ "min-height": "15px"})
+        }
+        if (text.substring(0,7) === "<title>") {
+            text = text.substring(7)
+            outer.css({"font-weight":"bold","font-size":"1.65em"})
+        }
         outer.text(text);
         return outer;
     }
@@ -1252,7 +1323,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
 
     function getDoqFromZIndex(z) {
-        if (data && data.length > z && data[z-1]!==false && data[z-1].SidebarInfo) {
+        if (data && data.length > z && data[z - 1] !== false && data[z - 1].SidebarInfo && data[z - 1].SidebarInfo.length) {
             return data[z-1];
         }
         return null;

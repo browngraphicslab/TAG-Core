@@ -4140,8 +4140,8 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
      * @inner
      */
     function getPointRelativeToAbsolute( point, element ) {
-        var offset = $.getElementOffset( element );
-        return point.minus( offset );
+        var offset = $.getElementOffset(element);
+        return point ? point.minus? point.minus( offset ) : new $.Point( 1, 1 ) : new $.Point( 1, 1 )
     }
 
     /**
@@ -13793,7 +13793,6 @@ ImageJob.prototype = {
         this.image.onload = this.image.onerror = this.image.onabort = null;
         if (!successful) {
             this.image = null;
-            console.log("failed to load image");
         }
 
         if ( this.jobId ) {

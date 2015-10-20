@@ -13,6 +13,9 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
 
     options = options || {}; // cut down on null checks later
 
+    //options :
+    var TILE_IMAGE_SPECIAL_CASING = true
+
     var // DOM-related
         root = TAG.Util.getHtmlAjax('NewCatalog.html'), // use AJAX to load html from .html file
         tileDiv = $(document.createElement("div")).attr("id", "tileDiv"),
@@ -428,12 +431,26 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                 "height": "auto",
                 "bottom" : "0%",
             })
+            if (TILE_IMAGE_SPECIAL_CASING === true) {
+                var collID = currCollection.Identifier.toLowerCase()
+                if (collID === "family" || collID === "will" || collID === "patents") {
+                    tileImage.css({
+                        "top": "0%",
+                    })
+                }
+            }
             artTitle.addClass('artTitle');
             artText.addClass('artText');
             artText.addClass('secondaryFont');
             artText.css({
                 'color': NOBEL_COLOR,
             });
+            var lightbulb = $(document.createElement('div')).attr('id','lightbulb')
+                            .css({ 'width': '40px', 'height': '40px', 'position': 'absolute', 'right': '5px', 'bottom': '0px', 'z-index': '50001'});
+            var lightimg = $(document.createElement('img')).attr({ 'id': 'lightbulbimg' , 'src': tagPath + 'images/lightbulb.png'})
+                            .css({ 'width': '100%', 'height': '100%' });
+            lightbulb.append(lightimg).hide();
+            main.append(lightbulb);
 
 
             //CLICK HANDLER FOR TILE
@@ -797,6 +814,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                 avl,
                 avlArray = [],
                 prevInfo;
+                
+           avlArray = TAG.Layout.Spoof().doqsInCollection[currCollection.Identifier]
 
                 artworkViewer = TAG.Layout.ArtworkViewer({
                     doq: artwork,
@@ -806,7 +825,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                     onAssocMediaView : onAssocMediaView,
                     titleIsName: titleIsName,
                     isNobelWill: false,
-                    isSlideMode: slideMode,
+                    isSlideMode: true,
                     slidesArray : avlArray,
                     twoDeep: twoDeep,
                 });

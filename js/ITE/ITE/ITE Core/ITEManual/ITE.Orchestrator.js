@@ -173,6 +173,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 
 
 	function play() {
+	    $(document).data("tourPlaying", true)
 	    if (!self.cancelEntirely) {
 	        self.setLastMovedObjectByZIndex(-1);
 	        updateZIndices();
@@ -195,6 +196,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	}
 
 	function pause() {
+	    $(document).data("tourPlaying", false)
 	    self.updateZIndices();
 		self.timeManager.stopTimer();
 		for (i = 0; i < self.trackManager.length; i++) {
@@ -350,6 +352,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	function playWhenAllTracksReady() {
 	    self.loadedTracks++
 	    if (self.loadedTracks == trackManager.length) {
+	        $("#backButtonContainer").off('click')
 	        if (!self.isAuthoring) {
 	            window.setTimeout(self.player.play(), 7500);
 	        } else {

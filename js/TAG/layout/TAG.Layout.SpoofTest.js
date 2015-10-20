@@ -7,8 +7,13 @@ TAG.Layout.SpoofTest = (function () {
 	"use strict";
 
     //OPTIONS
-    var IDLE_TIMER_TIME = 30 //IN SECONDS
+	var IDLE_TIMER_TIME = 45 //IN SECONDS
 
+	var SANDBOX_NEW_UI = true
+
+    var SQUISH_FACTOR = SANDBOX_NEW_UI ? 30 : 0
+    var LAUR_WIDTH_REDUCITON = SANDBOX_NEW_UI ? 5 : 0
+    var HORIZ_SPACING_CONSTANT = SANDBOX_NEW_UI ? 40 : 25
 
 	var root = $("#tagRoot")
 	var base = $(document.createElement("div"))
@@ -26,7 +31,8 @@ TAG.Layout.SpoofTest = (function () {
         sortTags = [],
         searchText = $(document.createElement("div")),
         timer,
-        searchBoxController
+        searchBoxController,
+        isSurface
 
 	root.append(base)
 	base.append(sortDiv)
@@ -48,22 +54,25 @@ TAG.Layout.SpoofTest = (function () {
 	    if (ratio > (16 / 9)) {
 	        base.css("width", root.height() * (16 / 9) + "px")
 	        console.log("ratio was greater than 16/9")
+            isSurface = false
 	    }
 	    else {
 	        base.css("height", (9 / 16) * root.width() + "px")
 	        base.css("top", .5 * (root.height() - ((9 / 16) * root.width())) + "px")
 	        console.log("ratio was less than 16/9")
+            isSurface = true
 	    }
 	}
 	else {
-        console.log("ratio was 16/9")
+	    console.log("ratio was 16/9")
+        isSurface = false
 	}
 
 
 	TAG.Layout.Spoof().getLaureates(init)
 	function makeSearchBoxController() {
 	    searchIconButton.css({
-	        "right": "50px",
+	        "left": "977px",
 	        "width": "auto",
 	        "position": "absolute",
 	        "height": "38px",
@@ -108,7 +117,7 @@ TAG.Layout.SpoofTest = (function () {
             $("#overlay").die()
             $("#popup").remove()
             $("#overlay").remove()
-            var width = Math.floor(laurs.length / 3) * ((pageHeight / 5) + 25) + 15
+            var width = Math.floor(laurs.length / 3) * ((pageHeight / 5) + HORIZ_SPACING_CONSTANT - LAUR_WIDTH_REDUCITON - SQUISH_FACTOR) + 15
             var finalX = width - pageWidth
             if (scroller.scrollLeft() > width / 2) {
                 finalX = 0
@@ -146,7 +155,7 @@ TAG.Layout.SpoofTest = (function () {
 			"position": "absolute",
 			"width": "100%",
 			"height": "15%",
-			"top": "0%",
+			"top": "-6%",
 			"left": "0%",
 		})
 		searchBox.css({
@@ -156,11 +165,15 @@ TAG.Layout.SpoofTest = (function () {
             "top": "90px",
             "overflow": "hidden",
             "color" : "white",
-			"right": "50px",
+			"left" : "765px",
 			"border": "2.5px solid " + NOBEL_ORANGE_COLOR,
 			"border-radius": "12px",
-			"position" : "absolute"
+			"position": "absolute"
 		}).attr({ id: "searchBox" })
+
+		searchBox[0].placeholder = "Search by keyword"
+
+		$(searchBox).bind("input", function () { searchBoxController.search() })
 
 		searchBoxController = makeSearchBoxController()
 
@@ -176,7 +189,8 @@ TAG.Layout.SpoofTest = (function () {
             "vertical-align" : "middle",
 		    "box-shadow": "3px 8px 17px 4px #000",
 		    "border-color": NOBEL_ORANGE_COLOR,
-		    "top": "95px",
+		    "top": "93px",
+            "padding-top": "7px"
 		}
 		sortButton.css(clearSortCSS)
 		clearButton.css(clearSortCSS)
@@ -186,32 +200,17 @@ TAG.Layout.SpoofTest = (function () {
 		    sort(null);
 		}).hide();
 		clearButton.css({
-		    "left": "765px",
+		    "right": "50px",
 		}).text("Clear").click(reset).mousedown(function () { clearButton.css("opacity", ".75") }).mouseleave(function () { clearButton.css("opacity","1")})
 
-		var subSearchText = $(document.createElement("div")).text("Single term: name, country of origin, or sub-field")
-		subSearchText.css({
-		    "top": "138.5px",
-		    "right": "50px",
-		    "font-size": ".55em",
-		    "color": "white",
-            "position" : "absolute"
-		})
-        sortDiv.append(subSearchText)
 		searchText.css({
 		    "height": "30px",
-		    "top": "152.5px",
+		    "top": "150px",
 		    "left": "45px",
 		    "font-size": ".8em",
 		    "color": "white",
 		    "position": "absolute"
 		}).hide();
-		searchButton.css({
-			"height": "30px",
-			"top": "55px",
-			"right": "50px",
-			"position": "absolute"
-		}).text("Search")
         $(base).keyup(function (e) {
             if (e.keyCode === 13) {
                 searchBoxController.search()
@@ -222,8 +221,8 @@ TAG.Layout.SpoofTest = (function () {
 			"overflow-x": "scroll",
 			"overflow-y": "hidden",
 			"width": "100%",
-			"height": "75%",
-			"top": "25%",
+			"height": "82%",
+			"top": "21.5%",
 			"position": "absolute",
 			"background-color" : "transparent"
 		}).attr({id:"scroller"})
@@ -240,7 +239,7 @@ TAG.Layout.SpoofTest = (function () {
             l+=70
 		})
 
-		//timer = makeTimer()
+		timer = makeTimer()
         makeDropDowns()
         $("#decadeList").hide();
         $("#genderList").hide();
@@ -250,8 +249,8 @@ TAG.Layout.SpoofTest = (function () {
 		$("#tagRoot").unbind()
 		root.unbind()
 		var ontouch = function () {
-		    //timer.stop()
-		    //timer.restart()
+		    timer.stop()
+		    timer.restart()
 		}
 		scroller.click(ontouch).mousedown(ontouch)
         $(".block").click(ontouch).mousedown(ontouch)
@@ -288,10 +287,10 @@ TAG.Layout.SpoofTest = (function () {
 
 		block.css({
 			"position": "absolute",
-			"width": pageHeight /5 + "px",
-			"height": pageHeight /5 + "px",
-			"top": i % 3 * ((pageHeight /5) +35 )+ "px",
-			"left": Math.floor(i / 3) * ((pageHeight /5) + 25) + 15 + "px",
+			"width": pageHeight / 5 - LAUR_WIDTH_REDUCITON + "px",
+			"height": pageHeight /5 + SQUISH_FACTOR +"px",
+			"top": i % 3 * ((pageHeight /5) +45 )+ "px",
+			"left": Math.floor(i / 3) * ((pageHeight / 5) + HORIZ_SPACING_CONSTANT - LAUR_WIDTH_REDUCITON - SQUISH_FACTOR) + 15 + "px",
 			"overflow": "hidden",
 			"box-shadow": "3px 8px 17px 4px #000"
 		}).addClass("block")
@@ -299,7 +298,7 @@ TAG.Layout.SpoofTest = (function () {
 
 		var css = {
 			"position": "relative",
-			"width": "65.75%",
+			"width": SANDBOX_NEW_UI ? "65%" : "65.75%",
             "height" : "33.3333%",
 			"float": "right",
 			"font-size": ".75em",
@@ -364,7 +363,7 @@ TAG.Layout.SpoofTest = (function () {
 		header.css({
 			"position": "absolute",
 			"width": "100%",
-			"height": "25%",
+			"height": "20%",
 			"font-size": ".5em",
 			"text-align": "right",
 			"background-color" : prizecolor
@@ -373,8 +372,31 @@ TAG.Layout.SpoofTest = (function () {
 		img.css({
 			"position": "absolute",
 			"width": "100%",
-			"height" : "auto"
+			"height": "auto",
+			//"top": SANDBOX_NEW_UI ? "15px": "0%"
+            
 		}).attr({ src: laur.Metadata.Thumbnail.FilePath })
+
+	    //console.log(img.height());
+		img.load(function(){
+		    if (img.height()+12.5 < block.height()) {
+		        //console.log("Laureate image DOES NOT hit bottom: " + laur.Metadata.LastName);
+
+		        img.css({
+		            "bottom": "0%",
+		            //"top": img.height(),
+		            "vertical-align": "bottom"
+		        });
+
+		    } else {
+		        //console.log("Laureate image hits bottom: " + laur.Metadata.LastName);
+		        img.css("top", SANDBOX_NEW_UI ? "12.5px": "0%");
+
+		    }
+		})
+
+
+	    //pageHeight /5 + SQUISH_FACTOR +"px" -> This is the height of a laureate tile
 
 		laur.block = block
 		laur.searchString = searchString
@@ -382,11 +404,17 @@ TAG.Layout.SpoofTest = (function () {
 	function arrangeTiles(tiles) {
 		for (var tile = 0; tile < tiles.length; tile++) {
 			var t = tiles[tile]
-			t.style.top = tile % 3 * ((pageHeight /5) + 35) + "px"
-			t.style.left = Math.floor(tile/ 3) * ((pageHeight /5) + 25) + 15 + "px"
+			t.style.top = tile % 3 * ((pageHeight /5) + 45) + "px"
+			t.style.left = Math.floor(tile / 3) * ((pageHeight / 5) + HORIZ_SPACING_CONSTANT - LAUR_WIDTH_REDUCITON - SQUISH_FACTOR) + 15 + "px"
 		}
 	}
 	function search(s) {
+	    while (s.slice(-1) === " ") {
+            s = s.substring(0,s.length-1)
+	    }
+	    while (s.substring(0, 1) === " ") {
+	        s = s.substring(1)
+	    }
 	    $("#decadeList").hide();
 	    $("#genderList").hide();
 	    sortTags.forEach(function (t) {
@@ -403,10 +431,10 @@ TAG.Layout.SpoofTest = (function () {
 		arrangeTiles(blocks)
 		searchText.text("You have " + blocks.length + " results for '"+s+"'");
 		searchText.show();
-		searchBox.text('')
 		$("#scroller").scrollLeft(0)
 	}
-	function sort(tags,singleSearch) {
+	function sort(tags, singleSearch) {
+	    searchBoxController.setSearch()
 	    if (tags === null || tags === undefined) {
 	        var tagsToSort = []
 	        sortTags.forEach(function (t) {
@@ -424,9 +452,15 @@ TAG.Layout.SpoofTest = (function () {
 	        reset();
 	        return;
 	    }
-        //$("#decadeList").hide();
-        //$("#genderList").hide();
 	    $(".block").hide()
+
+	    if (tags.length > 1) {
+	        var t = {}
+	        tags.forEach(function (tag) {
+                t[tag] = true
+	        })
+            tags = Object.keys(t)
+	    }
 
 	    var p = ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics']
 	    var d = ['1900s', '1910s', '1920s', '1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s']
@@ -535,7 +569,7 @@ TAG.Layout.SpoofTest = (function () {
 		}
 		searchText.text("There were " + tiles.length + " results found for " + s);
 		if (tiles.length === 0) {
-			searchText.text("There were no results found" );
+			searchText.text("There were no results found for " + s);
 		}
 		searchText.show();
 		$("#scroller").scrollLeft(0)
@@ -549,7 +583,6 @@ TAG.Layout.SpoofTest = (function () {
 	    })
 		$(".block").show()
 		arrangeTiles($(".block").toArray())
-		searchBox[0].value = ''
         searchBoxController.setSearch()
 	}
 	function makeBigPopup(laur) {
@@ -582,8 +615,8 @@ TAG.Layout.SpoofTest = (function () {
 		    "height": "35px",
 		    "width": "35px",
 		    "position": "absolute",
-		    "top": "5px",
-            "left" : "5px"
+		    "top": "9px",
+            "right" : "9px"
 		}).click(hide)
 		imgwrapper.css({
 			"width": "40%",
@@ -617,15 +650,18 @@ TAG.Layout.SpoofTest = (function () {
 		var name = $(document.createElement("div"))
 		var category = $(document.createElement("div"))
 		var year = $(document.createElement("div"))
+		var collaborators = $(document.createElement("div"))
+		var citation = $(document.createElement("div"))
 		var desc = $(document.createElement("div"))
 		var country = $(document.createElement("div"))
-		var icon = $(document.createElement("img")).attr({ src: '../tagcore/images/prize_icons/' + laur.Metadata.PrizeCategory.toLowerCase() + '.svg' })
+		var icon = $(document.createElement("img")).attr({ src: '../tagcore/images/prize_icons/' + laur.Metadata.PrizeCategory.toLowerCase() + '_white.svg' })
 		icon.css({
-		    "width": "70px",
+		    "width": "20%",
 		    "height": "auto",
-		    "bottom": "0px",
-		    "position": "absolute",
-            "left" : "0%"
+		   // "bottom": "82%",
+		    "position": "relative",
+		    "float": "right",
+            "margin-right" : '55%',
 		})
 		var commonCSS = {
 		    "position": "relative",
@@ -635,7 +671,8 @@ TAG.Layout.SpoofTest = (function () {
             "margin-bottom" : "15px"
 		}
 		name.css({ "font-size": "1.4em" })
-		category.css({ "font-size": ".95em" })
+		collaborators.css({ "font-size": ".95em" })
+		
 		year.css({ "font-size": ".95em" })
 		desc.css({ "font-size": ".95em" })
 		country.css({ "font-size": ".95em" })
@@ -643,12 +680,17 @@ TAG.Layout.SpoofTest = (function () {
 		if (last === undefined || last === null || last === "undefined") {
             last = ""
 		}
-		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " +last));
+
+		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " + last));
+		rightSide.append(icon);
 		rightSide.append(category.css(commonCSS).text(laur.Metadata.PrizeCategory));
 		rightSide.append(year.css(commonCSS).text(laur.Metadata.Year));
 		rightSide.append(country.css(commonCSS).text(laur.Metadata.bornCountry ? laur.Metadata.bornCountry : ""))
+
+
+		rightSide.append(collaborators.css(commonCSS).text(laur.Metadata.Collaborators ? "Collaborators: "+laur.Metadata.Collaborators : ""))
+		rightSide.append(citation.css(commonCSS).text("Citation:"));
 		rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
-        rightSide.append(icon)
 
 		function hide() {
 			$("#popup").hide()
@@ -672,7 +714,7 @@ TAG.Layout.SpoofTest = (function () {
             "width" : "55px",
 	        "position": "absolute",
 	        "left": x + "px",
-            "top" : "65px"
+            "top" : "70px"
 	    }).click(
         function () {
             div.toggle()
@@ -700,7 +742,7 @@ TAG.Layout.SpoofTest = (function () {
 	    div.select = function () {
 	        div.selected = true;
 	        img.css({
-                "border" : "1.5px solid white"
+                "border" : "2px solid white"
 	        })
 	    }
 	    div.unselect = function () {
@@ -784,10 +826,11 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "100px",
+	        "top": "93px",
 	        "padding-left": "5px",
+            "padding-top": "7px",
 	        "font-size": ".75em",
-	        "height": "27.5px",
+	        "height": "30px",
 	        "left": "45px",
 	        "box-shadow": "3px 8px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
@@ -811,12 +854,12 @@ TAG.Layout.SpoofTest = (function () {
 	    base.append(decadeList)
 	    decadeList.css({
 	        "position": "absolute",
-	        "width": "90px",
+	        "width": $("#decadeButton").width()+2 + "px",
 	        "border-bottom-left-radius": "4pt",
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "122.5px",
+	        "top": isSurface ? "71px" : "76.5px",
 	        "padding-left": "3px",
             "overflow" : "hidden",
 	        "left": "45px",
@@ -837,10 +880,11 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "100px",
-            "height" : "27.5px",
+	        "top": "93px",
+            "height" : "30px",
             "font-size": ".75em",
-            "padding-left" : "5px",
+            "padding-left": "5px",
+            "padding-top": "7px",
 	        "left": "150px",
 	        "box-shadow": "3px 20px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
@@ -857,12 +901,12 @@ TAG.Layout.SpoofTest = (function () {
 	    base.append(genderList)
 	    genderList.css({
 	        "position": "absolute",
-	        "width": "94px",
+	        "width" : $("#genderButton").width() +2+ "px",
 	        "border-bottom-left-radius": "4pt",
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "122.5px",
+	        "top": isSurface ? "71px" : "76.5px",
 	        "overflow": "hidden",
 	        "padding-left": "3px",
 	        "left": "150px",
@@ -884,7 +928,8 @@ TAG.Layout.SpoofTest = (function () {
 	        "right": "5px",
             "width" : "auto",
             "transform" : "rotate(270deg)",
-	        "top": "10%",
+            "top": "10%",
+            "padding-top": "4px"
 	    }).attr({ src: '../tagcore/images/icons/blackclose.svg' })
         div.append(img)
 	}

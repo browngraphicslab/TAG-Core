@@ -185,6 +185,34 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         infoDiv.text("Loading Interactive Tour...");
         infoDiv.attr('id', 'infoDiv')
 
+        var tourVideoContainer = $(document.createElement('div')).attr('id', 'tourVideoContainer');
+        var tourVideo = $(document.createElement('video')).attr('id', 'tourVideo');
+        tourVideoContainer.css({
+            'background-color': 'black',
+            'position': 'absolute',
+            'width': '100%',
+            'height': '100%',
+            'top': '0%',
+            'text-align': 'center',
+            'z-index': '50002',
+        });
+        tourVideo.css({
+            'position': 'relative',
+            'width': '100%',
+            'height': '100%',
+            'z-index': '1005'
+        });
+        tourVideo.attr({
+            controls: false,
+            preload: 'none',
+            loop: true
+        });
+        videoElt = tourVideo[0],
+        videoElt.innerHTML = '<source src="' + tagPath + 'images/NW_instruction_video.mov' + '" type="video/mp4">';
+        tourVideoContainer.append(tourVideo);
+        initialOverlay.append(tourVideoContainer);
+        videoElt.play();
+
         var moreinfoDiv = $(document.createElement('div'));
         moreinfoDiv.css({
             "color": "white",
@@ -311,6 +339,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             player.pause();
             player.unload();
             player.cancelLoad();
+            $(document).data("tourPlaying",false)
         }
         var willRoot = $("#willOverlayRoot")
         willRoot.css({ "background-color": "transparent" })
