@@ -1345,49 +1345,65 @@ TAG.Layout.Spoof = (function () {
                         d.Metadata.FullImage = { "FilePath": url }
                     })
                 }
+                else {
+                    console.log("couldn't get map for: "+id)
+                }
                 }
             }
 
             function poll() {
                 if (doqs.length >= Object.keys(map).length) {
-                    var ds = []
-                    var hash = {}
-                    for (var i = 0; i < doqarray.length; i++) {
-                        doqarray[i].physics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
-                        doqarray[i].chemistry.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
-                        doqarray[i].medicine.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
-                        doqarray[i].literature.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
-                        doqarray[i].peace.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
-                        doqarray[i].economics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
-                    }
-                    var hash2 = {}
-                    ds.forEach(function (l) {
-                        var k = l.Metadata.Year + l.Metadata.PrizeCategory
-                        if (!hash2[k]) {
-                            hash2[k] = []
+                    setTimeout(function(){
+                        var ds = []
+                        var hash = {}
+                        for (var i = 0; i < doqarray.length; i++) {
+                            doqarray[i].physics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
+                            doqarray[i].chemistry.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                            doqarray[i].medicine.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                            doqarray[i].literature.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                            doqarray[i].peace.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!") } })
+                            doqarray[i].economics.forEach(function (d) { if (!hash[d.Metadata.ID]) { ds.push(d); hash[d.Metadata.ID] = true } else { console.log(d.Metadata.ID + "was already added!")} })
                         }
-                        hash2[k].push(l)
-                    })
-                    var keys = Object.keys(hash2)
-                    keys.forEach(function (k) {
-                        var list = hash2[k]
-                        if (list.length > 1) {
-                            list.forEach(function (laur) {
-                                var string = ""
-                                list.forEach(function (l) {
-                                    if (l.Metadata.ID !== laur.Metadata.ID) {
-                                        string += l.Metadata.FirstName + " " + l.Metadata.LastName + ", "
-                                    }
+                        var hash2 = {}
+                        ds.forEach(function (l) {
+                            var k = l.Metadata.Year + l.Metadata.PrizeCategory
+                            if (!hash2[k]) {
+                                hash2[k] = []
+                            }
+                            hash2[k].push(l)
+                        })
+                        var keys = Object.keys(hash2)
+                        keys.forEach(function (k) {
+                            var list = hash2[k]
+                            if (list.length > 1) {
+                                list.forEach(function (laur) {
+                                    var collabs = []
+                                    list.forEach(function (l) {
+                                        if (l.Metadata.ID !== laur.Metadata.ID) {
+                                            collabs.push(l)
+                                        }
+                                    })
+                                    laur.Metadata.Collaborators = collabs
                                 })
-                                laur.Metadata.Collaborators = string.substring(0, string.length - 2)
+                            }
+                            else {
+                                list[0].Metadata.Collaborators = ""
+                            }
+                        })
+                        console.log("number of laureates: " + ds.length)
+                        doqs.forEach(function (d) {
+                            var found  = false
+                            ds.forEach(function (da) {
+                                if (da.Metadata.ID == d.Metadata.ID) {
+                                    found = true
+                                }
                             })
-                        }
-                        else {
-                            list[0].Metadata.Collaborators = ""
-                        }
-                    })
-                    console.log("number of laureates: "+ds.length)
-                    callback(ds);
+                            if (found === false) {
+                                console.log(d.Metadata.ID)
+                            }
+                        })
+                        callback(ds);
+                    },500)
                 }
                 else {
                     setTimeout(poll, 500);
@@ -1586,7 +1602,7 @@ TAG.Layout.Spoof = (function () {
             "1950-11-010000-00-00US1998physics": "LAUGHLIN_1998.TIF",
             "1949-04-060000-00-00DE1998physics": "STOERMER_1998.TIF",
             "1939-02-280000-00-00CN1998physics": "TSUI_1998.TIF",
-            "1946-07-050000-00-00NL1999physics": "msf_logo_lowresjpeg.jpg",
+            "1946-07-050000-00-00NL1999physics": "_T_HOOFT_1999.TIF",
             "1931-06-270000-00-00NL1999physics": "VELTMAN_1999.TIF",
             "1852-08-301911-03-01NLDE1901chemistry": "BEHRING_1901.TIF",
             "1852-10-091919-07-15DEDE1902chemistry": "FISCHER_1902.TIF",
@@ -1602,7 +1618,7 @@ TAG.Layout.Spoof = (function () {
             "1854-11-051941-08-14FRFR1912chemistry": "SABATIER_1912.TIF",
             "1866-12-121919-11-15FRCH1913chemistry": "WERNER_1913.TIF",
             "1868-01-311928-04-02USUS1914chemistry": "RICHARDS_1914.TIF",
-            "1872-08-131942-08-03DECH1915chemistry": "BRAGG_W_H_1915.TIF",
+            "1872-08-131942-08-03DECH1915chemistry": "WILLSTAETTER_1915.TIF",
             "1868-12-091934-01-29PLCH1918chemistry": "HABER_1918.TIF",
             "1864-06-251941-11-18DEDE1920chemistry": "NERNST_1920.TIF",
             "1877-09-021956-09-22GBGB1921chemistry": "SODDY_1921.TIF",
@@ -1798,7 +1814,7 @@ TAG.Layout.Spoof = (function () {
             "1918-03-032007-10-26USUS1959medicine": "KORNBERG_1959.TIF",
             "1899-09-031985-08-31AUAU1960medicine": "BURNET_1960.TIF",
             "1915-02-281987-10-02BRGB1960medicine": "MEDAWAR_1960.TIF",
-            "1899-06-031972-06-13HUUS1961medicine": "MOESSBAUER_1961.TIF",
+            "1899-06-031972-06-13HUUS1961medicine": "VON_B_K_SY_1961.TIF",
             "1916-06-082004-07-28GBUS1962medicine": "CRICK_1962.TIF",
             "1928-04-060000-00-00US1962medicine": "WATSON_1962.TIF",
             "1916-12-152004-10-05NZGB1962medicine": "WILKINS_1962.TIF",
@@ -1999,7 +2015,7 @@ TAG.Layout.Spoof = (function () {
             "1835-07-271907-02-16ITIT1906literature": "CARDUCCI_1906.TIF",
             "1865-12-301936-01-18INGB1907literature": "KIPLING_1907.TIF",
             "1846-01-051926-09-14DEDE1908literature": "EUCKEN_1908.TIF",
-            "1858-11-201940-03-16SESE1909literature": "D_ESTOURNELLE_1909.TIF",
+            "1858-11-201940-03-16SESE1909literature": "LAGERLOEF_1909.TIF",
             "1830-03-151914-04-02DEDE1910literature": "HEYSE_1910.TIF",
             "1862-08-291949-05-06BEFR1911literature": "MAETERLINCK_1911.TIF",
             "1862-11-151946-06-06DEPL1912literature": "HAUPTMANN_1912.TIF",
@@ -2025,7 +2041,7 @@ TAG.Layout.Spoof = (function () {
             "1870-10-221953-11-08RUFR1933literature": "BUNIN_1933.TIF",
             "1867-06-281936-12-10ITIT1934literature": "PIRANDELLO_1934.TIF",
             "1888-10-161953-11-27USUS1936literature": "O_NEILL_1936.TIF",
-            "1881-03-231958-08-22FRFR1937literature": "SZENT_GYOERGYI_1937.TIF",
+            "1881-03-231958-08-22FRFR1937literature": "MARTIN_DU_GARD_1937.TIF",
             "1892-06-261973-03-06USUS1938literature": "PEARL_BUCK_1938.TIF",
             "1888-09-161964-06-03FIFI1939literature": "SILLANPAEAE_1939.TIF",
             "1873-01-201950-11-25DKDK1944literature": "JENSEN_1944.TIF",
