@@ -72,7 +72,7 @@ TAG.Layout.SpoofTest = (function () {
 	TAG.Layout.Spoof().getLaureates(init)
 	function makeSearchBoxController() {
 	    searchIconButton.css({
-	        "right": "50px",
+	        "left": "977px",
 	        "width": "auto",
 	        "position": "absolute",
 	        "height": "38px",
@@ -165,11 +165,15 @@ TAG.Layout.SpoofTest = (function () {
             "top": "90px",
             "overflow": "hidden",
             "color" : "white",
-			"right": "50px",
+			"left" : "765px",
 			"border": "2.5px solid " + NOBEL_ORANGE_COLOR,
 			"border-radius": "12px",
-			"position" : "absolute"
+			"position": "absolute"
 		}).attr({ id: "searchBox" })
+
+		searchBox[0].placeholder = "Search by keyword"
+
+		$(searchBox).bind("input", function () { searchBoxController.search() })
 
 		searchBoxController = makeSearchBoxController()
 
@@ -185,7 +189,8 @@ TAG.Layout.SpoofTest = (function () {
             "vertical-align" : "middle",
 		    "box-shadow": "3px 8px 17px 4px #000",
 		    "border-color": NOBEL_ORANGE_COLOR,
-		    "top": "95px",
+		    "top": "93px",
+            "padding-top": "7px"
 		}
 		sortButton.css(clearSortCSS)
 		clearButton.css(clearSortCSS)
@@ -195,32 +200,17 @@ TAG.Layout.SpoofTest = (function () {
 		    sort(null);
 		}).hide();
 		clearButton.css({
-		    "left": "765px",
+		    "right": "50px",
 		}).text("Clear").click(reset).mousedown(function () { clearButton.css("opacity", ".75") }).mouseleave(function () { clearButton.css("opacity","1")})
 
-		var subSearchText = $(document.createElement("div")).text("Find laureates by name or country of origin")
-		subSearchText.css({
-		    "top": "137.5px",
-		    "right": "50px",
-		    "font-size": ".55em",
-		    "color": "white",
-            "position" : "absolute"
-		})
-        sortDiv.append(subSearchText)
 		searchText.css({
 		    "height": "30px",
-		    "top": "157.5px",
+		    "top": "150px",
 		    "left": "45px",
 		    "font-size": ".8em",
 		    "color": "white",
 		    "position": "absolute"
 		}).hide();
-		searchButton.css({
-			"height": "30px",
-			"top": "55px",
-			"right": "50px",
-			"position": "absolute"
-		}).text("Search")
         $(base).keyup(function (e) {
             if (e.keyCode === 13) {
                 searchBoxController.search()
@@ -727,7 +717,7 @@ TAG.Layout.SpoofTest = (function () {
             "width" : "55px",
 	        "position": "absolute",
 	        "left": x + "px",
-            "top" : "65px"
+            "top" : "70px"
 	    }).click(
         function () {
             div.toggle()
@@ -839,10 +829,11 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "100px",
+	        "top": "93px",
 	        "padding-left": "5px",
+            "padding-top": "7px",
 	        "font-size": ".75em",
-	        "height": "27.5px",
+	        "height": "30px",
 	        "left": "45px",
 	        "box-shadow": "3px 8px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
@@ -892,10 +883,11 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": "100px",
-            "height" : "27.5px",
+	        "top": "93px",
+            "height" : "30px",
             "font-size": ".75em",
-            "padding-left" : "5px",
+            "padding-left": "5px",
+            "padding-top": "7px",
 	        "left": "150px",
 	        "box-shadow": "3px 20px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
@@ -939,7 +931,8 @@ TAG.Layout.SpoofTest = (function () {
 	        "right": "5px",
             "width" : "auto",
             "transform" : "rotate(270deg)",
-	        "top": "10%",
+            "top": "10%",
+            "padding-top": "4px"
 	    }).attr({ src: '../tagcore/images/icons/blackclose.svg' })
         div.append(img)
 	}
