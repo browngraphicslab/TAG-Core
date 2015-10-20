@@ -445,6 +445,7 @@ TAG.Layout.SpoofTest = (function () {
 		$("#scroller").scrollLeft(0)
 	}
 	function sort(tags, singleSearch) {
+	    searchBoxController.setSearch()
 	    searchBox[0].innerText = " "
 	    if (tags === null || tags === undefined) {
 	        var tagsToSort = []
