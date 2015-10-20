@@ -580,7 +580,7 @@ TAG.Layout.SpoofTest = (function () {
 		}
 		searchText.text("There were " + tiles.length + " results found for " + s);
 		if (tiles.length === 0) {
-			searchText.text("There were no results found" );
+			searchText.text("There were no results found for " + s);
 		}
 		searchText.show();
 		$("#scroller").scrollLeft(0)
