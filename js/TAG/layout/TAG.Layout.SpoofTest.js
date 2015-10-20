@@ -686,7 +686,7 @@ TAG.Layout.SpoofTest = (function () {
 		collaborators.css({ "font-size": ".95em" })
 		
 		year.css({ "font-size": ".95em" })
-		desc.css({ "font-size": ".95em" })
+		desc.css({ "font-size": ".95em"})
 		country.css({ "font-size": ".95em" })
 		var last = laur.Metadata.LastName
 		if (last === undefined || last === null || last === "undefined") {
@@ -702,7 +702,21 @@ TAG.Layout.SpoofTest = (function () {
 
 		rightSide.append(collaborators.css(commonCSS).text(laur.Metadata.Collaborators ? "Collaborators: "+laur.Metadata.Collaborators : ""))
 		rightSide.append(citation.css(commonCSS).text("Citation:"));
-		rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
+		var mot = laur.Metadata.Motivation;
+		if (mot.indexOf("<I>") > 0) {
+		    var start = mot.indexOf("<I>");
+		    var end = mot.lastIndexOf("</I>");
+		    var firstPart = mot.slice(0, start);
+		    var italicText = mot.slice(start + 3, end);
+		    var lastPart = mot.slice(end + 4, mot.length);
+		    var firstSpan = $('<span/>').text(firstPart);
+		    var italicSpan = $('<span/>').text(italicText).css("font-style", "italic");
+		    var lastSpan = $('<span/>').text(lastPart);
+		    desc.css(commonCSS).append(firstSpan).append(italicSpan).append(lastSpan);
+		    rightSide.append(desc);
+		} else {
+		    rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
+		}
 
 		function hide() {
 			$("#popup").hide()

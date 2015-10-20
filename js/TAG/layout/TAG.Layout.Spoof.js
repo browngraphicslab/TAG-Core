@@ -1583,7 +1583,7 @@ TAG.Layout.Spoof = (function () {
             "1950-11-010000-00-00US1998physics": "LAUGHLIN_1998.TIF",
             "1949-04-060000-00-00DE1998physics": "STOERMER_1998.TIF",
             "1939-02-280000-00-00CN1998physics": "TSUI_1998.TIF",
-            "1946-07-050000-00-00NL1999physics": "msf_logo_lowresjpeg.jpg",
+            "1946-07-050000-00-00NL1999physics": "_T_HOOFT_1999.TIF",
             "1931-06-270000-00-00NL1999physics": "VELTMAN_1999.TIF",
             "1852-08-301911-03-01NLDE1901chemistry": "BEHRING_1901.TIF",
             "1852-10-091919-07-15DEDE1902chemistry": "FISCHER_1902.TIF",
@@ -1996,7 +1996,7 @@ TAG.Layout.Spoof = (function () {
             "1835-07-271907-02-16ITIT1906literature": "CARDUCCI_1906.TIF",
             "1865-12-301936-01-18INGB1907literature": "KIPLING_1907.TIF",
             "1846-01-051926-09-14DEDE1908literature": "EUCKEN_1908.TIF",
-            "1858-11-201940-03-16SESE1909literature": "D_ESTOURNELLE_1909.TIF",
+            "1858-11-201940-03-16SESE1909literature": "LAGERLOEF_1909.TIF",
             "1830-03-151914-04-02DEDE1910literature": "HEYSE_1910.TIF",
             "1862-08-291949-05-06BEFR1911literature": "MAETERLINCK_1911.TIF",
             "1862-11-151946-06-06DEPL1912literature": "HAUPTMANN_1912.TIF",
@@ -2022,7 +2022,7 @@ TAG.Layout.Spoof = (function () {
             "1870-10-221953-11-08RUFR1933literature": "BUNIN_1933.TIF",
             "1867-06-281936-12-10ITIT1934literature": "PIRANDELLO_1934.TIF",
             "1888-10-161953-11-27USUS1936literature": "O_NEILL_1936.TIF",
-            "1881-03-231958-08-22FRFR1937literature": "SZENT_GYOERGYI_1937.TIF",
+            "1881-03-231958-08-22FRFR1937literature": "MARTIN_DU_GARD_1937.TIF",
             "1892-06-261973-03-06USUS1938literature": "PEARL_BUCK_1938.TIF",
             "1888-09-161964-06-03FIFI1939literature": "SILLANPAEAE_1939.TIF",
             "1873-01-201950-11-25DKDK1944literature": "JENSEN_1944.TIF",
@@ -2914,7 +2914,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1917",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\“for his discovery of the characteristic R&ouml;ntgen radiation of the elements\”",
+                        "motivation": "\“for his discovery of the characteristic Röntgen radiation of the elements\”",
                         "affiliations": [
                             {
                                 "name": "Edinburgh University",
@@ -4004,7 +4004,7 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "60",
-                "firstname": "Frits (Frederik)",
+                "firstname": "Frits",
                 "surname": "Zernike",
                 "born": "1888-07-16",
                 "died": "1966-03-10",
@@ -4049,7 +4049,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\“for his fundamental research in quantum mechanics, especially for his statistical interpretation of the wavefunction\”",
+                        "motivation": "\“for his fundamental research in quantum mechanics, especially for his statistical interpretation of the wave function\”",
                         "affiliations": [
                             {
                                 "name": "Edinburgh University",
@@ -17756,7 +17756,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1902",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\“the greatest living master of the art of historical writing, with special reference to his monumental work, <I>A history of Rome</I>\”",
+                        "motivation": "\“the greatest living master of the art of historical writing, with special reference to his monumental work, <I>A History of Rome</I>\”",
                         "affiliations": [
                             []
                         ]
@@ -21696,7 +21696,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\“for an &aelig;uvre of universal validity, bitter insights and linguistic ingenuity, which has opened new paths for the Chinese novel and drama\”",
+                        "motivation": "\“for an oeuvre of universal validity, bitter insights and linguistic ingenuity, which has opened new paths for the Chinese novel and drama\”",
                         "affiliations": [
                             []
                         ]
@@ -22937,7 +22937,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\“for her musical flow of voices and counter-voices in novels and plays that with extraordinary linguistic zeal reveal the absurdity of society's clich&eacute;s and their subjugating power\”",
+                        "motivation": "\“for her musical flow of voices and counter-voices in novels and plays that with extraordinary linguistic zeal reveal the absurdity of society's clichés and their subjugating power\”",
                         "affiliations": [
                             []
                         ]
