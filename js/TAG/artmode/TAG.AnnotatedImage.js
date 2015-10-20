@@ -199,6 +199,10 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      * @method unload
      */
     function unload() {
+        if (viewer &&  viewerelt && viewerelt.children && viewerelt.children[0] && viewerelt.children[0].uniqueID === viewer.container.uniqueID) {
+            viewerelt.removeChild(viewer.container)
+        }
+        return;
         viewer && viewer.destroy();
     }
 
@@ -619,20 +623,43 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             panHorizontal = false;
         }
         //creates and sets up the OSD viewer
-        viewer = new OpenSeadragon.Viewer({
-            id: holderID,
-            element: viewerelt,
-            zoomPerClick: 1,  //disables click to zoom
-            artworkViewer: true,
-            panVertical: panVertical,
-            constrainDuringPan: true,
-            panHorizontal: panHorizontal,
-            minZoomImageRatio: minZoomImageRatio,
-            maxZoomImageRatio: maxZoomImageRatio,
-            maxZoomPixelRatio: isNobelWill === false ? 2 : 0, //The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. 
-            visibilityRatio: isNobelWill === false ? .2 : 0, //set for consistency with ITE
-            gestureSettingsTouch: { flickEnabled: false }, //don't allow flick gesture to throw art off screen
-        });
+        var osdv = jQuery.data(document, "OSDViewers")[doq.Identifier]
+        if (osdv !== undefined && osdv !== null) {
+            viewer = osdv
+            viewerelt.appendChild(viewer.container)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+        else {
+            viewer = new OpenSeadragon.Viewer({
+                id: holderID,
+                element: viewerelt,
+                zoomPerClick: 1,  //disables click to zoom
+                artworkViewer: true,
+                panVertical: panVertical,
+                constrainDuringPan: true,
+                panHorizontal: panHorizontal,
+                minZoomImageRatio: minZoomImageRatio,
+                maxZoomImageRatio: maxZoomImageRatio,
+                maxZoomPixelRatio: isNobelWill === false ? 2 : 0, //The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. 
+                visibilityRatio: isNobelWill === false ? .2 : 0, //set for consistency with ITE
+                gestureSettingsTouch: { flickEnabled: false }, //don't allow flick gesture to throw art off screen
+            });
+            jQuery.data(document, "OSDViewers")[doq.Identifier] = viewer
+        }
         if (locationHist) {
             viewer.setMouseNavEnabled(false);
         }

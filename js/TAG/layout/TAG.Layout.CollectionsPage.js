@@ -88,8 +88,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
     backButton.click(function () {
         willRoot.css({"background-color":"transparent"})
         willRoot.animate({ left: "100%" }, 1000, "easeInOutQuart", function () {
-            willRoot.die()
             willRoot.remove()
+            willRoot.die()
         })
     });
 

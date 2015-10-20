@@ -246,7 +246,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         if (isImpactMap) sideBar.css
-
+        if (annotatedImage !== null && annotatedImage !== undefined) {
+            annotatedImage.unload()
+            annotatedImage = null
+        }
         annotatedImage = TAG.AnnotatedImage({
             isNobelWill: isNobelWill,
             isImpactMap: isImpactMap,
@@ -356,7 +359,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var i = 0
             slideModeArray.forEach(function (it) { if (it.Identifier === item.Identifier) { index = i }; i++ })
             if (index === false) { return false }
-            if (index === 0) {
+            if (index === 0 || index === false) {
                 return false;
             }
             else {
@@ -366,12 +369,24 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         return false
     }
     function switchSlidePage(d) {
-        annotatedImage && annotatedImage.unload();
+        if (annotatedImage) {
+            annotatedImage.unload();
+        }
         doq = d
         nextSlide.remove()
         prevSlide.remove()
         nextSlide.die()
         prevSlide.die()
+
+
+        TAG.Util.removeYoutubeVideo();
+        $('.annotatedImageHotspotCircle').remove(); //remove hotspots
+        $('.mediaOuterContainer').remove();
+        backButton.off('click');
+
+        root.css("background-color", "black")
+
+
         init(true);
         /*
         origOptions.doq = doq
@@ -978,7 +993,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             root.css("background-color","black")
             var cb = function () {
                 annotatedImage && annotatedImage.unload();
-                $("#artworkViewerSwitchRoot").remove(); $("#artworkViewerSwitchRoot").die()
+                $("#artworkViewerSwitchRoot").remove();
+                $("#artworkViewerSwitchRoot").die()
+                annotatedImage = null;
             }
             $("#artworkViewerSwitchRoot").animate({ left: "100%" }, 1000, "easeInOutQuart", cb)
         }

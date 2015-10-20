@@ -127,16 +127,16 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 
 	    // Create _viewer, the actual seadragon viewer.  It is appended to UIControl.
         // This currently relies on an augmented OSD library where we are using their touch/click handlers + our own edits to deal with the layers issue 
-		_viewer	= new OpenSeadragon.Viewer({
-			id 			 		: trackData.name + "holder",
-			prefixUrl	 		: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
-			zoomPerClick 		: 1,
-			minZoomImageRatio	: .5,
-			maxZoomPixelRatio	: 2,
-			visibilityRatio		: .2,
-			mouseNavEnabled 	: true, //enables their own touch/click handlers
-			orchestrator        : orchestrator, //passes in a reference to orchestrator for layers fix
-            ITE_track: self
+		_viewer = new OpenSeadragon.Viewer({
+		    id: trackData.name + "holder",
+		    prefixUrl: itePath + "Dependencies/openseadragon-bin-1.2.1/images/",
+		    zoomPerClick: 1,
+		    minZoomImageRatio: .5,
+		    maxZoomPixelRatio: 2,
+		    visibilityRatio: .2,
+		    mouseNavEnabled: true, //enables their own touch/click handlers
+		    orchestrator: orchestrator, //passes in a reference to orchestrator for layers fix
+		    ITE_track: self
 		});
 		$(_viewer.container).css({
 			"position":"absolute",
