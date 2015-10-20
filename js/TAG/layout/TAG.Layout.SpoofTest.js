@@ -120,6 +120,7 @@ TAG.Layout.SpoofTest = (function () {
             $("#overlay").die()
             $("#popup").remove()
             $("#overlay").remove()
+            base.focus()
             var width = Math.floor(laurs.length / 3) * ((pageHeight / 5) + HORIZ_SPACING_CONSTANT - LAUR_WIDTH_REDUCITON - SQUISH_FACTOR) + 15
             var finalX = width - pageWidth
             if (scroller.scrollLeft() > width / 2) {
@@ -224,6 +225,7 @@ TAG.Layout.SpoofTest = (function () {
 		}).hide();
         $(base).keyup(function (e) {
             if (e.keyCode === 13) {
+                base.focus()
                 searchBoxController.search()
             }
 		 })
@@ -356,22 +358,10 @@ TAG.Layout.SpoofTest = (function () {
 		block.addClass(laur.Metadata.KeywordsSet2.toLowerCase())
 		block.addClass(laur.Metadata.KeywordsSet3.toLowerCase())
 
-		var keys = {}
-		function addToString(obj) {
-			var type = $.type(obj)
-			if (type === "string") {
-				searchString+=obj.toLowerCase()
-			}
-			else if (type === "object") {
-				keys = Object.keys(obj)
-				for (var k = 0; k < keys.length; k++) {
-					addToString(obj[keys[k]])
-				}
-			}
-		}
-		addToString(laur)
-        searchString += (laur.Metadata.FirstName+" "+laur.Metadata.LastName).toLowerCase()
-
+		var categories = ["FirstName", "LastName", "bornCountry", "born", "Motivation", "died", "KeywordsSet2", "KeywordsSet3", "KeywordsSet1", "Year"]
+		categories.forEach(function (c) {
+            searchString += laur.Metadata[c] ? laur.Metadata[c].toLowerCase()+" " : ""
+		})
 		header.css({
 			"position": "absolute",
 			"width": "100%",
@@ -421,9 +411,6 @@ TAG.Layout.SpoofTest = (function () {
 		}
 	}
 	function search(s) {
-	    while (s.slice(-1) === " ") {
-            s = s.substring(0,s.length-1)
-	    }
 	    while (s.substring(0, 1) === " ") {
 	        s = s.substring(1)
 	    }
@@ -653,11 +640,11 @@ TAG.Layout.SpoofTest = (function () {
 	    var hasFilters = genders.length + decades.length + prizes.length > 0
 
 	    if (hasFilters && hasSearch) {
-            s+= " and search term "+searchTerm
+            s+= " and search term '"+searchTerm+"'"
             searchText.text(s)
         }
 	    else if (hasSearch) {
-	        s = num.toString() + " results found for search term " + searchTerm
+	        s = num.toString() + " results found for search term '" + searchTerm+"'"
             searchText.text(s)
         }
         else if (hasFilters) {
