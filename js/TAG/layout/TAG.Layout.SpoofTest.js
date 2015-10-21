@@ -775,7 +775,7 @@ TAG.Layout.SpoofTest = (function () {
 		    "position": "relative",
 		    "height": "100%",
 		    "width": "auto",
-		    "float": "left"
+		    "float": "left",
 		}
 
 		var lifeString = getYear(laur.Metadata.born) + " - " + getYear(laur.Metadata.died)
@@ -804,7 +804,8 @@ TAG.Layout.SpoofTest = (function () {
 		    var d = $(document.createElement('div')).css(collabCSS).text(name)
 		    d.link = link
 		    link && d.click(function () { goto(d.link) })
-		    link && d.css({ "text-decoration": "underline","padding-left" : "10px" })
+		    link && d.css({ "text-decoration": "underline",  "color": "#d99b3b", })
+		    !link && d.css({"padding-right" : "10px"})
 		    collaborators.append(d)
 		    return d
 		}
