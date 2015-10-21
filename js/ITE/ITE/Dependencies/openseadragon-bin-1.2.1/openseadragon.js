@@ -13780,6 +13780,7 @@ ImageJob.prototype = {
             var tempS = s;
             var tempImg = this.image
             TAG.Layout.Spoof().staticSetPath(s, this.image, "src", function () { (jQuery.data(document, "seadragon_sources"))[tempS] = tempImg.src })
+           
         }
         else {
             this.image.src = (jQuery.data(document, "seadragon_sources"))[s]
@@ -15035,8 +15036,9 @@ function updateViewport( drawer ) {
     drawTiles( drawer, drawer.lastDrawn );
 
     // Load the new 'best' tile
-    if ( best ) {
+    if (best) {
         loadTile( drawer, best, currentTime );
+        
         // because we haven't finished drawing, so
         drawer.updateAgain = true;
     }
@@ -15248,7 +15250,7 @@ function loadTile( drawer, tile, time ) {
         drawer.imageLoader.addJob({
             src: tile.url,
             crossOriginPolicy: drawer.crossOriginPolicy,
-            callback: function( image ){
+            callback: function (image) {
                 onTileLoad( drawer, tile, time, image );
             }
         });

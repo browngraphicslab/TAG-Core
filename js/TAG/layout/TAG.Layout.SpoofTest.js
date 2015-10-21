@@ -32,7 +32,8 @@ TAG.Layout.SpoofTest = (function () {
         searchText = $(document.createElement("div")),
         timer,
         searchBoxController,
-        isSurface
+        isSurface,
+        filter = {}
 
 	root.append(base)
 	base.append(sortDiv)
@@ -102,7 +103,9 @@ TAG.Layout.SpoofTest = (function () {
 	    }
 	    ret.search = function () {
 	        find()
-	        ret.setClear()
+	        if (searchBox[0].value !== "") {
+                ret.setClear()
+	        }
 	    }
         return ret
 	}
@@ -594,39 +597,39 @@ TAG.Layout.SpoofTest = (function () {
                 tags.push(tag.tag.toLowerCase())
             }
         })
-        var decades = []
-        var genders = []
-        var prizes = []
+        filter.decades = []
+        filter.genders = []
+        filter.prizes = []
         var p = ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics']
         var d = ['1900s', '1910s', '1920s', '1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s']
         var g = ['male', 'female']
         tags.forEach(function (t) {
             if (p.indexOf(t) !== -1) {
-                prizes.push(t)
+                filter.prizes.push(t)
             }
             if (d.indexOf(t) !== -1) {
-                decades.push(t)
+                filter.decades.push(t)
             }
             if (g.indexOf(t) !== -1) {
-                genders.push(t)
+                filter.genders.push(t)
             }
         })
-	    if (decades.length > 0) {
-	        decades.forEach(function (d) {
+	    if (filter.decades.length > 0) {
+	        filter.decades.forEach(function (d) {
 	            s += "'" + d + "'" + " or "
 	        })
 	        s = s.substring(0, s.length - 4)
 	        s += " and "
 	    }
-	    if (genders.length > 0) {
-	        genders.forEach(function (d) {
+	    if (filter.genders.length > 0) {
+	        filter.genders.forEach(function (d) {
 	            s += "'" + d + "'" + " or "
 	        })
 	        s = s.substring(0, s.length - 4)
 	        s += " and "
 	    }
-	    if (prizes.length > 0) {
-	        prizes.forEach(function (d) {
+	    if (filter.prizes.length > 0) {
+	        filter.prizes.forEach(function (d) {
 	            s += "'" + d + "'" + " or "
 	        })
 	        s = s.substring(0, s.length - 4)
@@ -637,7 +640,7 @@ TAG.Layout.SpoofTest = (function () {
        
 	    var searchTerm = searchBox[0].value
 	    var hasSearch = searchTerm.length > 0 && searchTerm !== " "
-	    var hasFilters = genders.length + decades.length + prizes.length > 0
+	    var hasFilters = filter.genders.length + filter.decades.length + filter.prizes.length > 0
 
 	    if (hasFilters && hasSearch) {
             s+= " and search term '"+searchTerm+"'"
@@ -656,6 +659,13 @@ TAG.Layout.SpoofTest = (function () {
 	    searchText.show();
 	}
 	function makeBigPopup(laur) {
+
+	    TAG.Telemetry.recordEvent("Laureate", function (tobj) {
+	        tobj.laureateName = (laur.Metadata.FirstName ? laur.Metadata.FirstName + " " : "") + (laur.Metadata.LastName ? laur.Metadata.LastName + " " : "")
+	        tobj.year = laur.Metadata.Year;
+	        tobj.category = laur.Metadata.PrizeCategory;
+	    });
+
 		var overlay = $(document.createElement("div")).attr({ id: "overlay" });
 		var popup = $(document.createElement("div")).attr({ id: "popup" });
 		var rightSide = $(document.createElement("div"))
@@ -809,7 +819,7 @@ TAG.Layout.SpoofTest = (function () {
 		    }
 		}
 
-		rightSide.append(collaborators.css(commonCSS).text(laur.Metadata.Collaborators ? "Collaborators: "+laur.Metadata.Collaborators : ""))
+		rightSide.append(collaborators.css(commonCSS))
 		var mot = laur.Metadata.Motivation;
 		if (mot.indexOf("<I>") > 0) {
 		    var start = mot.indexOf("<I>");
@@ -890,9 +900,14 @@ TAG.Layout.SpoofTest = (function () {
                 div.unselect()
 	        }
 	        else {
-	            div.select();
+	            div.select();	            
 	        }
-	        find()
+	        find();
+	        TAG.Telemetry.recordEvent("Filter", function (tobj) {
+	            tobj.categories = filter.prizes;
+	            tobj.genders = filter.genders;
+	            tobj.decades = filter.decades;
+	        });
 	    }
 	    sortDiv.append(div)
         return div
@@ -927,29 +942,33 @@ TAG.Layout.SpoofTest = (function () {
                 "padding-left": "30px",
                 "margin-top" : "5px"
 	        }).text(tag)
-            div.tag = tag
-            div.box = box
+	        div.tag = tag;
+            div.box = box;
             div.isSelected = function () {
-                return div.box[0].checked === true
+                return div.box[0].checked === true;
             }
 	        div.select = function () {
-	            div.box[0].checked = true
+	            div.box[0].checked = true;
 	        }
 	        div.unselect = function () {
-	            div.box[0].checked = false
+	            div.box[0].checked = false;
 	        }
 	        div.toggle = function () {
 	            if (div.isSelected() === true) {
-	                div.unselect()
-                    find()
+	                div.unselect();
 	            }
 	            else {
 	                div.select();
-	                find()
 	            }
+	            find();
+	            TAG.Telemetry.recordEvent("Filter", function (tobj) {
+	                tobj.categories = filter.prizes;
+	                tobj.genders = filter.genders;
+	                tobj.decades = filter.decades;
+	            });
 	        }
-	        sortTags.push(div)
-            return div
+	        sortTags.push(div);
+	        return div;
 	    }
 	    var filterDiv = $(document.createElement('div'))
 	    var decades = $(document.createElement('div')).attr({id:'decadeButton'})

@@ -88,8 +88,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
     backButton.click(function () {
         willRoot.css({"background-color":"transparent"})
         willRoot.animate({ left: "100%" }, 1000, "easeInOutQuart", function () {
-            willRoot.die()
             willRoot.remove()
+            willRoot.die()
         })
     });
 
@@ -447,7 +447,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
             });
             var lightbulb = $(document.createElement('div')).attr('id','lightbulb')
                             .css({ 'width': '40px', 'height': '40px', 'position': 'absolute', 'right': '5px', 'bottom': '0px', 'z-index': '50001'});
-            var lightimg = $(document.createElement('img')).attr({ 'id': 'lightbulbimg' , 'src': tagPath + 'images/lightbulb.png'})
+            var lightimg = $(document.createElement('img')).attr({ 'id': 'lightbulbimg' , 'src': tagPath + 'images/information.png'})
                             .css({ 'width': '100%', 'height': '100%' });
             lightbulb.append(lightimg).hide();
             main.append(lightbulb);
@@ -849,7 +849,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                     switchRoot.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { $("#artworkViewerSwitchRoot").css({ "background-color": "black" }) })
                 }
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                currentPage.obj  = artworkViewer;
+                currentPage.obj = artworkViewer;
+                
            // }
             root.css({ 'overflow-x': 'hidden' });
         }

@@ -147,6 +147,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	    if (idleTimer) {
 	        idleTimer.tourPlaying(false);
 	    }
+        
 		for (i = self.trackManager.length-1; i >= 0; i--) {
 			self.trackManager[i].unload();
 			trackManager.remove(trackManager[i]);
