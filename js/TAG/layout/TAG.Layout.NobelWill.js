@@ -80,7 +80,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         $(document).unbind('mousemove', restartTimer);
 
         $("#bigPopup").remove();
-        $("#infoDiv").css('display','none');
+        $("#infoDiv").css('display', 'none');
+        $("#infoblocker").css('display', 'none');
 
         videoContainer = $(document.createElement('div')).attr('id', 'videoContainer');
         var touchToExplore = $(document.createElement('div')).attr('id', 'touchToExplore'),
