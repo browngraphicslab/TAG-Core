@@ -184,7 +184,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         })
         infoDiv.text("Loading Interactive Tour...");
         infoDiv.attr('id', 'infoDiv')
-
+        /*
         var tourVideoContainer = $(document.createElement('div')).attr('id', 'tourVideoContainer');
         var tourVideo = $(document.createElement('video')).attr('id', 'tourVideo');
         tourVideoContainer.css({
@@ -212,6 +212,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         tourVideoContainer.append(tourVideo);
         initialOverlay.append(tourVideoContainer);
         videoElt.play();
+
+        */
 
         var moreinfoDiv = $(document.createElement('div'));
         moreinfoDiv.css({

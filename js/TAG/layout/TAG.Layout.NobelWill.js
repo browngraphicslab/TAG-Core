@@ -4,7 +4,7 @@
  * @class TAG.Layout.NobelWill
  */
 TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exhibition) {
-    $("#startPageLoadingOverlay").remove();
+    $("#startPageLoadingOverlay").remove().die();
     "use strict";
 
     //OPTIONS
@@ -56,7 +56,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         spoof,
 
-        LIGHTBULB_ICON = tagPath + 'images/lightbulb.png',
+        LIGHTBULB_ICON = tagPath + 'images/information.png',
         timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
         idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair)
 
@@ -182,6 +182,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     }
 
     function firstInit() {
+        $(document).data("OSDViewers", {})
+        $(document).data("tourOSDObjects", {})
         $(document).data("tourPlaying", false)
         idleTimer && idleTimer.tourPlaying(false)
         background = $(document.createElement('div'));
@@ -550,7 +552,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             }
         )
         if (iconColor === "orig") {
-            LIGHTBULB_ICON = tagPath + 'images/lightbulb.png'
+            LIGHTBULB_ICON = tagPath + 'images/information.png'
         }
 
         sliderBar.append(down)
@@ -1764,7 +1766,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         tobj.name = doq.tourTitle;
                     });
                     var tourDoq = spoof.tourDoqs[doq.Name]
+
                     var tourPlayer = TAG.Layout.TourPlayer(doq, null, null, null, spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail, null)
+                    
                     $(document).data("currentTour", tourPlayer);
                     slideDiv.append(tourPlayer.getRoot());
                     tourPlayer.startPlayback()
@@ -1854,8 +1858,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     		'width': '30px',
             "z-index" : "1000",
     	}).click(function () {
-    	    $("#blocker").remove()
-    	    $("#bigPopup").remove()
+    	    $("#blocker").remove().die()
+    	    $("#bigPopup").remove().die()
     	}).css({"opacity":"0"})
 
     	popup.append(closeX);
@@ -2084,7 +2088,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             else {
                 switch (assetNumber) {
                     case 1:
-                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg';
+                        img = tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Intro.png';
                         title = "Intro";
                         link = "Intro_Tour";
                         break;

@@ -246,7 +246,13 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         }
 
         if (isImpactMap) sideBar.css
-
+        if (annotatedImage !== null && annotatedImage !== undefined) {
+            annotatedImage.unload()
+            annotatedImage = null
+        }
+        TAG.Telemetry.recordEvent("Artwork", function (tobj) {
+            tobj.name = doq.Identifier;
+        });
         annotatedImage = TAG.AnnotatedImage({
             isNobelWill: isNobelWill,
             isImpactMap: isImpactMap,
@@ -356,7 +362,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             var i = 0
             slideModeArray.forEach(function (it) { if (it.Identifier === item.Identifier) { index = i }; i++ })
             if (index === false) { return false }
-            if (index === 0) {
+            if (index === 0 || index === false) {
                 return false;
             }
             else {
@@ -366,12 +372,24 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         return false
     }
     function switchSlidePage(d) {
-        annotatedImage && annotatedImage.unload();
+        if (annotatedImage) {
+            annotatedImage.unload();
+        }
         doq = d
         nextSlide.remove()
         prevSlide.remove()
         nextSlide.die()
         prevSlide.die()
+
+
+        TAG.Util.removeYoutubeVideo();
+        $('.annotatedImageHotspotCircle').remove(); //remove hotspots
+        $('.mediaOuterContainer').remove();
+        backButton.off('click');
+
+        root.css("background-color", "black")
+
+
         init(true);
         /*
         origOptions.doq = doq
@@ -556,18 +574,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
 
         var first_time = true,
             telem_timer = new TelemetryTimer();
-
-        TAG.Telemetry.register(slideButton, 'click', 'ButtonPanelToggled', function (tobj) {
-            if (first_time || count) { //registering only when the button panel is open and for how long it was open
-                telemetry_timer.restart();
-                first_time = false;
-                return true;
-            }
-            tobj.current_artwork = doq.Identifier;
-            tobj.time_spent = telemetry_timer.get_elapsed();
-            //doNothing(tobj.time_spent);
-        });
-
+        
 
         container.append(slideButton);
         var sdleftbtn = createButton('leftControl', tagPath + 'images/icons/zoom_left.svg'),
@@ -877,6 +884,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $(".description").remove()
             $(".description").die()
             var descriptionDiv = $(document.createElement('div'));
+
             descriptionDiv.css({
                 'font-size': '75%',
                 'display': 'inline-block',
@@ -889,6 +897,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             descriptionDiv.addClass('description');
             descriptionDiv.text(description);
             descriptionDiv.appendTo(info);
+
+            //hackiest shit ever, too lazy to find better way. WAY too tired   --Trent
+            setTimeout(function () { descriptionDiv.css({ 'max-height': .85 * (sideBar.height() - infoTitle.offset().top - infoTitle.height()) + 'px' }) }, 5)
+            setTimeout(function () { descriptionDiv.css({ 'max-height': .85 * (sideBar.height() - infoTitle.offset().top - infoTitle.height()) + 'px' }) }, 75)
         }
         else {
             $(".description").remove()
@@ -919,31 +931,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         });
         var t_timer = new TelemetryTimer();
 
-        TAG.Telemetry.register(toggler, 'mouseup', 'ToggleSidebar', function (tobj) {
-            if (!isBarOpen) {
-                t_timer.restart();
-                return true;
-            }
-            tobj.sidebar_open = !isBarOpen;
-            tobj.current_artwork = doq.Identifier;
-            tobj.time_spent = t_timer.get_elapsed();
-            //doNothing(tobj.time_spent);
-        });
-
+        
         backButton.on('click', goBack);
-        TAG.Telemetry.register(backButton, 'click', 'BackButton', function (tobj) {
-
-            //for the seadragon controls, if the back button is pressed when they are open
-            root.find('#seadragonManipSlideButton').click();
-
-            //same for the left menu sidebar
-            toggler.mouseup();
-
-            tobj.current_artwork = doq.Identifier;
-            tobj.next_page = prevCollection;
-            tobj.time_spent = telemetry_timer.get_elapsed();
-        });
-
+        
         if (IS_WEBAPP && !locked) {
             linkButton.attr('src', tagPath + 'images/link.svg');
             linkButton.on('click', function () {
@@ -978,7 +968,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             root.css("background-color","black")
             var cb = function () {
                 annotatedImage && annotatedImage.unload();
-                $("#artworkViewerSwitchRoot").remove(); $("#artworkViewerSwitchRoot").die()
+                $("#artworkViewerSwitchRoot").remove();
+                $("#artworkViewerSwitchRoot").die()
+                annotatedImage = null;
             }
             $("#artworkViewerSwitchRoot").animate({ left: "100%" }, 1000, "easeInOutQuart", cb)
         }

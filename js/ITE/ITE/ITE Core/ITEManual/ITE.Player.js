@@ -93,7 +93,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             "opacity" : "0"
         })
         infoAvailableIcon.attr({
-            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/lightbulb.png"
+            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/information.png"
         })
         $("#ITEContainer").append(infoAvailableIcon)
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
