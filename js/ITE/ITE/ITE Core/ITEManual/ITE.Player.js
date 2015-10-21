@@ -84,8 +84,8 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     */
     function createITEPlayer(playerParent, options) {
         infoAvailableIcon.css({
-            "height": "40px",
-            "width": "40px",
+            "height": "80px",
+            "width": "auto",
             "position": "absolute",
             "top": "20px",
             "right": "20px",
@@ -93,7 +93,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             "opacity" : "0"
         })
         infoAvailableIcon.attr({
-            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/information.png"
+            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/tour_interaction.png"
         })
         $("#ITEContainer").append(infoAvailableIcon)
         this.playerConfiguration    = Utils.sanitizeConfiguration(playerConfiguration, options); //replace ones that are listed
@@ -1049,7 +1049,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
 
     function setInfoAvailable(yes) {
         infoAvailableIcon.attr({
-            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/lit_info.svg"
+            src: itePath + "ITE Core/ITEManual/ITEPlayerImages/tour_interaction.png"
         })
         if (yes === true) {
             infoAvailableIcon.css({

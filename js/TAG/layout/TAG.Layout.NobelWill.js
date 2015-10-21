@@ -1032,7 +1032,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     div.attr({
                         id: hardcodedData[p - 1]["associatedMedia"][i].Identifier
                     });
-                    div.addClass("nobelHostpot")
+                    div.addClass("nobelHotspot")
                     div.addClass("nobelHotspot_page_"+p)
                     div.hotspotImage = $('#willp' + p + '_' + (i + 1)).show();
                     div.Show = function () {
@@ -2200,10 +2200,23 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         collectionTitleDiv.css({
             "height": "37.5%",
             "position": "absolute",
-            "top": "-15%",
+            "top": "-20%",
             "font-size":"14pt",
         });
         collectionTitleDiv.attr('id', 'collectionTitleDiv').text("COLLECTIONS");
+
+        var collectionLine = $(document.createElement('div'));
+        collectionLine.css({
+            "height": "3%",
+            "position": "absolute",
+            "top": "19%",
+            "width": "89%",
+            "background-color": "#d99b3b",
+        })
+        collectionLine.attr('id', 'collectionLine');
+        collectionDiv.append(collectionLine)
+
+        
 
         /**
         var collectionTextImg = $(document.createElement ('img'));
@@ -2238,10 +2251,22 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": "27.5%",
             "position": "absolute",
             //"left": "-7%",
-            "top": "-15%",
+            "top": "-20%",
             "font-size": "14pt"
         });
         tourTitleDiv.attr('id', 'tourTitleDiv').text("TOURS");
+
+        var tourLine = $(document.createElement('div'));
+        tourLine.css({
+            "height": "3%",
+            "position": "absolute",
+            "top": "19%",
+            "width": "87%",
+            "background-color": "#d99b3b",
+        })
+        tourLine.attr('id', 'tourLine');
+        tourDiv.append(tourLine);
+
         /**
         var tourTextImg = $(document.createElement ('img'));
         tourTextImg.css({
@@ -2255,6 +2280,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourTitleDiv.append(tourTextImg);
         **/
         tourDiv.append(tourTitleDiv);
+
         for (var i = 0; i<6; i++) {
             tourDiv.append(createTaskbarExtra('tour', i+1));
         }
@@ -2352,15 +2378,100 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			]
     	]
     	var collections = [//any collections available to travel to from a big popup, with name of collection and collection GUID supplied
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Will.svg', "Will", "Will"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg', "Industry", "Factories"]]],
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Patents.svg', "Patents", "Patents"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]]],
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]], [], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "Bjorkborn"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Böjrkborn", "Bjorkborn"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_San Remo.svg', "San Remo", "SanRemo"]]],
+			[
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Will.svg', "Will", "Will"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Family.svg', "Family", "Family"]],
+                [],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Factories.svg', "Factories", "Factories"]]
+			],
+			[
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Patents.svg', "Patents", "Patents"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]]
+			],
+			[
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Ceremonies.svg', "Ceremonies", "Ceremonies"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Medals.svg', "Medals", "Medals"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Diplomas.svg', "Diplomas", "Diplomas"]],
+                    [], [],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Björkborn", "Bjorkborn"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Björkborn", "Bjorkborn"]],
+                [],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_San Remo.svg', "San Remo", "SanRemo"]]
+			],
 			[[], []]
     	]
     	var tours = [//very similiar to collections above, but with tours
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "FromWillToPrize"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "Family_Tour"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Factories", "link"]]],
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Industry", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]]],
-			[[[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "link"], [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "link"]], [], [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Industry", "Factories_Tour"]], [], [], [], []],
+			[
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "FromWillToPrize"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "Family_Tour"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "Family_Tour"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "Family_Tour"]],
+                [],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Factories", "Factories_Tour"]]
+			],
+			[
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Factories", "Factories_Tour"]],
+                [],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]]
+			],
+			[
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
+                    [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_From_the_Will.svg', "Prize", "FromWillToPrize"]],
+                [],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Factories.svg', "Factories", "Factories_Tour"]],
+                [],
+                [],
+                [],
+                []
+			],
 			[[], []]
     	]
     	var shortTexts = [//specified short texts for associated media
