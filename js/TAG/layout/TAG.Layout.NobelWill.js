@@ -2434,7 +2434,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	var tours = [//very similiar to collections above, but with tours
 			[
                 [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"]],
-                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "FromWillToPrize"],
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Alfred_Nobels_Will.svg', "Will", "Will_Tour"],
                     [tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "Family_Tour"]],
                 [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "Family_Tour"]],
                 [[tagPath + 'images/NobelWillImages/ToursAndCollections/Tour_Family.svg', "Family", "Family_Tour"]],
