@@ -849,7 +849,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                     switchRoot.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { $("#artworkViewerSwitchRoot").css({ "background-color": "black" }) })
                 }
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                currentPage.obj  = artworkViewer;
+                currentPage.obj = artworkViewer;
+                TAG.Telemetry.recordEvent("Artwork", function (tobj) {
+                    tobj.name = doq.Identifier;
+                });
            // }
             root.css({ 'overflow-x': 'hidden' });
         }
