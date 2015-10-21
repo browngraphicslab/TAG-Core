@@ -850,9 +850,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
                 }
                 currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
                 currentPage.obj = artworkViewer;
-                TAG.Telemetry.recordEvent("Artwork", function (tobj) {
-                    tobj.name = doq.Identifier;
-                });
+                
            // }
             root.css({ 'overflow-x': 'hidden' });
         }
