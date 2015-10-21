@@ -586,6 +586,13 @@ TAG.Layout.SpoofTest = (function () {
         searchBoxController.setSearch()
 	}
 	function makeBigPopup(laur) {
+
+	    TAG.Telemetry.recordEvent("Tour", function (tobj) {
+	        tobj.laureateName = (laur.Metadata.FirstName ? laur.Metadata.FirstName + " " : "") + (laur.Metadata.LastName ? laur.Metadata.LastName + " " : "")
+	        tobj.year = laur.Metadata.Year;
+	        tobj.category = laur.Metadata.PrizeCategory;
+	    });
+
 		var overlay = $(document.createElement("div")).attr({ id: "overlay" });
 		var popup = $(document.createElement("div")).attr({ id: "popup" });
 		var rightSide = $(document.createElement("div"))

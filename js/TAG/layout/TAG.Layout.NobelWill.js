@@ -1755,6 +1755,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     for (var i = 0; i < spoof.doqsInCollection[doq.Identifier].length; i++) {
                         artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Identifier][i]]);
                     }
+
                     var collectionsPage = TAG.Layout.CollectionsPage({ "doqToUse": doq, "willRoot": slideDiv, "artworkDoqs": artworks });
                     slideDiv.append(collectionsPage.getRoot())
                     break
@@ -1789,6 +1790,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	})
     	root.append(blocker);
     	var info = getPopupInfo(mediaNumber);
+
+    	TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
+    	    tobj.page = pageNumber;
+    	    tobj.name = info.title;
+    	});
+
     	var text = $(document.createElement('div'));
     	var title = $(document.createElement('div'));
     	var popup = $(document.createElement('div'));
