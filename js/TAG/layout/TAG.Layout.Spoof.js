@@ -2258,7 +2258,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1917",
                         "category": "physics",
                         "share": "1",
-                        "motivation": "\“for his discovery of the characteristic R&ouml;ntgen radiation of the elements\”",
+                        "motivation": "\“for his discovery of the characteristic Röntgen radiation of the elements\”",
                         "affiliations": [
                             {
                                 "name": "Edinburgh University",
@@ -3348,7 +3348,7 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "60",
-                "firstname": "Frits (Frederik)",
+                "firstname": "Frits",
                 "surname": "Zernike",
                 "born": "1888-07-16",
                 "died": "1966-03-10",
@@ -3393,7 +3393,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "physics",
                         "share": "2",
-                        "motivation": "\“for his fundamental research in quantum mechanics, especially for his statistical interpretation of the wavefunction\”",
+                        "motivation": "\“for his fundamental research in quantum mechanics, especially for his statistical interpretation of the wave function\”",
                         "affiliations": [
                             {
                                 "name": "Edinburgh University",
@@ -16091,7 +16091,7 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "523",
-                "firstname": "Ligue des Sociétés de la Croix-Rouge (League of Red Cross Societies)",
+                "firstname": "League of Red Cross Societies",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -17100,7 +17100,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1902",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\“the greatest living master of the art of historical writing, with special reference to his monumental work, <I>A history of Rome</I>\”",
+                        "motivation": "\“the greatest living master of the art of historical writing, with special reference to his monumental work, <I>A History of Rome</I>\”",
                         "affiliations": [
                             []
                         ]
@@ -21040,7 +21040,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2000",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\“for an &aelig;uvre of universal validity, bitter insights and linguistic ingenuity, which has opened new paths for the Chinese novel and drama\”",
+                        "motivation": "\“for an oeuvre of universal validity, bitter insights and linguistic ingenuity, which has opened new paths for the Chinese novel and drama\”",
                         "affiliations": [
                             []
                         ]
@@ -22281,7 +22281,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2004",
                         "category": "literature",
                         "share": "1",
-                        "motivation": "\“for her musical flow of voices and counter-voices in novels and plays that with extraordinary linguistic zeal reveal the absurdity of society's clich&eacute;s and their subjugating power\”",
+                        "motivation": "\“for her musical flow of voices and counter-voices in novels and plays that with extraordinary linguistic zeal reveal the absurdity of society's clichés and their subjugating power\”",
                         "affiliations": [
                             []
                         ]

@@ -1748,16 +1748,23 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "left": "100%",
                 "z-index": "50000"
             }).attr({id:"willOverlayRoot"})
-            root.append(slideDiv)
+            root.append(slideDiv)            
             switch (doqType) {
                 case "collection":
+                    TAG.Telemetry.recordEvent("Collection", function (tobj) {
+                        tobj.name = doq.Identifier;
+                    });
                     for (var i = 0; i < spoof.doqsInCollection[doq.Identifier].length; i++) {
                         artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Identifier][i]]);
                     }
+
                     var collectionsPage = TAG.Layout.CollectionsPage({ "doqToUse": doq, "willRoot": slideDiv, "artworkDoqs": artworks });
                     slideDiv.append(collectionsPage.getRoot())
                     break
                 case "tour":
+                    TAG.Telemetry.recordEvent("Tour", function (tobj) {
+                        tobj.name = doq.tourTitle;
+                    });
                     var tourDoq = spoof.tourDoqs[doq.Name]
 
                     var tourPlayer = TAG.Layout.TourPlayer(doq, null, null, null, spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail, null)
@@ -1787,6 +1794,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	})
     	root.append(blocker);
     	var info = getPopupInfo(mediaNumber);
+
+    	TAG.Telemetry.recordEvent("AssociatedMedia", function (tobj) {
+    	    tobj.page = pageNumber;
+    	    tobj.name = info.title;
+    	});
+
     	var text = $(document.createElement('div'));
     	var title = $(document.createElement('div'));
     	var popup = $(document.createElement('div'));
@@ -2363,7 +2376,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "Chemist Georges Fehrenbach worked Alfred Nobel’s private laboratory at his house in Paris and also at laboratories at several dynamite factories.",
                 "After Alfred Nobel's death his assets were gathered and the Nobel Foundation created to administer the fortune and the distribution of the Nobel Prizes.",
                 "In Alfred Nobel’s will the Nobel Prizes were established but how the Prizes were to be presented and manifested was decided in the statutes of the Nobel Foundation.",
-                "Alfred Nobel wanted to reward achievements for the \"benefit to mankind\". The phrase is an important beacon for the activities of the Nobel Foundation and its subsidiary organizations.",
+                "Alfred Nobel wanted to reward achievements for the \"greatest benefit to mankind\".",
                 "Physics was the first prize category Alfred Nobel mentioned in his will.",
                 "Chemistry was the second prize category Alfred Nobel mentioned in his will.",
                 "Physiology or medicine was the third prize category Alfred Nobel mentioned in his will.",
