@@ -56,7 +56,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
         spoof,
 
-        LIGHTBULB_ICON = tagPath + 'images/lightbulb.png',
+        LIGHTBULB_ICON = tagPath + 'images/information.png',
         timerPair = TAG.Util.IdleTimer.timerPair(3000, videoOverlay),
         idleTimer = TAG.Util.IdleTimer.TwoStageTimer(timerPair)
 
@@ -552,7 +552,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             }
         )
         if (iconColor === "orig") {
-            LIGHTBULB_ICON = tagPath + 'images/lightbulb.png'
+            LIGHTBULB_ICON = tagPath + 'images/information.png'
         }
 
         sliderBar.append(down)

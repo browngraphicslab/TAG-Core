@@ -1157,7 +1157,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                         console.log("circlewidth: " + ($('#circle' + mdoq.Identifier).width()));
                         if ($('#circle' + mdoq.Identifier).width()===null){
                             circle = $(document.createElement("img"));
-                            circle.attr('src', tagPath + 'images/lightbulb.svg');
+                            circle.attr('src', tagPath + 'images/information.png');
                             circle.attr('id', 'circle' + mdoq.Identifier);
                             circle.addClass('annotatedImageHotspotCircle');
                             circle.click(function (evt) {
@@ -2248,11 +2248,11 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
 
             if ((IS_HOTSPOT && hotspotMediaHidden) || (IS_HOTSPOT && !isHotspotIcon && !hotspotMediaHidden)) {
                 if (circle) {
-                    circle.attr('src', tagPath + 'images/lightbulb.svg');
+                    circle.attr('src', tagPath + 'images/information.png');
                 }
             } else {
                 if (circle) {
-                    circle.attr('src', tagPath + 'images/lightbulb.svg');
+                    circle.attr('src', tagPath + 'images/information.png');
                 }
             }
 
@@ -2373,7 +2373,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
             //TAG.Util.removeYoutubeVideo();
             outerContainer.stop();
             if (circle) {
-                circle.attr('src', tagPath + 'images/lightbulb.svg');
+                circle.attr('src', tagPath + 'images/information.png');
             }
 
             var toHideID = '#thumbnailButton-' + mdoq.Identifier;
