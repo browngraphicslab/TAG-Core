@@ -2,9 +2,10 @@
 TAG.Telemetry = (function () {
 
     var sessionDataRequests = [],
-		sendFreq = 10,  // telemetry data is sent once every sendFreq-th log
+		sendFreq = 50,  // telemetry data is sent once every sendFreq-th log
         folder;
-    Windows.Storage.KnownFolders.picturesLibrary.createFolderAsync("TAG Telemetry", Windows.Storage.CreationCollisionOption.openIfExists)
+    Windows.Storage.KnownFolders.picturesLibrary.createFolderAsync
+        ("TAG Telemetry", Windows.Storage.CreationCollisionOption.openIfExists)
         .done(function success(newFolder) {
             folder = newFolder;
         });
@@ -35,19 +36,22 @@ TAG.Telemetry = (function () {
             return;
         }
         sessionDataRequests.push(tobj);
-        if (sessionDataRequests.length >= sendFreq) {	
-            var writeFile;
-            folder.createFolderAsync(today_date.getMonth() + 1 + "-" + today_date.getDate() + "-" + today_date.getFullYear(), Windows.Storage.CreationCollisionOption.openIfExists)
-                .then(function (folder) {
-                    folder.createFileAsync(parseInt(today_date.getTime()/1000) + ".txt",
-                Windows.Storage.CreationCollisionOption.replaceExisting).then(function (file) {
-                    writeFile = file;
-                }).then(function () {
-                    Windows.Storage.FileIO.writeTextAsync(writeFile, JSON.stringify(sessionDataRequests)).then(function () {
-                        sessionDataRequests = [];
+        if (sessionDataRequests.length >= sendFreq) {
+            try {
+                folder.createFolderAsync(today_date.getMonth() + 1 + "-" + today_date.getDate() + "-" + today_date.getFullYear(), Windows.Storage.CreationCollisionOption.openIfExists)
+                    .then(function (folder) {
+                        folder.createFileAsync(parseInt(today_date.getTime() / 1000) + ".txt",
+                        Windows.Storage.CreationCollisionOption.replaceExisting)
+                        .then(function (file) {
+                            Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(sessionDataRequests)).then(function () {
+                            sessionDataRequests = [];
+                        });
                     });
                 });
-            });
+            } catch(e) {
+                console.log("TELEMETRY ERROR: " + e);
+            }
+            
         
         }
        
