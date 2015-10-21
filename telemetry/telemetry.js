@@ -2,7 +2,7 @@
 TAG.Telemetry = (function () {
 
     var sessionDataRequests = [],
-		sendFreq = 4,  // telemetry data is sent once every sendFreq-th log
+		sendFreq = 10,  // telemetry data is sent once every sendFreq-th log
         folder;
     Windows.Storage.KnownFolders.picturesLibrary.createFolderAsync("TAG Telemetry", Windows.Storage.CreationCollisionOption.openIfExists)
         .done(function success(newFolder) {
@@ -35,7 +35,6 @@ TAG.Telemetry = (function () {
             return;
         }
         sessionDataRequests.push(tobj);
-        console.log("Length of pending requests: " + sessionDataRequests.length);
         if (sessionDataRequests.length >= sendFreq) {	
             var writeFile;
             folder.createFolderAsync(today_date.getMonth() + 1 + "-" + today_date.getDate() + "-" + today_date.getFullYear(), Windows.Storage.CreationCollisionOption.openIfExists)
