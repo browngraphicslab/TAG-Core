@@ -810,7 +810,6 @@ TAG.Layout.SpoofTest = (function () {
 		}
 
 		rightSide.append(collaborators.css(commonCSS).text(laur.Metadata.Collaborators ? "Collaborators: "+laur.Metadata.Collaborators : ""))
-		rightSide.append(citation.css(commonCSS).text("Citation:"));
 		var mot = laur.Metadata.Motivation;
 		if (mot.indexOf("<I>") > 0) {
 		    var start = mot.indexOf("<I>");

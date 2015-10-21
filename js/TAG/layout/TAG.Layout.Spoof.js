@@ -16765,7 +16765,7 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "523",
-                "firstname": "Ligue des Sociétés de la Croix-Rouge (League of Red Cross Societies)",
+                "firstname": "League of Red Cross Societies",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
