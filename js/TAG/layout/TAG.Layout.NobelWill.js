@@ -1030,7 +1030,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     div.attr({
                         id: hardcodedData[p - 1]["associatedMedia"][i].Identifier
                     });
-                    div.addClass("nobelHostpot")
+                    div.addClass("nobelHotspot")
                     div.addClass("nobelHotspot_page_"+p)
                     div.hotspotImage = $('#willp' + p + '_' + (i + 1)).show();
                     div.Show = function () {
@@ -2196,10 +2196,23 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         collectionTitleDiv.css({
             "height": "37.5%",
             "position": "absolute",
-            "top": "-15%",
+            "top": "-20%",
             "font-size":"14pt",
         });
         collectionTitleDiv.attr('id', 'collectionTitleDiv').text("COLLECTIONS");
+
+        var collectionLine = $(document.createElement('div'));
+        collectionLine.css({
+            "height": "3%",
+            "position": "absolute",
+            "top": "19%",
+            "width": "89%",
+            "background-color": "#d99b3b",
+        })
+        collectionLine.attr('id', 'collectionLine');
+        collectionDiv.append(collectionLine)
+
+        
 
         /**
         var collectionTextImg = $(document.createElement ('img'));
@@ -2234,10 +2247,22 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             "height": "27.5%",
             "position": "absolute",
             //"left": "-7%",
-            "top": "-15%",
+            "top": "-20%",
             "font-size": "14pt"
         });
         tourTitleDiv.attr('id', 'tourTitleDiv').text("TOURS");
+
+        var tourLine = $(document.createElement('div'));
+        tourLine.css({
+            "height": "3%",
+            "position": "absolute",
+            "top": "19%",
+            "width": "87%",
+            "background-color": "#d99b3b",
+        })
+        tourLine.attr('id', 'tourLine');
+        tourDiv.append(tourLine);
+
         /**
         var tourTextImg = $(document.createElement ('img'));
         tourTextImg.css({
@@ -2251,6 +2276,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourTitleDiv.append(tourTextImg);
         **/
         tourDiv.append(tourTitleDiv);
+
         for (var i = 0; i<6; i++) {
             tourDiv.append(createTaskbarExtra('tour', i+1));
         }
