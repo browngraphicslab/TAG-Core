@@ -95,12 +95,13 @@ TAG.Layout.SpoofTest = (function () {
 	            ret.search()
 	        }
 	        else {
-	            reset();
-                ret.setSearch()
+	            searchBox[0].value = ""
+	            ret.setSearch()
+                find()
 	        }
 	    }
 	    ret.search = function () {
-	        search(searchBox[0].value.toLowerCase())
+	        find()
 	        ret.setClear()
 	    }
         return ret
@@ -109,14 +110,17 @@ TAG.Layout.SpoofTest = (function () {
 	    var ret = {}
 	    ret.time = IDLE_TIMER_TIME * 1000
         ret.scrollTime = 1800000
-        ret.start = function () {
-            reset();
+        ret.start = function (alreadyReset) {
+            if (alreadyReset !== true) {
+                reset();
+            }
             $("#popup").hide()
             $("#overlay").hide()
             $("#popup").die()
             $("#overlay").die()
             $("#popup").remove()
             $("#overlay").remove()
+            base.focus()
             var width = Math.floor(laurs.length / 3) * ((pageHeight / 5) + HORIZ_SPACING_CONSTANT - LAUR_WIDTH_REDUCITON - SQUISH_FACTOR) + 15
             var finalX = width - pageWidth
             if (scroller.scrollLeft() > width / 2) {
@@ -173,7 +177,15 @@ TAG.Layout.SpoofTest = (function () {
 
 		searchBox[0].placeholder = "Search by keyword"
 
-		$(searchBox).bind("input", function () { searchBoxController.search() })
+		$(searchBox).bind("input", function () {
+		    if (searchBox[0].value.length > 0 && searchBox[0].value !== " ") {
+		        searchBoxController.search()
+                searchBoxController.setClear()
+		    }
+		    else {
+                searchBoxController.setSearch()
+		    }
+		})
 
 		searchBoxController = makeSearchBoxController()
 
@@ -197,7 +209,7 @@ TAG.Layout.SpoofTest = (function () {
 		sortButton.css({
 		    "left": "750px",
 		}).text("Apply").click(function () {
-		    sort(null);
+		    find()
 		}).hide();
 		clearButton.css({
 		    "right": "50px",
@@ -213,6 +225,7 @@ TAG.Layout.SpoofTest = (function () {
 		}).hide();
         $(base).keyup(function (e) {
             if (e.keyCode === 13) {
+                base.focus()
                 searchBoxController.search()
             }
 		 })
@@ -345,21 +358,10 @@ TAG.Layout.SpoofTest = (function () {
 		block.addClass(laur.Metadata.KeywordsSet2.toLowerCase())
 		block.addClass(laur.Metadata.KeywordsSet3.toLowerCase())
 
-		var keys = {}
-		function addToString(obj) {
-			var type = $.type(obj)
-			if (type === "string") {
-				searchString+=obj.toLowerCase()
-			}
-			else if (type === "object") {
-				keys = Object.keys(obj)
-				for (var k = 0; k < keys.length; k++) {
-					addToString(obj[keys[k]])
-				}
-			}
-		}
-		addToString(laur)
-
+		var categories = ["FirstName", "LastName", "bornCountry", "born", "Motivation", "died", "KeywordsSet2", "KeywordsSet3", "KeywordsSet1", "Year"]
+		categories.forEach(function (c) {
+            searchString += laur.Metadata[c] ? laur.Metadata[c].toLowerCase()+" " : ""
+		})
 		header.css({
 			"position": "absolute",
 			"width": "100%",
@@ -409,32 +411,29 @@ TAG.Layout.SpoofTest = (function () {
 		}
 	}
 	function search(s) {
-	    while (s.slice(-1) === " ") {
-            s = s.substring(0,s.length-1)
-	    }
 	    while (s.substring(0, 1) === " ") {
 	        s = s.substring(1)
 	    }
-	    $("#decadeList").hide();
-	    $("#genderList").hide();
+	    /*
 	    sortTags.forEach(function (t) {
 	        t.unselect();
 	    })
+        */
 		var blocks = []
 		$(".block").hide()
 		laurs.forEach(function(laur){
 			if (laur.searchString.indexOf(s) !== -1 && blocks.indexOf(laur.block[0])===-1) {
 				blocks.push(laur.block[0])
-				laur.block.show()
+				//laur.block.show()
 			}
 		})
+        return blocks
 		arrangeTiles(blocks)
 		searchText.text("You have " + blocks.length + " results for '"+s+"'");
 		searchText.show();
 		$("#scroller").scrollLeft(0)
 	}
 	function sort(tags, singleSearch) {
-	    searchBoxController.setSearch()
 	    if (tags === null || tags === undefined) {
 	        var tagsToSort = []
 	        sortTags.forEach(function (t) {
@@ -445,12 +444,10 @@ TAG.Layout.SpoofTest = (function () {
 	        if (singleSearch !== null && singleSearch !== undefined) {
                 tagsToSort.push(singleSearch.tag.toLowerCase())
 	        }
-	        sort(tagsToSort)
-	        return;
+	        return sort(tagsToSort)
 	    }
 	    if (!tags || tags.length === 0) {
-	        reset();
-	        return;
+	        return "none";
 	    }
 	    $(".block").hide()
 
@@ -542,36 +539,8 @@ TAG.Layout.SpoofTest = (function () {
 				tiles.push(b);
 			}
 		})
+        return tiles
 		arrangeTiles(tiles);
-		var s = ""
-		if (decades.length > 0) {
-		    decades.forEach(function (d) {
-		        s += "'"+d+"'" + " or "
-		    })
-		    s = s.substring(0, s.length - 4)
-            s+=" and "
-		}
-		if (genders.length > 0) {
-		    genders.forEach(function (d) {
-		        s += "'" + d + "'" + " or "
-		    })
-		    s = s.substring(0, s.length - 4)
-		    s += " and "
-		}
-		if (prizes.length > 0) {
-		    prizes.forEach(function (d) {
-		        s += "'" + d + "'" + " or "
-		    })
-		    s = s.substring(0, s.length - 4)
-		}
-		else {
-			s = s.substring(0, s.length - 5)
-		}
-		searchText.text("There were " + tiles.length + " results found for " + s);
-		if (tiles.length === 0) {
-			searchText.text("There were no results found for " + s);
-		}
-		searchText.show();
 		$("#scroller").scrollLeft(0)
 	}
 	function reset() {
@@ -583,7 +552,108 @@ TAG.Layout.SpoofTest = (function () {
 	    })
 		$(".block").show()
 		arrangeTiles($(".block").toArray())
-        searchBoxController.setSearch()
+		searchBox[0].value = ""
+		searchBoxController.setSearch()
+		scroller.scrollLeft(0)
+		setTimeout(function(){
+		    timer.start(true)
+		},1)
+	}
+	function find() {
+	    var sorts = sort()
+	    var searches = search(searchBox[0].value.toLowerCase())
+	    var hash = {}
+	    var ret = []
+	    if ((!sorts || !searches || sorts.length === 0 || searches.length === 0) && sorts !== "none"){
+	        printOutputString(0)
+            return
+	    }
+	    $(".block").hide()
+	    if (sorts !== "none") {
+	        sorts.forEach(function (s) {
+	            if (hash[s.uniqueID] === undefined) {
+	                hash[s.uniqueID] = 1
+	            }
+	        })
+	    }
+	    searches.forEach(function (s) {
+	        if (hash[s.uniqueID] === 1 || sorts === "none") {
+                ret.push(s)
+	        }
+	    })
+	    ret.forEach(function (s) { $(s).show()})
+	    arrangeTiles(ret)
+	    scroller.scrollLeft(0)
+        printOutputString(ret.length)
+	}
+	function printOutputString(num) {
+	    var s = num.toString() + " results found for "
+        var tags = []
+        sortTags.forEach(function (tag) {
+            if (tag.isSelected() === true) {
+                tags.push(tag.tag.toLowerCase())
+            }
+        })
+        var decades = []
+        var genders = []
+        var prizes = []
+        var p = ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics']
+        var d = ['1900s', '1910s', '1920s', '1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s']
+        var g = ['male', 'female']
+        tags.forEach(function (t) {
+            if (p.indexOf(t) !== -1) {
+                prizes.push(t)
+            }
+            if (d.indexOf(t) !== -1) {
+                decades.push(t)
+            }
+            if (g.indexOf(t) !== -1) {
+                genders.push(t)
+            }
+        })
+	    if (decades.length > 0) {
+	        decades.forEach(function (d) {
+	            s += "'" + d + "'" + " or "
+	        })
+	        s = s.substring(0, s.length - 4)
+	        s += " and "
+	    }
+	    if (genders.length > 0) {
+	        genders.forEach(function (d) {
+	            s += "'" + d + "'" + " or "
+	        })
+	        s = s.substring(0, s.length - 4)
+	        s += " and "
+	    }
+	    if (prizes.length > 0) {
+	        prizes.forEach(function (d) {
+	            s += "'" + d + "'" + " or "
+	        })
+	        s = s.substring(0, s.length - 4)
+	    }
+	    else {
+	        s = s.substring(0, s.length - 5)
+	    }
+       
+	    var searchTerm = searchBox[0].value
+	    var hasSearch = searchTerm.length > 0 && searchTerm !== " "
+	    var hasFilters = genders.length + decades.length + prizes.length > 0
+
+	    if (hasFilters && hasSearch) {
+            s+= " and search term '"+searchTerm+"'"
+            searchText.text(s)
+        }
+	    else if (hasSearch) {
+	        s = num.toString() + " results found for search term '" + searchTerm+"'"
+            searchText.text(s)
+        }
+        else if (hasFilters) {
+            searchText.text(s)
+        }
+        else {
+            searchText.text(" ")
+        }
+	    searchText.show();
 	}
 	function makeBigPopup(laur) {
 
@@ -657,8 +727,8 @@ TAG.Layout.SpoofTest = (function () {
 		var name = $(document.createElement("div"))
 		var category = $(document.createElement("div"))
 		var year = $(document.createElement("div"))
+		var lifetime = $(document.createElement("div"))
 		var collaborators = $(document.createElement("div"))
-		var citation = $(document.createElement("div"))
 		var desc = $(document.createElement("div"))
 		var country = $(document.createElement("div"))
 		var icon = $(document.createElement("img")).attr({ src: '../tagcore/images/prize_icons/' + laur.Metadata.PrizeCategory.toLowerCase() + '_white.svg' })
@@ -675,29 +745,93 @@ TAG.Layout.SpoofTest = (function () {
             "color" : "white",
 		    "width": "100%",
 		    "height": "auto",
-            "margin-bottom" : "15px"
+		    "margin-bottom": "15px"
 		}
 		name.css({ "font-size": "1.4em" })
 		collaborators.css({ "font-size": ".95em" })
 		
 		year.css({ "font-size": ".95em" })
-		desc.css({ "font-size": ".95em" })
+		desc.css({ "font-size": ".95em"})
 		country.css({ "font-size": ".95em" })
 		var last = laur.Metadata.LastName
 		if (last === undefined || last === null || last === "undefined") {
             last = ""
 		}
 
+		function getYear(y) {
+		    var short = y.substring(0,4)
+		    if (short === "0000") {
+                return ""
+		    }
+		    else {
+                return short
+		    }
+		}
+
+		var collabCSS = {
+		    "position": "relative",
+		    "height": "100%",
+		    "width": "auto",
+		    "float": "left"
+		}
+
+		var lifeString = getYear(laur.Metadata.born) + " - " + getYear(laur.Metadata.died)
+
 		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " + last));
 		rightSide.append(icon);
 		rightSide.append(category.css(commonCSS).text(laur.Metadata.PrizeCategory));
 		rightSide.append(year.css(commonCSS).text(laur.Metadata.Year));
 		rightSide.append(country.css(commonCSS).text(laur.Metadata.bornCountry ? laur.Metadata.bornCountry : ""))
-
+		if (laur.Metadata.born.substring(0,4) !== "0000") {
+		    rightSide.append(lifetime.css(commonCSS).text(lifeString))
+		}
+		if (laur.Metadata.Collaborators.length) {
+		    rightSide.append(collaborators.css(commonCSS).css({ "min-height": year.height()}))
+		}
+		function goto(link) {
+		    $("#popup").hide()
+		    $("#overlay").hide()
+		    $("#popup").die()
+		    $("#overlay").die()
+		    $("#popup").remove()
+		    $("#overlay").remove()
+		    makeBigPopup(link)
+		}
+		function addCollab(name, link) {
+		    var d = $(document.createElement('div')).css(collabCSS).text(name)
+		    d.link = link
+		    link && d.click(function () { goto(d.link) })
+		    link && d.css({ "text-decoration": "underline","padding-left" : "10px" })
+		    collaborators.append(d)
+		    return d
+		}
+		if (laur.Metadata.Collaborators.length) {
+		    var collab = addCollab("Collaborators:  ")
+		    var last = null
+		    laur.Metadata.Collaborators.forEach(function (c) {
+		        last = addCollab(c.Metadata.FirstName + " " + c.Metadata.LastName, c)
+		    })
+		    if (last.offset().top > collab.offset().top) {
+		        collaborators.css({ "min-height": year.height() * 2})
+		    }
+		}
 
 		rightSide.append(collaborators.css(commonCSS).text(laur.Metadata.Collaborators ? "Collaborators: "+laur.Metadata.Collaborators : ""))
-		rightSide.append(citation.css(commonCSS).text("Citation:"));
-		rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
+		var mot = laur.Metadata.Motivation;
+		if (mot.indexOf("<I>") > 0) {
+		    var start = mot.indexOf("<I>");
+		    var end = mot.lastIndexOf("</I>");
+		    var firstPart = mot.slice(0, start);
+		    var italicText = mot.slice(start + 3, end);
+		    var lastPart = mot.slice(end + 4, mot.length);
+		    var firstSpan = $('<span/>').text(firstPart);
+		    var italicSpan = $('<span/>').text(italicText).css("font-style", "italic");
+		    var lastSpan = $('<span/>').text(lastPart);
+		    desc.css(commonCSS).append(firstSpan).append(italicSpan).append(lastSpan);
+		    rightSide.append(desc);
+		} else {
+		    rightSide.append(desc.css(commonCSS).text(laur.Metadata.Motivation));
+		}
 
 		function hide() {
 			$("#popup").hide()
@@ -765,7 +899,7 @@ TAG.Layout.SpoofTest = (function () {
 	        else {
 	            div.select();
 	        }
-	        sort()
+	        find()
 	    }
 	    sortDiv.append(div)
         return div
@@ -814,11 +948,11 @@ TAG.Layout.SpoofTest = (function () {
 	        div.toggle = function () {
 	            if (div.isSelected() === true) {
 	                div.unselect()
-                    sort()
+                    find()
 	            }
 	            else {
 	                div.select();
-	                sort(null, div)
+	                find()
 	            }
 	        }
 	        sortTags.push(div)

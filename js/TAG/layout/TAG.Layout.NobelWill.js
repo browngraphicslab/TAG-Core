@@ -2372,7 +2372,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 "Chemist Georges Fehrenbach worked Alfred Nobel’s private laboratory at his house in Paris and also at laboratories at several dynamite factories.",
                 "After Alfred Nobel's death his assets were gathered and the Nobel Foundation created to administer the fortune and the distribution of the Nobel Prizes.",
                 "In Alfred Nobel’s will the Nobel Prizes were established but how the Prizes were to be presented and manifested was decided in the statutes of the Nobel Foundation.",
-                "Alfred Nobel wanted to reward achievements for the \"benefit to mankind\". The phrase is an important beacon for the activities of the Nobel Foundation and its subsidiary organizations.",
+                "Alfred Nobel wanted to reward achievements for the \"greatest benefit to mankind\".",
                 "Physics was the first prize category Alfred Nobel mentioned in his will.",
                 "Chemistry was the second prize category Alfred Nobel mentioned in his will.",
                 "Physiology or medicine was the third prize category Alfred Nobel mentioned in his will.",
