@@ -36,6 +36,10 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
        bottomContainer.append(buttonContainer);
    }
 
+   bottomContainer.css({
+       "left": "6%",
+   })
+
     //Buttons
    var volumeButton = $(document.createElement("img")),
        volumeLevel = $(document.createElement("img")),
@@ -44,6 +48,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
        progressBar = $(document.createElement("div")),
        fullScreenButton = $(document.createElement("img")),
        progressIndicator = $(document.createElement("div")),
+       tourNameDiv = $(document.createElement("div")),
        volumeLevelContainer = $(document.createElement("div")),
        infoAvailableIcon = $(document.createElement("img")),
        NOBEL_WILL_COLOR = '#"D99B3B',
@@ -320,6 +325,21 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             ProgressIndicatorContainer.css({ 'right': $("#tagRoot").width()*0.04 + 100 + 'px' });
             updateProgressIndicator(orchestrator.getElapsedTime());
         }
+        tourNameDiv.css({
+            "z-index": "123984719834798275",
+            "width": "100%",
+            "height": "75px",
+            "top": "93.3%",
+            "left": "45px",
+            "text-align": "left",
+            "vertical-align": "middle",
+            "pointer-events": "none",
+            "position": "absolute",
+            "color": "#d99b3b",
+            "font-weight": "bold",
+            "font-size": "35px",
+        }).text(tourPlayer.getTourName()).attr({ id: "tourNameDiv" })
+        $("#ITEContainer").append(tourNameDiv)
     };
 
     function tourOver(sec) {
