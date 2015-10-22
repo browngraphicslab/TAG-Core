@@ -248,7 +248,6 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 		for(var v in self) {
 			v = null;
 		}
-
 	};
 
 	/*

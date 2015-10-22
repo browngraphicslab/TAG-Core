@@ -1082,6 +1082,12 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             hideInfoPane();
             makePaneVisible(false);
         }
+        var telemetryName = getDoqIDFromZIndex(z)
+        if(telemetryName){
+            TAG.Telemetry.recordEvent("TourDZInteraction", function (tobj) {
+                tobj.Name = telemetryName
+            })
+        }
     }
 
     function createSlidingPane() {
@@ -1328,7 +1334,15 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         }
         return null;
     }
-
+    function getDoqIDFromZIndex(z) {
+        if(!data || data.length <= z){
+            return false
+        }
+        if (data[z - 1] !== false && data[z-1].Identifier) {
+            return data[z-1].Identifier
+        }
+        return data[z-1]
+    }
 
     this.getTracks          = getTracks;
     this.addKeyframe        = addKeyframe;
