@@ -14857,7 +14857,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "467",
-                "firstname": "Institut de droit international (Institute of International Law)",
+                "firstname": "Institute of",
+                "surname": "International Law",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -15070,7 +15071,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "477",
-                "firstname": "Bureau international permanent de la Paix (Permanent International Peace Bureau)",
+                "firstname": "Permanent International",
+                "surname" : "Peace Bureau",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -15700,7 +15702,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "503",
-                "firstname": "Office international Nansen pour les Réfugiés (Nansen International Office for Refugees)",
+                "firstname": "Nansen International",
+                "surname": "Office for Refugees",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -15946,7 +15949,7 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "515",
-                "firstname": "Office of the United Nations High Commissioner for Refugees (UNHCR)",
+                "firstname": "UNHCR",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -16091,7 +16094,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "523",
-                "firstname": "League of Red Cross Societies",
+                "firstname": "League of Red Cross",
+                "surname": "Societies",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -16173,7 +16177,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "527",
-                "firstname": "International Labour Organization (I.L.O.)",
+                "firstname": "International Labour",
+                "surname": "Organization",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -16592,7 +16597,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "547",
-                "firstname": "International Physicians for the Prevention of Nuclear War",
+                "firstname": "Int. Physicians for the",
+                "surname" : "Prevention of Nuclear War",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",

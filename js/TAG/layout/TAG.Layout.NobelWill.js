@@ -80,7 +80,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         $(document).unbind('mousemove', restartTimer);
 
         $("#bigPopup").remove();
-        $("#infoDiv").css('display','none');
+        $("#helpDiv").css('display', 'none');
+        $("#infoblocker").css('display', 'none');
 
         videoContainer = $(document.createElement('div')).attr('id', 'videoContainer');
         var touchToExplore = $(document.createElement('div')).attr('id', 'touchToExplore'),
@@ -2026,7 +2027,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 'width': '40px',
                 'position': 'absolute',
                 'right': '1.5%',
-                'bottom': '20px',
+                'bottom': '13px',
                 'z-index': '50050'
             }).attr({ id: 'infoButtonContainer' });
         var infoButton = $(document.createElement('img')).attr({ src: tagPath + 'images/question_icon.png', id: 'infoButton' })
