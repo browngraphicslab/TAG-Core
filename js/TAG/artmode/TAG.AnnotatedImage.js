@@ -17,6 +17,7 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         root = options.root,           // root of the artwork viewing page
         doq = options.doq,            // doq for the artwork
         callback = options.callback,       // called after associated media are retrieved from server
+        interactionCallback = options.interactionCallback,
         noMedia = options.noMedia,        // should we not have assoc media? (set to true in artwork editor)
         locationHist = options.locationHist,
         inArtworkEditor = options.inArtworkEditor,
@@ -225,7 +226,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
      */
 
     function dzManip(res) {
-
         if (disableZoomRLH) { return; }
 
         var scale = res.scale,
@@ -234,7 +234,6 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
         var pivotRel;
         var transRel;
         dzManipPreprocessing();
-
         if (!artworkFrozen && isNobelWill !== true) {
             pivotRel = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(pivot.x, pivot.y));
             var piv = {
@@ -642,7 +641,17 @@ TAG.AnnotatedImage = function (options) { // rootElt, doq, split, callback, shou
                 visibilityRatio: isNobelWill === false ? .2 : 0, //set for consistency with ITE
                 gestureSettingsTouch: { flickEnabled: false }, //don't allow flick gesture to throw art off screen
             });
+            viewer.addHandler("canvas-click", function () {
+                interactionCallback();
+            });
+            /*
+            viewer.element.click(function () {
+                console.log("clicked!");
+            });
             //jQuery.data(document, "OSDViewers")[doq.Identifier] = viewer
+            $(".artworkCanvasTesting").mouseup(function () {
+                console.log("up")
+            })*/
         }
         if (locationHist) {
             viewer.setMouseNavEnabled(false);
