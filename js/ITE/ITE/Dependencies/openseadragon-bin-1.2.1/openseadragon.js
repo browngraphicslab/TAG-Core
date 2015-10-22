@@ -5328,7 +5328,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
                         }
 
                         // Drag End
-                        if ( tracker.dragEndHandler && !updateGPoint.currentPos.equals( updateGPoint.contactPos ) ) {
+                        if ( tracker.dragEndHandler && updateGPoint.currentPos && !updateGPoint.currentPos.equals( updateGPoint.contactPos ) ) {
                             propagate = tracker.dragEndHandler(
                                 {
                                     eventSource:          tracker,

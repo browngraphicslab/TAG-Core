@@ -845,8 +845,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             togglerImage.attr("src", tagPath + 'images/icons/Close_nobel.svg');
         }
         infoTitle.text(doq.Name);
-        infoArtist.text(doq.Metadata.Artist);
-        infoYear.text(doq.Metadata.Year);
+        infoArtist.text(doq.Metadata ? doq.Metadata.Artist : "");
+        infoYear.text(doq.Metadata? doq.Metadata.Year : "");
         infoTitle.css({
             'color': '#' + PRIMARY_FONT_COLOR,
         });
@@ -864,7 +864,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             //'font-family': FONT
         });
 
-        if (doq.Metadata.Description) {
+        if (doq.Metadata && doq.Metadata.Description) {
             console.log("description");
             var description = doq.Metadata.Description;
             $(".description").remove()
