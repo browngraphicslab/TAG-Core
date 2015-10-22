@@ -31,6 +31,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locationPanelDiv = null,
         locHistoryToggle = null,
         locHistoryToggleSign = null,
+        interactionSign = $(document.createElement('img')),
         toggleArea,
         toggleHotspotButton,
         fieldsMapButton = $(document.createElement("BUTTON")),
@@ -92,8 +93,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         telemetry_timer = new TelemetryTimer(),       //Timer for telemetry
         firstShowHotspots = true,
 
+
         //nobel will variables
         showInitialNobelWillBox = true,
+
         showInitialImpactPopUp = options.showInitialImpactPopUp || false,
         sliderBar,//the big yellow div sliding up and down
         chunkNumber,//the current chunk number (0-based) being observed
@@ -123,6 +126,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         smallWillImage,
 
         // misc uninitialized vars
+        interactionTimer,
         keywordSets,
         locationList,                               // location history data
         customMapsLength,
@@ -141,6 +145,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         getRoot: getRoot,
         getArt: getArt
     };
+    
     root.attr('unselectable', 'on');
     root.css({
         '-moz-user-select': '-moz-none',
@@ -167,6 +172,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @method init
      */
     function init(partialSidebar) {
+        
+
         if (partialSidebar !== true) {
             var head,
                 script,
@@ -222,13 +229,16 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     slideModeArray = temp;
                 }
             }
+            interactionSign = $(document.createElement('img'))
             nextSlide = $(document.createElement('img'))
             prevSlide = $(document.createElement('img'))
+            interactionSign.css({ "top": "40px", "right": "10%", "position": "absolute", "z-index": "999999" }).attr({ src: tagPath + 'images/collection_interaction.png' })
             nextSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "right": "40%", "position": "absolute", "z-index": "999999" }).attr({ src: tagPath + 'images/right_icon.png' })
             prevSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "left": "40%", "position": "absolute", "z-index": "999999" }).attr({ src: tagPath + 'images/left_icon.png' })
             nextSlide.click(nextSlidePage)
             prevSlide.click(prevSlidePage)
             root.append(nextSlide).append(prevSlide)
+            interactionTimer = setTimeout(function () { root.append(interactionSign) }, 5000);
         }
         if (afterInSlideArray() === false || afterInSlideArray() === undefined) {
             nextSlide.hide()
@@ -250,6 +260,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             isImpactMap: isImpactMap,
             root: root,
             doq: doq,
+            interactionCallback: function() {
+                clearTimeout(interactionTimer);
+                interactionSign.hide();
+            },
             callback: function () {
                 associatedMedia = annotatedImage.getAssociatedMedia();
                 associatedMedia.guids.sort(function (a, b) {
