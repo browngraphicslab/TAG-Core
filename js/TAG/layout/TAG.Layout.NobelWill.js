@@ -68,6 +68,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             restartTimer()
             return;
         }
+        $(document).data("current_page", "will");
         var tourPlayer = jQuery.data(document, "currentTour")
         if (Object.keys(tourPlayer).length !== 0) {
             tourPlayer.goBack();
@@ -1112,6 +1113,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function nobelWillInit() {
         $(document).data("current_page", "will");
         $(document).data("currentTour", {});
+        var keysToCheck = Object.keys(jQuery.data(document,"seadragon_sources"))
         if (testamentHeader !== true) {
             $("#titleDiv").text("WILL PAGE " + pageNumber + "/4");
         }

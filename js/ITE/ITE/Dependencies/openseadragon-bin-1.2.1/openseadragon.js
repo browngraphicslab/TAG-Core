@@ -13778,12 +13778,7 @@ ImageJob.prototype = {
         }
         if (jQuery.data(document, "seadragon_sources")[s] === undefined) {
             var tempS = s;
-            var tempImg = this.image
-            TAG.Layout.Spoof().staticSetPath(s, this.image, "src", function () {
-                if (jQuery.data(document, "current_page") === "tour") {
-                    (jQuery.data(document, "seadragon_sources"))[tempS] = tempImg.src
-                }
-            })
+            TAG.Layout.Spoof().staticSetPath(s, this.image, "src", null)
         }
         else {
             this.image.src = (jQuery.data(document, "seadragon_sources"))[s]

@@ -344,10 +344,11 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             $(document).data("tourPlaying",false)
         }
         var willRoot = $("#willOverlayRoot")
-        willRoot.css({ "background-color": "transparent" })
+        //willRoot.css({ "background-color": "transparent" })
         willRoot.animate({ left: "100%" }, 1000, "easeInOutQuart", function () {
             willRoot.die()
             willRoot.remove()
+            $(document).data("current_page", "will");
         })
     }
     this.goBack = goBack;
