@@ -1370,7 +1370,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 		div.append(picWrapper)
 
         var pic = $(document.createElement("img"));
-        pic.attr({ src: info.image })
+        pic.attr({ src: tagPath + 'images/nobelwillimages/NobelWillPopupImages/small_' + info.image })
 
 		var ratio = pic.height() / pic.width()
 
@@ -1879,7 +1879,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	console.log(info.image);
     	var pic = $(document.createElement('img'));
     	pic.attr({
-    		src : info.image
+    	    src: tagPath + 'images/nobelwillimages/NobelWillPopupImages/' + info.image
     	})
     	pic.css({
     	    "max-height": "100%",
@@ -2315,9 +2315,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 			["Patents","Crematorium", "Margin Text"]
     	]
     	var images = [//images locations after the regular tagpath
-			['01_Testament.tif','Popup_1_1.png', '03_Robert.png', '04_Emanuel.png', '05_Sofie.tif', '06_Alarik.png', MARGINALIA_1, MARGINALIA_2], //add in lightbulb images and text to the end of these arrays (for marginalia)
+			['01_Testament.tif','02_Alfred Bernhard Nobel.png', '03_Robert.png', '04_Emanuel.png', '05_Sofie.tif', '06_Alarik.png', MARGINALIA_1, MARGINALIA_2], //add in lightbulb images and text to the end of these arrays (for marginalia)
 			['07_Georges.tif', '08_fund.tif', '09_prizes.tif', '10_benefit.png', '11_physics.png', '12_chemistry.png', '13_med.png', '14_litt.png', MARGINALIA_2],
-			['15_pea.tif', '16_academysci.tif', '17_Caroline.tif', '18_academystock.jpg', '19_storting.tif', '20_scandinavian.jpg', '21_Sohlman.tif', '22_Bofors.tif', '','23_Paris.tif', '24_San Remo.tif', MARGINALIA_2],
+			['15_pea.tif', '16_academysci.tif', '17_Caroline.tif', '18_academystock.jpg', '19_storting.tif', '20_scandinavian.jpg', '21_Sohlman.tif', '22_Bofors.tif', '23_my_properties.png','23_Paris.tif', '24_San Remo.tif', MARGINALIA_2],
 			['25_patent.tif', '26_crematorium.tif', MARGINALIA_2]
     	]
     	var texts = [//big chunks of text per popup
@@ -2517,7 +2517,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     	//END HARDCODING INFO AREA
 
 
-    	info.image = tagPath + 'images/nobelwillimages/NobelWillPopupImages/'+images[page-1][number];
+    	info.image = images[page-1][number];
     	info.text = texts[page - 1][number];
     	info.shortText = shortTexts[page - 1][number];
     	info.collections = collections[page-1][number];

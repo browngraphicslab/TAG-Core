@@ -779,8 +779,11 @@ TAG.Layout.SpoofTest = (function () {
 		}
 
 		var lifeString = getYear(laur.Metadata.born) + " - " + getYear(laur.Metadata.died)
-
-		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " + last));
+		if (laur.Metadata.longname) {
+		    rightSide.append(name.css(commonCSS).text(laur.Metadata.longname));
+		} else {
+		    rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " + last));
+		}
 		rightSide.append(icon);
 		rightSide.append(category.css(commonCSS).text(laur.Metadata.PrizeCategory));
 		rightSide.append(year.css(commonCSS).text(laur.Metadata.Year));

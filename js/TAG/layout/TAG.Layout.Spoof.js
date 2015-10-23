@@ -1651,6 +1651,17 @@ TAG.Layout.Spoof = (function () {
             "1954-01-110000-00-00IN2014peace": "AM_Official_portrait_Kailash.jpg",
             "1997-07-120000-00-00PK2014peace": "Malala_Yousafzai_01_gs.tif",
             "1953-08-090000-00-00FR2014economics": "AM_Official_portrait_Tirole.jpg",
+            //"0000-00-000000-00-00IE12015medicine": "campbell.tif",
+            //"0000-00-000000-00-00JP22015medicine": "omura.tif",
+            //"0000-00-000000-00-00CN32015medicine": "youyou.tif",
+            //"0000-00-000000-00-00JP42015physics": "kajita.tif",
+            //"0000-00-000000-00-00CA52015physics": "mcdonald.tif",
+            //"0000-00-000000-00-00SE62015chemistry": "lindahl.tif",
+            //"0000-00-000000-00-00US72015chemistry": "modrich.tif",
+            //"0000-00-000000-00-00TR82015chemistry": "sancar.tif",
+            //"1948-05-310000-00-00UA92015literature": "alexievich.tif",
+            //"0000-00-000000-00-0010102015peace": "quartet.TIF",
+            //"0000-00-000000-00-00GB112015economics": "Deaton.tif",
         }
         return map
     }
@@ -16963,7 +16974,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "564",
-                "firstname": "International Campaign to Ban Landmines (ICBL)",
+                "firstname": "ICBL",
+                "longname": "International Campaign to Ban Landmines",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -21443,7 +21455,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\“for their discoveries concerning genetic regulation of organ development and programmed cell death'\”",
+                        "motivation": "\“for their discoveries concerning genetic regulation of organ development and programmed cell death\”",
                         "affiliations": [
                             {
                                 "name": "The Molecular Sciences Institute",
@@ -21469,7 +21481,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\“for their discoveries concerning genetic regulation of organ development and programmed cell death'\”",
+                        "motivation": "\“for their discoveries concerning genetic regulation of organ development and programmed cell death\”",
                         "affiliations": [
                             {
                                 "name": "Massachusetts Institute of Technology (MIT)",
@@ -21495,7 +21507,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2002",
                         "category": "medicine",
                         "share": "3",
-                        "motivation": "\“for their discoveries concerning genetic regulation of organ development and programmed cell death'\”",
+                        "motivation": "\“for their discoveries concerning genetic regulation of organ development and programmed cell death\”",
                         "affiliations": [
                             {
                                 "name": "The Wellcome Trust Sanger Institute",
@@ -22396,7 +22408,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\“for their discovery of the bacterium <i>Helicobacter pylori</i> and its role in gastritis and peptic ulcer disease\”",
+                        "motivation": "\“for their discovery of the bacterium <I>Helicobacter pylori</I> and its role in gastritis and peptic ulcer disease\”",
                         "affiliations": [
                             {
                                 "name": "NHMRC Helicobacter pylori Research Laboratory, QEII Medical Centre",
@@ -22427,7 +22439,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2005",
                         "category": "medicine",
                         "share": "2",
-                        "motivation": "\“for their discovery of the bacterium <i>Helicobacter pylori</i> and its role in gastritis and peptic ulcer disease\”",
+                        "motivation": "\“for their discovery of the bacterium <I>Helicobacter pylori</I> and its role in gastritis and peptic ulcer disease\”",
                         "affiliations": [
                             {
                                 "city": "Perth",
@@ -22608,7 +22620,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "797",
-                "firstname": "International Atomic Energy Agency (IAEA)",
+                "firstname": "IAEA",
+                "longname": "International Atomic Energy Agency",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -23132,7 +23145,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "818",
-                "firstname": "Intergovernmental Panel on Climate Change (IPCC)",
+                "firstname": "IPCC",
+                "longname": "Intergovernmental Panel on Climate Change", 
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -24452,7 +24466,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "peace",
                         "share": "3",
-                        "motivation": "\“for their non-violent struggle for the safety of women and for women&apos;s rights to full participation in peace-building work\”",
+                        "motivation": "\“for their non-violent struggle for the safety of women and for women's rights to full participation in peace-building work\”",
                         "affiliations": [
                             []
                         ]
@@ -24474,7 +24488,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "peace",
                         "share": "3",
-                        "motivation": "\“for their non-violent struggle for the safety of women and for women&apos;s rights to full participation in peace-building work\”",
+                        "motivation": "\“for their non-violent struggle for the safety of women and for women's rights to full participation in peace-building work\”",
                         "affiliations": [
                             []
                         ]
@@ -24496,7 +24510,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "2011",
                         "category": "peace",
                         "share": "3",
-                        "motivation": "\“for their non-violent struggle for the safety of women and for women&apos;s rights to full participation in peace-building work\”",
+                        "motivation": "\“for their non-violent struggle for the safety of women and for women's rights to full participation in peace-building work\”",
                         "affiliations": [
                             []
                         ]
@@ -25585,6 +25599,7 @@ TAG.Layout.Spoof = (function () {
                 "died": "0000-00-00",
                 "bornCountry": "Ireland",
                 "bornCountryCode": "IE",
+                "diedCountryCode": "1", //just for mapping- not real data
                 "bornCity": "Ramelton",
                 "gender": "male",
                 "prizes": [
@@ -25606,11 +25621,12 @@ TAG.Layout.Spoof = (function () {
         {
             "id": "917",
             "firstname": "Satoshi",
-            "surname": "&#332;mura",
+            "surname": "Ōmura",
             "born": "0000-00-00",
             "died": "0000-00-00",
             "bornCountry": "Japan",
             "bornCountryCode": "JP",
+            "diedCountryCode" : "2", //not real data- just for mapping
             "bornCity": "Yamanashi prefektur",
             "gender": "male",
             "prizes": [
@@ -25637,6 +25653,7 @@ TAG.Layout.Spoof = (function () {
             "died": "0000-00-00",
             "bornCountry": "China",
             "bornCountryCode": "CN",
+            "diedCountryCode" : "3",
             "bornCity": "Zhejiang Ningpo",
             "gender": "female",
             "prizes": [
@@ -25663,6 +25680,7 @@ TAG.Layout.Spoof = (function () {
             "died": "0000-00-00",
             "bornCountry": "Japan",
             "bornCountryCode": "JP",
+            "diedCountryCode": "4", //mapping
             "bornCity": "Higashimatsuyama",
             "gender": "male",
             "prizes": [
@@ -25689,6 +25707,7 @@ TAG.Layout.Spoof = (function () {
             "died": "0000-00-00",
             "bornCountry": "Canada",
             "bornCountryCode": "CA",
+            "diedCountryCode" : "5", //mapping
             "bornCity": "Sydney",
             "gender": "male",
             "prizes": [
@@ -25715,6 +25734,7 @@ TAG.Layout.Spoof = (function () {
             "died": "0000-00-00",
             "bornCountry": "Sweden",
             "bornCountryCode": "SE",
+            "diedCountryCode": "6", //mapping
             "bornCity": "Stockholm",
             "gender": "male",
             "prizes": [
@@ -25744,6 +25764,9 @@ TAG.Layout.Spoof = (function () {
             "surname": "Modrich",
             "born": "0000-00-00",
             "died": "0000-00-00",
+            "bornCountryCode": "US",
+            "bornCountry": "United States",
+            "diedCountryCode" : "7", //mapping
             "gender": "male",
             "prizes": [
                 {
@@ -25774,6 +25797,7 @@ TAG.Layout.Spoof = (function () {
             "died": "0000-00-00",
             "bornCountry": "Turkey",
             "bornCountryCode": "TR",
+            "diedCountryCode": "8", //mapping
             "bornCity": "Savur",
             "gender": "male",
             "prizes": [
@@ -25800,6 +25824,7 @@ TAG.Layout.Spoof = (function () {
             "died": "0000-00-00",
             "bornCountry": "Ukraine",
             "bornCountryCode": "UA",
+            "diedCountryCode" : "9",
             "bornCity": "Ivano-Frankivsk",
             "gender": "female",
             "prizes": [
@@ -25819,6 +25844,8 @@ TAG.Layout.Spoof = (function () {
             "firstname": "National Dialogue Quartet",
             "born": "0000-00-00",
             "died": "0000-00-00",
+            "bornCountryCode": "10",
+            "diedCountryCode": "10",
             "gender": "org",
             "prizes": [
                 {
@@ -25840,6 +25867,7 @@ TAG.Layout.Spoof = (function () {
             "died": "0000-00-00",
             "bornCountry": "United Kingdom",
             "bornCountryCode": "GB",
+            "diedCountryCode": "11",
             "bornCity": "Edinburgh",
             "gender": "male",
             "prizes": [
