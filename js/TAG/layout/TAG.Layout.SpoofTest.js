@@ -382,23 +382,29 @@ TAG.Layout.SpoofTest = (function () {
             
 		}).attr({ src: laur.Metadata.Thumbnail.FilePath })
 
+        
 	    //console.log(img.height());
 		img.load(function(){
 		    if (img.height()+12.5 < block.height()) {
-		        //console.log("Laureate image DOES NOT hit bottom: " + laur.Metadata.LastName);
+		        console.log("Laureate image DOES NOT hit bottom: " + laur.Metadata.LastName + (block.height() - img.height())/2 + "px");
 
 		        img.css({
 		            "bottom": "0%",
 		            //"top": img.height(),
-		            "vertical-align": "bottom"
+		            "margin-bottom" : (block.height() - img.height())/2 + "px",
+		            "vertical-align": "bottom",
 		        });
 
 		    } else {
 		        //console.log("Laureate image hits bottom: " + laur.Metadata.LastName);
-		        img.css("top", SANDBOX_NEW_UI ? "12.5px": "0%");
+		        var donotShift = ["Perrin", "Schwinger"];
+                if (donotShift.indexOf(laur.Metadata.LastName) < 0) {
+		            img.css("top", SANDBOX_NEW_UI ? "12.5px": "0%");
+		        }
 
 		    }
 		})
+        
 
 
 	    //pageHeight /5 + SQUISH_FACTOR +"px" -> This is the height of a laureate tile

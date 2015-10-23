@@ -910,7 +910,7 @@ TAG.Layout.Spoof = (function () {
             "1930-03-280000-00-00US1990physics": "FRIEDMAN_1990.TIF",
             "1926-12-091999-02-15USUS1990physics": "KENDALL_1990.TIF",
             "1929-11-020000-00-00CA1990physics": "TAYLOR_R_E_1990.TIF",
-            "1932-10-242007-05-18FRFR1991physics": "AUNG_SAN_SUU_KYI_1991.TIF",
+            "1932-10-242007-05-18FRFR1991physics": "DE_GENNES_1991.TIF",
             "1924-08-012010-09-29PLFR1992physics": "CHARPAK_1992.TIF",
             "1950-11-280000-00-00US1993physics": "HULSE_1993.TIF",
             "1941-03-290000-00-00US1993physics": "TAYLOR_J_H_1993.TIF",
@@ -929,7 +929,7 @@ TAG.Layout.Spoof = (function () {
             "1939-02-280000-00-00CN1998physics": "TSUI_1998.TIF",
             "1946-07-050000-00-00NL1999physics": "_T_HOOFT_1999.TIF",
             "1931-06-270000-00-00NL1999physics": "VELTMAN_1999.TIF",
-            "1852-08-301911-03-01NLDE1901chemistry": "BEHRING_1901.TIF",
+            "1852-08-301911-03-01NLDE1901chemistry": "VAN_T_HOFF_1901.TIF",
             "1852-10-091919-07-15DEDE1902chemistry": "FISCHER_1902.TIF",
             "1859-02-191927-10-02SESE1903chemistry": "ARRHENIUS_1903.TIF",
             "1852-10-021916-07-23GBGB1904chemistry": "RAMSAY_1904.TIF",
@@ -1249,9 +1249,7 @@ TAG.Layout.Spoof = (function () {
             "1864-11-111921-05-05ATAT1911peace": "FRIED_1911.TIF",
             "1845-02-151937-02-07USUS1912peace": "ROOT_1912.TIF",
             "1854-04-221943-05-14BEBE1913peace": "LA_FONTAINE_1913.TIF",
-            "0000-00-000000-00-001917peace": "RED_CROSS_1917_1944_1963.TIF",
-            "0000-00-000000-00-001944peace": "RED_CROSS_1917_1944_1963.TIF",
-            "0000-00-000000-00-001963peace": "RED_CROSS_1917_1944_1963.TIF",
+            "0000-00-000000-00-0021917peace": "RED_CROSS_1917_1944_1963.TIF",
             "1856-12-281924-02-03USUS1919peace": "WILSON_1919.TIF",
             "1851-05-211925-09-29FRFR1920peace": "BOURGEOIS_1920.TIF",
             "1860-11-231925-02-24SESE1921peace": "BRANTING_1921.TIF",
@@ -1270,20 +1268,19 @@ TAG.Layout.Spoof = (function () {
             "1872-12-261967-10-07GBGB1933peace": "ANGELL_1933.TIF",
             "1863-09-131935-10-20GBGB1934peace": "HENDERSON_1934.TIF",
             "1889-10-031938-05-04DEDE1935peace": "VON_OSSIETSKY_1935.TIF",
-            "1878-11-011959-05-05ARAR1936peace": "O_NEILL_1936.TIF",
+            "1878-11-011959-05-05ARAR1936peace": "SAAVEDRA_LAMAS_1936.TIF",
             "1864-09-141958-11-24GBGB1937peace": "CECIL_OF_CHELWOOD_1937.TIF",
             "0000-00-000000-00-001938peace": "nansen.jpg",
             "1871-10-021955-07-23USUS1945peace": "HULL_1945.TIF",
             "1867-01-081961-01-09USUS1946peace": "BALCH_1946.TIF",
             "1865-05-251955-01-31USUS1946peace": "MOTT_1946.TIF",
-            "0000-00-000000-00-001947peace": "FSC_1947_FAERG.TIF",
+            "0000-00-000000-00-0011947peace": "FSC_1947_FAERG.TIF",
             "1880-09-231971-06-25GBGB1949peace": "BOYD_ORR_1949.TIF",
             "1904-08-071971-12-09USUS1950peace": "BUNCHE_1950.TIF",
             "1879-07-011954-04-28FRFR1951peace": "JOUHAUX_1951.TIF",
             "1875-01-141965-09-04FRGA1952peace": "SCHWEITZER_1952.TIF",
             "1880-12-311959-10-16USUS1953peace": "MARSHALL_1953.TIF",
             "0000-00-000000-00-001954peace": "UNHCR_1954_1981.TIF",
-            "0000-00-000000-00-001981peace": "UNHCR_1954_1981.TIF",
             "1897-04-231972-12-27CACA1957peace": "PEARSON_1957.TIF",
             "1910-02-101969-01-30BEBE1958peace": "PIRE_1958.TIF",
             "1889-11-011982-10-08GBGB1959peace": "NOEL_BAKER_1959.TIF",
@@ -1306,7 +1303,7 @@ TAG.Layout.Spoof = (function () {
             "1910-08-261997-09-05MKIN1979peace": "MOTHER_TERESA_1979.TIF",
             "1931-11-260000-00-00AR1980peace": "PEREZ_ESQUIVEL_1980.TIF",
             "1902-01-311986-02-01SESE1982peace": "MYRDAL_A_1982.TIF",
-            "1911-03-201991-09-02MX1982peace": "GARCIA_MARQUES_1982.TIF",
+            "1911-03-201991-09-02MX1982peace": "GARCIA_ROBLES_1982.TIF",
             "1943-09-290000-00-00PL1983peace": "WALESA_1983.TIF",
             "1931-10-070000-00-00ZA1984peace": "TUTU_1984.TIF",
             "0000-00-000000-00-001985peace": "INT_PHYSICIANS_1985.TIF",
@@ -1651,6 +1648,7 @@ TAG.Layout.Spoof = (function () {
             "1954-01-110000-00-00IN2014peace": "AM_Official_portrait_Kailash.jpg",
             "1997-07-120000-00-00PK2014peace": "Malala_Yousafzai_01_gs.tif",
             "1953-08-090000-00-00FR2014economics": "AM_Official_portrait_Tirole.jpg",
+            //2015 winners
             "0000-00-000000-00-00IE12015medicine": "campbell.tif",
             "0000-00-000000-00-00JP22015medicine": "omura.tif",
             "0000-00-000000-00-00CN32015medicine": "youyou.tif",
@@ -1662,6 +1660,20 @@ TAG.Layout.Spoof = (function () {
             "1948-05-310000-00-00UA92015literature": "alexievich.tif",
             "0000-00-000000-00-0010102015peace": "fre_2015_fram.jpg",
             "0000-00-000000-00-00GB112015economics": "Deaton.tif",
+            //missing or duplicates/errors
+            /**
+            "1905-06-211980-04-15FRFR1964literature": "declined the prize (1).png",
+            "0000-00-000000-00-0011963peace": "red-cross-league_postcard.jpg",
+            "1931-07-100000-00-00CA2013literature": "alice-munro-standing.jpg",
+            "0000-00-000000-00-0021944peace": "RED_CROSS_1917_1944_1963 - Copy.TIF",
+            "0000-00-000000-00-0021963peace": "RED_CROSS_1917_1944_1963 - Copy (2).TIF",
+            "0000-00-000000-00-002013peace": "opcw_postcard.jpg",
+            "0000-00-000000-00-0021947peace": "friends-committee_postcard.jpg",
+            "0000-00-000000-00-001981peace": "UNHCR_1954_1981 - Copy.TIF",
+            "0000-00-000000-00-001965peace": "unicef_postcard.jpg",
+            "1911-10-141990-10-13VNVN1973peace": "declined the prize (1) - Copy.png",
+            "0000-00-000000-00-002012peace": "flag_yellow_high.jpg",
+            **/
         }
         return map
     }
@@ -15199,6 +15211,7 @@ TAG.Layout.Spoof = (function () {
                 "firstname": "Comité international de la Croix Rouge (International Committee of the Red Cross)",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
+                "bornCountryCode": "2", //for mapping
                 "gender": "org",
                 "prizes": [
                     {
@@ -15805,6 +15818,7 @@ TAG.Layout.Spoof = (function () {
                 "firstname": "Friends Service Council (The Quakers)",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
+                "bornCountryCode": "1", //for mapping
                 "gender": "org",
                 "prizes": [
                     {
@@ -15822,6 +15836,7 @@ TAG.Layout.Spoof = (function () {
                 "firstname": "American Friends Service Committee (The Quakers)",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
+                "bornCountryCode": "2", //for mapping
                 "gender": "org",
                 "prizes": [
                     {
@@ -16109,6 +16124,7 @@ TAG.Layout.Spoof = (function () {
                 "surname": "Societies",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
+                "bornCountryCode" : "1",
                 "gender": "org",
                 "prizes": [
                     {
