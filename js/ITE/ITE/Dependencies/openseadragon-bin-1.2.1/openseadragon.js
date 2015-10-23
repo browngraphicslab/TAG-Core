@@ -5328,7 +5328,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
                         }
 
                         // Drag End
-                        if ( tracker.dragEndHandler && !updateGPoint.currentPos.equals( updateGPoint.contactPos ) ) {
+                        if ( tracker.dragEndHandler && updateGPoint.currentPos && !updateGPoint.currentPos.equals( updateGPoint.contactPos ) ) {
                             propagate = tracker.dragEndHandler(
                                 {
                                     eventSource:          tracker,
@@ -13779,8 +13779,11 @@ ImageJob.prototype = {
         if (jQuery.data(document, "seadragon_sources")[s] === undefined) {
             var tempS = s;
             var tempImg = this.image
-            TAG.Layout.Spoof().staticSetPath(s, this.image, "src", function () { (jQuery.data(document, "seadragon_sources"))[tempS] = tempImg.src })
-           
+            TAG.Layout.Spoof().staticSetPath(s, this.image, "src", function () {
+                if (jQuery.data(document, "current_page") === "tour") {
+                    (jQuery.data(document, "seadragon_sources"))[tempS] = tempImg.src
+                }
+            })
         }
         else {
             this.image.src = (jQuery.data(document, "seadragon_sources"))[s]

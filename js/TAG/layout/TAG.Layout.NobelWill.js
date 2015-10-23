@@ -985,6 +985,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         'width': '105.5%',
                         'color': 'black',
                         'height': '2.1%',
+                        "font-weight" : "bold",
                         'top': currentHeight + '%',
                         'font-size': '.479em',
                     }).text(hardcodedData[p - 1]["leftTextArray"][i]);
@@ -1109,6 +1110,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
     }
     function nobelWillInit() {
+        $(document).data("current_page", "will");
         $(document).data("currentTour", {});
         if (testamentHeader !== true) {
             $("#titleDiv").text("WILL PAGE " + pageNumber + "/4");
@@ -1666,7 +1668,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         return list;
     }
     function switchTo(objName) {
-        var doqType;
+        var doqType,
+            tourNameString = ""
         var doq,
             artworks = []
 
@@ -1676,30 +1679,37 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 doq = spoof.collectionDoqs.Patents
                 doqType = "collection"
                 break;
+
             //Tours
             case "Will_Tour":
                 doq = spoof.tourDoqs.Will
                 doqType = "tour"
+                tourNameString = "WILL TOUR"
                 break;
             case "FromWillToPrize":
                 doq = spoof.tourDoqs.FromWillToPrize
                 doqType = "tour"
+                tourNameString = "PRIZE TOUR"
                 break;
             case "Family_Tour":
                 doq = spoof.tourDoqs.Family
                 doqType = "tour"
+                tourNameString = "FAMILY TOUR"
                 break;
             case "Factories_Tour":
                 doq = spoof.tourDoqs.Factories
                 doqType = "tour"
+                tourNameString = "FACTORIES TOUR"
                 break;
             case "Homes_Tour":
                 doq = spoof.tourDoqs.Homes
                 doqType = "tour"
+                tourNameString = "HOMES TOUR"
                 break;
             case "Intro_Tour":
                 doq = spoof.tourDoqs.Intro
                 doqType = "tour"
+                tourNameString = "INTRO TOUR"
                 break;
             //Collections
             case "Bjorkborn":
@@ -1752,9 +1762,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             root.append(slideDiv)            
             switch (doqType) {
                 case "collection":
-                    TAG.Telemetry.recordEvent("Collection", function (tobj) {
-                        tobj.name = doq.Identifier;
-                    });
+                    $(document).data("current_page", "collection");
                     for (var i = 0; i < spoof.doqsInCollection[doq.Identifier].length; i++) {
                         artworks.push(spoof.artDoqs[spoof.doqsInCollection[doq.Identifier][i]]);
                     }
@@ -1763,19 +1771,29 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     slideDiv.append(collectionsPage.getRoot())
                     break
                 case "tour":
-                    TAG.Telemetry.recordEvent("Tour", function (tobj) {
-                        tobj.name = doq.tourTitle;
-                    });
+                    $(document).data("current_page", "tour");
                     var tourDoq = spoof.tourDoqs[doq.Name]
 
-                    var tourPlayer = TAG.Layout.TourPlayer(doq, null, null, null, spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail, null)
+                    var tourPlayer = TAG.Layout.TourPlayer(doq, null, null, null, spoof.artDoqs[Object.keys(spoof.artDoqs)[0]].Metadata.Thumbnail, null,tourNameString)
                     
                     $(document).data("currentTour", tourPlayer);
                     slideDiv.append(tourPlayer.getRoot());
                     tourPlayer.startPlayback()
                     break;
             }
-            slideDiv.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { slideDiv.css({ "background-color": "black" });})
+            slideDiv.animate({ left: "0%" }, 1000, "easeInOutQuart", function () { slideDiv.css({ "background-color": "black" }); })
+            switch (doqType) {
+                case "tour":
+                    TAG.Telemetry.recordEvent("Tour", function (tobj) {
+                        tobj.name = doq.tourTitle;
+                    });
+                    break;
+                case "collection":
+                    TAG.Telemetry.recordEvent("Collection", function (tobj) {
+                        tobj.name = doq.Identifier;
+                    });
+                    break;
+            }
         }
     }
     function showLargePopup(mediaNumber) {

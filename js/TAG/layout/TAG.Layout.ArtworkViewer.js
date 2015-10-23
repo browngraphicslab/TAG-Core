@@ -31,6 +31,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         locationPanelDiv = null,
         locHistoryToggle = null,
         locHistoryToggleSign = null,
+        interactionSign = $(document.createElement('img')),
         toggleArea,
         toggleHotspotButton,
         fieldsMapButton = $(document.createElement("BUTTON")),
@@ -92,8 +93,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         telemetry_timer = new TelemetryTimer(),       //Timer for telemetry
         firstShowHotspots = true,
 
+
         //nobel will variables
         showInitialNobelWillBox = true,
+
         showInitialImpactPopUp = options.showInitialImpactPopUp || false,
         sliderBar,//the big yellow div sliding up and down
         chunkNumber,//the current chunk number (0-based) being observed
@@ -123,6 +126,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         smallWillImage,
 
         // misc uninitialized vars
+        interactionTimer,
         keywordSets,
         locationList,                               // location history data
         customMapsLength,
@@ -141,6 +145,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         getRoot: getRoot,
         getArt: getArt
     };
+    
     root.attr('unselectable', 'on');
     root.css({
         '-moz-user-select': '-moz-none',
@@ -167,71 +172,74 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
      * @method init
      */
     function init(partialSidebar) {
-        var head,
-            script,
-            meta;
+        
 
-        var progressCircCSS = {
-            'position': 'absolute',
-            'z-index': '50',
-            'height': 'auto',
-            'width': '5%',
-            'left': '47.5%',
-            'top': '42.5%'
-        };
+        if (partialSidebar !== true) {
+            var head,
+                script,
+                meta;
+
+            var progressCircCSS = {
+                'position': 'absolute',
+                'z-index': '50',
+                'height': 'auto',
+                'width': '5%',
+                'left': '47.5%',
+                'top': '42.5%'
+            };
 
 
-        TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
-        var loadingLabel = $(document.createElement('label'));
-        loadingLabel.css({
-            'position': 'absolute',
-            'left': '40%',
-            'top': '55%',
-            'font-size': '200%',
-            'color': 'white',
-            'opacity': '1'
-        });
-        loadingLabel.text('Loading Viewer');
-        loadingArea.append(loadingLabel);
+            TAG.Util.showProgressCircle(loadingArea, progressCircCSS, '0px', '0px', false);
+            var loadingLabel = $(document.createElement('label'));
+            loadingLabel.css({
+                'position': 'absolute',
+                'left': '40%',
+                'top': '55%',
+                'font-size': '200%',
+                'color': 'white',
+                'opacity': '1'
+            });
+            loadingLabel.text('Loading Viewer');
+            loadingArea.append(loadingLabel);
 
-        // add script for displaying bing maps
+            // add script for displaying bing maps
 
-        head = document.getElementsByTagName('head').item(0);
-        script = document.createElement("script");
-        script.charset = "UTF-8";
-        script.type = "text/javascript";
-        script.src = "http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0";
-        head.appendChild(script);
-        meta = document.createElement('meta');
-        meta.httpEquiv = "Content-Type";
-        meta.content = "text/html; charset=utf-8";
-        head.appendChild(meta);
+            head = document.getElementsByTagName('head').item(0);
+            script = document.createElement("script");
+            script.charset = "UTF-8";
+            script.type = "text/javascript";
+            script.src = "http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0";
+            head.appendChild(script);
+            meta = document.createElement('meta');
+            meta.httpEquiv = "Content-Type";
+            meta.content = "text/html; charset=utf-8";
+            head.appendChild(meta);
 
-        locationList = TAG.Util.UI.getLocationList(doq.Metadata);
-
-        ///sideBar.css('visibility', 'hidden');
-        if (!slideModeArray[0].Identifier) {
-            if (!slideModeArray || !slideModeArray.length || slideModeArray.length === 0) {
-                isSlideMode = false;
-            }
-            else {
-                isSlideMode = true
-                var s = TAG.Layout.Spoof()
-                var temp = []
-                while (slideModeArray.length > 0) {
-                    temp.push(s.getDoq(slideModeArray.shift()))
+            if (!slideModeArray[0].Identifier) {
+                if (!slideModeArray || !slideModeArray.length || slideModeArray.length === 0) {
+                    isSlideMode = false;
                 }
-                slideModeArray = temp;
+                else {
+                    isSlideMode = true
+                    var s = TAG.Layout.Spoof()
+                    var temp = []
+                    while (slideModeArray.length > 0) {
+                        temp.push(s.getDoq(slideModeArray.shift()))
+                    }
+                    slideModeArray = temp;
+                }
             }
+            interactionSign = $(document.createElement('img'))
+            nextSlide = $(document.createElement('img'))
+            prevSlide = $(document.createElement('img'))
+            interactionSign.css({ "top": "40px", "right": "40px", "position": "absolute", "z-index": "999999","height":"65%","width":"auto" }).attr({ src: tagPath + 'images/collection_interaction.png' })
+            nextSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "right": "40%", "position": "absolute", "z-index": "999999" }).attr({ src: tagPath + 'images/right_icon.png' })
+            prevSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "left": "40%", "position": "absolute", "z-index": "999999" }).attr({ src: tagPath + 'images/left_icon.png' })
+            nextSlide.click(nextSlidePage)
+            prevSlide.click(prevSlidePage)
+            root.append(nextSlide).append(prevSlide)
+            interactionTimer = setTimeout(function () { root.append(interactionSign) }, 5000);
         }
-        nextSlide = $(document.createElement('img'))
-        prevSlide = $(document.createElement('img'))
-        nextSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "right": "40%", "position": "absolute", "z-index": "999999" }).attr({ src: tagPath + 'images/right_icon.png' })
-        prevSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "left": "40%","position":"absolute","z-index":"999999"}).attr({ src: tagPath + 'images/left_icon.png' })
-        nextSlide.click(nextSlidePage)
-        prevSlide.click(prevSlidePage)
-        root.append(nextSlide).append(prevSlide)
-
         if (afterInSlideArray() === false || afterInSlideArray() === undefined) {
             nextSlide.hide()
         }
@@ -244,12 +252,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         else {
             prevSlide.show()
         }
-
-        if (isImpactMap) sideBar.css
-        if (annotatedImage !== null && annotatedImage !== undefined) {
-            annotatedImage.unload()
-            annotatedImage = null
-        }
         TAG.Telemetry.recordEvent("Artwork", function (tobj) {
             tobj.name = doq.Identifier;
         });
@@ -258,6 +260,10 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             isImpactMap: isImpactMap,
             root: root,
             doq: doq,
+            interactionCallback: function() {
+                clearTimeout(interactionTimer);
+                interactionSign.hide();
+            },
             callback: function () {
                 associatedMedia = annotatedImage.getAssociatedMedia();
                 associatedMedia.guids.sort(function (a, b) {
@@ -376,12 +382,6 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             annotatedImage.unload();
         }
         doq = d
-        nextSlide.remove()
-        prevSlide.remove()
-        nextSlide.die()
-        prevSlide.die()
-
-
         TAG.Util.removeYoutubeVideo();
         $('.annotatedImageHotspotCircle').remove(); //remove hotspots
         $('.mediaOuterContainer').remove();
@@ -859,8 +859,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             togglerImage.attr("src", tagPath + 'images/icons/Close_nobel.svg');
         }
         infoTitle.text(doq.Name);
-        infoArtist.text(doq.Metadata.Artist);
-        infoYear.text(doq.Metadata.Year);
+        infoArtist.text(doq.Metadata ? doq.Metadata.Artist : "");
+        infoYear.text(doq.Metadata? doq.Metadata.Year : "");
         infoTitle.css({
             'color': '#' + PRIMARY_FONT_COLOR,
         });
@@ -878,7 +878,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             //'font-family': FONT
         });
 
-        if (doq.Metadata.Description) {
+        if (doq.Metadata && doq.Metadata.Description) {
             console.log("description");
             var description = doq.Metadata.Description;
             $(".description").remove()
@@ -975,7 +975,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             $("#artworkViewerSwitchRoot").animate({ left: "100%" }, 1000, "easeInOutQuart", cb)
         }
 
-        if (customMapsLength > 0 || locationList.length > 0) {
+        if (customMapsLength > 0) {
             locHistoryButton = initlocationHistory();
             assetContainer.append(locHistoryButton);
             currBottom += locHistoryButton.height();

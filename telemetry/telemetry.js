@@ -37,22 +37,15 @@ TAG.Telemetry = (function () {
         }
         sessionDataRequests.push(tobj);
         if (sessionDataRequests.length >= sendFreq) {
-            try {
-                folder.createFolderAsync(today_date.getMonth() + 1 + "-" + today_date.getDate() + "-" + today_date.getFullYear(), Windows.Storage.CreationCollisionOption.openIfExists)
-                    .then(function (folder) {
-                        folder.createFileAsync(parseInt(today_date.getTime() / 1000) + ".txt",
-                        Windows.Storage.CreationCollisionOption.replaceExisting)
-                        .then(function (file) {
-                            Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(sessionDataRequests)).then(function () {
-                            sessionDataRequests = [];
-                        });
-                    });
+            folder.createFolderAsync(today_date.getMonth() + 1 + "-" + today_date.getDate() + "-" + today_date.getFullYear(), Windows.Storage.CreationCollisionOption.openIfExists)
+                .then(function (folder) {
+                    folder.createFileAsync(parseInt(today_date.getTime() / 1000) + ".txt",
+                    Windows.Storage.CreationCollisionOption.replaceExisting)
+                    .then(function (file) {
+                        Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(sessionDataRequests));
                 });
-            } catch(e) {
-                console.log("TELEMETRY ERROR: " + e);
-            }
-            
-        
+            });
+            sessionDataRequests = [];
         }
        
     }

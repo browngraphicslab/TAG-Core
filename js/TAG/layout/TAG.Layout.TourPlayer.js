@@ -12,7 +12,7 @@
  * @param idletimer    the idle timer 
  * @param nobel
  */
-TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj, idletimer) {
+TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, tourObj, idletimer,tourNameString) {
     "use strict";
     var artworkPrev;
 	var prevExhib = exhibition;
@@ -353,7 +353,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     this.goBack = goBack;
     this.getInitialOverlay = function () { return initialOverlay }
 
-
+    this.getTourName = function () {
+        return tourNameString ? tourNameString : ""
+    }
 
     return {
         getRoot: function () {
