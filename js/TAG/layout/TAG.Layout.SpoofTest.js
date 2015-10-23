@@ -162,7 +162,7 @@ TAG.Layout.SpoofTest = (function () {
 			"position": "absolute",
 			"width": "100%",
 			"height": "15%",
-			"top": "-6%",
+			"top": isSurface ? "-3%" : "-6%",
 			"left": "0%",
 		})
 		searchBox.css({
@@ -814,7 +814,7 @@ TAG.Layout.SpoofTest = (function () {
 		    d.link = link
 		    link && d.click(function () { goto(d.link) })
 		    link && d.css({ "text-decoration": "underline",  "color": "#d99b3b", })
-		    !link && d.css({"padding-right" : "10px"})
+		    d.css({"padding-right" : "10px"})
 		    collaborators.append(d)
 		    return d
 		}
