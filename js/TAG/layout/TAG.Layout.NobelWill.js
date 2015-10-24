@@ -185,6 +185,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function firstInit() {
         $(document).data("OSDViewers", {})
+        $(document).data("preload_files", {})
         $(document).data("tourOSDObjects", {})
         $(document).data("tourPlaying", false)
         idleTimer && idleTimer.tourPlaying(false)

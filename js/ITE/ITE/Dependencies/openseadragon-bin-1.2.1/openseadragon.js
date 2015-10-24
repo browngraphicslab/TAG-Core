@@ -13777,8 +13777,13 @@ ImageJob.prototype = {
             s=s.replace("/","\\")
         }
         if (jQuery.data(document, "seadragon_sources")[s] === undefined) {
+            /*
             var tempS = s;
-            TAG.Layout.Spoof().staticSetPath(s, this.image, "src", null)
+            TAG.Layout.Spoof().staticSetPath(s, this.image, "src", function () {
+                jQuery.data(document, "preload_files")[tempS] = true;
+            })
+            */
+            TAG.Layout.Spoof().staticSetPath(s, this.image, "src",null)
         }
         else {
             this.image.src = (jQuery.data(document, "seadragon_sources"))[s]
