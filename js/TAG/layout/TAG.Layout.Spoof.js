@@ -1661,19 +1661,19 @@ TAG.Layout.Spoof = (function () {
             "0000-00-000000-00-0010102015peace": "fre_2015_fram.jpg",
             "0000-00-000000-00-00GB112015economics": "Deaton.tif",
             //missing or duplicates/errors
-            /**
+            
             "1905-06-211980-04-15FRFR1964literature": "declined the prize (1).png",
-            "0000-00-000000-00-0011963peace": "red-cross-league_postcard.jpg",
-            "1931-07-100000-00-00CA2013literature": "alice-munro-standing.jpg",
+            "0000-00-000000-00-0011963peace": "2000px-Emblem_of_the_IFRC.png",
+            "1931-07-100000-00-00CA2013literature": "Alice_Munro.tif",
             "0000-00-000000-00-0021944peace": "RED_CROSS_1917_1944_1963 - Copy.TIF",
             "0000-00-000000-00-0021963peace": "RED_CROSS_1917_1944_1963 - Copy (2).TIF",
-            "0000-00-000000-00-002013peace": "opcw_postcard.jpg",
-            "0000-00-000000-00-0021947peace": "friends-committee_postcard.jpg",
+            "0000-00-000000-00-002013peace": "opcw-logo.jpg",
+            "0000-00-000000-00-0021947peace": "AFSC-2Blogo-2B.jpg",
             "0000-00-000000-00-001981peace": "UNHCR_1954_1981 - Copy.TIF",
             "0000-00-000000-00-001965peace": "unicef_postcard.jpg",
             "1911-10-141990-10-13VNVN1973peace": "declined the prize (1) - Copy.png",
-            "0000-00-000000-00-002012peace": "flag_yellow_high.jpg",
-            **/
+            "0000-00-000000-00-002012peace": "flag_yellow_high.jpg",     
+            
         }
         return map
     }
