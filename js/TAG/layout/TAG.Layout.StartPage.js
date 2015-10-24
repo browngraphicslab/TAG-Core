@@ -27,6 +27,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options.tagContainer = $("#tagRoot");
 
     var loadingWill = false;
+    var loadingLaureates = false;
 
     var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
         goToCollectionsButton = root.find('#goToCollectionsButton'),
@@ -460,9 +461,16 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         winnersImage.on('click', function() {
-            switchPage(LAUREATE_NAME, false, true, true);
-            //winnersImage.disabled = true;
-           // goToWinnersButton.disabled = true;
+            if (loadingLaureates == false) {
+                switchPage(LAUREATE_NAME, false, true, true);
+                loadingLaureates = true;
+            } else {
+                console.log("Already loading laureates");
+            }
+
+            //switchPage(LAUREATE_NAME, false, true, true);
+           // winnersImage.disabled = true;
+            //goToWinnersButton.disabled = true;
 
         });
 
@@ -492,7 +500,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         goToWinnersButton.on('click', function () {
-            switchPage(LAUREATE_NAME, false, true, true);
+
+            if (loadingLaureates == false) {
+                switchPage(LAUREATE_NAME, false, true, true);
+                loadingLaureates = true;
+            } else {
+                console.log("Already loading laureates");
+            }
+            //switchPage(LAUREATE_NAME, false, true, true);
             //goToWinnersButton.disabled = true;
             //winnersImage.disabled = true;
         });
