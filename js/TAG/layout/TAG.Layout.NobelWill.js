@@ -68,6 +68,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             restartTimer()
             return;
         }
+        $(document).data("current_page", "will");
         var tourPlayer = jQuery.data(document, "currentTour")
         if (Object.keys(tourPlayer).length !== 0) {
             tourPlayer.goBack();
@@ -184,6 +185,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function firstInit() {
         $(document).data("OSDViewers", {})
+        $(document).data("preload_files", {})
         $(document).data("tourOSDObjects", {})
         $(document).data("tourPlaying", false)
         idleTimer && idleTimer.tourPlaying(false)
@@ -1082,14 +1084,20 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
 
         if (OFFLINE === true) {
-            TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
+            console.log("about to call getdata")
+            TAG.Layout.Spoof().getData(function (s) {
+                spoof = s;
+                nobelWillInit()
+            });
         }
         else {
             nobelWillInit();
         }
         videoOverlay();
     }
-    TAG.Layout.Spoof().setGlobalImages(firstInit)
+    firstInit()
+
+
     //Start Auto Functions
     //End Auto Functions
 
@@ -1112,6 +1120,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function nobelWillInit() {
         $(document).data("current_page", "will");
         $(document).data("currentTour", {});
+        var keysToCheck = Object.keys(jQuery.data(document,"seadragon_sources"))
         if (testamentHeader !== true) {
             $("#titleDiv").text("WILL PAGE " + pageNumber + "/4");
         }

@@ -186,6 +186,9 @@ TAG.Layout.SpoofTest = (function () {
                 searchBoxController.setClear()
 		    }
 		    else {
+		        if (searchBox[0].value === "") {
+		            searchBoxController.search()
+		        }
                 searchBoxController.setSearch()
 		    }
 		})
@@ -361,7 +364,7 @@ TAG.Layout.SpoofTest = (function () {
 		block.addClass(laur.Metadata.KeywordsSet2.toLowerCase())
 		block.addClass(laur.Metadata.KeywordsSet3.toLowerCase())
 
-		var categories = ["FirstName", "LastName", "bornCountry", "born", "Motivation", "died", "KeywordsSet2", "KeywordsSet3", "KeywordsSet1", "Year"]
+		var categories = ["FirstName", "LastName", "bornCountry", "born", "Motivation", "died", "KeywordsSet2", "KeywordsSet3", "KeywordsSet1", "Year","longname"]
 		categories.forEach(function (c) {
             searchString += laur.Metadata[c] ? laur.Metadata[c].toLowerCase()+" " : ""
 		})
@@ -386,8 +389,6 @@ TAG.Layout.SpoofTest = (function () {
 	    //console.log(img.height());
 		img.load(function(){
 		    if (img.height()+12.5 < block.height()) {
-		        console.log("Laureate image DOES NOT hit bottom: " + laur.Metadata.LastName + (block.height() - img.height())/2 + "px");
-
 		        img.css({
 		            "bottom": "0%",
 		            //"top": img.height(),
@@ -398,9 +399,7 @@ TAG.Layout.SpoofTest = (function () {
 		        if (laur.Metadata.LastName === "Riess") {
 		            img.css({ "margin-bottom": "0px" });
 		        }
-
 		    } else {
-		        //console.log("Laureate image hits bottom: " + laur.Metadata.LastName);
 		        var donotShift = ["Perrin", "Schwinger", "Rainwater", "Veltman", "Leontief", "Sen", "Heckman", "Echegary y Eizaguirre", "Gjellerup", "Sillanpää", "Eliot", "Camus", "Steinbeck", "Solzhenitsyn", "Martinson", "Singer", "Brodsky", "Dawes", "Hammarskjöld","MacBride","Sato","Kuhn","Joilot-Curie","Joilot","Hevesy","Synge","Eigen","Porter","Noyori","Tsien","Wagner-Jauregg","Beadle","Holley","Granit","Lynen","Hodgkin","Watson","Jacob","Palade","Guillemmin","Dausset"];
                 if (donotShift.indexOf(laur.Metadata.LastName) < 0 && laur.Metadata.FirstName !== "Pugwash Conferences") {
 		            img.css("top", SANDBOX_NEW_UI ? "12.5px": "0%");
@@ -823,10 +822,14 @@ TAG.Layout.SpoofTest = (function () {
 		    return d
 		}
 		if (laur.Metadata.Collaborators.length) {
-		    var collab = addCollab("Collaborators:  ")
+		    var collab = addCollab("Shared Prize With:  ")
 		    var last = null
 		    laur.Metadata.Collaborators.forEach(function (c) {
-		        last = addCollab(c.Metadata.FirstName + " " + c.Metadata.LastName, c)
+		        var lastName = ""
+		        if (c.Metadata.LastName !== undefined && c.Metadata.LastName !== null) {
+		            lastName = c.Metadata.LastName
+		        }
+		        last = addCollab(c.Metadata.FirstName + " " + lastName, c)
 		    })
 		    if (last.offset().top > collab.offset().top) {
 		        collaborators.css({ "min-height": year.height() * 2})
