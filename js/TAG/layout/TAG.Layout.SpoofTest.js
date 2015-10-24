@@ -395,10 +395,14 @@ TAG.Layout.SpoofTest = (function () {
 		            "vertical-align": "bottom",
 		        });
 
+		        if (laur.Metadata.LastName === "Riess") {
+		            img.css({ "margin-bottom": "0px" });
+		        }
+
 		    } else {
 		        //console.log("Laureate image hits bottom: " + laur.Metadata.LastName);
-		        var donotShift = ["Perrin", "Schwinger"];
-                if (donotShift.indexOf(laur.Metadata.LastName) < 0) {
+		        var donotShift = ["Perrin", "Schwinger", "Rainwater", "Veltman", "Leontief", "Sen", "Heckman", "Echegary y Eizaguirre", "Gjellerup", "Sillanpää", "Eliot", "Camus", "Steinbeck", "Solzhenitsyn", "Martinson", "Singer", "Brodsky", "Dawes", "Hammarskjöld","MacBride","Sato","Kuhn","Joilot-Curie","Joilot","Hevesy","Synge","Eigen","Porter","Noyori","Tsien","Wagner-Jauregg","Beadle","Holley","Granit","Lynen","Hodgkin","Watson","Jacob","Palade","Guillemmin","Dausset"];
+                if (donotShift.indexOf(laur.Metadata.LastName) < 0 && laur.Metadata.FirstName !== "Pugwash Conferences") {
 		            img.css("top", SANDBOX_NEW_UI ? "12.5px": "0%");
 		        }
 

@@ -15208,7 +15208,9 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "482",
-                "firstname": "Comité international de la Croix Rouge (International Committee of the Red Cross)",
+                "firstname": "International Committee",
+                "surname": "of the Red Cross",
+                "longname": "Comité international de la Croix Rouge (International Committee of the Red Cross)",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "bornCountryCode": "2", //for mapping
@@ -15976,6 +15978,7 @@ TAG.Layout.Spoof = (function () {
             {
                 "id": "515",
                 "firstname": "UNHCR",
+                "longname": "Office of the United Nations High Commissioner for Refugees (UNHCR) ",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -16163,7 +16166,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "525",
-                "firstname": "United Nations Children's Fund (UNICEF)",
+                "firstname": "UNICEF",
+                "longname": "United Nations Children's Fund (UNICEF)",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -16625,7 +16629,8 @@ TAG.Layout.Spoof = (function () {
             {
                 "id": "547",
                 "firstname": "Int. Physicians for the",
-                "surname" : "Prevention of Nuclear War",
+                "surname": "Prevention of Nuclear War",
+                "longname": "International Physicians for the Prevention of Nuclear War",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -16685,7 +16690,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "550",
-                "firstname": "United Nations Peacekeeping Forces",
+                "firstname": "United Nations ",
+                "surname": "Peacekeeping Forces",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -16928,7 +16934,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "561",
-                "firstname": "Pugwash Conferences on Science and World Affairs",
+                "firstname": "Pugwash Conferences",
+                "longname": "Pugwash Conferences on Science and World Affairs",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
@@ -25099,7 +25106,8 @@ TAG.Layout.Spoof = (function () {
             },
             {
                 "id": "893",
-                "firstname": "Organisation for the Prohibition of Chemical Weapons (OPCW)",
+                "firstname": "OPCW",
+                "longname": "Organisation for the Prohibition of Chemical Weapons (OPCW)",
                 "born": "0000-00-00",
                 "died": "0000-00-00",
                 "gender": "org",
