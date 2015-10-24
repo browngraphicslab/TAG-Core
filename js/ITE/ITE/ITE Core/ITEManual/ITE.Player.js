@@ -620,13 +620,13 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                         setControlsFade();
                         orchestrator.play();
                         mute()
-                        setTimeout(function () { orchestrator.pause(); orchestrator.play(); }, 50)
+                        setTimeout(function () { orchestrator.pause(); orchestrator.play(); }, 25)
                         setTimeout(function () {
                             orchestrator.seek(orchestrator.getElapsedTime()/orchestrator.tourData.totalDuration,true)
                             unMute()
                             tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
-                        },75);
-                    }, 5000);
+                        },35);
+                    }, 8500);
                 }, 1);
                 return;
             }

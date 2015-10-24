@@ -16,6 +16,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     SPENT_TIMER = new TelemetryTimer(); //global timer to measure time spent
     SETTINGSVIEW_TIMER = new TelemetryTimer(); //global timer to measure time spent in settings view
 
+
+    var USE_AUTO_START = false;
+
+
+
     var isPreview;
     options && function () {isPreview = options.isPreview; }();
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
@@ -282,6 +287,34 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      */
     function testConnection(options) {
         if (OFFLINE === true) {
+            if (USE_AUTO_START === true) {
+                Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\AutoStart.txt").done(function (file) {
+                    Windows.Storage.FileIO.readTextAsync(file).done(function (f) {
+                        if (f.toLowerCase() === "will" || f.toLowerCase() === "laureates") {
+                            var t = f.toLowerCase() === "will" ? "Will" : "Winners"
+                            var div = $(document.createElement('div')).attr({ id: "autoLoadBlocker" })
+                            $("#tagContainer").css({ "z-index": "10" })
+                            div.css({
+                                "position": "absolute",
+                                "width": "100%",
+                                "height": "100%",
+                                "background-color": "rgb(150,150,150)",
+                                "z-index": "50"
+                            })
+                            $("#tagContainer").append(div)
+                            setTimeout(function () {
+                                if (t === "Winners") {
+                                    $("#autoLoadBlocker").remove().die()
+                                }
+                                $("#goTo" + t + "Button").click()
+                                setTimeout(function () {
+                                    $("#autoLoadBlocker").remove().die()
+                                }, 7500)
+                            }, 2000)
+                        }
+                    })
+                });
+            }
             successConnecting();
         }
         else {

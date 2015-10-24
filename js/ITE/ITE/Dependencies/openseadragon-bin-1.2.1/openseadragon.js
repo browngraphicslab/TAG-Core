@@ -13777,20 +13777,17 @@ ImageJob.prototype = {
             s=s.replace("/","\\")
         }
         if (jQuery.data(document, "seadragon_sources")[s] === undefined) {
+            /*
             var tempS = s;
-            var tempImg = this.image
             TAG.Layout.Spoof().staticSetPath(s, this.image, "src", function () {
-                if (jQuery.data(document, "current_page") === "tour") {
-                    (jQuery.data(document, "seadragon_sources"))[tempS] = tempImg.src
-                }
+                jQuery.data(document, "preload_files")[tempS] = true;
             })
+            */
+            TAG.Layout.Spoof().staticSetPath(s, this.image, "src",null)
         }
         else {
             this.image.src = (jQuery.data(document, "seadragon_sources"))[s]
         }
-        //this.image.src = ($(document).data("seadragon_sources"))[]
-        //TAG.Layout.Spoof().staticSetPath(s,this.image,"src")
-        //this.image.src = this.src;
     },
 
     finish: function( successful ) {

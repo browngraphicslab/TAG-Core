@@ -68,6 +68,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
             restartTimer()
             return;
         }
+        $(document).data("current_page", "will");
         var tourPlayer = jQuery.data(document, "currentTour")
         if (Object.keys(tourPlayer).length !== 0) {
             tourPlayer.goBack();
@@ -184,6 +185,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
     function firstInit() {
         $(document).data("OSDViewers", {})
+        $(document).data("preload_files", {})
         $(document).data("tourOSDObjects", {})
         $(document).data("tourPlaying", false)
         idleTimer && idleTimer.tourPlaying(false)
@@ -1082,14 +1084,19 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
 
         if (OFFLINE === true) {
-            TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
+            TAG.Layout.Spoof().getData(function (s) {
+                spoof = s;
+                nobelWillInit()
+                videoOverlay();
+            });
         }
         else {
             nobelWillInit();
         }
-        videoOverlay();
     }
-    TAG.Layout.Spoof().setGlobalImages(firstInit)
+    firstInit()
+
+
     //Start Auto Functions
     //End Auto Functions
 
@@ -1112,6 +1119,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function nobelWillInit() {
         $(document).data("current_page", "will");
         $(document).data("currentTour", {});
+
+        setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
+
+        hardcodedData[pageNumber - 1]["nobelHotspots"].forEach(function (m) {
+            m[1].show()
+            m[1].checkHeight()
+        })
+
         if (testamentHeader !== true) {
             $("#titleDiv").text("WILL PAGE " + pageNumber + "/4");
         }
@@ -1175,10 +1190,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 break;
         }
 
-        dragging = true
-        lastDragY = 0
-        mouseMove({ clientY: .1, clientX: 500 })
-        setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
 
 
         for (var i = 0; i < hardcodedData[pageNumber - 1]["associatedMedia"].length; i++) {
