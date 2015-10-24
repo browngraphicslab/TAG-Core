@@ -1084,14 +1084,20 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
 
         if (OFFLINE === true) {
-            TAG.Layout.Spoof().getData(function (s) { spoof = s; nobelWillInit() });
+            console.log("about to call getdata")
+            TAG.Layout.Spoof().getData(function (s) {
+                spoof = s;
+                nobelWillInit()
+            });
         }
         else {
             nobelWillInit();
         }
         videoOverlay();
     }
-    TAG.Layout.Spoof().setGlobalImages(firstInit)
+    firstInit()
+
+
     //Start Auto Functions
     //End Auto Functions
 

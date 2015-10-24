@@ -13788,9 +13788,6 @@ ImageJob.prototype = {
         else {
             this.image.src = (jQuery.data(document, "seadragon_sources"))[s]
         }
-        //this.image.src = ($(document).data("seadragon_sources"))[]
-        //TAG.Layout.Spoof().staticSetPath(s,this.image,"src")
-        //this.image.src = this.src;
     },
 
     finish: function( successful ) {
