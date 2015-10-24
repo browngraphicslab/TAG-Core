@@ -162,7 +162,7 @@ TAG.Layout.SpoofTest = (function () {
 			"position": "absolute",
 			"width": "100%",
 			"height": "15%",
-			"top": "-6%",
+			"top": isSurface ? "-3%" : "-6%",
 			"left": "0%",
 		})
 		searchBox.css({
@@ -382,23 +382,33 @@ TAG.Layout.SpoofTest = (function () {
             
 		}).attr({ src: laur.Metadata.Thumbnail.FilePath })
 
+        
 	    //console.log(img.height());
 		img.load(function(){
 		    if (img.height()+12.5 < block.height()) {
-		        //console.log("Laureate image DOES NOT hit bottom: " + laur.Metadata.LastName);
+		        console.log("Laureate image DOES NOT hit bottom: " + laur.Metadata.LastName + (block.height() - img.height())/2 + "px");
 
 		        img.css({
 		            "bottom": "0%",
 		            //"top": img.height(),
-		            "vertical-align": "bottom"
+		            "margin-bottom" : (block.height() - img.height())/2 + "px",
+		            "vertical-align": "bottom",
 		        });
+
+		        if (laur.Metadata.LastName === "Riess") {
+		            img.css({ "margin-bottom": "0px" });
+		        }
 
 		    } else {
 		        //console.log("Laureate image hits bottom: " + laur.Metadata.LastName);
-		        img.css("top", SANDBOX_NEW_UI ? "12.5px": "0%");
+		        var donotShift = ["Perrin", "Schwinger", "Rainwater", "Veltman", "Leontief", "Sen", "Heckman", "Echegary y Eizaguirre", "Gjellerup", "Sillanpää", "Eliot", "Camus", "Steinbeck", "Solzhenitsyn", "Martinson", "Singer", "Brodsky", "Dawes", "Hammarskjöld","MacBride","Sato","Kuhn","Joilot-Curie","Joilot","Hevesy","Synge","Eigen","Porter","Noyori","Tsien","Wagner-Jauregg","Beadle","Holley","Granit","Lynen","Hodgkin","Watson","Jacob","Palade","Guillemmin","Dausset"];
+                if (donotShift.indexOf(laur.Metadata.LastName) < 0 && laur.Metadata.FirstName !== "Pugwash Conferences") {
+		            img.css("top", SANDBOX_NEW_UI ? "12.5px": "0%");
+		        }
 
 		    }
 		})
+        
 
 
 	    //pageHeight /5 + SQUISH_FACTOR +"px" -> This is the height of a laureate tile
@@ -779,8 +789,11 @@ TAG.Layout.SpoofTest = (function () {
 		}
 
 		var lifeString = getYear(laur.Metadata.born) + " - " + getYear(laur.Metadata.died)
-
-		rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " + last));
+		if (laur.Metadata.longname) {
+		    rightSide.append(name.css(commonCSS).text(laur.Metadata.longname));
+		} else {
+		    rightSide.append(name.css(commonCSS).text(laur.Metadata.FirstName + " " + last));
+		}
 		rightSide.append(icon);
 		rightSide.append(category.css(commonCSS).text(laur.Metadata.PrizeCategory));
 		rightSide.append(year.css(commonCSS).text(laur.Metadata.Year));
@@ -805,7 +818,7 @@ TAG.Layout.SpoofTest = (function () {
 		    d.link = link
 		    link && d.click(function () { goto(d.link) })
 		    link && d.css({ "text-decoration": "underline",  "color": "#d99b3b", })
-		    !link && d.css({"padding-right" : "10px"})
+		    d.css({"padding-right" : "10px"})
 		    collaborators.append(d)
 		    return d
 		}
