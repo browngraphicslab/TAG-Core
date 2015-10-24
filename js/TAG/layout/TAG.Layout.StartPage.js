@@ -21,13 +21,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
+    var loadingWill = false;
+
     var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
         goToCollectionsButton = root.find('#goToCollectionsButton'),
         goToWillButton = root.find('#goToWillButton'),
         goToWillImage = root.find('#goToWillImage'),
         goToHistoryButton = root.find('#goToHistoryButton'),
         goToWinnersButton = root.find('#goToWinnersButton'),
-        goToLifeButton = root.find('#goToLifeButton'),
+       goToLifeButton = root.find('#goToLifeButton'),
         goToIntroButton = root.find("#goToIntroButton"),
         willImage = root.find('#willImage'),
         lifeImage = root.find('#lifeImage'),
@@ -425,7 +427,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         winnersImage.on('click', function() {
-            switchPage(LAUREATE_NAME,false,true,true);
+            switchPage(LAUREATE_NAME, false, true, true);
+            //winnersImage.disabled = true;
+           // goToWinnersButton.disabled = true;
+
         });
 
         historyImage.on('click', function(){
@@ -433,7 +438,16 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         willImage.on('click', function(){
-            switchPage(WILL_NAME);
+            if (loadingWill == false) {
+                switchPage(WILL_NAME);
+                loadingWill = true;
+                document.getElementById("willImage").disabled = true;
+
+            } else {
+                console.log("Already loading");
+            }
+            //switchPage(WILL_NAME);
+
         });
 
         lifeImage.on('click', function(){
@@ -446,6 +460,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         goToWinnersButton.on('click', function () {
             switchPage(LAUREATE_NAME, false, true, true);
+            //goToWinnersButton.disabled = true;
+            //winnersImage.disabled = true;
         });
 
         goToHistoryButton.on('click', function () {
@@ -453,7 +469,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         goToWillButton.on('click', function () {
-            switchPage(WILL_NAME);
+            if (loadingWill == false) {
+                switchPage(WILL_NAME);
+                loadingWill = true;
+                goToWillButton.disabled = true;
+
+            } else {
+                console.log("Already loading");
+            }
         });
 
         goToLifeButton.on('click', function () {
