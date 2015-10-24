@@ -419,6 +419,9 @@ TAG.Layout.Spoof = (function () {
            staticSetPath(blob.str, blob, "src", function () {
                jQuery.data(document, "seadragon_sources")[blob.str] = blob.src
                count++
+               if (count % 500 === 0) {
+                   console.log("Percent efficient preload: "+(count/needed))
+               }
            })
            needed++
        })

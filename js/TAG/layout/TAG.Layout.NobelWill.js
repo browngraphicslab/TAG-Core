@@ -1084,16 +1084,15 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
 
 
         if (OFFLINE === true) {
-            console.log("about to call getdata")
             TAG.Layout.Spoof().getData(function (s) {
                 spoof = s;
                 nobelWillInit()
+                videoOverlay();
             });
         }
         else {
             nobelWillInit();
         }
-        videoOverlay();
     }
     firstInit()
 
@@ -1120,7 +1119,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function nobelWillInit() {
         $(document).data("current_page", "will");
         $(document).data("currentTour", {});
-        var keysToCheck = Object.keys(jQuery.data(document,"seadragon_sources"))
+
+        setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
+
+        hardcodedData[pageNumber - 1]["nobelHotspots"].forEach(function (m) {
+            m[1].show()
+            m[1].checkHeight()
+        })
+
         if (testamentHeader !== true) {
             $("#titleDiv").text("WILL PAGE " + pageNumber + "/4");
         }
@@ -1184,10 +1190,6 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 break;
         }
 
-        dragging = true
-        lastDragY = 0
-        mouseMove({ clientY: .1, clientX: 500 })
-        setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
 
 
         for (var i = 0; i < hardcodedData[pageNumber - 1]["associatedMedia"].length; i++) {
