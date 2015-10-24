@@ -28,7 +28,8 @@ TAG.Telemetry = (function () {
             ttype: ttype,
             //session_id: TELEMETRY_SESSION_ID,
             //machine_id: localStorage.machId,
-            date_time: today_date.toTimeString()
+            date_time: today_date.toTimeString(),
+            formatted_date: (today_date.getMonth() + 1) + "-" + today_date.getDate() + "-" + today_date.getFullYear()
         };        
         TAG.TelemetryEvents.initEventProperties(tobj);
         // if preHandler returns true, return
