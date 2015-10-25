@@ -880,12 +880,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                         51.75, 'has of his own free will declared the above',
                         54, 'to be his last Will and Testament, and that he has signed the same, we have, in his presence and the presence of each other,',
                         58.5, 'hereunto subscribed our names as witnesses:',
-                        62, 'Sigurd Ehrenborg        R. W. Strehlenert',
-                        64.5, 'former Lieutenant        Civil Engineer',
-                        67, '86 Boulevard Haussmann        8, Rue Auber, Paris',
-                        71, 'Thos Nordenfelt        Leonard Hwass',
-                        74, 'Constructor        Civil Engineer',
-                        76.5, '4, Passage Caroline        4, Passage Caroline'
+
+                        62, 'Sigurd Ehrenborg . . . . . . . . . . . . . . . . . . Thos Nordenfelt',
+                        64.5, 'former Lieutenant . . . . . . . . . . . . . . . . . . Constructor',
+                        67, '86 Boulevard Haussmann. . . . . . . . . . . 8, Rue Auber, Paris',
+
+                        71, 'R. W. Strehlenert . . . . . . . . . . . . . . . . . . . Leonard Hwass',
+                        74, 'Civil Engineer. . . . . . . . . . . . . . . . . . . . . . Civil Engineer',
+                        76.5, '4, Passage Caroline. . . . . . . . . . . . . . . . 4, Passage Caroline'
                     ]
                     sliderPositions = [
                         [7.75, 12],
@@ -2475,7 +2477,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Björkborn", "Bjorkborn"]],
                 [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_Bjorkborn.svg', "Björkborn", "Bjorkborn"]],
                 [],
-                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_San Remo.svg', "San Remo", "SanRemo"]]
+                [[tagPath + 'images/NobelWillImages/ToursAndCollections/Collection_SanRemo.svg', "San Remo", "SanRemo"]]
 			],
 			[[], []]
     	]

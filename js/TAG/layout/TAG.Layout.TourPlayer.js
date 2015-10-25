@@ -173,7 +173,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             "color": "white",
             "background-color": "transparent",
             "text-align": "center",
-            "top": "59%",
+            "top": "24%",
             "display": "block",
             "position": "absolute",
             "font-size": "3em",
@@ -184,43 +184,14 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         })
         infoDiv.text("Tap on artworks to learn more");
         infoDiv.attr('id', 'infoDiv')
-        /*
-        var tourVideoContainer = $(document.createElement('div')).attr('id', 'tourVideoContainer');
-        var tourVideo = $(document.createElement('video')).attr('id', 'tourVideo');
-        tourVideoContainer.css({
-            'background-color': 'black',
-            'position': 'absolute',
-            'width': '100%',
-            'height': '100%',
-            'top': '0%',
-            'text-align': 'center',
-            'z-index': '50002',
-        });
-        tourVideo.css({
-            'position': 'relative',
-            'width': '100%',
-            'height': '100%',
-            'z-index': '1005'
-        });
-        tourVideo.attr({
-            controls: false,
-            preload: 'none',
-            loop: true
-        });
-        videoElt = tourVideo[0],
-        videoElt.innerHTML = '<source src="' + tagPath + 'images/NW_instruction_video.mov' + '" type="video/mp4">';
-        tourVideoContainer.append(tourVideo);
-        initialOverlay.append(tourVideoContainer);
-        videoElt.play();
 
-        */
 
         var moreinfoDiv = $(document.createElement('div'));
         moreinfoDiv.css({
             "color": "white",
             "background-color": "transparent",
             "text-align": "center",
-            "top": "70%",
+            "top": "35%",
             "display": "block",
             "position": "absolute",
             "font-size": "2em",
@@ -232,7 +203,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         moreinfoDiv.text("Loading Interactive Tour...");
         moreinfoDiv.attr('id', 'moreinfoDiv')
 
-        TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
+        TAG.Util.showLoading(initialOverlay, '10%', '55%', '45%')//to show the loading screen
         initialOverlay.append(infoDiv);
         initialOverlay.append(moreinfoDiv);
         $("#ITEContainer").append(initialOverlay);
