@@ -28,7 +28,7 @@ TAG.Util.IdleTimer = (function() {
     function TwoStageTimer(stageOne, stageTwo) {
         stageOne = stageOne || {};
         stageTwo = stageTwo || {};
-        var s1d = 60000, 
+        var s1d = 90000, 
             s1c = stageOne.callback || defaultStageOne,          // stage one callback
             s2d = stageTwo.duration || 10000,                    // duration of stage two timer
             s2c = stageTwo.callback || defaultStageTwo,          // stage two callback

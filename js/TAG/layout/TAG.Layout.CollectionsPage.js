@@ -90,6 +90,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
         willRoot.animate({ left: "100%" }, 1000, "easeInOutQuart", function () {
             willRoot.remove()
             willRoot.die()
+            $(document).data("current_page", "will");
         })
     });
 

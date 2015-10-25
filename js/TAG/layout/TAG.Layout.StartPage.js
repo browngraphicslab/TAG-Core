@@ -16,10 +16,18 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     SPENT_TIMER = new TelemetryTimer(); //global timer to measure time spent
     SETTINGSVIEW_TIMER = new TelemetryTimer(); //global timer to measure time spent in settings view
 
+
+    var USE_AUTO_START = false;
+
+
+
     var isPreview;
     options && function () {isPreview = options.isPreview; }();
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
+
+    var loadingWill = false;
+    var loadingLaureates = false;
 
     var root = TAG.Util.getHtmlAjax('SplashScreenOverlay.html'), // use AJAX to load html from .html fil  
         goToCollectionsButton = root.find('#goToCollectionsButton'),
@@ -27,7 +35,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         goToWillImage = root.find('#goToWillImage'),
         goToHistoryButton = root.find('#goToHistoryButton'),
         goToWinnersButton = root.find('#goToWinnersButton'),
-        goToLifeButton = root.find('#goToLifeButton'),
+       goToLifeButton = root.find('#goToLifeButton'),
         goToIntroButton = root.find("#goToIntroButton"),
         willImage = root.find('#willImage'),
         lifeImage = root.find('#lifeImage'),
@@ -280,6 +288,34 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      */
     function testConnection(options) {
         if (OFFLINE === true) {
+            if (USE_AUTO_START === true) {
+                Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\AutoStart.txt").done(function (file) {
+                    Windows.Storage.FileIO.readTextAsync(file).done(function (f) {
+                        if (f.toLowerCase() === "will" || f.toLowerCase() === "laureates") {
+                            var t = f.toLowerCase() === "will" ? "Will" : "Winners"
+                            var div = $(document.createElement('div')).attr({ id: "autoLoadBlocker" })
+                            $("#tagContainer").css({ "z-index": "10" })
+                            div.css({
+                                "position": "absolute",
+                                "width": "100%",
+                                "height": "100%",
+                                "background-color": "rgb(150,150,150)",
+                                "z-index": "50"
+                            })
+                            $("#tagContainer").append(div)
+                            setTimeout(function () {
+                                if (t === "Winners") {
+                                    $("#autoLoadBlocker").remove().die()
+                                }
+                                $("#goTo" + t + "Button").click()
+                                setTimeout(function () {
+                                    $("#autoLoadBlocker").remove().die()
+                                }, 7500)
+                            }, 2000)
+                        }
+                    })
+                });
+            }
             successConnecting();
         }
         else {
@@ -425,7 +461,17 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         winnersImage.on('click', function() {
-            switchPage(LAUREATE_NAME,false,true,true);
+            if (loadingLaureates == false) {
+                switchPage(LAUREATE_NAME, false, true, true);
+                loadingLaureates = true;
+            } else {
+                console.log("Already loading laureates");
+            }
+
+            //switchPage(LAUREATE_NAME, false, true, true);
+           // winnersImage.disabled = true;
+            //goToWinnersButton.disabled = true;
+
         });
 
         historyImage.on('click', function(){
@@ -433,7 +479,16 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         willImage.on('click', function(){
-            switchPage(WILL_NAME);
+            if (loadingWill == false) {
+                switchPage(WILL_NAME);
+                loadingWill = true;
+                document.getElementById("willImage").disabled = true;
+
+            } else {
+                console.log("Already loading");
+            }
+            //switchPage(WILL_NAME);
+
         });
 
         lifeImage.on('click', function(){
@@ -445,7 +500,16 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         goToWinnersButton.on('click', function () {
-            switchPage(LAUREATE_NAME, false, true, true);
+
+            if (loadingLaureates == false) {
+                switchPage(LAUREATE_NAME, false, true, true);
+                loadingLaureates = true;
+            } else {
+                console.log("Already loading laureates");
+            }
+            //switchPage(LAUREATE_NAME, false, true, true);
+            //goToWinnersButton.disabled = true;
+            //winnersImage.disabled = true;
         });
 
         goToHistoryButton.on('click', function () {
@@ -453,7 +517,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
 
         goToWillButton.on('click', function () {
-            switchPage(WILL_NAME);
+            if (loadingWill == false) {
+                switchPage(WILL_NAME);
+                loadingWill = true;
+                goToWillButton.disabled = true;
+
+            } else {
+                console.log("Already loading");
+            }
         });
 
         goToLifeButton.on('click', function () {
