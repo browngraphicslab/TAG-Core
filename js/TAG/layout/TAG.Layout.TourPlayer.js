@@ -182,7 +182,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             "overflow": "visible",
             "word-wrap": "break-word"
         })
-        infoDiv.text("Loading Interactive Tour...");
+        infoDiv.text("Tap on artworks to learn more");
         infoDiv.attr('id', 'infoDiv')
         /*
         var tourVideoContainer = $(document.createElement('div')).attr('id', 'tourVideoContainer');
@@ -229,7 +229,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             "overflow": "visible",
             "word-wrap": "break-word"
         })
-        moreinfoDiv.text("Tap on artworks to learn more");
+        moreinfoDiv.text("Loading Interactive Tour...");
         moreinfoDiv.attr('id', 'moreinfoDiv')
 
         TAG.Util.showLoading(initialOverlay, '10%', '42.5%', '45%')//to show the loading screen
