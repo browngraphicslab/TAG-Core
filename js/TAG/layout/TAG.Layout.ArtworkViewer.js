@@ -238,7 +238,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             nextSlide.click(nextSlidePage)
             prevSlide.click(prevSlidePage)
             root.append(nextSlide).append(prevSlide)
-            interactionTimer = setTimeout(function () { root.append(interactionSign) }, 5000);
+            interactionTimer = setTimeout(function () { root.append(interactionSign) }, 3000);
         }
         if (afterInSlideArray() === false || afterInSlideArray() === undefined) {
             nextSlide.hide()

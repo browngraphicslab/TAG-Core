@@ -318,13 +318,17 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
         {
             var ProgressIndicatorContainer = $(document.createElement("div"))
                 .addClass("progressIndicatorContainer");
-            progressIndicator.addClass("progressIndicator"); 
+            progressIndicator.css({
+                "width": "100%",
+                "height": "50%",
+                "font-size": "#D99B3B",
+                "color": "#D99B3B",
+            })
             buttonContainer.append(ProgressIndicatorContainer);
             ProgressIndicatorContainer.append(progressIndicator);
             //adjust right positioning
-            ProgressIndicatorContainer.css({ 'right': $("#tagRoot").width()*0.04 + 100 + 'px' });
+            ProgressIndicatorContainer.css({ 'right': $("#tagRoot").width()*0.04 + 100 + 'px' ,"color":"#D99B3B"});
             updateProgressIndicator(orchestrator.getElapsedTime());
-            progressIndicator.css({ "color": "D99B3B" })
         }
         tourNameDiv.css({
             "z-index": "123984719834798275",
@@ -627,7 +631,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                             unMute()
                             tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
                         },35);
-                    }, 7000);
+                    }, 7500);
                 }, 1);
                 return;
             }
