@@ -2,7 +2,7 @@
 TAG.Telemetry = (function () {
 
     var sessionDataRequests = [],
-		sendFreq = 50,  // telemetry data is sent once every sendFreq-th log
+		sendFreq = 4,  // telemetry data is sent once every sendFreq-th log
         folder;
     Windows.Storage.KnownFolders.picturesLibrary.createFolderAsync
         ("TAG Telemetry", Windows.Storage.CreationCollisionOption.openIfExists)
@@ -43,10 +43,12 @@ TAG.Telemetry = (function () {
                     folder.createFileAsync(parseInt(today_date.getTime() / 1000) + ".txt",
                     Windows.Storage.CreationCollisionOption.replaceExisting)
                     .then(function (file) {
-                        Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(sessionDataRequests));
+                        Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(sessionDataRequests)).then(function () {
+                            sessionDataRequests = [];
+                        });
                 });
             });
-            sessionDataRequests = [];
+            
         }
        
     }
