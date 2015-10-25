@@ -337,6 +337,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     }
 
     function goBack() {
+        idleTimer && idleTimer.restart();
         if (player) {
             player.pause();
             player.unload();
@@ -349,6 +350,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             willRoot.die()
             willRoot.remove()
             $(document).data("current_page", "will");
+            idleTimer && idleTimer.restart();
         })
     }
     this.goBack = goBack;

@@ -243,6 +243,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 	            var track = self.trackManager[i];
 	            if (track.type === "audio") {
 	                track.play(track.seek());
+	                $(document).data("tourPlaying", true)
                     return
 	            }
 	        }
@@ -286,6 +287,7 @@ ITE.Orchestrator = function(player, isAuthoring) {
 			}
 		}
 		self.prevStatus = 0;
+		$(document).data("tourPlaying", true)
 	}
 
 

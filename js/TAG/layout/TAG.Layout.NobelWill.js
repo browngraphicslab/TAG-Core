@@ -4,12 +4,10 @@
  * @class TAG.Layout.NobelWill
  */
 TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exhibition) {
-    $("#startPageLoadingOverlay").remove().die();
+    console.log("start nobel will init");
     "use strict";
 
     //OPTIONS
-
-
     var BezierOn = true,//These are all depracated, some partially, some fully, some barely  #classicTAG
         iconColor = "orig", //options are:   red, orange, blue, orig
         paragraphed = false,
@@ -21,6 +19,18 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         tourAndCollectionTaskBar = true, //make the tour and collection UI on the popup the same as the one for taskbar
         testamentHeader = false, // Use the orange script-y Testament image instead of plain text saying "The Will Page ..."
         OFFLINE = true;
+    
+    var startOverlay = $(document.createElement("div")).attr({ id: "startPageLoadingOverlay" })
+    startOverlay.css({
+        "width": "100%",
+        "height": "100%",
+        "position": "absolute",
+        "background-color": "black",
+        "z-index" : "345235252432345234",//#TAG
+    })
+    $("#tagContainer").append(startOverlay)
+
+
 
     var root = $("#tagRoot"),
         showInitialNobelWillBox = true,
@@ -1088,6 +1098,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 spoof = s;
                 nobelWillInit()
                 videoOverlay();
+                $("#startPageLoadingOverlay").remove().die();
             });
         }
         else {
@@ -1120,12 +1131,14 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         $(document).data("current_page", "will");
         $(document).data("currentTour", {});
 
-        setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
-
         hardcodedData[pageNumber - 1]["nobelHotspots"].forEach(function (m) {
             m[1].show()
             m[1].checkHeight()
         })
+
+        var sliderTop = sliderBar.offset().top
+        var sliderFar = sliderTop + sliderBar.height()
+        makeTextsWhite()
 
         if (testamentHeader !== true) {
             $("#titleDiv").text("WILL PAGE " + pageNumber + "/4");
@@ -1197,6 +1210,8 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         $(".infobulb").hide()
         $(".infobulb_page_" + pageNumber).show()
+        setChunkNumber(pageNumber == 1 ? 1 : 0, null, 1);
+        makeTextsWhite()
     }
     function percentToPx(percent) {
         return (percent / 100) * sideBar.height();
@@ -1254,16 +1269,19 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                     }
                 }
             }
-            var sliderTop = sliderBar.offset().top
-            var sliderFar = sliderTop + sliderBar.height()
-            for (var i = 0; i < hardcodedData[pageNumber - 1]["textDivArray"].length; i++) {
-                var mid = hardcodedData[pageNumber - 1]["textDivArray"][i].offset().top + hardcodedData[pageNumber - 1]["textDivArray"][i].height() / 2
-                if (mid > sliderTop + 3 && mid < sliderFar - 3) {
-                    hardcodedData[pageNumber - 1]["textDivArray"][i].css("color", "white")
-                }
-                else {
-                    hardcodedData[pageNumber - 1]["textDivArray"][i].css("color", "black")
-                }
+            makeTextsWhite()
+        }
+    }
+    function makeTextsWhite() {
+        var sliderTop = sliderBar.offset().top
+        var sliderFar = sliderTop + sliderBar.height()
+        for (var i = 0; i < hardcodedData[pageNumber - 1]["textDivArray"].length; i++) {
+            var mid = hardcodedData[pageNumber - 1]["textDivArray"][i].offset().top + hardcodedData[pageNumber - 1]["textDivArray"][i].height() / 2
+            if (mid > sliderTop + 3 && mid < sliderFar - 3) {
+                hardcodedData[pageNumber - 1]["textDivArray"][i].css("color", "white")
+            }
+            else {
+                hardcodedData[pageNumber - 1]["textDivArray"][i].css("color", "black")
             }
         }
     }

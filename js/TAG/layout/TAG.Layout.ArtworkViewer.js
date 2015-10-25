@@ -232,7 +232,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             interactionSign = $(document.createElement('img'))
             nextSlide = $(document.createElement('img'))
             prevSlide = $(document.createElement('img'))
-            interactionSign.css({ "top": "40px", "right": "40px", "position": "absolute", "z-index": "999999","height":"15%","width":"auto" }).attr({ src: tagPath + 'images/collection_interaction.png' })
+            interactionSign.css({ "top": "40px", "right": "40px", "position": "absolute", "z-index": "999999","height":"20%","width":"auto" }).attr({ src: tagPath + 'images/collection_interaction.png' })
             nextSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "right": "40%", "position": "absolute", "z-index": "999999" }).attr({ src: tagPath + 'images/right_icon.png' })
             prevSlide.css({ "width": "45px", "height": "45px", "bottom": "20px", "left": "40%", "position": "absolute", "z-index": "999999" }).attr({ src: tagPath + 'images/left_icon.png' })
             nextSlide.click(nextSlidePage)

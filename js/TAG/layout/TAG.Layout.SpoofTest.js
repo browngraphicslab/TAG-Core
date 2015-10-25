@@ -822,7 +822,7 @@ TAG.Layout.SpoofTest = (function () {
 		    return d
 		}
 		if (laur.Metadata.Collaborators.length) {
-		    var collab = addCollab("Shared Prize With:  ")
+		    var collab = addCollab("Shared prize with:  ")
 		    var last = null
 		    laur.Metadata.Collaborators.forEach(function (c) {
 		        var lastName = ""

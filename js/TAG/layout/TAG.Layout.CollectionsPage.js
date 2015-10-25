@@ -52,7 +52,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
         lockKioskMode = false, //TAG.Layout.Spoof().getKioskLocked() : TAG.Worktop.Database.getKioskLocked(),                           // true if back button is hidden
         // constants
         NOBEL_COLOR = "#D99B3B",
-        TILE_BUFFER = $("#tagRoot").width() / 18,                  // number of pixels between artwork tiles
+        TILE_BUFFER = $("#tagRoot").width() / 14,                  // number of pixels between artwork tiles
         TILE_HEIGHT_RATIO = 200,                                          //ratio between width and height of artwork tiles
         TILE_WIDTH_RATIO = 255,
 
@@ -486,10 +486,11 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) {
             main.css({ 'height': (0.40) * tileDivHeight });
             main.css({ 
                 'width': 1.42*tileHeight,
-                'box-shadow': '8px 8px 20px #000',
+                'box-shadow': '20px 20px 20px #000',
                 'border': '3px solid',
                 'border-color': NOBEL_COLOR,
-                'border-radius': '3%'
+                'border-radius': '3%',
+                'bottom': '2%'
             });
             // Align tile so that it follows the grid pattern we want
             main.css({

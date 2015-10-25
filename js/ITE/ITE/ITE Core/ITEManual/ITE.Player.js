@@ -324,6 +324,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
             //adjust right positioning
             ProgressIndicatorContainer.css({ 'right': $("#tagRoot").width()*0.04 + 100 + 'px' });
             updateProgressIndicator(orchestrator.getElapsedTime());
+            progressIndicator.css({ "color": "D99B3B" })
         }
         tourNameDiv.css({
             "z-index": "123984719834798275",
@@ -626,7 +627,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
                             unMute()
                             tourPlayer.getInitialOverlay().fadeTo(1000, 0, function () { tourPlayer.getInitialOverlay().remove(); });
                         },35);
-                    }, 8500);
+                    }, 7000);
                 }, 1);
                 return;
             }
