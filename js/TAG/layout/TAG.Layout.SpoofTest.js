@@ -1071,7 +1071,7 @@ TAG.Layout.SpoofTest = (function () {
             "padding-left": "5px",
             "padding-top": "7px",
 	        "left": "150px",
-	        "box-shadow": "3px 20px 17px 4px #000",
+	        "box-shadow": "3px 8px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
 	    }).text("Gender").click(function () {
 	        if (genderList[0].style.display === "none") {
@@ -1095,7 +1095,7 @@ TAG.Layout.SpoofTest = (function () {
 	        "overflow": "hidden",
 	        "padding-left": "3px",
 	        "left": "150px",
-	        "box-shadow": "3px 20px 17px 4px #000",
+	        "box-shadow": "8px 8px 10px 0px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
 	    }).attr({ id: "genderList" })
 	    var ds = ["male","female","institution"]
