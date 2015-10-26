@@ -361,12 +361,27 @@ TAG.Layout.SpoofTest = (function () {
 		var searchString = ""
 
 		block.addClass(laur.Metadata.KeywordsSet1.toLowerCase())
-		block.addClass(laur.Metadata.KeywordsSet2.toLowerCase())
+		var kw2 = laur.Metadata.KeywordsSet2.toLowerCase()
+		if (kw2 !== "male" && kw2 !== "female") {
+		    kw2 = "institution";
+		}
+		block.addClass(kw2)
 		block.addClass(laur.Metadata.KeywordsSet3.toLowerCase())
 
 		var categories = ["FirstName", "LastName", "bornCountry", "born", "Motivation", "died", "KeywordsSet2", "KeywordsSet3", "KeywordsSet1", "Year","longname"]
 		categories.forEach(function (c) {
-            searchString += laur.Metadata[c] ? laur.Metadata[c].toLowerCase()+" " : ""
+		    if (c === "KeywordsSet2") {
+                var c2 = laur.Metadata[c].toLowerCase()
+                if (c2 === "male" || c2 === "female") {
+                    searchString += c2+ " "
+                }
+                else {
+                    searchString += "institution "
+                }
+		    }
+		    else {
+		        searchString += laur.Metadata[c] ? laur.Metadata[c].toLowerCase() + " " : ""
+		    }
 		})
 		header.css({
 			"position": "absolute",
@@ -473,7 +488,7 @@ TAG.Layout.SpoofTest = (function () {
 
 	    var p = ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics']
 	    var d = ['1900s', '1910s', '1920s', '1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s']
-	    var g = ['male', 'female']
+	    var g = ['male', 'female','institution']
 	    var prizes = []
 	    var genders = []
         var decades = []
@@ -611,7 +626,7 @@ TAG.Layout.SpoofTest = (function () {
         filter.prizes = []
         var p = ['physics', 'chemistry', 'medicine', 'literature', 'peace', 'economics']
         var d = ['1900s', '1910s', '1920s', '1930s', '1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s']
-        var g = ['male', 'female']
+        var g = ['male', 'female',"institution"]
         tags.forEach(function (t) {
             if (p.indexOf(t) !== -1) {
                 filter.prizes.push(t)
@@ -1076,14 +1091,14 @@ TAG.Layout.SpoofTest = (function () {
 	        "border-bottom-right-radius": "4pt",
 	        "background-color": NOBEL_ORANGE_COLOR,
 	        "color": "black",
-	        "top": isSurface ? "71px" : "76.5px",
+	        "top": isSurface ? "71px" : "89.5px",
 	        "overflow": "hidden",
 	        "padding-left": "3px",
 	        "left": "150px",
 	        "box-shadow": "3px 20px 17px 4px #000",
 	        "border-color": NOBEL_ORANGE_COLOR,
 	    }).attr({ id: "genderList" })
-	    var ds = ["male","female"]
+	    var ds = ["male","female","institution"]
 	    ds.forEach(function (d) {
 	        var t = makeCheckDiv(d)
 	        genderList.append(t);
