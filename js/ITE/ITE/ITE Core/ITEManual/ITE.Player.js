@@ -89,7 +89,7 @@ ITE.Player = function (options, tourPlayer, container,idleTimer, infoData) { //a
     */
     function createITEPlayer(playerParent, options) {
         infoAvailableIcon.css({
-            "height": "80px",
+            "height": "20%",
             "width": "auto",
             "position": "absolute",
             "top": "20px",
