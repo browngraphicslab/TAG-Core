@@ -2073,7 +2073,13 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         infoButtonContainer.append(infoButton);
         $("#tagRoot").append(infoButtonContainer);
         infoButtonContainer.click(function () {
-            showHelpDiv();
+            if ($("#helpDiv")[0].style.display === "block") {
+                infoblocker.css('display', 'none');
+                helpDiv.css('display', 'none');
+            }
+            else {
+                showHelpDiv()
+            }
         });
         function showHelpDiv() {
             infoblocker.css('display', 'block');
