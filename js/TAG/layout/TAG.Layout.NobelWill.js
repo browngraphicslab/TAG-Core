@@ -27,7 +27,12 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         "position": "absolute",
         "background-color": "black",
         "z-index" : "345235252432345234",//#TAG
+        "text-align": "center",
+        "vertical-align": "center",
+        "font-size": "2em",
+        "color" : "white",
     })
+    startOverlay.text("Restarting application part 2 of 2...")
     $("#tagContainer").append(startOverlay)
 
 
@@ -80,7 +85,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
         $(document).data("current_page", "will");
         var tourPlayer = jQuery.data(document, "currentTour")
-        if (Object.keys(tourPlayer).length !== 0) {
+        if (tourPlayer && Object.keys(tourPlayer).length !== 0) {
             tourPlayer.goBack();
             $(document).data("currentTour", {});
         }
@@ -161,7 +166,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
     function removeVideo() {
         $('#infoButton').click();
         var tourPlayer = jQuery.data(document, "currentTour")
-        if (Object.keys(tourPlayer).length !== 0) {
+        if (tourPlayer && Object.keys(tourPlayer).length !== 0) {
             tourPlayer.goBack();
             $(document).data("currentTour", {});
         }
@@ -1095,21 +1100,21 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         $(document).data("currentTour", {});
 
 
-        if (OFFLINE === true) {
+        if (OFFLINE === true && (spoof === null || spoof === undefined) ){
             TAG.Layout.Spoof().getData(function (s) {
                 spoof = s;
-                nobelWillInit()
+                nobelWillInit();
                 videoOverlay();
                 $("#startPageLoadingOverlay").remove().die();
             });
         }
         else {
             nobelWillInit();
+            videoOverlay();
+            $("#startPageLoadingOverlay").remove().die();
         }
     }
     firstInit()
-
-
     //Start Auto Functions
     //End Auto Functions
 
@@ -1130,9 +1135,9 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
         }
     }
     function nobelWillInit() {
+
         $(document).data("current_page", "will");
         $(document).data("currentTour", {});
-
         hardcodedData[pageNumber - 1]["nobelHotspots"].forEach(function (m) {
             m[1].show()
             m[1].checkHeight()
@@ -2056,7 +2061,10 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                            'display': 'none',
                        });
         var infoImg = $(document.createElement('img')).attr({ 'id': 'infoImg', 'src': tagPath + 'images/will_pop.png' }).css({ 'width': '100%' });
-        helpDiv.append(infoImg);
+        helpDiv.append(infoImg).click(function () {
+            infoblocker.css('display', 'none');
+            helpDiv.css('display', 'none');
+        });
         root.append(helpDiv);
 
         var infoButtonContainer = $(document.createElement('div'))

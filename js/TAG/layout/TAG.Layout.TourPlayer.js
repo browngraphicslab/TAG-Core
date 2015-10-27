@@ -182,7 +182,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             "overflow": "visible",
             "word-wrap": "break-word"
         })
-        infoDiv.text("Tap on artworks to learn more");
+        infoDiv.text("Tap on images to learn more");
         infoDiv.attr('id', 'infoDiv')
 
 

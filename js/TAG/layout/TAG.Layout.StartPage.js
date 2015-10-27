@@ -17,7 +17,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     SETTINGSVIEW_TIMER = new TelemetryTimer(); //global timer to measure time spent in settings view
 
 
-    var USE_AUTO_START = false;
+    var USE_AUTO_START = true;
 
 
 
@@ -289,7 +289,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     function testConnection(options) {
         if (OFFLINE === true) {
             if (USE_AUTO_START === true) {
-                Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\AutoStart.txt").done(function (file) {
+                Windows.Storage.KnownFolders.documentsLibrary.getFileAsync("NobelFolder\\AUTO_START_DO_NOT_DELETE.txt").done(function (file) {
                     Windows.Storage.FileIO.readTextAsync(file).done(function (f) {
                         if (f.toLowerCase() === "will" || f.toLowerCase() === "laureates") {
                             var t = f.toLowerCase() === "will" ? "Will" : "Winners"
@@ -300,8 +300,16 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                                 "width": "100%",
                                 "height": "100%",
                                 "background-color": "rgb(150,150,150)",
-                                "z-index": "50"
+                                "z-index": "50",
+                                "text-align": "center",
+                                "vertical-align": "center",
+                                "font-size": "2em",
+                                "color": "white",
                             })
+                            div.text("Restarting application part 1 of 2...")
+                            if (t === "Winners") {
+                                div.text("Restarting application, please wait...")
+                            }
                             $("#tagContainer").append(div)
                             setTimeout(function () {
                                 if (t === "Winners") {

@@ -3062,7 +3062,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
             mousemove:             function ( event ) { onMouseMove( _this, event ); },
             mousemovecaptured:     function ( event ) { onMouseMoveCaptured( _this, event ); },
             
-            mouseoutdocument:      function ( event ) { onMouseUp( _this, event ); },
+            //mouseoutdocument:      function ( event ) { onMouseUp( _this, event ); },
 
             touchenter:            function ( event ) { onTouchEnter( _this, event ); },
             touchleave:            function ( event ) { onTouchLeave( _this, event ); },
