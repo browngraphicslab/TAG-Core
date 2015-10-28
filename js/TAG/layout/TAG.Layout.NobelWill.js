@@ -346,7 +346,7 @@ TAG.Layout.NobelWill = function (startingPageNumber) { // prevInfo, options, exh
                 }
                 hardcodedData[pageNumber-1]["associatedMedia"].forEach(function (media) {
                     var medOffset = media.offset()
-                    if (medOffset.left!==0 && medOffset.top!==0  && e.clientX > medOffset.left && e.clientX < medOffset.left + media.width() && e.clientY > medOffset.top && e.clientY < medOffset.top + media.height()) {
+                    if (medOffset.left!==0 && medOffset.top!==0  && e.clientX > medOffset.left && e.clientX < medOffset.left + media.width() && e.clientY > medOffset.top && e.clientY -19 < medOffset.top + media.height()) {
                         media.click();
                         return;
                     }

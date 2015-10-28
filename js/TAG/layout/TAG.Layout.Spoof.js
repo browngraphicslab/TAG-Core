@@ -240,7 +240,7 @@ TAG.Layout.Spoof = (function () {
         "sohlman": { "Identifier": "sohlman", "Metadata": { "DeepZoom": { "Path": "Images\\FromWillToPrize\\sohlman\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Ragnar Sohlman", " ", "Ragnar Sohlman (1870–1948) was Alfred Nobel’s assistant during the years 1893–96. He began his career with Nobel in Paris, and later also worked with Nobel in San Remo, as well as at Nobel’s experimental laboratory in Bofors, Sweden from 1896–97."] },
 
         //Family
-        "3_ludvig_nobel": { "Identifier": "3_ludvig_nobel", "Metadata": { "DeepZoom": { "Path": "Images\\Family\\3_ludvig_nobel\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Ludvig Nobel", " ", "Like his brother Alfred, Ludvig Nobel regularly visited spas and resorts, where the brothers often met"]},
+        "3_ludvig_nobel": { "Identifier": "3_ludvig_nobel", "Metadata": { "DeepZoom": { "Path": "Images\\Family\\3_ludvig_nobel\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Ludvig Nobel", " ", "Like his brother Alfred, Ludvig Nobel regularly visited spas and resorts, where the brothers often met."]},
         "3_painting_mine": { "Identifier": "3_painting_mine", "Metadata": { "DeepZoom": { "Path": "Images\\Family\\3_painting_mine\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Immanuel Nobel's Painting", " ", "Following his return to Sweden around 1860, Immanuel Nobel made a number of watercolor drawings and sketches showing his mines. He also depicted a demonstration of his mines in presence of Russian military officers."] },
         "3_robert_family": { "Identifier": "3_robert_family", "Metadata": { "DeepZoom": { "Path": "Images\\Family\\3_robert_family\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Robert Nobel's Family", " ", "Robert Nobel and his family and household, after they had settled at Getå, his estate outside Norrköping, Sweden. Robert Nobel's wife Pauline is sitting to the right of him, their son Hjalmar is standing on the left and their son Ludvig is standing  the right. Their daughter Thyra is sitting at the right in the middle row and Ingeborg is sitting in the middle in the front row."] },
         "3_immanuel_nobel": { "Identifier": "3_immanuel_nobel", "Metadata": { "DeepZoom": { "Path": "Images\\Family\\3_immanuel_nobel\\GeneratedImages\\dzc_output.xml" }, }, "SidebarInfo": ["<title>Immanuel Nobel", " ", "Immanuel Nobel (1801–72) was an inventor and engineer. In 1837, he moved to St. Petersburg, Russia, and managed to interest the Russian Czar in an idea for naval mines. After Russia’s defeat in the Crimean War, however, times became difficult for Immanuel Nobel. At the end of the 1850’s, he returned to Sweden together with some members of his family. His more realistic ideas included artificial rubber and a predecessor of plywood. Among his eccentric ideas is a system of  pipes to move coffins from inner-cities to burial sites outside of them."] },
@@ -14987,6 +14987,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1901",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Jean Henry Dunant was the founder of the Red Cross.  His book \"A Memory of Solferino\", contained a plan where all countries should form associations to help the sick and wounded on the battlefield - whichever side they belonged to - resulted in the establishment of the International Committee of the Red Cross in 1863 and the adoption of the Geneva Convention in the following year.",
                         "affiliations": [
                             []
                         ]
@@ -15011,6 +15012,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1901",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Frédéric Passy was a scientist, politician and peace activist who maintained that free trade between independent nations promoted peace. Passy founded the first French Peace Society, opposed France's colonial policy because it did not accord with the ideals of free trade, and was also one of the founders of the Inter-Parliamentary Union.",
                         "affiliations": [
                             []
                         ]
@@ -15035,6 +15037,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1902",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Élie Ducommun was the honorary Secretary-General of the International Peace Bureau in Berne from its establishment in 1890 until his death. He also prepared programs for international peace congresses, published resolutions, and corresponded with promoters of peace.",
                         "affiliations": [
                             []
                         ]
@@ -15059,6 +15062,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1902",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Charles Albert Gobat participated in the Inter-Parliamentary Union from its beginnings in 1889.  When the Inter-Parliamentary Bureau was established in Berne three years later, Gobat was chosen to be its Secretary-General.  He took over as Secretary-General of the International Peace Bureau when Élie Ducommun died in 1906.",
                         "affiliations": [
                             []
                         ]
@@ -15082,6 +15086,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1903",
                         "category": "peace",
+                        "motivation": "Description : William Randal Cremer was nicknamed the \"Member of Arbitration\" by his colleagues in Parliament.  All his life he worked for the use of arbitration to resolve international conflicts, with the aim of preventing war.  In Parliament, Cremer spoke out fearlessly against war, among other things criticizing the British Government for the Boer War in South Africa.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -15100,6 +15105,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1904",
                         "category": "peace",
+                        "motivation": "Background: Institut de droit international (Institute of International Law), a nongovernmental organization of lawyers, founded in 1873 whose slogan is\"Justitia et pace\"  The aim was to build an international institute which would be an authority on international law and is still working to make the rules of international law, not war and violence, the guidelines for relations between sovereign states.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -15125,6 +15131,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1905",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Baroness Bertha von Suttner, the first woman to be awarded the Peace Prize, wrote one of the nineteenth century's most influential books, the anti-war novel \"Lay Down Your Arms\" (1889). In the 1870s she became a close friend of Alfred Nobel's, and they corresponded for years on the subject of peace.  She became one of the leaders of the international peace movement, and in 1891 established the Austrian Peace Society.",
                         "affiliations": [
                             []
                         ]
@@ -15148,6 +15155,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1906",
                         "category": "peace",
+                        "motivation": "Background: Theodore Roosevelt, President of the USA, negotiated peace in the Russo-Japanese war in 1904-5. He also resolved a dispute with Mexico by resorting to arbitration as recommended by the peace movement.  Roosevelt was the first statesman to be awarded the Peace Prize, and for the first time the award was controversial.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -15173,6 +15181,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1907",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Ernesto Moneta, the unrivalled leader of the Italian peace movement, was only 15 when he first experienced war. This experience shaped his view of life: states ought to cooperate to prevent war and human slaughter.  He wrote that the Italian army should be a popular militia only for use in wars of defense and that the most important goal, was to cultivate feelings of brotherhood among people.",
                         "affiliations": [
                             []
                         ]
@@ -15197,6 +15206,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1907",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Louis Renault, a lawyer, felt that peace could be brought about by strengthening international law. He was the French Government's adviser in foreign policy and international law. At the peace conferences at the Hague in 1899 and 1907 he was especially eager to extend the Geneva Convention to war at sea and also sought to have the rights and obligations of neutral states in wartime defined in more precise terms.",
                         "affiliations": [
                             {
                                 "name": "Sorbonne University",
@@ -15224,6 +15234,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1908",
                         "category": "peace",
+                        "motivation": "Background: Klas Pontus Arnoldson sent out his handbill in 1895 when Norway and Sweden were on the verge of war demanding \"Peace with Norway, whether the union sinks or swims\". For him, what counted most was peace: The Swedish and Norwegian \"brother peoples\" must never go to war with one another.  He was a pioneer in the Swedish peace movement, with an intense faith in international cooperation and supported arbitration and international law.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -15248,6 +15259,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1908",
                         "category": "peace",
+                        "motivation": "Background: Fredrik Bajer was an officer and fought in the Dano-German war in 1864.  In 1865 he left devoted his life to the cause of peace. He was elected a member of the Danish national assembly, figured prominently in inter-parliamentary work, and has been given the credit for the establishment of the International Peace Bureau in 1891.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -15272,6 +15284,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1909",
                         "category": "peace",
+                        "motivation": "Background: Auguste Beernaert, one of Belgium's most skilful lawyers, was through his inter-parliamentary work and at the international peace conferences at the Hague in 1899 and 1907 that he became known as a friend of peace.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -15297,6 +15310,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1909",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Paul Henri Benjamin d'Estournelles was a radical republican despite his aristocratic title. He believed in a united states of Europe and that good organization of the international community was the best guarantee of peace.",
                         "affiliations": [
                             []
                         ]
@@ -15315,6 +15329,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1910",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Bureau international permanent de la Paix (Permanent International Peace Bureau) - After 1870, a popular peace movement grew up and spread in Europe and the USA. A need was felt for an office that could coordinate and direct these activities. Laureatte Fredrik Bajer established the International Peace Bureau 1891 in Berne, Switzerland and Laureatte Élie Ducommun was the Peace Bureau's first secretary-general.",
                         "affiliations": [
                             []
                         ]
@@ -15339,6 +15354,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1911",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Tobias Asser, an expert in international private law was a co-founder in 1873 of the Institute of International Law, the first organization to be awarded the Nobel Peace Prize (1904).  Asser was also active at the international peace conferences at the Hague in 1899 and 1907.",
                         "affiliations": [
                             []
                         ]
@@ -15363,6 +15379,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1911",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Alfred Hermann Fried felt that politicians and friends of peace should work hard to organize the international community, which was why Fried was enthusiastic about the Permanent Court of Arbitration at the Hague. Fried moved to Germany and was a co-founder of the German Peace Society. The goal of Fried's life's-work in publishing and writing was a new and peaceful organization of society.",
                         "affiliations": [
                             []
                         ]
@@ -15386,6 +15403,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1912",
                         "category": "peace",
+                        "motivation": "Background: Elihu Root was US Secretary of War and Secretary of State between 1901 and 1909. He subsequently became a Senator and the first president of the Carnegie Endowment for International Peace. He pursued the aim that conflicts between states must be resolved by arbitration and after World War I participated in the development of the Permanent Court of International Justice at the Hague.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -15411,6 +15429,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1913",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Henri La Fontaine was the first socialist to win the Nobel Peace Prize. He held a doctorate in law, and in the Belgian parliament took a special interest in social policy and foreign affairs. But La Fontaine's greatest work was as an activist in the international peace movement and was president of the International Peace Bureau from 1907 until his death.",
                         "affiliations": [
                             []
                         ]
@@ -15431,6 +15450,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1917",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: The International Committee of the Red Cross was founded in 1863. In the following year, the first Geneva Convention was adopted,\"for the Amelioration of the Condition of the Wounded and Sick in Armed Forces in the Field\". The organization's symbol, the red cross on a white background, was to protect both friend and enemy.",
                         "affiliations": [
                             []
                         ]
@@ -15439,6 +15459,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1944",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: The International Committee of the Red Cross received the Nobel Prize for Peace for the second time for its work on behalf of prisoners of war.  During the war years The Red Cross had established contacts between prisoners of war and their families, sent parcels of clothes, medicine and food, inspected prison camps, and organized prisoner exchanges.",
                         "affiliations": [
                             []
                         ]
@@ -15471,6 +15492,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1919",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: President Thomas Woodrow Wilson of the United States was the leading architect behind the League of Nations. The League was to ensure world peace after the slaughter of millions of people in the First World War.  In his Fourteen Points program for peace, Wilson recommended national self-government for oppressed peoples, a conciliatory attitude to losers in the war, and a league of nations to ensure post-war peace.",
                         "affiliations": [
                             []
                         ]
@@ -15735,6 +15757,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1929",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Frank Kellogg was one of the initiators of the Briand-Kellogg Pact of 1928. Almost all the world's states signed this pact, which prohibited wars of aggression. He had sought a Franco-American agreement which would keep France secure from German revanchism after World War I. The United States was not interested, so Kellogg proposed a more extensive but looser pact.",
                         "affiliations": [
                             []
                         ]
@@ -15759,6 +15782,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1930",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Nathan Söderblom, the first clergyman to receive the Nobel Peace Prize, wanted to create a common Christian platform for peace. Söderblom was the prime mover behind the Universal Conference on Life and Work in Stockholm in 1925, which called for an international system of justice and arbitration, and supported the League of Nations.",
                         "affiliations": [
                             []
                         ]
@@ -15782,6 +15806,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1931",
                         "category": "peace",
+                        "motivation": "Background: Jane Addams, the second woman to receive the Peace Prize, founded the Women's International League for Peace and Freedom in 1919 and worked for many years to get the great powers to conclude peace agreements. She worked to help the poor, to stop the use of children as industrial laborers, and ran Hull House in Chicago, a center which helped immigrants in particular.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -15806,6 +15831,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1931",
                         "category": "peace",
+                        "motivation": "Background: Nicholas Murray Butler participated in peace conferences and established contacts with several Peace Prize Laureates. While in 1919 he opposed US entry into the new League of Nations, fearing that America's hands would be tied at the expense of national interests, in 1925, Butler became President of the Carnegie Endowment for International Peace.",
                         "share": "2",
                         "affiliations": [
                             {
@@ -15834,6 +15860,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1933",
                         "category": "peace",
+                        "motivation": "Background: Norman Angell, the only person to have been awarded the Peace Prize for publishing a book, \"The Great Illusion\". Angell analyzed the nature of war, believed that the expansion of free trade would create greater interdependence between states and that improved education would make war irrational and uncivilized, a concept known as \"angellism\" .",
                         "share": "1",
                         "affiliations": [
                             []
@@ -15859,6 +15886,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1934",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Arthur Henderson was a warm supporter of the League of Nations, and one of the principal architects behind the organization's disarmament conference. He was elected to chair the conference, and managed to keep the negotiations going despite opposition from the great powers and from his own government.",
                         "affiliations": [
                             []
                         ]
@@ -15882,6 +15910,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1935",
                         "category": "peace",
+                        "motivation": "Background: Carl von Ossietzky, a critic of political developments in Germany in the inter-war years, was found guilty of treason and imprisoned for revealing the secret rearmanent efforts of the German authorities. In 1933 he was arrested again and sent to a concentration camp. He was nominated for the Peace Prize as part of an international campaign to have him released.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -15906,6 +15935,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1936",
                         "category": "peace",
+                        "motivation": "Background: Carlos Saavedra Lamas deserved much of the credit when Argentina joined the League of Nations in 1932 and he played a leading role in the organization's condemnation of Italy's war on Ethiopia in 1936. He made important contributions to the peace negotiations between Paraguay and Bolivia after the so-called \"Chaco war\" in the 1930s.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -15931,6 +15961,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1937",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Lord Robert Cecil played a leading part in the formulation of the rules of the League of Nations. In 1919 he participated in the founding of the League of Nations Union (LNU), which in the inter-war years became Britain's most important extra-parliamentary pressure group in the field of foreign policy.",
                         "affiliations": [
                             []
                         ]
@@ -15949,6 +15980,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1938",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: The Nansen International Office for Refugees was set up in 1930 to keep up the relief work that had been launched by Fridtjof Nansen, the first high commissioner for refugees. Early in the 1930s, the Office was busy in helping Armenians who had been driven out of Turkey, and it was an important driving force behind the drawing up of the League of Nations Refugee Convention.",
                         "affiliations": [
                             []
                         ]
@@ -15972,6 +16004,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1945",
                         "category": "peace",
+                        "motivation" :" Background: Cordell Hull, the \"father of the United Nations\" conducted a policy of fraternization with Latin America and negotiated free trade agreements with a number of states. He played a prominent part in the planning of the United Nations, which replaced the League of Nations in 1945.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -15996,6 +16029,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1946",
                         "category": "peace",
+                        "motivation": " Background: Emily Greene Balch, worked with Jane Addams in World War I to persuade the heads of state of neutral countries to intervene to stop the war.  In 1935 she became leader of the Women's International League for Peace and Freedom and criticised the western democracies for not attempting to stop Hitler's and Mussolini's aggressive policies.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -16019,6 +16053,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1946",
                         "category": "peace",
+                        "motivation": " Background: John Raleigh Mott was the head of the Young Men's Christian Association (YMCA) which contributed to the creation of a peace-promoting religious brotherhood across national boundaries.  Mott took part during both World Wars in relief work for prisoners of war, criticised the oppression of colonial peoples, and was a pioneer in the struggle against racial discrimination.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -16037,6 +16072,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1947",
                         "category": "peace",
+                        "motivation": " Background: The Friends Service Council, established in 1927 to carry out the missionary and aid work of the British Quakers, who regarded social injustice and intolerance as important causes of war and spearheaded the struggles against slavery, for social reforms, and for women's rights. The Quakers opposed the use of arms and in the early 1800s took part in the foundation of the first peace societies.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -16055,6 +16091,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1947",
                         "category": "peace",
+                        "motivation": " Background: The American Friends Service Committee, founded in 1917, sought to demonstrate God's love for man by doing good deeds. In the 1930s American Quakers worked hard on behalf of Jewish refugees, in World War II they assisted interned Japanese-Americans. When peace came, they cared in particular for slave workers and prisoners of war.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -16080,6 +16117,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1949",
                         "category": "peace",
                         "share": "1",
+                        "motivation": " Background: John Boyd Orr proposed the idea of a \"world food plan\" to President Franklin D. Roosevelt of the USA. In 1945 he was elected Director-General of the FAO (Food and Agriculture Organization), the first of the specialized organizations established under the United Nations. Food and prosperity for all people on earth led to peace, Boyd Orr argued.",
                         "affiliations": [
                             []
                         ]
@@ -16103,6 +16141,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1950",
                         "category": "peace",
+                        "motivation": " Background: Ralph Bunche arranged a cease-fire between Israelis and Arabs during the war which followed the creation of the state of Israel in 1948.  When the chief UN negotiator Folke Bernadotte was murdered by Jewish extremists in the autumn of 1948, Ralph Bunche had to replace him. In the following year he succeeded in bringing about a cease-fire, after tough negotiations.",
                         "share": "1",
                         "affiliations": [
                             {
@@ -16131,6 +16170,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1951",
                         "category": "peace",
+                        "motivation": " Background: Léon Jouhaux, an ardent trade unionist and founder and leader of the national French labor organization, the C.G.T. (Confédération Générale du Travail). In the inter-war years, Jouhaux took part in the disarmament negotiations at the League of Nations, and figured prominently in the planning of social reform in France.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16155,6 +16195,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1952",
                         "category": "peace",
+                        "motivation": " Background: Albert Schweitzer believed that no person must ever harm or destroy life unless absolutely necessary.  He built and ran a hospital at the mission station Lambarene in Gabon, a French colony at the time. In 1957, Schweitzer spoke on the radio to people all over the world, warning against nuclear tests and the dangers from radioactive fall-out.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16180,6 +16221,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1953",
                         "category": "peace",
                         "share": "1",
+                        "motivation" : "Background: George Marshall was the author of the Marshal Plan, which aimed at the economic recovery of Western Europe after World War II. President Truman appointed Marshall Secretary of State in 1947, and between them they planned the economic support for Europe that was to secure stability and prevent the spread of Communism.",
                         "affiliations": [
                             []
                         ]
@@ -16198,6 +16240,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1954",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: The United Nations High Commissioner for Refugees (UNHCR) concentrated its aid on three kinds of measure: voluntary repatriation to one's country of origin, emigration, or permanent residence in the countries where the refugees were at the time.",
                         "affiliations": [
                             []
                         ]
@@ -16205,6 +16248,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1981",
                         "category": "peace",
+                        "motivation": "Background: The UNHCR, founded in 1951 in Geneva, Switzerland was awarded the prize for their humanitarian work.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16229,6 +16273,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1957",
                         "category": "peace",
+                        "motivation" :" Background: Lester Pearson was the President of the United Nations General Assembly during the \"Suez Crisis\" of 1956, in which Great Britain, France and Israel launched an attack on Egypt aimed at removing President Nasser. The United States had not been informed, and the Soviet Union threatened to use atomic weapons against the assailants. Pearson won support for sending a United Nations Emergency Force to the region to separate the warring parties.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16254,6 +16299,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1958",
                         "category": "peace",
                         "share": "1",
+                        "motivation": " Background: Georges Pire, a Belgian Dominican priest, took part as an army chaplain in the anti-German resistance movement during World War II. Having in 1949 learned of the miserable conditions in Austrian refugee camps, he decided to come to their rescue. Pire organized a network of sponsors who supplied food, clothes and medicine to the camps.",
                         "affiliations": [
                             []
                         ]
@@ -16278,6 +16324,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1959",
                         "category": "peace",
                         "share": "1",
+                        "motivation": " Background: Philip Noel-Baker was a minister in Winston Churchill's coalition Government. He was convinced that the private armaments industry bore much of the responsibility for the outbreak of war and the bloodbath that followed. The struggle for disarmament became a leitmotif for him for the rest of his life. ",
                         "affiliations": [
                             []
                         ]
@@ -16302,6 +16349,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1960",
                         "category": "peace",
                         "share": "1",
+                        "motivation": " Background: Albert Lutuli, President of the African National Congress in South Africa, became the spokesman of a campaign of civil disobedience directed against South Africa's policy of racial segregation, and spearheaded several demonstrations and strikes against the white minority government.",
                         "affiliations": [
                             []
                         ]
@@ -16326,6 +16374,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1961",
                         "category": "peace",
                         "share": "1",
+                        "motivation": " Background: Dag Hammarskjöld, second Secretary-General of the United Nations, was lauded  for having built up an efficient and independent UN Secretariat, and for having taken an independent line towards the great powers. He was also praised for having organized a peacekeeping force in the Middle East after the Suez crisis, and for his commitment to peace during the civil war in the Congo.",
                         "affiliations": [
                             []
                         ]
@@ -16592,6 +16641,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1975",
                         "category": "peace",
+                        "motivation": "Background: Andrei Sakharov, Soviet nuclear physicist and father of the Soviet hydrogen bomb, was awarded the Peace Prize in 1975 for his opposition to the abuse of power and his work for human rights.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16614,6 +16664,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1976",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Betty Williams co-founded the Northern Ireland Peace Movement (later renamed Community of Peace People) with Maired Corrigan. The organization fought against the meaningless use of violence in the conflict between Protestants and Catholics in Northern Ireland.",
                         "affiliations": [
                             []
                         ]
@@ -16634,6 +16685,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1976",
                         "category": "peace",
+                        "motivation": "Background: Maired Corrigan co-founded the Northern Ireland Peace Movement (later renamed Community of Peace People) with Betty Williams. The organization fought against the meaningless use of violence in the conflict between Protestants and Catholics in Northern Ireland.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -16652,6 +16704,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1977",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Amnesty International is a worldwide human rights organization independent of all governments, financial players, political convictions and religious faiths. The organization is devoted to uncovering the facts about violations and breaches of human rights and organizing targeted action and campaigns to bring them to an end.",
                         "affiliations": [
                             []
                         ]
@@ -16675,6 +16728,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1978",
                         "category": "peace",
+                        "motivation": "Background: Mohamed Anwar al-Sadat, President of the Arab Republic of Egypt, shared the Peace Prize with Israel's Prime Minister Begin after having taken the initiative in negotiating a peace treaty between the two countries.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -16699,6 +16753,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1978",
                         "category": "peace",
+                        "motivation": "Background: Menachem Begin, Prime Minister of Israel, shared the Peace Prize with Egypt's President Anwar el-Sadat for the peace treaty concluded between Israel and Egypt.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -16723,6 +16778,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1979",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Mother Teresa was a Catholic nun and founder of the Missionaries of Charity. Her organization built homes for orphans, nursing homes for lepers, and hospices for the terminally ill in Calcutta, India, and engaged in aid work in other parts of the world.",
                         "affiliations": [
                             []
                         ]
@@ -16744,6 +16800,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1980",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: Adolfo Pérez Esquival is an Argentinian human rights activist, whose nonviolent struggle during the violent Argentinian dictatorship following the 1976 military coup was an inspiration to oppressed people all over the world.",
                         "affiliations": [
                             []
                         ]
@@ -16767,6 +16824,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1982",
                         "category": "peace",
+                        "motivation": "Background: Alva Myrdal stood out as an innovator as the Swedish goverment minister in charge of disarmament issues. She represented non-aligned Sweden in nuclear disarmament negotionations, fighting for nuclear weapons-free zones in Europe.",
                         "share": "2",
                         "affiliations": [
                             []
@@ -16789,6 +16847,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1982",
                         "category": "peace",
                         "share": "2",
+                        "motivation": "Background: Alfonso García Robles played a key part in the laborious efforts to make Latin America a nuclear-free zone after the the Cuban missle crisis, and continued to work throughout his career as a diplomat for the cause of disarmament.",
                         "affiliations": [
                             []
                         ]
@@ -16809,6 +16868,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1983",
                         "category": "peace",
+                        "motivation": "Background: Lech Walesa led the campaign for freedom of organization in Poland. He became a symbol of revolt against the Communist party's monopoly on power. In 1989 the Solidarity union won free elections, and in the following year Walesa was elected President of Poland.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16830,6 +16890,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1984",
                         "category": "peace",
+                        "motivation": "Background: Desmond Tutu was honored for his opposition to South Africa's brutal apartheid regime. The broad media coverage of his opposition made him a living symbol in the struggle for liberation. There are many indications that Tutu's Peace Prize helped to pave the way for a policy of stricter sanctions against South Africa in the 1980s.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16849,6 +16910,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1985",
                         "category": "peace",
+                        "motivation": "Background: International Physicians for the Prevention of Nuclear War was founded by the heart specialists Bernhard Lown from the United States and Evgeny Chazov from the Soviet Union. Both were concerned about the medical aspects of a nuclear war. Despite belonging to opposing camps during the Cold War, they agreed to found an international organization for physicians that would seek to counteract the nuclear arms race.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16870,6 +16932,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1986",
                         "category": "peace",
+                        "motivation": "Background: Elie Wiesel is a Jewish author, philosopher and humanist. He made it his life's work to bear witness to the genocide committed by the Nazis during World War II. Today he is the world's leading spokesman on the Holocaust.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16910,6 +16973,7 @@ TAG.Layout.Spoof = (function () {
                     {
                         "year": "1988",
                         "category": "peace",
+                        "motivation": "Background: The United Nations Peace Keeping Forces is comprised of military personnel serving as observers and UN soldiers. From 1948 to 1988, over 500,000 persons from 53 states took part in the UN's peacekeeping operations. Of them, 733 lost their lives. Their main assignments were to report crisis situations, set up buffer zones, monitor armistice agreements, maintain calm and good order, and give humanitarian aid.",
                         "share": "1",
                         "affiliations": [
                             []
@@ -16931,6 +16995,7 @@ TAG.Layout.Spoof = (function () {
                         "year": "1989",
                         "category": "peace",
                         "share": "1",
+                        "motivation": "Background: The 14th Dalai Lama (Tenzin Gyatso) has since 1959 stood at the head of the nonviolent opposition to China's occupation of Tibet. Due to his Buddhist peace philosophy on reverence for all living things, It weighed heavily in the Tibetan leader's favor that he had showed willingness to compromise and seek reconciliation despite brutal violations.",
                         "affiliations": [
                             []
                         ]

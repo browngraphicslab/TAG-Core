@@ -72,7 +72,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         NOBEL_WILL_COLOR = 'rgb(254,161,0)',
         //NOBEL_WILL_COLOR = 'rgb(189,125,13)',
         NOBEL_ORANGE_COLOR = 'rgb(254,161,0)',
-        
+
         //options to maintain customizations when going back to collections page
         isImpactMap = options.isImpactMap,
         smallPreview = options.smallPreview,
@@ -93,6 +93,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
         telemetry_timer = new TelemetryTimer(),       //Timer for telemetry
         firstShowHotspots = true,
 
+        togglerRecentlyHit = false,
 
         //nobel will variables
         showInitialNobelWillBox = true,
@@ -911,8 +912,9 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             sideBar.css('min-width', 0.22 * screenWidth);
         }
 
+
         // toggler to hide/show sidebar
-        toggler.on('click', function () {
+        toggler.on('click', function (e) {
             sideBar.stop()
             var opts = {},
                 isLeft = root.data('split') === 'L';
