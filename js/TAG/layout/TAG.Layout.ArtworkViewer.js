@@ -912,6 +912,21 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             sideBar.css('min-width', 0.22 * screenWidth);
         }
 
+        sideBar.on('click', function (e) {
+            if (togglerRecentlyHit === true) {
+                togglerRecentlyHit = false
+                return
+            }
+            var offset = $("#toggler").offset()
+            var top = offset.top + ($("#toggler").height() / 2)
+            var left = offset.left +( $("#toggler").width() / 2) + 40
+            var one = top - e.clientY
+            var two = left - e.clientX
+            if (Math.sqrt((one * one) + (two * two)) < $("#toggler").height()*.75) {
+                $("#toggler").click()
+            }
+            e.handled = true;
+        })
 
         // toggler to hide/show sidebar
         toggler.on('click', function (e) {
@@ -930,6 +945,8 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
             sideBar.animate(opts, 1000, function () {
                 togglerImage.attr('src', tagPath + 'images/icons/' + ((!!isBarOpen) ^ (!isLeft) ? 'Close_nobel.svg' : 'Open_nobel.svg'));
             });
+            togglerRecentlyHit = true
+            setTimeout(function () { togglerRecentlyHit = false},25)
         });
         var t_timer = new TelemetryTimer();
 
