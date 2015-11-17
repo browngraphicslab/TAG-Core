@@ -156,6 +156,7 @@ var JSSRC = [
         
 		'js/TAG/authoring/TAG.Authoring.SettingsView.js',  // TAGCORE
 		'js/TAG/authoring/TAG.Authoring.FileUploader.js',  // TAGCORE
+		'js/TAG/authoring/TAG.Authoring.OldFileUploader.js',  // TAGCORE
 		'js/TAG/authoring/TAG.Authoring.WebFileUploader.js',  // TAGCORE
 		'js/TAG/authoring/jscolor/jscolor.js',             // TAGCORE
 

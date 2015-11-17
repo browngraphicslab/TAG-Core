@@ -1094,7 +1094,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
 
             if (title === "Audio (MP3)") {
-                upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
+                upldr = TAG.Authoring.OldFileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
                 function (files) {
                     var file;
                     for (i = 0; i < files.length; i++) {
@@ -1180,7 +1180,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
             }
 
             if (title === "Video (MP4, WEBM, OGV)") {
-                upldr = TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
+                upldr = TAG.Authoring.OldFileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
                 function (files, localURLs, confirmCallback, cancelCallback) {
                     var file,
                         total = files.length,
@@ -1298,7 +1298,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 upldr.setMinDuration(TAG.TourAuthoring.Constants.minMediaLength);
             }
             if (title === "Image") {
-                TAG.Authoring.FileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
+                TAG.Authoring.OldFileUploader(root, TAG.Authoring.FileUploadTypes.Standard,
                 function (files) {
                     for (i = 0; i < files.length; i++) {
                         names.push(files[i].displayName);
