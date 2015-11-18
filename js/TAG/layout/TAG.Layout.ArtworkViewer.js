@@ -1082,15 +1082,15 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     prevInfo = { artworkPrev: "artmode", prevScroll: prevScroll, prevTag: prevTag };
 
                     //Parse RIN data into ITE data
-                    var iteData = TAG.Util.RIN_TO_ITE(tour); 
+                    var rinData = JSON.parse(unescape(tour.Metadata.Content));
                     
                     //Create tag tourplayer (which will in turn create an ITE player)
-                    var ITEPlayer = new TAG.Layout.TourPlayer(iteData, prevCollection, prevInfo, options, tour);
-                    TAG.Util.UI.slidePageLeftSplit(root, ITEPlayer.getRoot(), function () {
+                    var rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options, tour);
+                    TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), function () {
                         setTimeout(function () {
                             //var rindata = tour;
                             //ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
-                            ITEPlayer.startPlayback();
+                            rinPlayer.startPlayback();
                         }, 1000);
                     });
                     currentPage.name = TAG.Util.Constants.pages.TOUR_PLAYER;
