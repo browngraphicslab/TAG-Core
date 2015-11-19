@@ -1,4 +1,4 @@
-﻿/* Generic Convex Polygon Scan Conversion based on: */
+/* Generic Convex Polygon Scan Conversion based on: */
 /*
  * Generic Convex Polygon Scan Conversion and Clipping
  * by Paul Heckbert

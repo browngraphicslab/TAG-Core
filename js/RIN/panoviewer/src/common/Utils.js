@@ -1,4 +1,4 @@
-﻿/**
+/**
 * A utility class for common functionality
 * @class
 */

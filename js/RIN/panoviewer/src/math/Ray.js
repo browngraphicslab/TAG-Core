@@ -1,4 +1,4 @@
-﻿/**
+/**
  * A class representing a 3D ray
  * @param {Vector3} origin The origin of the ray
  * @param {Vector3} direction The direction vector of the ray.  IMPORTANT: must be a unit vector

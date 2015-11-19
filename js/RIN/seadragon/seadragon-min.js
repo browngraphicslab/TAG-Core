@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Seadragon Ajax 0.8.9 (build 64702 on 2011-01-28)
  * http://gallery.expression.microsoft.com/SeadragonAjax
  * This code is distributed under the license agreement at:

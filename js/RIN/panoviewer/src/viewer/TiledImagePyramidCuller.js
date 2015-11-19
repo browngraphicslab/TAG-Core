@@ -1,4 +1,4 @@
-﻿// This is a helper class that computes the incremental change
+// This is a helper class that computes the incremental change
 // in visible tiles for the present model-view-projection and
 // viewport setups. The actually culling and LOD determination
 // is done by TiledImagePyramid.getVisibleTiles(), but this

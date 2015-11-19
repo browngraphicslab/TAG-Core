@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MathHelper class provides common math functions.
  * @class
 */

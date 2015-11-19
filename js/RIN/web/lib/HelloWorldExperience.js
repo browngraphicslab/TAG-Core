@@ -1,4 +1,4 @@
-﻿/// <reference path="DiscreteKeyFrameBase.ts"/>
+/// <reference path="DiscreteKeyFrameBase.ts"/>
 
 (function () {
     var HelloWorldExperienceProvider = (function () {

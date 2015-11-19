@@ -1,4 +1,4 @@
-﻿/**
+/**
 *@constructor
 */
 function Rectangle(x, y, width, height) {

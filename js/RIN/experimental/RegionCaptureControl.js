@@ -1,4 +1,4 @@
-﻿/// <reference path="../web/lib/jquery.min.js" />
+/// <reference path="../web/lib/jquery.min.js" />
 window.RinDragable = function(element, dragCallback, additionalHitTargets) {
     var isDragging = false, x, y;
     element.addEventListener('mousedown', function (e) {
