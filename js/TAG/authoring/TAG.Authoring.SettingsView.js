@@ -8134,7 +8134,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
                 TAG.Telemetry.recordEvent("MiddleBarSelection", function (tobj) {
                     tobj.type_representation = prevMiddleBarSelection.type_representation;
-                    tobj.time_spent = prevMiddleBarSelection.time_spent_timer.get_elapsed();
+                    tobj.time_spent = prevMiddleBarSelection.time_spent_timer ? prevMiddleBarSelection.time_spent_timer.get_elapsed() : 0;
                 });
 
                 if (onclick) {

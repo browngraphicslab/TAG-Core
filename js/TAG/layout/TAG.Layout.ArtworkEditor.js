@@ -2274,6 +2274,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     buttonbarLoadingDelete.css('background-color', 'black');
                     **/
                     creatingText = false;
+                    //if(isHotspot)
                     close();
                 } else {
                     updateAssocMedia({
@@ -2622,7 +2623,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
         if (text) {
             options = {
                 Text: text,
-                Name: name
+                Name: name,
             };
             TAG.Worktop.Database.createTextAssocMedia(options, onSuccess);
         } 
@@ -2650,7 +2651,6 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
             ops.AddIDs = newDoq.Identifier;
             TAG.Worktop.Database.changeArtwork(artwork.Identifier, ops);
             TAG.Worktop.Database.changeHotspot(newDoq.Identifier, options, done, TAG.Util.multiFnHandler(authError, done), TAG.Util.multiFnHandler(conflict(newDoq, "Update", done)), error(done));
-            
         };
 
     }
