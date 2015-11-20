@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This translates touchbegin,touchend,touchmove to
  * derived from Seadragon.TouchController.
  * zoom + pan operations on the viewer.

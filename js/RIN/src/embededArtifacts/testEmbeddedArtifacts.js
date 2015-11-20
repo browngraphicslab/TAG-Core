@@ -1,4 +1,4 @@
-﻿var rin;
+var rin;
 (function (rin) {
     //
     // Code to invoke the suite of NonlinearStoryboard tests...

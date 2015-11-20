@@ -1,4 +1,4 @@
-﻿/**
+/**
 * Provides common graphics helper function
 * @class
 */

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This is a simple control for showing image attribution
  * with creative common copyrights. It surfaces links to those
  * licenses, if no attribution is set, nothing is visible.

@@ -346,6 +346,8 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         });
         textArea.on('keyup', function (ev) {
             nameChanged = true;
+            $('#tourSaveButton').css('opacity', '1');
+            $('#tourSaveButton').prop('disabled', false);
             ev.stopImmediatePropagation();
         });
 

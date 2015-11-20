@@ -1,4 +1,4 @@
-﻿function GridGeometry( width, height, nSegX, nSegY, useTris ) {
+function GridGeometry( width, height, nSegX, nSegY, useTris ) {
 	GridGeometry.__super.call(this, {});
 
 	var x, y,

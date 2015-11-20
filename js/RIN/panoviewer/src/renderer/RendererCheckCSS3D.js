@@ -1,4 +1,4 @@
-﻿var RendererCheckCSS3D = {};
+var RendererCheckCSS3D = {};
 
 RendererCheckCSS3D.isValidBrowser = function () {
     //Check that CSS3D transforms are here, otherwise throw an exception.

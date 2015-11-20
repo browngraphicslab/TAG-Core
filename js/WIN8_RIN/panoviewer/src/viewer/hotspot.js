@@ -1,4 +1,4 @@
-﻿var HotspotCreator = function() {
+var HotspotCreator = function() {
 	this._hotspotImageSize = 128;
 	this._distToEye = 0.5;
 };

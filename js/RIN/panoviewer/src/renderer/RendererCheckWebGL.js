@@ -1,4 +1,4 @@
-﻿var RendererCheckWebGL = {};
+var RendererCheckWebGL = {};
 
 RendererCheckWebGL.getWebGLContext = function (win) {
     if (win.getContext) {

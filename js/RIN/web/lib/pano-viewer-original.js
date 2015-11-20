@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 var quirks = new function() {
     var _ua = navigator.userAgent;

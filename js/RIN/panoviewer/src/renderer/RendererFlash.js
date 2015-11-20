@@ -1,4 +1,4 @@
-﻿function RendererFlash(win, width, height) {
+function RendererFlash(win, width, height) {
 	RendererFlash.__super.call(this, win);
 
 	this._width = width;

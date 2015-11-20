@@ -1,4 +1,4 @@
-﻿/**
+/**
 * A vector class representing three dimensional space
 * @constructor
 * @param {number} x

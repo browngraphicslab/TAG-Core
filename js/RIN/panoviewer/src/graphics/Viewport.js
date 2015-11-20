@@ -1,4 +1,4 @@
-﻿/**
+/**
 * Represents a viewport into the 3D scene
 * @param {number} width The width of the viewport in pixels
 * @param {number} height The height of the viewport in pixels

@@ -1,4 +1,4 @@
-﻿//Takes two points and the slope (called k) of the line at each of those points.
+//Takes two points and the slope (called k) of the line at each of those points.
 //Math is taken from http://en.wikipedia.org/wiki/Spline_interpolation on 7/18/2012
 function SimpleSpline(x1, x2, y1, y2, k1, k2) {
     var x2MinusX1 = x2 - x1;

@@ -1,4 +1,4 @@
-﻿module.exports = function(grunt) {
+module.exports = function(grunt) {
     'use strict';
 
     grunt.registerMultiTask('concatTmpl', 'Concatenate tmpl files as script tags', function() {

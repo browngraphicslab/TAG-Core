@@ -35,7 +35,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     root.css({
         "background-color": "rgb(219,218,199)",
         "height": "100%",
-        "width": "100%" 
+        "width": "100%"
     });
     root.attr("class", "rootPage");
     TAG.Util.UI.getStack()[0] = null;
@@ -135,8 +135,8 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 $trackBody.css({
                     'height': $trackBody.height() - distance + 'px',
                 });
-                
-               
+
+
 
                 if (!$trackVeil) {
                     $trackVeil = $('#trackScrollVeil');
@@ -145,7 +145,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                     'height': $trackVeil.height() - distance + 'px',
                 });
 
-               
+
                 $('#verticalSliderPane').css({
                     'height': $trackBody.height() + 'px',
                 });
@@ -153,7 +153,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 $('#trackScrollVeil').css({
                     'height': $trackBody.height() + 'px',
                 });
-                
+
                 //update the height
                 originalHeightSize = originalHeightSize + distance;
 
@@ -163,9 +163,9 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 if (!$inkTextControls) { $inkTextControls = $('#inkTextControls'); }
                 if (!$inkDrawControls) { $inkDrawControls = $('#inkDrawControls'); }
                 if (!$inkTransControls) { $inkTransControls = $('#inkTransControls'); }
-             //   if (!$inkEditText) { $inkEditText = $('#inkEditText'); }
-             //   if (!$inkEditDraw) { $inkEditDraw = $('#inkEditDraw'); }
-             //   if (!$inkEditTransparency) { $inkEditTransparency = $('#inkEditTransparency'); }
+                //   if (!$inkEditText) { $inkEditText = $('#inkEditText'); }
+                //   if (!$inkEditDraw) { $inkEditDraw = $('#inkEditDraw'); }
+                //   if (!$inkEditTransparency) { $inkEditTransparency = $('#inkEditTransparency'); }
                 if ($('#inkTextControls').length > 0) {
                     $("#inkTextControls").css("height", raTop + raHeight - $("#inkTextControls").offset().top - 10);
                 }
@@ -175,21 +175,25 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
                 if ($('#inkTransControls').length > 0) {
                     $("#inkTransControls").css("height", raTop + raHeight - $("#inkTransControls").offset().top - 10);
                 }
-           //     $("#inkEditText").css("height", raTop + raHeight - $("#inkEditText").offset().top - 10);
-           //     $("#inkEditDraw").css("height", raTop + raHeight - $("#inkEditDraw").offset().top - 10);
-           //     $("#inkEditTransparency").css("height", raTop + raHeight - $("#inkEditTransparency").offset().top - 10);
+                //     $("#inkEditText").css("height", raTop + raHeight - $("#inkEditText").offset().top - 10);
+                //     $("#inkEditDraw").css("height", raTop + raHeight - $("#inkEditDraw").offset().top - 10);
+                //     $("#inkEditTransparency").css("height", raTop + raHeight - $("#inkEditTransparency").offset().top - 10);
                 viewer.resize();//resize the viewer.
 
                 prevLocationY = ui.position.top;
             },
             appendTo: 'body'
         });
+
+        //Telemetry
+        TAG.Telemetry.register(resizeButtonArea, "mousedown", "ResizePreviewArea");
+
         resizeButtonArea.append(resizeButton);
 
         root.append(resizeButtonDocfrag);
-       
+
     })();
- 
+
     /**
     *Creates components and sets up UI
     */
@@ -213,7 +217,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             undoManager: undoManager,
             viewer: viewer,
             timeline: timeline,
-            root : root
+            root: root
         });
         componentControls = TAG.TourAuthoring.ComponentControls({
             root: root,
@@ -234,7 +238,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
             playbackControls: playbackControls,
             root: root
         });
-       
+
         // Assemble the UI using docfrag
         var uiDocfrag = document.createDocumentFragment();
         uiDocfrag.appendChild(resizableArea[0]);
@@ -247,7 +251,7 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         root.append(uiDocfrag);
 
         // Load tour from the rin object
-        var rin = JSON.parse(unescape(tourobj.Metadata.Content));   
+        var rin = JSON.parse(unescape(tourobj.Metadata.Content));
         if (jQuery.isEmptyObject(rin)) {
             rin = timeline.toRIN();
         }
@@ -258,7 +262,11 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
         //timeline.setLoaded();
     })();
 
-    this.getRoot = function() {
+    this.getRoot = function () {
         return root;
     };
+
+    this.uploadStillHappening = function (uploadDone) {
+        return componentControls.otherUpload(uploadDone);
+    }
 };

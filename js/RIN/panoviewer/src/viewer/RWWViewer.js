@@ -1,4 +1,4 @@
-﻿var requestAnimationFrame =  window.requestAnimationFrame ||
+var requestAnimationFrame =  window.requestAnimationFrame ||
                              window.msRequestAnimationFrame ||
                              window.mozRequestAnimationFrame ||
                              window.oRequestAnimationFrame ||
