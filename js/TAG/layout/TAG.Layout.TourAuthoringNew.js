@@ -265,4 +265,8 @@ TAG.Layout.TourAuthoringNew = function (tourobj, onLoadCallback) {
     this.getRoot = function () {
         return root;
     };
+
+    this.uploadStillHappening = function (uploadDone) {
+        return componentControls.otherUpload(uploadDone);
+    }
 };

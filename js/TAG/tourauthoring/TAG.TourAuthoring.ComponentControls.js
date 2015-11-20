@@ -33,6 +33,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         IGNORE_IN_SEARCH = ['visible', 'exhibits', 'selected'],
         rinContainer = viewer.getContainer(),
         isUploading = false,
+        uploadHappening = false,
         allArtworks,
         pickerloaded = false;
     functionsPanelDocfrag.appendChild(functionsPanel[0]);
@@ -57,6 +58,11 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         timeline.onUpdate(true);
     }
+
+    function otherUpload(bool) {
+        uploadHappening = bool;
+    }
+    that.otherUpload = otherUpload;
 
     (function _createHTML() {
 
