@@ -1106,6 +1106,7 @@ window.rin = window.rin || {};
             }
             else { // Not IE 10, use normal single touch handlers.
                 var handler = function (event) {
+                    self._orchestrator._orchestrator.loadSidebarContent(self._orchestrator._orchestrator.sidebarDoqs[self._orchestrator._experienceStream._esData.data.guid]);
                     return self.touchHandler(event, cover);
                     //BACON FOR TOUCH?!
                 };

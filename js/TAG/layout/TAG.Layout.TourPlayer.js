@@ -175,14 +175,21 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             //'font-family': FONT
         });
 
+        sideBar.css('min-width', 0.22 * screenWidth);
+
         togglerImage.css('left', '0%');
+
+        sideBar.css({
+            "left": '-' + (0.22 * screenWidth) + 'px'
+        });
+
         // toggler to hide/show sidebar
         toggler.on('click', function () {
             var opts = {}
-            opts.right = '0%';
+            opts.left = '-' + (0.22*screenWidth) + 'px';
             isBarOpen = !isBarOpen;
 
-            sideBar.animate(opts, 1000, function () {
+            sideBar.animate(opts, 500, function () {
                 togglerImage.attr('src', tagPath + 'images/icons/Close.svg');
                 sideBar.css('visibility', 'hidden');
             });
@@ -272,7 +279,13 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             curr,
             descriptionDrawer;
 
+        var opts = {}
+        opts.left = '0%';
         sideBar.css('visibility', 'visible');
+        sideBar.animate(opts, 500, function () {
+            togglerImage.attr('src', tagPath + 'images/icons/Close.svg');
+        });
+
         infoTitle.text(doq.Name);
         infoArtist.text(doq.Metadata.Artist);
         infoYear.text(doq.Metadata.Year);
