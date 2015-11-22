@@ -5888,9 +5888,11 @@ rin.internal.PlayerControl.prototype = {
     },
 
     // Load a narrative from the rinData provided and make a callback once loading is complete.
-    loadData: function (rinData, onComplete) {
+    loadData: function (rinData, onComplete, sidebarDoqs, loadSidebarContent) {
         var self = this;
 
+        this.orchestrator.sidebarDoqs = sidebarDoqs;
+        this.orchestrator.loadSidebarContent = loadSidebarContent;
         this.orchestrator.load(rinData, function (error) {
             if (!error) {
                 if (self.playerConfiguration.playerStartupAction == rin.contracts.playerStartupAction.play) {
