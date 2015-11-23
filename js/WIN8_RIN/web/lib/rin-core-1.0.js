@@ -4185,6 +4185,7 @@ rin.internal.ESItemsManager.prototype = {
     _currentESItems: null,
     _esItemCache: null,
     _screenPlayInterpreterCache: null,
+    _sidebarDoqsOnScreen: 0,
 
     bufferingES: null,
     preloaderES: null,
@@ -4312,6 +4313,11 @@ rin.internal.ESItemsManager.prototype = {
                 if (removedItems && removedItems.any(function (item) { return item.experienceStream == addedItems[i].experienceStream })) continue; // These are in removed items also, so skip instead of re-adding.
 
                 var item = addedItems[i];
+                if (item.providerId === "ZMES" && item.esData.data.guid) {
+                    this._sidebarDoqsOnScreen++;
+                    $("#sidebarIconImg").show();
+                }
+
                 item.experienceStream.stateChangedEvent.subscribe(this.esStateChangedEventHook, "ESItemsManager");
                 this._setNewlyAddedState(item);
                 if (typeof (item.experienceStream.addedToStage) == "function")
@@ -4330,6 +4336,10 @@ rin.internal.ESItemsManager.prototype = {
                 if (addedItems && addedItems.any(function (item) { return item.experienceStream == removedItems[i].experienceStream })) continue; // No need to remove because it is there for re-add
 
                 var item = removedItems[i];
+                if (item.providerId === "ZMES" && item.esData.data.guid) {
+                    this._sidebarDoqsOnScreen--;
+                }
+
                 item.experienceStream.stateChangedEvent.unsubscribe("ESItemsManager");
                 item.experienceStream.pause(this._orchestrator._getESItemRelativeOffset(item, previousTimeOffset));
 
@@ -4338,6 +4348,10 @@ rin.internal.ESItemsManager.prototype = {
 
                 this._orchestrator.eventLogger.logEvent("ES {0} removed at {1} time scheduled {2}", item.id,
                     this._orchestrator.getCurrentLogicalTimeOffset(), item.endOffset);
+            }
+
+            if (this._sidebarDoqsOnScreen === 0) {
+                $("#sidebarIconImg").hide();
             }
         }
 
@@ -6398,7 +6412,6 @@ rin.internal.StageAreaManager.prototype = {
         if (wereItemsAdded) {
             for (var i = 0; i < addedItems.length; i++) {
                 var item = addedItems[i];
-
                 this._orchestrator.ensureExperienceStreamIsLoaded(item);
                 var uiControl = item.experienceStream.getUserInterfaceControl();
                 if (uiControl) {

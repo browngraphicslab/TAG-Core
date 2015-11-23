@@ -151,7 +151,12 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             infoCustom,
             i,
             curr,
-            descriptionDrawer;
+            descriptionDrawer,
+            sidebarIconImg = root.find("#sidebarIconImg");
+
+        sidebarIconImg.attr("src", tagPath + 'images/icons/Close.svg');
+        sidebarIconImg.hide();
+        
 
         sideBar.css('visibility', 'hidden');
 
