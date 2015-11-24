@@ -4260,7 +4260,8 @@ window.rin = window.rin || {};
         _currentESItems: null,
         _esItemCache: null,
         _screenPlayInterpreterCache: null,
-
+		_sidebarDoqsOnScreen: 0,
+		
         bufferingES: null,
         preloaderES: null,
         screenPlayInterpreter: null,
@@ -4388,6 +4389,10 @@ window.rin = window.rin || {};
                     if (removedItems && removedItems.any(function (item) { return item.experienceStream === addedItems[i].experienceStream; })) continue; // These are in removed items also, so skip instead of re-adding.
 
                     item = addedItems[i];
+					if (item.providerId === "ZMES" && item.esData.data.guid) {
+						this._sidebarDoqsOnScreen++;
+						$("#sidebarIconImg").show();
+					}
                     item.experienceStream.stateChangedEvent.subscribe(this.esStateChangedEventHook, "ESItemsManager");
                     this._setNewlyAddedState(item);
                     if (typeof (item.experienceStream.addedToStage) === "function")
@@ -4406,6 +4411,9 @@ window.rin = window.rin || {};
                     if (addedItems && addedItems.any(function (item) { return item.experienceStream === removedItems[i].experienceStream; })) continue; // No need to remove because it is there for re-add
 
                     item = removedItems[i];
+					if (item.providerId === "ZMES" && item.esData.data.guid) {
+						this._sidebarDoqsOnScreen--;
+					}
                     item.experienceStream.stateChangedEvent.unsubscribe("ESItemsManager");
                     item.experienceStream.pause(this._orchestrator._getESItemRelativeOffset(item, previousTimeOffset));
 
@@ -4415,6 +4423,10 @@ window.rin = window.rin || {};
                     this._orchestrator.eventLogger.logEvent("ES {0} removed at {1} time scheduled {2}", item.id,
                         this._orchestrator.getCurrentLogicalTimeOffset(), item.endOffset);
                 }
+				
+				if (this._sidebarDoqsOnScreen === 0) {
+					$("#sidebarIconImg").hide();
+				}
             }
 
             // If there were any items added or removed, check for ES status and show buffering ES if necessary.
@@ -6001,9 +6013,11 @@ window.rin = window.rin || {};
         },
 
         // Load a narrative from the rinData provided and make a callback once loading is complete.
-        loadData: function (rinData, onComplete) {
+        loadData: function (rinData, onComplete, sidebarDoqs, loadSidebarContent) {
             var self = this;
-
+			this.orchestrator.sidebarDoqs = sidebarDoqs;
+			this.orchestrator.loadSidebarContent = loadSidebarContent;
+			
             this.orchestrator.load(rinData, function (error) {
                 if (!error) {
                     if (self.playerConfiguration.playerStartupAction === rin.contracts.playerStartupAction.play) {
