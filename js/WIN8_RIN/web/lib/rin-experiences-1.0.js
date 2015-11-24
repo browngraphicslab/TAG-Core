@@ -1050,7 +1050,9 @@ window.rin = window.rin || {};
             if (window.navigator.msPointerEnabled && typeof (MSGesture) !== "undefined") {
                 var onmspointerdown = function (e) {
 
-                    self._orchestrator._orchestrator.loadSidebarContent(self._orchestrator._orchestrator.sidebarDoqs[self._orchestrator._experienceStream._esData.data.guid]);
+                    if (self._orchestrator._orchestrator.loadSidebarContent) {
+                        self._orchestrator._orchestrator.loadSidebarContent(self._orchestrator._orchestrator.sidebarDoqs[self._orchestrator._experienceStream._esData.data.guid]);
+                    }
 
                     self._orchestrator.startInteractionMode();
                     self._orchestrator.onESEvent(rin.contracts.esEventIds.interactionActivatedEventId, null);
@@ -1106,7 +1108,9 @@ window.rin = window.rin || {};
             }
             else { // Not IE 10, use normal single touch handlers.
                 var handler = function (event) {
-                    self._orchestrator._orchestrator.loadSidebarContent(self._orchestrator._orchestrator.sidebarDoqs[self._orchestrator._experienceStream._esData.data.guid]);
+                    if (self._orchestrator._orchestrator.loadSidebarContent) {
+                        self._orchestrator._orchestrator.loadSidebarContent(self._orchestrator._orchestrator.sidebarDoqs[self._orchestrator._experienceStream._esData.data.guid]);
+                    }
                     return self.touchHandler(event, cover);
                     //BACON FOR TOUCH?!
                 };
