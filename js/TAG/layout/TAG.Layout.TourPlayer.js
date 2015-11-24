@@ -106,6 +106,245 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         }
     }
 
+
+    //sidebar stuff
+
+    var sideBar = root.find('#sideBar'),
+    toggler = root.find('#toggler'),
+    togglerImage = root.find('#togglerImage'),
+    info = root.find('#info'),
+    screenWidth = $('#tagRoot').width(),
+
+    FIX_PATH = TAG.Worktop.Database.fixPath,
+    PRIMARY_FONT_COLOR = TAG.Worktop.Database.getMuseumPrimaryFontColor(),
+    SECONDARY_FONT_COLOR = TAG.Worktop.Database.getMuseumSecondaryFontColor(),
+    FONT = TAG.Worktop.Database.getMuseumFontFamily();
+
+    sideBar.disableSelection();
+    sideBar.attr('unselectable', 'on');
+    sideBar.css({
+        '-moz-user-select': '-moz-none',
+        '-o-user-select': 'none',
+        '-khtml-user-select': 'none',
+        '-webkit-user-select': 'none',
+        '-ms-user-select': 'none',
+        'user-select': 'none'
+    });
+    sideBar.bind('selectstart', function () { return false; });
+    sideBar.css('visibility', 'hidden');
+    /**
+     * Makes the artwork viewer sidebar
+     * @method makeSidebar
+     */
+    function makeSidebar(mapslength) {
+        var backBttnContainer = root.find("#backBttnContainer"),
+            sideBarSections = root.find('#sideBarSections'),
+            sideBarInfo = root.find('#sideBarInfo'),
+            infoTitle = root.find('#infoTitle'),
+            infoArtist = root.find('#infoArtist'),
+            infoYear = root.find('#infoYear'),
+            assetContainer = root.find('#assetContainer'),
+            isBarOpen = false,
+            item,
+            fieldTitle,
+            fieldValue,
+            infoCustom,
+            i,
+            curr,
+            descriptionDrawer,
+            sidebarIconImg = root.find("#sidebarIconImg");
+
+        sidebarIconImg.attr("src", tagPath + 'images/icons/Close.svg');
+        sidebarIconImg.hide();
+        
+
+        sideBar.css('visibility', 'hidden');
+
+        sideBarInfo.css({
+            'height': sideBarSections.height() - 25 + 'px'
+        });
+        togglerImage.attr("src", tagPath + 'images/icons/Close.svg');
+
+        infoTitle.css({
+            'color': '#' + PRIMARY_FONT_COLOR,
+            //'font-family': FONT
+        });
+
+        infoArtist.css({
+            'color': '#' + PRIMARY_FONT_COLOR,
+            //'font-family': FONT
+        });
+
+        infoYear.css({
+            'color': '#' + PRIMARY_FONT_COLOR,
+            //'font-family': FONT
+        });
+
+        sideBar.css('min-width', 0.22 * screenWidth);
+
+        togglerImage.css('left', '0%');
+
+        sideBar.css({
+            "left": '-' + (0.22 * screenWidth) + 'px'
+        });
+
+        // toggler to hide/show sidebar
+        toggler.on('click', function () {
+            var opts = {}
+            opts.left = '-' + (0.22*screenWidth) + 'px';
+            isBarOpen = !isBarOpen;
+
+            sideBar.animate(opts, 500, function () {
+                togglerImage.attr('src', tagPath + 'images/icons/Close.svg');
+                sideBar.css('visibility', 'hidden');
+            });
+        });
+    }
+    makeSidebar();
+
+    /**
+     * Create a drawer (e.g., for list of related tours or the artwork's description) 
+     * @param {String} title            title of the drawer
+     * @param {jQuery obj} topContents  an element to be included before the main contents of the drawer
+     * @return {jQuery obj}             the drawer
+     */
+    function createDrawer(title, topContents, assocMediaToShow) {
+        var drawer = $(document.createElement('div')).addClass('drawer'),
+            drawerHeader = $(document.createElement('div')).addClass('drawerHeader'),
+            label = $(document.createElement('div')).addClass('drawerLabel'),
+            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer'),
+            toggle = $(document.createElement('img')).addClass("drawerPlusToggle"),
+            drawerContents = $(document.createElement('div')).addClass("drawerContents"),
+            i;
+
+        label.addClass('primaryFont');
+        label.text(title);
+        label.css({
+            'color': '#' + PRIMARY_FONT_COLOR,
+            //'font-family': FONT
+        });
+        toggle.attr({
+            src: tagPath + 'images/icons/plus.svg',
+            expanded: false
+        });
+
+        drawer.append(drawerHeader);
+        drawerHeader.append(label);
+        drawerHeader.append(toggleContainer);
+        toggleContainer.append(toggle);
+
+        drawer.append(drawerContents);
+        topContents && drawerContents.append(topContents);
+        var drawerToggle = function (evt) {
+            if (toggle.attr('expanded') !== 'true') {
+                root.find(".drawerPlusToggle").attr({
+                    src: tagPath + 'images/icons/plus.svg',
+                    expanded: false
+                });
+
+                root.find(".drawerContents").slideUp();
+
+                toggle.attr({
+                    src: tagPath + 'images/icons/minus.svg',
+                    expanded: true
+                });
+            } else {
+                toggle.attr({
+                    src: tagPath + 'images/icons/plus.svg',
+                    expanded: false
+                });
+
+            }
+
+            drawerContents.slideToggle();
+        }
+
+        //have the toggler icon minus when is is expanded, plus otherwise.
+        drawerHeader.on('click', drawerToggle);
+
+        drawer.contents = drawerContents;
+
+        return drawer;
+    }
+
+    function loadSidebarContent(doq) {
+        var backBttnContainer = root.find("#backBttnContainer"),
+            sideBarSections = root.find('#sideBarSections'),
+            sideBarInfo = root.find('#sideBarInfo'),
+            infoTitle = root.find('#infoTitle'),
+            infoArtist = root.find('#infoArtist'),
+            infoYear = root.find('#infoYear'),
+            assetContainer = root.find('#assetContainer'),
+            isBarOpen = false,
+            item,
+            fieldTitle,
+            fieldValue,
+            infoCustom,
+            i,
+            curr,
+            descriptionDrawer;
+
+        var opts = {}
+        opts.left = '0%';
+        sideBar.css('visibility', 'visible');
+        sideBar.animate(opts, 500, function () {
+            togglerImage.attr('src', tagPath + 'images/icons/Close.svg');
+        });
+
+        infoTitle.text(doq.Name);
+        infoArtist.text(doq.Metadata.Artist);
+        infoYear.text(doq.Metadata.Year);
+
+        assetContainer.empty();
+        $(".infoCustom").remove();
+        // add more information for the artwork if curator added in the authoring mode
+        for (item in doq.Metadata.InfoFields) {
+            if (doq.Metadata.InfoFields.hasOwnProperty(item)) {
+                fieldTitle = item;
+                fieldValue = doq.Metadata.InfoFields[item];
+                infoCustom = $(document.createElement('div'));
+                infoCustom.addClass('infoCustom');
+                infoCustom.text(fieldTitle + ': ' + fieldValue);
+                infoCustom.css({
+                    'color': '#' + PRIMARY_FONT_COLOR,
+                    //'font-family': FONT
+                });
+                infoCustom.appendTo(info);
+            }
+        }
+
+        // make sure the info text fits in the div (TODO is this necessary?)
+        TAG.Util.fitText(info, 1.1);
+
+        // create drawers
+        if (doq.Metadata.Description) {
+            descriptionDrawer = createDrawer("Description");
+            descriptionDrawer.contents.html(Autolinker.link(doq.Metadata.Description.replace(/\n/g, "<br />"), { email: false, twitter: false }));
+            if (IS_WINDOWS) {
+                var links = descriptionDrawer.find('a');
+                links.each(function (index, element) {
+                    $(element).replaceWith(function () {
+                        return $.text([this]);
+                    });
+                });
+            }
+            assetContainer.append(descriptionDrawer);
+        }
+        //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
+
+        info.css({
+            'overflow-y': 'auto',
+            'max-height': sideBar.height() * 2 / 5 - (info.offset().top - sideBar.offset().top) + 'px',
+
+        });
+
+        assetContainer.css({
+            'max-height': sideBarInfo.height() - info.height() + (info.offset().top - sideBar.offset().top) + 'px'
+        });
+    }
+    //sidebar stuff
+
+
     /**
      * Simulate a click on the RIN play button. Used by tour embedding code.
      * 
@@ -183,24 +422,48 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             return root;
         },
         startPlayback: function () { // need to call this to ensure the tour will play when you exit and re-enter a tour, since sliding functionality and audio playback don't cooperate
-            rin.processAll(null, rinPath).then(function () {
-                var options = 'systemRootUrl=' + rinPath + '/&autoplay=' + (ispagetoload ? 'false' : 'true') + '&loop=false';
-                // create player
-                player = rin.createPlayerControl(rinPlayer[0], options);
-                for (var key in tour.resources) {
-                    if (tour.resources.hasOwnProperty(key)) {
-                        if (typeof tour.resources[key].uriReference === 'string') {
-                            tour.resources[key].uriReference = TAG.Worktop.Database.fixPath(tour.resources[key].uriReference);
+            var sidebarDoqGuids = JSON.parse(tourObj.Metadata.RelatedArtworks);
+            var sidebarDoqs = {};
+
+            var doqsPolled = 0;
+            for (var i = 0; i < sidebarDoqGuids.length; i++) {
+                TAG.Worktop.Database.getDoq(sidebarDoqGuids[i], function (doq) {
+                    if (doq) {
+                        sidebarDoqs[doq.Identifier] = doq;
+                        doqsPolled++
+                    }
+
+                    if (doqsPolled === sidebarDoqGuids.length) {
+                        loadTour();
+                    }
+                },
+                    function () {
+                        console.log("error getting doq in tourplayer")
+                    }, function () {
+                        console.log("error getting doq in tourplayer .")
+                    });
+            }
+
+            function loadTour() {
+                rin.processAll(null, rinPath).then(function () {
+                    var options = 'systemRootUrl=' + rinPath + '/&autoplay=' + (ispagetoload ? 'false' : 'true') + '&loop=false';
+                    // create player
+                    player = rin.createPlayerControl(rinPlayer[0], options);
+                    for (var key in tour.resources) {
+                        if (tour.resources.hasOwnProperty(key)) {
+                            if (typeof tour.resources[key].uriReference === 'string') {
+                                tour.resources[key].uriReference = TAG.Worktop.Database.fixPath(tour.resources[key].uriReference);
+                            }
                         }
                     }
-                }
-                player.loadData(tour, function () { });
-                if (!ispagetoload) {
-                    player.screenplayEnded.subscribe(function () { // at the end of a tour, go back to the collections view
-                        setTimeout(goBack, 1000);
-                    });
-                }
-            });
+                    player.loadData(tour, function () { }, sidebarDoqs, loadSidebarContent);
+                    if (!ispagetoload) {
+                        player.screenplayEnded.subscribe(function () { // at the end of a tour, go back to the collections view
+                            setTimeout(goBack, 1000);
+                        });
+                    }
+                });
+            }
         }
     };
 

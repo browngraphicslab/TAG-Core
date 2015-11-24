@@ -1,4 +1,4 @@
-/*! RIN | http://research.microsoft.com/rin | 2014-08-20 */
+﻿/*! RIN | http://research.microsoft.com/rin | 2014-08-20 */
 (function() {
 
     var rin = window.rin || {};
@@ -1049,6 +1049,11 @@ window.rin = window.rin || {};
             // If running on IE 10/RT, enable multitouch support.
             if (window.navigator.msPointerEnabled && typeof (MSGesture) !== "undefined") {
                 var onmspointerdown = function (e) {
+
+                    if (self._orchestrator._orchestrator.loadSidebarContent) {
+                        self._orchestrator._orchestrator.loadSidebarContent(self._orchestrator._orchestrator.sidebarDoqs[self._orchestrator._experienceStream._esData.data.guid]);
+                    }
+
                     self._orchestrator.startInteractionMode();
                     self._orchestrator.onESEvent(rin.contracts.esEventIds.interactionActivatedEventId, null);
 
@@ -1103,7 +1108,11 @@ window.rin = window.rin || {};
             }
             else { // Not IE 10, use normal single touch handlers.
                 var handler = function (event) {
+                    if (self._orchestrator._orchestrator.loadSidebarContent) {
+                        self._orchestrator._orchestrator.loadSidebarContent(self._orchestrator._orchestrator.sidebarDoqs[self._orchestrator._experienceStream._esData.data.guid]);
+                    }
                     return self.touchHandler(event, cover);
+                    //BACON FOR TOUCH?!
                 };
                 self._userInterfaceControl.addEventListener("touchstart", handler, true);
                 self._userInterfaceControl.addEventListener("touchmove", handler, true);

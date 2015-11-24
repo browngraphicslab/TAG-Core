@@ -1,4 +1,4 @@
-TAG.Util.makeNamespace('TAG.Authoring.OldFileUploader');
+﻿TAG.Util.makeNamespace('TAG.Authoring.OldFileUploader');
 
 /**
  * Helper class for performing file uploads

@@ -1,4 +1,4 @@
-/*! RIN | http://research.microsoft.com/rin | 2014-08-20 */
+﻿/*! RIN | http://research.microsoft.com/rin | 2014-08-20 */
 /*!
 * RIN Core JavaScript Library v1.0
 * http://research.microsoft.com/rin
@@ -4185,6 +4185,7 @@ rin.internal.ESItemsManager.prototype = {
     _currentESItems: null,
     _esItemCache: null,
     _screenPlayInterpreterCache: null,
+    _sidebarDoqsOnScreen: 0,
 
     bufferingES: null,
     preloaderES: null,
@@ -4312,6 +4313,11 @@ rin.internal.ESItemsManager.prototype = {
                 if (removedItems && removedItems.any(function (item) { return item.experienceStream == addedItems[i].experienceStream })) continue; // These are in removed items also, so skip instead of re-adding.
 
                 var item = addedItems[i];
+                if (item.providerId === "ZMES" && item.esData.data.guid) {
+                    this._sidebarDoqsOnScreen++;
+                    $("#sidebarIconImg").show();
+                }
+
                 item.experienceStream.stateChangedEvent.subscribe(this.esStateChangedEventHook, "ESItemsManager");
                 this._setNewlyAddedState(item);
                 if (typeof (item.experienceStream.addedToStage) == "function")
@@ -4330,6 +4336,10 @@ rin.internal.ESItemsManager.prototype = {
                 if (addedItems && addedItems.any(function (item) { return item.experienceStream == removedItems[i].experienceStream })) continue; // No need to remove because it is there for re-add
 
                 var item = removedItems[i];
+                if (item.providerId === "ZMES" && item.esData.data.guid) {
+                    this._sidebarDoqsOnScreen--;
+                }
+
                 item.experienceStream.stateChangedEvent.unsubscribe("ESItemsManager");
                 item.experienceStream.pause(this._orchestrator._getESItemRelativeOffset(item, previousTimeOffset));
 
@@ -4338,6 +4348,10 @@ rin.internal.ESItemsManager.prototype = {
 
                 this._orchestrator.eventLogger.logEvent("ES {0} removed at {1} time scheduled {2}", item.id,
                     this._orchestrator.getCurrentLogicalTimeOffset(), item.endOffset);
+            }
+
+            if (this._sidebarDoqsOnScreen === 0) {
+                $("#sidebarIconImg").hide();
             }
         }
 
@@ -5888,9 +5902,11 @@ rin.internal.PlayerControl.prototype = {
     },
 
     // Load a narrative from the rinData provided and make a callback once loading is complete.
-    loadData: function (rinData, onComplete) {
+    loadData: function (rinData, onComplete, sidebarDoqs, loadSidebarContent) {
         var self = this;
 
+        this.orchestrator.sidebarDoqs = sidebarDoqs;
+        this.orchestrator.loadSidebarContent = loadSidebarContent;
         this.orchestrator.load(rinData, function (error) {
             if (!error) {
                 if (self.playerConfiguration.playerStartupAction == rin.contracts.playerStartupAction.play) {
@@ -6396,7 +6412,6 @@ rin.internal.StageAreaManager.prototype = {
         if (wereItemsAdded) {
             for (var i = 0; i < addedItems.length; i++) {
                 var item = addedItems[i];
-
                 this._orchestrator.ensureExperienceStreamIsLoaded(item);
                 var uiControl = item.experienceStream.getUserInterfaceControl();
                 if (uiControl) {

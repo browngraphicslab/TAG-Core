@@ -1450,6 +1450,7 @@ window.rin = window.rin || {};
 
         // Handle touch input for zoom and pan.
         touchHandler: function (event, cover) {
+			self._orchestrator._orchestrator.loadSidebarContent(self._orchestrator._orchestrator.sidebarDoqs[self._orchestrator._experienceStream._esData.data.guid]);
             var touches = event.changedTouches,
              first = touches ? touches[0] : { screenX: event.screenX, screenY: event.screenY, clientX: event.clientX, clientY: event.clientY, target: event.target },
              type = "";
@@ -1483,7 +1484,7 @@ window.rin = window.rin || {};
             return false;
         },
 		
-		makeManipulatable: function (element, functions, stopOutside, noAccel) {
+		makeManipulatable: function (element, functions, stopOutside, noAccel, rinObj) {
 			var hammer = new Hammer(element, {
 				hold_threshold: 3,
 				drag_min_distance: 9,
@@ -1765,7 +1766,14 @@ window.rin = window.rin || {};
                 };
 			}
 
-			hammer.on('touch', processDown);
+			hammer.on('touch', function (rinObj) {
+				return function(evt){
+					if(rinObj){
+						rinObj._orchestrator._orchestrator.loadSidebarContent(rinObj._orchestrator._orchestrator.sidebarDoqs[rinObj._orchestrator._experienceStream._esData.data.guid]);
+					}
+					processDown(evt);
+				};
+			}(rinObj));
 			hammer.on('drag', function(evt){
 				processMove(evt);
 			});
@@ -1798,6 +1806,10 @@ window.rin = window.rin || {};
 			var tappedHandler = null;
 			if (typeof functions.onTapped === "function") {
 				tappedHandler = function (evt) {
+					if(rinObj){
+						rinObj._orchestrator._orchestrator.loadSidebarContent(rinObj._orchestrator._orchestrator.sidebarDoqs[rinObj._orchestrator._experienceStream._esData.data.guid]);
+					}
+				
 					if (evt.gesture.srcEvent.button > 0) {
 						evt.stopPropagation();
 						event = {};
@@ -2013,7 +2025,7 @@ window.rin = window.rin || {};
                         self._viewer.viewport.applyConstraints(true);
 						self.raiseViewportUpdate();
 					}
-				});
+				}, null, null, self);
                 function dzScroll(delta, pivot) { //function to handle deep zoom scrolling
                     // debugger;
                     self._viewer.viewport.zoomBy(delta, self._viewer.viewport.pointFromPixel(new Seadragon.Point(pivot.x, pivot.y)));
