@@ -154,7 +154,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             descriptionDrawer,
             sidebarIconImg = root.find("#sidebarIconImg");
 
-        sidebarIconImg.attr("src", tagPath + 'images/icons/Close.svg');
+        sidebarIconImg.attr("src", tagPath + 'images/icons/sidebarIcon.png');
         sidebarIconImg.hide();
         
 
@@ -387,7 +387,11 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
 
         if (artmodeOptions) {
             artmode = new TAG.Layout.ArtworkViewer(artmodeOptions);
-            TAG.Util.UI.slidePageRightSplit(root, artmode.getRoot());
+
+            var newPageRoot = artmode.getRoot();
+            newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+            TAG.Util.UI.slidePageRightSplit(root, newPageRoot);
 
             currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
             currentPage.obj = artmode;

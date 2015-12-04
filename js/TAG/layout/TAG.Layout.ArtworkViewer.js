@@ -1086,7 +1086,11 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                     
                     //Create tag tourplayer (which will in turn create an ITE player)
                     var rinPlayer = new TAG.Layout.TourPlayer(rinData, prevCollection, prevInfo, options, tour);
-                    TAG.Util.UI.slidePageLeftSplit(root, rinPlayer.getRoot(), function () {
+
+                    var newPageRoot = rinPlayer.getRoot();
+                    newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+                    TAG.Util.UI.slidePageLeftSplit(root, newPageRoot, function () {
                         setTimeout(function () {
                             //var rindata = tour;
                             //ITEPlayer.setTourData(TAG.Util.RIN_TO_ITE(rindata));
