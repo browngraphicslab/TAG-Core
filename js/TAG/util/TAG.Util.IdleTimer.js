@@ -275,12 +275,18 @@ TAG.Util.IdleTimer = (function() {
         TAG.Util.Splitscreen.setOn(false);
         TELEMETRY_SESSION_ID = TAG.Util.IdCreator();
 
-        if(currentPage.name !== TAG.Util.Constants.pages.COLLECTIONS_PAGE || !currentPage.obj || !currentPage.obj.loadFirstCollection) {
-            catalog = new TAG.Layout.CollectionsPage();
-            TAG.Util.UI.slidePageRight(catalog.getRoot());
+        var isHomePageOn = TAG.Worktop.Database.getMuseumLoc();
+        if (isHomePageOn === true || isHomePageOn === "true") {
+            //TODO TRENT/TANAY
         } else {
-            removeIdleOverlay();
-            currentPage.obj.loadFirstCollection();
+
+            if (currentPage.name !== TAG.Util.Constants.pages.START_PAGE) {
+                catalog = new TAG.Layout.CollectionsPage();
+                TAG.Util.UI.slidePageRight(catalog.getRoot());
+            } else {
+                removeIdleOverlay();
+                currentPage.obj.loadFirstCollection();
+            }
         }
     }
 

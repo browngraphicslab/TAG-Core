@@ -15,7 +15,8 @@ TAG.Util.Constants = (function (options) {
         TOUR_PLAYER:      4,
         AUTHORING_HUB:    5,
         ARTWORK_EDITOR:   6,
-        TOUR_AUTHORING:   7
+        TOUR_AUTHORING: 7,
+        HOME_PAGE: 8
     };
 
 
