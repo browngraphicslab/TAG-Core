@@ -145,14 +145,32 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
 
     backButton.attr('src', tagPath + 'images/icons/Back.svg');
 
-    backButton.click(function () {    
-        TAG.Layout.StartPage(null, function (page) {
-            // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
-            // For now, we'll just hide the whole keywords div.
-           // $('#keywords').hide();
-            $('#keywords').empty();
-            TAG.Util.UI.slidePageRight(page);
-        });
+    backButton.click(function () {
+
+        var isHomePageOn = TAG.Worktop.Database.getMuseumLoc();
+        if (isHomePageOn === true || isHomePageOn === "true") {
+            isHomePageOn = true;
+        } else {
+            isHomePageOn = false;
+        }
+
+        if (isHomePageOn) {
+            TAG.Layout.HomePage(null, function (page) {
+                // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+                // For now, we'll just hide the whole keywords div.
+                // $('#keywords').hide();
+                $('#keywords').empty();
+                TAG.Util.UI.slidePageRight(page);
+            });
+        } else {
+            TAG.Layout.StartPage(null, function (page) {
+                // quick fix - something weird happens to the dropdownchecklists that reverts them to the visible multiselect on a page switch.
+                // For now, we'll just hide the whole keywords div.
+                // $('#keywords').hide();
+                $('#keywords').empty();
+                TAG.Util.UI.slidePageRight(page);
+            });
+        }
     });
 
     if (lockKioskMode == "true") {

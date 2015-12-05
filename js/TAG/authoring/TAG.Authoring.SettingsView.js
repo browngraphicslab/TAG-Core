@@ -1088,39 +1088,32 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * @method loadSplashScreen
      */
     function loadSplashScreen() {
-        //$(document).off();
         prepareViewer(true);
         clearRight();
-
-
-        // Load the start page, the callback will add it to the viewer when its done
-        //if (generalIsLoading) {
-        //    generalProgressCircle = displayLoadingSettings();
-        //} else {
-        //    generalProgressCircle && hideLoadingSettings(generalProgressCircle);
-        //}
-
         // Get DB Values
-        /*var alpha = TAG.Worktop.Database.getMuseumOverlayTransparency();
+        var alpha = TAG.Worktop.Database.getMuseumOverlayTransparency();
         var overlayColor = TAG.Worktop.Database.getMuseumOverlayColor();
         var name = TAG.Worktop.Database.getMuseumName();
         var loc = TAG.Worktop.Database.getMuseumLoc();
+        //var isStartPageOn = TAG.Worktop.Database.getMuseumLoc(); //TRENT TODO
         var info = TAG.Worktop.Database.getMuseumInfo();
         if (name === undefined) {
             name = "";
         }
+
         if (loc === undefined) {
             loc = "";
         }
+
         if (info === undefined) {
             info = "";
         }
-        var logoColor = TAG.Worktop.Database.getLogoBackgroundColor();
+
         var backgroundColor = TAG.Worktop.Database.getBackgroundColor();
-        var backgroundOpacity = TAG.Worktop.Database.getBackgroundOpacity();*/
+        var backgroundOpacity = TAG.Worktop.Database.getBackgroundOpacity();
         var primaryFontColor = TAG.Worktop.Database.getPrimaryFontColor();
         var secondaryFontColor = TAG.Worktop.Database.getSecondaryFontColor();
-        var fontFamily = TAG.Worktop.Database.getFontFamily();
+
         var idleTimerDuration = TAG.Worktop.Database.getIdleTimerDuration() / 60000;
 
         // TODO-KEYWORDS
@@ -1132,7 +1125,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         };
 
         // Create inputs
-        //var alphaInput = createTextInput(Math.floor(alpha * 100), true);
+        var alphaInput = createTextInput(Math.floor(alpha * 100), true);
         bgImgInput = $(createButton('Import', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
@@ -1146,6 +1139,11 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     'background-size': 'cover',
                 });
                 saveSplashScreen({
+                    alphaInput: alphaInput,                             //Overlay Transparency
+                    overlayColorInput: overlayColorInput,               //Overlay Color
+                    nameInput: nameInput,                               //Museum Name
+                    locInput: locInput,                                 //Museum Location
+                    infoInput: infoInput,                               //Museum Info
                     isKioskLocked: kioskIsLocked,
                     bgImgInput: bgImgInput,                             //Background image
                     primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
@@ -1236,21 +1234,12 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //nothing to record
         });
         bgImgInput.css('height', '35px');
-        /*var logoInput = createButton('Change Logo', function () {
-            changesHaveBeenMade = true;
-			uploadFile(TAG.Authoring.FileUploadTypes.Standard, function (urls) {
-                var url = urls[0];
-                logoInput.val(url);
-                $('#logo')[0].src = TAG.Worktop.Database.fixPath(url);
-            });
-        });*/
-        /*var overlayColorInput = createBGColorInput(overlayColor, '.infoDiv', null, function () { return alphaInput.val(); });
+
+        var overlayColorInput = createBGColorInput(overlayColor, '.infoDiv', null, function () { return alphaInput.val(); });
         var nameInput = createTextInput(TAG.Util.htmlEntityDecode(name), true, 40);
         var locInput = createTextInput(TAG.Util.htmlEntityDecode(loc), true, 45);
         var infoInput = createTextAreaInput(TAG.Util.htmlEntityDecode(info), true);
-        var logoColorInput = createBGColorInput(logoColor, '.logoContainer', null, function () { return 100; });
-        var backgroundColorInput = createBGColorInput(backgroundColor, '.background', null, function() { return backgroundOpacityInput.val(); });
-        var backgroundOpacityInput = createTextInput(backgroundOpacity, true);*/
+       
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
@@ -1354,10 +1343,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
-        //var font = fontFamilyInput.find(":selected").text();
-        //$('.primaryFont').css('font-family', fontFamily);
-        //$('.secondaryFont').css('font-family', fontFamily);
-
         // Handle changes
         primaryFontColorInput.focus(function () {
             $('#tagContainer').off().unbind();
@@ -1365,13 +1350,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         secondaryFontColorInput.focus(function () {
             $('#tagContainer').off().unbind();
         });
-        // Handle changes for autosaving
-        //primaryFontColorInput.on('change', function () { changesHaveBeenMade = true; });
-        //secondaryFontColorInput.on('change', function () { changesHaveBeenMade = true; });
-        //fontFamilyInput.on('change', function () { changesHaveBeenMade = true; });
-        //idleTimerDurationInput.on('change', function () { changesHaveBeenMade = true; });
 
-        /*onChangeUpdateNum(alphaInput, 0, 100, function (num) {
+        onChangeUpdateNum(alphaInput, 0, 100, function (num) {
             updateBGColor('.infoDiv', overlayColorInput.val(), num);
         });
         onChangeUpdateText(nameInput, '#museumName', 40);
@@ -1380,31 +1360,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         nameInput.keydown(function () {
             startPage.fixText();
-        });var museumLoc
+        });
         nameInput.change(function () {
             startPage.fixText();
         });
         onChangeUpdateText(locInput, '#subheading', 33);
         onChangeUpdateText(infoInput, '#museumInfo', 300);
-        onChangeUpdateNum(backgroundOpacityInput, 0, 100, function(num) {
-            updateBGColor('.background', backgroundColorInput.val(), num);
-        })*/
-
-
 
         var bgImage = createSetting('Background Image', bgImgInput);
-        /*var overlayAlpha = createSetting('Overlay Transparency (0-100)', alphaInput);
+        var overlayAlpha = createSetting('Overlay Transparency (0-100)', alphaInput);
         var overlayColorSetting = createSetting('Overlay Color', overlayColorInput);
         var museumName = createSetting('Museum Name', nameInput);
         var museumLoc = createSetting('Museum Location', locInput);
         var museumInfo = createSetting('Museum Info', infoInput);
-        var museumLogo = createSetting('Museum Logo', logoInput);
-        var logoColorSetting = createSetting('Museum Logo Background Color', logoColorInput);
-        var backgroundColorSetting = createSetting('Background Color', backgroundColorInput);
-        var backgroundOpacitySetting = createSetting('Background Opacity (0-100)', backgroundOpacityInput);*/
+
         var primaryFontColorSetting = createSetting('Primary Font Color', primaryFontColorInput);
         var secondaryFontColorSetting = createSetting('Secondary Font Color', secondaryFontColorInput);
-        //var fontFamilySetting = createSetting('Font Family', fontFamilyInput);
         var idleTimerDurationSetting = createSetting('Idle Timer Duration (in minutes)', idleTimerDurationInput);
 
         // Kiosk locked setting.
@@ -1459,18 +1430,13 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         settingsContainer.append(bgImage);
-        /*settingsContainer.append(overlayColorSetting);
+        settingsContainer.append(overlayColorSetting);
         settingsContainer.append(overlayAlpha);
         settingsContainer.append(museumName);
         settingsContainer.append(museumLoc);
         settingsContainer.append(museumInfo);
-        settingsContainer.append(museumLogo);
-        settingsContainer.append(logoColorSetting);
-        settingsContainer.append(backgroundColorSetting);
-        settingsContainer.append(backgroundOpacitySetting);*/
         settingsContainer.append(primaryFontColorSetting);
         settingsContainer.append(secondaryFontColorSetting);
-        //settingsContainer.append(fontFamilySetting);
         settingsContainer.append(idleTimerDurationSetting);
         settingsContainer.append(lockKioskSetting);
         settingsContainer.append(keywordsLabelContainer);
@@ -1485,32 +1451,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             secondaryFontColorInput.trigger("blur");
             primaryFontColorInput.trigger("blur");
         });
-
-        //currentMetadataHandler = function () {
-        //    /*if (locInput === undefined) {
-        //        locInput = "";
-        //    }
-        //    if (infoInput === undefined) {
-        //        infoInput = "";
-        //    }*/
-        //    saveSplashScreen({
-        //        /*alphaInput: alphaInput,                             //Overlay Transparency
-        //        overlayColorInput: overlayColorInput,               //Overlay Color
-        //        nameInput: nameInput,                               //Museum Name
-        //        locInput: locInput,                                 //Museum Location
-        //        infoInput: infoInput,                               //Museum Info
-        //        logoColorInput: logoColorInput, */                    //Logo background color
-        //        bgImgInput: bgImgInput,                             //Background image
-        //        /*logoInput: logoInput,                               //Logo image
-        //        backgroundColorInput: backgroundColorInput,         //Background Color
-        //        backgroundOpacityInput: backgroundOpacityInput, */    //Background Opacity
-        //        primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
-        //        secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
-        //        fontFamilyInput: fontFamilyInput,
-        //        //idleTimerDurationInput: idleTimerDurationInput
-        //    });
-        //};
-
 
 
         //to-do create save function for kiosk locking
@@ -1543,20 +1483,15 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveIdleTimerDuration(idleTimerDurationInput);
             //idleTimerDurationInput.text(idleDuration);
             saveSplashScreen({
-                //alphaInput: alphaInput,                             //Overlay Transparency
-                //overlayColorInput: overlayColorInput,               //Overlay Color
-                //nameInput: nameInput,                               //Museum Name
-                //locInput: locInput,                                 //Museum Location
-                //infoInput: infoInput,                               //Museum Info
-                //logoColorInput: logoColorInput,                     //Logo background color
+                alphaInput: alphaInput,                             //Overlay Transparency
+                overlayColorInput: overlayColorInput,               //Overlay Color
+                nameInput: nameInput,                               //Museum Name
+                locInput: locInput,                                 //Museum Location
+                infoInput: infoInput,                               //Museum Info
                 isKioskLocked: kioskIsLocked,
                 bgImgInput: bgImgInput,                             //Background image
-                //logoInput: logoInput,                               //Logo image
-                //backgroundColorInput: backgroundColorInput,         //Background Color
-                //backgroundOpacityInput: backgroundOpacityInput,    //Background Opacity
                 primaryFontColorInput: primaryFontColorInput,       //Primary Font Color
                 secondaryFontColorInput: secondaryFontColorInput,   //Secondary Font Color
-                //fontFamilyInput: fontFamilyInput,
                 idleTimerDurationInput: idleTimerDurationInput,
                 keywordSetsInputs: keywordSetsInputs // TODO-KEYWORDS
             });
@@ -1666,52 +1601,36 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
      * param function callback      function to be called after done
      */
     function saveSplashScreen(inputs, callback) {
-        //pCL = displayLoadingSettings();
-        //backButtonClicked && prepareNextView(false, null, null, "Saving...");
-        //generalIsLoading = true;
         clearRight();
         prepareViewer(true);
         prepareNextView(false, null, null, "Saving...");
 
-        /*var alpha = inputs.alphaInput.val()/100;
+        var alpha = inputs.alphaInput.val()/100;
         var overlayColor = inputs.overlayColorInput.val();
         var name = inputs.nameInput.val();
         var loc = inputs.locInput.val();
         var info = inputs.infoInput.val().replace('/\n\r?/g', '<br />');
-        var logoColor = inputs.logoColorInput.val();*/
+
         var bgImg = inputs.bgImgInput.val();
-        /*var logo = inputs.logoInput.val();
-        var backgroundColor = inputs.backgroundColorInput.val();
-        var backgroundOpacity = inputs.backgroundOpacityInput.val();*/
+
         var primaryFontColor = inputs.primaryFontColorInput.val();
         var secondaryFontColor = inputs.secondaryFontColorInput.val();
         var isKioskLocked = inputs.isKioskLocked;
-        //var fontFamily = inputs.fontFamilyInput.val();
-        //var baseFontSize = LADS.Util.getMaxFontSize('Test', 2, 100000000, 30, 0.1);
         var idleTimerDuration = inputs.idleTimerDurationInput.val() * 1000 * 60;
 
-
-        //inputs.idleTimerDurationInput.val(idleTimerDuration);
-        //TAG.Util.IdleTimer.TwoStageTimer().s1d = parseInt(idleTimerDuration);
         var options = {
-            //Name: name,
-            //OverlayColor: overlayColor,
-            //OverlayTrans: alpha,
-            //Location: loc,
-            //Info: info,
-            //IconColor: logoColor,
-            //BackgroundColor: backgroundColor,
-            //BackgroundOpacity: backgroundOpacity,
+            Name: name,
+            OverlayColor: overlayColor,
+            OverlayTrans: alpha,
+            Location: loc,
+            Info: info,
             PrimaryFontColor: primaryFontColor,
             SecondaryFontColor: secondaryFontColor,
             isKioskLocked: isKioskLocked,
-            //FontFamily: fontFamily,
-            //BaseFontSize: baseFontSize,
             IdleTimerDuration: idleTimerDuration,
 
         };
         if (bgImg) { options.Background = bgImg; }
-        //if (logo) options.Icon = logo;
 
         if (keywordSets) {
             options.KeywordSet1Title = keywordSets[0].name;
@@ -1724,16 +1643,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             options.KeywordSet2Shown = keywordSets[1].shown;
             options.KeywordSet3Shown = keywordSets[2].shown;
         }
-        
 
         //Change the settings in the database
         TAG.Worktop.Database.changeMain(options, function () {
-            //refreshSplashScreen();
-            //generalIsLoading = false;
-            //if (!(generalIsLoading || collectionsIsLoading ||
-            //    artworksIsLoading || associatedMediaIsLoading || toursIsLoading)) { //don't continue if more sections are still loading - wait for them to finish
-            //    backButtonClicked && backButtonClickHandler();
-            //};
             if (prevSelectedSetting && prevSelectedSetting !== nav[NAV_TEXT.general.text]) {
                 LADS.Worktop.Database.getMain();
                 return;
@@ -1743,8 +1655,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     loadGeneralView();
                 };
             }, error(loadGeneralView), null);
-            //hideLoading();
-            //hideLoadingSettings(pCL);
             if (callback) {
                 callback()
             }

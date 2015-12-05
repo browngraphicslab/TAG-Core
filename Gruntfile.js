@@ -101,6 +101,7 @@ var JSSRC = [
 		'js/TAG/worktop/TAG.Worktop.Database.js',              // TAGCORE
 		'js/TAG/artmode/TAG.AnnotatedImage.js',      
 		'js/TAG/auth/TAG.Auth.js',                             // TAGCORE
+        'js/TAG/layout/TAG.Layout.HomePage.js',                // TAGCORE
 		'js/TAG/layout/TAG.Layout.StartPage.js',               // TAGCORE
 		'js/TAG/layout/TAG.Layout.ArtworkViewer.js',           // TAGCORE
 		'js/TAG/layout/TAG.Layout.CollectionsPage.js',         // TAGCORE

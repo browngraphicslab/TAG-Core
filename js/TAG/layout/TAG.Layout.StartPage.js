@@ -12,12 +12,12 @@
 */
 TAG.Layout.StartPage = function (options, startPageCallback) {
     "use strict"; ////////////////////////////////////////////////
-    jQuery.data(document.body,"isKiosk",false)
+    jQuery.data(document.body, "isKiosk", false)
     SPENT_TIMER = new TelemetryTimer(); //global timer to measure time spent
     SETTINGSVIEW_TIMER = new TelemetryTimer(); //global timer to measure time spent in settings view
 
     var isPreview;
-    options && function () {isPreview = options.isPreview; }();
+    options && function () { isPreview = options.isPreview; }();
     options = TAG.Util.setToDefaults(options, TAG.Layout.StartPage.default_options);
     options.tagContainer = $("#tagRoot");
 
@@ -54,7 +54,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
     //PREVIEW STYLING
     isPreview && function () {
-        serverInput.css({ 'min-height': '0px','min-width': '0px',});
+        serverInput.css({ 'min-height': '0px', 'min-width': '0px', });
         serverSubmit.css({ 'min-height': '0px', 'min-width': '0px', });
         authoringInput.css({ 'min-height': '0px', 'min-width': '0px', });
         passwordSubmit.css({ 'min-height': '0px', 'min-width': '0px', });
@@ -83,7 +83,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     if (localStorage.ip && localStorage.ip.indexOf(':') !== -1) {
         localStorage.ip = localStorage.ip.split(':')[0];
     }
-    
+
     serverURL = 'http://' + (localStorage.ip ? localStorage.ip + ':8080' : "browntagserver.com:8080");
     tagContainer = options.tagContainer || $('body');
 
@@ -93,34 +93,34 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     //     authoringInput.css('opacity', '0.5');
     //     passwordSubmit.css('opacity', '0.5');
     // }
-    
+
     testConnection();
-    if(newUser){
+    if (newUser) {
         telemetryDialogDisplay();
     }
 
-    
+
     //applyCustomization();
-    function telemetryDialogDisplay(){
+    function telemetryDialogDisplay() {
         var tagContainer = $('#tagRoot');
-        var telemetryDialogoverlay = $(TAG.Util.UI.PopUpConfirmation(function(){
+        var telemetryDialogoverlay = $(TAG.Util.UI.PopUpConfirmation(function () {
             TELEMETRY_SWITCH = 'off';
             localStorage.tagTelemetry = "off";
             //telemetryDialogOverlay.remove();
         },
             "To improve the Touch Art Gallery experience, we're trying to collect more information about how users like you use our application. Do you mind us collecting information on your usage?",
-            "Yes, I mind",null,
-            function(){
+            "Yes, I mind", null,
+            function () {
                 TELEMETRY_SWITCH = 'on';
                 localStorage.tagTelemetry = "on";
                 //telemetryDialogOverlay.remove();
             },
-            tagContainer,null,null,true
+            tagContainer, null, null, true
         ));
 
-        
+
         root.append(telemetryDialogoverlay);
-        
+
         telemetryDialogoverlay.show();
         adjustHeights(document.getElementById("popupmessage"));
 
@@ -258,7 +258,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                 }
             },
             error: function (err) {
-                if(!timedOut) {
+                if (!timedOut) {
                     clearTimeout(connectionTimeout);
                     $.ajax({  // TODO: not a solid way to do this
                         url: internetURL,
@@ -273,7 +273,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                             }
                         },
                         error: function (err) {
-                            if(!timedOut) {
+                            if (!timedOut) {
                                 clearTimeout(connectionTimeout);
                                 tagContainer.empty();
                                 tagContainer.append((new TAG.Layout.InternetFailurePage("No Internet")).getRoot());
@@ -284,7 +284,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             }
         });
 
-        connectionTimeout = setTimeout(function() {
+        connectionTimeout = setTimeout(function () {
             timedOut = true;
             tagContainer.empty();
             tagContainer.append((new TAG.Layout.InternetFailurePage("Server Down")).getRoot());
@@ -308,11 +308,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         });
     }
 
-    var that = {};    
+    var that = {};
     var backgroundColor,
         logoContainer,
         touchHint,
-        handGif;    
+        handGif;
 
     /**
     * sets up the entire visual layout and images of the splash screen
@@ -340,55 +340,72 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             startPageCallback(root);
         }
 
-        TAG.Util.Constants.set("START_PAGE_SPLASH", tagPath+"images/birdtextile.jpg");
+        TAG.Util.Constants.set("START_PAGE_SPLASH", tagPath + "images/birdtextile.jpg");
         // if(!allowServerChange) {
         //  $('#serverTagBuffer').remove();
         // }
-    
+
         // if(!allowAuthoringMode){
         //     $('#authoringButtonBuffer').remove();
         // }
-        
+
         if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
             goToCollectionsButton.text("Go to Artwork");
         }
-        
+
         goToCollectionsButton.on('click', function () {
             jQuery.data(document.body, "isKiosk", true);
-            if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
-                TAG.Worktop.Database.getArtworks(function (result) {
-                    $.each(result, function (index, artwork) {
-                        if (artwork.Identifier === TAG.Worktop.Database.getLocked()) {
-                            if (artwork.Metadata.Type === "VideoArtwork") { // video                  
-                                var videoPlayer = TAG.Layout.VideoPlayer(artwork);
-                                TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
 
-                                currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
-                                currentPage.obj = videoPlayer;
-
-                            } else {
-                                var artworkViewer = TAG.Layout.ArtworkViewer({
-                                    doq: artwork,
-                                });
-                                var newPageRoot = artworkViewer.getRoot();
-                                newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
-
-                                TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
-
-                                currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
-                                currentPage.obj = artworkViewer;
-                            }
-                               
-                        }
-                    });
-                });
-
-                return false;
+            var isHomePageOn = TAG.Worktop.Database.getMuseumLoc();
+            if (isHomePageOn === true || isHomePageOn === "true") {
+                isHomePageOn = true;
             } else {
-                switchPage();
+                isHomePageOn = false;
+            }
+
+            if (isHomePageOn) {
+                goToCollectionsButton.off('click');
+                var homePage = TAG.Layout.HomePage(null, null); // TODO merging
+                TAG.Util.UI.slidePageLeft(homePage.getRoot());
+
+                currentPage.name = 8;
+                currentPage.obj = homePage;
+            } else {
+                if (TAG.Worktop.Database.getLocked() != undefined && TAG.Worktop.Database.getLocked() != "undefined") {
+                    TAG.Worktop.Database.getArtworks(function (result) {
+                        $.each(result, function (index, artwork) {
+                            if (artwork.Identifier === TAG.Worktop.Database.getLocked()) {
+                                if (artwork.Metadata.Type === "VideoArtwork") { // video                  
+                                    var videoPlayer = TAG.Layout.VideoPlayer(artwork);
+                                    TAG.Util.UI.slidePageLeftSplit(root, videoPlayer.getRoot());
+
+                                    currentPage.name = TAG.Util.Constants.pages.VIDEO_PLAYER;
+                                    currentPage.obj = videoPlayer;
+
+                                } else {
+                                    var artworkViewer = TAG.Layout.ArtworkViewer({
+                                        doq: artwork,
+                                    });
+                                    var newPageRoot = artworkViewer.getRoot();
+                                    newPageRoot.data('split', root.data('split') === 'R' ? 'R' : 'L');
+
+                                    TAG.Util.UI.slidePageLeftSplit(root, newPageRoot);
+
+                                    currentPage.name = TAG.Util.Constants.pages.ARTWORK_VIEWER;
+                                    currentPage.obj = artworkViewer;
+                                }
+
+                            }
+                        });
+                    });
+
+                    return false;
+                } else {
+                    switchPage();
+                }
             }
         });
-        
+
         setImagePaths(main);
         setUpCredits();
         setUpInfo(main);
@@ -409,15 +426,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             TAG.Util.UI.slidePageLeft(collectionsPage.getRoot());
 
             currentPage.name = 2; // TODO merging TAG.Util.Constants.pages.COLLECTIONS_PAGE;
-            currentPage.obj  = collectionsPage;
+            currentPage.obj = collectionsPage;
         }
 
         // Test for browser compatibility
-        if(!isBrowserCompatible()) {
+        if (!isBrowserCompatible()) {
             handleIncompatibleBrowser();
         }
-    }   
-    
+    }
+
     var saveClick = $.debounce(500, false, function (e) {
         var address = serverInput.val();
         switch (address) {
@@ -476,15 +493,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     });
 
     serverSubmit.on('click', function (e) { if (!isPreview) { saveClick(e) } });
-    serverInput.keypress(function(e){
+    serverInput.keypress(function (e) {
         if (e.which === 13 && !isPreview) {
             saveClick();
         }
     });
     serverSubmit.on("mousedown", function () {
-        serverSubmit.css({"background-color": PRIMARY_FONT_COLOR, "color": "black"});
+        serverSubmit.css({ "background-color": PRIMARY_FONT_COLOR, "color": "black" });
     });
-    
+
     passwordSubmit.on("mouseleave", function () {
         passwordSubmit.css({ "background-color": "transparent", "color": PRIMARY_FONT_COLOR });
 
@@ -499,7 +516,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             serverInput.attr('value', localStorage.ip);
         }
     });
-    var passwordClick = $.debounce(500, false, function(e){
+    var passwordClick = $.debounce(500, false, function (e) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -509,15 +526,15 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         //if(IS_WINDOWS) {
         TAG.Auth.checkPassword(authoringInput.val(), function () {
-                jQuery.data(document.body, "inKiosk", false);
-                enterAuthoringMode();
-            }, function () {
-                passwordError.html('Invalid Password. Please try again...');
-                passwordError.css({'visibility':'visible'});
-            }, function () {
-                passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
-                passwordError.css({'visibility':'visible', 'color': 'rgba(255, 255, 255)'});                    
-            });     
+            jQuery.data(document.body, "inKiosk", false);
+            enterAuthoringMode();
+        }, function () {
+            passwordError.html('Invalid Password. Please try again...');
+            passwordError.css({ 'visibility': 'visible' });
+        }, function () {
+            passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
+            passwordError.css({ 'visibility': 'visible', 'color': 'rgba(255, 255, 255)' });
+        });
         //} 
         /**
         else {
@@ -529,14 +546,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     });
 
 
-    function authClick(){
+    function authClick() {
         passwordSubmit.on('click', passwordClick);
 
         passwordSubmit.on("mousedown", function () {
             passwordSubmit.css({ "background-color": PRIMARY_FONT_COLOR, "color": "black" });
         });
-    
-    //Enter can be pressed to submit the password form...
+
+        //Enter can be pressed to submit the password form...
         authoringInput.keypress(function (e) {
             if (e.which === 13) {  // enter key press
                 e.preventDefault();
@@ -545,16 +562,16 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
                     enterAuthoringMode()
                 }, function () {
                     passwordError.html('Invalid Password. Please try again...');
-                    passwordError.css({'visibility':'visible'});
+                    passwordError.css({ 'visibility': 'visible' });
                 }, function () {
                     passwordError.html('There was an error contacting the server. Contact a server administrator if this error persists.');
-                    passwordError.css({'visibility':'visible'});
+                    passwordError.css({ 'visibility': 'visible' });
                 });
             }
         });
     }
 
-      
+
     var serverCircle = $(document.createElement('img'));
     serverCircle.css({
         'width': '20px',
@@ -564,11 +581,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         'margin-top': '2.5%',
         'float': 'right'
     });
-    serverCircle.attr('src', tagPath+'images/icons/progress-circle.gif');
+    serverCircle.attr('src', tagPath + 'images/icons/progress-circle.gif');
 
 
 
-       
+
     /**
     * Checks if TAG is compatible with the current browser.
     *
@@ -582,14 +599,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //doNothing("userAgent: " + navigator.userAgent);
 
         // Android and iOS are incompatible
-        if(userAgent.indexOf('android') >= 0 || userAgent.indexOf('iphone') >= 0 || userAgent.indexOf('ipad') >= 0 || userAgent.indexOf('ipod') >= 0) {
-            if(userAgent.indexOf('android') >= 0) {
+        if (userAgent.indexOf('android') >= 0 || userAgent.indexOf('iphone') >= 0 || userAgent.indexOf('ipad') >= 0 || userAgent.indexOf('ipod') >= 0) {
+            if (userAgent.indexOf('android') >= 0) {
                 doNothing("Detected Android Device. Unsupported browser.");
             } else if (userAgent.indexOf('iphone') >= 0) {
                 doNothing("Detected iPhone. Unsupported browser.");
             } else if (userAgent.indexOf('ipad') >= 0) {
                 doNothing("Detected iPad. Unsupported browser.");
-            } else if(userAgent.indexOf('ipod') >= 0) {
+            } else if (userAgent.indexOf('ipod') >= 0) {
                 doNothing("Detected iPod. Unsupported browser.");
             }
             return false;
@@ -601,41 +618,41 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             var version = 0;
 
             // Opera is incompatible
-            if(browser.indexOf('opera') >= 0 || userAgent.indexOf('opr') >= 0) {
+            if (browser.indexOf('opera') >= 0 || userAgent.indexOf('opr') >= 0) {
                 doNothing("Detected Opera. Unsupported browser.");
                 return false;
-            } 
-            // Chrome 31+
-            else if(browser.indexOf('chrome') >= 0) {
+            }
+                // Chrome 31+
+            else if (browser.indexOf('chrome') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
                 doNothing("Detected Chrome Version: " + version);
-                return(version >= 31);
-            } 
-            // Safari 7+
-            else if(browser.indexOf('safari') >= 0) {
+                return (version >= 31);
+            }
+                // Safari 7+
+            else if (browser.indexOf('safari') >= 0) {
                 var detailedVersion = browser.substring(browser.indexOf(' ', browser.indexOf(' ') + 1) + 1);
                 version = detailedVersion.substring(0, detailedVersion.indexOf("."));
                 doNothing("Detected Safari Version: " + version);
-                return(version >= 7);
-            } 
-            // Firefox 28+
-            else if(browser.indexOf('firefox') >= 0) {
+                return (version >= 7);
+            }
+                // Firefox 28+
+            else if (browser.indexOf('firefox') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
                 doNothing("Detected Firefox Version: " + version);
-//                var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not currently well supported in Firefox. When viewing artwork, please use two-finger scroll."),"OK");
-//                root.append(popupMsg);
-//                popupMsg.show();
+                //                var popupMsg = $(TAG.Util.UI.popUpMessage(null,"Pinch zoom is not currently well supported in Firefox. When viewing artwork, please use two-finger scroll."),"OK");
+                //                root.append(popupMsg);
+                //                popupMsg.show();
                 //document.getElementsByName("viewport")[0].content="width=device-width, maximum-scale=1.0";
                 //$('meta[name=viewport]').attr('content','width='+$(window).width()+',user-scalable=no, maximum-scale=1.0');
-                return(version >= 28);
-            } 
-            // Internet Explorer 10+
-            else if(browser.indexOf('msie') >= 0 || browser.indexOf('ie') >= 0) {
+                return (version >= 28);
+            }
+                // Internet Explorer 10+
+            else if (browser.indexOf('msie') >= 0 || browser.indexOf('ie') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
                 //doNothing("Detected IE Version: " + version);
-                return(version >= 10);
-            } 
-            // Other browsers are incompatible
+                return (version >= 10);
+            }
+                // Other browsers are incompatible
             else {
                 doNothing("Unsupported browser.");
                 return false;
@@ -652,16 +669,16 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @return Browser name followed by version e.g. "Chrome 34.0.1847.116"
     */
     function getBrowserVersion() {
-        var ua= navigator.userAgent, tem, 
-        M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*([\d\.]+)/i) || [];
+        var ua = navigator.userAgent, tem,
+        M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*([\d\.]+)/i) || [];
 
-        if(/trident/i.test(M[1])){
-            tem=  /\brv[ :]+(\d+(\.\d+)?)/g.exec(ua) || [];
-            return 'IE '+(tem[1] || '');
+        if (/trident/i.test(M[1])) {
+            tem = /\brv[ :]+(\d+(\.\d+)?)/g.exec(ua) || [];
+            return 'IE ' + (tem[1] || '');
         }
 
-        M= M[2]? [M[1], M[2]]:[navigator.appName, navigator.appVersion, '-?'];
-        if((tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+        M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+        if ((tem = ua.match(/version\/([\.\d]+)/i)) != null) M[2] = tem[1];
 
         return M.join(' ');
     }
@@ -713,7 +730,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         var safariIconLink = $(document.createElement('a')).attr('href', 'http://www.apple.com/safari');
 
         var linksArray = [ieIconLink, chromeIconLink, firefoxIconLink, safariIconLink];
-        for(var i = 0; i < linksArray.length; i++) {
+        for (var i = 0; i < linksArray.length; i++) {
             var current = linksArray[i]
             current.attr('target', '_blank'); // Set target="_blank" to open links in new tab
             current.addClass('browserIconLink'); // Set the corresponding CSS class to each link
@@ -722,10 +739,10 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         browserIcons.append(ieIconLink, chromeIconLink, firefoxIconLink, safariIconLink);
 
         // Browser Icon Images
-        var ieIcon = $(document.createElement('img')).attr('title', 'Internet Explorer').attr('src', tagPath+'images/icons/browserIcons/ie.png');
-        var chromeIcon = $(document.createElement('img')).attr('title', 'Google Chrome').attr('src', tagPath+'images/icons/browserIcons/chrome.png'); 
-        var firefoxIcon = $(document.createElement('img')).attr('title', 'Firefox').attr('src', tagPath+'images/icons/browserIcons/firefox.png');
-        var safariIcon = $(document.createElement('img')).attr('title', 'Safari').attr('src', tagPath+'images/icons/browserIcons/safari.png');
+        var ieIcon = $(document.createElement('img')).attr('title', 'Internet Explorer').attr('src', tagPath + 'images/icons/browserIcons/ie.png');
+        var chromeIcon = $(document.createElement('img')).attr('title', 'Google Chrome').attr('src', tagPath + 'images/icons/browserIcons/chrome.png');
+        var firefoxIcon = $(document.createElement('img')).attr('title', 'Firefox').attr('src', tagPath + 'images/icons/browserIcons/firefox.png');
+        var safariIcon = $(document.createElement('img')).attr('title', 'Safari').attr('src', tagPath + 'images/icons/browserIcons/safari.png');
 
         ieIconLink.append(ieIcon);
         chromeIconLink.append(chromeIcon);
@@ -734,31 +751,31 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         $('#browserIcons a img').addClass('browserIcon');
     }
-    
+
     /**
     * adjusts the text to fit the screen size
     * @method fixText
     */
     function fixText() { // TODO fix this up, make it cleaner
-            var nameDivSize,
-                nameSpanSize,
-                fontSizeSpan,
-                subheadingFont;
-            if (TAG.Util.elementInDocument(museumName)) {
-                subheadingFont = parseInt($(museumLoc).css('font-size'), 10);
-                nameDivSize = $(museumName).height();
-                fontSizeSpan = $(museumName).height();
-                
-                var museumNameSpan = document.getElementById("museumNameSpan"); //can't seem to find this variable in scope
-                $(museumNameSpan).css('height', nameSpanSize);               
-            }
+        var nameDivSize,
+            nameSpanSize,
+            fontSizeSpan,
+            subheadingFont;
+        if (TAG.Util.elementInDocument(museumName)) {
+            subheadingFont = parseInt($(museumLoc).css('font-size'), 10);
+            nameDivSize = $(museumName).height();
+            fontSizeSpan = $(museumName).height();
+
+            var museumNameSpan = document.getElementById("museumNameSpan"); //can't seem to find this variable in scope
+            $(museumNameSpan).css('height', nameSpanSize);
         }
+    }
 
     /**
     * initializes the handlers for various 'click' functions including setting up a server
     * @method initializeHandlers
     */
-    function initializeHandlers(){
+    function initializeHandlers() {
         logoContainer.on('click', function (evt) {
             evt.stopPropagation();
         });
@@ -779,7 +796,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             evt.stopPropagation();
         });
         goToCollectionsButton.on("mousedown", function () {
-            goToCollectionsButton.css({"background-color": "transparent", "color": "white"});
+            goToCollectionsButton.css({ "background-color": "transparent", "color": "white" });
         });
     }
 
@@ -789,14 +806,14 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @method setImagePaths
     * @param {Object} main    contains all the image links
     */
-    function setImagePaths(main){
+    function setImagePaths(main) {
         var fullScreen,
             overlayColor,
             overlayTransparency,
             imageBgColor,
             logo;
-            
-            
+
+
         // set image paths
         // root.find('#expandImage').attr('src', tagPath+'images/icons/Left.png');
         // root.find('#handGif').attr('src', tagPath+'images/RippleNewSmall.gif');
@@ -818,12 +835,12 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // logo.attr('src', TAG.Worktop.Database.fixPath(main.Metadata["Icon"]));
     }
 
-    
+
     /**
     * Sets up the credits box with its content including text and images. Also includes function for animation of credits.
     * @method setUpCredits
     */
-    function setUpCredits(){
+    function setUpCredits() {
         var brownInfoBox,
             expandInfoButton,
             expandImage,
@@ -856,7 +873,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
 
         microsoftLogo = root.find('#msLogo');
         // microsoftLogo.attr('id', 'microsoftLogo');
-        microsoftLogo.attr('src', tagPath+'images/microsoft_logo_transparent.png');
+        microsoftLogo.attr('src', tagPath + 'images/microsoft_logo_transparent.png');
 
         brownLogo = root.find('#brownLogo');
         brownLogo.attr('src', tagPath + 'images/brown_logo_transparent.png');
@@ -896,16 +913,16 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // }
     }
 
-    
+
     /**
     * sets up the info div which contains all the museum information
     * @method setUpInfo
     * @param {Object} main    contains all the museum information
     */
-    function setUpInfo(main){
+    function setUpInfo(main) {
         // var infoTextHolder,
         //     infoDiv;
-        
+
         // infoTextHolder = root.find('#infoTextHolder');
         // infoDiv = root.find('#infoDiv');
         // infoDiv.css({
@@ -926,26 +943,26 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // var color = '#' + main.Metadata["PrimaryFontColor"];
         var color = PRIMARY_FONT_COLOR;
         var secColor = SECONDARY_FONT_COLOR;
-        $('.primaryFont').css({ 
+        $('.primaryFont').css({
             'color': color
             //'font-family': main.Metadata["FontFamily"]
         });
 
-        $('.secondaryFont').css({ 
+        $('.secondaryFont').css({
             'color': secColor
             //'font-family': main.Metadata["FontFamily"]
         });
 
         serverInput.css({
             'border-color': color,
-            'color' : color
+            'color': color
         });
         serverSubmit.css({
             'border-color': color
         });
         authoringInput.css({
             'border-color': color,
-            'color' : color
+            'color': color
         });
         passwordSubmit.css({
             'border-color': color
@@ -963,7 +980,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
     * @method setUpMuseumInfo
     * @param {Object} main     contains all the museum information
     */
-    function setUpMuseumInfo(main){
+    function setUpMuseumInfo(main) {
         // var museumName,
         //     museumNameSpan,
         //     tempName,
@@ -976,7 +993,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         //     primaryFontColor,
         //     secondaryFontColor;
 
-        
+
         // primaryFontColor = options.primaryFontColor ? options.primaryFontColor : main.Metadata["PrimaryFontColor"];
         // secondaryFontColor = options.secondaryFontColor ? options.secondaryFontColor : main.Metadata["SecondaryFontColor"];
         // museumName = root.find('#museumName');
@@ -1011,11 +1028,11 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         // } else {
         //     museumInfoSpan.html(Autolinker.link(tempInfo , {email: false, twitter: false}));
         // }
-        
+
         // $(primaryFont).css({ 
         //     'color': '#' + primaryFontColor,
         //     'font-family': main.Metadata["FontFamily"]
-            
+
         // });
         // $(secondaryFont).css({
         //     'color': '#' + secondaryFontColor,
@@ -1029,13 +1046,13 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      * @method openDialog
      */
     function openDialog() {
-         authClick();
+        authClick();
 
-         if(localStorage.ip === 'tagtestserver.cloudapp.net') {
-             $('#authoringInput').attr('value', 'Test1234');
+        if (localStorage.ip === 'tagtestserver.cloudapp.net') {
+            $('#authoringInput').attr('value', 'Test1234');
         } else if (localStorage.ip === 'localhost') {
-             $('#authoringInput').attr('value', 'admin');
-         }
+            $('#authoringInput').attr('value', 'admin');
+        }
     }
 
     /**Loads authoring mode Settings View
@@ -1043,7 +1060,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
      */
     function enterAuthoringMode() {
         var timer = new TelemetryTimer();
-        goToCollectionsButton.on('click', function() {;});
+        goToCollectionsButton.on('click', function () {; });
         // authoringButtonContainer.off('click');
         var authoringMode = new TAG.Authoring.SettingsView();
         TAG.Util.UI.slidePageLeft(authoringMode.getRoot(), function () {
@@ -1056,7 +1073,7 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
             SPENT_TIMER.restart();
         });
     }
- 
+
     /**
     * @method getRoot
     * @return    the root of the splash screen DOM

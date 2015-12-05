@@ -396,9 +396,9 @@
             
         } else { // otherwise, load to start page
             currentPage.name = TAG.Util.Constants.pages.START_PAGE;
-            currentPage.obj  = null;
+            currentPage.obj = null;
 
-            TAG.Layout.StartPage({ newUser: newUser }, function (page) {
+            TAG.Layout.StartPage({ newUser: newUser}, function (page) {
                 tagContainer.append(page);
             });
         }

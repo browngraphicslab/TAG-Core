@@ -5927,6 +5927,11 @@ rin.internal.PlayerControl.prototype = {
 
     // Play the narrative at the given offset of the screenplay specified.
     play: function (offset, screenPlayId) {
+        var sidebarDiv = $("#sideBar");
+        if (sidebarDiv) {
+            sidebarDiv.hide();
+            sidebarDiv.data({ isOpen: false, isHidden: true });
+        }
         this.orchestrator.play(offset, screenPlayId);
     },
 
@@ -7515,6 +7520,12 @@ rin.internal.ui.SliderBase = function (controlPlaceHolder, controlElement, isVer
 
 
     this.sliderContainer.bind("changeValue", function (type, event) {
+        var sidebarDiv = $("#sideBar");
+        if (sidebarDiv) {
+            sidebarDiv.hide();
+            sidebarDiv.data({ isOpen: false, isHidden: true });
+        }
+
         var sliderOffset = self.sliderContainer.offset(),
             sender = event.currentTarget,
             valueInPercent;

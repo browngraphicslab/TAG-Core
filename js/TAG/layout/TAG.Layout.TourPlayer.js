@@ -157,13 +157,14 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         sidebarIconImg.attr("src", tagPath + 'images/icons/sidebarIcon.png');
         sidebarIconImg.hide();
         
-
-        sideBar.css('visibility', 'hidden');
+        sideBar.css('visibility', 'visible');
+        sideBar.hide();
+        sideBar.data({ isOpen: false, isHidden: true });
 
         sideBarInfo.css({
             'height': sideBarSections.height() - 25 + 'px'
         });
-        togglerImage.attr("src", tagPath + 'images/icons/Close.svg');
+        togglerImage.attr("src", tagPath + 'images/icons/Open.svg');
 
         infoTitle.css({
             'color': '#' + PRIMARY_FONT_COLOR,
@@ -191,12 +192,22 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         // toggler to hide/show sidebar
         toggler.on('click', function () {
             var opts = {}
-            opts.left = '-' + (0.22*screenWidth) + 'px';
-            isBarOpen = !isBarOpen;
+            var isOpen = sideBar.data("isOpen");
+
+            if (isOpen) {
+                opts.left = '-' + (0.22 * screenWidth) + 'px';
+            } else {
+                opts.left = '0%'; 
+            }
 
             sideBar.animate(opts, 500, function () {
-                togglerImage.attr('src', tagPath + 'images/icons/Close.svg');
-                sideBar.css('visibility', 'hidden');
+                if (isOpen) {
+                    togglerImage.attr('src', tagPath + 'images/icons/Open.svg');
+                    sideBar.data({ isOpen: false });
+                } else {
+                    togglerImage.attr('src', tagPath + 'images/icons/Close.svg');
+                    sideBar.data({ isOpen: true })
+                }
             });
         });
     }
@@ -284,13 +295,6 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             curr,
             descriptionDrawer;
 
-        var opts = {}
-        opts.left = '0%';
-        sideBar.css('visibility', 'visible');
-        sideBar.animate(opts, 500, function () {
-            togglerImage.attr('src', tagPath + 'images/icons/Close.svg');
-        });
-
         infoTitle.text(doq.Name);
         infoArtist.text(doq.Metadata.Artist);
         infoYear.text(doq.Metadata.Year);
@@ -341,6 +345,34 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         assetContainer.css({
             'max-height': sideBarInfo.height() - info.height() + (info.offset().top - sideBar.offset().top) + 'px'
         });
+
+        if (sideBar.data("isHidden")) {
+            sideBar.css({
+                "left": '-' + (0.22 * screenWidth) + 'px'
+            });
+            togglerImage.attr('src', tagPath + 'images/icons/Open.svg');
+            sideBar.show();
+
+            var opts = {}
+            opts.left = '0%';
+            sideBar.animate(opts, 500, function () {
+                togglerImage.attr('src', tagPath + 'images/icons/Close.svg');
+            });
+
+            sideBar.data({ isOpen: true, isHidden: false });
+        } else {
+            if (!sideBar.data("isOpen") && sideBar.data("artworkGuid") && sideBar.data("artworkGuid") === doq.Metadata.artworkGuid) {
+                sideBar.data({ isOpen: false });
+            } else if (!sideBar.data("isOpen") && sideBar.data("artworkGuid") && sideBar.data("artworkGuid") !== doq.Metadata.artworkGuid) {
+                var opts = {}
+                opts.left = '0%';
+                sideBar.animate(opts, 500, function () {
+                    togglerImage.attr('src', tagPath + 'images/icons/Close.svg');
+                });
+                sideBar.data({ isOpen: true });
+            }
+        }
+        sideBar.data({ artworkGuid: doq.Metadata.artworkGuid });
     }
     //sidebar stuff
 
