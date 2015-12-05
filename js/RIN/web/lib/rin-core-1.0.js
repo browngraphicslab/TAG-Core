@@ -6038,6 +6038,11 @@ window.rin = window.rin || {};
 
         // Play the narrative at the given offset of the screenplay specified.
         play: function (offset, screenPlayId) {
+            var sidebarDiv = $("#sideBar");
+            if (sidebarDiv) {
+                sidebarDiv.hide();
+                sidebarDiv.data({ isOpen: false, isHidden: true });
+            }
             this.orchestrator.play(offset, screenPlayId);
         },
 
@@ -7659,6 +7664,12 @@ window.rin = window.rin || {};
         };
 
         this.sliderContainer.bind("changeValue", function (type, event) {
+            var sidebarDiv = $("#sideBar");
+            if (sidebarDiv) {
+                sidebarDiv.hide();
+                sidebarDiv.data({ isOpen: false, isHidden: true });
+            }
+
             var sliderOffset = self.sliderContainer.offset(),
                 sender = event.currentTarget,
                 valueInPercent;
