@@ -172,8 +172,8 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             });
         }
     });
-
-    if (lockKioskMode == "true") {
+    var isHomePageOn = TAG.Worktop.Database.getMuseumLoc();
+    if (lockKioskMode == "true" && ! isHomePageOn) {
         doNothing("kiosk mode locked, back button disabled")
         backButton.css('display', 'none');
     } else {

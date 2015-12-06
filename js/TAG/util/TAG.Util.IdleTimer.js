@@ -277,7 +277,9 @@ TAG.Util.IdleTimer = (function() {
 
         var isHomePageOn = TAG.Worktop.Database.getMuseumLoc();
         if (isHomePageOn === true || isHomePageOn === "true") {
-            //TODO TRENT/TANAY
+            var homepage = new TAG.Layout.HomePage();
+            TAG.Util.UI.slidePageRight(homepage.getRoot());
+            removeIdleOverlay();
         } else {
 
             if (currentPage.name !== TAG.Util.Constants.pages.START_PAGE) {
