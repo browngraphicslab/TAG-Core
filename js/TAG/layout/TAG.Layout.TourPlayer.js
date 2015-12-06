@@ -461,6 +461,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             var sidebarDoqGuids = JSON.parse(tourObj.Metadata.RelatedArtworks);
             var sidebarDoqs = {};
 
+            if (sidebarDoqGuids.length === 0) {
+                loadTour();
+            }
             var doqsPolled = 0;
             for (var i = 0; i < sidebarDoqGuids.length; i++) {
                 TAG.Worktop.Database.getDoq(sidebarDoqGuids[i], function (doq) {

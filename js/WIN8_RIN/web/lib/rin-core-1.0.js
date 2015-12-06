@@ -4338,6 +4338,12 @@ rin.internal.ESItemsManager.prototype = {
                 var item = removedItems[i];
                 if (item.providerId === "ZMES" && item.esData.data.guid) {
                     this._sidebarDoqsOnScreen--;
+
+                    var sidebarDiv = $("#sideBar");
+                    if (sidebarDiv && sidebarDiv.data("artworkGuid") === item.esData.data.guid) {
+                        sidebarDiv.hide();
+                        sidebarDiv.data({ isOpen: false, isHidden: true });
+                    }
                 }
 
                 item.experienceStream.stateChangedEvent.unsubscribe("ESItemsManager");

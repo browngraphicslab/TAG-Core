@@ -187,6 +187,13 @@
             // If running on IE 10/RT, enable multitouch support.
             if (window.navigator.msPointerEnabled && typeof (MSGesture) !== "undefined") {
                 var immsgesturedown = function (e) {
+
+                    var sidebarDiv = $("#sideBar");
+                    if (sidebarDiv) {
+                        sidebarDiv.hide();
+                        sidebarDiv.data({ isOpen: false, isHidden: true });
+                    }
+
                     self._orchestrator.startInteractionMode();
                     self._orchestrator.onESEvent(rin.contracts.esEventIds.interactionActivatedEventId, null);
 
@@ -247,6 +254,12 @@
                 //Add the event listener for detecting interactions
                 var immousedown = function (event) {
                     /// <summary>Bind the mouse down to raise an interaction event</summary>
+
+                    var sidebarDiv = $("#sideBar");
+                    if (sidebarDiv) {
+                        sidebarDiv.hide();
+                        sidebarDiv.data({ isOpen: false, isHidden: true });
+                    }
 
                     cover.show();
 

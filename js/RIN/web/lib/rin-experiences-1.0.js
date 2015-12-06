@@ -188,6 +188,11 @@
             // If running on IE 10/RT, enable multitouch support.
             if (window.navigator.msPointerEnabled && typeof (MSGesture) !== "undefined") {
                 var immsgesturedown = function (e) {
+                    var sidebarDiv = $("#sideBar");
+                    if (sidebarDiv) {
+                        sidebarDiv.hide();
+                        sidebarDiv.data({ isOpen: false, isHidden: true });
+                    }
                     self._orchestrator.startInteractionMode();
                     self._orchestrator.onESEvent(rin.contracts.esEventIds.interactionActivatedEventId, null);
 
@@ -247,7 +252,12 @@
 			
 			// enable hammer
 				this.makeManipulatable(this._image, {
-					onManipulate: function (res) {
+				    onManipulate: function (res) {
+				        var sidebarDiv = $("#sideBar");
+				        if (sidebarDiv) {
+				            sidebarDiv.hide();
+				            sidebarDiv.data({ isOpen: false, isHidden: true });
+				        }
 						//var diffx = event.x - this.lastTouchPoint.x;
                         //var diffy = event.y - this.lastTouchPoint.y;
 						var diffx = res.translation.x;
@@ -270,7 +280,12 @@
 					}
 				});
                 //Add the event listener for detecting interactions
-                var immousedown = function (event) {
+				var immousedown = function (event) {
+				    var sidebarDiv = $("#sideBar");
+				    if (sidebarDiv) {
+				        sidebarDiv.hide();
+				        sidebarDiv.data({ isOpen: false, isHidden: true });
+				    }
                     event.preventDefault();
                     /// <summary>Bind the mouse down to raise an interaction event</summary>
                     
@@ -447,6 +462,12 @@
 			// mousedown
 			var dragStart;
 			function processDown(evt) {
+			    var sidebarDiv = $("#sideBar");
+			    if (sidebarDiv) {
+			        sidebarDiv.hide();
+			        sidebarDiv.data({ isOpen: false, isHidden: true });
+			    }
+
 				lastScale = 1;
 				isDown = true;
 				dragStart = evt.gesture.center;
