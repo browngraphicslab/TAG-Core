@@ -421,7 +421,7 @@ TAG.Layout.HomePage = function (options, startPageCallback) {
 
         // set image paths
         root.find('#expandImage').attr('src', tagPath + 'images/icons/Left.png');
-        root.find('#handGif').attr('src', tagPath + 'images/RippleNewSmall.gif');
+        root.find('#handGif').attr('src', tagPath + 'images/taglogo.png');
 
         fullScreen = root.find('#background');
         fullScreen.css('background-image', "url(" + TAG.Worktop.Database.fixPath(main.Metadata["BackgroundImage"]) + ")");
