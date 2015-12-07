@@ -1356,13 +1356,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         onChangeUpdateText(nameInput, '#museumName', 40);
         nameInput.keyup(function () {
-            startPage.fixText();
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
         });
         nameInput.keydown(function () {
-            startPage.fixText();
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
         });
         nameInput.change(function () {
-            startPage.fixText();
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
         });
         onChangeUpdateText(locInput, '#subheading', 33);
         onChangeUpdateText(infoInput, '#museumInfo', 300);
