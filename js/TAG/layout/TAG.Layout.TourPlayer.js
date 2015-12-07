@@ -279,6 +279,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
     }
 
     function loadSidebarContent(doq) {
+        if (!doq) {
+            return;
+        }
         var backBttnContainer = root.find("#backBttnContainer"),
             sideBarSections = root.find('#sideBarSections'),
             sideBarInfo = root.find('#sideBarInfo'),
@@ -301,6 +304,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
 
         assetContainer.empty();
         $(".infoCustom").remove();
+
         // add more information for the artwork if curator added in the authoring mode
         for (item in doq.Metadata.InfoFields) {
             if (doq.Metadata.InfoFields.hasOwnProperty(item)) {
@@ -465,10 +469,26 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                 loadTour();
             }
             var doqsPolled = 0;
+
             for (var i = 0; i < sidebarDoqGuids.length; i++) {
                 TAG.Worktop.Database.getDoq(sidebarDoqGuids[i], function (doq) {
                     if (doq) {
-                        sidebarDoqs[doq.Identifier] = doq;
+                        var validDoq = false;
+                        for (var item in doq.Metadata.InfoFields) {
+                            if (doq.Metadata.InfoFields.hasOwnProperty(item)) {
+                                validDoq = true;
+                                break;
+                            }
+                        }
+                        if (doq.Metadata.Artist || doq.Metadata.Year || doq.Metadata.Description) {
+                            validDoq = true
+                        }
+                        if (validDoq) {
+                            sidebarDoqs[doq.Identifier] = doq;
+                        }
+                        else {
+                            sidebarDoqs[doq.Identifier] = null;
+                        }
                         doqsPolled++
                     }
 
