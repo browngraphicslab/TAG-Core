@@ -2817,10 +2817,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //    'resize': 'vertical',
             //    'height':'60px'
             //});
-
             settingsContainer.append(privateSetting);
             settingsContainer.append(localVisibilitySetting);
-            settingsContainer.append(name);
+            settingsContainer.append(sidebarInfoDiv)
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
@@ -6367,9 +6366,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                     customSettings[key] = createSetting(key, customInputs[key]);
                 });
             }
-
+            var sidebarInfoDiv = $(document.createElement("div")).attr({ id: "sidebarInfoDiv" });
+            sidebarInfoDiv.text("Fill one of the following metadata fields to enable tour sidebar for this artwork:");
+            sidebarInfoDiv.css({
+                "padding-top": "2%",
+                "padding-bottom": "2%",
+                "font-style": "italic",
+                "font-size": "70%"
+        });
+            title.css({"margin-bottom":"0%"})
 
             settingsContainer.append(title);
+            settingsContainer.append(sidebarInfoDiv);
             settingsContainer.append(artist);
             settingsContainer.append(desc);
             settingsContainer.append(yearMetadataDivSpecs.yearMetadataDiv);
