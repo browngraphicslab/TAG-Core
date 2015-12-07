@@ -1518,6 +1518,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             'margin-bottom': '3%',
         });
         previewStartPageButton.focus();
+
+        var previewHomePageButton = createButton('Home Page', function () {
+            previewHomePage(primaryFontColorInput, secondaryFontColorInput);
+            primaryColorPicker.hidePicker();
+            secondaryColorPicker.hidePicker();
+        }, {
+            'margin-left': '2%',
+            'margin-top': '1%',
+            'margin-right': '0%',
+            'margin-bottom': '3%',
+        });
+
         var previewCollectionsPageButton = createButton('Collections Page', function () {
             previewCollectionsPage(primaryFontColorInput, secondaryFontColorInput);
             primaryColorPicker.hidePicker();
@@ -1528,7 +1540,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 'margin-top': '1%',
                 'margin-right': '0%',
                 'margin-bottom': '3%',
-            });
+        });
 
         var previewArtworkViewerButton = createButton('Artwork Viewer', function () {
             previewArtworkViewer(primaryFontColorInput, secondaryFontColorInput);
@@ -1543,6 +1555,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         buttonContainer.append(saveButton);
         buttonContainer.append(previewStartPageButton);
+        buttonContainer.append(previewHomePageButton);
         buttonContainer.append(previewCollectionsPageButton);
         buttonContainer.append(previewArtworkViewerButton);
 
@@ -1554,6 +1567,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         previewStartPageButton.on("mousedown", function () {
             previewStartPageButton.css({ "background-color": "white" });
+        });
+        previewHomePageButton.on("mousedown", function () {
+            previewHomePageButton.css({ "background-color": "white" });
         });
         previewCollectionsPageButton.on("mousedown", function () {
             previewCollectionsPageButton.css({ "background-color": "white" });
@@ -1569,6 +1585,9 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
         previewStartPageButton.on("mouseleave", function () {
             previewStartPageButton.css({ "background-color": "transparent" });
+        });
+        previewHomePageButton.on("mouseleave", function () {
+            previewHomePageButton.css({ "background-color": "transparent" });
         });
         previewCollectionsPageButton.on("mouseleave", function () {
             previewCollectionsPageButton.css({ "background-color": "transparent" });
@@ -1768,7 +1787,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
     }
 
-    // PREVIEWS OF SPLASH SCREEN, COLLECTIONS PAGE, ARTOWRK VIEWER FOR CUSTOMIZATION
+    // PREVIEWS OF SPLASH SCREEN, HOME PAGE, COLLECTIONS PAGE, ARTOWRK VIEWER FOR CUSTOMIZATION
 
     /**Preview splash screen
      * @method previewStartPage
@@ -1784,6 +1803,22 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             preventClickthrough(viewer);
         });
         return startPage;
+    }
+
+    /**Preview splash screen
+    * @method previewHomePage
+    */
+    function previewHomePage(primaryFontInput, secondaryFontInput) {
+        // Load the start page, the callback adds it to the viewer when it's done loading
+        var homePage = TAG.Layout.HomePage({ primaryFontColor: primaryFontInput.val(), secondaryFontColor: secondaryFontInput.val(), isPreview: true }, function (homePage) {
+            if (prevSelectedSetting && prevSelectedSetting != nav[NAV_TEXT.general.text]) {
+                return;
+            }
+            viewer.empty();
+            viewer.append(homePage);
+            preventClickthrough(viewer);
+        });
+        return homePage;
     }
 
     /**Preview collections page
