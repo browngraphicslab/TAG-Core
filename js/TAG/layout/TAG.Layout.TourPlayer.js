@@ -223,8 +223,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         var drawer = $(document.createElement('div')).addClass('drawer'),
             drawerHeader = $(document.createElement('div')).addClass('drawerHeader'),
             label = $(document.createElement('div')).addClass('drawerLabel'),
-            toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer'),
-            toggle = $(document.createElement('img')).addClass("drawerPlusToggle"),
+            //toggleContainer = $(document.createElement('div')).addClass('drawerToggleContainer'),
+            //toggle = $(document.createElement('img')).addClass("drawerPlusToggle"),
             drawerContents = $(document.createElement('div')).addClass("drawerContents"),
             i;
 
@@ -234,18 +234,19 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             'color': '#' + PRIMARY_FONT_COLOR,
             //'font-family': FONT
         });
-        toggle.attr({
-            src: tagPath + 'images/icons/plus.svg',
-            expanded: false
-        });
+        //toggle.attr({
+        //    src: tagPath + 'images/icons/plus.svg',
+        //    expanded: true
+        //});
 
         drawer.append(drawerHeader);
         drawerHeader.append(label);
-        drawerHeader.append(toggleContainer);
-        toggleContainer.append(toggle);
+        //drawerHeader.append(toggleContainer);
+        //toggleContainer.append(toggle);
 
         drawer.append(drawerContents);
         topContents && drawerContents.append(topContents);
+
         var drawerToggle = function (evt) {
             if (toggle.attr('expanded') !== 'true') {
                 root.find(".drawerPlusToggle").attr({
@@ -271,7 +272,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         }
 
         //have the toggler icon minus when is is expanded, plus otherwise.
-        drawerHeader.on('click', drawerToggle);
+        //drawerHeader.on('click', drawerToggle);
 
         drawer.contents = drawerContents;
 
@@ -340,15 +341,15 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         }
         //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
 
-        info.css({
-            'overflow-y': 'auto',
-            'max-height': sideBar.height() * 2 / 5 - (info.offset().top - sideBar.offset().top) + 'px',
+        //info.css({
+        //    'overflow-y': 'auto',
+        //    'max-height': sideBar.height() * 2 / 5 - (info.offset().top - sideBar.offset().top) + 'px',
 
-        });
+        //});
 
-        assetContainer.css({
-            'max-height': sideBarInfo.height() - info.height() + (info.offset().top - sideBar.offset().top) + 'px'
-        });
+        //assetContainer.css({
+        //    'max-height': sideBarInfo.height() - info.height() + (info.offset().top - sideBar.offset().top) + 'px'
+        //});
 
         if (sideBar.data("isHidden")) {
             sideBar.css({

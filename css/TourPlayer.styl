@@ -79,7 +79,7 @@ DEFAULT_FONT_FAMILY = '"sans-serif","Times New Roaman", "Segoe UI", "Ebrima", "N
 #tourRoot #assetContainer
 	overflow visible
 	margin-top 5%
-	height 70%
+	height 50%
 
 #tourRoot #info
 	font-size 22px
@@ -87,6 +87,8 @@ DEFAULT_FONT_FAMILY = '"sans-serif","Times New Roaman", "Segoe UI", "Ebrima", "N
 	width 100%
 	white-space normal
 	padding-right 7%
+	height 50%
+	overflow-y scroll
 
 #tourRoot #infoArtist
 	headerTitle(90%)
@@ -115,19 +117,20 @@ DEFAULT_FONT_FAMILY = '"sans-serif","Times New Roaman", "Segoe UI", "Ebrima", "N
 	position absolute
 	top 0px
 	width 22%
-	z-index 999999999999999
+	z-index 100000
 
 #tourRoot #sideBarInfo
     position absolute
 	width 100%
-	height 60%
+	height 100%
 	margin-bottom 2%
 
 #tourRoot #sideBarSections
 	width 89%
-	height 76%
+	height 73%
 	left 5%
 	position relative
+	padding-top 25%
 
 #tourRoot #toggler
 	background-color rgba(0,0,0,0.7)
@@ -147,6 +150,7 @@ DEFAULT_FONT_FAMILY = '"sans-serif","Times New Roaman", "Segoe UI", "Ebrima", "N
 
 #tourRoot .drawer
 	display inline
+	height 100%
 
 #tourRoot .drawerHeader
 	width 100%
@@ -172,13 +176,15 @@ DEFAULT_FONT_FAMILY = '"sans-serif","Times New Roaman", "Segoe UI", "Ebrima", "N
 	max-height 100%
 
 #tourRoot .drawerContents
-	display none
+	display block
 	clear both
 	font-size 93%
-	width 95%
+	width 100%
+	height 100%
 	color #dddddd
-	padding-right 20px
-	overflow-y auto
+	padding-right 7%
+	overflow-y scroll
+	font-style italic
 
 #tourRoot .infoLabel
 	width 100%
