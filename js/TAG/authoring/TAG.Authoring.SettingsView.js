@@ -2819,7 +2819,6 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //});
             settingsContainer.append(privateSetting);
             settingsContainer.append(localVisibilitySetting);
-            settingsContainer.append(sidebarInfoDiv)
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
@@ -6367,7 +6366,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 });
             }
             var sidebarInfoDiv = $(document.createElement("div")).attr({ id: "sidebarInfoDiv" });
-            sidebarInfoDiv.text("Fill one of the following metadata fields to enable tour sidebar for this artwork:");
+            sidebarInfoDiv.text("Fill one or more of the following metadata fields to enable the tour sidebar for this artwork:");
             sidebarInfoDiv.css({
                 "padding-top": "2%",
                 "padding-bottom": "2%",

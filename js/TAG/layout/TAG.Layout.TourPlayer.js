@@ -161,9 +161,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         sideBar.hide();
         sideBar.data({ isOpen: false, isHidden: true });
 
-        sideBarInfo.css({
-            'height': sideBarSections.height() - 25 + 'px'
-        });
+        //sideBarInfo.css({
+        //    'height': sideBarSections.height() - 25 + 'px'
+        //});
         togglerImage.attr("src", tagPath + 'images/icons/Open.svg');
 
         infoTitle.css({
@@ -247,29 +247,29 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         drawer.append(drawerContents);
         topContents && drawerContents.append(topContents);
 
-        var drawerToggle = function (evt) {
-            if (toggle.attr('expanded') !== 'true') {
-                root.find(".drawerPlusToggle").attr({
-                    src: tagPath + 'images/icons/plus.svg',
-                    expanded: false
-                });
+        //var drawerToggle = function (evt) {
+        //    if (toggle.attr('expanded') !== 'true') {
+        //        root.find(".drawerPlusToggle").attr({
+        //            src: tagPath + 'images/icons/plus.svg',
+        //            expanded: false
+        //        });
 
-                root.find(".drawerContents").slideUp();
+        //        root.find(".drawerContents").slideUp();
 
-                toggle.attr({
-                    src: tagPath + 'images/icons/minus.svg',
-                    expanded: true
-                });
-            } else {
-                toggle.attr({
-                    src: tagPath + 'images/icons/plus.svg',
-                    expanded: false
-                });
+        //        toggle.attr({
+        //            src: tagPath + 'images/icons/minus.svg',
+        //            expanded: true
+        //        });
+        //    } else {
+        //        toggle.attr({
+        //            src: tagPath + 'images/icons/plus.svg',
+        //            expanded: false
+        //        });
 
-            }
+        //    }
 
-            drawerContents.slideToggle();
-        }
+        //    drawerContents.slideToggle();
+        //}
 
         //have the toggler icon minus when is is expanded, plus otherwise.
         //drawerHeader.on('click', drawerToggle);
@@ -303,7 +303,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         infoArtist.text(doq.Metadata.Artist);
         infoYear.text(doq.Metadata.Year);
 
-        assetContainer.empty();
+        //assetContainer.empty();
         $(".infoCustom").remove();
 
         // add more information for the artwork if curator added in the authoring mode
@@ -326,8 +326,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         TAG.Util.fitText(info, 1.1);
 
         // create drawers
-        if (doq.Metadata.Description) {
+        if (doq.Metadata.Description && !$(".drawer").length) {
             descriptionDrawer = createDrawer("Description");
+            $(descriptionDrawer).attr({id:"descriptionDrawer"})
             descriptionDrawer.contents.html(Autolinker.link(doq.Metadata.Description.replace(/\n/g, "<br />"), { email: false, twitter: false }));
             if (IS_WINDOWS) {
                 var links = descriptionDrawer.find('a');
@@ -337,7 +338,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                     });
                 });
             }
-            assetContainer.append(descriptionDrawer);
+            //assetContainer.append(descriptionDrawer);
+            sideBarInfo.append(descriptionDrawer);
         }
         //when the #info div's size is not too large, the text inside metadata fields is made as much visible as possible
 
@@ -350,6 +352,11 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         //assetContainer.css({
         //    'max-height': sideBarInfo.height() - info.height() + (info.offset().top - sideBar.offset().top) + 'px'
         //});
+        setTimeout(function(){
+            $("#descriptionDrawer").css({
+                "max-height": sideBarInfo.height() - info.height() 
+            })
+        },5)
 
         if (sideBar.data("isHidden")) {
             sideBar.css({
