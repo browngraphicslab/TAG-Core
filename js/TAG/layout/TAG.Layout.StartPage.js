@@ -771,6 +771,8 @@ TAG.Layout.StartPage = function (options, startPageCallback) {
         }
     }
 
+    that.fixText = fixText;
+
     /**
     * initializes the handlers for various 'click' functions including setting up a server
     * @method initializeHandlers
