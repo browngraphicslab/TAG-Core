@@ -1371,43 +1371,108 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         onChangeUpdateText(infoInput, '#museumInfo', 300);
 
         var bgImage = createSetting('Background Image', bgImgInput);
-        var overlayAlpha = createSetting('Overlay Transparency (0-100)', alphaInput);
-        var overlayColorSetting = createSetting('Overlay Color', overlayColorInput);
+        //var overlayAlpha = createSetting('Overlay Transparency (0-100)', alphaInput);
+        //var overlayColorSetting = createSetting('Overlay Color', overlayColorInput);
         var museumName = createSetting('Museum Name', nameInput);
-        var museumLoc = createSetting('Museum Location', locInput);
+        //var museumLoc = createSetting('Museum Location', locInput);
         var museumInfo = createSetting('Museum Info', infoInput);
 
         var primaryFontColorSetting = createSetting('Primary Font Color', primaryFontColorInput);
         var secondaryFontColorSetting = createSetting('Secondary Font Color', secondaryFontColorInput);
         var idleTimerDurationSetting = createSetting('Idle Timer Duration (in minutes)', idleTimerDurationInput);
 
+        // Museum home screen setting
+        var homeEnabledInput = createButton('Enabled', function () {
+            locInput = "true";
+            lockedKioskInput.prop('disabled', true);
+            lockedKioskInput.css('opacity', '0.4');
+            unlockedKioskInput.prop('disabled', true);
+            unlockedKioskInput.css('opacity', '0.4');
+
+            homeEnabledInput.css('background-color', 'white');
+            homeDisabledInput.css('background-color', '');
+
+            nameInput.prop('disabled', false);
+            nameInput.css('opacity', '1');
+            infoInput.prop('disabled', false);
+            infoInput.css('opacity', '1');
+        }, {
+            'min-height': '0px',
+            'margin-right': '4%',
+            'width': '48%',
+        });
+        var homeDisabledInput = createButton('Disabled', function () {
+            locInput = "false";
+            lockedKioskInput.prop('disabled', false);
+            lockedKioskInput.css('opacity', '1');
+            unlockedKioskInput.prop('disabled', false);
+            unlockedKioskInput.css('opacity', '1');
+
+            nameInput.prop('disabled', true);
+            nameInput.css('opacity', '0.4');
+            infoInput.prop('disabled', true);
+            infoInput.css('opacity', '0.4');
+
+            homeDisabledInput.css('background-color', 'white');
+            homeEnabledInput.css('background-color', '');
+        }, {
+            'min-height': '0px',
+            'width': '48%',
+        });
+
+        var homeOptionDiv = $(document.createElement('div'));
+        homeOptionDiv.append(homeEnabledInput).append(homeDisabledInput);
+        var homeScreenSetting = createSetting("Enable Home Screen", homeOptionDiv);
+
         // Kiosk locked setting.
         var kioskIsLocked = TAG.Worktop.Database.getKioskLocked(); //need server request
         var unlockedKioskInput = createButton('Unlocked', function () {
-            kioskIsLocked = false;
-            unlockedKioskInput.css('background-color', 'white');
-            lockedKioskInput.css('background-color', '');
+            if (!unlockedKioskInput.attr("disabled")) {
+                kioskIsLocked = false;
+                unlockedKioskInput.css('background-color', 'white');
+                lockedKioskInput.css('background-color', '');
+            }
         }, {
             'min-height': '0px',
             'margin-right': '4%',
             'width': '48%',
         });
         var lockedKioskInput = createButton('Locked', function () {
-            kioskIsLocked = true;
-            lockedKioskInput.css('background-color', 'white');
-            unlockedKioskInput.css('background-color', '');
+            if (!lockedKioskInput.attr("disabled")) {
+                kioskIsLocked = true;
+                lockedKioskInput.css('background-color', 'white');
+                unlockedKioskInput.css('background-color', '');
+            }
         }, {
             'min-height': '0px',
             'width': '48%',
         });
+
+        var kioskOptionsDiv = $(document.createElement('div'));
+        kioskOptionsDiv.append(unlockedKioskInput).append(lockedKioskInput);
+        var lockKioskSetting = createSetting("Lock Kiosk Mode", kioskOptionsDiv);
+
         if (kioskIsLocked == "true") {
             lockedKioskInput.css('background-color', 'white');
         } else {
             unlockedKioskInput.css('background-color', 'white');
         }
-        var kioskOptionsDiv = $(document.createElement('div'));
-        kioskOptionsDiv.append(unlockedKioskInput).append(lockedKioskInput);
-        var lockKioskSetting = createSetting("Lock Kiosk Mode", kioskOptionsDiv);
+
+        // Disable/enable other buttons depending on whether the home screen option is enabled or not
+        if (loc == "true") {
+            homeEnabledInput.css('background-color', 'white');
+            kioskIsLocked = "false";
+            lockedKioskInput.prop('disabled', true);
+            lockedKioskInput.css('opacity', '0.4');
+            unlockedKioskInput.prop('disabled', true);
+            unlockedKioskInput.css('opacity', '0.4');
+        } else {
+            homeDisabledInput.css('background-color', 'white');
+            nameInput.prop('disabled', true);
+            nameInput.css('opacity', '0.4');
+            infoInput.prop('disabled', true);
+            infoInput.css('opacity', '0.4');
+        }
 
         // TODO-KEYWORDS
         var keywordsLabelContainer = $(document.createElement('div'))
@@ -1433,15 +1498,16 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         settingsContainer.append(bgImage);
-        settingsContainer.append(overlayColorSetting);
-        settingsContainer.append(overlayAlpha);
+        //settingsContainer.append(overlayColorSetting);
+        //settingsContainer.append(overlayAlpha);
         settingsContainer.append(museumName);
-        settingsContainer.append(museumLoc);
+        //settingsContainer.append(museumLoc);
         settingsContainer.append(museumInfo);
         settingsContainer.append(primaryFontColorSetting);
         settingsContainer.append(secondaryFontColorSetting);
         settingsContainer.append(idleTimerDurationSetting);
         settingsContainer.append(lockKioskSetting);
+        settingsContainer.append(homeScreenSetting);
         settingsContainer.append(keywordsLabelContainer);
         keywordSetsSettings.forEach(function (setting) {
             settingsContainer.append(setting);
@@ -1465,6 +1531,18 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         });
 
         unlockedKioskInput.on('click', function () {
+            changesMade = true;
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
+        });
+
+        homeEnabledInput.on('click', function () {
+            changesMade = true;
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
+        });
+
+        homeDisabledInput.on('click', function () {
             changesMade = true;
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
@@ -1630,7 +1708,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         var alpha = inputs.alphaInput.val()/100;
         var overlayColor = inputs.overlayColorInput.val();
         var name = inputs.nameInput.val();
-        var loc = inputs.locInput.val();
+        var loc = inputs.locInput;
         var info = inputs.infoInput.val().replace('/\n\r?/g', '<br />');
 
         var bgImg = inputs.bgImgInput.val();
