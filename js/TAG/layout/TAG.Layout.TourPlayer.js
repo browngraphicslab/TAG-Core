@@ -354,8 +354,8 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         //});
         setTimeout(function(){
             $("#descriptionDrawer").css({
-                "max-height": sideBarInfo.height() - info.height() 
-            }).text(doq.Metadata.Description)
+                "max-height": sideBarInfo.height() - info.height() - .05*sideBarInfo.height()
+            })
         },5)
 
         if (sideBar.data("isHidden")) {
