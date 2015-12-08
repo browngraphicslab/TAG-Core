@@ -4313,7 +4313,7 @@ rin.internal.ESItemsManager.prototype = {
                 if (removedItems && removedItems.any(function (item) { return item.experienceStream == addedItems[i].experienceStream })) continue; // These are in removed items also, so skip instead of re-adding.
 
                 var item = addedItems[i];
-                if (item.providerId === "ZMES" && item.esData.data.guid && this._orchestrator.sidebarDoqs[item.esData.data.guid]) {
+                if (item.providerId === "ZMES" && item.esData.data.guid && this._orchestrator.sidebarDoqs && this._orchestrator.sidebarDoqs[item.esData.data.guid]) {
                     this._sidebarDoqsOnScreen++;
                     $("#sidebarIconImg").show();
                 }
@@ -4336,7 +4336,7 @@ rin.internal.ESItemsManager.prototype = {
                 if (addedItems && addedItems.any(function (item) { return item.experienceStream == removedItems[i].experienceStream })) continue; // No need to remove because it is there for re-add
 
                 var item = removedItems[i];
-                if (item.providerId === "ZMES" && item.esData.data.guid && this._orchestrator.sidebarDoqs[item.esData.data.guid]) {
+                if (item.providerId === "ZMES" && item.esData.data.guid && this._orchestrator.sidebarDoqs && this._orchestrator.sidebarDoqs[item.esData.data.guid]) {
                     this._sidebarDoqsOnScreen--;
 
                     var sidebarDiv = $("#sideBar");
