@@ -354,7 +354,7 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
         //});
         setTimeout(function(){
             $("#descriptionDrawer").css({
-                "max-height": sideBarInfo.height() - info.height() 
+                "max-height": sideBarInfo.height() - info.height() - .05*sideBarInfo.height()
             })
         },5)
 
