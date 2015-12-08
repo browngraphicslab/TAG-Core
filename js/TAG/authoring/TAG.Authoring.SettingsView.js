@@ -1328,6 +1328,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 saveButton.prop("disabled", false);
                 saveButton.css("opacity", 1);
             });
+
             inputs.showKeywords.click(function (e) {
                 changesMade = true;
                 saveButton.prop("disabled", false);
@@ -1341,6 +1342,24 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             keywordSetsInputs.push(inputs);
         });
 
+
+        infoInput.change(function () {
+            changesMade = true;
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
+        });
+
+        infoInput.keydown(function () {
+            changesMade = true;
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
+        });
+
+        infoInput.keyup(function () {
+            changesMade = true;
+            saveButton.prop("disabled", false);
+            saveButton.css("opacity", 1);
+        });
         var startPage = previewStartPage(primaryFontColorInput, secondaryFontColorInput);
 
         // Handle changes
