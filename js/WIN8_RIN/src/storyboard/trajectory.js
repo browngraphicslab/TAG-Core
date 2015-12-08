@@ -13,7 +13,7 @@
         //
         (function (Trajectory) {
             function log(str) {
-                console.log(str);
+                doNothing(str);
             }
             ;
             // (stolen from rin.core)

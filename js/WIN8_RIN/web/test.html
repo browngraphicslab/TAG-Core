@@ -147,7 +147,7 @@
                     $("#testDescription").html(data);
                 }, error: function (jqxhr, status) {
                     $("#testDescription").html("No test description available");
-                    console.log("Error getting test description file: " + status);
+                    doNothing("Error getting test description file: " + status);
                 }
             });
         });

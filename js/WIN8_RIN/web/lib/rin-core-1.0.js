@@ -1067,7 +1067,7 @@ var rin;
             var STOPPED = 0, PLAYING = 1, PAUSING = 2, PAUSED = 3;
             // state values;
                         function log(str) {
-                console.log(str);
+                doNothing(str);
             }
             ;
             function buildStoryboard(sb) {
@@ -1169,7 +1169,7 @@ var rin;
         //
         (function (Trajectory) {
             function log(str) {
-                console.log(str);
+                doNothing(str);
             }
             ;
             // (stolen from rin.core)
@@ -1611,7 +1611,7 @@ var rin;
                 function quaternionToCenter(q, c) {
                     if(q.w != 0) {
                         if(typeof (console) != "undefined" && console && console.log) {
-                            console.log("vectorBased interpolation: quaternions with q.w = 0?");
+                            doNothing("vectorBased interpolation: quaternions with q.w = 0?");
                         }
                     }
                     var pitch = Math.asin(q.z);
@@ -3301,7 +3301,6 @@ rin.internal.debug = {
         if ((typeof rin !== "undefined") && !rin.disableLogging &&
            (typeof (console) != "undefined") && console && console.log) {
 
-            console.log(info);
         }
     }
 };

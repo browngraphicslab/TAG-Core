@@ -16,7 +16,7 @@ var rin;
 (function (rin) {
     (function (diagnostics) {
         function newDiagnosticsModule(moduleName) {
-            var doLog = !!(console && console.log);
+            var doLog = !!(console && doNothing);
             return {
                 log: function () {
                     var content = [];
@@ -24,7 +24,7 @@ var rin;
                         content[_i] = arguments[_i + 0];
                     }
                     //document.writeln.apply(document, content);
-                    doLog && console.log.apply(console, content);
+                    doLog && doNothing.apply(console, content);
                 },
                 assert: function assert(cond, strCond) {
                     if(!cond) {

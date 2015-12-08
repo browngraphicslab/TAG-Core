@@ -483,7 +483,7 @@ ITE.DeepZoomProvider = function (trackData, player, timeManager, orchestrator) {
 	 */
 	function addInk(inkTrack) {
 		if (!_viewer.viewport){
-			// console.log("failed to load ink as DZ is not ready... trying again" );
+			// doNothing("failed to load ink as DZ is not ready... trying again" );
 			setTimeout(function(){
 				addInk(inkTrack) } , 100);
 		} else {

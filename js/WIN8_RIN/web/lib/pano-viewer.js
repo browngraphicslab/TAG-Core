@@ -148,17 +148,17 @@ RendererCheckWebGL.isValidBrowser = function () {
 
     var gl = RendererCheckWebGL.getWebGLContext(canvas);
     if (!gl) {
-        console.log("WebGL is not supported.");
+        doNothing("WebGL is not supported.");
         RendererCheckWebGL.isValidBrowser = function () { return false; };
         return false;
     }
     else if (quirks.isWebGLCORSRequired && !quirks.isWebGLCORSSupported) {
-        console.log('CORS image textures are not supported in this browser.');
+        doNothing('CORS image textures are not supported in this browser.');
         RendererCheckWebGL.isValidBrowser = function () { return false; };
         return false;
     }
     else if (quirks.webGLRendersAllBlack) {
-        console.log('Webgl fails to render image tiles correctly in this browser.');
+        doNothing('Webgl fails to render image tiles correctly in this browser.');
         RendererCheckWebGL.isValidBrowser = function () { return false; };
         return false;
     }
@@ -2166,11 +2166,11 @@ var Config = {
 var Utils = {
 
     /**
-     * Wraps console.log for debugging.
+     * Wraps doNothing for debugging.
      */
     log : function() {
         if(window.console && Config.debug) {
-            console.log.apply(console, arguments);
+            doNothing.apply(console, arguments);
         }
     },
 
@@ -3236,7 +3236,7 @@ var PriorityNetworkDownloader = function(useCORS, tileDownloadFailedCallback, ti
                     }
                     break;
                 case TileDownloadState.cacheExpired:
-                    //console.log('download cache expired image immediately');
+                    //doNothing('download cache expired image immediately');
                     startImageDownload(downloadRequest, false);
                     break;
                 case TileDownloadState.downloading:
@@ -3253,8 +3253,8 @@ var PriorityNetworkDownloader = function(useCORS, tileDownloadFailedCallback, ti
         }
 
         if (blockedDownloads > 0) {
-            //console.log('pano blocked downloads: ' + blockedDownloads + ' at ' + new Date().toLocaleTimeString());
-            //console.log(_throttle.counts);
+            //doNothing('pano blocked downloads: ' + blockedDownloads + ' at ' + new Date().toLocaleTimeString());
+            //doNothing(_throttle.counts);
         }
     };
 
@@ -6874,7 +6874,7 @@ RotationalFixedPositionCameraController.prototype = {
                 case 'mousewheel':
                     this._cancelCameraMovements(false);
                     this._userInteracted();
-                    //console.log('mousehweel delta: ' + e.delta);
+                    //doNothing('mousehweel delta: ' + e.delta);
                     zoomOut = (e.delta < 0);
                     this.onDiscreteZoom(e.x, e.y, zoomOut);
                     break;
@@ -6891,7 +6891,7 @@ RotationalFixedPositionCameraController.prototype = {
                     }
                     break;
                 case 'zoompoint':
-                    //console.log(e.zoomInfo);
+                    //doNothing(e.zoomInfo);
                     zoomOut = false;
                     this.pick(e.zoomInfo.x, e.zoomInfo.y, zoomOut, e.zoomInfo.scale);
                     break;
@@ -9993,7 +9993,7 @@ function PanoTouchHelper(el) {
     }
 
     function queueKeyEvent(e) {
-        //console.log('panoTouch (' + created + ') key event: ' + e.type + ' at: ' + e.timestamp);
+        //doNothing('panoTouch (' + created + ') key event: ' + e.type + ' at: ' + e.timestamp);
         queueEvent(e);
     }
 
@@ -10068,7 +10068,7 @@ function PanoTouchHelper(el) {
     };
 
     this.userCurrentlyInteracting = function () {
-        //if (activePointers > 0) { console.log('active pointers:' + activePointers); }
+        //if (activePointers > 0) { doNothing('active pointers:' + activePointers); }
 
         return (activePointers > 0);
     };

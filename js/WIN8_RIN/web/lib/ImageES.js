@@ -119,7 +119,7 @@
 
             if (keyframeData && keyframeData.state && keyframeData.state.viewport) {
                 this._fitImage(keyframeData.state.viewport);
-                //console.log(JSON.stringify(keyframeData.state.viewport));
+                //doNothing(JSON.stringify(keyframeData.state.viewport));
             }
         };
         ImageES.prototype.unload = function () {

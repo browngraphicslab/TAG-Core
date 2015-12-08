@@ -376,9 +376,9 @@ rin.internal.debug = {
         // NOTE: we need to check for existence of rin because logging is 
         // called during unload which is problematic within iframes in IE.
         if ((typeof rin !== "undefined") && !rin.disableLogging &&
-           (typeof (console) != "undefined") && console && console.log) {
+           (typeof (console) != "undefined") && console && doNothing) {
 
-            console.log(info);
+            doNothing(info);
         }
     }
 };

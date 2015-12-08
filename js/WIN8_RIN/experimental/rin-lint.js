@@ -19,7 +19,7 @@ var rin;
                     async: false,
                     cache: true,
                     error: function (jqxhr, textStatus, errorThrown) {
-                        console.log(errorThrown);
+                        doNothing(errorThrown);
                     },
                     success: function (data, textStatus, jqxhr) {
                         try  {

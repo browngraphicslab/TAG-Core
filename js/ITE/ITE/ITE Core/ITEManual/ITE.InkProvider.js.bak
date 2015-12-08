@@ -318,7 +318,7 @@ ITE.InkProvider = function (trackData, player, timeManager, orchestrator) {
 		if (_attachedAsset) {
 			return _attachedAsset;
 		} else {
-			console.log("Failed to find asset '" + experienceReference + "' for attached ink '" + trackData.name + "'");
+			doNothing("Failed to find asset '" + experienceReference + "' for attached ink '" + trackData.name + "'");
 		};
 	};
 	self.findAttachedAsset = findAttachedAsset;

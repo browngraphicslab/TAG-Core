@@ -67,7 +67,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         });
 
         if (url) {
-            loadTour(url, function () { console.log('Viewer: initial loading complete'); });
+            loadTour(url, function () { doNothing('Viewer: initial loading complete'); });
         }
     })();
 
@@ -85,7 +85,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
      * @param eventArgs     sender, eventId, ? (RIN)
      */
     function _onPlayerESEvent(eventArgs) {
-        console.log(eventArgs.eventId);
+        doNothing(eventArgs.eventId);
         if (timeline) {
             switch (eventArgs.eventId) {
                 case rin.contracts.esEventIds.interactionActivatedEventId:
@@ -112,7 +112,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             capture = sender.captureKeyframe();
             if (capture === '') { // continue capturing until successful
                 //setTimeout(function () { _sendKeyframe(sender); }, 10);
-				console.log('No keyframe captured!?');
+				doNothing('No keyframe captured!?');
                 return;
             }
             trackName = sender._esData.experienceId;
@@ -336,8 +336,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
         if (!doNotUpdateReloading) {
             isReloading = true;
         }
-        //console.log("####################################################: "+isReloading);
-        // console.log("player: "+player);
+        //doNothing("####################################################: "+isReloading);
+        // doNothing("player: "+player);
         for (var key in data.resources) {
             if (data.resources.hasOwnProperty(key)) {
                 if (typeof data.resources[key].uriReference === 'string') {
@@ -366,7 +366,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                     isReloading = false;
 
                 }
-                //console.log("##############################################: "+isReloading);
+                //doNothing("##############################################: "+isReloading);
             });
         } else {
             setTimeout(function () { reloadTour(data, true); }, 50);
@@ -387,8 +387,8 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
     function initializeTour(data) {
         var ctime;
         isReloading = true;
-        console.log("isReloading: true, in initializeTour");
-        // console.log("player: "+player);
+        doNothing("isReloading: true, in initializeTour");
+        // doNothing("player: "+player);
         if (player) {
             ctime = timeManager.getCurrentTime();
             player.unload();
@@ -396,7 +396,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
                 setTimeout(function () {
                     seek(ctime);
                     isReloading = false;
-                    console.log("isReloading: false, in initializeTour");
+                    doNothing("isReloading: false, in initializeTour");
                 }, 50);
             });
         } else if (timeline.getTrackslength() === 0) {
@@ -404,7 +404,7 @@ TAG.TourAuthoring.Viewer = function (spec, my) {
             setTimeout(function () {
                 //seek(ctime);
                 isReloading = false;
-                console.log("isReloading: false, in initializeTour");
+                doNothing("isReloading: false, in initializeTour");
             }, 50);
         } else {
             setTimeout(function () { reloadTour(data, true); }, 50);

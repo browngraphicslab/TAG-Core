@@ -3411,13 +3411,13 @@ function extend(derived, base)
 
 var Utils = {
     /**
-     * Wraps console.log for debugging.
+     * Wraps doNothing for debugging.
      */
     log: function (msg)
     {
         if (window.console && DebugHelper.debugEnabled)
         {
-            window.console.log(msg);
+            window.doNothing(msg);
         }
     },
 

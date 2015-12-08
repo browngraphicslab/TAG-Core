@@ -30,7 +30,7 @@ TAG.TourAuthoring.UndoManager = function (spec, my) {
             if (redoStack.length > 0) {
                 redoStack = []; // when should do this?
                 $('.redoButton').css({ 'opacity': '0.4' });
-                console.log("clear redoStack?");
+                doNothing("clear redoStack?");
             }
             undoStack.push(command);
             $('.undoButton').css({ 'opacity': '1.0' });
@@ -39,7 +39,7 @@ TAG.TourAuthoring.UndoManager = function (spec, my) {
                 undoStack.splice(0, diff);
             }
 
-            //  console.log("SAVED STATE //TOP//FROM log command// ===" + undoStack[undoStack.length - 1].savedState);
+            //  doNothing("SAVED STATE //TOP//FROM log command// ===" + undoStack[undoStack.length - 1].savedState);
         }
 
         //Check to see if there have been any changes and update save button accordingly
@@ -55,7 +55,7 @@ TAG.TourAuthoring.UndoManager = function (spec, my) {
     */
     function dirtyStateGetter() {
         if (undoStack.length > 0) {
-            console.log("SAVED STATE //TOP//FROM DSG// ===" + undoStack[undoStack.length - 1].savedState);
+            doNothing("SAVED STATE //TOP//FROM DSG// ===" + undoStack[undoStack.length - 1].savedState);
             return undoStack[undoStack.length - 1].savedState;
         }
         return true;
@@ -77,9 +77,9 @@ TAG.TourAuthoring.UndoManager = function (spec, my) {
 
             for (var i = 0; i < undoStack.length - 1; i++) {
                 undoStack[i].savedState = false;
-                // console.log("SAVED STATE===" + undoStack[i].savedState);
+                // doNothing("SAVED STATE===" + undoStack[i].savedState);
             }
-            // console.log("SAVED STATE //TOP// ===" + undoStack[undoStack.length - 1].savedState);
+            // doNothing("SAVED STATE //TOP// ===" + undoStack[undoStack.length - 1].savedState);
         }
     }
     that.setPrevFalse = setPrevFalse;

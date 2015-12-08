@@ -9,7 +9,7 @@
 	            {
 	                var allText = rawFile.responseText;
 	                var json = JSON.parse(allText);
-	                console.log(json);
+	                doNothing(json);
 	                var newjson = {
 	                    "tourTitle" : String(json.data.narrativeData.title)
 	                };
@@ -100,7 +100,7 @@
 	                	}
 	                };
 
-	                console.log(newjson);
+	                doNothing(newjson);
 	                document.write(JSON.stringify(newjson));
 	                
 

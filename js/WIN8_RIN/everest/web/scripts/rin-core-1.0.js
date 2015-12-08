@@ -1067,7 +1067,7 @@ var rin;
             var STOPPED = 0, PLAYING = 1, PAUSING = 2, PAUSED = 3;
             // state values;
                         function log(str) {
-                console.log(str);
+                doNothing(str);
             }
             ;
             function buildStoryboard(sb) {
@@ -1169,7 +1169,7 @@ var rin;
         //
         (function (Trajectory) {
             function log(str) {
-                console.log(str);
+                doNothing(str);
             }
             ;
             // (stolen from rin.core)
@@ -1610,8 +1610,8 @@ var rin;
                 //
                 function quaternionToCenter(q, c) {
                     if(q.w != 0) {
-                        if(typeof (console) != "undefined" && console && console.log) {
-                            console.log("vectorBased interpolation: quaternions with q.w = 0?");
+                        if(typeof (console) != "undefined" && console && doNothing) {
+                            doNothing("vectorBased interpolation: quaternions with q.w = 0?");
                         }
                     }
                     var pitch = Math.asin(q.z);
@@ -1924,7 +1924,7 @@ var rin;
 (function (rin) {
     (function (diagnostics) {
         function newDiagnosticsModule(moduleName) {
-            var doLog = !!(console && console.log);
+            var doLog = !!(console && doNothing);
             return {
                 log: function () {
                     var content = [];
@@ -1932,7 +1932,7 @@ var rin;
                         content[_i] = arguments[_i + 0];
                     }
                     //document.writeln.apply(document, content);
-                    doLog && console.log.apply(console, content);
+                    doLog && doNothing.apply(console, content);
                 },
                 assert: function assert(cond, strCond) {
                     if(!cond) {
@@ -3299,9 +3299,9 @@ rin.internal.debug = {
         // NOTE: we need to check for existence of rin because logging is 
         // called during unload which is problematic within iframes in IE.
         if ((typeof rin !== "undefined") && !rin.disableLogging &&
-           (typeof (console) != "undefined") && console && console.log) {
+           (typeof (console) != "undefined") && console && doNothing) {
 
-            console.log(info);
+            doNothing(info);
         }
     }
 };

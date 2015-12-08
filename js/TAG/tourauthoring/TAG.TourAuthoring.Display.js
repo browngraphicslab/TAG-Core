@@ -18,7 +18,7 @@ TAG.TourAuthoring.DisplayParts = {
 TAG.TourAuthoring.Display = function (spec, my) {
     "use strict";
     if (my.type === TAG.TourAuthoring.TrackType.audio) {
-        console.log('audio');
+        doNothing('audio');
     }
     var that = {}, //values of display
         storageContainer, parentDisplay, // parentDisplay used only by ink
@@ -408,7 +408,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             //});
 
         $(finD[0][0]).on("mousedown", function (e) {
-            console.log("using new events");
+            doNothing("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseInt(finD.attr('x'), 10), TAG.TourAuthoring.DisplayParts['fade-in']);
         });
@@ -429,7 +429,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             //});
 
         $(mainD[0][0]).on("mousedown", function (e) {
-            console.log("using new events");
+            doNothing("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseInt(mainD.attr('x'), 10), TAG.TourAuthoring.DisplayParts['main']);
         });
@@ -453,7 +453,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         $(fioD[0][0]).on("mousedown", function (e) {
             
-            console.log("using new events");
+            doNothing("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseFloat(fioD.attr('x')), TAG.TourAuthoring.DisplayParts['fade-out']);
         });
@@ -478,7 +478,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
         //});
 
         $(finHandle[0][0]).on("mousedown", function (e) {
-            console.log("using new events");
+            doNothing("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseInt(finD.attr('x'), 10), TAG.TourAuthoring.DisplayParts['fade-in']);
         });
@@ -494,7 +494,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             //});
 
         $(fioHandle[0][0]).on("mousedown", function (e) {
-            console.log("using new events");
+            doNothing("using new events");
             var offsetX = e.offsetX;
             _displayMousedown(offsetX - parseInt(fioD.attr('x'), 10), TAG.TourAuthoring.DisplayParts['fade-out']);
         });
@@ -551,7 +551,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
                     var clamp_command = {
                         execute: function () { disp.setTimes(cnew); },
                         unexecute: function () {
-                            console.log("init: " + cinit.inStart + ", new: " + cnew.inStart);
+                            doNothing("init: " + cinit.inStart + ", new: " + cnew.inStart);
                             disp.setTimes(cinit);
                         },
                     };
@@ -997,7 +997,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             // for distributed warnings onto ink tracks (alternative option that can be implemented later)
             //var i;
             //for (i = 0; i < my.attachedInks.length; i++) {
-            //    console.log('append warning here');
+            //    doNothing('append warning here');
             //}
         } else {
             len = removeAttachedInkDisplays();
@@ -1075,7 +1075,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
         command.execute();
         if (acted) {
             my.undoManager.logCommand(command);
-            console.log('logging');
+            doNothing('logging');
         }
     }
     that.removeDisplay = removeDisplay;
@@ -1443,7 +1443,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         // error checking
         if (!loc || (offset !== 0 && !offset) || !my.currentDisplay) { // need that extra offset = 0 check since 0 and null are equal, arg
-            console.log('Move display called when no display is selected!');
+            doNothing('Move display called when no display is selected!');
         }
             // Actual editing
         else if (loc === TAG.TourAuthoring.DisplayParts['fade-in']) { // Drag fade-in section to adjust length
@@ -1592,7 +1592,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             }
         }
         else {
-            console.log('currentDisplay.loc should be one of: \'fade-in\', \'fade-out\', or \'main\'');
+            doNothing('currentDisplay.loc should be one of: \'fade-in\', \'fade-out\', or \'main\'');
         }
         that.outStart = outStart; //bleveque -- added for edit ink
         that.inStart = inStart;
@@ -2011,7 +2011,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
                 fadeIn: fin,
                 fadeOut: fout,
             };
-            //console.log("init start: " + disp.clamped_init.inStart + ", new start: " + disp.clamped_new.inStart);
+            //doNothing("init start: " + disp.clamped_init.inStart + ", new start: " + disp.clamped_new.inStart);
             var nextDisp = displayTree.findNext(disp.getStorageContainer());
             //if (dispArray.length > index+1 && dispArray[index + 1].display.getStart() < newEnd) {
             if (nextDisp && nextDisp.display.getStart() < newEnd) {
@@ -2050,7 +2050,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
     function getTranslation(res, leftbound, rightbound, fadeinrightbound, fadeoutleftbound) {
         var translation;
         if (!loc || (offset !== 0 && !offset) || !my.currentDisplay) { // need that extra offset = 0 check since 0 and null are equal, arg
-            console.log('Move display called when no display is selected!');
+            doNothing('Move display called when no display is selected!');
         }
         else if (loc === TAG.TourAuthoring.DisplayParts['fade-in']) {
           var newinStart = Math.constrain(my.timeManager.pxToTime(res.pivot.x - offset), // note this is defined in TAG.Util
@@ -2087,7 +2087,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         // error checking
         if (!loc || (offset !== 0 && !offset)) { // need that extra offset = 0 check since 0 and null are equal, arg
-            console.log('Move display called when no display is selected!');
+            doNothing('Move display called when no display is selected!');
         }
         // Actual editing
         else if (loc === TAG.TourAuthoring.DisplayParts['fade-in']) { // Drag fade-in section to adjust length
@@ -2176,7 +2176,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
             
         }
         else {
-            console.log('currentDisplay.loc should be one of: \'fade-in\', \'fade-out\', or \'main\'');
+            doNothing('currentDisplay.loc should be one of: \'fade-in\', \'fade-out\', or \'main\'');
         }
         that.outStart = outStart; //bleveque -- added for edit ink
         that.inStart = inStart;
@@ -2232,7 +2232,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
      */
     function scale() {
         if (T2P(inStart) < 1884 && T2P(inStart) > 1883)
-            console.log('');
+            doNothing('');
         outStart = inStart + fadeIn + main;
         finD.css('left', T2P(inStart) + "px")
             .css('width', T2P(fadeIn) + "px");
@@ -2314,7 +2314,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
                 }
             });
             my.undoManager.logCommand(command);
-            console.log('logging');
+            doNothing('logging');
 
             //keyframes.push(keyframe);
             //sortKeyframes();
@@ -2468,7 +2468,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
                 break;
 
             default:
-                console.log('RIN track type not yet implemented');
+                doNothing('RIN track type not yet implemented');
         }
     }
     that.toES = toES;
@@ -2518,7 +2518,7 @@ TAG.TourAuthoring.Display = function (spec, my) {
 
         } else if (kfarray.length == 0) {
             //var data = my.timeline.captureKeyframe(my.title);
-            console.log("capturing blank kf for reset");
+            doNothing("capturing blank kf for reset");
             first = my.timeline.captureKeyframe(my.title);
             if (!first) {
                 first = {

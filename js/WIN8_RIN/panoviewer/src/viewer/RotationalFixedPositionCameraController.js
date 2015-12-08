@@ -767,7 +767,7 @@ RotationalFixedPositionCameraController.prototype = {
                 case 'mousewheel':
                     this._cancelCameraMovements(false);
                     this._userInteracted();
-                    //console.log('mousehweel delta: ' + e.delta);
+                    //doNothing('mousehweel delta: ' + e.delta);
                     zoomOut = (e.delta < 0);
                     this.onDiscreteZoom(e.x, e.y, zoomOut);
                     break;
@@ -784,7 +784,7 @@ RotationalFixedPositionCameraController.prototype = {
                     }
                     break;
                 case 'zoompoint':
-                    //console.log(e.zoomInfo);
+                    //doNothing(e.zoomInfo);
                     zoomOut = false;
                     this.pick(e.zoomInfo.x, e.zoomInfo.y, zoomOut, e.zoomInfo.scale);
                     break;

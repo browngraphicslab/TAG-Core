@@ -61,7 +61,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
         var saveClicked = false;
         var nameChanged = false;
         function save(stayOnPage) {
-            console.log("isUploading === " + componentControls.getIsUploading());
+            doNothing("isUploading === " + componentControls.getIsUploading());
             saveClicked = true;
             nameChanged = false;
             if ($("#inkEditText").css('display') !== "none") {
@@ -133,7 +133,7 @@ TAG.TourAuthoring.TopMenu = function (spec, my) {
                 TAG.Telemetry.recordEvent("SpentTime", function (tobj) {
                     tobj.item = "tour_authoring";
                     tobj.time_spent = SPENT_TIMER.get_elapsed();
-                    console.log("tour authoring spent time: " + tobj.time_spent);
+                    doNothing("tour authoring spent time: " + tobj.time_spent);
                 });
             });
         }

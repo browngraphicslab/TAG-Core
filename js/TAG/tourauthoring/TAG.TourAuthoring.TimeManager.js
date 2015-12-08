@@ -157,7 +157,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         _sendMove({ current: current, percent: pct });
         _sendSeek({ current: current, percent: pct });
         if (current > end) {
-            console.log('On timeManager seek: asked to seek past end (normal seek)');
+            doNothing('On timeManager seek: asked to seek past end (normal seek)');
         }
     }
     
@@ -173,7 +173,7 @@ TAG.TourAuthoring.TimeManager = function (spec, my) { //get rid of my- look to m
         _sendMove({ current: current, percent: pct });
         _sendSeek({ current: current, percent: pct });
         if (current > end) {
-            console.log('On timeManager seek: asked to seek past end (amount seek)');
+            doNothing('On timeManager seek: asked to seek past end (amount seek)');
         }
     }
 

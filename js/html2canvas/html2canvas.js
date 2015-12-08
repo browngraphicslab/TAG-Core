@@ -17,7 +17,7 @@ html2canvas;
 _html2canvas.Util = {};
 
 _html2canvas.Util.log = function(a) {
-  if (_html2canvas.logging && window.console && window.console.log) {
+  if (_html2canvas.logging && window.console && window.doNothing) {
     window.doNothing(a);
   }
 };

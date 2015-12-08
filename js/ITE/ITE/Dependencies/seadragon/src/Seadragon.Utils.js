@@ -587,7 +587,7 @@ var SeadragonUtils = function() {
                 xmlDoc.loadXML(string);
             } catch (e) {
                 SeadragonDebug.log(e.name + " while parsing XML (ActiveX): " + e.message);
-                console.log("error creating ActiveXObject in Seadragon.Utils parseXml");
+                doNothing("error creating ActiveXObject in Seadragon.Utils parseXml");
             }
         } else if (window.DOMParser) {
             try {

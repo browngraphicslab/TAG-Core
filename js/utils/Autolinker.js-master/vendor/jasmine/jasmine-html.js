@@ -104,11 +104,11 @@ jasmine.HtmlReporter = function(_doc) {
 
   self.log = function() {
     var console = jasmine.getGlobal().console;
-    if (console && console.log) {
-      if (console.log.apply) {
-        console.log.apply(console, arguments);
+    if (console && doNothing) {
+      if (doNothing.apply) {
+        doNothing.apply(console, arguments);
       } else {
-        doNothing(arguments); // ie fix: console.log.apply doesn't exist on ie
+        doNothing(arguments); // ie fix: doNothing.apply doesn't exist on ie
       }
     }
   };
@@ -653,11 +653,11 @@ jasmine.TrivialReporter.prototype.reportSpecResults = function(spec) {
 
 jasmine.TrivialReporter.prototype.log = function() {
   var console = jasmine.getGlobal().console;
-  if (console && console.log) {
-    if (console.log.apply) {
-      console.log.apply(console, arguments);
+  if (console && doNothing) {
+    if (doNothing.apply) {
+      doNothing.apply(console, arguments);
     } else {
-      doNothing(arguments); // ie fix: console.log.apply doesn't exist on ie
+      doNothing(arguments); // ie fix: doNothing.apply doesn't exist on ie
     }
   }
 };

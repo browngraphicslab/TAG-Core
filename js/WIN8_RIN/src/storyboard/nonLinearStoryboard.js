@@ -14,7 +14,7 @@
             var STOPPED = 0, PLAYING = 1, PAUSING = 2, PAUSED = 3;
             // state values;
                         function log(str) {
-                console.log(str);
+                doNothing(str);
             }
             ;
             function buildStoryboard(sb) {

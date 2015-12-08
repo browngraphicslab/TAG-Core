@@ -311,7 +311,7 @@ window.rin = window.rin || {};
 
             var newWidth = bottomRight.x - topLeft.x;
             var newHeight = bottomRight.y - topLeft.y;
-            //console.log("nL = " + newLeft + ", nT = " + newTop + ", nW = " + newWidth + ", nH = " + newHeight);
+            //doNothing("nL = " + newLeft + ", nT = " + newTop + ", nW = " + newWidth + ", nH = " + newHeight);
 
             if (!this.proxy[0].parentNode) {
                 var viewerElt = $("#rinplayer").length ? $("#rinplayer") : $("#rinPlayer");

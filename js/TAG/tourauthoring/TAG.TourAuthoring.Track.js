@@ -103,7 +103,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                     return function (output) {
                         retstring = output;
                         if (output !== "False" && output !== "Error") {
-                            console.log("converted: ");
+                            doNothing("converted: ");
                             var mp4filepath = "/Images/" + basefilename + ".mp4";
                             var mp4file = TAG.Worktop.Database.fixPath(mp4filepath);
                             videotag.attr('src', mp4file);
@@ -136,10 +136,10 @@ TAG.TourAuthoring.Track = function (spec, my) {
                             $(popup).show();
                             //}
                             clearInterval(chkIntervalVal);
-                            console.log("Error ocurred when converting");
+                            doNothing("Error ocurred when converting");
                         }
                         else {
-                            console.log("not converted: ");
+                            doNothing("not converted: ");
                         }
                     }
                 })(videotag), null, filename, basefilename);
@@ -940,7 +940,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
                 }
             }
             my.timeManager.setScale(my.timeManager.getScale()); // bleveque: TODO hacky fix before SAM release -- figure out why displays were showing up strangely otherwise
-            console.log("combining " + (my.undoManager.undoStackSize() - undoStackSize));
+            doNothing("combining " + (my.undoManager.undoStackSize() - undoStackSize));
             my.undoManager.combineLast(my.undoManager.undoStackSize() - undoStackSize);
         }
 
@@ -1438,7 +1438,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
         my.resource = 'R-' + arrayPos;
         //prevTrack = my.track.prev(".track");
         //prevTitleDiv = titlediv.prev(".titlediv");
-        //console.log("new position assigned: " + pos);
+        //doNothing("new position assigned: " + pos);
     }
     that.updatePos = updatePos;
 
@@ -1514,7 +1514,7 @@ TAG.TourAuthoring.Track = function (spec, my) {
 
     function debugTrackArray() {
         for (var i = 0; i < dataHolder._trackArray.length; i++) {
-            console.log(i + " - " + dataHolder._trackArray[i].track.getTitle());
+            doNothing(i + " - " + dataHolder._trackArray[i].track.getTitle());
         }
     }
 
@@ -1880,7 +1880,7 @@ function trackTitleReleased(evt) {
         } else if (that.getCurrentDisplay() !== null) {
             that.getCurrentDisplay().released(evt);
         } else {
-            console.log("skipping release");
+            doNothing("skipping release");
 
 
 
@@ -3012,7 +3012,7 @@ function trackTitleReleased(evt) {
         if (my.attachedInks.indexOf(tr) < 0) {
             my.attachedInks.push(tr);
         } else {
-            console.log("duplicate added");
+            doNothing("duplicate added");
         }
     }
     function removeAttachedInkTrack(tr) {
@@ -3125,7 +3125,7 @@ function trackTitleReleased(evt) {
                 exp.resourceReferences = [];
                 break;
             default:
-                console.log('Track type not yet implemented in RIN');
+                doNothing('Track type not yet implemented in RIN');
         }
 
         // don't pass through if track is currently selected or there is no selection

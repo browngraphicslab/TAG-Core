@@ -95,7 +95,7 @@ ITE.AudioProvider = function (trackData, player, timeManager, orchestrator) {
 		// function monitor(timeWaited) {
 		// 	timeWaited = timeWaited || 0;
 		// 	if (timeWaited > 2000) {
-		// 		console.log("Audio failed to load!");
+		// 		doNothing("Audio failed to load!");
 		// 	}
 		// 	else if (_audioControls.readyState !== 4) {
 		// 		setTimeout(function(){ monitor(timeWaited+100); }, 100);

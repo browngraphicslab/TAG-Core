@@ -299,9 +299,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
             curr,
             descriptionDrawer;
 
-        infoTitle.text(doq.Name);
-        infoArtist.text(doq.Metadata.Artist);
-        infoYear.text(doq.Metadata.Year);
+        infoTitle.text(doq.Name || "");
+        infoArtist.text(doq.Metadata.Artist || "");
+        infoYear.text(doq.Metadata.Year || "");
 
         //assetContainer.empty();
         $(".infoCustom").remove();
@@ -505,9 +505,9 @@ TAG.Layout.TourPlayer = function (tour, exhibition, prevInfo, artmodeOptions, to
                     }
                 },
                     function () {
-                        console.log("error getting doq in tourplayer")
+                        doNothing("error getting doq in tourplayer")
                     }, function () {
-                        console.log("error getting doq in tourplayer .")
+                        doNothing("error getting doq in tourplayer .")
                     });
             }
 

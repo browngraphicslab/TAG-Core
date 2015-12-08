@@ -1057,7 +1057,7 @@ var SeadragonDrawer,
                         
                         flipIter++;
                         if (flipIter >= 4) {
-                            //console.log('flipped all');
+                            //doNothing('flipped all');
                             break;
                         }
                         segmentPassed = 0;

@@ -123,8 +123,8 @@
                 //
                 function quaternionToCenter(q, c) {
                     if(q.w != 0) {
-                        if(typeof (console) != "undefined" && console && console.log) {
-                            console.log("vectorBased interpolation: quaternions with q.w = 0?");
+                        if(typeof (console) != "undefined" && console && doNothing) {
+                            doNothing("vectorBased interpolation: quaternions with q.w = 0?");
                         }
                     }
                     var pitch = Math.asin(q.z);

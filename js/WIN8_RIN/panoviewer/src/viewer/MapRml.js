@@ -94,7 +94,7 @@ var MapRml = {
 			};
 		} catch (e) {
 			if (window.console) {
-				console.log(e);
+				doNothing(e);
 			}
 			return null;
 		}

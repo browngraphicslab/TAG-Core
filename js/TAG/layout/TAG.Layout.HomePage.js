@@ -56,7 +56,7 @@ TAG.Layout.HomePage = function (options, startPageCallback) {
             connectionTimeout,
             timedOut;
 
-        //console.log("checking server url: " + serverURL);
+        //doNothing("checking server url: " + serverURL);
         $.ajax({
             url: serverURL,
             dataType: "text",
@@ -65,7 +65,7 @@ TAG.Layout.HomePage = function (options, startPageCallback) {
             success: function () {
                 if (!timedOut) {
                     clearTimeout(connectionTimeout);
-                    //console.log("success checking server url");
+                    //doNothing("success checking server url");
                     successConnecting();
                 }
             },
@@ -209,62 +209,62 @@ TAG.Layout.HomePage = function (options, startPageCallback) {
     * @return true if the browser is compatible with TAG, false if it isn't
     */
     function isBrowserCompatible() {
-        //console.log("\n///// Browser Compatibility /////")
+        //doNothing("\n///// Browser Compatibility /////")
         var userAgent = navigator.userAgent.toLowerCase();
-        //console.log("userAgent: " + navigator.userAgent);
+        //doNothing("userAgent: " + navigator.userAgent);
 
         // Android and iOS are incompatible
         if (userAgent.indexOf('android') >= 0 || userAgent.indexOf('iphone') >= 0 || userAgent.indexOf('ipad') >= 0 || userAgent.indexOf('ipod') >= 0) {
             if (userAgent.indexOf('android') >= 0) {
-                console.log("Detected Android Device. Unsupported browser.");
+                doNothing("Detected Android Device. Unsupported browser.");
             } else if (userAgent.indexOf('iphone') >= 0) {
-                console.log("Detected iPhone. Unsupported browser.");
+                doNothing("Detected iPhone. Unsupported browser.");
             } else if (userAgent.indexOf('ipad') >= 0) {
-                console.log("Detected iPad. Unsupported browser.");
+                doNothing("Detected iPad. Unsupported browser.");
             } else if (userAgent.indexOf('ipod') >= 0) {
-                console.log("Detected iPod. Unsupported browser.");
+                doNothing("Detected iPod. Unsupported browser.");
             }
             return false;
         } else {
             var browser = getBrowserVersion();
-            //console.log("Browser Version: " + browser);
+            //doNothing("Browser Version: " + browser);
 
             browser = browser.toLowerCase();
             var version = 0;
 
             // Opera is incompatible
             if (browser.indexOf('opera') >= 0 || userAgent.indexOf('opr') >= 0) {
-                console.log("Detected Opera. Unsupported browser.");
+                doNothing("Detected Opera. Unsupported browser.");
                 return false;
             }
                 // Chrome 31+
             else if (browser.indexOf('chrome') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
-                console.log("Detected Chrome Version: " + version);
+                doNothing("Detected Chrome Version: " + version);
                 return (version >= 31);
             }
                 // Safari 7+
             else if (browser.indexOf('safari') >= 0) {
                 var detailedVersion = browser.substring(browser.indexOf(' ', browser.indexOf(' ') + 1) + 1);
                 version = detailedVersion.substring(0, detailedVersion.indexOf("."));
-                console.log("Detected Safari Version: " + version);
+                doNothing("Detected Safari Version: " + version);
                 return (version >= 7);
             }
                 // Firefox 28+
             else if (browser.indexOf('firefox') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
-                console.log("Detected Firefox Version: " + version);
+                doNothing("Detected Firefox Version: " + version);
                 return (version >= 28);
             }
                 // Internet Explorer 10+
             else if (browser.indexOf('msie') >= 0 || browser.indexOf('ie') >= 0) {
                 version = browser.substring(browser.indexOf(' ') + 1, browser.indexOf("."));
-                //console.log("Detected IE Version: " + version);
+                //doNothing("Detected IE Version: " + version);
                 return (version >= 10);
             }
                 // Other browsers are incompatible
             else {
-                console.log("Unsupported browser.");
+                doNothing("Unsupported browser.");
                 return false;
             }
         }

@@ -168,7 +168,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         //});
 
         $(circle[0][0]).on('mousedown', function (e) {
-            console.log("using new events");
+            doNothing("using new events");
             var offsetX = e.offsetX;
             var offsetY = e.offsetY;
             _keyframeMousedown(offsetX - parseInt(circle.attr('cx'), 10), offsetY - parseInt(circle.attr('cy'), 10));
@@ -192,7 +192,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
         //});
 
         $(innerCircle[0][0]).on('mousedown', function (e) {
-            console.log("using new events");
+            doNothing("using new events");
             var offsetX = e.offsetX;
             var offsetY = e.offsetY;
             _keyframeMousedown(offsetX - parseInt(innerCircle.attr('cx'), 10), offsetY - parseInt(innerCircle.attr('cy'), 10));
@@ -536,7 +536,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
 
         // error checking
         if ((!offsetx && offsetx !== 0) || (!offsety && offsety !== 0) || !my.currentKeyframe) {
-            console.log('Move keyframe called when no keyframe is selected!');
+            doNothing('Move keyframe called when no keyframe is selected!');
         }
         // Editing
         else {
@@ -680,7 +680,7 @@ TAG.TourAuthoring.Keyframe = function (spec, my) {
                 };
                 break;
             default:
-                console.log('RIN track type not yet implemented');
+                doNothing('RIN track type not yet implemented');
                 break;
         }
         return keyframe;

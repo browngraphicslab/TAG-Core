@@ -5,11 +5,11 @@
 var Utils = {
 
     /**
-     * Wraps console.log for debugging.
+     * Wraps doNothing for debugging.
      */
     log : function() {
         if(window.console && Config.debug) {
-            console.log.apply(console, arguments);
+            doNothing.apply(console, arguments);
         }
     },
 

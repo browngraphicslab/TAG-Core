@@ -16,7 +16,7 @@
             for (var _i = 0; _i < (arguments.length - 0); _i++) {
                 content[_i] = arguments[_i + 0];
             }
-            console.log(content[0]);
+            doNothing(content[0]);
         }
         NLTests.log = log;
         function assert(cond, strCond) {

@@ -61,7 +61,7 @@ function PanoTouchHelper(el) {
     }
 
     function queueKeyEvent(e) {
-        //console.log('panoTouch (' + created + ') key event: ' + e.type + ' at: ' + e.timestamp);
+        //doNothing('panoTouch (' + created + ') key event: ' + e.type + ' at: ' + e.timestamp);
         queueEvent(e);
     }
 
@@ -136,7 +136,7 @@ function PanoTouchHelper(el) {
     };
 
     this.userCurrentlyInteracting = function () {
-        //if (activePointers > 0) { console.log('active pointers:' + activePointers); }
+        //if (activePointers > 0) { doNothing('active pointers:' + activePointers); }
 
         return (activePointers > 0);
     };

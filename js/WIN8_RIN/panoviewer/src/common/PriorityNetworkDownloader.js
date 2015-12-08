@@ -215,7 +215,7 @@ var PriorityNetworkDownloader = function(useCORS, tileDownloadFailedCallback, ti
                     }
                     break;
                 case TileDownloadState.cacheExpired:
-                    //console.log('download cache expired image immediately');
+                    //doNothing('download cache expired image immediately');
                     startImageDownload(downloadRequest, false);
                     break;
                 case TileDownloadState.downloading:
@@ -232,8 +232,8 @@ var PriorityNetworkDownloader = function(useCORS, tileDownloadFailedCallback, ti
         }
 
         if (blockedDownloads > 0) {
-            //console.log('pano blocked downloads: ' + blockedDownloads + ' at ' + new Date().toLocaleTimeString());
-            //console.log(_throttle.counts);
+            //doNothing('pano blocked downloads: ' + blockedDownloads + ' at ' + new Date().toLocaleTimeString());
+            //doNothing(_throttle.counts);
         }
     };
 

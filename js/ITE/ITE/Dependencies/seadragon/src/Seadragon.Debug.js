@@ -9,8 +9,8 @@ var SeadragonDebug = function () {
         var console = window.console || {};
         var debug = SeadragonConfig.debugMode;
 
-        if (debug && console.log) {
-            console.log(msg);
+        if (debug && doNothing) {
+            doNothing(msg);
         } else if (debug && important) {
             alert(msg);
         }

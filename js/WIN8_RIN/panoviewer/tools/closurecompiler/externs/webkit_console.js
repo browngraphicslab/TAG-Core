@@ -41,7 +41,7 @@ console.info = function(var_args) {};
 /**
  * @param {...*} var_args
  */
-console.log = function(var_args) {};
+doNothing = function(var_args) {};
 
 /**
  * @param {...*} var_args
