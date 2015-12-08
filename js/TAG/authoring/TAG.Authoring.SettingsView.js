@@ -1237,8 +1237,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         var overlayColorInput = createBGColorInput(overlayColor, '.infoDiv', null, function () { return alphaInput.val(); });
         var nameInput = createTextInput(TAG.Util.htmlEntityDecode(name), true, 40);
-        var locInput = createTextInput(TAG.Util.htmlEntityDecode(loc), true, 45);
         var infoInput = createTextAreaInput(TAG.Util.htmlEntityDecode(info), true);
+        var locInput = loc;
        
         var primaryFontColorInput = createBGColorInput(primaryFontColor, null, '.primaryFont', function () {
             changesMade = true;
@@ -1367,7 +1367,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             saveButton.prop("disabled", false);
             saveButton.css("opacity", 1);
         });
-        onChangeUpdateText(locInput, '#subheading', 33);
+        //onChangeUpdateText(locInput, '#subheading', 33);
         onChangeUpdateText(infoInput, '#museumInfo', 300);
 
         var bgImage = createSetting('Background Image', bgImgInput);
