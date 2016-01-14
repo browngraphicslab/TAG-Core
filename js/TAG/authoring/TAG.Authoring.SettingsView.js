@@ -2838,6 +2838,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             //});
             settingsContainer.append(privateSetting);
             settingsContainer.append(localVisibilitySetting);
+            settingsContainer.append(name);
             settingsContainer.append(desc);
             settingsContainer.append(bg);
             settingsContainer.append(timeline);
