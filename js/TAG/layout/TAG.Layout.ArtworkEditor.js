@@ -650,7 +650,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
 
         assocMediaLabel = $(document.createElement('div')); // TODO JADE/STYL
         assocMediaLabel.addClass('assocMediaLabel');
-        assocMediaLabel.text('Associated Media');
+        assocMediaLabel.text('Related Materials');
         assocMediaLabel.css({
             color: 'white',
             'font-size': titleFontSize,
@@ -704,7 +704,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          */
         function createMediaPicker() {
             TAG.Util.UI.createAssociationPicker(root,
-                "Choose the media you wish to associate with this artwork",
+                "Choose the media you wish to relate to this artwork",
                 {comp: artwork, type: 'artwork', modifiedButtons: true},
                 "artwork",
                 [{
@@ -712,7 +712,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     getObjs: TAG.Worktop.Database.getAssocMedia,
                     excluded: guidsToBeDeleted
                 }, {
-                    name: "Currently Associated",
+                    name: "Currently Related",
                     getObjs: TAG.Worktop.Database.getAssocMediaTo,
                     args: [artwork.Identifier],
                     excluded: guidsToBeDeleted
@@ -1928,7 +1928,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                         'position': 'relative',
                     })
                     .addClass('header')
-                    .text('Edit Associated Media')
+                    .text('Edit Related Materials')
                     .appendTo($rightbar),
                 $assocMediaContainer = $(document.createElement('div'))
                     .css({
@@ -2051,7 +2051,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     .appendTo($rightbar),
                 $unassociateAssocMediaButton = $(document.createElement('button'))
                     .addClass('asscmediabutton unassociatebutton').css('border-radius','3.5px')
-                    .text('Unassociate')
+                    .text('Unrelate')
                     .css({
                         'float': 'left',
                         'border': '2px solid white',
@@ -2401,7 +2401,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                // });
 
                 
-                rightbar.find('.header').text("Edit Associated Media");
+                rightbar.find('.header').text("Edit Related Materials");
                
                 rightbar.find('.assocmedia').html(content);
                 rightbar.find('.title').val(title);

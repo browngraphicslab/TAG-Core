@@ -1024,7 +1024,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
         // create the buttons to add various components
         var artButton = _createAddComponentButton("Artwork", dropMain);
-        var assetButton = _createAddComponentButton("Associated Media", dropMain);
+        var assetButton = _createAddComponentButton("Related Materials", dropMain);
         var fileButton = _createAddComponentButton("From File", dropMain);
         var inkButton = _createAddComponentButton("Annotate", dropMain);
 
@@ -1395,7 +1395,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
 
                 switch (self.text()) {
                     case "Artwork":
-                    case "Associated Media":
+                    case "Related Materials":
                         dropInk.hide();
                         dropFile.hide();
                         break;
@@ -1485,7 +1485,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                         _catalogPick();
                     break;
 
-                    case "Associated Media":
+                    case "Related Materials":
                         exitInk();
                         self.css({
                             'background-color': 'white',
@@ -1799,7 +1799,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
         // heading
         var associatedMediaPickerHeader = document.createElement('div');
         $(associatedMediaPickerHeader).addClass('associatedMediaPickerInfo');
-        $(associatedMediaPickerHeader).text("Select media to import");
+        $(associatedMediaPickerHeader).text("Select materials to import");
         $(associatedMediaPickerHeader).css({
             'font-size': '100%',
         });
@@ -1937,7 +1937,7 @@ TAG.TourAuthoring.ComponentControls = function (spec, my) {
                 'padding-top': '3%',
                 'font-size': '70%'
             });
-            $(allAssociatedMediaHolder).text('All Associated Media');
+            $(allAssociatedMediaHolder).text('All Related Materials');
             $(associatedMediaPickerArtwork).append(allAssociatedMediaHolder);
 
             var mediaCache = {};

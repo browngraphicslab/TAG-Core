@@ -2007,7 +2007,7 @@ TAG.Util = (function () {
             }
 
             createDivWithLabel("Click or tap on a tile to preview the item it represents, and click/tap on its thumbnail again to begin exploring it in full.");
-            createDivWithLabel("Tiles without icons are image artworks. Any media associated with the artwork will appear below the artwork in the previewer. You can explore the artwork with a specific media item by tapping on the item's thumbnail image.")
+            createDivWithLabel("Tiles without icons are image artworks. Any material attached to the artwork will appear below the artwork in the previewer. You can explore the artwork with a specific media item by tapping on the item's thumbnail image.")
             createDivWithLabel("Tiles with the play icon represent video artworks. Click or tap on the tile to view them in the video player.", tagPath + 'images/video_icon.svg');
             createDivWithLabel("Tiles with this icon represent interactive tours. Click or tap on the tile to open them in the tour player. Tours are like video narratives, but can be paused at any time via the controls, or by tapping anywhere in the player. While paused, you can freely manipulate all items that are currently onscreen.", tagPath + 'images/tour_icon.svg');
 

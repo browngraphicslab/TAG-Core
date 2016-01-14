@@ -895,7 +895,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 } else { 
 
                     if (!mediaDrawer) {
-                        mediaDrawer = createDrawer('Associated Media', null, assocMediaToShow);
+                        mediaDrawer = createDrawer('Related Materials', null, assocMediaToShow);
                         if (mediaDrawer.drawerToggle) {
                             drawerToggleFn = mediaDrawer.drawerToggle;
                         }
@@ -1623,7 +1623,7 @@ TAG.Layout.ArtworkViewer = function (options, container) { // prevInfo, options,
                 tobj.drawer_header = drawerHeader.text();
         });
         drawer.contents = drawerContents;
-        if (assocMediaToShow && title === 'Associated Media') {
+        if (assocMediaToShow && title === 'Related Materials') {
             //drawerHeader.click();
             drawer.drawerToggle = drawerToggle;
         }

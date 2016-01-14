@@ -3516,7 +3516,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 exploreText = $(document.createElement('div'))
                     .addClass('exploreText')
                     .css("font-size",  BASE_FONT_SIZE*2/3 + 'em')
-                    .text(onAssocMediaView ? "Select an Associated Artwork Below" : "Tap to Explore");
+                    .text(onAssocMediaView ? "Select an Related Artwork Below" : "Tap to Explore");
 
                 exploreTab.append(exploreText)
 
@@ -3709,7 +3709,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                         TAG.Util.removeProgressCircle(circle);
                     } else {
                         descSpan.css({'height':'33%'});
-                        miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Associated Media");
+                        miniTilesLabel.text(onAssocMediaView ? "Artworks" : "Related Materials");
                         tileSpacing = miniTilesHolder.height()/10;
                         if (numberAssociatedDoqs* (miniTilesHolder.height() + tileSpacing) - tileSpacing > miniTilesHolder.width()){
                             prevArrow = $(document.createElement('img'))

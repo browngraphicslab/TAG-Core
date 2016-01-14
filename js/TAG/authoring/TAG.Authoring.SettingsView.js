@@ -109,8 +109,8 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 subtext: 'Import and manage artworks'
             },
             media: {
-                text: 'Associated Media',
-                subtext: 'Manage associated media'
+                text: 'Related Materials',
+                subtext: 'Manage related materials'
             },
             tour: {
                 text: 'Tours',
@@ -848,7 +848,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
                 loadArtView(id);
                 isArtView = true;
                 break;
-            case "Associated Media":
+            case "Related Materials":
                 selectLabel(nav[NAV_TEXT.media.text]);
                 prevSelectedSetting = nav[NAV_TEXT.media.text];
                 loadAssocMediaView(id);
@@ -2821,7 +2821,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
             desc = createSetting('Description', descInput);
             bg = createSetting('Background Image', bgInput);
             timeline = createSetting('Timeline Setting', timelineOptionsDiv);
-            assocMedia = createSetting('Associated Media Timeline Setting', assocMediaOptionsDiv);
+            assocMedia = createSetting('Related Materials Timeline Setting', assocMediaOptionsDiv);
 
             if (sortDropDown) {
                 sortOptions = createSetting('Sort Options', sortDropDown);
@@ -4012,7 +4012,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         if (prevLeftBarSelection.categoryName == null) {
             prevLeftBarSelection = {
                 timeSpentTimer: new TelemetryTimer(),
-                categoryName: "Associated Media",
+                categoryName: "Related Materials",
                 loadTime: 0
             };
         }
@@ -4887,10 +4887,10 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         guidsToBeDeleted = guidsToBeDeleted.concat(mediaGuids);
         var toLoad;
         var onlyMiddle = false;
-        var confirmText = "Are you sure you want to delete the " + numMed + " selected associated media?";
+        var confirmText = "Are you sure you want to delete the " + numMed + " selected related material?";
         var confirmButtonText = "Delete";
         if (numMed === 0) {
-            confirmText = "You have not selected any associated media to delete";
+            confirmText = "You have not selected any related materials to delete";
             confirmButtonText = "no confirm";
         }
         var confirmationBox = TAG.Util.UI.PopUpConfirmation(function () {
@@ -5611,7 +5611,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         } else if (inAssociatedView) {
             loadAssocMediaView(null, matches);
             if (matches.length == 0) {
-                doNothing("no matches in associated media view");
+                doNothing("no matches in related materials view");
             }
         } else if (inCollectionsView) {
             loadExhibitionsView(null, matches);
@@ -6092,7 +6092,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         //Opens a popup to choose artwork(s) to associate Associated Media(s) to
-        TAG.Util.UI.createAssociationPicker(root, "Associate with Artworks",
+        TAG.Util.UI.createAssociationPicker(root, "Relate to Artworks",
                 { comp: assocMedia, type: 'mediaMulti', modifiedButtons: true },
                 'artwork', [{
                     name: 'All Artworks',
@@ -8414,7 +8414,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         } else if (inAssociatedView) {
             findBar.css("display", "none");
-            addButton.text("Add Associations");
+            addButton.text("Add Relations");
             addButton.css('margin-left', '1%');
             addButton.show();
             newButton.hide();
