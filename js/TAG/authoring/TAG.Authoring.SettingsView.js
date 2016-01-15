@@ -6092,7 +6092,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
         }
 
         //Opens a popup to choose artwork(s) to associate Associated Media(s) to
-        TAG.Util.UI.createAssociationPicker(root, "Relate to Artworks",
+        TAG.Util.UI.createAssociationPicker(root, "Attach to Artworks",
                 { comp: assocMedia, type: 'mediaMulti', modifiedButtons: true },
                 'artwork', [{
                     name: 'All Artworks',
@@ -8414,7 +8414,7 @@ TAG.Authoring.SettingsView = function (startView, callback, backPage, startLabel
 
         } else if (inAssociatedView) {
             findBar.css("display", "none");
-            addButton.text("Add Relations");
+            addButton.text("Add Attachments");
             addButton.css('margin-left', '1%');
             addButton.show();
             newButton.hide();

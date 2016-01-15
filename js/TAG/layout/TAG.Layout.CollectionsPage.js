@@ -3516,7 +3516,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                 exploreText = $(document.createElement('div'))
                     .addClass('exploreText')
                     .css("font-size",  BASE_FONT_SIZE*2/3 + 'em')
-                    .text(onAssocMediaView ? "Select an Related Artwork Below" : "Tap to Explore");
+                    .text(onAssocMediaView ? "Select a Related Artwork Below" : "Tap to Explore");
 
                 exploreTab.append(exploreText)
 

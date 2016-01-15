@@ -704,7 +704,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
          */
         function createMediaPicker() {
             TAG.Util.UI.createAssociationPicker(root,
-                "Choose the media you wish to relate to this artwork",
+                "Choose the media you wish to attach to this artwork",
                 {comp: artwork, type: 'artwork', modifiedButtons: true},
                 "artwork",
                 [{
@@ -712,7 +712,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     getObjs: TAG.Worktop.Database.getAssocMedia,
                     excluded: guidsToBeDeleted
                 }, {
-                    name: "Currently Related",
+                    name: "Currently Attached",
                     getObjs: TAG.Worktop.Database.getAssocMediaTo,
                     args: [artwork.Identifier],
                     excluded: guidsToBeDeleted
@@ -2051,7 +2051,7 @@ TAG.Layout.ArtworkEditor = function (artwork, guidsToBeDeleted) {
                     .appendTo($rightbar),
                 $unassociateAssocMediaButton = $(document.createElement('button'))
                     .addClass('asscmediabutton unassociatebutton').css('border-radius','3.5px')
-                    .text('Unrelate')
+                    .text('Unattach')
                     .css({
                         'float': 'left',
                         'border': '2px solid white',
