@@ -817,7 +817,7 @@ TAG.Layout.Spoof = (function () {
     }
     function getLaureates(callback) {
         var doqarray = []
-        for (var a = 0; a < 115; a++) {
+        for (var a = 0; a < 116; a++) {
             doqarray.push({
                 "physics": [],
                 "chemistry": [],
@@ -1859,20 +1859,35 @@ TAG.Layout.Spoof = (function () {
             "1954-01-110000-00-00IN2014peace": "AM_Official_portrait_Kailash.jpg",
             "1997-07-120000-00-00PK2014peace": "Malala_Yousafzai_01_gs.tif",
             "1953-08-090000-00-00FR2014economics": "AM_Official_portrait_Tirole.jpg",
+
+
             //2015 winners
-            "0000-00-000000-00-00IE12015medicine": "campbell.tif",
-            "0000-00-000000-00-00JP22015medicine": "omura.tif",
-            "0000-00-000000-00-00CN32015medicine": "youyou.tif",
-            "0000-00-000000-00-00JP42015physics": "kajita.tif",
-            "0000-00-000000-00-00CA52015physics": "mcdonald.tif",
-            "0000-00-000000-00-00SE62015chemistry": "lindahl.tif",
-            "0000-00-000000-00-00US72015chemistry": "modrich.tif",
-            "0000-00-000000-00-00TR82015chemistry": "sancar.tif",
-            "1948-05-310000-00-00UA92015literature": "alexievich.tif",
+            "1930-06-280000-00-00IE12015medicine": "Nobel_Campbell_2015.jpg",
+            "1935-07-120000-00-00JP22015medicine": "Nobel_Omura_2015.jpg",
+            "1930-12-300000-00-00CN32015medicine": "Nobel_Tu_2015.jpg",
+            "1959-03-090000-00-00JP42015physics": "Nobel_Kajita_2015.jpg",
+            "1943-08-290000-00-00CA52015physics": "Nobel_McDonald_2015.jpg",
+            "1938-01-280000-00-00SE62015chemistry": "Nobel_Lindahl_2015.jpg",
+            "1946-06-130000-00-00US72015chemistry": "Nobel_Modrich_2015.jpg",
+            "1946-09-080000-00-00TR82015chemistry": "Nobel_Sancar_2015.jpg",
+            "1948-05-310000-00-00UA92015literature": "Nobel_Alexievich_2015.jpg",
             "0000-00-000000-00-0010102015peace": "fre_2015_fram.jpg",
-            "0000-00-000000-00-00GB112015economics": "Deaton.tif",
+            "1945-10-190000-00-00GB112015economics": "Nobel_Deaton_2015.jpg",
+
+            //2016 Winners
+            "0000-00-000000-00-00JP2016medicine": "ohsumi.jpg",
+            "1934-09-210000-00-00GB2016physics": "thouless.jpg",
+            "1951-09-140000-00-00GB2016physics": "haldane.jpg",
+            "1942-06-220000-00-00GB2016physics": "kosterlitz.jpg",
+            "1944-10-210000-00-00FR2016chemistry": "sauvage.jpg",
+            "1942-05-240000-00-00GB2016chemistry": "stoddart.jpg",
+            "1951-05-180000-00-00NL2016chemistry": "feringa.jpg",
+            "0000-00-000000-00-00CO2016peace": "santos.jpg",
+            "1948-10-090000-00-00GB2016economics": "hart.jpg",
+            "1949-04-180000-00-00FI2016economics": "holmstrom.jpg",
+            "1941-05-240000-00-00US2016literature": "dylan.jpg",
+
             //missing or duplicates/errors
-            
             "1905-06-211980-04-15FRFR1964literature": "declined the prize (1).png",
             "0000-00-000000-00-0011963peace": "2000px-Emblem_of_the_IFRC.png",
             "1931-07-100000-00-00CA2013literature": "Alice_Munro.tif",
@@ -25918,7 +25933,7 @@ TAG.Layout.Spoof = (function () {
                 "id": "916",
                 "firstname": "William C.",
                 "surname": "Campbell",
-                "born": "0000-00-00",
+                "born": "1930-06-28",
                 "died": "0000-00-00",
                 "bornCountry": "Ireland",
                 "bornCountryCode": "IE",
@@ -25945,7 +25960,7 @@ TAG.Layout.Spoof = (function () {
             "id": "917",
             "firstname": "Satoshi",
             "surname": "Ōmura",
-            "born": "0000-00-00",
+            "born": "1935-07-12",
             "died": "0000-00-00",
             "bornCountry": "Japan",
             "bornCountryCode": "JP",
@@ -25972,7 +25987,7 @@ TAG.Layout.Spoof = (function () {
             "id": "918",
             "firstname": "Youyou",
             "surname": "Tu",
-            "born": "0000-00-00",
+            "born": "1930-12-30",
             "died": "0000-00-00",
             "bornCountry": "China",
             "bornCountryCode": "CN",
@@ -25999,7 +26014,7 @@ TAG.Layout.Spoof = (function () {
             "id": "919",
             "firstname": "Takaaki",
             "surname": "Kajita",
-            "born": "0000-00-00",
+            "born": "1959-03-09",
             "died": "0000-00-00",
             "bornCountry": "Japan",
             "bornCountryCode": "JP",
@@ -26026,7 +26041,7 @@ TAG.Layout.Spoof = (function () {
             "id": "920",
             "firstname": "Arthur B.",
             "surname": "McDonald",
-            "born": "0000-00-00",
+            "born": "1943-08-29",
             "died": "0000-00-00",
             "bornCountry": "Canada",
             "bornCountryCode": "CA",
@@ -26053,7 +26068,7 @@ TAG.Layout.Spoof = (function () {
             "id": "921",
             "firstname": "Tomas",
             "surname": "Lindahl",
-            "born": "0000-00-00",
+            "born": "1938-01-28",
             "died": "0000-00-00",
             "bornCountry": "Sweden",
             "bornCountryCode": "SE",
@@ -26085,7 +26100,7 @@ TAG.Layout.Spoof = (function () {
             "id": "922",
             "firstname": "Paul",
             "surname": "Modrich",
-            "born": "0000-00-00",
+            "born": "1946-06-13",
             "died": "0000-00-00",
             "bornCountryCode": "US",
             "bornCountry": "USA",
@@ -26116,7 +26131,7 @@ TAG.Layout.Spoof = (function () {
             "id": "923",
             "firstname": "Aziz",
             "surname": "Sancar",
-            "born": "0000-00-00",
+            "born": "1946-09-08",
             "died": "0000-00-00",
             "bornCountry": "Turkey",
             "bornCountryCode": "TR",
@@ -26186,7 +26201,7 @@ TAG.Layout.Spoof = (function () {
             "id": "926",
             "firstname": "Angus",
             "surname": "Deaton",
-            "born": "0000-00-00",
+            "born": "1945-10-19",
             "died": "0000-00-00",
             "bornCountry": "United Kingdom",
             "bornCountryCode": "GB",
@@ -26205,6 +26220,283 @@ TAG.Layout.Spoof = (function () {
                             "city": "Princeton, NJ",
                             "country": "USA"
                         }
+                    ]
+                }
+            ]
+        }, {
+            "id": "927",
+            "firstname": "Yoshinori",
+            "surname": "Ohsumi",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "bornCountry": "Japan",
+            "bornCountryCode": "JP",
+            "bornCity": "Fukuoka",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "medicine",
+                    "share": "1",
+                    "motivation": "\"for his discoveries of mechanisms for autophagy\"",
+                    "affiliations": [
+                        {
+                            "name": "Tokyo Institute of Technology",
+                            "city": "Tokyo",
+                            "country": "Japan"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "928",
+            "firstname": "David J.",
+            "surname": "Thouless",
+            "born": "1934-09-21",
+            "died": "0000-00-00",
+            "bornCountry": "United Kingdom",
+            "bornCountryCode": "GB",
+            "bornCity": "Bearsden",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "physics",
+                    "share": "2",
+                    "motivation": "\"for theoretical discoveries of topological phase transitions and topological phases of matter\"",
+                    "affiliations": [
+                        {
+                            "name": "University of Washington",
+                            "city": "Seattle, WA",
+                            "country": "USA"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "929",
+            "firstname": "F. Duncan M.",
+            "surname": "Haldane",
+            "born": "1951-09-14",
+            "died": "0000-00-00",
+            "bornCountry": "United Kingdom",
+            "bornCountryCode": "GB",
+            "bornCity": "London",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "physics",
+                    "share": "4",
+                    "motivation": "\"for theoretical discoveries of topological phase transitions and topological phases of matter\"",
+                    "affiliations": [
+                        {
+                            "name": "Princeton University",
+                            "city": "Princeton, NJ",
+                            "country": "USA"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "930",
+            "firstname": "J. Michael",
+            "surname": "Kosterlitz",
+            "born": "1942-06-22",
+            "died": "0000-00-00",
+            "bornCountry": "United Kingdom",
+            "bornCountryCode": "GB",
+            "bornCity": "Aberdeen",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "physics",
+                    "share": "4",
+                    "motivation": "\"for theoretical discoveries of topological phase transitions and topological phases of matter\"",
+                    "affiliations": [
+                        {
+                            "name": "Brown University",
+                            "city": "Providence, RI",
+                            "country": "USA"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "931",
+            "firstname": "Jean-Pierre",
+            "surname": "Sauvage",
+            "born": "1944-10-21",
+            "died": "0000-00-00",
+            "bornCountry": "France",
+            "bornCountryCode": "FR",
+            "bornCity": "Paris",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "chemistry",
+                    "share": "3",
+                    "motivation": "\"for the design and synthesis of molecular machines\"",
+                    "affiliations": [
+                        {
+                            "name": "University of Strasbourg",
+                            "city": "Strasbourg",
+                            "country": "France"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "932",
+            "firstname": "Sir J. Fraser",
+            "surname": "Stoddart",
+            "born": "1942-05-24",
+            "died": "0000-00-00",
+            "bornCountry": "United Kingdom",
+            "bornCountryCode": "GB",
+            "bornCity": "Edinburgh",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "chemistry",
+                    "share": "3",
+                    "motivation": "\"for the design and synthesis of molecular machines\"",
+                    "affiliations": [
+                        {
+                            "name": "Northwestern University",
+                            "city": "Evanston, IL",
+                            "country": "USA"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "933",
+            "firstname": "Bernard L.",
+            "surname": "Feringa",
+            "born": "1951-05-18",
+            "died": "0000-00-00",
+            "bornCountry": "the Netherlands",
+            "bornCountryCode": "NL",
+            "bornCity": "Barger-Compascuum",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "chemistry",
+                    "share": "3",
+                    "motivation": "\"for the design and synthesis of molecular machines\"",
+                    "affiliations": [
+                        {
+                            "name": "University of Groningen",
+                            "city": "Groningen",
+                            "country": "the Netherlands"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "934",
+            "firstname": "Juan Manuel",
+            "surname": "Santos",
+            "born": "0000-00-00",
+            "died": "0000-00-00",
+            "bornCountry": "Colombia",
+            "bornCountryCode": "CO",
+            "bornCity": "Bogotá",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "peace",
+                    "share": "1",
+                    "motivation": "\"for his resolute efforts to bring the country's more than 50-year-long civil war to an end\"",
+                    "affiliations": [
+                        []
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "935",
+            "firstname": "Oliver",
+            "surname": "Hart",
+            "born": "1948-10-09",
+            "died": "0000-00-00",
+            "bornCountry": "United Kingdom",
+            "bornCountryCode": "GB",
+            "bornCity": "London",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "economics",
+                    "share": "2",
+                    "motivation": "\"for their contributions to contract theory\"",
+                    "affiliations": [
+                        {
+                            "name": "Harvard University",
+                            "city": "Cambridge, MA",
+                            "country": "USA"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "936",
+            "firstname": "Bengt",
+            "surname": "Holmström",
+            "born": "1949-04-18",
+            "died": "0000-00-00",
+            "bornCountry": "Finland",
+            "bornCountryCode": "FI",
+            "bornCity": "Helsinki",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "economics",
+                    "share": "2",
+                    "motivation": "\"for their contributions to contract theory\"",
+                    "affiliations": [
+                        {
+                            "name": "Massachusetts Institute of Technology (MIT)",
+                            "city": "Cambridge, MA",
+                            "country": "USA"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "937",
+            "firstname": "Bob",
+            "surname": "Dylan",
+            "born": "1941-05-24",
+            "died": "0000-00-00",
+            "bornCountry": "USA",
+            "bornCountryCode": "US",
+            "bornCity": "Duluth, MN",
+            "gender": "male",
+            "prizes": [
+                {
+                    "year": "2016",
+                    "category": "literature",
+                    "share": "1",
+                    "motivation": "\"for having created new poetic expressions within the great American song tradition\"",
+                    "affiliations": [
+                        []
                     ]
                 }
             ]
