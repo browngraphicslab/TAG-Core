@@ -758,7 +758,14 @@ TAG.Layout.SpoofTest = (function () {
 		var collaborators = $(document.createElement("div"))
 		var desc = $(document.createElement("div"))
 		var country = $(document.createElement("div"))
-		var icon = $(document.createElement("img")).attr({ src: '../tagcore/images/prize_icons/' + laur.Metadata.PrizeCategory.toLowerCase() + '_white.svg' })
+		var icon = $(document.createElement("img")).attr({  id: "iconId" ,src: '../tagcore/images/prize_icons/' + laur.Metadata.PrizeCategory.toLowerCase() + '_white.svg' })
+
+		icon && icon.click(function () {
+		    if (laur && laur.Metadata && laur.Metadata.surname && laur.Metadata.surname == "Kosterlitz") {
+		        $("#iconId") && $("#iconId").attr('src', '../tagcore/images/brown-logo.png')
+		    }
+		})
+
 		icon.css({
 		    "width": "20%",
 		    "height": "auto",
