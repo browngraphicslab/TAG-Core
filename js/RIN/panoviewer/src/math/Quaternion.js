@@ -1,4 +1,4 @@
-//For more information I would recommend "Essential Mathematics For Games", Van Verth, Bishop
+﻿//For more information I would recommend "Essential Mathematics For Games", Van Verth, Bishop
 
 /**
 * Quaternion

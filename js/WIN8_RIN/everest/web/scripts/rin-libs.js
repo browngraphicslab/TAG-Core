@@ -1,4 +1,4 @@
-/*! RIN | http://research.microsoft.com/rin | 2014-08-20 */
+﻿/*! RIN | http://research.microsoft.com/rin | 2014-08-20 */
 /**
  * Seadragon Ajax 0.8.9 (build 64702 on 2011-01-28)
  * http://gallery.expression.microsoft.com/SeadragonAjax

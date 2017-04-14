@@ -1,4 +1,4 @@
-
+﻿
 var PolygonTileFloodFiller = {
 
     floodFill: function (gridWidth, gridHeight, polygon, startingTile) {

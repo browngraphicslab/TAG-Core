@@ -1,4 +1,4 @@
-
+﻿
 function PanoTouchHelper(el) {
     var eventQueue = [],
         activePointers = 0,

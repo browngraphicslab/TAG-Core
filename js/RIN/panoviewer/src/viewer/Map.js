@@ -1,4 +1,4 @@
-var Map = function () {
+﻿var Map = function () {
 		var self = this;
 		self.frameCount = 0;
 		self.culler = new TiledImagePyramidCuller;

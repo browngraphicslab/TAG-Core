@@ -1,4 +1,4 @@
-function BallisticPath(pitch1, heading1, fov1, pitch2, heading2, fov2, maxAllowedFov, durationScaleOverride) {
+﻿function BallisticPath(pitch1, heading1, fov1, pitch2, heading2, fov2, maxAllowedFov, durationScaleOverride) {
     //Approximate a field of view that will show both centerpoints at once but never have the middlepoint fov smaller than either fov1 or fov2
     var middleFov = Math.abs(pitch1 - pitch2) + Math.abs(heading1 - heading2);
 

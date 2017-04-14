@@ -2270,6 +2270,10 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
             }
             loadQueue.add(function () {
                 if (works.length > 0) {
+                    var left = tileDiv.children().length * 50 + 25;
+                    if (tileDiv.children().eq(-1).position() != null) {
+                        left = tileDiv.children().eq(-1).position().left + tileDiv.children().eq(-1).width()
+                    }
                     paddingDiv = $(document.createElement("div"))
                         .css({
                             'height': "100%",
@@ -2277,7 +2281,7 @@ TAG.Layout.CollectionsPage = function (options, idletimerDuration) { // backInfo
                             "pointer-events": "none",
                             'position': 'absolute',
                             "margin": "none",
-                            'left': tileDiv.children().eq(-1).position().left + tileDiv.children().eq(-1).width() // to get last child position
+                            'left': left // to get last child position
                         });
                     tileDiv.append(paddingDiv);
                 }

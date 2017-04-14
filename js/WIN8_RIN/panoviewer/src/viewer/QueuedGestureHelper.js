@@ -1,4 +1,4 @@
-//The intent of this class is to encapsulate various forms of touch and mouse input supported by
+﻿//The intent of this class is to encapsulate various forms of touch and mouse input supported by
 //different browsers and then fire a consistent set of events that can be used to control a camera.
 
 function QueuedGestureHelper(elem) {

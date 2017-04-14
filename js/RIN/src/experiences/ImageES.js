@@ -1,4 +1,4 @@
-/// <reference path="../../../web/lib/rin-core-1.0.js" />
+﻿/// <reference path="../../../web/lib/rin-core-1.0.js" />
 
 /*!
 * RIN Experience Provider JavaScript Library v1.0
